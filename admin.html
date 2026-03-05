@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>Admin Panel</title>
+    <meta charset="UTF-8"><title>Admin Panel - Beacon of Unity</title>
 </head>
 <body style="padding:30px; font-family:sans-serif; background:#eee;">
-    <h1>Pending ID Approvals</h1>
-    <div id="container">Loading IDs...</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; background:white; padding:15px 25px; border-radius:10px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+        <h1 style="margin:0; color:#2c3e50;">🛡️ Admin: Pending ID Reviews</h1>
+        <button id="logoutBtn" style="padding:10px 20px; cursor:pointer; background:#e67e22; color:white; border:none; border-radius:5px; font-weight:bold;">Logout</button>
+    </div>
+    
+    <div id="container" style="max-width:800px; margin:auto;">Verifying Admin Access...</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -22,22 +27,80 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
+        // 1. DUAL-ADMIN SECURITY LOGIC
+        onAuthStateChanged(auth, (user) => {
+            const allowedAdmins = [
+                "beaconofunityofficial@gmail.com",
+                "luckyansh.t@gmail.com"
+            ];
+
+            if (!user || !allowedAdmins.includes(user.email)) {
+                alert("Restricted Area: Authorized Admins Only.");
+                window.location.href = "login.html"; 
+            } else {
+                console.log("Access Granted to: " + user.email);
+                loadData();
+            }
+        });
+
+        // 2. FETCH AND DISPLAY PENDING IDs
         async function loadData() {
             const snap = await getDocs(collection(db, "id_reviews"));
             const container = document.getElementById('container');
             container.innerHTML = "";
             
-            snap.forEach(doc => {
-                const d = doc.data();
-                container.innerHTML += `
-                    <div style="background:white; padding:20px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;">
-                        <p><strong>Resident:</strong> ${d.email}</p>
-                        <img src="${d.image}" style="width:100%; max-width:500px; border:1px solid #000;">
-                    </div>`;
+            if (snap.empty) {
+                container.innerHTML = "<div style='text-align:center; padding:40px; background:white; border-radius:10px;'><h3>✅ All caught up! No IDs to review.</h3></div>";
+                return;
+            }
+
+            snap.forEach(docSnap => {
+                const d = docSnap.data();
+                const id = docSnap.id;
+                
+                const card = document.createElement('div');
+                card.style = "background:white; padding:25px; margin-bottom:20px; border-radius:12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #3498db;";
+                card.innerHTML = `
+                    <p style="font-size:1.2em; margin-top:0;"><strong>Resident Email:</strong> ${d.email}</p>
+                    <div style="background:#f9f9f9; padding:10px; border-radius:8px; text-align:center;">
+                        <img src="${d.image}" style="width:100%; max-height:450px; object-fit:contain; border:2px solid #ddd;">
+                    </div>
+                    <div style="margin-top:20px; display:flex; gap:15px;">
+                        <button onclick="processUser('${id}', '${d.email}', 'approve')" style="flex:1; background:#27ae60; color:white; border:none; padding:15px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:1em;">
+                            ✅ Approve & Send Welcome Email
+                        </button>
+                        <button onclick="processUser('${id}', '${d.email}', 'deny')" style="flex:0.5; background:#c0392b; color:white; border:none; padding:15px; border-radius:6px; cursor:pointer; font-weight:bold;">
+                            ❌ Deny
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
             });
         }
-        loadData();
+
+        // 3. APPROVAL AND DELETION LOGIC
+        window.processUser = async (docId, userEmail, action) => {
+            if (action === 'approve') {
+                const subject = encodeURIComponent("Beacon of Unity - Verification Successful!");
+                const body = encodeURIComponent(`Hello,\n\nCongratulations! Your Emirates ID has been verified. You now have full access to the Beacon of Unity platform.\n\nYou can now participate in community requests and volunteer your help.\n\nWelcome to the team!`);
+                
+                // Triggers the email client on your computer/phone
+                window.location.href = `mailto:${userEmail}?subject=${subject}&body=${body}`;
+                
+                // Clear the ID from the database after approval
+                await deleteDoc(doc(db, "id_reviews", docId));
+                alert("Member approved! Email draft created.");
+            } else {
+                if(confirm("Are you sure you want to reject and delete this ID?")) {
+                    await deleteDoc(doc(db, "id_reviews", docId));
+                }
+            }
+            loadData(); // Refresh the list
+        };
+
+        document.getElementById('logoutBtn').onclick = () => signOut(auth);
     </script>
 </body>
 </html>
