@@ -12,132 +12,104 @@
         .sidebar h2 { font-size: 22px; font-weight: 800; color: #38bdf8; margin-bottom: 30px; letter-spacing: -0.5px; }
         .nav-item { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 8px; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
         .nav-item:hover { background: #1e293b; }
-        .active { background: #38bdf8; color: #0f172a; font-weight: 600; }
+        .nav-item.active { background: #38bdf8; color: #0f172a; font-weight: 600; }
 
         /* Main Content */
         .main-content { margin-left: 310px; padding: 40px; width: calc(100% - 310px); }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .welcome-text h1 { margin: 0; font-size: 28px; color: #0f172a; }
         
         .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
         .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; }
         
-        /* Request Feed Styling */
+        /* Lost and Found Badges */
+        .badge-lost { background: #fee2e2; color: #991b1b; }
+        .badge-found { background: #dcfce7; color: #166534; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Existing Request Styling */
         .request-card { border-left: 5px solid #38bdf8; margin-bottom: 15px; }
         .urgency-high { border-left-color: #ef4444; }
-        .badge { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
-        .badge-food { background: #dcfce7; color: #166534; }
         .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; }
 
-        /* Volunteer List */
-        .vol-list { display:none; margin-top:10px; padding:15px; background:#f1f5f9; border-radius:10px; border: 1px dashed #cbd5e1; }
-        .vol-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
-        .chat-trigger-btn { background: #22c55e; color: white; border: none; padding: 4px 10px; border-radius: 5px; font-size: 11px; cursor: pointer; }
-
-        /* Modal Styling */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:1000; align-items:center; justify-content:center; }
         .modal-content { background:white; width:90%; max-width:450px; padding:30px; border-radius:20px; }
         input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
 
-        /* FAB */
-        .fab { position: fixed; bottom: 30px; right: 30px; background: #38bdf8; color: #0f172a; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; border: none; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.4); }
-
-        .logout-btn { background: #fee2e2; color: #991b1b; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        
-        @media (max-width: 900px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; width: 100%; padding: 20px; }
-            .content-grid { grid-template-columns: 1fr; }
-        }
+        .fab { position: fixed; bottom: 30px; right: 30px; background: #38bdf8; color: #0f172a; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; border: none; cursor: pointer; z-index: 999; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <h2>Beacon of Unity</h2>
-        <div class="nav-item active">✨ Community Hub</div>
+        <div class="nav-item active" onclick="switchTab('community')">✨ Community Hub</div>
+        <div class="nav-item" onclick="switchTab('lostfound')">🔍 Lost and Found</div>
         <div class="nav-item">📢 Updates</div>
-        <div class="nav-item">🗓 Events</div>
-        <div class="nav-item">🤝 Connect</div>
-        <div class="nav-item" id="logoutBtnNav" style="margin-top: 60px; opacity: 0.7;">Logout</div>
+        <div class="nav-item" id="logoutBtnNav" style="margin-top: 100px; opacity: 0.7;">Logout</div>
     </div>
 
     <div class="main-content">
         <div class="header">
-            <div class="welcome-text">
-                <h1 id="welcomeUser">Hello!</h1>
-                <p>What would you like to do today?</p>
-            </div>
-            <button class="logout-btn" id="logoutBtn">Logout</button>
+            <h1 id="pageTitle">Community Hub</h1>
+            <button class="logout-btn" id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer;">Logout</button>
         </div>
 
         <div class="content-grid">
             <div>
-                <h3>Community Requests</h3>
-                <div id="requestFeed">
-                    <p>Loading requests...</p>
+                <div id="communityTab" class="tab-content active">
+                    <h3>Recent Requests</h3>
+                    <div id="requestFeed"><p>Loading...</p></div>
+                </div>
+
+                <div id="lostFoundTab" class="tab-content">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>Lost & Found Items</h3>
+                        <button onclick="openLFModal()" style="background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">+ Report Item</button>
+                    </div>
+                    <div id="lfFeed"><p>No items reported yet.</p></div>
                 </div>
             </div>
             
             <div>
                 <div class="card">
-                    <h3>Your Impact</h3>
-                    <p style="font-size: 14px; color: #64748b;">Volunteer Points: <span id="userPoints" style="color: #38bdf8; font-weight: 800;">0</span></p>
-                    <span class="status-badge" style="background:#dcfce7; color:#166534; padding:4px 10px; border-radius:99px; font-size:12px;">Verified Member</span>
-                </div>
-
-                <div class="card" id="activeChatsCard">
                     <h3>Active Conversations</h3>
-                    <div id="activeChatsList" style="font-size: 13px; color: #64748b;">
-                        <p>No active chats yet. Join a request to start talking!</p>
-                    </div>
+                    <div id="activeChatsList" style="font-size: 13px; color: #64748b;"><p>No active chats.</p></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="lfModal" class="modal">
+        <div class="modal-content">
+            <h2>Report Lost/Found Item</h2>
+            <label>I have...</label>
+            <select id="lfType">
+                <option value="Lost">Lost something</option>
+                <option value="Found">Found something</option>
+            </select>
+            <label>Item Name</label><input type="text" id="lfItem" placeholder="e.g. Blue Wallet">
+            <label>Location</label><input type="text" id="lfLoc" placeholder="Where was it last seen?">
+            <label>Description</label><textarea id="lfDesc" placeholder="Describe the item..."></textarea>
+            <button id="submitLFBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Report</button>
+            <button onclick="document.getElementById('lfModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
         </div>
     </div>
 
     <div id="chatPopup" style="display:none; position:fixed; bottom:20px; right:90px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden;">
         <div style="background:#0f172a; color:white; padding:12px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleChatCollapse()">
-            <span id="chatWith" style="font-weight:600; font-size:14px;">Chat</span>
+            <span id="chatWith">Chat</span>
             <span id="collapseIcon">▼</span>
         </div>
-        <div id="chatBody" style="flex:1; display:flex; flex-direction:column; height: calc(100% - 45px);">
+        <div id="chatBody" style="flex:1; display:flex; flex-direction:column;">
             <div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc;"></div>
-            <div id="chatControls" style="padding:10px; border-top:1px solid #e2e8f0; background:white;">
-                <div style="display:flex; gap:5px; margin-bottom: 5px;">
-                    <input type="text" id="msgInput" placeholder="Type a message..." style="margin:0; padding:8px; font-size:13px;">
-                    <button id="sendMsgBtn" style="background:#38bdf8; border:none; border-radius:8px; padding:0 12px; cursor:pointer; color:white;">➔</button>
-                </div>
-                <button id="resolveBtn" style="width:100%; background:#22c55e; color:white; border:none; padding:6px; border-radius:6px; font-size:12px; font-weight:bold; cursor:pointer; display:none;">Mark as Resolved ✓</button>
+            <div style="padding:10px; border-top:1px solid #e2e8f0;">
+                <input type="text" id="msgInput" placeholder="Type a message..." style="width:80%;">
+                <button id="sendMsgBtn">➔</button>
             </div>
         </div>
     </div>
-
-    <div id="requestModal" class="modal">
-        <div class="modal-content">
-            <h2 style="margin-top:0;">Request Help</h2>
-            <label>Title</label><input type="text" id="reqTitle" placeholder="What do you need?">
-            <label>Category</label>
-            <select id="reqCategory">
-                <option value="Food">Food / Groceries</option>
-                <option value="Medicine">Medicine</option>
-                <option value="Transport">Transport</option>
-                <option value="Emergency">Emergency Supplies</option>
-            </select>
-            <label>Urgency Level</label>
-            <select id="reqUrgency">
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High (Urgent)</option>
-            </select>
-            <label>Location</label><input type="text" id="reqLocation" placeholder="e.g., Al Majaz, Sharjah">
-            <label>Description</label><textarea id="reqDesc" rows="3" placeholder="Describe how someone can help..."></textarea>
-            <button id="submitReqBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button>
-            <button id="closeModalBtn" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
-        </div>
-    </div>
-
-    <button class="fab" id="openModalBtn">+</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
@@ -157,176 +129,69 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let currentChatId = null;
-        let unsubscribeChat = null;
-
-        // --- PROFANITY FILTER ---
-        const badWords = ["stupid", "idiot", "jerk", "shut up"]; // Add any words you want to block here
-
-        function censorText(text) {
-            let filtered = text;
-            badWords.forEach(word => {
-                const regex = new RegExp(word, "gi");
-                filtered = filtered.replace(regex, "****");
-            });
-            return filtered;
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().status === "approved") {
-                    document.getElementById('welcomeUser').innerText = `Welcome, ${user.email.split('@')[0]}!`;
-                    loadRequests();
-                    loadActiveChats();
-                } else { window.location.href = "login.html"; }
-            } else { window.location.href = "login.html"; }
-        });
-
-        // --- HELPERS ---
-        window.toggleVols = (id) => {
-            const el = document.getElementById(`vols-${id}`);
-            el.style.display = el.style.display === 'none' ? 'block' : 'none';
-        };
-
-        window.offerHelp = async (requestId) => {
-            const user = auth.currentUser;
-            try {
-                await updateDoc(doc(db, "requests", requestId), {
-                    volunteers: arrayUnion({ uid: user.uid, name: user.email.split('@')[0] }),
-                    volunteerCount: increment(1)
-                });
-                alert("You've been added! Check 'Active Conversations' to chat.");
-            } catch (e) { alert("Error joining."); }
-        };
-
-        window.toggleChatCollapse = () => {
-            const body = document.getElementById('chatBody');
-            const popup = document.getElementById('chatPopup');
-            const icon = document.getElementById('collapseIcon');
-            if (body.style.display === 'none') {
-                body.style.display = 'flex'; popup.style.height = '450px'; icon.innerText = '▼';
+        // --- TAB SWITCHING ---
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
+            if(tab === 'community') {
+                document.getElementById('communityTab').classList.add('active');
+                document.getElementById('pageTitle').innerText = "Community Hub";
             } else {
-                body.style.display = 'none'; popup.style.height = '45px'; icon.innerText = '▲';
+                document.getElementById('lostFoundTab').classList.add('active');
+                document.getElementById('pageTitle').innerText = "Lost and Found";
+                loadLF();
             }
         };
 
-        window.startChat = async (requestId, volId, volName, requesterId) => {
-            currentChatId = [volId, requesterId].sort().join("_") + "_" + requestId;
-            document.getElementById('chatWith').innerText = `Chatting with ${volName}`;
-            document.getElementById('chatPopup').style.display = 'flex';
-            document.getElementById('chatBody').style.display = 'flex';
-            
-            const isOwner = auth.currentUser.uid === requesterId;
-            document.getElementById('resolveBtn').style.display = isOwner ? 'block' : 'none';
-            document.getElementById('resolveBtn').onclick = () => markAsResolved(requestId, volId);
+        // --- LOST & FOUND LOGIC ---
+        window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
 
-            if (unsubscribeChat) unsubscribeChat();
-            
-            const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
-            unsubscribeChat = onSnapshot(q, (snapshot) => {
-                const area = document.getElementById('messageArea');
-                area.innerHTML = "";
-                snapshot.forEach(d => {
-                    const data = d.data();
-                    const isMe = data.senderId === auth.currentUser.uid;
-                    const msgDiv = document.createElement('div');
-                    msgDiv.style = `max-width:80%; padding:8px 12px; border-radius:12px; font-size:13px; margin-bottom:4px; ${isMe ? 'align-self:flex-end; background:#38bdf8; color:white;' : 'align-self:flex-start; background:white; border:1px solid #e2e8f0;'}`;
-                    msgDiv.innerText = data.text;
-                    area.appendChild(msgDiv);
-                });
-                area.scrollTop = area.scrollHeight;
-            });
-        };
+        document.getElementById('submitLFBtn').onclick = async () => {
+            const type = document.getElementById('lfType').value;
+            const item = document.getElementById('lfItem').value;
+            const loc = document.getElementById('lfLoc').value;
+            const desc = document.getElementById('lfDesc').value;
 
-        document.getElementById('sendMsgBtn').onclick = async () => {
-            const rawText = document.getElementById('msgInput').value;
-            if (!rawText || !currentChatId) return;
+            if(!item || !loc) return alert("Please fill details");
 
-            // Apply Profanity Filter
-            const censoredText = censorText(rawText);
-
-            await addDoc(collection(db, "chats", currentChatId, "messages"), {
-                text: censoredText, 
-                senderId: auth.currentUser.uid, 
+            await addDoc(collection(db, "lostfound"), {
+                type, item, location: loc, description: desc,
+                userId: auth.currentUser.uid,
+                userEmail: auth.currentUser.email,
                 createdAt: serverTimestamp()
             });
-            document.getElementById('msgInput').value = "";
+            document.getElementById('lfModal').style.display = 'none';
         };
 
-        async function markAsResolved(requestId, volunteerId) {
-            if(!confirm("Did this volunteer help? This will close the request.")) return;
-            try {
-                await deleteDoc(doc(db, "requests", requestId));
-                document.getElementById('chatPopup').style.display = 'none';
-                alert("Resolved!");
-            } catch (e) { alert("Error."); }
-        }
-
-        function loadActiveChats() {
-            const user = auth.currentUser;
-            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
+        function loadLF() {
+            const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
-                const list = document.getElementById('activeChatsList');
-                list.innerHTML = "";
-                let hasChats = false;
-                snapshot.forEach(docSnap => {
-                    const req = docSnap.data();
-                    const isOwner = req.userId === user.uid;
-                    const myVolEntry = req.volunteers?.find(v => v.uid === user.uid);
-                    if (isOwner || myVolEntry) {
-                        hasChats = true;
-                        const chatDiv = document.createElement('div');
-                        chatDiv.style = "padding:10px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;";
-                        const label = isOwner ? `Req: ${req.title}` : `Helping: ${req.userEmail.split('@')[0]}`;
-                        const targetVolId = isOwner ? (req.volunteers[0]?.uid || '') : user.uid;
-                        const targetVolName = isOwner ? (req.volunteers[0]?.name || 'Volunteer') : 'Requester';
-                        chatDiv.innerHTML = `<span style="font-weight:600;">${label}</span><button onclick="startChat('${docSnap.id}', '${targetVolId}', '${targetVolName}', '${req.userId}')" style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:11px;">Open Chat</button>`;
-                        list.appendChild(chatDiv);
-                    }
-                });
-                if (!hasChats) list.innerHTML = "<p>No active chats yet.</p>";
-            });
-        }
-
-        function loadRequests() {
-            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('requestFeed');
+                const feed = document.getElementById('lfFeed');
                 feed.innerHTML = "";
                 snapshot.forEach(docSnap => {
-                    const req = docSnap.data();
-                    const isOwner = auth.currentUser.uid === req.userId;
+                    const data = docSnap.data();
                     const card = document.createElement('div');
-                    card.className = `card request-card ${req.urgency === 'high' ? 'urgency-high' : ''}`;
-                    let volItems = (req.volunteers || []).map(v => `<div class="vol-item"><span>👤 ${v.name}</span>${isOwner ? `<button class="chat-trigger-btn" onclick="startChat('${docSnap.id}', '${v.uid}', '${v.name}', '${req.userId}')">Chat</button>` : ''}</div>`).join('');
-                    card.innerHTML = `<div style="display:flex; justify-content:space-between;"><span class="badge badge-food">${req.category}</span><small style="color:#64748b;">${req.location}</small></div><h4 style="margin: 10px 0 5px 0;">${req.title}</h4><p style="font-size: 14px; color: #475569;">${req.description}</p><div style="display:flex; gap:15px; align-items:center;"><button class="btn-help" onclick="offerHelp('${docSnap.id}')">I Can Help</button><span style="font-size:12px; color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="toggleVols('${docSnap.id}')">Volunteers (${req.volunteerCount || 0})</span></div><div id="vols-${docSnap.id}" class="vol-list"><h5 style="margin:0 0 10px 0;">Volunteer Queue:</h5>${volItems || '<p style="font-size:12px; color:gray;">No volunteers yet.</p>'}</div>`;
+                    card.className = "card";
+                    card.innerHTML = `
+                        <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
+                        <h4>${data.item}</h4>
+                        <p style="font-size:13px;">📍 ${data.location}</p>
+                        <p style="font-size:14px; color:#475569;">${data.description}</p>
+                        <button onclick="startChat('${docSnap.id}', '${data.userId}', '${data.userEmail.split('@')[0]}', '${data.userId}')" 
+                                style="background:#f1f5f9; border:1px solid #cbd5e1; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px;">
+                            Contact Finder/Owner
+                        </button>
+                    `;
                     feed.appendChild(card);
                 });
             });
         }
 
-        const modal = document.getElementById('requestModal');
-        document.getElementById('openModalBtn').onclick = () => modal.style.display = 'flex';
-        document.getElementById('closeModalBtn').onclick = () => modal.style.display = 'none';
+        // --- RE-USE YOUR EXISTING CHAT & FEED LOGIC BELOW ---
+        // (Keep all your existing loadRequests, startChat, and onAuthStateChanged functions here)
+        // Ensure you include the "censorText" function you added earlier!
 
-        document.getElementById('submitReqBtn').onclick = async () => {
-            const title = censorText(document.getElementById('reqTitle').value);
-            const location = document.getElementById('reqLocation').value;
-            const desc = censorText(document.getElementById('reqDesc').value);
-            if(!title || !location || !desc) return alert("Fill all fields");
-            await addDoc(collection(db, "requests"), {
-                userId: auth.currentUser.uid, userEmail: auth.currentUser.email,
-                title, category: document.getElementById('reqCategory').value, 
-                urgency: document.getElementById('reqUrgency').value, location, description: desc,
-                volunteerCount: 0, volunteers: [], createdAt: serverTimestamp()
-            });
-            modal.style.display = 'none';
-        };
-
-        const handleLogout = () => signOut(auth).then(() => { window.location.href = "login.html"; });
-        document.getElementById('logoutBtn').onclick = handleLogout;
-        document.getElementById('logoutBtnNav').onclick = handleLogout;
     </script>
 </body>
 </html>
