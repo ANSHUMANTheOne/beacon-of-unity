@@ -81,7 +81,6 @@
             const userDoc = querySnapshot.docs[0];
             const userRef = doc(db, "users", userDoc.id);
 
-            // Fully wipe the tester's history
             await updateDoc(userRef, {
                 status: "none",
                 hasPreviousDenial: false 
@@ -104,34 +103,44 @@
 
         if (action === 'approve') {
             try {
+                // Safeguard: Ensure email isn't empty or invalid
+                if (!userEmail || userEmail === "undefined") {
+                    throw new Error("Recipient address is empty or undefined.");
+                }
+
                 const templateParams = {
-                    email: userEmail, // Matching your EmailJS {{email}} tag
+                    email: userEmail,    // Your current {{email}} tag
+                    to_email: userEmail, // Backup {{to_email}} tag
                     name: userEmail.split('@')[0]
                 };
 
+                // Send the email first
                 await emailjs.send("service_w3ai9pm", "template_zttw3uf", templateParams);
 
+                // Update Firestore status
                 await updateDoc(userRef, { 
                     status: "approved", 
                     approvedAt: new Date().toISOString() 
                 });
 
+                // Remove from the queue
                 await deleteDoc(doc(db, "id_reviews", docId));
-                alert("Success! Welcome email sent.");
+                
+                alert("Success! Welcome email sent to " + userEmail);
                 loadData();
             } catch (e) {
-                alert("Approval Error: " + (e.text || "Check console"));
+                console.error("Approval Error:", e);
+                alert("Approval Error: " + (e.text || e.message || "Check console"));
             }
         } else {
-            // --- UPDATED DENY LOGIC (NO MORE BLOCKING) ---
             try {
                 await updateDoc(userRef, { 
                     status: "rejected",
-                    hasPreviousDenial: true // Permanent flag for retries
+                    hasPreviousDenial: true 
                 });
 
                 await deleteDoc(doc(db, "id_reviews", docId));
-                alert("User Denied. They are flagged for retry.");
+                alert("User Denied. Flagged for retry.");
                 loadData();
             } catch (err) {
                 alert("Error processing denial.");
@@ -151,23 +160,24 @@
             }
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
+                const displayEmail = data.email || "Unknown User";
                 
-                // Show a tag based on whether they were denied before
                 const tag = data.hasPreviousDenial 
                     ? `<span class="badge badge-retry">Retrying</span>` 
                     : `<span class="badge badge-new">New</span>`;
 
                 tableBody.innerHTML += `
                     <tr>
-                        <td>${data.email} ${tag}</td>
+                        <td>${displayEmail} ${tag}</td>
                         <td><a href="${data.idCardUrl}" target="_blank" class="id-link">View ID</a></td>
                         <td>
-                            <button onclick="processUser('${docSnap.id}', '${data.email}', 'approve', '${data.userId}')" class="btn btn-approve">Approve</button>
-                            <button onclick="processUser('${docSnap.id}', '${data.email}', 'deny', '${data.userId}')" class="btn btn-deny">Deny</button>
+                            <button onclick="processUser('${docSnap.id}', '${displayEmail}', 'approve', '${data.userId}')" class="btn btn-approve">Approve</button>
+                            <button onclick="processUser('${docSnap.id}', '${displayEmail}', 'deny', '${data.userId}')" class="btn btn-deny">Deny</button>
                         </td>
                     </tr>`;
             });
         } catch (err) {
+            console.error("Loading Error:", err);
             tableBody.innerHTML = "<tr><td colspan='3'>Error loading data.</td></tr>";
         }
     }
