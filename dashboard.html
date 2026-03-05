@@ -19,51 +19,48 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         
         .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
-        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; }
+        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; position: relative; }
         
+        /* CIRCULAR POST BUTTON (FAB) */
+        .fab {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: #38bdf8; color: #0f172a;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.4);
+            border: none; transition: 0.3s; z-index: 999;
+        }
+        .fab:hover { transform: scale(1.1) rotate(90deg); background: #0ea5e9; }
+
         /* Badges */
         .badge { font-size: 11px; padding: 4px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
         .badge-lost { background: #fee2e2; color: #991b1b; }
         .badge-found { background: #dcfce7; color: #166534; }
+        .badge-food { background: #e0f2fe; color: #0369a1; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .request-card { border-left: 5px solid #38bdf8; margin-bottom: 15px; }
-        .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .request-card { border-left: 5px solid #38bdf8; }
+        .urgency-high { border-left: 5px solid #ef4444; animation: pulse-border 2s infinite; }
+        
+        @keyframes pulse-border {
+            0% { border-left-color: #ef4444; }
+            50% { border-left-color: #fee2e2; }
+            100% { border-left-color: #ef4444; }
+        }
+
+        .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; }
 
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:1000; align-items:center; justify-content:center; }
         .modal-content { background:white; width:90%; max-width:450px; padding:30px; border-radius:20px; }
         input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
 
-        #chatPopup { display:none; position:fixed; bottom:20px; right:90px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
+        #chatPopup { display:none; position:fixed; bottom:20px; right:100px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
 
-        /* Animation for notifications */
-        @keyframes pulse-red {
-            0% { background-color: #fff; border-color: #e2e8f0; }
-            50% { background-color: #fff1f2; border-color: #ef4444; transform: scale(1.01); }
-            100% { background-color: #fff; border-color: #e2e8f0; }
-        }
+        .dot { height: 10px; width: 10px; background-color: #ef4444; border-radius: 50%; display: inline-block; margin-right: 8px; }
 
-        .new-message-blink {
-            animation: pulse-red 1.5s infinite ease-in-out !important;
-            border: 2px solid #ef4444 !important;
-            z-index: 5;
-        }
-
-        .dot { height: 10px; width: 10px; background-color: #ef4444; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.8); }
-
-        .chat-list-item {
-            padding: 12px;
-            border: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            background: white;
-            transition: all 0.2s;
-        }
+        .chat-list-item { padding: 12px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; border-radius: 12px; margin-bottom: 8px; background: white; }
     </style>
 </head>
 <body>
@@ -79,10 +76,10 @@
     <div class="main-content">
         <div class="header">
             <div>
-                <h1 id="pageTitle" style="margin-bottom: 5px;">Community Hub</h1>
+                <h1 id="pageTitle">Community Hub</h1>
                 <p id="welcomeUser" style="color: #64748b; margin: 0;">Hello, Member</p>
             </div>
-            <button class="logout-btn" id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer;">Logout</button>
+            <button id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer;">Logout</button>
         </div>
 
         <div class="content-grid">
@@ -97,18 +94,43 @@
                         <h3>Lost & Found Items</h3>
                         <button onclick="openLFModal()" style="background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">+ Report Item</button>
                     </div>
-                    <div id="lfFeed"><p>No items reported yet.</p></div>
+                    <div id="lfFeed"></div>
                 </div>
             </div>
             
             <div>
                 <div class="card">
                     <h3>Active Conversations</h3>
-                    <div id="activeChatsList" style="font-size: 13px; color: #64748b;">
+                    <div id="activeChatsList">
                         <p id="noChatsMsg">No active chats.</p>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <button class="fab" id="fabBtn" onclick="openRequestModal()">+</button>
+
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <h2>Post a Help Request</h2>
+            <label>Title</label><input type="text" id="reqTitle" placeholder="What do you need?">
+            <label>Category</label>
+            <select id="reqCat">
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Tools">Tools</option>
+                <option value="Labor">General Help</option>
+            </select>
+            <label>Urgency</label>
+            <select id="reqUrg">
+                <option value="low">Low (Next few days)</option>
+                <option value="high">High (Immediate)</option>
+            </select>
+            <label>Location</label><input type="text" id="reqLoc" placeholder="Where are you?">
+            <label>Description</label><textarea id="reqDesc" placeholder="Detailed description..."></textarea>
+            <button id="submitReqBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button>
+            <button onclick="document.getElementById('requestModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
         </div>
     </div>
 
@@ -121,8 +143,8 @@
                 <option value="Found">Found something</option>
             </select>
             <label>Item Name</label><input type="text" id="lfItem" placeholder="e.g. Blue Wallet">
-            <label>Location</label><input type="text" id="lfLoc" placeholder="Where was it last seen?">
-            <label>Description</label><textarea id="lfDesc" placeholder="Describe the item..."></textarea>
+            <label>Location</label><input type="text" id="lfLoc" placeholder="Where?">
+            <label>Description</label><textarea id="lfDesc" placeholder="Describe..."></textarea>
             <button id="submitLFBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Report</button>
             <button onclick="document.getElementById('lfModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
         </div>
@@ -133,9 +155,9 @@
             <span id="chatWith" style="font-weight:600; font-size:14px;">Chat</span>
             <span onclick="document.getElementById('chatPopup').style.display='none'" style="cursor:pointer;">✕</span>
         </div>
-        <div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc; height:330px;"></div>
+        <div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc;"></div>
         <div style="padding:10px; border-top:1px solid #e2e8f0; display:flex; gap:5px;">
-            <input type="text" id="msgInput" placeholder="Type a message..." style="flex:1;">
+            <input type="text" id="msgInput" placeholder="Type a message..." style="flex:1; margin:0;">
             <button id="sendMsgBtn" style="background:#38bdf8; border:none; color:white; padding:0 12px; border-radius:8px; cursor:pointer;">➔</button>
         </div>
     </div>
@@ -160,16 +182,88 @@
 
         let currentChatId = null;
         let unsubscribeChat = null;
-        let chatMessageCounts = {}; 
+        let chatMessageCounts = {};
 
-        const badWords = ["stupid", "idiot", "jerk", "shut up"]; 
-        function censorText(text) {
-            let filtered = text;
-            badWords.forEach(word => { filtered = filtered.replace(new RegExp(word, "gi"), "****"); });
-            return filtered;
+        // --- AUTH LOGIC ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) document.getElementById('welcomeUser').innerText = `Hello, ${userDoc.data().fullName}`;
+                loadRequests(); 
+                loadActiveChats(); 
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        // --- REQUEST LOGIC ---
+        window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
+
+        document.getElementById('submitReqBtn').onclick = async () => {
+            const user = auth.currentUser;
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            const fullName = userDoc.exists() ? userDoc.data().fullName : "Unity Member";
+
+            const title = document.getElementById('reqTitle').value;
+            const category = document.getElementById('reqCat').value;
+            const urgency = document.getElementById('reqUrg').value;
+            const location = document.getElementById('reqLoc').value;
+            const description = document.getElementById('reqDesc').value;
+
+            if(!title || !location) return alert("Title and Location required!");
+
+            await addDoc(collection(db, "requests"), {
+                title, category, urgency, location, description,
+                userId: user.uid,
+                userName: fullName,
+                volunteers: [],
+                volunteerCount: 0,
+                createdAt: serverTimestamp()
+            });
+
+            document.getElementById('requestModal').style.display = 'none';
+        };
+
+        function loadRequests() {
+            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const feed = document.getElementById('requestFeed');
+                feed.innerHTML = "";
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const isOwner = auth.currentUser.uid === data.userId;
+                    const card = document.createElement('div');
+                    card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
+
+                    let volListHtml = (data.volunteers || []).map(v => `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
+                            <span style="font-size:12px;">👤 ${v.name}</span>
+                            ${isOwner ? `<button onclick="startChat('${docSnap.id}', '${v.uid}', '${data.title}')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
+                        </div>
+                    `).join('');
+
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="badge badge-food">${data.category}</span>
+                            <small>${data.location}</small>
+                        </div>
+                        <h4 style="margin:10px 0;">${data.title}</h4>
+                        <p style="font-size:13px; color:#475569;">${data.description}</p>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn-help" onclick="offerHelp('${docSnap.id}')">I Can Help</button>
+                            <span style="font-size:12px; color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="toggleVols('${docSnap.id}')">
+                                Volunteers (${data.volunteerCount || 0})
+                            </span>
+                        </div>
+                        <div id="vols-${docSnap.id}" style="display:none; margin-top:10px; padding:10px; background:#f8fafc; border-radius:8px;">
+                            ${volListHtml || '<p style="font-size:11px; color:gray;">Waiting for volunteers...</p>'}
+                        </div>
+                    `;
+                    feed.appendChild(card);
+                });
+            });
         }
 
-        // --- Volunteer Queue Logic ---
         window.toggleVols = (id) => {
             const el = document.getElementById(`vols-${id}`);
             el.style.display = el.style.display === 'none' ? 'block' : 'none';
@@ -180,64 +274,21 @@
             const userDoc = await getDoc(doc(db, "users", user.uid));
             const userName = userDoc.exists() ? userDoc.data().fullName : "Unity Member";
             
-            try {
-                await updateDoc(doc(db, "requests", requestId), {
-                    volunteers: arrayUnion({ uid: user.uid, name: userName }),
-                    volunteerCount: increment(1)
-                });
-                alert("You've joined the volunteer queue!");
-            } catch (e) { alert("Already joined or error occurred."); }
+            await updateDoc(doc(db, "requests", requestId), {
+                volunteers: arrayUnion({ uid: user.uid, name: userName }),
+                volunteerCount: increment(1)
+            });
+            alert("Added to queue!");
         };
 
-        window.switchTab = (tab) => {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            if(tab === 'community') {
-                document.getElementById('communityTab').classList.add('active');
-                document.getElementById('pageTitle').innerText = "Community Hub";
-                document.querySelector('[onclick="switchTab(\'community\')"]').classList.add('active');
-            } else {
-                document.getElementById('lostFoundTab').classList.add('active');
-                document.getElementById('pageTitle').innerText = "Lost and Found";
-                document.querySelector('[onclick="switchTab(\'lostfound\')"]').classList.add('active');
-                loadLF();
-            }
-        };
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists()) {
-                    document.getElementById('welcomeUser').innerText = `Hello, ${userDoc.data().fullName}`;
-                }
-                loadRequests(); 
-                loadActiveChats(); 
-            } else {
-                window.location.href = "login.html";
-            }
-        });
-
-        window.startChat = async (itemId, targetUserId, itemLabel) => {
-            if (auth.currentUser.uid === targetUserId) return alert("This is your post!");
-            
-            const targetDoc = await getDoc(doc(db, "users", targetUserId));
-            const targetName = targetDoc.exists() ? targetDoc.data().fullName : "User";
-
+        // --- CHAT LOGIC ---
+        window.startChat = async (itemId, targetUserId, label) => {
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
-            
             await setDoc(doc(db, "chats", currentChatId), {
                 participants: [auth.currentUser.uid, targetUserId],
-                itemLabel: itemLabel,
+                itemLabel: label,
                 lastUpdated: serverTimestamp()
             }, { merge: true });
-
-            openChatWindow(targetName);
-        };
-
-        window.resumeChat = (chatID, label) => {
-            currentChatId = chatID;
-            const el = document.getElementById(`item-${chatID}`);
-            if(el) el.classList.remove('new-message-blink');
             openChatWindow(label);
         };
 
@@ -245,7 +296,6 @@
             document.getElementById('chatWith').innerText = `Chat: ${label}`;
             document.getElementById('chatPopup').style.display = 'flex';
             if (unsubscribeChat) unsubscribeChat();
-            
             const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
             unsubscribeChat = onSnapshot(q, (snapshot) => {
                 const area = document.getElementById('messageArea');
@@ -264,11 +314,9 @@
 
         document.getElementById('sendMsgBtn').onclick = async () => {
             const input = document.getElementById('msgInput');
-            const text = censorText(input.value);
-            if (!text || !currentChatId) return;
-            
+            if (!input.value || !currentChatId) return;
             await addDoc(collection(db, "chats", currentChatId, "messages"), {
-                text, senderId: auth.currentUser.uid, createdAt: serverTimestamp()
+                text: input.value, senderId: auth.currentUser.uid, createdAt: serverTimestamp()
             });
             input.value = "";
         };
@@ -280,118 +328,48 @@
                 snapshot.forEach(async (docSnap) => {
                     const chatId = docSnap.id;
                     if (chatId.includes(auth.currentUser.uid)) {
-                        const noMsg = document.getElementById('noChatsMsg');
-                        if (noMsg) noMsg.remove();
-
+                        const noMsg = document.getElementById('noChatsMsg'); if(noMsg) noMsg.remove();
                         const parts = chatId.split('_');
-                        const otherUserId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
-                        const otherDoc = await getDoc(doc(db, "users", otherUserId));
+                        const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
+                        const otherDoc = await getDoc(doc(db, "users", otherId));
                         const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
-                        const itemLabel = docSnap.data().itemLabel || "Item";
-
-                        const msgQ = query(collection(db, "chats", chatId, "messages"), orderBy("createdAt", "desc"));
-                        onSnapshot(msgQ, (msgSnap) => {
-                            const count = msgSnap.size;
-                            const lastMsg = msgSnap.docs[0]?.data();
-                            
-                            let isNew = chatMessageCounts[chatId] !== undefined && count > chatMessageCounts[chatId];
-                            let shouldBlink = (isNew || (lastMsg && lastMsg.senderId !== auth.currentUser.uid)) && currentChatId !== chatId;
-
-                            let chatDiv = document.getElementById(`item-${chatId}`);
-                            if (!chatDiv) {
-                                chatDiv = document.createElement('div');
-                                chatDiv.id = `item-${chatId}`;
-                                chatDiv.className = "chat-list-item";
-                                list.prepend(chatDiv);
-                            }
-
-                            if (shouldBlink) chatDiv.classList.add('new-message-blink');
-                            else chatDiv.classList.remove('new-message-blink');
-
-                            chatDiv.innerHTML = `
-                                <div style="flex: 1;">
-                                    <span style="font-weight:700; color:#1e293b; display:flex; align-items:center;">
-                                        ${shouldBlink ? '<span class="dot"></span>' : ''}${otherName}
-                                    </span>
-                                    <small style="color:#64748b; display:block; margin-top:2px;">Re: ${itemLabel}</small>
-                                </div>
-                                <button onclick="resumeChat('${chatId}', '${otherName}')" style="background:#0f172a; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:600;">Open</button>
-                            `;
-                            chatMessageCounts[chatId] = count;
-                        });
+                        
+                        let chatDiv = document.getElementById(`item-${chatId}`);
+                        if (!chatDiv) {
+                            chatDiv = document.createElement('div');
+                            chatDiv.id = `item-${chatId}`;
+                            chatDiv.className = "chat-list-item";
+                            list.prepend(chatDiv);
+                        }
+                        chatDiv.innerHTML = `<div><b>${otherName}</b><br><small>${docSnap.data().itemLabel}</small></div>
+                        <button onclick="resumeChat('${chatId}', '${otherName}')" style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Open</button>`;
                     }
                 });
             });
         }
 
-        function loadLF() {
-            const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('lfFeed');
-                feed.innerHTML = "";
-                snapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    const card = document.createElement('div');
-                    card.className = "card";
-                    card.innerHTML = `
-                        <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
-                        <h4>${censorText(data.item)}</h4>
-                        <p style="font-size:13px; color:#64748b;">📍 ${data.location}</p>
-                        <button onclick="startChat('${docSnap.id}', '${data.userId}', '${data.item}')" style="background:#0f172a; color:white; border:none; padding:8px; border-radius:8px; width:100%; cursor:pointer;">Contact</button>
-                    `;
-                    feed.appendChild(card);
-                });
-            });
-        }
+        window.resumeChat = (id, name) => { currentChatId = id; openChatWindow(name); };
 
-        function loadRequests() {
-            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('requestFeed');
-                feed.innerHTML = "";
-                snapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    const isOwner = auth.currentUser.uid === data.userId;
-                    const card = document.createElement('div');
-                    card.className = "card request-card";
-
-                    let volListHtml = (data.volunteers || []).map(v => `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f1f5f9;">
-                            <span style="font-size:13px;">🙋‍♂️ ${v.name}</span>
-                            ${isOwner ? `<button onclick="startChat('${docSnap.id}', '${v.uid}', '${data.title}')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:11px; cursor:pointer;">Chat</button>` : ''}
-                        </div>
-                    `).join('');
-
-                    card.innerHTML = `
-                        <h4>${censorText(data.title)}</h4>
-                        <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Posted by: ${data.userName || 'Unity Member'}</p>
-                        <div style="display:flex; gap:10px;">
-                            <button class="btn-help" style="margin:0;" onclick="offerHelp('${docSnap.id}')">I Can Help</button>
-                            <button style="background:none; border:1px solid #e2e8f0; padding:8px 12px; border-radius:6px; font-size:12px; cursor:pointer;" onclick="toggleVols('${docSnap.id}')">
-                                Volunteers (${data.volunteerCount || 0})
-                            </button>
-                        </div>
-                        <div id="vols-${docSnap.id}" style="display:none; margin-top:15px; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
-                            <p style="font-size:11px; font-weight:bold; color:#64748b; margin-top:0;">HELPERS QUEUE:</p>
-                            ${volListHtml || '<p style="font-size:12px; color:#94a3b8;">No volunteers yet.</p>'}
-                        </div>
-                    `;
-                    feed.appendChild(card);
-                });
-            });
-        }
-
+        // --- LOST & FOUND ---
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
         document.getElementById('submitLFBtn').onclick = async () => {
-            const item = censorText(document.getElementById('lfItem').value);
-            const loc = document.getElementById('lfLoc').value;
-            if(!item || !loc) return alert("Fill all details");
             await addDoc(collection(db, "lostfound"), {
-                type: document.getElementById('lfType').value, item, location: loc,
-                description: censorText(document.getElementById('lfDesc').value),
-                userId: auth.currentUser.uid, userEmail: auth.currentUser.email, createdAt: serverTimestamp()
+                type: document.getElementById('lfType').value,
+                item: document.getElementById('lfItem').value,
+                location: document.getElementById('lfLoc').value,
+                userId: auth.currentUser.uid,
+                createdAt: serverTimestamp()
             });
             document.getElementById('lfModal').style.display = 'none';
+        };
+
+        // --- TABS & LOGOUT ---
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab === 'community' ? 'communityTab' : 'lostFoundTab').classList.add('active');
+            document.getElementById('pageTitle').innerText = tab === 'community' ? "Community Hub" : "Lost and Found";
+            // Hide FAB on Lost & Found tab if you only want it for help requests
+            document.getElementById('fabBtn').style.display = tab === 'community' ? 'flex' : 'none';
         };
 
         const logout = () => signOut(auth).then(() => window.location.href = "login.html");
