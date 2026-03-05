@@ -27,6 +27,9 @@
         .btn-reset { background: #5f6368; color: white; margin-bottom: 20px; }
         .btn-reset:hover { background: #3c4043; }
         .id-link { color: #1a73e8; text-decoration: none; font-weight: 500; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 10px; text-transform: uppercase; }
+        .badge-new { background: #e6f4ea; color: #1e8e3e; }
+        .badge-retry { background: #fce8e6; color: #d93025; }
     </style>
 </head>
 <body>
@@ -52,7 +55,6 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    // Added 'query' and 'where' to allow searching for the specific tester email
     import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -67,41 +69,33 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // --- RESET FUNCTION FOR SPECIFIC TESTER ---
     window.resetTester = async () => {
         const testerEmail = "rashmibiswa2008@gmail.com";
-        
         try {
-            // 1. Find the tester in the 'users' collection
             const q = query(collection(db, "users"), where("email", "==", testerEmail));
             const querySnapshot = await getDocs(q);
-
             if (querySnapshot.empty) {
-                alert("Tester account not found in database.");
+                alert("Tester account not found.");
                 return;
             }
-
             const userDoc = querySnapshot.docs[0];
             const userRef = doc(db, "users", userDoc.id);
 
-            // 2. Reset status to 'none' and strikes to 0
+            // Fully wipe the tester's history
             await updateDoc(userRef, {
                 status: "none",
-                attempts: 0
+                hasPreviousDenial: false 
             });
 
-            // 3. Delete any existing review requests for this user
             const reviewQ = query(collection(db, "id_reviews"), where("email", "==", testerEmail));
             const reviewDocs = await getDocs(reviewQ);
-            
             const deletePromises = reviewDocs.docs.map(d => deleteDoc(doc(db, "id_reviews", d.id)));
             await Promise.all(deletePromises);
 
-            alert("✅ Tester Reset! rashmibiswa2008 can now re-upload their ID.");
+            alert("✅ Tester Reset! Completely clean slate.");
             loadData();
         } catch (err) {
-            console.error("Reset Error:", err);
-            alert("Failed to reset tester.");
+            alert("Reset Error.");
         }
     };
 
@@ -111,7 +105,7 @@
         if (action === 'approve') {
             try {
                 const templateParams = {
-                    to_email: userEmail,
+                    email: userEmail, // Matching your EmailJS {{email}} tag
                     name: userEmail.split('@')[0]
                 };
 
@@ -123,28 +117,21 @@
                 });
 
                 await deleteDoc(doc(db, "id_reviews", docId));
-                
-                alert("Success! Welcome email sent and resident approved.");
+                alert("Success! Welcome email sent.");
                 loadData();
             } catch (e) {
-                alert("Approval Error: Check console for details.");
+                alert("Approval Error: " + (e.text || "Check console"));
             }
         } else {
-            // --- DENY LOGIC (3 STRIKES) ---
+            // --- UPDATED DENY LOGIC (NO MORE BLOCKING) ---
             try {
-                const userSnap = await getDoc(userRef);
-                let currentAttempts = (userSnap.exists() && userSnap.data().attempts) ? userSnap.data().attempts : 0;
-                currentAttempts += 1;
-
-                if (currentAttempts >= 3) {
-                    await updateDoc(userRef, { status: "blocked", attempts: currentAttempts });
-                    alert("User BLOCKED (3 failures).");
-                } else {
-                    await updateDoc(userRef, { status: "rejected", attempts: currentAttempts });
-                    alert(`Denied. ${3 - currentAttempts} attempts remaining.`);
-                }
+                await updateDoc(userRef, { 
+                    status: "rejected",
+                    hasPreviousDenial: true // Permanent flag for retries
+                });
 
                 await deleteDoc(doc(db, "id_reviews", docId));
+                alert("User Denied. They are flagged for retry.");
                 loadData();
             } catch (err) {
                 alert("Error processing denial.");
@@ -162,20 +149,26 @@
                 tableBody.innerHTML = "<tr><td colspan='3'>No pending requests.</td></tr>";
                 return;
             }
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                
+                // Show a tag based on whether they were denied before
+                const tag = data.hasPreviousDenial 
+                    ? `<span class="badge badge-retry">Retrying</span>` 
+                    : `<span class="badge badge-new">New</span>`;
+
                 tableBody.innerHTML += `
                     <tr>
-                        <td>${data.email}</td>
+                        <td>${data.email} ${tag}</td>
                         <td><a href="${data.idCardUrl}" target="_blank" class="id-link">View ID</a></td>
                         <td>
-                            <button onclick="processUser('${doc.id}', '${data.email}', 'approve', '${data.userId}')" class="btn btn-approve">Approve</button>
-                            <button onclick="processUser('${doc.id}', '${data.email}', 'deny', '${data.userId}')" class="btn btn-deny">Deny</button>
+                            <button onclick="processUser('${docSnap.id}', '${data.email}', 'approve', '${data.userId}')" class="btn btn-approve">Approve</button>
+                            <button onclick="processUser('${docSnap.id}', '${data.email}', 'deny', '${data.userId}')" class="btn btn-deny">Deny</button>
                         </td>
                     </tr>`;
             });
         } catch (err) {
-            tableBody.innerHTML = "<tr><td colspan='3'>Error loading requests.</td></tr>";
+            tableBody.innerHTML = "<tr><td colspan='3'>Error loading data.</td></tr>";
         }
     }
     loadData();
