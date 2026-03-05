@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Admin Panel</title>
+</head>
+<body style="padding:30px; font-family:sans-serif; background:#eee;">
+    <h1>Pending ID Approvals</h1>
+    <div id="container">Loading IDs...</div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
+            authDomain: "beaconofunityofficial.firebaseapp.com",
+            projectId: "beaconofunityofficial",
+            storageBucket: "beaconofunityofficial.firebasestorage.app",
+            messagingSenderId: "37918398882",
+            appId: "1:37918398882:web:205161bb147393f4defafb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadData() {
+            const snap = await getDocs(collection(db, "id_reviews"));
+            const container = document.getElementById('container');
+            container.innerHTML = "";
+            
+            snap.forEach(doc => {
+                const d = doc.data();
+                container.innerHTML += `
+                    <div style="background:white; padding:20px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;">
+                        <p><strong>Resident:</strong> ${d.email}</p>
+                        <img src="${d.image}" style="width:100%; max-width:500px; border:1px solid #000;">
+                    </div>`;
+            });
+        }
+        loadData();
+    </script>
+</body>
+</html>
