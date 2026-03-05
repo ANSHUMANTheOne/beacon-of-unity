@@ -8,7 +8,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
-          // Initialized with your Public Key
           emailjs.init("QhpmiLS1azGRS4w23"); 
        })();
     </script>
@@ -25,6 +24,8 @@
         .btn-approve:hover { background: #2d8e47; }
         .btn-deny { background: #ea4335; color: white; }
         .btn-deny:hover { background: #d93025; }
+        .btn-reset { background: #5f6368; color: white; margin-bottom: 20px; }
+        .btn-reset:hover { background: #3c4043; }
         .id-link { color: #1a73e8; text-decoration: none; font-weight: 500; }
     </style>
 </head>
@@ -32,6 +33,11 @@
 
 <div class="container">
     <h2>Resident Verification Queue</h2>
+    
+    <button onclick="resetTester()" class="btn btn-reset">
+       🔄 Reset Tester (rashmibiswa2008@gmail.com)
+    </button>
+
     <table id="requestsTable">
         <thead>
             <tr>
@@ -46,7 +52,8 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    // Added 'query' and 'where' to allow searching for the specific tester email
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -60,13 +67,49 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // WE ATTACH TO WINDOW SO THE HTML BUTTONS CAN CALL THIS
+    // --- RESET FUNCTION FOR SPECIFIC TESTER ---
+    window.resetTester = async () => {
+        const testerEmail = "rashmibiswa2008@gmail.com";
+        
+        try {
+            // 1. Find the tester in the 'users' collection
+            const q = query(collection(db, "users"), where("email", "==", testerEmail));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                alert("Tester account not found in database.");
+                return;
+            }
+
+            const userDoc = querySnapshot.docs[0];
+            const userRef = doc(db, "users", userDoc.id);
+
+            // 2. Reset status to 'none' and strikes to 0
+            await updateDoc(userRef, {
+                status: "none",
+                attempts: 0
+            });
+
+            // 3. Delete any existing review requests for this user
+            const reviewQ = query(collection(db, "id_reviews"), where("email", "==", testerEmail));
+            const reviewDocs = await getDocs(reviewQ);
+            
+            const deletePromises = reviewDocs.docs.map(d => deleteDoc(doc(db, "id_reviews", d.id)));
+            await Promise.all(deletePromises);
+
+            alert("✅ Tester Reset! rashmibiswa2008 can now re-upload their ID.");
+            loadData();
+        } catch (err) {
+            console.error("Reset Error:", err);
+            alert("Failed to reset tester.");
+        }
+    };
+
     window.processUser = async (docId, userEmail, action, userId) => {
         const userRef = doc(db, "users", userId);
 
         if (action === 'approve') {
             try {
-                // 1. Send the Email via EmailJS (No more Brevo/Worker)
                 const templateParams = {
                     to_email: userEmail,
                     name: userEmail.split('@')[0]
@@ -74,54 +117,36 @@
 
                 await emailjs.send("service_w3ai9pm", "template_zttw3uf", templateParams);
 
-                // 2. Update status to approved in Firebase
                 await updateDoc(userRef, { 
                     status: "approved", 
                     approvedAt: new Date().toISOString() 
                 });
 
-                // 3. Remove from the Review Queue
                 await deleteDoc(doc(db, "id_reviews", docId));
                 
-                alert("Success! Welcome email sent via Gmail and resident approved.");
+                alert("Success! Welcome email sent and resident approved.");
                 loadData();
             } catch (e) {
-                console.error("Approval Error:", e);
-                alert("Failed to approve. Check the console for EmailJS errors.");
+                alert("Approval Error: Check console for details.");
             }
         } else {
-            // --- DENY LOGIC (WITH 3 STRIKES) ---
+            // --- DENY LOGIC (3 STRIKES) ---
             try {
                 const userSnap = await getDoc(userRef);
-                let currentAttempts = 0;
-                
-                if (userSnap.exists() && userSnap.data().attempts) {
-                    currentAttempts = userSnap.data().attempts;
-                }
-
+                let currentAttempts = (userSnap.exists() && userSnap.data().attempts) ? userSnap.data().attempts : 0;
                 currentAttempts += 1;
 
                 if (currentAttempts >= 3) {
-                    // Block the user permanently after 3 tries
-                    await updateDoc(userRef, { 
-                        status: "blocked", 
-                        attempts: currentAttempts 
-                    });
-                    alert("User has failed 3 times and is now BLOCKED.");
+                    await updateDoc(userRef, { status: "blocked", attempts: currentAttempts });
+                    alert("User BLOCKED (3 failures).");
                 } else {
-                    // Allow them to retry
-                    await updateDoc(userRef, { 
-                        status: "rejected", 
-                        attempts: currentAttempts 
-                    });
-                    alert(`Request denied. User has ${3 - currentAttempts} attempts left.`);
+                    await updateDoc(userRef, { status: "rejected", attempts: currentAttempts });
+                    alert(`Denied. ${3 - currentAttempts} attempts remaining.`);
                 }
 
-                // Clear the request from the queue
                 await deleteDoc(doc(db, "id_reviews", docId));
                 loadData();
             } catch (err) {
-                console.error(err);
                 alert("Error processing denial.");
             }
         }
@@ -134,7 +159,7 @@
             const querySnapshot = await getDocs(collection(db, "id_reviews"));
             tableBody.innerHTML = "";
             if (querySnapshot.empty) {
-                tableBody.innerHTML = "<tr><td colspan='3'>No pending verifications. All clear!</td></tr>";
+                tableBody.innerHTML = "<tr><td colspan='3'>No pending requests.</td></tr>";
                 return;
             }
             querySnapshot.forEach((doc) => {
@@ -150,11 +175,9 @@
                     </tr>`;
             });
         } catch (err) {
-            console.error("Load Error:", err);
-            tableBody.innerHTML = "<tr><td colspan='3'>Error loading data.</td></tr>";
+            tableBody.innerHTML = "<tr><td colspan='3'>Error loading requests.</td></tr>";
         }
     }
-    
     loadData();
 </script>
 </body>
