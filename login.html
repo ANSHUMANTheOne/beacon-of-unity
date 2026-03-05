@@ -1,80 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Verify - Beacon of Unity</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8"><title>Verify - Beacon of Unity</title>
 </head>
-<body>
-    <header><h1>Beacon of Unity</h1></header>
-    <div style="max-width: 400px; margin: 40px auto; background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-        <h2>Secure Verification</h2>
-        <p><small>Your data is encrypted. Only the admin can review these files.</small></p>
-        
-        <input type="email" id="userEmail" placeholder="Email Address" required style="width:90%; padding:10px; margin-bottom:10px; border:1px solid #ccc;">
-        
-        <div style="border: 2px dashed #3498db; padding: 15px; margin: 15px 0; background: #f9f9f9;">
-            <p><strong>Upload Emirates ID (Front)</strong></p>
-            <input type="file" id="idFront" accept="image/*" style="width: 100%;">
+<body style="font-family:sans-serif; text-align:center; padding:40px; background:#f4f7f6;">
+    <div style="max-width:400px; margin:auto; background:white; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+        <h2>Secure ID Upload</h2>
+        <input type="email" id="email" placeholder="Email Address" required style="width:90%; padding:10px; margin-bottom:15px; border:1px solid #ddd;">
+        <div style="border: 2px dashed #3498db; padding: 20px; margin-bottom: 20px;">
+            <p><strong>Emirates ID Photo</strong></p>
+            <input type="file" id="photo" accept="image/*" style="width:100%;">
         </div>
-        
-        <button id="uploadBtn" style="width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-            Submit for Secure Review
-        </button>
-        
-        <p id="status" style="margin-top: 15px; font-weight: bold;"></p>
+        <button id="uploadBtn" style="width:100%; padding:12px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Upload to Secure Vault</button>
+        <p id="msg" style="margin-top:15px; font-weight:bold;"></p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-storage.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-        // Your specific config
+        // Your specific config from image_4f4a28.png
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
             authDomain: "beaconofunityofficial.firebaseapp.com",
             projectId: "beaconofunityofficial",
             storageBucket: "beaconofunityofficial.firebasestorage.app",
             messagingSenderId: "37918398882",
-            appId: "1:37918398882:web:205161bb147393f4defafb",
-            measurementId: "G-L01XH8Q4KB"
+            appId: "1:37918398882:web:205161bb147393f4defafb"
         };
 
-        // Initialize Firebase and Storage
         const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app);
+        const db = getFirestore(app);
 
-        // Handle the button click
-        document.getElementById('uploadBtn').addEventListener('click', async () => {
-            const email = document.getElementById('userEmail').value;
-            const file = document.getElementById('idFront').files[0];
-            const status = document.getElementById('status');
-            const btn = document.getElementById('uploadBtn');
+        document.getElementById('uploadBtn').onclick = async () => {
+            const file = document.getElementById('photo').files[0];
+            const email = document.getElementById('email').value;
+            const msg = document.getElementById('msg');
+            
+            if(!file || !email) return alert("Please provide email and photo");
 
-            if (!email || !file) {
-                alert("Please enter your email and select an ID photo.");
-                return;
-            }
-
-            btn.disabled = true;
-            status.innerText = "Encrypting and uploading securely...";
-            status.style.color = "#34495e";
-
-            // Create a secure reference: identities/user-email/front-id.jpg
-            const storageRef = ref(storage, 'pending_verification/' + email + '_EID_Front');
-
-            try {
-                // Upload the file
-                await uploadBytes(storageRef, file);
-                status.innerText = "✅ Success! Admin will review your ID shortly.";
-                status.style.color = "#27ae60";
-            } catch (error) {
-                console.error("Upload Error:", error);
-                status.innerText = "❌ Upload failed. Make sure Storage Rules are set to 'Test Mode'.";
-                status.style.color = "#e74c3c";
-                btn.disabled = false;
-            }
-        });
+            msg.innerText = "Encrypting and Uploading...";
+            
+            const reader = new FileReader();
+            reader.readAsDataURL(file); // Converts image to text string for Firestore
+            reader.onload = async () => {
+                try {
+                    // Saves to a collection called "id_reviews"
+                    await addDoc(collection(db, "id_reviews"), {
+                        email: email,
+                        image: reader.result,
+                        time: new Date()
+                    });
+                    msg.innerText = "✅ Successfully Stored!";
+                    msg.style.color = "green";
+                } catch (e) { 
+                    msg.innerText = "❌ Error: " + e.message; 
+                    msg.style.color = "red";
+                }
+            };
+        };
     </script>
 </body>
 </html>
