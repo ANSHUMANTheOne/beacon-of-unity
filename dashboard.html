@@ -38,7 +38,7 @@
 
         #chatPopup { display:none; position:fixed; bottom:20px; right:90px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
 
-        /* --- FIXED BLINKING ANIMATION --- */
+        /* Animation for notifications */
         @keyframes pulse-red {
             0% { background-color: #fff; border-color: #e2e8f0; }
             50% { background-color: #fff1f2; border-color: #ef4444; transform: scale(1.01); }
@@ -78,14 +78,17 @@
 
     <div class="main-content">
         <div class="header">
-            <h1 id="pageTitle">Community Hub</h1>
+            <div>
+                <h1 id="pageTitle" style="margin-bottom: 5px;">Community Hub</h1>
+                <p id="welcomeUser" style="color: #64748b; margin: 0;">Hello, Member</p>
+            </div>
             <button class="logout-btn" id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer;">Logout</button>
         </div>
 
         <div class="content-grid">
             <div>
                 <div id="communityTab" class="tab-content active">
-                    <h3>Recent Requests</h3>
+                    <h3>Recent Requests (Volunteer Queue)</h3>
                     <div id="requestFeed"><p>Loading...</p></div>
                 </div>
 
@@ -140,7 +143,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, arrayUnion, increment, deleteDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -172,22 +175,46 @@
             if(tab === 'community') {
                 document.getElementById('communityTab').classList.add('active');
                 document.getElementById('pageTitle').innerText = "Community Hub";
+                document.querySelector('[onclick="switchTab(\'community\')"]').classList.add('active');
             } else {
                 document.getElementById('lostFoundTab').classList.add('active');
                 document.getElementById('pageTitle').innerText = "Lost and Found";
+                document.querySelector('[onclick="switchTab(\'lostfound\')"]').classList.add('active');
                 loadLF();
             }
         };
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) { loadRequests(); loadActiveChats(); } 
-            else { window.location.href = "login.html"; }
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Fetch Legal Name for the Welcome Message
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    document.getElementById('welcomeUser').innerText = `Hello, ${userDoc.data().fullName}`;
+                }
+                loadRequests(); 
+                loadActiveChats(); 
+            } else {
+                window.location.href = "login.html";
+            }
         });
 
-        window.startChat = async (itemId, targetUserId, targetUserName) => {
+        window.startChat = async (itemId, targetUserId, itemLabel) => {
             if (auth.currentUser.uid === targetUserId) return alert("This is your post!");
+            
+            // Get target user's real name
+            const targetDoc = await getDoc(doc(db, "users", targetUserId));
+            const targetName = targetDoc.exists() ? targetDoc.data().fullName : "User";
+
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
-            openChatWindow(targetUserName);
+            
+            // Initialize chat document if it doesn't exist
+            await setDoc(doc(db, "chats", currentChatId), {
+                participants: [auth.currentUser.uid, targetUserId],
+                itemLabel: itemLabel,
+                lastUpdated: serverTimestamp()
+            }, { merge: true });
+
+            openChatWindow(targetName);
         };
 
         window.resumeChat = (chatID, label) => {
@@ -222,34 +249,37 @@
             const input = document.getElementById('msgInput');
             const text = censorText(input.value);
             if (!text || !currentChatId) return;
+            
             await addDoc(collection(db, "chats", currentChatId, "messages"), {
                 text, senderId: auth.currentUser.uid, createdAt: serverTimestamp()
             });
             input.value = "";
         };
 
-        // --- UPDATED ACTIVE CHATS (FIXED UI & BLINKING) ---
         function loadActiveChats() {
             const q = query(collection(db, "chats"));
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('activeChatsList');
-                let foundAny = false;
-
-                snapshot.forEach(docSnap => {
+                snapshot.forEach(async (docSnap) => {
                     const chatId = docSnap.id;
                     if (chatId.includes(auth.currentUser.uid)) {
-                        foundAny = true;
-                        
-                        // Clear the "No chats" message immediately if found
                         const noMsg = document.getElementById('noChatsMsg');
                         if (noMsg) noMsg.remove();
+
+                        // Get the other participant's ID
+                        const parts = chatId.split('_');
+                        const otherUserId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
+                        
+                        // Get other user's real name
+                        const otherDoc = await getDoc(doc(db, "users", otherUserId));
+                        const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
+                        const itemLabel = docSnap.data().itemLabel || "Item";
 
                         const msgQ = query(collection(db, "chats", chatId, "messages"), orderBy("createdAt", "desc"));
                         onSnapshot(msgQ, (msgSnap) => {
                             const count = msgSnap.size;
                             const lastMsg = msgSnap.docs[0]?.data();
                             
-                            // Condition: Blink if new message received, sender is not me, and chat window not currently focused on this chat
                             let isNew = chatMessageCounts[chatId] !== undefined && count > chatMessageCounts[chatId];
                             let shouldBlink = (isNew || (lastMsg && lastMsg.senderId !== auth.currentUser.uid)) && currentChatId !== chatId;
 
@@ -261,22 +291,19 @@
                                 list.prepend(chatDiv);
                             }
 
-                            if (shouldBlink) {
-                                chatDiv.classList.add('new-message-blink');
-                            } else {
-                                chatDiv.classList.remove('new-message-blink');
-                            }
+                            if (shouldBlink) chatDiv.classList.add('new-message-blink');
+                            else chatDiv.classList.remove('new-message-blink');
 
                             chatDiv.innerHTML = `
                                 <div style="flex: 1;">
                                     <span style="font-weight:700; color:#1e293b; display:flex; align-items:center;">
-                                        ${shouldBlink ? '<span class="dot"></span>' : ''}Message Request
+                                        ${shouldBlink ? '<span class="dot"></span>' : ''}${otherName}
                                     </span>
                                     <small style="color:#64748b; display:block; margin-top:2px;">
-                                        ${lastMsg ? censorText(lastMsg.text).substring(0, 18) + '...' : 'Pending reply...'}
+                                        Re: ${itemLabel}
                                     </small>
                                 </div>
-                                <button onclick="resumeChat('${chatId}', 'User')" style="background:#0f172a; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:600;">Open</button>
+                                <button onclick="resumeChat('${chatId}', '${otherName}')" style="background:#0f172a; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:600;">Open</button>
                             `;
                             chatMessageCounts[chatId] = count;
                         });
@@ -298,7 +325,7 @@
                         <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
                         <h4>${censorText(data.item)}</h4>
                         <p style="font-size:13px; color:#64748b;">📍 ${data.location}</p>
-                        <button onclick="startChat('${docSnap.id}', '${data.userId}', 'User')" style="background:#0f172a; color:white; border:none; padding:8px; border-radius:8px; width:100%; cursor:pointer;">Contact</button>
+                        <button onclick="startChat('${docSnap.id}', '${data.userId}', '${data.item}')" style="background:#0f172a; color:white; border:none; padding:8px; border-radius:8px; width:100%; cursor:pointer;">Contact</button>
                     `;
                     feed.appendChild(card);
                 });
@@ -314,7 +341,11 @@
                     const data = docSnap.data();
                     const card = document.createElement('div');
                     card.className = "card request-card";
-                    card.innerHTML = `<h4>${censorText(data.title)}</h4><button class="btn-help" onclick="startChat('${docSnap.id}', '${data.userId}', 'User')">Help Now</button>`;
+                    card.innerHTML = `
+                        <h4>${censorText(data.title)}</h4>
+                        <p style="font-size:12px; color:#64748b;">Posted by: ${data.userName || 'Unity Member'}</p>
+                        <button class="btn-help" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.title}')">Help Now</button>
+                    `;
                     feed.appendChild(card);
                 });
             });
