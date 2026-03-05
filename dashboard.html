@@ -143,7 +143,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -169,6 +169,26 @@
             return filtered;
         }
 
+        // --- Volunteer Queue Logic ---
+        window.toggleVols = (id) => {
+            const el = document.getElementById(`vols-${id}`);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        };
+
+        window.offerHelp = async (requestId) => {
+            const user = auth.currentUser;
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            const userName = userDoc.exists() ? userDoc.data().fullName : "Unity Member";
+            
+            try {
+                await updateDoc(doc(db, "requests", requestId), {
+                    volunteers: arrayUnion({ uid: user.uid, name: userName }),
+                    volunteerCount: increment(1)
+                });
+                alert("You've joined the volunteer queue!");
+            } catch (e) { alert("Already joined or error occurred."); }
+        };
+
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -186,7 +206,6 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Fetch Legal Name for the Welcome Message
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists()) {
                     document.getElementById('welcomeUser').innerText = `Hello, ${userDoc.data().fullName}`;
@@ -201,13 +220,11 @@
         window.startChat = async (itemId, targetUserId, itemLabel) => {
             if (auth.currentUser.uid === targetUserId) return alert("This is your post!");
             
-            // Get target user's real name
             const targetDoc = await getDoc(doc(db, "users", targetUserId));
             const targetName = targetDoc.exists() ? targetDoc.data().fullName : "User";
 
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
             
-            // Initialize chat document if it doesn't exist
             await setDoc(doc(db, "chats", currentChatId), {
                 participants: [auth.currentUser.uid, targetUserId],
                 itemLabel: itemLabel,
@@ -266,11 +283,8 @@
                         const noMsg = document.getElementById('noChatsMsg');
                         if (noMsg) noMsg.remove();
 
-                        // Get the other participant's ID
                         const parts = chatId.split('_');
                         const otherUserId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
-                        
-                        // Get other user's real name
                         const otherDoc = await getDoc(doc(db, "users", otherUserId));
                         const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
                         const itemLabel = docSnap.data().itemLabel || "Item";
@@ -299,9 +313,7 @@
                                     <span style="font-weight:700; color:#1e293b; display:flex; align-items:center;">
                                         ${shouldBlink ? '<span class="dot"></span>' : ''}${otherName}
                                     </span>
-                                    <small style="color:#64748b; display:block; margin-top:2px;">
-                                        Re: ${itemLabel}
-                                    </small>
+                                    <small style="color:#64748b; display:block; margin-top:2px;">Re: ${itemLabel}</small>
                                 </div>
                                 <button onclick="resumeChat('${chatId}', '${otherName}')" style="background:#0f172a; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:600;">Open</button>
                             `;
@@ -339,12 +351,30 @@
                 feed.innerHTML = "";
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
+                    const isOwner = auth.currentUser.uid === data.userId;
                     const card = document.createElement('div');
                     card.className = "card request-card";
+
+                    let volListHtml = (data.volunteers || []).map(v => `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f1f5f9;">
+                            <span style="font-size:13px;">🙋‍♂️ ${v.name}</span>
+                            ${isOwner ? `<button onclick="startChat('${docSnap.id}', '${v.uid}', '${data.title}')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:11px; cursor:pointer;">Chat</button>` : ''}
+                        </div>
+                    `).join('');
+
                     card.innerHTML = `
                         <h4>${censorText(data.title)}</h4>
-                        <p style="font-size:12px; color:#64748b;">Posted by: ${data.userName || 'Unity Member'}</p>
-                        <button class="btn-help" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.title}')">Help Now</button>
+                        <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Posted by: ${data.userName || 'Unity Member'}</p>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-help" style="margin:0;" onclick="offerHelp('${docSnap.id}')">I Can Help</button>
+                            <button style="background:none; border:1px solid #e2e8f0; padding:8px 12px; border-radius:6px; font-size:12px; cursor:pointer;" onclick="toggleVols('${docSnap.id}')">
+                                Volunteers (${data.volunteerCount || 0})
+                            </button>
+                        </div>
+                        <div id="vols-${docSnap.id}" style="display:none; margin-top:15px; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
+                            <p style="font-size:11px; font-weight:bold; color:#64748b; margin-top:0;">HELPERS QUEUE:</p>
+                            ${volListHtml || '<p style="font-size:12px; color:#94a3b8;">No volunteers yet.</p>'}
+                        </div>
                     `;
                     feed.appendChild(card);
                 });
