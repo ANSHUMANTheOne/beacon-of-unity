@@ -22,6 +22,7 @@
         .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; }
         
         /* Lost and Found Badges */
+        .badge { font-size: 11px; padding: 4px 10px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
         .badge-lost { background: #fee2e2; color: #991b1b; }
         .badge-found { background: #dcfce7; color: #166534; }
 
@@ -30,14 +31,14 @@
 
         /* Existing Request Styling */
         .request-card { border-left: 5px solid #38bdf8; margin-bottom: 15px; }
-        .urgency-high { border-left-color: #ef4444; }
         .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; }
 
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:1000; align-items:center; justify-content:center; }
         .modal-content { background:white; width:90%; max-width:450px; padding:30px; border-radius:20px; }
         input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
 
-        .fab { position: fixed; bottom: 30px; right: 30px; background: #38bdf8; color: #0f172a; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; border: none; cursor: pointer; z-index: 999; }
+        /* Chat Popup */
+        #chatPopup { display:none; position:fixed; bottom:20px; right:90px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
     </style>
 </head>
 <body>
@@ -46,14 +47,13 @@
         <h2>Beacon of Unity</h2>
         <div class="nav-item active" onclick="switchTab('community')">✨ Community Hub</div>
         <div class="nav-item" onclick="switchTab('lostfound')">🔍 Lost and Found</div>
-        <div class="nav-item">📢 Updates</div>
         <div class="nav-item" id="logoutBtnNav" style="margin-top: 100px; opacity: 0.7;">Logout</div>
     </div>
 
     <div class="main-content">
         <div class="header">
             <h1 id="pageTitle">Community Hub</h1>
-            <button class="logout-btn" id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer;">Logout</button>
+            <button id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">Logout</button>
         </div>
 
         <div class="content-grid">
@@ -84,37 +84,32 @@
     <div id="lfModal" class="modal">
         <div class="modal-content">
             <h2>Report Lost/Found Item</h2>
-            <label>I have...</label>
-            <select id="lfType">
-                <option value="Lost">Lost something</option>
-                <option value="Found">Found something</option>
-            </select>
-            <label>Item Name</label><input type="text" id="lfItem" placeholder="e.g. Blue Wallet">
-            <label>Location</label><input type="text" id="lfLoc" placeholder="Where was it last seen?">
+            <label>Type</label>
+            <select id="lfType"><option value="Lost">Lost</option><option value="Found">Found</option></select>
+            <label>Item Name</label><input type="text" id="lfItem" placeholder="Blue Wallet">
+            <label>Location</label><input type="text" id="lfLoc" placeholder="Dubai Mall">
             <label>Description</label><textarea id="lfDesc" placeholder="Describe the item..."></textarea>
-            <button id="submitLFBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Report</button>
+            <button id="submitLFBtn" style="width:100%; padding:12px; background:#38bdf8; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Report</button>
             <button onclick="document.getElementById('lfModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
         </div>
     </div>
 
-    <div id="chatPopup" style="display:none; position:fixed; bottom:20px; right:90px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden;">
-        <div style="background:#0f172a; color:white; padding:12px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleChatCollapse()">
-            <span id="chatWith">Chat</span>
-            <span id="collapseIcon">▼</span>
+    <div id="chatPopup">
+        <div style="background:#0f172a; color:white; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+            <span id="chatWith" style="font-weight:600;">Chat</span>
+            <span onclick="document.getElementById('chatPopup').style.display='none'" style="cursor:pointer;">✕</span>
         </div>
-        <div id="chatBody" style="flex:1; display:flex; flex-direction:column;">
-            <div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc;"></div>
-            <div style="padding:10px; border-top:1px solid #e2e8f0;">
-                <input type="text" id="msgInput" placeholder="Type a message..." style="width:80%;">
-                <button id="sendMsgBtn">➔</button>
-            </div>
+        <div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc; height:330px;"></div>
+        <div style="padding:10px; border-top:1px solid #e2e8f0; display:flex; gap:5px;">
+            <input type="text" id="msgInput" placeholder="Type..." style="margin:0;">
+            <button id="sendMsgBtn" style="background:#38bdf8; border:none; color:white; padding:0 15px; border-radius:8px; cursor:pointer;">➔</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, arrayUnion, increment, deleteDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -129,41 +124,79 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        let currentChatId = null;
+        let unsubscribeChat = null;
+
+        // --- CENSOR FILTER ---
+        const badWords = ["stupid", "idiot", "jerk"]; 
+        function censorText(text) {
+            let filtered = text;
+            badWords.forEach(word => {
+                const regex = new RegExp(word, "gi");
+                filtered = filtered.replace(regex, "****");
+            });
+            return filtered;
+        }
+
+        // --- AUTH ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadRequests();
+                loadLF();
+            } else { window.location.href = "login.html"; }
+        });
+
         // --- TAB SWITCHING ---
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            
             if(tab === 'community') {
                 document.getElementById('communityTab').classList.add('active');
                 document.getElementById('pageTitle').innerText = "Community Hub";
             } else {
                 document.getElementById('lostFoundTab').classList.add('active');
                 document.getElementById('pageTitle').innerText = "Lost and Found";
-                loadLF();
             }
         };
 
-        // --- LOST & FOUND LOGIC ---
-        window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
-
-        document.getElementById('submitLFBtn').onclick = async () => {
-            const type = document.getElementById('lfType').value;
-            const item = document.getElementById('lfItem').value;
-            const loc = document.getElementById('lfLoc').value;
-            const desc = document.getElementById('lfDesc').value;
-
-            if(!item || !loc) return alert("Please fill details");
-
-            await addDoc(collection(db, "lostfound"), {
-                type, item, location: loc, description: desc,
-                userId: auth.currentUser.uid,
-                userEmail: auth.currentUser.email,
-                createdAt: serverTimestamp()
+        // --- CHAT LOGIC ---
+        window.startChat = async (itemId, targetUserId, targetUserName) => {
+            if (auth.currentUser.uid === targetUserId) return alert("This is your own post!");
+            
+            // Unique ID for this specific pair of users and this specific item
+            currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
+            
+            document.getElementById('chatWith').innerText = `Chatting with ${targetUserName}`;
+            document.getElementById('chatPopup').style.display = 'flex';
+            
+            if (unsubscribeChat) unsubscribeChat();
+            const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
+            unsubscribeChat = onSnapshot(q, (snapshot) => {
+                const area = document.getElementById('messageArea');
+                area.innerHTML = "";
+                snapshot.forEach(d => {
+                    const data = d.data();
+                    const isMe = data.senderId === auth.currentUser.uid;
+                    const msgDiv = document.createElement('div');
+                    msgDiv.style = `max-width:80%; padding:8px 12px; border-radius:12px; font-size:13px; margin-bottom:4px; ${isMe ? 'align-self:flex-end; background:#38bdf8; color:white;' : 'align-self:flex-start; background:white; border:1px solid #e2e8f0;'}`;
+                    msgDiv.innerText = data.text;
+                    area.appendChild(msgDiv);
+                });
+                area.scrollTop = area.scrollHeight;
             });
-            document.getElementById('lfModal').style.display = 'none';
         };
 
+        document.getElementById('sendMsgBtn').onclick = async () => {
+            const input = document.getElementById('msgInput');
+            const text = censorText(input.value);
+            if (!text || !currentChatId) return;
+            await addDoc(collection(db, "chats", currentChatId, "messages"), {
+                text, senderId: auth.currentUser.uid, createdAt: serverTimestamp()
+            });
+            input.value = "";
+        };
+
+        // --- DATA LOADING ---
         function loadLF() {
             const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -175,12 +208,11 @@
                     card.className = "card";
                     card.innerHTML = `
                         <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
-                        <h4>${data.item}</h4>
+                        <h4>${censorText(data.item)}</h4>
                         <p style="font-size:13px;">📍 ${data.location}</p>
-                        <p style="font-size:14px; color:#475569;">${data.description}</p>
-                        <button onclick="startChat('${docSnap.id}', '${data.userId}', '${data.userEmail.split('@')[0]}', '${data.userId}')" 
-                                style="background:#f1f5f9; border:1px solid #cbd5e1; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px;">
-                            Contact Finder/Owner
+                        <button onclick="startChat('${docSnap.id}', '${data.userId}', '${data.userEmail.split('@')[0]}')" 
+                                style="background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; width:100%; margin-top:10px;">
+                            Contact ${data.type === 'Lost' ? 'Owner' : 'Finder'}
                         </button>
                     `;
                     feed.appendChild(card);
@@ -188,10 +220,37 @@
             });
         }
 
-        // --- RE-USE YOUR EXISTING CHAT & FEED LOGIC BELOW ---
-        // (Keep all your existing loadRequests, startChat, and onAuthStateChanged functions here)
-        // Ensure you include the "censorText" function you added earlier!
+        function loadRequests() {
+            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const feed = document.getElementById('requestFeed');
+                feed.innerHTML = "";
+                snapshot.forEach(docSnap => {
+                    const req = docSnap.data();
+                    const card = document.createElement('div');
+                    card.className = "card request-card";
+                    card.innerHTML = `<h4>${censorText(req.title)}</h4><button class="btn-help" onclick="startChat('${docSnap.id}', '${req.userId}', '${req.userEmail.split('@')[0]}')">Contact Requester</button>`;
+                    feed.appendChild(card);
+                });
+            });
+        }
 
+        window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
+        document.getElementById('submitLFBtn').onclick = async () => {
+            const item = censorText(document.getElementById('lfItem').value);
+            const loc = document.getElementById('lfLoc').value;
+            if(!item || !loc) return alert("Fill details");
+            await addDoc(collection(db, "lostfound"), {
+                type: document.getElementById('lfType').value, item, location: loc,
+                description: censorText(document.getElementById('lfDesc').value),
+                userId: auth.currentUser.uid, userEmail: auth.currentUser.email, createdAt: serverTimestamp()
+            });
+            document.getElementById('lfModal').style.display = 'none';
+        };
+
+        const handleLogout = () => signOut(auth).then(() => { window.location.href = "login.html"; });
+        document.getElementById('logoutBtn').onclick = handleLogout;
+        document.getElementById('logoutBtnNav').onclick = handleLogout;
     </script>
 </body>
 </html>
