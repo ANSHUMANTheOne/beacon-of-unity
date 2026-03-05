@@ -32,11 +32,15 @@
         }
         .fab:hover { transform: scale(1.1) rotate(90deg); background: #0ea5e9; }
 
-        /* Badges */
+        /* Updated Badges */
         .badge { font-size: 11px; padding: 4px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
         .badge-lost { background: #fee2e2; color: #991b1b; }
         .badge-found { background: #dcfce7; color: #166534; }
         .badge-food { background: #e0f2fe; color: #0369a1; }
+        .badge-transport { background: #fef9c3; color: #854d0e; }
+        .badge-tools { background: #f1f5f9; color: #475569; }
+        .badge-medical { background: #ffedd5; color: #9a3412; }
+        .badge-general { background: #f3e8ff; color: #6b21a8; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -57,9 +61,6 @@
         input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
 
         #chatPopup { display:none; position:fixed; bottom:20px; right:100px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
-
-        .dot { height: 10px; width: 10px; background-color: #ef4444; border-radius: 50%; display: inline-block; margin-right: 8px; }
-
         .chat-list-item { padding: 12px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; border-radius: 12px; margin-bottom: 8px; background: white; }
     </style>
 </head>
@@ -117,10 +118,12 @@
             <label>Title</label><input type="text" id="reqTitle" placeholder="What do you need?">
             <label>Category</label>
             <select id="reqCat">
-                <option value="Food">Food</option>
-                <option value="Transport">Transport</option>
-                <option value="Tools">Tools</option>
+                <option value="Food">Food / Groceries</option>
+                <option value="Transport">Transport / Lift</option>
+                <option value="Tools">Tools / Lending</option>
+                <option value="Medical">Medical / Pharmacy</option>
                 <option value="Labor">General Help</option>
+                <option value="Tech">Tech Support</option>
             </select>
             <label>Urgency</label>
             <select id="reqUrg">
@@ -130,7 +133,7 @@
             <label>Location</label><input type="text" id="reqLoc" placeholder="Where are you?">
             <label>Description</label><textarea id="reqDesc" placeholder="Detailed description..."></textarea>
             <button id="submitReqBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button>
-            <button onclick="document.getElementById('requestModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
+            <button onclick="closeRequestModal()" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
         </div>
     </div>
 
@@ -182,7 +185,11 @@
 
         let currentChatId = null;
         let unsubscribeChat = null;
-        let chatMessageCounts = {};
+
+        // --- SCOPING FIXES (Attaching to window so HTML can see them) ---
+        window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
+        window.closeRequestModal = () => document.getElementById('requestModal').style.display = 'none';
+        window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
 
         // --- AUTH LOGIC ---
         onAuthStateChanged(auth, async (user) => {
@@ -196,13 +203,10 @@
             }
         });
 
-        // --- REQUEST LOGIC ---
-        window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
-
+        // --- REQUEST SUBMISSION (Fixed logic) ---
         document.getElementById('submitReqBtn').onclick = async () => {
             const user = auth.currentUser;
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            const fullName = userDoc.exists() ? userDoc.data().fullName : "Unity Member";
+            if(!user) return;
 
             const title = document.getElementById('reqTitle').value;
             const category = document.getElementById('reqCat').value;
@@ -212,18 +216,31 @@
 
             if(!title || !location) return alert("Title and Location required!");
 
-            await addDoc(collection(db, "requests"), {
-                title, category, urgency, location, description,
-                userId: user.uid,
-                userName: fullName,
-                volunteers: [],
-                volunteerCount: 0,
-                createdAt: serverTimestamp()
-            });
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                const fullName = userDoc.exists() ? userDoc.data().fullName : "Unity Member";
 
-            document.getElementById('requestModal').style.display = 'none';
+                await addDoc(collection(db, "requests"), {
+                    title, category, urgency, location, description,
+                    userId: user.uid,
+                    userName: fullName,
+                    volunteers: [],
+                    volunteerCount: 0,
+                    createdAt: serverTimestamp()
+                });
+
+                // Clear fields and close
+                document.getElementById('reqTitle').value = "";
+                document.getElementById('reqLoc').value = "";
+                document.getElementById('reqDesc').value = "";
+                window.closeRequestModal();
+            } catch (e) {
+                console.error(e);
+                alert("Error posting request.");
+            }
         };
 
+        // --- RENDER REQUESTS ---
         function loadRequests() {
             const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -235,6 +252,9 @@
                     const card = document.createElement('div');
                     card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
 
+                    // Dynamic badge class based on category
+                    const badgeClass = `badge-${data.category.toLowerCase()}`;
+
                     let volListHtml = (data.volunteers || []).map(v => `
                         <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
                             <span style="font-size:12px;">👤 ${v.name}</span>
@@ -244,8 +264,8 @@
 
                     card.innerHTML = `
                         <div style="display:flex; justify-content:space-between;">
-                            <span class="badge badge-food">${data.category}</span>
-                            <small>${data.location}</small>
+                            <span class="badge ${badgeClass}">${data.category}</span>
+                            <small>📍 ${data.location}</small>
                         </div>
                         <h4 style="margin:10px 0;">${data.title}</h4>
                         <p style="font-size:13px; color:#475569;">${data.description}</p>
@@ -350,25 +370,18 @@
 
         window.resumeChat = (id, name) => { currentChatId = id; openChatWindow(name); };
 
-        // --- LOST & FOUND ---
-        window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
-        document.getElementById('submitLFBtn').onclick = async () => {
-            await addDoc(collection(db, "lostfound"), {
-                type: document.getElementById('lfType').value,
-                item: document.getElementById('lfItem').value,
-                location: document.getElementById('lfLoc').value,
-                userId: auth.currentUser.uid,
-                createdAt: serverTimestamp()
-            });
-            document.getElementById('lfModal').style.display = 'none';
-        };
-
         // --- TABS & LOGOUT ---
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(tab === 'community' ? 'communityTab' : 'lostFoundTab').classList.add('active');
-            document.getElementById('pageTitle').innerText = tab === 'community' ? "Community Hub" : "Lost and Found";
-            // Hide FAB on Lost & Found tab if you only want it for help requests
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            if(tab === 'community') {
+                document.getElementById('communityTab').classList.add('active');
+                document.getElementById('pageTitle').innerText = "Community Hub";
+            } else {
+                document.getElementById('lostFoundTab').classList.add('active');
+                document.getElementById('pageTitle').innerText = "Lost and Found";
+            }
             document.getElementById('fabBtn').style.display = tab === 'community' ? 'flex' : 'none';
         };
 
