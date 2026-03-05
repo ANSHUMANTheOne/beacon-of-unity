@@ -19,7 +19,7 @@
 
         <div id="verifySection" style="display:none;">
             <h3>Verify Your Identity</h3>
-            <p id="instructionText">Enter your legal name as it appears on your ID and upload a photo.</p>
+            <p id="instructionText">Enter your legal name as it appears on your ID and upload a photo of you holding your Emirates ID with your face visible.</p>
             
             <div id="uploadControls">
                 <input type="text" id="fullName" placeholder="Full Legal Name" style="width:90%; padding:10px; margin-bottom:15px; border: 1px solid #3498db; border-radius: 5px;">
@@ -70,7 +70,7 @@
                     document.getElementById('instructionText').style.display = "none";
                     document.getElementById('statusMsg').innerText = "⏳ Verification Pending. Admin is reviewing your ID.";
                 } else {
-                    document.getElementById('statusMsg').innerText = "Account found. Please verify your identity.";
+                    document.getElementById('statusMsg').innerText = "Identity Verification";
                 }
             } else {
                 document.getElementById('loginForm').style.display = "block";
