@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>Login - Beacon of Unity</title>
+    <meta charset="UTF-8">
+    <title>Login - Beacon of Unity</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body style="font-family:sans-serif; background:#f4f7f6; display:flex; justify-content:center; align-items:center; height:100vh; margin:0;">
@@ -18,17 +19,20 @@
 
         <div id="verifySection" style="display:none;">
             <h3>Verify Your Identity</h3>
-            <p>Please upload your Emirates ID front.</p>
-            <input type="file" id="idPhoto" accept="image/*" style="margin-bottom:15px;">
-            <button id="uploadBtn" style="width:95%; padding:10px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">Submit for Admin Approval</button>
+            <p id="instructionText">Please upload your Emirates ID front.</p>
+            <div id="uploadControls">
+                <input type="file" id="idPhoto" accept="image/*" style="margin-bottom:15px;">
+                <button id="uploadBtn" style="width:95%; padding:10px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">Submit for Admin Approval</button>
+            </div>
         </div>
-        <p id="statusMsg" style="margin-top:15px; font-weight:bold;"></p>
+        
+        <p id="statusMsg" style="margin-top:15px; font-weight:bold; color: #2c3e50;"></p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -44,50 +48,88 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // Check if user is already logged in
+        // --- AUTH STATE OBSERVER (The "Redirector") ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().status === "Approved") {
-                    window.location.href = "dashboard.html"; // Send to main site
-                } else {
-                    document.getElementById('loginForm').style.display = "none";
-                    document.getElementById('verifySection').style.display = "block";
-                    document.getElementById('statusMsg').innerText = userDoc.exists() ? "Status: " + userDoc.data().status : "Please verify.";
+                const userData = userDoc.exists() ? userDoc.data() : null;
+
+                // 1. Check if Approved -> Go to Dashboard
+                if (userData && userData.status === "approved") {
+                    window.location.href = "dashboard.html";
+                    return;
                 }
+
+                // 2. Hide Login, Show Verification
+                document.getElementById('loginForm').style.display = "none";
+                document.getElementById('verifySection').style.display = "block";
+
+                // 3. Check if Waiting
+                if (userData && userData.status === "waiting for approval") {
+                    document.getElementById('uploadControls').style.display = "none";
+                    document.getElementById('instructionText').style.display = "none";
+                    document.getElementById('statusMsg').innerText = "⏳ Verification Pending. Admin is reviewing your ID.";
+                } else {
+                    document.getElementById('statusMsg').innerText = "Account found. Please verify your ID.";
+                }
+            } else {
+                // Not logged in
+                document.getElementById('loginForm').style.display = "block";
+                document.getElementById('verifySection').style.display = "none";
             }
         });
 
-        // Email Login/Signup Logic
+        // --- LOGIN LOGIC ---
         document.getElementById('emailLoginBtn').onclick = async () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
             } catch (e) {
-                await createUserWithEmailAndPassword(auth, email, pass);
+                try {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                } catch (err) { alert(err.message); }
             }
         };
 
-        // Google Login Logic
         document.getElementById('googleLoginBtn').onclick = () => signInWithPopup(auth, provider);
 
-        // ID Upload Logic
+        // --- UPLOAD LOGIC (The "Master Bridge") ---
         document.getElementById('uploadBtn').onclick = async () => {
             const file = document.getElementById('idPhoto').files[0];
             const user = auth.currentUser;
-            if(!file) return alert("Select a photo");
+            
+            if(!file) return alert("Please select a photo first.");
+            document.getElementById('uploadBtn').innerText = "Uploading...";
+            document.getElementById('uploadBtn').disabled = true;
 
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = async () => {
-                await setDoc(doc(db, "users", user.uid), {
-                    email: user.email,
-                    idImage: reader.result,
-                    status: "Pending Verification",
-                    timestamp: new Date()
-                });
-                document.getElementById('statusMsg').innerText = "✅ Submitted! Admin will review.";
+                try {
+                    // A. Create the Review Request for Admin Panel
+                    await addDoc(collection(db, "id_reviews"), {
+                        email: user.email,
+                        userId: user.uid,
+                        idCardUrl: reader.result,
+                        timestamp: new Date()
+                    });
+
+                    // B. Update the User's Status to lock them out until approved
+                    await setDoc(doc(db, "users", user.uid), {
+                        email: user.email,
+                        status: "waiting for approval"
+                    }, { merge: true });
+
+                    // C. Update UI
+                    document.getElementById('uploadControls').style.display = "none";
+                    document.getElementById('statusMsg').innerText = "✅ Submitted! Admin will review your access.";
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Submission failed. Check connection.");
+                    document.getElementById('uploadBtn').disabled = false;
+                    document.getElementById('uploadBtn').innerText = "Submit for Admin Approval";
+                }
             };
         };
     </script>
