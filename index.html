@@ -66,5 +66,34 @@
         <p>&copy; 2026 Beacon of Unity. All rights reserved.</p>
     </footer>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
+            authDomain: "beaconofunityofficial.firebaseapp.com",
+            projectId: "beaconofunityofficial", 
+            storageBucket: "beaconofunityofficial.firebasestorage.app",
+            messagingSenderId: "37918398882",
+            appId: "1:37918398882:web:205161bb147393f4defafb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Check if a returning user is already approved
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().status === "approved") {
+                    // Approved members skip the landing page
+                    window.location.href = "dashboard.html";
+                }
+            }
+        });
+    </script>
 </body>
 </html>
