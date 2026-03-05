@@ -37,6 +37,19 @@
         input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
 
         #chatPopup { display:none; position:fixed; bottom:20px; right:90px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
+
+        /* --- BLINKING ANIMATION --- */
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); border-color: #ef4444; }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); border-color: #ef4444; }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: #e2e8f0; }
+        }
+        .new-message-blink {
+            animation: pulse-red 2s infinite;
+            background: #fff1f2 !important;
+            border-width: 2px !important;
+        }
+        .dot { height: 8px; width: 8px; background-color: #ef4444; border-radius: 50%; display: inline-block; margin-right: 5px; }
     </style>
 </head>
 <body>
@@ -74,7 +87,9 @@
             <div>
                 <div class="card">
                     <h3>Active Conversations</h3>
-                    <div id="activeChatsList" style="font-size: 13px; color: #64748b;"><p>No active chats.</p></div>
+                    <div id="activeChatsList" style="font-size: 13px; color: #64748b;">
+                        <p>No active chats.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,15 +143,12 @@
 
         let currentChatId = null;
         let unsubscribeChat = null;
+        let chatMessageCounts = {}; // Track message count per chat for blinking
 
-        // --- CENSOR FILTER ---
         const badWords = ["stupid", "idiot", "jerk", "shut up"]; 
         function censorText(text) {
             let filtered = text;
-            badWords.forEach(word => {
-                const regex = new RegExp(word, "gi");
-                filtered = filtered.replace(regex, "****");
-            });
+            badWords.forEach(word => { filtered = filtered.replace(new RegExp(word, "gi"), "****"); });
             return filtered;
         }
 
@@ -154,15 +166,13 @@
             }
         };
 
-        // --- AUTH & INITIAL LOAD ---
+        // --- AUTH ---
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                loadRequests();
-                loadActiveChats();
-            } else { window.location.href = "login.html"; }
+            if (user) { loadRequests(); loadActiveChats(); } 
+            else { window.location.href = "login.html"; }
         });
 
-        // --- CHAT SYSTEM ---
+        // --- CHAT LOGIC ---
         window.startChat = async (itemId, targetUserId, targetUserName) => {
             if (auth.currentUser.uid === targetUserId) return alert("This is your post!");
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
@@ -171,6 +181,9 @@
 
         window.resumeChat = (chatID, label) => {
             currentChatId = chatID;
+            // Clear blinking when opened
+            const el = document.getElementById(`item-${chatID}`);
+            if(el) el.classList.remove('new-message-blink');
             openChatWindow(label);
         };
 
@@ -178,6 +191,7 @@
             document.getElementById('chatWith').innerText = `Chat: ${label}`;
             document.getElementById('chatPopup').style.display = 'flex';
             if (unsubscribeChat) unsubscribeChat();
+            
             const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
             unsubscribeChat = onSnapshot(q, (snapshot) => {
                 const area = document.getElementById('messageArea');
@@ -204,27 +218,50 @@
             input.value = "";
         };
 
-        // --- ACTIVE CHATS LISTENER (The Fix) ---
+        // --- UPDATED ACTIVE CHATS WITH BLINKING ---
         function loadActiveChats() {
             const q = query(collection(db, "chats"));
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('activeChatsList');
-                list.innerHTML = "";
-                let hasChats = false;
                 snapshot.forEach(docSnap => {
-                    if (docSnap.id.includes(auth.currentUser.uid)) {
-                        hasChats = true;
-                        const chatDiv = document.createElement('div');
-                        chatDiv.style = "padding:10px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;";
-                        chatDiv.innerHTML = `<span>Conversation</span><button onclick="resumeChat('${docSnap.id}', 'Active Chat')" style="background:#0f172a; color:white; border:none; padding:4px 8px; border-radius:5px; cursor:pointer; font-size:11px;">Open</button>`;
-                        list.appendChild(chatDiv);
+                    const chatId = docSnap.id;
+                    if (chatId.includes(auth.currentUser.uid)) {
+                        
+                        // Listen for message counts in each chat
+                        const msgQ = query(collection(db, "chats", chatId, "messages"));
+                        onSnapshot(msgQ, (msgSnap) => {
+                            const count = msgSnap.size;
+                            const lastMsg = msgSnap.docs[msgSnap.docs.length - 1]?.data();
+                            
+                            // Detect new message that isn't from me
+                            let isNew = chatMessageCounts[chatId] !== undefined && count > chatMessageCounts[chatId];
+                            let shouldBlink = isNew && lastMsg?.senderId !== auth.currentUser.uid && currentChatId !== chatId;
+
+                            let chatDiv = document.getElementById(`item-${chatId}`);
+                            if (!chatDiv) {
+                                chatDiv = document.createElement('div');
+                                chatDiv.id = `item-${chatId}`;
+                                chatDiv.style = "padding:10px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center; border-radius:8px; margin-bottom:5px; transition:0.3s;";
+                                list.prepend(chatDiv);
+                            }
+
+                            if (shouldBlink) chatDiv.classList.add('new-message-blink');
+
+                            chatDiv.innerHTML = `
+                                <div>
+                                    <span style="font-weight:600; display:block;">${shouldBlink ? '<span class="dot"></span>' : ''}Message Request</span>
+                                    <small style="color:#64748b;">${lastMsg ? lastMsg.text.substring(0, 15) + '...' : 'Open to chat'}</small>
+                                </div>
+                                <button onclick="resumeChat('${chatId}', 'User')" style="background:#0f172a; color:white; border:none; padding:4px 8px; border-radius:5px; cursor:pointer; font-size:11px;">Open</button>
+                            `;
+                            chatMessageCounts[chatId] = count;
+                        });
                     }
                 });
-                if (!hasChats) list.innerHTML = "<p>No active chats.</p>";
             });
         }
 
-        // --- FEED LOADERS ---
+        // --- FEED LOADERS (LF & REQUESTS) ---
         function loadLF() {
             const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -238,7 +275,7 @@
                         <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
                         <h4>${censorText(data.item)}</h4>
                         <p style="font-size:13px; color:#64748b;">📍 ${data.location}</p>
-                        <button onclick="startChat('${docSnap.id}', '${data.userId}', '${data.userEmail.split('@')[0]}')" style="background:#0f172a; color:white; border:none; padding:8px; border-radius:8px; width:100%; cursor:pointer;">Contact</button>
+                        <button onclick="startChat('${docSnap.id}', '${data.userId}', 'User')" style="background:#0f172a; color:white; border:none; padding:8px; border-radius:8px; width:100%; cursor:pointer;">Contact</button>
                     `;
                     feed.appendChild(card);
                 });
@@ -254,13 +291,12 @@
                     const data = docSnap.data();
                     const card = document.createElement('div');
                     card.className = "card request-card";
-                    card.innerHTML = `<h4>${censorText(data.title)}</h4><button class="btn-help" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.userEmail.split('@')[0]}')">Help Now</button>`;
+                    card.innerHTML = `<h4>${censorText(data.title)}</h4><button class="btn-help" onclick="startChat('${docSnap.id}', '${data.userId}', 'User')">Help Now</button>`;
                     feed.appendChild(card);
                 });
             });
         }
 
-        // --- SUBMISSION ---
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
         document.getElementById('submitLFBtn').onclick = async () => {
             const item = censorText(document.getElementById('lfItem').value);
@@ -274,9 +310,9 @@
             document.getElementById('lfModal').style.display = 'none';
         };
 
-        const handleLogout = () => signOut(auth).then(() => { window.location.href = "login.html"; });
-        document.getElementById('logoutBtn').onclick = handleLogout;
-        document.getElementById('logoutBtnNav').onclick = handleLogout;
+        const logout = () => signOut(auth).then(() => window.location.href = "login.html");
+        document.getElementById('logoutBtn').onclick = logout;
+        document.getElementById('logoutBtnNav').onclick = logout;
     </script>
 </body>
 </html>
