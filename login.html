@@ -48,23 +48,20 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // --- AUTH STATE OBSERVER (The "Redirector") ---
+        // --- AUTH STATE OBSERVER ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 const userData = userDoc.exists() ? userDoc.data() : null;
 
-                // 1. Check if Approved -> Go to Dashboard
                 if (userData && userData.status === "approved") {
                     window.location.href = "dashboard.html";
                     return;
                 }
 
-                // 2. Hide Login, Show Verification
                 document.getElementById('loginForm').style.display = "none";
                 document.getElementById('verifySection').style.display = "block";
 
-                // 3. Check if Waiting
                 if (userData && userData.status === "waiting for approval") {
                     document.getElementById('uploadControls').style.display = "none";
                     document.getElementById('instructionText').style.display = "none";
@@ -73,7 +70,6 @@
                     document.getElementById('statusMsg').innerText = "Account found. Please verify your ID.";
                 }
             } else {
-                // Not logged in
                 document.getElementById('loginForm').style.display = "block";
                 document.getElementById('verifySection').style.display = "none";
             }
@@ -94,7 +90,7 @@
 
         document.getElementById('googleLoginBtn').onclick = () => signInWithPopup(auth, provider);
 
-        // --- UPLOAD LOGIC (The "Master Bridge") ---
+        // --- UPDATED UPLOAD LOGIC ---
         document.getElementById('uploadBtn').onclick = async () => {
             const file = document.getElementById('idPhoto').files[0];
             const user = auth.currentUser;
@@ -107,26 +103,38 @@
             reader.readAsDataURL(file);
             reader.onload = async () => {
                 try {
-                    // A. Create the Review Request for Admin Panel
+                    // 1. Fetch current user data to see if they were previously denied
+                    const userRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userRef);
+                    let isRetry = false;
+
+                    if (userSnap.exists()) {
+                        // Check if the permanent flag exists in the user profile
+                        isRetry = userSnap.data().hasPreviousDenial || false;
+                    }
+
+                    // 2. Add to review queue with the 'hasPreviousDenial' flag
                     await addDoc(collection(db, "id_reviews"), {
                         email: user.email,
                         userId: user.uid,
                         idCardUrl: reader.result,
+                        hasPreviousDenial: isRetry, 
                         timestamp: new Date()
                     });
 
-                    // B. Update the User's Status to lock them out until approved
-                    await setDoc(doc(db, "users", user.uid), {
+                    // 3. Set status to 'waiting' so they can't upload again immediately
+                    await setDoc(userRef, {
                         email: user.email,
                         status: "waiting for approval"
                     }, { merge: true });
 
-                    // C. Update UI
+                    // 4. Update UI
                     document.getElementById('uploadControls').style.display = "none";
+                    document.getElementById('instructionText').style.display = "none";
                     document.getElementById('statusMsg').innerText = "✅ Submitted! Admin will review your access.";
                 } catch (error) {
                     console.error("Error:", error);
-                    alert("Submission failed. Check connection.");
+                    alert("Submission failed.");
                     document.getElementById('uploadBtn').disabled = false;
                     document.getElementById('uploadBtn').innerText = "Submit for Admin Approval";
                 }
