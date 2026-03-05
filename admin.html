@@ -31,16 +31,14 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="tableBody">
-            </tbody>
+        <tbody id="tableBody"></tbody>
     </table>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // CORRECTED CONFIG BASED ON YOUR FIREBASE SCREENSHOT
     const firebaseConfig = {
         apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
         authDomain: "beaconofunityofficial.firebaseapp.com",
@@ -53,89 +51,95 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // WE ATTACH TO WINDOW SO THE HTML BUTTONS CAN CALL THIS
     window.processUser = async (docId, userEmail, action, userId) => {
         const WORKER_URL = "https://brevo-proxy.anshorg.workers.dev/"; 
         const BREVO_LIST_ID = 2; 
+        const userRef = doc(db, "users", userId);
 
         if (action === 'approve') {
             try {
-                // 1. Trigger the Brevo Welcome Email via Cloudflare
                 const res = await fetch(WORKER_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        email: userEmail,
-                        listIds: [BREVO_LIST_ID],
-                        updateEnabled: true
-                    })
+                    body: JSON.stringify({ email: userEmail, listIds: [BREVO_LIST_ID], updateEnabled: true })
                 });
 
                 if (res.ok) {
-                    // 2. Update status to "approved" (lowercase to match your dashboard check)
-                    const userRef = doc(db, "users", userId);
-                    await updateDoc(userRef, { 
-                        status: "approved",
-                        approvedAt: new Date().toISOString()
-                    });
-
-                    // 3. Remove from the Review Queue
+                    await updateDoc(userRef, { status: "approved", approvedAt: new Date().toISOString() });
                     await deleteDoc(doc(db, "id_reviews", docId));
-                    
-                    alert("User Approved! They can now access the Hub.");
+                    alert("User Approved!");
                     loadData();
                 } else {
-                    alert("Worker Error: Check your BREVO_KEY in Cloudflare settings.");
+                    alert("Worker Error.");
                 }
             } catch (e) {
-                console.error("System Error:", e);
-                alert("Failed to connect to proxy.");
+                alert("Connection failed.");
             }
         } else {
-            // If Denied
-            await deleteDoc(doc(db, "id_reviews", docId));
-            alert("Verification denied and removed.");
-            loadData();
+            // --- UPDATED DENY LOGIC WITH 3 STRIKES ---
+            try {
+                const userSnap = await getDoc(userRef);
+                let currentAttempts = 0;
+                
+                if (userSnap.exists() && userSnap.data().attempts) {
+                    currentAttempts = userSnap.data().attempts;
+                }
+
+                currentAttempts += 1;
+
+                if (currentAttempts >= 3) {
+                    // Block the user permanently
+                    await updateDoc(userRef, { 
+                        status: "blocked", 
+                        attempts: currentAttempts 
+                    });
+                    alert("User has failed 3 times and is now BLOCKED.");
+                } else {
+                    // Allow them to retry
+                    await updateDoc(userRef, { 
+                        status: "rejected", 
+                        attempts: currentAttempts 
+                    });
+                    alert(`Request denied. User has ${3 - currentAttempts} attempts left.`);
+                }
+
+                // Clear the request from the queue
+                await deleteDoc(doc(db, "id_reviews", docId));
+                loadData();
+            } catch (err) {
+                console.error(err);
+                alert("Error processing denial.");
+            }
         }
     };
 
-    // LOAD THE PENDING REQUESTS
     async function loadData() {
         const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = "<tr><td colspan='3'>Searching for new verification requests...</td></tr>";
-        
+        tableBody.innerHTML = "<tr><td colspan='3'>Searching...</td></tr>";
         try {
             const querySnapshot = await getDocs(collection(db, "id_reviews"));
             tableBody.innerHTML = "";
-
             if (querySnapshot.empty) {
                 tableBody.innerHTML = "<tr><td colspan='3'>No pending verifications.</td></tr>";
                 return;
             }
-
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                const row = `
+                tableBody.innerHTML += `
                     <tr>
                         <td>${data.email}</td>
-                        <td><a href="${data.idCardUrl}" target="_blank" class="id-link">View Uploaded ID</a></td>
+                        <td><a href="${data.idCardUrl}" target="_blank" class="id-link">View ID</a></td>
                         <td>
                             <button onclick="processUser('${doc.id}', '${data.email}', 'approve', '${data.userId}')" class="btn btn-approve">Approve</button>
                             <button onclick="processUser('${doc.id}', '${data.email}', 'deny', '${data.userId}')" class="btn btn-deny">Deny</button>
                         </td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
+                    </tr>`;
             });
         } catch (err) {
-            console.error("Firestore Load Error:", err);
-            tableBody.innerHTML = "<tr><td colspan='3' style='color:red;'>Error loading data. Check Project ID.</td></tr>";
+            tableBody.innerHTML = "<tr><td colspan='3'>Error loading data.</td></tr>";
         }
     }
-
-    // Run on startup
     loadData();
 </script>
-
 </body>
 </html>
