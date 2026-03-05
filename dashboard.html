@@ -57,6 +57,7 @@
         }
 
         .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-help:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
         .btn-delete { background: #fee2e2; color: #991b1b; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
 
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:1000; align-items:center; justify-content:center; }
@@ -228,7 +229,7 @@
                 } else {
                     document.getElementById('welcomeUser').innerText = `Hello, ${userSnap.data().fullName}`;
                     loadRequests(); 
-                    loadLF(); // Logic added for Lost & Found
+                    loadLF(); 
                     loadActiveChats(); 
                 }
             } else {
@@ -326,7 +327,12 @@
                 feed.innerHTML = "";
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
-                    const isOwner = auth.currentUser.uid === data.userId;
+                    const currentUserId = auth.currentUser.uid;
+                    const isOwner = currentUserId === data.userId;
+                    
+                    // Logic to check if user already volunteered
+                    const hasVolunteered = (data.volunteers || []).some(v => v.uid === currentUserId);
+
                     const card = document.createElement('div');
                     card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
                     const badgeClass = `badge-${data.category.toLowerCase()}`;
@@ -350,7 +356,11 @@
                         <p style="font-size:11px; color:#64748b; margin: -5px 0 10px 0;">Posted by: ${data.userName}</p>
                         <p style="font-size:13px; color:#475569;">${data.description}</p>
                         <div style="display:flex; gap:10px; align-items:center;">
-                            <button class="btn-help" onclick="offerHelp('${docSnap.id}')">I Can Help</button>
+                            <button class="btn-help" 
+                                ${isOwner || hasVolunteered ? 'disabled' : ''} 
+                                onclick="offerHelp('${docSnap.id}')">
+                                ${isOwner ? 'Your Post' : (hasVolunteered ? 'Waitlisted' : 'I Can Help')}
+                            </button>
                             <span style="font-size:12px; color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="toggleVols('${docSnap.id}')">
                                 Volunteers (${data.volunteerCount || 0})
                             </span>
@@ -411,8 +421,21 @@
 
         window.offerHelp = async (requestId) => {
             const user = auth.currentUser;
+            const reqRef = doc(db, "requests", requestId);
+            const reqSnap = await getDoc(reqRef);
+            
+            if(!reqSnap.exists()) return;
+            const data = reqSnap.data();
+
+            // Prevent self-volunteering
+            if(data.userId === user.uid) return alert("You cannot volunteer for your own post.");
+
+            // Prevent duplicate volunteering
+            const alreadyVolunteered = (data.volunteers || []).some(v => v.uid === user.uid);
+            if(alreadyVolunteered) return alert("You have already offered help for this request.");
+
             const userDoc = await getDoc(doc(db, "users", user.uid));
-            await updateDoc(doc(db, "requests", requestId), {
+            await updateDoc(reqRef, {
                 volunteers: arrayUnion({ uid: user.uid, name: userDoc.data().fullName }),
                 volunteerCount: increment(1)
             });
