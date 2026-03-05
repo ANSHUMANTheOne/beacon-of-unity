@@ -39,6 +39,10 @@
         .badge-tools { background: #f1f5f9; color: #475569; }
         .badge-medical { background: #ffedd5; color: #9a3412; }
         .badge-general, .badge-labor, .badge-tech { background: #f3e8ff; color: #6b21a8; }
+        
+        /* Lost & Found Badges */
+        .badge-lost { background: #fee2e2; color: #991b1b; }
+        .badge-found { background: #dcfce7; color: #166534; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -160,6 +164,8 @@
             <label>Item Name</label><input type="text" id="lfItem" placeholder="e.g. Blue Wallet">
             <label>Location</label><input type="text" id="lfLoc" placeholder="Where?">
             <label>Description</label><textarea id="lfDesc" placeholder="Describe..."></textarea>
+            <label>Photo (Optional)</label>
+            <input type="file" id="lfImg" accept="image/*" style="font-size: 12px;">
             <button id="submitLFBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Report</button>
             <button onclick="document.getElementById('lfModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
         </div>
@@ -222,6 +228,7 @@
                 } else {
                     document.getElementById('welcomeUser').innerText = `Hello, ${userSnap.data().fullName}`;
                     loadRequests(); 
+                    loadLF(); // Logic added for Lost & Found
                     loadActiveChats(); 
                 }
             } else {
@@ -229,7 +236,7 @@
             }
         });
 
-        // --- SUBMISSION ---
+        // --- SUBMISSION (REQUESTS) ---
         document.getElementById('submitReqBtn').onclick = async () => {
             const user = auth.currentUser;
             const title = document.getElementById('reqTitle').value.trim();
@@ -260,7 +267,58 @@
             } catch (e) { alert("Error posting."); }
         };
 
-        // --- FEED ---
+        // --- SUBMISSION (LOST & FOUND) ---
+        const processImage = (file) => new Promise((resolve) => {
+            if (!file) resolve("");
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const img = new Image();
+                img.src = reader.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 400; 
+                    const scale = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scale;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.5));
+                };
+            };
+        });
+
+        document.getElementById('submitLFBtn').onclick = async () => {
+            const user = auth.currentUser;
+            const item = document.getElementById('lfItem').value.trim();
+            const loc = document.getElementById('lfLoc').value.trim();
+            if(!item || !loc) return alert("Item and Location required!");
+
+            try {
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                const imgFile = document.getElementById('lfImg').files[0];
+                const imgBase64 = await processImage(imgFile);
+
+                await addDoc(collection(db, "lostfound"), {
+                    item,
+                    type: document.getElementById('lfType').value,
+                    location: loc,
+                    description: document.getElementById('lfDesc').value.trim(),
+                    image: imgBase64,
+                    userId: user.uid,
+                    userName: userSnap.data().fullName,
+                    createdAt: serverTimestamp()
+                });
+
+                document.getElementById('lfItem').value = "";
+                document.getElementById('lfLoc').value = "";
+                document.getElementById('lfDesc').value = "";
+                document.getElementById('lfImg').value = "";
+                document.getElementById('lfModal').style.display = 'none';
+            } catch (e) { alert("Error posting report."); }
+        };
+
+        // --- FEED (REQUESTS) ---
         function loadRequests() {
             const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -306,8 +364,44 @@
             });
         }
 
+        // --- FEED (LOST & FOUND) ---
+        function loadLF() {
+            const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const feed = document.getElementById('lfFeed');
+                feed.innerHTML = "";
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const isOwner = auth.currentUser.uid === data.userId;
+                    const card = document.createElement('div');
+                    card.className = "card";
+                    const badgeClass = data.type === 'Lost' ? 'badge-lost' : 'badge-found';
+
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <span class="badge ${badgeClass}">${data.type}</span>
+                            <div style="text-align:right;">
+                                <small style="display:block;">📍 ${data.location}</small>
+                                ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}
+                            </div>
+                        </div>
+                        ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
+                        <h4 style="margin:10px 0;">${data.item}</h4>
+                        <p style="font-size:11px; color:#64748b; margin: -5px 0 10px 0;">Reported by: ${data.userName}</p>
+                        <p style="font-size:13px; color:#475569;">${data.description}</p>
+                        ${!isOwner ? `<button class="btn-help" style="width:100%; margin-top:10px;" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.type}: ${data.item}')">Contact Finder/Owner</button>` : ''}
+                    `;
+                    feed.appendChild(card);
+                });
+            });
+        }
+
         window.deletePost = async (id) => {
             if(confirm("Delete this request?")) await deleteDoc(doc(db, "requests", id));
+        };
+
+        window.deleteLF = async (id) => {
+            if(confirm("Delete this report?")) await deleteDoc(doc(db, "lostfound", id));
         };
 
         window.toggleVols = (id) => {
@@ -327,6 +421,7 @@
 
         // --- CHAT ---
         window.startChat = async (itemId, targetUserId, label) => {
+            if(auth.currentUser.uid === targetUserId) return;
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
             await setDoc(doc(db, "chats", currentChatId), {
                 participants: [auth.currentUser.uid, targetUserId],
@@ -399,9 +494,11 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(tab === 'community') {
                 document.getElementById('communityTab').classList.add('active');
+                document.querySelectorAll('.nav-item')[0].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Community Hub";
             } else {
                 document.getElementById('lostFoundTab').classList.add('active');
+                document.querySelectorAll('.nav-item')[1].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Lost and Found";
             }
             document.getElementById('fabBtn').style.display = tab === 'community' ? 'flex' : 'none';
