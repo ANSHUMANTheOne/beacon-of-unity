@@ -18,14 +18,32 @@
         .main-content { margin-left: 310px; padding: 40px; width: calc(100% - 310px); }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .welcome-text h1 { margin: 0; font-size: 28px; color: #0f172a; }
-        .welcome-text p { margin: 5px 0 0; color: #64748b; }
         
         .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
-        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; }
         
-        .status-badge { background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 99px; font-size: 13px; font-weight: 600; }
+        /* Request Feed Styling */
+        .request-card { border-left: 5px solid #38bdf8; margin-bottom: 15px; }
+        .urgency-high { border-left-color: #ef4444; }
+        .badge { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
+        .badge-food { background: #dcfce7; color: #166534; }
+        .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+
+        /* Modal Styling */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:1000; align-items:center; justify-content:center; }
+        .modal-content { background:white; width:90%; max-width:450px; padding:30px; border-radius:20px; }
+        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
+
+        /* FAB */
+        .fab { position: fixed; bottom: 30px; right: 30px; background: #38bdf8; color: #0f172a; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; border: none; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.4); }
+
         .logout-btn { background: #fee2e2; color: #991b1b; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .logout-btn:hover { background: #fecaca; }
+        
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; width: 100%; padding: 20px; }
+            .content-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -43,29 +61,67 @@
         <div class="header">
             <div class="welcome-text">
                 <h1 id="welcomeUser">Hello!</h1>
-                <p>Welcome to the circle. You are a verified member.</p>
+                <p>What would you like to do today?</p>
             </div>
             <button class="logout-btn" id="logoutBtn">Logout</button>
         </div>
 
         <div class="content-grid">
-            <div class="card">
-                <h3>Latest Updates</h3>
-                <p>No new announcements today. Check back later for community news and events!</p>
+            <div>
+                <h3>Community Requests</h3>
+                <div id="requestFeed">
+                    <p>Loading requests...</p>
+                </div>
             </div>
             
-            <div class="card">
-                <h3>Your Profile</h3>
-                <p style="font-size: 14px; color: #64748b;">Verified Member Since: <br><span id="joinedDate" style="color: #0f172a; font-weight: 500;">March 2026</span></p>
-                <span class="status-badge">Active Member</span>
+            <div>
+                <div class="card">
+                    <h3>Your Impact</h3>
+                    <p style="font-size: 14px; color: #64748b;">Volunteer Points: <span id="userPoints" style="color: #38bdf8; font-weight: 800;">0</span></p>
+                    <span class="status-badge" style="background:#dcfce7; color:#166534; padding:4px 10px; border-radius:99px; font-size:12px;">Verified Member</span>
+                </div>
             </div>
         </div>
     </div>
 
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-top:0;">Request Help</h2>
+            <label>Title</label>
+            <input type="text" id="reqTitle" placeholder="What do you need?">
+            
+            <label>Category</label>
+            <select id="reqCategory">
+                <option value="Food">Food / Groceries</option>
+                <option value="Medicine">Medicine</option>
+                <option value="Transport">Transport</option>
+                <option value="Emergency">Emergency Supplies</option>
+            </select>
+
+            <label>Urgency Level</label>
+            <select id="reqUrgency">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High (Urgent)</option>
+            </select>
+
+            <label>Location</label>
+            <input type="text" id="reqLocation" placeholder="e.g., Al Majaz, Sharjah">
+
+            <label>Description</label>
+            <textarea id="reqDesc" rows="3" placeholder="Describe how someone can help..."></textarea>
+            
+            <button id="submitReqBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button>
+            <button id="closeModalBtn" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <button class="fab" id="openModalBtn">+</button>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -80,12 +136,13 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // --- AUTH & REDIRECT ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                
                 if (userDoc.exists() && userDoc.data().status === "approved") {
                     document.getElementById('welcomeUser').innerText = `Welcome, ${user.email.split('@')[0]}!`;
+                    loadRequests(); // Load the feed once verified
                 } else {
                     window.location.href = "login.html";
                 }
@@ -94,10 +151,60 @@
             }
         });
 
-        const handleLogout = () => {
-            signOut(auth).then(() => { window.location.href = "login.html"; });
+        // --- LOAD REQUESTS (REAL-TIME) ---
+        function loadRequests() {
+            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const feed = document.getElementById('requestFeed');
+                feed.innerHTML = "";
+                if (snapshot.empty) feed.innerHTML = "<p>No active requests in your area.</p>";
+                
+                snapshot.forEach(docSnap => {
+                    const req = docSnap.data();
+                    const card = document.createElement('div');
+                    card.className = `card request-card ${req.urgency === 'high' ? 'urgency-high' : ''}`;
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="badge badge-food">${req.category}</span>
+                            <small style="color:#64748b;">${req.location}</small>
+                        </div>
+                        <h4 style="margin: 10px 0 5px 0;">${req.title}</h4>
+                        <p style="font-size: 14px; color: #475569;">${req.description}</p>
+                        <button class="btn-help" onclick="alert('Chat system coming in Step 4!')">I Can Help</button>
+                    `;
+                    feed.appendChild(card);
+                });
+            });
+        }
+
+        // --- SUBMIT REQUEST LOGIC ---
+        const modal = document.getElementById('requestModal');
+        document.getElementById('openModalBtn').onclick = () => modal.style.display = 'flex';
+        document.getElementById('closeModalBtn').onclick = () => modal.style.display = 'none';
+
+        document.getElementById('submitReqBtn').onclick = async () => {
+            const title = document.getElementById('reqTitle').value;
+            const category = document.getElementById('reqCategory').value;
+            const urgency = document.getElementById('reqUrgency').value;
+            const location = document.getElementById('reqLocation').value;
+            const desc = document.getElementById('reqDesc').value;
+
+            if(!title || !location || !desc) return alert("Please fill all fields");
+
+            try {
+                await addDoc(collection(db, "requests"), {
+                    userId: auth.currentUser.uid,
+                    userEmail: auth.currentUser.email,
+                    title, category, urgency, location, description: desc,
+                    status: "open",
+                    createdAt: serverTimestamp()
+                });
+                modal.style.display = 'none';
+                alert("Request posted!");
+            } catch (e) { alert("Error posting request"); }
         };
 
+        const handleLogout = () => signOut(auth).then(() => { window.location.href = "login.html"; });
         document.getElementById('logoutBtn').onclick = handleLogout;
         document.getElementById('logoutBtnNav').onclick = handleLogout;
     </script>
