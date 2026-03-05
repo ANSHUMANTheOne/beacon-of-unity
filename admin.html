@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel | Beacon of Unity</title>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          // Initialized with your Public Key
+          emailjs.init("QhpmiLS1azGRS4w23"); 
+       })();
+    </script>
+
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; }
         .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
@@ -51,32 +60,37 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // WE ATTACH TO WINDOW SO THE HTML BUTTONS CAN CALL THIS
     window.processUser = async (docId, userEmail, action, userId) => {
-        const WORKER_URL = "https://brevo-proxy.anshorg.workers.dev/"; 
-        const BREVO_LIST_ID = 2; 
         const userRef = doc(db, "users", userId);
 
         if (action === 'approve') {
             try {
-                const res = await fetch(WORKER_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email: userEmail, listIds: [BREVO_LIST_ID], updateEnabled: true })
+                // 1. Send the Email via EmailJS (No more Brevo/Worker)
+                const templateParams = {
+                    to_email: userEmail,
+                    name: userEmail.split('@')[0]
+                };
+
+                await emailjs.send("service_w3ai9pm", "template_zttw3uf", templateParams);
+
+                // 2. Update status to approved in Firebase
+                await updateDoc(userRef, { 
+                    status: "approved", 
+                    approvedAt: new Date().toISOString() 
                 });
 
-                if (res.ok) {
-                    await updateDoc(userRef, { status: "approved", approvedAt: new Date().toISOString() });
-                    await deleteDoc(doc(db, "id_reviews", docId));
-                    alert("User Approved!");
-                    loadData();
-                } else {
-                    alert("Worker Error.");
-                }
+                // 3. Remove from the Review Queue
+                await deleteDoc(doc(db, "id_reviews", docId));
+                
+                alert("Success! Welcome email sent via Gmail and resident approved.");
+                loadData();
             } catch (e) {
-                alert("Connection failed.");
+                console.error("Approval Error:", e);
+                alert("Failed to approve. Check the console for EmailJS errors.");
             }
         } else {
-            // --- UPDATED DENY LOGIC WITH 3 STRIKES ---
+            // --- DENY LOGIC (WITH 3 STRIKES) ---
             try {
                 const userSnap = await getDoc(userRef);
                 let currentAttempts = 0;
@@ -88,7 +102,7 @@
                 currentAttempts += 1;
 
                 if (currentAttempts >= 3) {
-                    // Block the user permanently
+                    // Block the user permanently after 3 tries
                     await updateDoc(userRef, { 
                         status: "blocked", 
                         attempts: currentAttempts 
@@ -120,7 +134,7 @@
             const querySnapshot = await getDocs(collection(db, "id_reviews"));
             tableBody.innerHTML = "";
             if (querySnapshot.empty) {
-                tableBody.innerHTML = "<tr><td colspan='3'>No pending verifications.</td></tr>";
+                tableBody.innerHTML = "<tr><td colspan='3'>No pending verifications. All clear!</td></tr>";
                 return;
             }
             querySnapshot.forEach((doc) => {
@@ -136,9 +150,11 @@
                     </tr>`;
             });
         } catch (err) {
+            console.error("Load Error:", err);
             tableBody.innerHTML = "<tr><td colspan='3'>Error loading data.</td></tr>";
         }
     }
+    
     loadData();
 </script>
 </body>
