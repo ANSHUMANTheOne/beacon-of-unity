@@ -10,29 +10,32 @@
         <h2 id="title">Beacon of Unity</h2>
         
         <div id="loginForm">
-            <input type="email" id="email" placeholder="Email" style="width:90%; padding:10px; margin-bottom:10px;">
-            <input type="password" id="pass" placeholder="Password" style="width:90%; padding:10px; margin-bottom:10px;">
+            <input type="email" id="email" placeholder="Email" style="width:90%; padding:10px; margin-bottom:10px; border: 1px solid #ddd; border-radius: 5px;">
+            <input type="password" id="pass" placeholder="Password" style="width:90%; padding:10px; margin-bottom:10px; border: 1px solid #ddd; border-radius: 5px;">
             <button id="emailLoginBtn" style="width:95%; padding:10px; background:#3498db; color:white; border:none; border-radius:5px; cursor:pointer;">Login / Sign Up</button>
-            <hr>
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
             <button id="googleLoginBtn" style="width:95%; padding:10px; background:#db4437; color:white; border:none; border-radius:5px; cursor:pointer;">Sign in with Google</button>
         </div>
 
         <div id="verifySection" style="display:none;">
             <h3>Verify Your Identity</h3>
-            <p id="instructionText">Please upload your Emirates ID front.</p>
+            <p id="instructionText">Enter your legal name as it appears on your ID and upload a photo.</p>
+            
             <div id="uploadControls">
-                <input type="file" id="idPhoto" accept="image/*" style="margin-bottom:15px;">
-                <button id="uploadBtn" style="width:95%; padding:10px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">Submit for Admin Approval</button>
+                <input type="text" id="fullName" placeholder="Full Legal Name" style="width:90%; padding:10px; margin-bottom:15px; border: 1px solid #3498db; border-radius: 5px;">
+                
+                <input type="file" id="idPhoto" accept="image/*" style="margin-bottom:15px; font-size: 12px;">
+                <button id="uploadBtn" style="width:95%; padding:10px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer; font-weight: bold;">Submit for Admin Approval</button>
             </div>
         </div>
         
-        <p id="statusMsg" style="margin-top:15px; font-weight:bold; color: #2c3e50;"></p>
+        <p id="statusMsg" style="margin-top:15px; font-weight:bold; color: #2c3e50; font-size: 14px;"></p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -55,7 +58,7 @@
                 const userData = userDoc.exists() ? userDoc.data() : null;
 
                 if (userData && userData.status === "approved") {
-                    window.location.href = "dashboard.html";
+                    window.location.href = "index.html"; 
                     return;
                 }
 
@@ -67,7 +70,7 @@
                     document.getElementById('instructionText').style.display = "none";
                     document.getElementById('statusMsg').innerText = "⏳ Verification Pending. Admin is reviewing your ID.";
                 } else {
-                    document.getElementById('statusMsg').innerText = "Account found. Please verify your ID.";
+                    document.getElementById('statusMsg').innerText = "Account found. Please verify your identity.";
                 }
             } else {
                 document.getElementById('loginForm').style.display = "block";
@@ -93,9 +96,12 @@
         // --- UPDATED UPLOAD LOGIC ---
         document.getElementById('uploadBtn').onclick = async () => {
             const file = document.getElementById('idPhoto').files[0];
+            const nameInput = document.getElementById('fullName').value.trim();
             const user = auth.currentUser;
             
+            if(!nameInput) return alert("Please enter your full legal name.");
             if(!file) return alert("Please select a photo first.");
+
             document.getElementById('uploadBtn').innerText = "Uploading...";
             document.getElementById('uploadBtn').disabled = true;
 
@@ -103,35 +109,31 @@
             reader.readAsDataURL(file);
             reader.onload = async () => {
                 try {
-                    // 1. Fetch current user data to see if they were previously denied
                     const userRef = doc(db, "users", user.uid);
                     const userSnap = await getDoc(userRef);
-                    let isRetry = false;
+                    let isRetry = userSnap.exists() ? (userSnap.data().hasPreviousDenial || false) : false;
 
-                    if (userSnap.exists()) {
-                        // Check if the permanent flag exists in the user profile
-                        isRetry = userSnap.data().hasPreviousDenial || false;
-                    }
-
-                    // 2. Add to review queue with the 'hasPreviousDenial' flag
+                    // 1. Add to review queue with the Full Name
                     await addDoc(collection(db, "id_reviews"), {
+                        fullName: nameInput,
                         email: user.email,
                         userId: user.uid,
                         idCardUrl: reader.result,
                         hasPreviousDenial: isRetry, 
-                        timestamp: new Date()
+                        timestamp: serverTimestamp()
                     });
 
-                    // 3. Set status to 'waiting' so they can't upload again immediately
+                    // 2. Set status and save the name to the user profile
                     await setDoc(userRef, {
+                        fullName: nameInput,
                         email: user.email,
                         status: "waiting for approval"
                     }, { merge: true });
 
-                    // 4. Update UI
+                    // 3. Update UI
                     document.getElementById('uploadControls').style.display = "none";
                     document.getElementById('instructionText').style.display = "none";
-                    document.getElementById('statusMsg').innerText = "✅ Submitted! Admin will review your access.";
+                    document.getElementById('statusMsg').innerText = "✅ Submitted! Admin will review your name and ID.";
                 } catch (error) {
                     console.error("Error:", error);
                     alert("Submission failed.");
