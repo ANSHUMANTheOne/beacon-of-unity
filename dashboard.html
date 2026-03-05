@@ -21,7 +21,7 @@
         .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
         .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; position: relative; }
         
-        /* CIRCULAR POST BUTTON (FAB) */
+        /* FAB */
         .fab {
             position: fixed; bottom: 30px; right: 30px;
             width: 60px; height: 60px;
@@ -32,15 +32,13 @@
         }
         .fab:hover { transform: scale(1.1) rotate(90deg); background: #0ea5e9; }
 
-        /* Updated Badges */
+        /* Badges */
         .badge { font-size: 11px; padding: 4px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
-        .badge-lost { background: #fee2e2; color: #991b1b; }
-        .badge-found { background: #dcfce7; color: #166534; }
         .badge-food { background: #e0f2fe; color: #0369a1; }
         .badge-transport { background: #fef9c3; color: #854d0e; }
         .badge-tools { background: #f1f5f9; color: #475569; }
         .badge-medical { background: #ffedd5; color: #9a3412; }
-        .badge-general { background: #f3e8ff; color: #6b21a8; }
+        .badge-general, .badge-labor, .badge-tech { background: #f3e8ff; color: #6b21a8; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -55,6 +53,7 @@
         }
 
         .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-delete { background: #fee2e2; color: #991b1b; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
 
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:1000; align-items:center; justify-content:center; }
         .modal-content { background:white; width:90%; max-width:450px; padding:30px; border-radius:20px; }
@@ -112,6 +111,19 @@
 
     <button class="fab" id="fabBtn" onclick="openRequestModal()">+</button>
 
+    <div id="nameLockModal" class="modal">
+        <div class="modal-content">
+            <h2>Identity Verification</h2>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">
+                Welcome! Please enter your real name to continue. 
+                <strong>Note: This is permanent and cannot be changed later.</strong>
+            </p>
+            <label>Full Name</label>
+            <input type="text" id="lockedFullName" placeholder="e.g. John Doe">
+            <button id="confirmNameBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Confirm Identity</button>
+        </div>
+    </div>
+
     <div id="requestModal" class="modal">
         <div class="modal-content">
             <h2>Post a Help Request</h2>
@@ -168,7 +180,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc, updateDoc, arrayUnion, increment, deleteDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -186,42 +198,54 @@
         let currentChatId = null;
         let unsubscribeChat = null;
 
-        // --- SCOPING FIXES (Attaching to window so HTML can see them) ---
         window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
         window.closeRequestModal = () => document.getElementById('requestModal').style.display = 'none';
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
 
-        // --- AUTH LOGIC ---
+        // --- AUTH & NAME LOCKDOWN ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists()) document.getElementById('welcomeUser').innerText = `Hello, ${userDoc.data().fullName}`;
-                loadRequests(); 
-                loadActiveChats(); 
+                const userDocRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userDocRef);
+
+                if (!userSnap.exists() || !userSnap.data().fullName) {
+                    document.getElementById('nameLockModal').style.display = 'flex';
+                    document.getElementById('confirmNameBtn').onclick = async () => {
+                        const nameInput = document.getElementById('lockedFullName').value.trim();
+                        if (nameInput.length < 2) return alert("Please enter a valid name.");
+                        try {
+                            await setDoc(userDocRef, { fullName: nameInput, email: user.email, joinedAt: serverTimestamp() }, { merge: true });
+                            document.getElementById('nameLockModal').style.display = 'none';
+                            location.reload();
+                        } catch (e) { alert("Error saving identity."); }
+                    };
+                } else {
+                    document.getElementById('welcomeUser').innerText = `Hello, ${userSnap.data().fullName}`;
+                    loadRequests(); 
+                    loadActiveChats(); 
+                }
             } else {
                 window.location.href = "login.html";
             }
         });
 
-        // --- REQUEST SUBMISSION (Fixed logic) ---
+        // --- SUBMISSION ---
         document.getElementById('submitReqBtn').onclick = async () => {
             const user = auth.currentUser;
-            if(!user) return;
-
-            const title = document.getElementById('reqTitle').value;
-            const category = document.getElementById('reqCat').value;
-            const urgency = document.getElementById('reqUrg').value;
-            const location = document.getElementById('reqLoc').value;
-            const description = document.getElementById('reqDesc').value;
-
-            if(!title || !location) return alert("Title and Location required!");
+            const title = document.getElementById('reqTitle').value.trim();
+            const locationStr = document.getElementById('reqLoc').value.trim();
+            if(!title || !locationStr) return alert("Title and Location required!");
 
             try {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                const fullName = userDoc.exists() ? userDoc.data().fullName : "Unity Member";
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                const fullName = userSnap.data().fullName;
 
                 await addDoc(collection(db, "requests"), {
-                    title, category, urgency, location, description,
+                    title, 
+                    category: document.getElementById('reqCat').value,
+                    urgency: document.getElementById('reqUrg').value,
+                    location: locationStr,
+                    description: document.getElementById('reqDesc').value.trim(),
                     userId: user.uid,
                     userName: fullName,
                     volunteers: [],
@@ -229,18 +253,14 @@
                     createdAt: serverTimestamp()
                 });
 
-                // Clear fields and close
                 document.getElementById('reqTitle').value = "";
                 document.getElementById('reqLoc').value = "";
                 document.getElementById('reqDesc').value = "";
                 window.closeRequestModal();
-            } catch (e) {
-                console.error(e);
-                alert("Error posting request.");
-            }
+            } catch (e) { alert("Error posting."); }
         };
 
-        // --- RENDER REQUESTS ---
+        // --- FEED ---
         function loadRequests() {
             const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -251,8 +271,6 @@
                     const isOwner = auth.currentUser.uid === data.userId;
                     const card = document.createElement('div');
                     card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
-
-                    // Dynamic badge class based on category
                     const badgeClass = `badge-${data.category.toLowerCase()}`;
 
                     let volListHtml = (data.volunteers || []).map(v => `
@@ -263,11 +281,15 @@
                     `).join('');
 
                     card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between;">
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
                             <span class="badge ${badgeClass}">${data.category}</span>
-                            <small>📍 ${data.location}</small>
+                            <div style="text-align:right;">
+                                <small style="display:block;">📍 ${data.location}</small>
+                                ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}
+                            </div>
                         </div>
                         <h4 style="margin:10px 0;">${data.title}</h4>
+                        <p style="font-size:11px; color:#64748b; margin: -5px 0 10px 0;">Posted by: ${data.userName}</p>
                         <p style="font-size:13px; color:#475569;">${data.description}</p>
                         <div style="display:flex; gap:10px; align-items:center;">
                             <button class="btn-help" onclick="offerHelp('${docSnap.id}')">I Can Help</button>
@@ -284,6 +306,10 @@
             });
         }
 
+        window.deletePost = async (id) => {
+            if(confirm("Delete this request?")) await deleteDoc(doc(db, "requests", id));
+        };
+
         window.toggleVols = (id) => {
             const el = document.getElementById(`vols-${id}`);
             el.style.display = el.style.display === 'none' ? 'block' : 'none';
@@ -292,16 +318,14 @@
         window.offerHelp = async (requestId) => {
             const user = auth.currentUser;
             const userDoc = await getDoc(doc(db, "users", user.uid));
-            const userName = userDoc.exists() ? userDoc.data().fullName : "Unity Member";
-            
             await updateDoc(doc(db, "requests", requestId), {
-                volunteers: arrayUnion({ uid: user.uid, name: userName }),
+                volunteers: arrayUnion({ uid: user.uid, name: userDoc.data().fullName }),
                 volunteerCount: increment(1)
             });
             alert("Added to queue!");
         };
 
-        // --- CHAT LOGIC ---
+        // --- CHAT ---
         window.startChat = async (itemId, targetUserId, label) => {
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
             await setDoc(doc(db, "chats", currentChatId), {
@@ -370,11 +394,9 @@
 
         window.resumeChat = (id, name) => { currentChatId = id; openChatWindow(name); };
 
-        // --- TABS & LOGOUT ---
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
             if(tab === 'community') {
                 document.getElementById('communityTab').classList.add('active');
                 document.getElementById('pageTitle').innerText = "Community Hub";
