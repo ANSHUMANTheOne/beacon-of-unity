@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beacon of Unity | Building Stronger Communities</title>
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #2ecc71; --light: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; color: var(--primary); line-height: 1.6; }
+        
+        /* Navigation */
+        nav { background: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary); text-decoration: none; }
+        .btn-login { background: var(--secondary); color: white; padding: 10px 25px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .btn-login:hover { background: var(--primary); }
+
+        /* Hero Section */
+        .hero { background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1559027615-cd7607c1f3cd?auto=format&fit=crop&w=1350&q=80'); 
+                background-size: cover; color: white; padding: 100px 10px; text-align: center; }
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; }
+
+        /* About Section */
+        .section { padding: 80px 10%; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
+        .card { background: var(--light); padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card h3 { color: var(--secondary); }
+
+        footer { background: var(--primary); color: white; padding: 40px 10px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">Beacon of Unity</a>
+        <a href="login.html" class="btn-login">Sign In</a>
+    </nav>
+
+    <header class="hero">
+        <h1>Building Bridges, One Neighbor at a Time</h1>
+        <p>A unified platform for community support, verified volunteering, and collective growth.</p>
+        <a href="login.html" class="btn-login" style="background: var(--accent); padding: 15px 40px;">Join the Movement</a>
+    </header>
+
+    <section class="section" id="about">
+        <h2>What is Beacon of Unity?</h2>
+        <p style="max-width: 800px; margin: 0 auto;">We believe that every community has the strength to solve its own problems. Our platform connects those who need help with those who want to give back.</p>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Verified Safety</h3>
+                <p>All members are verified via Emirates ID to ensure a secure and trustworthy environment for everyone.</p>
+            </div>
+            <div class="card">
+                <h3>Real-Time Support</h3>
+                <p>Post urgent requests for help—from groceries to tutoring—and get connected with local volunteers instantly.</p>
+            </div>
+            <div class="card">
+                <h3>Reward Impact</h3>
+                <p>Earn "Unity Points" for every helpful act and climb the leaderboard as a community champion.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Beacon of Unity. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
