@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>Verify - Beacon of Unity</title>
+    <meta charset="UTF-8"><title>Login - Beacon of Unity</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body style="font-family:sans-serif; text-align:center; padding:40px; background:#f4f7f6;">
-    <div style="max-width:400px; margin:auto; background:white; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-        <h2>Secure ID Upload</h2>
-        <input type="email" id="email" placeholder="Email Address" required style="width:90%; padding:10px; margin-bottom:15px; border:1px solid #ddd;">
-        <div style="border: 2px dashed #3498db; padding: 20px; margin-bottom: 20px;">
-            <p><strong>Emirates ID Photo</strong></p>
-            <input type="file" id="photo" accept="image/*" style="width:100%;">
+<body style="font-family:sans-serif; background:#f4f7f6; display:flex; justify-content:center; align-items:center; height:100vh; margin:0;">
+    <div id="authContainer" style="background:white; padding:30px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1); width:350px; text-align:center;">
+        <h2 id="title">Beacon of Unity</h2>
+        
+        <div id="loginForm">
+            <input type="email" id="email" placeholder="Email" style="width:90%; padding:10px; margin-bottom:10px;">
+            <input type="password" id="pass" placeholder="Password" style="width:90%; padding:10px; margin-bottom:10px;">
+            <button id="emailLoginBtn" style="width:95%; padding:10px; background:#3498db; color:white; border:none; border-radius:5px; cursor:pointer;">Login / Sign Up</button>
+            <hr>
+            <button id="googleLoginBtn" style="width:95%; padding:10px; background:#db4437; color:white; border:none; border-radius:5px; cursor:pointer;">Sign in with Google</button>
         </div>
-        <button id="uploadBtn" style="width:100%; padding:12px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Upload to Secure Vault</button>
-        <p id="msg" style="margin-top:15px; font-weight:bold;"></p>
+
+        <div id="verifySection" style="display:none;">
+            <h3>Verify Your Identity</h3>
+            <p>Please upload your Emirates ID front.</p>
+            <input type="file" id="idPhoto" accept="image/*" style="margin-bottom:15px;">
+            <button id="uploadBtn" style="width:95%; padding:10px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">Submit for Admin Approval</button>
+        </div>
+        <p id="statusMsg" style="margin-top:15px; font-weight:bold;"></p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-        // Your specific config from image_4f4a28.png
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
             authDomain: "beaconofunityofficial.firebaseapp.com",
@@ -30,33 +40,54 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-        document.getElementById('uploadBtn').onclick = async () => {
-            const file = document.getElementById('photo').files[0];
-            const email = document.getElementById('email').value;
-            const msg = document.getElementById('msg');
-            
-            if(!file || !email) return alert("Please provide email and photo");
-
-            msg.innerText = "Encrypting and Uploading...";
-            
-            const reader = new FileReader();
-            reader.readAsDataURL(file); // Converts image to text string for Firestore
-            reader.onload = async () => {
-                try {
-                    // Saves to a collection called "id_reviews"
-                    await addDoc(collection(db, "id_reviews"), {
-                        email: email,
-                        image: reader.result,
-                        time: new Date()
-                    });
-                    msg.innerText = "✅ Successfully Stored!";
-                    msg.style.color = "green";
-                } catch (e) { 
-                    msg.innerText = "❌ Error: " + e.message; 
-                    msg.style.color = "red";
+        // Check if user is already logged in
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().status === "Approved") {
+                    window.location.href = "dashboard.html"; // Send to main site
+                } else {
+                    document.getElementById('loginForm').style.display = "none";
+                    document.getElementById('verifySection').style.display = "block";
+                    document.getElementById('statusMsg').innerText = userDoc.exists() ? "Status: " + userDoc.data().status : "Please verify.";
                 }
+            }
+        });
+
+        // Email Login/Signup Logic
+        document.getElementById('emailLoginBtn').onclick = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (e) {
+                await createUserWithEmailAndPassword(auth, email, pass);
+            }
+        };
+
+        // Google Login Logic
+        document.getElementById('googleLoginBtn').onclick = () => signInWithPopup(auth, provider);
+
+        // ID Upload Logic
+        document.getElementById('uploadBtn').onclick = async () => {
+            const file = document.getElementById('idPhoto').files[0];
+            const user = auth.currentUser;
+            if(!file) return alert("Select a photo");
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                await setDoc(doc(db, "users", user.uid), {
+                    email: user.email,
+                    idImage: reader.result,
+                    status: "Pending Verification",
+                    timestamp: new Date()
+                });
+                document.getElementById('statusMsg').innerText = "✅ Submitted! Admin will review.";
             };
         };
     </script>
