@@ -168,11 +168,124 @@
         body.dark .badge-tools { background:#334155; color:#94a3b8; }
         body.dark .nav-item.active { background:#38bdf8; color:#0f172a; }
         body.dark #myPointsBadge { background:#1e293b; }
+
+        /* ══════════════════════════════════════════════════════
+           MOBILE ONLY  (max-width: 768px)
+           Desktop styles above are completely untouched.
+        ══════════════════════════════════════════════════════ */
+        #mobileTabBar { display: none; } /* hidden on desktop */
+
+        @media (max-width: 768px) {
+
+            /* ── Body & layout ── */
+            body { display: block; }
+            .sidebar { display: none; }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 16px 14px 90px;
+                box-sizing: border-box;
+            }
+            .header { margin-bottom: 16px; }
+            .header h1 { font-size: 20px; }
+            .header > button { padding: 7px 12px; font-size: 12px; }
+            .content-grid { grid-template-columns: 1fr; gap: 0; }
+            .card { padding: 16px; border-radius: 12px; margin-bottom: 14px; }
+
+            /* Active conversations panel hidden on mobile — accessible via Chats tab */
+            .content-grid > div:last-child { display: none; }
+
+            /* ── FAB & settings move up above tab bar ── */
+            .fab { bottom: 76px; right: 18px; width: 52px; height: 52px; font-size: 26px; }
+            #settingsBtn { bottom: 140px; right: 18px; }
+
+            /* ── Chat popup → full screen ── */
+            #chatPopup {
+                bottom: 0 !important; right: 0 !important;
+                width: 100% !important; height: 100% !important;
+                border-radius: 0 !important; border: none !important;
+                z-index: 2500 !important;
+            }
+
+            /* ── Modals ── */
+            .modal-content {
+                width: 94% !important;
+                padding: 20px !important;
+                border-radius: 16px !important;
+                box-sizing: border-box;
+            }
+            #reportModal .modal-content { max-height: 92vh; overflow-y: auto; }
+
+            /* ── Leaderboard ── */
+            .lb-row { padding: 10px 12px; gap: 10px; }
+            .lb-avatar { width: 36px; height: 36px; font-size: 13px; }
+            .lb-pts { font-size: 16px; }
+            #leaderboardTab > div:first-child { flex-wrap: wrap; }
+
+            /* ── Hovercard on mobile — show below name, normal wrap ── */
+            .hovername .hovercard {
+                bottom: auto; top: 130%;
+                white-space: normal; min-width: 150px;
+            }
+
+            /* ── Quote text smaller ── */
+            #quoteText { font-size: 17px; }
+
+            /* ── Bottom Tab Bar ── */
+            #mobileTabBar {
+                display: flex !important;
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                height: 62px;
+                background: #0f172a;
+                border-top: 1px solid #1e293b;
+                z-index: 1200;
+                justify-content: space-around;
+                align-items: stretch;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            .mob-tab {
+                flex: 1; display: flex; flex-direction: column;
+                align-items: center; justify-content: center;
+                cursor: pointer; color: #64748b;
+                font-size: 9px; font-weight: 600; gap: 3px;
+                border: none; background: none;
+                text-transform: uppercase; letter-spacing: 0.3px;
+                -webkit-tap-highlight-color: transparent;
+                transition: color 0.15s;
+            }
+            .mob-tab .mob-icon { font-size: 19px; line-height: 1; transition: transform 0.15s; }
+            .mob-tab.active { color: #38bdf8; }
+            .mob-tab.active .mob-icon { transform: translateY(-2px); }
+
+            /* ── Dark mode on mobile ── */
+            body.dark .main-content { background: #0f172a; }
+            body.dark #mobileTabBar { background: #020617; border-color: #0f172a; }
+            body.dark .mob-tab { color: #475569; }
+            body.dark .mob-tab.active { color: #38bdf8; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- ── Quote Overlay ── -->
+    <!-- ── Mobile Bottom Tab Bar (hidden on desktop via CSS) ── -->
+    <nav id="mobileTabBar">
+        <button class="mob-tab active"      onclick="switchTab('community')"     id="mob-community">
+            <span class="mob-icon">✨</span>Hub
+        </button>
+        <button class="mob-tab"             onclick="switchTab('lostfound')"     id="mob-lostfound">
+            <span class="mob-icon">🔍</span>Lost&Found
+        </button>
+        <button class="mob-tab"             onclick="switchTab('leaderboard')"   id="mob-leaderboard">
+            <span class="mob-icon">🏆</span>Ranks
+        </button>
+        <button class="mob-tab"             onclick="switchTab('chats-mobile')"  id="mob-chats">
+            <span class="mob-icon" id="mobChatsIcon">💬</span>Chats
+        </button>
+        <button class="mob-tab"             onclick="openProfileModal()"         id="mob-profile">
+            <span class="mob-icon">👤</span>Profile
+        </button>
+    </nav>
     <div id="quoteOverlay">
         <div id="quoteText"><span id="quoteTyped"></span><span id="quoteCursor"></span></div>
         <button id="quoteSkip">Skip  ✕</button>
@@ -302,6 +415,14 @@
                             <h4 style="margin:0 0 8px;">Volunteer Rank System Launched</h4>
                             <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points with every resolved chat and climb through volunteer ranks — from Newcomer all the way to Guardian of Unity. Check your rank on the Leaderboard!</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Mobile-only Chats panel -->
+                <div id="chats-mobileTab" class="tab-content">
+                    <h3 style="margin-bottom:16px;">💬 Active Conversations</h3>
+                    <div id="activeChatsMobile">
+                        <p style="color:#94a3b8; text-align:center; padding:20px;">No active chats.</p>
                     </div>
                 </div>
             </div>
@@ -1145,6 +1266,11 @@
                         chatDiv.classList.remove('chat-unread');
                     }
 
+                    // Update mobile tab bar unread indicator
+                    const anyUnread = document.querySelector('.chat-unread');
+                    const mobIcon = document.getElementById('mobChatsIcon');
+                    if (mobIcon) mobIcon.innerText = anyUnread ? '🔴' : '💬';
+
                     chatDiv.innerHTML = `
                         <div style="flex:1; min-width:0;">
                             <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
@@ -1167,11 +1293,20 @@
                         </div>
                         <button onclick="resumeChat('${chatId}','${otherName}','${otherId}','${cType}','${pOwnerId}')"
                             style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px; flex-shrink:0; margin-left:8px;">Open</button>`;
+                    // Sync to mobile panel too
+                    syncMobileChats();
                 });
             });
         }
 
-        window.resumeChat = (id, name, otherId, cType, pOwnerId) => {
+        // Sync desktop chat list to mobile panel (called after each snapshot)
+        function syncMobileChats() {
+            const desktop = document.getElementById('activeChatsList');
+            const mobile  = document.getElementById('activeChatsMobile');
+            if (desktop && mobile) {
+                mobile.innerHTML = desktop.innerHTML;
+            }
+        }
             currentChatId = id;
             currentChatOtherName = name;
             currentChatOtherUserId = otherId;
@@ -1278,19 +1413,24 @@
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
             const navItems = document.querySelectorAll('.nav-item');
+
             if (tab === 'community') {
                 document.getElementById('communityTab').classList.add('active');
                 navItems[0].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Community Hub";
+                document.getElementById('mob-community')?.classList.add('active');
             } else if (tab === 'lostfound') {
                 document.getElementById('lostFoundTab').classList.add('active');
                 navItems[1].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Lost and Found";
+                document.getElementById('mob-lostfound')?.classList.add('active');
             } else if (tab === 'leaderboard') {
                 document.getElementById('leaderboardTab').classList.add('active');
                 navItems[2].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Leaderboard";
+                document.getElementById('mob-leaderboard')?.classList.add('active');
                 loadLeaderboard();
             } else if (tab === 'volunteer-opps') {
                 document.getElementById('volunteer-oppsTab').classList.add('active');
@@ -1300,6 +1440,11 @@
                 document.getElementById('updatesTab').classList.add('active');
                 navItems[5].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Updates";
+            } else if (tab === 'chats-mobile') {
+                document.getElementById('chats-mobileTab').classList.add('active');
+                document.getElementById('pageTitle').innerText = "Conversations";
+                document.getElementById('mob-chats')?.classList.add('active');
+                syncMobileChats();
             }
         };
 
