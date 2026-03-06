@@ -9,7 +9,8 @@
         
         /* Sidebar Navigation */
         .sidebar { width: 260px; background: #0f172a; color: white; height: 100vh; padding: 25px; position: fixed; }
-        .sidebar h2 { font-size: 22px; font-weight: 800; color: #38bdf8; margin-bottom: 30px; letter-spacing: -0.5px; }
+        .sidebar h2 { font-size: 22px; font-weight: 800; color: #38bdf8; margin-bottom: 5px; letter-spacing: -0.5px; }
+        .region-tag { font-size: 12px; color: #94a3b8; margin-bottom: 25px; display: block; }
         .nav-item { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 8px; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
         .nav-item:hover { background: #1e293b; }
         .nav-item.active { background: #38bdf8; color: #0f172a; font-weight: 600; }
@@ -72,8 +73,10 @@
 
     <div class="sidebar">
         <h2>Beacon of Unity</h2>
+        <span class="region-tag" id="userRegionDisplay">Region: Loading...</span>
         <div class="nav-item active" onclick="switchTab('community')">✨ Community Hub</div>
         <div class="nav-item" onclick="switchTab('lostfound')">🔍 Lost and Found</div>
+        <div class="nav-item" onclick="openProfileModal()">👤 Profile & Region</div>
         <div class="nav-item">📢 Updates</div>
         <div class="nav-item" id="logoutBtnNav" style="margin-top: 100px; opacity: 0.7;">Logout</div>
     </div>
@@ -90,13 +93,13 @@
         <div class="content-grid">
             <div>
                 <div id="communityTab" class="tab-content active">
-                    <h3>Recent Requests (Volunteer Queue)</h3>
-                    <div id="requestFeed"><p>Loading...</p></div>
+                    <h3>Recent Requests in <span class="current-region-text">...</span></h3>
+                    <div id="requestFeed"><p>Loading local requests...</p></div>
                 </div>
 
                 <div id="lostFoundTab" class="tab-content">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h3>Lost & Found Items</h3>
+                        <h3>Lost & Found (<span class="current-region-text">...</span>)</h3>
                         <button onclick="openLFModal()" style="background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">+ Report Item</button>
                     </div>
                     <div id="lfFeed"></div>
@@ -115,6 +118,48 @@
     </div>
 
     <button class="fab" id="fabBtn" onclick="openRequestModal()">+</button>
+
+    <div id="regionModal" class="modal">
+        <div class="modal-content">
+            <h2>Select Your Region</h2>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">Please select your Emirate to see local community requests.</p>
+            <label>Emirate</label>
+            <select id="initialRegionSelect">
+                <option value="Abu Dhabi">Abu Dhabi</option>
+                <option value="Dubai">Dubai</option>
+                <option value="Sharjah">Sharjah</option>
+                <option value="Ajman">Ajman</option>
+                <option value="Umm Al Quwain">Umm Al Quwain</option>
+                <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                <option value="Fujairah">Fujairah</option>
+            </select>
+            <button id="saveInitialRegionBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Set Region</button>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2>Your Profile</h2>
+                <span onclick="closeProfileModal()" style="cursor:pointer; font-size:20px;">✕</span>
+            </div>
+            <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                <label style="font-size: 12px; color: #64748b;">Verified Name (Permanent)</label>
+                <div id="profileNameDisplay" style="font-weight: bold; font-size: 18px;">...</div>
+            </div>
+            <label>Change Your Emirate</label>
+            <select id="profileRegionSelect">
+                <option value="Abu Dhabi">Abu Dhabi</option>
+                <option value="Dubai">Dubai</option>
+                <option value="Sharjah">Sharjah</option>
+                <option value="Ajman">Ajman</option>
+                <option value="Umm Al Quwain">Umm Al Quwain</option>
+                <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                <option value="Fujairah">Fujairah</option>
+            </select>
+            <button id="updateProfileBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px;">Update Region</button>
+        </div>
+    </div>
 
     <div id="nameLockModal" class="modal">
         <div class="modal-content">
@@ -147,7 +192,7 @@
                 <option value="low">Low (Next few days)</option>
                 <option value="high">High (Immediate)</option>
             </select>
-            <label>Location</label><input type="text" id="reqLoc" placeholder="Where are you?">
+            <label>Specific Location (Area)</label><input type="text" id="reqLoc" placeholder="e.g. Al Majaz 2">
             <label>Description</label><textarea id="reqDesc" placeholder="Detailed description..."></textarea>
             <button id="submitReqBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button>
             <button onclick="closeRequestModal()" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
@@ -163,7 +208,7 @@
                 <option value="Found">Found something</option>
             </select>
             <label>Item Name</label><input type="text" id="lfItem" placeholder="e.g. Blue Wallet">
-            <label>Location</label><input type="text" id="lfLoc" placeholder="Where?">
+            <label>Specific Location (Area)</label><input type="text" id="lfLoc" placeholder="Where?">
             <label>Description</label><textarea id="lfDesc" placeholder="Describe..."></textarea>
             <label>Photo (Optional)</label>
             <input type="file" id="lfImg" accept="image/*" style="font-size: 12px;">
@@ -187,7 +232,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc, updateDoc, arrayUnion, increment, deleteDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc, updateDoc, arrayUnion, increment, deleteDoc, where } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -204,38 +249,69 @@
 
         let currentChatId = null;
         let unsubscribeChat = null;
+        let userRegion = null;
+        let userName = "";
 
         window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
         window.closeRequestModal = () => document.getElementById('requestModal').style.display = 'none';
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
+        window.openProfileModal = () => {
+            document.getElementById('profileNameDisplay').innerText = userName;
+            document.getElementById('profileRegionSelect').value = userRegion;
+            document.getElementById('profileModal').style.display = 'flex';
+        };
+        window.closeProfileModal = () => document.getElementById('profileModal').style.display = 'none';
 
-        // --- AUTH & NAME LOCKDOWN ---
+        // --- AUTH & DATA LOCKDOWN ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDocRef = doc(db, "users", user.uid);
                 const userSnap = await getDoc(userDocRef);
 
+                // Step 1: Force Name
                 if (!userSnap.exists() || !userSnap.data().fullName) {
                     document.getElementById('nameLockModal').style.display = 'flex';
                     document.getElementById('confirmNameBtn').onclick = async () => {
                         const nameInput = document.getElementById('lockedFullName').value.trim();
                         if (nameInput.length < 2) return alert("Please enter a valid name.");
-                        try {
-                            await setDoc(userDocRef, { fullName: nameInput, email: user.email, joinedAt: serverTimestamp() }, { merge: true });
-                            document.getElementById('nameLockModal').style.display = 'none';
-                            location.reload();
-                        } catch (e) { alert("Error saving identity."); }
+                        await setDoc(userDocRef, { fullName: nameInput, email: user.email, joinedAt: serverTimestamp() }, { merge: true });
+                        location.reload();
                     };
-                } else {
-                    document.getElementById('welcomeUser').innerText = `Hello, ${userSnap.data().fullName}`;
-                    loadRequests(); 
-                    loadLF(); 
-                    loadActiveChats(); 
+                    return;
                 }
+
+                // Step 2: Force Region
+                if (!userSnap.data().region) {
+                    document.getElementById('regionModal').style.display = 'flex';
+                    document.getElementById('saveInitialRegionBtn').onclick = async () => {
+                        const selectedRegion = document.getElementById('initialRegionSelect').value;
+                        await updateDoc(userDocRef, { region: selectedRegion });
+                        location.reload();
+                    };
+                    return;
+                }
+
+                // Load App Data
+                userName = userSnap.data().fullName;
+                userRegion = userSnap.data().region;
+                document.getElementById('welcomeUser').innerText = `Hello, ${userName}`;
+                document.getElementById('userRegionDisplay').innerText = `Region: ${userRegion}`;
+                document.querySelectorAll('.current-region-text').forEach(el => el.innerText = userRegion);
+
+                loadRequests(); 
+                loadLF(); 
+                loadActiveChats(); 
             } else {
                 window.location.href = "login.html";
             }
         });
+
+        // Update Region from Profile
+        document.getElementById('updateProfileBtn').onclick = async () => {
+            const newRegion = document.getElementById('profileRegionSelect').value;
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { region: newRegion });
+            location.reload(); // Reload to refresh all filtered listeners
+        };
 
         // --- SUBMISSION (REQUESTS) ---
         document.getElementById('submitReqBtn').onclick = async () => {
@@ -245,22 +321,19 @@
             if(!title || !locationStr) return alert("Title and Location required!");
 
             try {
-                const userSnap = await getDoc(doc(db, "users", user.uid));
-                const fullName = userSnap.data().fullName;
-
                 await addDoc(collection(db, "requests"), {
                     title, 
                     category: document.getElementById('reqCat').value,
                     urgency: document.getElementById('reqUrg').value,
                     location: locationStr,
+                    region: userRegion, // Auto-tagging region
                     description: document.getElementById('reqDesc').value.trim(),
                     userId: user.uid,
-                    userName: fullName,
+                    userName: userName,
                     volunteers: [],
                     volunteerCount: 0,
                     createdAt: serverTimestamp()
                 });
-
                 document.getElementById('reqTitle').value = "";
                 document.getElementById('reqLoc').value = "";
                 document.getElementById('reqDesc').value = "";
@@ -296,7 +369,6 @@
             if(!item || !loc) return alert("Item and Location required!");
 
             try {
-                const userSnap = await getDoc(doc(db, "users", user.uid));
                 const imgFile = document.getElementById('lfImg').files[0];
                 const imgBase64 = await processImage(imgFile);
 
@@ -304,10 +376,11 @@
                     item,
                     type: document.getElementById('lfType').value,
                     location: loc,
+                    region: userRegion, // Auto-tagging region
                     description: document.getElementById('lfDesc').value.trim(),
                     image: imgBase64,
                     userId: user.uid,
-                    userName: userSnap.data().fullName,
+                    userName: userName,
                     createdAt: serverTimestamp()
                 });
 
@@ -319,18 +392,16 @@
             } catch (e) { alert("Error posting report."); }
         };
 
-        // --- FEED (REQUESTS) ---
+        // --- FEED (REQUESTS) --- (Filtered by Region)
         function loadRequests() {
-            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
+            const q = query(collection(db, "requests"), where("region", "==", userRegion), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
                 const feed = document.getElementById('requestFeed');
-                feed.innerHTML = "";
+                feed.innerHTML = snapshot.empty ? `<p style="color:gray;">No requests in ${userRegion} yet.</p>` : "";
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
                     const currentUserId = auth.currentUser.uid;
                     const isOwner = currentUserId === data.userId;
-                    
-                    // Logic to check if user already volunteered
                     const hasVolunteered = (data.volunteers || []).some(v => v.uid === currentUserId);
 
                     const card = document.createElement('div');
@@ -356,9 +427,7 @@
                         <p style="font-size:11px; color:#64748b; margin: -5px 0 10px 0;">Posted by: ${data.userName}</p>
                         <p style="font-size:13px; color:#475569;">${data.description}</p>
                         <div style="display:flex; gap:10px; align-items:center;">
-                            <button class="btn-help" 
-                                ${isOwner || hasVolunteered ? 'disabled' : ''} 
-                                onclick="offerHelp('${docSnap.id}')">
+                            <button class="btn-help" ${isOwner || hasVolunteered ? 'disabled' : ''} onclick="offerHelp('${docSnap.id}')">
                                 ${isOwner ? 'Your Post' : (hasVolunteered ? 'Waitlisted' : 'I Can Help')}
                             </button>
                             <span style="font-size:12px; color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="toggleVols('${docSnap.id}')">
@@ -374,12 +443,12 @@
             });
         }
 
-        // --- FEED (LOST & FOUND) ---
+        // --- FEED (LOST & FOUND) --- (Filtered by Region)
         function loadLF() {
-            const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
+            const q = query(collection(db, "lostfound"), where("region", "==", userRegion), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
                 const feed = document.getElementById('lfFeed');
-                feed.innerHTML = "";
+                feed.innerHTML = snapshot.empty ? `<p style="color:gray;">No items in ${userRegion} yet.</p>` : "";
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
                     const isOwner = auth.currentUser.uid === data.userId;
@@ -406,37 +475,21 @@
             });
         }
 
-        window.deletePost = async (id) => {
-            if(confirm("Delete this request?")) await deleteDoc(doc(db, "requests", id));
-        };
-
-        window.deleteLF = async (id) => {
-            if(confirm("Delete this report?")) await deleteDoc(doc(db, "lostfound", id));
-        };
-
-        window.toggleVols = (id) => {
-            const el = document.getElementById(`vols-${id}`);
-            el.style.display = el.style.display === 'none' ? 'block' : 'none';
-        };
+        window.deletePost = async (id) => { if(confirm("Delete this request?")) await deleteDoc(doc(db, "requests", id)); };
+        window.deleteLF = async (id) => { if(confirm("Delete this report?")) await deleteDoc(doc(db, "lostfound", id)); };
+        window.toggleVols = (id) => { const el = document.getElementById(`vols-${id}`); el.style.display = el.style.display === 'none' ? 'block' : 'none'; };
 
         window.offerHelp = async (requestId) => {
             const user = auth.currentUser;
             const reqRef = doc(db, "requests", requestId);
             const reqSnap = await getDoc(reqRef);
-            
             if(!reqSnap.exists()) return;
             const data = reqSnap.data();
-
-            // Prevent self-volunteering
             if(data.userId === user.uid) return alert("You cannot volunteer for your own post.");
-
-            // Prevent duplicate volunteering
             const alreadyVolunteered = (data.volunteers || []).some(v => v.uid === user.uid);
-            if(alreadyVolunteered) return alert("You have already offered help for this request.");
-
-            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if(alreadyVolunteered) return alert("Already offered help.");
             await updateDoc(reqRef, {
-                volunteers: arrayUnion({ uid: user.uid, name: userDoc.data().fullName }),
+                volunteers: arrayUnion({ uid: user.uid, name: userName }),
                 volunteerCount: increment(1)
             });
             alert("Added to queue!");
@@ -495,7 +548,6 @@
                         const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
                         const otherDoc = await getDoc(doc(db, "users", otherId));
                         const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
-                        
                         let chatDiv = document.getElementById(`item-${chatId}`);
                         if (!chatDiv) {
                             chatDiv = document.createElement('div');
