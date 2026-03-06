@@ -63,8 +63,43 @@
         .modal-content { background:white; width:90%; max-width:450px; padding:30px; border-radius:20px; }
         input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
 
-        #chatPopup { display:none; position:fixed; bottom:20px; right:100px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
+        #chatPopup { display:none; position:fixed; bottom:20px; right:100px; width:320px; height:500px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
         .chat-list-item { padding: 12px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; border-radius: 12px; margin-bottom: 8px; background: white; }
+
+        /* ── Rating Modal ── */
+        #ratingModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.85); z-index:3000; align-items:center; justify-content:center; }
+        #ratingModal .modal-content { text-align:center; }
+        .star-row { display:flex; justify-content:center; gap:6px; margin:15px 0 5px; }
+        .star-btn { font-size:34px; background:none; border:none; cursor:pointer; color:#e2e8f0; transition:color 0.1s; padding:0; line-height:1; width:auto; margin:0; }
+        .star-btn.lit { color:#f59e0b; }
+
+        /* ── Hover tooltip ── */
+        .hovername { position:relative; display:inline-block; cursor:default; }
+        .hovername .tip {
+            display:none; position:absolute; bottom:130%; left:50%; transform:translateX(-50%);
+            background:#0f172a; color:white; padding:5px 10px; border-radius:8px;
+            font-size:12px; white-space:nowrap; z-index:9999; pointer-events:none;
+        }
+        .hovername:hover .tip { display:block; }
+
+        /* ── Chat footer bar ── */
+        #chatFooterBar { padding:7px 10px; border-top:1px solid #f1f5f9; background:#f8fafc; }
+
+        /* ── Leaderboard ── */
+        .lb-row { display:flex; align-items:center; gap:14px; background:white; border:1px solid #e2e8f0; border-radius:14px; padding:14px 18px; margin-bottom:12px; box-shadow:0 2px 4px rgba(0,0,0,0.04); transition:transform 0.15s; }
+        .lb-row:hover { transform:translateY(-1px); }
+        .lb-rank { font-size:22px; font-weight:800; width:36px; text-align:center; flex-shrink:0; }
+        .lb-rank.gold   { color:#f59e0b; }
+        .lb-rank.silver { color:#94a3b8; }
+        .lb-rank.bronze { color:#b45309; }
+        .lb-rank.other  { color:#cbd5e1; font-size:16px; }
+        .lb-avatar { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#38bdf8,#0ea5e9); display:flex; align-items:center; justify-content:center; font-weight:700; color:white; font-size:16px; flex-shrink:0; }
+        .lb-info { flex:1; }
+        .lb-name { font-weight:700; font-size:15px; }
+        .lb-sub  { font-size:12px; color:#64748b; margin-top:2px; }
+        .lb-pts  { font-size:20px; font-weight:800; color:#38bdf8; flex-shrink:0; }
+        .lb-pts span { font-size:11px; font-weight:500; color:#94a3b8; }
+        .lb-row.is-me { border-color:#38bdf8; background:#f0f9ff; }
     </style>
 </head>
 <body>
@@ -74,6 +109,7 @@
         <span class="region-tag" id="userRegionDisplay">Region: Loading...</span>
         <div class="nav-item active" onclick="switchTab('community')">✨ Community Hub</div>
         <div class="nav-item" onclick="switchTab('lostfound')">🔍 Lost and Found</div>
+        <div class="nav-item" onclick="switchTab('leaderboard')">🏆 Leaderboard</div>
         <div class="nav-item" onclick="openProfileModal()">👤 Profile & Region</div>
         <div class="nav-item">📢 Updates</div>
         <div class="nav-item" id="logoutBtnNav" style="margin-top: 100px; opacity: 0.7;">Logout</div>
@@ -93,6 +129,17 @@
                 <div id="communityTab" class="tab-content active">
                     <h3>Recent Requests in <span class="current-region-text">...</span></h3>
                     <div id="requestFeed"><p>Loading local requests...</p></div>
+                </div>
+
+                <div id="leaderboardTab" class="tab-content">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <div>
+                            <h3 style="margin:0;">🏆 Community Leaderboard</h3>
+                            <p style="font-size:13px; color:#64748b; margin:4px 0 0;">Top helpers in <span class="current-region-text">...</span> — 2 pts per resolved chat</p>
+                        </div>
+                        <div id="myPointsBadge" style="background:#0f172a; color:#38bdf8; padding:8px 16px; border-radius:10px; font-weight:700; font-size:14px;">My Points: —</div>
+                    </div>
+                    <div id="leaderboardFeed"><p style="color:#94a3b8;">Loading leaderboard...</p></div>
                 </div>
 
                 <div id="lostFoundTab" class="tab-content">
@@ -212,12 +259,33 @@
         </div>
     </div>
 
+    <!-- ★ RATING MODAL — Community Hub only -->
+    <div id="ratingModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:5px;">⭐ Rate the Volunteer</h2>
+            <p id="ratingSubtitle" style="color:#64748b; font-size:14px; margin:0 0 5px;">How was your experience?</p>
+            <div class="star-row" id="starRow">
+                <button class="star-btn" data-val="1">★</button>
+                <button class="star-btn" data-val="2">★</button>
+                <button class="star-btn" data-val="3">★</button>
+                <button class="star-btn" data-val="4">★</button>
+                <button class="star-btn" data-val="5">★</button>
+            </div>
+            <p id="starLabel" style="font-size:13px; color:#94a3b8; margin-bottom:18px; min-height:18px;"></p>
+            <button id="submitRatingBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer; opacity:0.4;" disabled>Submit Rating &amp; Resolve</button>
+            <button id="skipRatingBtn" style="width:100%; background:none; border:none; color:#94a3b8; margin-top:10px; cursor:pointer; font-size:13px;">Skip — just end chat</button>
+        </div>
+    </div>
+
+    <!-- Chat popup -->
     <div id="chatPopup">
         <div style="background:#0f172a; color:white; padding:12px; display:flex; justify-content:space-between; align-items:center;">
             <span id="chatWith" style="font-weight:600; font-size:14px;">Chat</span>
             <span onclick="document.getElementById('chatPopup').style.display='none'" style="cursor:pointer;">✕</span>
         </div>
         <div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc;"></div>
+        <!-- Resolve / End-chat bar injected here -->
+        <div id="chatFooterBar"></div>
         <div style="padding:10px; border-top:1px solid #e2e8f0; display:flex; gap:5px;">
             <input type="text" id="msgInput" placeholder="Type a message..." style="flex:1; margin:0;">
             <button id="sendMsgBtn" style="background:#38bdf8; border:none; color:white; padding:0 12px; border-radius:8px; cursor:pointer;">➔</button>
@@ -243,11 +311,48 @@
         const db = getFirestore(app);
 
         let currentChatId = null;
+        let currentChatOtherUserId = null;
+        let currentChatOtherName = null;
+        let currentChatType = null;          // 'community' | 'lostfound'
         let unsubscribeChat = null;
         let userRegion = null;
         let userName = "";
 
-        // Modal triggers
+        // ── Star-rating UI ───────────────────────────────────────────────────
+        let selectedStars = 0;
+        const starWords = ['','Poor','Fair','Good','Great','Excellent'];
+
+        document.querySelectorAll('.star-btn').forEach(btn => {
+            btn.addEventListener('mouseover', () => lightStars(+btn.dataset.val));
+            btn.addEventListener('mouseout',  () => lightStars(selectedStars));
+            btn.addEventListener('click', () => {
+                selectedStars = +btn.dataset.val;
+                lightStars(selectedStars);
+                document.getElementById('starLabel').innerText = starWords[selectedStars];
+                const sb = document.getElementById('submitRatingBtn');
+                sb.disabled = false;
+                sb.style.opacity = '1';
+            });
+        });
+
+        function lightStars(n) {
+            document.querySelectorAll('.star-btn').forEach(b =>
+                b.classList.toggle('lit', +b.dataset.val <= n));
+        }
+
+        // ── Fetch rating text for tooltip ────────────────────────────────────
+        async function getRatingText(uid) {
+            try {
+                const snap = await getDoc(doc(db, "users", uid));
+                if (!snap.exists()) return 'No ratings yet';
+                const d = snap.data();
+                if (!d.ratingCount || d.ratingCount === 0) return 'No ratings yet';
+                const avg = (d.ratingTotal / d.ratingCount).toFixed(1);
+                return `⭐ ${avg} / 5  (${d.ratingCount} rating${d.ratingCount > 1 ? 's' : ''})`;
+            } catch { return 'No ratings yet'; }
+        }
+
+        // ── Modal openers ────────────────────────────────────────────────────
         window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
         window.closeRequestModal = () => document.getElementById('requestModal').style.display = 'none';
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
@@ -258,7 +363,7 @@
         };
         window.closeProfileModal = () => document.getElementById('profileModal').style.display = 'none';
 
-        // Auth Logic
+        // ── Auth ─────────────────────────────────────────────────────────────
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDocRef = doc(db, "users", user.uid);
@@ -291,9 +396,9 @@
                 document.getElementById('userRegionDisplay').innerText = `Region: ${userRegion}`;
                 document.querySelectorAll('.current-region-text').forEach(el => el.innerText = userRegion);
 
-                loadRequests(); 
-                loadLF(); 
-                loadActiveChats(); 
+                loadRequests();
+                loadLF();
+                loadActiveChats();
             } else {
                 window.location.href = "login.html";
             }
@@ -305,7 +410,7 @@
             location.reload();
         };
 
-        // Submission Logic - Community Request
+        // ── Submit: Community Request ────────────────────────────────────────
         document.getElementById('submitReqBtn').onclick = async () => {
             const user = auth.currentUser;
             const title = document.getElementById('reqTitle').value.trim();
@@ -324,14 +429,13 @@
             } catch (e) { alert("Error posting."); }
         };
 
-        // ✅ FIX: Submission Logic - Lost & Found (was missing entirely)
+        // ── Submit: Lost & Found ─────────────────────────────────────────────
         document.getElementById('submitLFBtn').onclick = async () => {
             const user = auth.currentUser;
             const item = document.getElementById('lfItem').value.trim();
             const locationStr = document.getElementById('lfLoc').value.trim();
             if (!item || !locationStr) return alert("Item name and location required!");
 
-            // Handle optional photo upload (converted to base64)
             let imageBase64 = null;
             const imgFile = document.getElementById('lfImg').files[0];
             if (imgFile) {
@@ -345,16 +449,12 @@
             try {
                 await addDoc(collection(db, "lostfound"), {
                     type: document.getElementById('lfType').value,
-                    item,
-                    location: locationStr,
-                    region: userRegion,
+                    item, location: locationStr, region: userRegion,
                     description: document.getElementById('lfDesc').value.trim(),
                     image: imageBase64,
-                    userId: user.uid,
-                    userName: userName,
+                    userId: user.uid, userName: userName,
                     createdAt: serverTimestamp()
                 });
-                // Clear form and close modal
                 document.getElementById('lfItem').value = '';
                 document.getElementById('lfLoc').value = '';
                 document.getElementById('lfDesc').value = '';
@@ -366,7 +466,7 @@
             }
         };
 
-        // Feed Logic (Filtered by Region with Sharjah Fallback)
+        // ── Feed: Community Requests ─────────────────────────────────────────
         function loadRequests() {
             const feed = document.getElementById('requestFeed');
             const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
@@ -376,20 +476,23 @@
                 let hasPosts = false;
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
-                    const postRegion = data.region || "Sharjah"; // Fallback for old posts
+                    const postRegion = data.region || "Sharjah";
                     if (postRegion === userRegion) {
                         hasPosts = true;
                         const card = document.createElement('div');
                         card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
                         const isOwner = auth.currentUser.uid === data.userId;
                         const hasVolunteered = (data.volunteers || []).some(v => v.uid === auth.currentUser.uid);
-                        
+
+                        // Volunteer list — names get hover-rating tooltips
                         let volListHtml = (data.volunteers || []).map(v => `
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
-                                <span style="font-size:12px;">👤 ${v.name}</span>
-                                ${isOwner ? `<button onclick="startChat('${docSnap.id}', '${v.uid}', '${data.title}')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
-                            </div>
-                        `).join('');
+                                <span class="hovername" id="vn-${v.uid}-${docSnap.id}" style="font-size:12px;">
+                                    👤 ${v.name}
+                                    <span class="tip" id="tip-${v.uid}-${docSnap.id}">Loading…</span>
+                                </span>
+                                ${isOwner ? `<button onclick="startChat('${docSnap.id}','${v.uid}','${data.title}','community')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
+                            </div>`).join('');
 
                         card.innerHTML = `
                             <div style="display:flex; justify-content:space-between; align-items:start;">
@@ -408,12 +511,19 @@
                             </div>
                             <div id="vols-${docSnap.id}" style="display:none; margin-top:10px; padding:10px; background:#f8fafc; border-radius:8px;">${volListHtml || '<p style="font-size:11px;">Waiting for volunteers...</p>'}</div>`;
                         feed.appendChild(card);
+
+                        // Lazy-fill rating tooltips
+                        (data.volunteers || []).forEach(async v => {
+                            const tipEl = document.getElementById(`tip-${v.uid}-${docSnap.id}`);
+                            if (tipEl) tipEl.innerText = await getRatingText(v.uid);
+                        });
                     }
                 });
                 if (!hasPosts) feed.innerHTML = `<p style="text-align:center; padding:20px; color:#94a3b8;">No requests in ${userRegion} yet.</p>`;
             });
         }
 
+        // ── Feed: Lost & Found ───────────────────────────────────────────────
         function loadLF() {
             const feed = document.getElementById('lfFeed');
             const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
@@ -438,7 +548,7 @@
                             <h4 style="margin:10px 0;">${data.item}</h4>
                             <p style="font-size:11px; color:#64748b;">Reported by: ${data.userName}</p>
                             <p style="font-size:13px; color:#475569;">${data.description}</p>
-                            ${!isOwner ? `<button class="btn-help" style="width:100%;" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.type}: ${data.item}')">Contact User</button>` : ''}`;
+                            ${!isOwner ? `<button class="btn-help" style="width:100%;" onclick="startChat('${docSnap.id}','${data.userId}','${data.type}: ${data.item}','lostfound')">Contact User</button>` : ''}`;
                         feed.appendChild(card);
                     }
                 });
@@ -446,77 +556,282 @@
             });
         }
 
-        // Shared Functions
+        // ── Shared helpers ───────────────────────────────────────────────────
         window.deletePost = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "requests", id)); };
-        window.deleteLF = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "lostfound", id)); };
+        window.deleteLF   = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "lostfound", id)); };
         window.toggleVols = (id) => { const el = document.getElementById(`vols-${id}`); el.style.display = el.style.display === 'none' ? 'block' : 'none'; };
-        window.offerHelp = async (requestId) => {
+        window.offerHelp  = async (requestId) => {
             const user = auth.currentUser;
             const reqRef = doc(db, "requests", requestId);
             await updateDoc(reqRef, { volunteers: arrayUnion({ uid: user.uid, name: userName }), volunteerCount: increment(1) });
             alert("Added to queue!");
         };
 
-        // Chat & Tabs Logic
-        window.startChat = async (itemId, targetUserId, label) => {
+        // ── Chat ─────────────────────────────────────────────────────────────
+        // chatType = 'community' | 'lostfound'
+        window.startChat = async (itemId, targetUserId, label, chatType) => {
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
-            await setDoc(doc(db, "chats", currentChatId), { participants: [auth.currentUser.uid, targetUserId], itemLabel: label, lastUpdated: serverTimestamp() }, { merge: true });
+            currentChatOtherUserId = targetUserId;
+            currentChatType = chatType || 'community';
+            currentChatOtherName = null;
+
+            await setDoc(doc(db, "chats", currentChatId), {
+                participants: [auth.currentUser.uid, targetUserId],
+                itemLabel: label,
+                chatType: currentChatType,
+                lastUpdated: serverTimestamp()
+            }, { merge: true });
+
             openChatWindow(label);
         };
 
-        function openChatWindow(label) {
+        async function openChatWindow(label) {
             document.getElementById('chatWith').innerText = `Chat: ${label}`;
             document.getElementById('chatPopup').style.display = 'flex';
+
+            // Resolve other user's display name
+            if (!currentChatOtherName && currentChatOtherUserId) {
+                const od = await getDoc(doc(db, "users", currentChatOtherUserId));
+                currentChatOtherName = od.exists() ? od.data().fullName : "User";
+            }
+
+            renderFooterBar();
+
             if (unsubscribeChat) unsubscribeChat();
             const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
             unsubscribeChat = onSnapshot(q, (snapshot) => {
-                const area = document.getElementById('messageArea'); area.innerHTML = "";
+                const area = document.getElementById('messageArea');
+                area.innerHTML = "";
                 snapshot.forEach(d => {
-                    const data = d.data(); const isMe = data.senderId === auth.currentUser.uid;
+                    const data = d.data();
+                    const isMe = data.senderId === auth.currentUser.uid;
                     const msgDiv = document.createElement('div');
                     msgDiv.style = `max-width:80%; padding:8px 12px; border-radius:12px; font-size:13px; margin-bottom:4px; ${isMe ? 'align-self:flex-end; background:#38bdf8; color:white;' : 'align-self:flex-start; background:white; border:1px solid #e2e8f0;'}`;
-                    msgDiv.innerText = data.text; area.appendChild(msgDiv);
+                    msgDiv.innerText = data.text;
+                    area.appendChild(msgDiv);
                 });
                 area.scrollTop = area.scrollHeight;
             });
         }
 
+        // Inject the correct footer action bar based on chat type
+        function renderFooterBar() {
+            const bar = document.getElementById('chatFooterBar');
+            const isSelf = (currentChatOtherUserId === auth.currentUser.uid);
+            const name = currentChatOtherName || 'User';
+
+            if (currentChatType === 'community' && !isSelf) {
+                // Community: Resolve & Rate
+                bar.innerHTML = `
+                    <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#f0fdf4; border-top:1px solid #bbf7d0;">
+                        <span style="font-size:11px; color:#166534;">Chat with <b>${name}</b></span>
+                        <button onclick="window.openRatingModal()" style="background:#22c55e; color:white; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">✅ Resolve &amp; Rate</button>
+                    </div>`;
+            } else {
+                // Lost & Found (or self): just End Chat
+                bar.innerHTML = `
+                    <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#fff7f7; border-top:1px solid #fecaca;">
+                        <span style="font-size:11px; color:#991b1b;">Chat with <b>${name}</b></span>
+                        <button onclick="window.endChat()" style="background:#ef4444; color:white; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">🔴 End Chat</button>
+                    </div>`;
+            }
+        }
+
+        // ── Rating Modal ─────────────────────────────────────────────────────
+        window.openRatingModal = () => {
+            // Guard: cannot rate yourself
+            if (currentChatOtherUserId === auth.currentUser.uid) {
+                window.endChat(); return;
+            }
+            selectedStars = 0;
+            lightStars(0);
+            document.getElementById('starLabel').innerText = '';
+            const sb = document.getElementById('submitRatingBtn');
+            sb.disabled = true; sb.style.opacity = '0.4';
+            document.getElementById('ratingSubtitle').innerText =
+                `Rate ${currentChatOtherName || 'the volunteer'} for their help`;
+            document.getElementById('ratingModal').style.display = 'flex';
+        };
+
+        document.getElementById('submitRatingBtn').onclick = async () => {
+            if (!selectedStars) return;
+            // Save rating to volunteer's user doc
+            await updateDoc(doc(db, "users", currentChatOtherUserId), {
+                ratingTotal: increment(selectedStars),
+                ratingCount: increment(1)
+            });
+            // Award 2 leaderboard points to the volunteer
+            await updateDoc(doc(db, "users", currentChatOtherUserId), { leaderboardPoints: increment(2) });
+            document.getElementById('ratingModal').style.display = 'none';
+            await window.endChat(true);
+        };
+
+        document.getElementById('skipRatingBtn').onclick = async () => {
+            // Award 2 leaderboard points even if rating is skipped
+            if (currentChatOtherUserId && currentChatOtherUserId !== auth.currentUser.uid) {
+                await updateDoc(doc(db, "users", currentChatOtherUserId), { leaderboardPoints: increment(2) });
+            }
+            document.getElementById('ratingModal').style.display = 'none';
+            await window.endChat(true);
+        };
+
+        // ── End Chat ─────────────────────────────────────────────────────────
+        window.endChat = async (skipConfirm) => {
+            if (!currentChatId) return;
+            if (!skipConfirm && !confirm("End this conversation? This cannot be undone.")) return;
+            try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
+            document.getElementById('chatPopup').style.display = 'none';
+            const el = document.getElementById(`item-${currentChatId}`);
+            if (el) el.remove();
+            currentChatId = null; currentChatOtherUserId = null;
+            currentChatOtherName = null; currentChatType = null;
+        };
+
+        // ── Send message ─────────────────────────────────────────────────────
         document.getElementById('sendMsgBtn').onclick = async () => {
-            const input = document.getElementById('msgInput'); if (!input.value) return;
-            await addDoc(collection(db, "chats", currentChatId, "messages"), { text: input.value, senderId: auth.currentUser.uid, createdAt: serverTimestamp() });
+            const input = document.getElementById('msgInput');
+            if (!input.value.trim()) return;
+            await addDoc(collection(db, "chats", currentChatId, "messages"), {
+                text: input.value.trim(),
+                senderId: auth.currentUser.uid,
+                createdAt: serverTimestamp()
+            });
             input.value = "";
         };
 
+        // ── Active Chats sidebar ─────────────────────────────────────────────
         function loadActiveChats() {
             onSnapshot(query(collection(db, "chats")), (snapshot) => {
                 const list = document.getElementById('activeChatsList');
+
+                // Handle deleted chats
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === 'removed') {
+                        const el = document.getElementById(`item-${change.doc.id}`);
+                        if (el) el.remove();
+                        // Show "no chats" if list is now empty
+                        if (!list.querySelector('.chat-list-item')) {
+                            if (!document.getElementById('noChatsMsg')) {
+                                const p = document.createElement('p');
+                                p.id = 'noChatsMsg'; p.innerText = 'No active chats.';
+                                list.appendChild(p);
+                            }
+                        }
+                    }
+                });
+
                 snapshot.forEach(async (docSnap) => {
                     const chatId = docSnap.id;
-                    if (chatId.includes(auth.currentUser.uid)) {
-                        const noMsg = document.getElementById('noChatsMsg'); if(noMsg) noMsg.remove();
-                        const parts = chatId.split('_'); const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
-                        const otherDoc = await getDoc(doc(db, "users", otherId)); const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
-                        let chatDiv = document.getElementById(`item-${chatId}`);
-                        if (!chatDiv) { chatDiv = document.createElement('div'); chatDiv.id = `item-${chatId}`; chatDiv.className = "chat-list-item"; list.prepend(chatDiv); }
-                        chatDiv.innerHTML = `<div><b>${otherName}</b><br><small>${docSnap.data().itemLabel}</small></div>
-                        <button onclick="resumeChat('${chatId}', '${otherName}')" style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Open</button>`;
+                    if (!chatId.includes(auth.currentUser.uid)) return;
+
+                    const noMsg = document.getElementById('noChatsMsg');
+                    if (noMsg) noMsg.remove();
+
+                    const parts = chatId.split('_');
+                    const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
+                    const otherDoc = await getDoc(doc(db, "users", otherId));
+                    const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
+                    const ratingTxt = await getRatingText(otherId);
+                    const chatData = docSnap.data();
+                    const cType = chatData.chatType || 'community';
+
+                    let chatDiv = document.getElementById(`item-${chatId}`);
+                    if (!chatDiv) {
+                        chatDiv = document.createElement('div');
+                        chatDiv.id = `item-${chatId}`;
+                        chatDiv.className = "chat-list-item";
+                        list.prepend(chatDiv);
                     }
+
+                    chatDiv.innerHTML = `
+                        <div>
+                            <span class="hovername" style="font-weight:bold; font-size:14px;">
+                                ${otherName}
+                                <span class="tip">${ratingTxt}</span>
+                            </span>
+                            <br><small style="color:#64748b;">${chatData.itemLabel || ''}</small>
+                        </div>
+                        <button onclick="resumeChat('${chatId}','${otherName}','${otherId}','${cType}')"
+                            style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px;">Open</button>`;
                 });
             });
         }
 
-        window.resumeChat = (id, name) => { currentChatId = id; openChatWindow(name); };
+        window.resumeChat = (id, name, otherId, cType) => {
+            currentChatId = id;
+            currentChatOtherName = name;
+            currentChatOtherUserId = otherId;
+            currentChatType = cType || 'community';
+            openChatWindow(name);
+        };
+
+        // ── Leaderboard ──────────────────────────────────────────────────────
+        function loadLeaderboard() {
+            const feed = document.getElementById('leaderboardFeed');
+            // Listen to all users, filter by region, sort by points client-side
+            onSnapshot(query(collection(db, "users")), (snapshot) => {
+                const users = [];
+                snapshot.forEach(d => {
+                    const data = d.data();
+                    if ((data.region || 'Sharjah') === userRegion && data.fullName) {
+                        users.push({ uid: d.id, name: data.fullName, pts: data.leaderboardPoints || 0,
+                            rating: data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : null,
+                            ratingCount: data.ratingCount || 0 });
+                    }
+                });
+                users.sort((a, b) => b.pts - a.pts);
+
+                // Update "My Points" badge
+                const me = users.find(u => u.uid === auth.currentUser.uid);
+                document.getElementById('myPointsBadge').innerText = `My Points: ${me ? me.pts : 0}`;
+
+                feed.innerHTML = '';
+                if (!users.length) {
+                    feed.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:30px;">No helpers yet — be the first!</p>';
+                    return;
+                }
+
+                users.forEach((u, i) => {
+                    const rank = i + 1;
+                    const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'other';
+                    const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+                    const initial = u.name.charAt(0).toUpperCase();
+                    const isMe = u.uid === auth.currentUser.uid;
+                    const ratingStr = u.rating ? `⭐ ${u.rating} (${u.ratingCount})` : 'No ratings yet';
+
+                    const row = document.createElement('div');
+                    row.className = `lb-row${isMe ? ' is-me' : ''}`;
+                    row.innerHTML = `
+                        <div class="lb-rank ${rankClass}">${rankIcon}</div>
+                        <div class="lb-avatar">${initial}</div>
+                        <div class="lb-info">
+                            <div class="lb-name">${u.name}${isMe ? ' <span style="font-size:11px;background:#38bdf8;color:#0f172a;padding:2px 7px;border-radius:99px;font-weight:600;">You</span>' : ''}</div>
+                            <div class="lb-sub">${ratingStr}</div>
+                        </div>
+                        <div class="lb-pts">${u.pts} <span>pts</span></div>`;
+                    feed.appendChild(row);
+                });
+            });
+        }
+
+        // ── Tab switching ────────────────────────────────────────────────────
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(tab === 'community') {
+            const navItems = document.querySelectorAll('.nav-item');
+            if (tab === 'community') {
                 document.getElementById('communityTab').classList.add('active');
-                document.querySelectorAll('.nav-item')[0].classList.add('active');
+                navItems[0].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Community Hub";
-            } else {
+            } else if (tab === 'lostfound') {
                 document.getElementById('lostFoundTab').classList.add('active');
-                document.querySelectorAll('.nav-item')[1].classList.add('active');
+                navItems[1].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Lost and Found";
+            } else if (tab === 'leaderboard') {
+                document.getElementById('leaderboardTab').classList.add('active');
+                navItems[2].classList.add('active');
+                document.getElementById('pageTitle').innerText = "Leaderboard";
+                loadLeaderboard();
             }
         };
 
