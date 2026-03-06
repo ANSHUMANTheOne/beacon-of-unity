@@ -215,9 +215,10 @@
         <div class="nav-item active" onclick="switchTab('community')">✨ Community Hub</div>
         <div class="nav-item" onclick="switchTab('lostfound')">🔍 Lost and Found</div>
         <div class="nav-item" onclick="switchTab('leaderboard')">🏆 Leaderboard</div>
+        <div class="nav-item" onclick="switchTab('volunteer-opps')">🤝 Volunteer Opportunities</div>
         <div class="nav-item" onclick="openProfileModal()">👤 Profile & Region</div>
-        <div class="nav-item">📢 Updates</div>
-        <div class="nav-item" id="logoutBtnNav" style="margin-top: 100px; opacity: 0.7;">Logout</div>
+        <div class="nav-item" onclick="switchTab('updates')">📢 Updates</div>
+        <div class="nav-item" id="logoutBtnNav" style="margin-top: 60px; opacity: 0.7;">Logout</div>
     </div>
 
     <div class="main-content">
@@ -259,6 +260,49 @@
                         <button onclick="openLFModal()" style="background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">+ Report Item</button>
                     </div>
                     <div id="lfFeed"></div>
+                </div>
+
+                <div id="volunteer-oppsTab" class="tab-content">
+                    <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+                        <div style="font-size:42px;">🤝</div>
+                        <div>
+                            <h3 style="margin:0;">Volunteer Opportunities</h3>
+                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Find meaningful ways to give back to your community</p>
+                        </div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#e0f2fe,#f0f9ff); border:1px solid #bae6fd; border-radius:16px; padding:28px; text-align:center;">
+                        <div style="font-size:48px; margin-bottom:14px;">🚧</div>
+                        <h3 style="margin:0 0 8px; color:#0369a1;">Coming Soon</h3>
+                        <p style="color:#0284c7; font-size:14px; margin:0; max-width:380px; margin:0 auto;">We're building a curated list of volunteering opportunities across the UAE. Check back soon — great things are on the way!</p>
+                    </div>
+                </div>
+
+                <div id="updatesTab" class="tab-content">
+                    <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+                        <div style="font-size:42px;">📢</div>
+                        <div>
+                            <h3 style="margin:0;">Platform Updates</h3>
+                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Latest news from the Beacon of Unity team</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:16px;">
+                        <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7); border:1px solid #86efac; border-radius:14px; padding:22px;">
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                                <span style="background:#22c55e; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">🟢 Live</span>
+                                <span style="font-size:12px; color:#64748b;">March 2025</span>
+                            </div>
+                            <h4 style="margin:0 0 8px; color:#166534;">Pilot Phase Now Live!</h4>
+                            <p style="font-size:14px; color:#15803d; margin:0; line-height:1.6;">The pilot phase of the Beacon of Unity program is currently ongoing. We're testing, learning, and growing together — and we couldn't do it without you. <b>Thank you for being a part of this!</b> 🌟</p>
+                        </div>
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                                <span style="background:#38bdf8; color:#0f172a; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">✨ Feature</span>
+                                <span style="font-size:12px; color:#64748b;">March 2025</span>
+                            </div>
+                            <h4 style="margin:0 0 8px;">Volunteer Rank System Launched</h4>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points with every resolved chat and climb through volunteer ranks — from Newcomer all the way to Guardian of Unity. Check your rank on the Leaderboard!</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -302,6 +346,15 @@
             <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; margin: 15px 0;">
                 <label style="font-size: 12px; color: #64748b;">Verified Name (Permanent)</label>
                 <div id="profileNameDisplay" style="font-weight: bold; font-size: 18px;">...</div>
+            </div>
+            <!-- Volunteer Rank Badge -->
+            <div id="profileRankBadge" style="display:flex; align-items:center; gap:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:16px;">
+                <div id="profileRankIcon" style="font-size:28px;">🌱</div>
+                <div>
+                    <div style="font-size:11px; color:#94a3b8; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Volunteer Rank</div>
+                    <div id="profileRankLabel" style="font-weight:800; font-size:16px; color:#0f172a;">Newcomer</div>
+                    <div id="profileRankPts" style="font-size:12px; color:#64748b; margin-top:1px;">0 pts</div>
+                </div>
             </div>
             <label>Change Your Emirate</label>
             <select id="profileRegionSelect">
@@ -527,13 +580,52 @@
                     </span>`;
         }
 
+        // ── Volunteer Rank System ────────────────────────────────────────────
+        // Every 10 pts = new rank tier, 10 tiers total
+        const VOLUNTEER_RANKS = [
+            { min: 0,   label: 'Newcomer',            icon: '🌱', color: '#64748b' },
+            { min: 10,  label: 'Kind Soul',            icon: '💙', color: '#0ea5e9' },
+            { min: 20,  label: 'Helper',               icon: '🤝', color: '#06b6d4' },
+            { min: 30,  label: 'Trusted Volunteer',    icon: '⭐', color: '#f59e0b' },
+            { min: 40,  label: 'Community Pillar',     icon: '🏛️', color: '#8b5cf6' },
+            { min: 50,  label: 'Rising Star',          icon: '🌟', color: '#f97316' },
+            { min: 60,  label: 'Champion',             icon: '🏆', color: '#eab308' },
+            { min: 70,  label: 'Elite Helper',         icon: '💎', color: '#06d6a0' },
+            { min: 80,  label: 'Guardian',             icon: '🛡️', color: '#ef4444' },
+            { min: 100, label: 'Guardian of Unity',    icon: '✨', color: '#38bdf8' },
+            { min: 120, label: 'Beacon of Hope',       icon: '🕯️', color: '#f472b6' },
+            { min: 150, label: 'Community Defender',   icon: '🦺', color: '#10b981' },
+            { min: 180, label: 'Devoted Helper',       icon: '🫶', color: '#ec4899' },
+            { min: 210, label: 'Neighborhood Hero',    icon: '🦸', color: '#6366f1' },
+            { min: 250, label: 'Unity Architect',      icon: '🏗️', color: '#0891b2' },
+            { min: 300, label: 'Legendary Volunteer',  icon: '🌠', color: '#d97706' },
+            { min: 350, label: 'Pillar of Society',    icon: '🗽', color: '#7c3aed' },
+            { min: 400, label: 'Beacon Elite',         icon: '🔆', color: '#0284c7' },
+            { min: 450, label: 'Mythic Helper',        icon: '🐉', color: '#dc2626' },
+            { min: 500, label: 'Legend of Unity',      icon: '👑', color: '#f59e0b' },
+        ];
+
+        function getVolunteerRank(pts) {
+            let rank = VOLUNTEER_RANKS[0];
+            for (const r of VOLUNTEER_RANKS) { if (pts >= r.min) rank = r; }
+            return rank;
+        }
+
         // ── Modal openers ────────────────────────────────────────────────────
         window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
         window.closeRequestModal = () => document.getElementById('requestModal').style.display = 'none';
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
-        window.openProfileModal = () => {
+        window.openProfileModal = async () => {
             document.getElementById('profileNameDisplay').innerText = userName;
             document.getElementById('profileRegionSelect').value = userRegion;
+            // Fetch latest points for rank display
+            const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
+            const pts = snap.exists() ? (snap.data().leaderboardPoints || 0) : 0;
+            const rank = getVolunteerRank(pts);
+            document.getElementById('profileRankIcon').innerText  = rank.icon;
+            document.getElementById('profileRankLabel').innerText = rank.label;
+            document.getElementById('profileRankLabel').style.color = rank.color;
+            document.getElementById('profileRankPts').innerText   = `${pts} pts earned`;
             document.getElementById('profileModal').style.display = 'flex';
         };
         window.closeProfileModal = () => document.getElementById('profileModal').style.display = 'none';
@@ -1117,7 +1209,7 @@
                     if (!data.fullName) return;
                     // Filter by region for local scope
                     if (lbScope === 'local' && (data.region || 'Sharjah') !== userRegion) return;
-                    users.push({
+                users.push({
                         uid: d.id, name: data.fullName,
                         pts: data.leaderboardPoints || 0,
                         region: data.region || '—',
@@ -1131,7 +1223,9 @@
                 const meAll = [];
                 snapshot.forEach(d => { if (d.id === auth.currentUser.uid) meAll.push(d.data()); });
                 const myPts = meAll.length ? (meAll[0].leaderboardPoints || 0) : 0;
-                document.getElementById('myPointsBadge').innerText = `My Points: ${myPts}`;
+                const myRank = getVolunteerRank(myPts);
+                document.getElementById('myPointsBadge').innerHTML =
+                    `<span style="opacity:0.7;font-size:12px;font-weight:500;">My Points:</span> ${myPts} &nbsp;<span style="font-size:13px;">${myRank.icon}</span> <span style="font-size:12px;color:#38bdf8;">${myRank.label}</span>`;
 
                 feed.innerHTML = '';
                 if (!users.length) {
@@ -1146,22 +1240,33 @@
                     const initial   = u.name.charAt(0).toUpperCase();
                     const isMe      = u.uid === auth.currentUser.uid;
                     const ratingStr = u.rating ? `⭐ ${u.rating} (${u.ratingCount})` : 'No ratings yet';
+                    const vRank     = getVolunteerRank(u.pts);
                     const regionTag = lbScope === 'global'
                         ? `<span style="font-size:11px; background:#f1f5f9; color:#475569; padding:2px 7px; border-radius:99px; margin-left:6px;">${u.region}</span>`
                         : '';
 
                     const row = document.createElement('div');
                     row.className = `lb-row${isMe ? ' is-me' : ''}`;
+                    const safeName = u.name.replace(/'/g, "\\'");
                     row.innerHTML = `
                         <div class="lb-rank ${rankClass}">${rankIcon}</div>
                         <div class="lb-avatar">${initial}</div>
                         <div class="lb-info">
                             <div class="lb-name">
-                                ${u.name}
+                                <span class="hovername">
+                                    ${u.name}
+                                    <span class="hovercard">
+                                        <div class="rating-line">${ratingStr}</div>
+                                        ${!isMe ? `<button class="report-btn" onclick="openReportModal('${u.uid}','${safeName}')">🚩 Report User</button>` : '<div style="font-size:11px;color:#64748b;">This is you</div>'}
+                                    </span>
+                                </span>
                                 ${isMe ? '<span style="font-size:11px;background:#38bdf8;color:#0f172a;padding:2px 7px;border-radius:99px;font-weight:600;">You</span>' : ''}
                                 ${regionTag}
                             </div>
-                            <div class="lb-sub">${ratingStr}</div>
+                            <div class="lb-sub">
+                                <span style="color:${vRank.color}; font-weight:600;">${vRank.icon} ${vRank.label}</span>
+                                &nbsp;·&nbsp; ${ratingStr}
+                            </div>
                         </div>
                         <div class="lb-pts">${u.pts} <span>pts</span></div>`;
                     feed.appendChild(row);
@@ -1187,6 +1292,14 @@
                 navItems[2].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Leaderboard";
                 loadLeaderboard();
+            } else if (tab === 'volunteer-opps') {
+                document.getElementById('volunteer-oppsTab').classList.add('active');
+                navItems[3].classList.add('active');
+                document.getElementById('pageTitle').innerText = "Volunteer Opportunities";
+            } else if (tab === 'updates') {
+                document.getElementById('updatesTab').classList.add('active');
+                navItems[5].classList.add('active');
+                document.getElementById('pageTitle').innerText = "Updates";
             }
         };
 
