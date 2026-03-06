@@ -74,14 +74,33 @@
         .star-btn { font-size:34px; background:none; border:none; cursor:pointer; color:#e2e8f0; transition:color 0.1s; padding:0; line-height:1; width:auto; margin:0; }
         .star-btn.lit { color:#f59e0b; }
 
-        /* ── Hover tooltip ── */
+        /* ── Hover card ── */
         .hovername { position:relative; display:inline-block; cursor:default; }
-        .hovername .tip {
+        .hovername .hovercard {
             display:none; position:absolute; bottom:130%; left:50%; transform:translateX(-50%);
-            background:#0f172a; color:white; padding:5px 10px; border-radius:8px;
-            font-size:12px; white-space:nowrap; z-index:9999; pointer-events:none;
+            background:#0f172a; color:white; padding:10px 14px; border-radius:10px;
+            font-size:12px; white-space:nowrap; z-index:9999; pointer-events:auto;
+            box-shadow:0 8px 24px rgba(0,0,0,0.3); min-width:160px; text-align:center;
         }
-        .hovername:hover .tip { display:block; }
+        .hovername .hovercard::after {
+            content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+            border:5px solid transparent; border-top-color:#0f172a;
+        }
+        .hovername:hover .hovercard { display:block; }
+        .hovercard .rating-line { color:#94a3b8; margin-bottom:8px; font-size:11px; }
+        .hovercard .report-btn {
+            background:#ef4444; color:white; border:none; padding:4px 12px;
+            border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; width:100%;
+        }
+        .hovercard .report-btn:hover { background:#dc2626; }
+
+        /* ── Report Modal ── */
+        #reportModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.85); z-index:6000; align-items:center; justify-content:center; }
+        #reportModal .modal-content { max-width:420px; max-height:90vh; overflow-y:auto; }
+        .report-category-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 15px; }
+        .report-cat-btn { padding:8px 10px; border:2px solid #e2e8f0; border-radius:8px; background:white; font-size:12px; cursor:pointer; text-align:left; transition:0.15s; }
+        .report-cat-btn:hover { border-color:#ef4444; color:#ef4444; }
+        .report-cat-btn.selected { border-color:#ef4444; background:#fee2e2; color:#991b1b; font-weight:700; }
 
         /* ── Chat footer bar ── */
         #chatFooterBar { padding:7px 10px; border-top:1px solid #f1f5f9; background:#f8fafc; }
@@ -101,9 +120,94 @@
         .lb-pts  { font-size:20px; font-weight:800; color:#38bdf8; flex-shrink:0; }
         .lb-pts span { font-size:11px; font-weight:500; color:#94a3b8; }
         .lb-row.is-me { border-color:#38bdf8; background:#f0f9ff; }
+
+        /* ── Settings icon ── */
+        #settingsBtn { position:fixed; bottom:105px; right:38px; width:36px; height:36px; background:white; border:1px solid #e2e8f0; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:998; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:0.2s; font-size:16px; }
+        #settingsBtn:hover { background:#f1f5f9; transform:rotate(30deg); }
+
+        /* ── Settings Modal ── */
+        #settingsModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.7); z-index:5000; align-items:center; justify-content:center; }
+        #settingsModal .modal-content { max-width:360px; }
+        .settings-row { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid #f1f5f9; }
+        .settings-row:last-child { border-bottom:none; }
+        .toggle-track { width:44px; height:24px; background:#e2e8f0; border-radius:99px; position:relative; cursor:pointer; transition:background 0.2s; flex-shrink:0; }
+        .toggle-track.on { background:#38bdf8; }
+        .toggle-thumb { position:absolute; top:3px; left:3px; width:18px; height:18px; background:white; border-radius:50%; transition:left 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+        .toggle-track.on .toggle-thumb { left:23px; }
+
+        /* ── Quote overlay ── */
+        #quoteOverlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.92); z-index:9000; align-items:center; justify-content:center; flex-direction:column; }
+        #quoteText { color:white; font-size:22px; font-weight:300; max-width:520px; text-align:center; line-height:1.6; padding:0 30px; min-height:60px; }
+        #quoteCursor { display:inline-block; width:2px; height:1.1em; background:#38bdf8; margin-left:3px; vertical-align:middle; animation:blink 0.7s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        #quoteSkip { margin-top:28px; color:#94a3b8; font-size:13px; cursor:pointer; border:1px solid #334155; background:none; padding:7px 18px; border-radius:8px; transition:0.2s; }
+        #quoteSkip:hover { color:white; border-color:#64748b; }
+
+        /* ── Dark mode ── */
+        body.dark { background:#0f172a; color:#e2e8f0; }
+        body.dark .sidebar { background:#020617; }
+        body.dark .main-content { background:#0f172a; }
+        body.dark .card { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+        body.dark .card h3, body.dark .card h4 { color:#f1f5f9; }
+        body.dark .card p, body.dark .card small { color:#94a3b8; }
+        body.dark input, body.dark select, body.dark textarea { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+        body.dark .modal-content { background:#1e293b; color:#e2e8f0; }
+        body.dark .modal-content h2, body.dark .modal-content label { color:#f1f5f9; }
+        body.dark .modal-content p { color:#94a3b8; }
+        body.dark #chatPopup { background:#1e293b; border-color:#334155; }
+        body.dark #messageArea { background:#0f172a; }
+        body.dark #chatFooterBar { background:#1e293b; border-color:#334155; }
+        body.dark .chat-list-item { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+        body.dark .chat-unread { background:#2d1515 !important; border-color:#ef4444 !important; }
+        body.dark .lb-row { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+        body.dark .lb-row.is-me { background:#0c2233; border-color:#38bdf8; }
+        body.dark .lb-sub { color:#94a3b8; }
+        body.dark #settingsBtn { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+        body.dark .settings-row { border-color:#334155; }
+        body.dark .header h1 { color:#f1f5f9; }
+        body.dark .badge-tools { background:#334155; color:#94a3b8; }
+        body.dark .nav-item.active { background:#38bdf8; color:#0f172a; }
+        body.dark #myPointsBadge { background:#1e293b; }
     </style>
 </head>
 <body>
+
+    <!-- ── Quote Overlay ── -->
+    <div id="quoteOverlay">
+        <div id="quoteText"><span id="quoteTyped"></span><span id="quoteCursor"></span></div>
+        <button id="quoteSkip">Skip  ✕</button>
+    </div>
+
+    <!-- ── Settings Icon ── -->
+    <button id="settingsBtn" onclick="document.getElementById('settingsModal').style.display='flex'" title="Settings">⚙️</button>
+
+    <!-- ── Settings Modal ── -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+                <h2 style="margin:0;">⚙️ Settings</h2>
+                <span onclick="document.getElementById('settingsModal').style.display='none'" style="cursor:pointer;font-size:20px;color:#94a3b8;">✕</span>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <div style="font-weight:600;">Daily Inspiration Quote</div>
+                    <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Show a motivational quote on page load</div>
+                </div>
+                <div class="toggle-track" id="quoteToggle" onclick="toggleSetting('quote')">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <div style="font-weight:600;">Dark Mode</div>
+                    <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Easier on the eyes at night</div>
+                </div>
+                <div class="toggle-track" id="darkToggle" onclick="toggleSetting('dark')">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="sidebar">
         <h2>Beacon of Unity</h2>
@@ -266,9 +370,59 @@
         </div>
     </div>
 
+    <!-- ── Report User Modal ── -->
+    <div id="reportModal">
+        <div class="modal-content" style="position:relative;">
+            <button onclick="closeReportModal()" style="position:absolute;top:12px;right:12px;background:#fee2e2;color:#991b1b;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;font-weight:700;cursor:pointer;">✕</button>
+
+            <!-- Step 1: Confirm -->
+            <div id="reportStep1">
+                <div style="font-size:36px;text-align:center;margin-bottom:10px;">🚨</div>
+                <h2 style="margin:0 0 6px;text-align:center;">Report User</h2>
+                <p id="reportStep1Subtitle" style="color:#64748b;font-size:14px;text-align:center;margin:0 0 22px;"></p>
+                <div style="display:flex;gap:10px;">
+                    <button onclick="closeReportModal()" style="flex:1;padding:11px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
+                    <button onclick="reportGoStep2()" style="flex:1;padding:11px;background:#ef4444;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Yes, Report</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Details -->
+            <div id="reportStep2" style="display:none;">
+                <h2 style="margin:0 0 4px;">What's the issue?</h2>
+                <p style="color:#64748b;font-size:13px;margin:0 0 10px;">Select a category <span style="color:#ef4444;">*</span></p>
+                <div class="report-category-grid">
+                    <button class="report-cat-btn" data-cat="Scam / Fraud">🛑 Scam / Fraud</button>
+                    <button class="report-cat-btn" data-cat="Misuse of System">⚠️ Misuse of System</button>
+                    <button class="report-cat-btn" data-cat="Faking Volunteer Points">🎭 Faking Points</button>
+                    <button class="report-cat-btn" data-cat="Harassment">😡 Harassment</button>
+                    <button class="report-cat-btn" data-cat="Fake Identity">👤 Fake Identity</button>
+                    <button class="report-cat-btn" data-cat="Other">📋 Other</button>
+                </div>
+                <label style="font-size:13px;font-weight:600;">Description <span style="color:#ef4444;">*</span></label>
+                <textarea id="reportDesc" placeholder="Describe what happened..." style="height:90px;resize:vertical;margin-top:6px;"></textarea>
+                <label style="font-size:13px;font-weight:600;">Attach Image (optional)</label>
+                <input type="file" id="reportImg" accept="image/*" style="font-size:12px;margin-top:4px;">
+                <p id="reportImgStatus" style="font-size:11px;color:#94a3b8;margin:4px 0 12px;"></p>
+                <button id="submitReportBtn" onclick="submitReport()" style="width:100%;padding:12px;background:#ef4444;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:14px;">Submit Report</button>
+                <p id="reportError" style="color:#ef4444;font-size:12px;text-align:center;margin-top:8px;display:none;"></p>
+            </div>
+
+            <!-- Step 3: Success -->
+            <div id="reportStep3" style="display:none;text-align:center;">
+                <div style="font-size:48px;margin-bottom:12px;">✅</div>
+                <h2 style="margin:0 0 8px;">Report Submitted</h2>
+                <p style="color:#64748b;font-size:14px;margin:0 0 22px;">Our admin team will review this and take action if needed.</p>
+                <button onclick="closeReportModal()" style="width:100%;padding:12px;background:#0f172a;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Done</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ★ RATING MODAL — Community Hub only -->
     <div id="ratingModal">
-        <div class="modal-content">
+        <div class="modal-content" style="position:relative;">
+            <!-- Cancel X — closes modal and returns to chat without doing anything -->
+            <button onclick="document.getElementById('ratingModal').style.display='none'" 
+                style="position:absolute;top:12px;right:12px;background:#fee2e2;color:#991b1b;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
             <h2 style="margin-bottom:5px;">⭐ Rate the Volunteer</h2>
             <p id="ratingSubtitle" style="color:#64748b; font-size:14px; margin:0 0 5px;">How was your experience?</p>
             <div class="star-row" id="starRow">
@@ -358,6 +512,19 @@
                 const avg = (d.ratingTotal / d.ratingCount).toFixed(1);
                 return `⭐ ${avg} / 5  (${d.ratingCount} rating${d.ratingCount > 1 ? 's' : ''})`;
             } catch { return 'No ratings yet'; }
+        }
+
+        // Build hovercard HTML — rating line + report button
+        // uid/name are escaped so they're safe in onclick attributes
+        function buildHoverCard(uid, name, ratingTxt) {
+            const safeName = (name || 'User').replace(/'/g, "\\'");
+            const isSelf   = uid === auth.currentUser.uid;
+            const reportBtn = isSelf ? '' :
+                `<button class="report-btn" onclick="openReportModal('${uid}','${safeName}')">🚩 Report User</button>`;
+            return `<span class="hovercard">
+                        <div class="rating-line">${ratingTxt || 'No ratings yet'}</div>
+                        ${reportBtn}
+                    </span>`;
         }
 
         // ── Modal openers ────────────────────────────────────────────────────
@@ -492,12 +659,15 @@
                         const isOwner = auth.currentUser.uid === data.userId;
                         const hasVolunteered = (data.volunteers || []).some(v => v.uid === auth.currentUser.uid);
 
-                        // Volunteer list — names get hover-rating tooltips
+                        // Volunteer list — names get hover cards with rating + report
                         let volListHtml = (data.volunteers || []).map(v => `
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
                                 <span class="hovername" id="vn-${v.uid}-${docSnap.id}" style="font-size:12px;">
                                     👤 ${v.name}
-                                    <span class="tip" id="tip-${v.uid}-${docSnap.id}">Loading…</span>
+                                    <span class="hovercard" id="hc-${v.uid}-${docSnap.id}">
+                                        <div class="rating-line">Loading…</div>
+                                        ${v.uid !== auth.currentUser.uid ? `<button class="report-btn" onclick="openReportModal('${v.uid}','${v.name.replace(/'/g,"\\'")}')">🚩 Report User</button>` : ''}
+                                    </span>
                                 </span>
                                 ${isOwner ? `<button onclick="startChat('${docSnap.id}','${v.uid}','${data.title}','community')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
                             </div>`).join('');
@@ -520,10 +690,14 @@
                             <div id="vols-${docSnap.id}" style="display:none; margin-top:10px; padding:10px; background:#f8fafc; border-radius:8px;">${volListHtml || '<p style="font-size:11px;">Waiting for volunteers...</p>'}</div>`;
                         feed.appendChild(card);
 
-                        // Lazy-fill rating tooltips
+                        // Lazy-fill rating in hovercards
                         (data.volunteers || []).forEach(async v => {
-                            const tipEl = document.getElementById(`tip-${v.uid}-${docSnap.id}`);
-                            if (tipEl) tipEl.innerText = await getRatingText(v.uid);
+                            const hcEl = document.getElementById(`hc-${v.uid}-${docSnap.id}`);
+                            if (hcEl) {
+                                const ratingTxt = await getRatingText(v.uid);
+                                const ratingLine = hcEl.querySelector('.rating-line');
+                                if (ratingLine) ratingLine.innerText = ratingTxt;
+                            }
                         });
                     }
                 });
@@ -583,8 +757,6 @@
             currentChatType = chatType || 'community';
             currentChatOtherName = null;
 
-            // The person clicking "Chat" is always the post owner (they initiated from their volunteer list)
-            // For LF, the person clicking "Contact User" is the visitor — post owner is targetUserId
             const postOwnerId = chatType === 'community' ? auth.currentUser.uid : targetUserId;
 
             await setDoc(doc(db, "chats", currentChatId), {
@@ -592,6 +764,7 @@
                 itemLabel: label,
                 chatType: currentChatType,
                 postOwnerId: postOwnerId,
+                requestId: chatType === 'community' ? itemId : null,
                 lastUpdated: serverTimestamp()
             }, { merge: true });
 
@@ -689,30 +862,92 @@
 
         document.getElementById('submitRatingBtn').onclick = async () => {
             if (!selectedStars) return;
-            // Save rating to volunteer's user doc
             await updateDoc(doc(db, "users", currentChatOtherUserId), {
                 ratingTotal: increment(selectedStars),
                 ratingCount: increment(1)
             });
-            // Award 2 leaderboard points to the volunteer
             await updateDoc(doc(db, "users", currentChatOtherUserId), { leaderboardPoints: increment(2) });
             document.getElementById('ratingModal').style.display = 'none';
-            await window.endChat(true);
+            await resolveAndClose();
         };
 
         document.getElementById('skipRatingBtn').onclick = async () => {
-            // Award 2 leaderboard points even if rating is skipped
             if (currentChatOtherUserId && currentChatOtherUserId !== auth.currentUser.uid) {
                 await updateDoc(doc(db, "users", currentChatOtherUserId), { leaderboardPoints: increment(2) });
             }
             document.getElementById('ratingModal').style.display = 'none';
-            await window.endChat(true);
+            await resolveAndClose();
         };
 
-        // ── End Chat ─────────────────────────────────────────────────────────
+        // Called after rating (or skip) — notifies volunteer, then asks post owner about deleting request
+        async function resolveAndClose() {
+            const chatSnap = await getDoc(doc(db, "chats", currentChatId));
+            const requestId = chatSnap.exists() ? chatSnap.data().requestId : null;
+
+            // 1. Send a system message so the volunteer sees the chat was ended
+            try {
+                await addDoc(collection(db, "chats", currentChatId, "messages"), {
+                    text: `✅ ${userName} has resolved and ended this chat. Thank you for your help!`,
+                    senderId: 'system',
+                    createdAt: serverTimestamp()
+                });
+                // Mark as unread for volunteer so they see the notice
+                await updateDoc(doc(db, "chats", currentChatId), {
+                    [`unread_${currentChatOtherUserId}`]: true,
+                    resolved: true
+                });
+            } catch {}
+
+            // Small delay so message writes before we delete the chat
+            await new Promise(r => setTimeout(r, 600));
+
+            // 2. Delete the chat
+            try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
+            document.getElementById('chatPopup').style.display = 'none';
+            const el = document.getElementById(`item-${currentChatId}`);
+            if (el) el.remove();
+
+            // 3. Ask post owner if they want to delete the request too
+            if (requestId) {
+                showDeleteRequestPrompt(requestId);
+            }
+
+            currentChatId = null; currentChatOtherUserId = null;
+            currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
+        }
+
+        // Nice inline prompt to delete the request
+        function showDeleteRequestPrompt(requestId) {
+            const overlay = document.createElement('div');
+            overlay.style = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.75);z-index:4000;display:flex;align-items:center;justify-content:center;';
+            overlay.innerHTML = `
+                <div style="background:white;padding:30px;border-radius:20px;max-width:380px;width:90%;text-align:center;position:relative;box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+                    <button id="deleteReqCancelX" style="position:absolute;top:10px;right:10px;background:#fee2e2;color:#991b1b;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;font-weight:700;cursor:pointer;">✕</button>
+                    <div style="font-size:40px;margin-bottom:12px;">🎉</div>
+                    <h3 style="margin:0 0 8px;">Chat Resolved!</h3>
+                    <p style="color:#64748b;font-size:14px;margin:0 0 22px;">Would you like to remove your request from the Community Hub now that it's been fulfilled?</p>
+                    <div style="display:flex;gap:10px;">
+                        <button id="deleteReqYes" style="flex:1;padding:11px;background:#ef4444;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Yes, delete it</button>
+                        <button id="deleteReqNo"  style="flex:1;padding:11px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Keep it up</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(overlay);
+            const close = () => overlay.remove();
+            document.getElementById('deleteReqYes').onclick = async () => {
+                try { await deleteDoc(doc(db, "requests", requestId)); } catch {}
+                close();
+            };
+            document.getElementById('deleteReqNo').onclick      = close;
+            document.getElementById('deleteReqCancelX').onclick = close;
+        }
+
+        // ── End Chat (non-resolve path) ───────────────────────────────────────
         window.endChat = async (skipConfirm) => {
             if (!currentChatId) return;
-            if (!skipConfirm && !confirm("End this conversation? This cannot be undone.")) return;
+            if (!skipConfirm) {
+                const confirmed = await showConfirmEndChat();
+                if (!confirmed) return;
+            }
             try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
             document.getElementById('chatPopup').style.display = 'none';
             const el = document.getElementById(`item-${currentChatId}`);
@@ -720,6 +955,30 @@
             currentChatId = null; currentChatOtherUserId = null;
             currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
         };
+
+        // Styled end-chat confirm with a red X to cancel
+        function showConfirmEndChat() {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.style = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.75);z-index:4000;display:flex;align-items:center;justify-content:center;';
+                overlay.innerHTML = `
+                    <div style="background:white;padding:28px;border-radius:18px;max-width:340px;width:90%;text-align:center;position:relative;box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+                        <button id="endChatCancelX" style="position:absolute;top:10px;right:10px;background:#fee2e2;color:#991b1b;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;font-weight:700;cursor:pointer;">✕</button>
+                        <div style="font-size:36px;margin-bottom:10px;">💬</div>
+                        <h3 style="margin:0 0 8px;">End this chat?</h3>
+                        <p style="color:#64748b;font-size:14px;margin:0 0 20px;">This conversation will be permanently closed.</p>
+                        <div style="display:flex;gap:10px;">
+                            <button id="endChatNo"  style="flex:1;padding:10px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
+                            <button id="endChatYes" style="flex:1;padding:10px;background:#ef4444;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">End Chat</button>
+                        </div>
+                    </div>`;
+                document.body.appendChild(overlay);
+                const close = (val) => { overlay.remove(); resolve(val); };
+                document.getElementById('endChatYes').onclick      = () => close(true);
+                document.getElementById('endChatNo').onclick       = () => close(false);
+                document.getElementById('endChatCancelX').onclick  = () => close(false);
+            });
+        }
 
         // ── Send message ─────────────────────────────────────────────────────
         async function sendMessage() {
@@ -807,7 +1066,10 @@
                             </div>
                             <span class="hovername" style="font-weight:700; font-size:13px;">
                                 ${otherName}
-                                <span class="tip">${ratingTxt}</span>
+                                <span class="hovercard">
+                                    <div class="rating-line">${ratingTxt}</div>
+                                    <button class="report-btn" onclick="openReportModal('${otherId}','${otherName.replace(/'/g,"\\'")}')">🚩 Report User</button>
+                                </span>
                             </span>
                             <br><small style="color:#94a3b8; font-size:11px;">${chatData.itemLabel || ''}</small>
                         </div>
@@ -931,6 +1193,183 @@
         const logout = () => signOut(auth).then(() => window.location.href = "login.html");
         document.getElementById('logoutBtn').onclick = logout;
         document.getElementById('logoutBtnNav').onclick = logout;
+
+        // ── Settings & Dark Mode ─────────────────────────────────────────────
+        function applySettings() {
+            // Default: dark = false (light mode), quote = true
+            const dark  = localStorage.getItem('bou_dark')  === 'true';
+            const quote = localStorage.getItem('bou_quote') !== 'false';
+            document.body.classList.toggle('dark', dark);
+            document.getElementById('darkToggle').classList.toggle('on', dark);
+            document.getElementById('quoteToggle').classList.toggle('on', quote);
+        }
+
+        window.toggleSetting = (key) => {
+            if (key === 'dark') {
+                const now = localStorage.getItem('bou_dark') === 'true';
+                localStorage.setItem('bou_dark', !now);
+            } else {
+                const now = localStorage.getItem('bou_quote') !== 'false';
+                localStorage.setItem('bou_quote', !now);
+            }
+            applySettings();
+        };
+
+        applySettings();
+
+        // ── Inspirational Quote (typing animation) ───────────────────────────
+        const QUOTES = [
+            "Small acts of kindness change the world.",
+            "You matter more than you know.",
+            "Together we rise.",
+            "Be the reason someone smiles today.",
+            "One kind word can warm three winter months.",
+            "Your help is someone else's miracle.",
+            "Community is strength.",
+            "Do good and good comes back.",
+            "A little help goes a long way.",
+            "Kindness is free — spread it everywhere.",
+            "Every neighbour matters.",
+            "The world is better because you're in it.",
+            "Help someone today — they'll help another tomorrow.",
+            "Great things happen when people come together.",
+        ];
+
+        function runQuote() {
+            if (localStorage.getItem('bou_quote') === 'false') return;
+
+            // Track shown quotes to avoid repeats (reset when all seen)
+            let seen = JSON.parse(localStorage.getItem('bou_seen_quotes') || '[]');
+            const remaining = QUOTES.filter((_, i) => !seen.includes(i));
+            if (!remaining.length) { seen = []; localStorage.setItem('bou_seen_quotes', '[]'); }
+
+            const idx = QUOTES.indexOf(remaining[Math.floor(Math.random() * remaining.length)]);
+            seen.push(idx);
+            localStorage.setItem('bou_seen_quotes', JSON.stringify(seen));
+
+            const text   = QUOTES[idx];
+            const overlay = document.getElementById('quoteOverlay');
+            const typed   = document.getElementById('quoteTyped');
+            overlay.style.display = 'flex';
+            typed.innerText = '';
+            let i = 0;
+
+            const typeInterval = setInterval(() => {
+                typed.innerText += text[i++];
+                if (i >= text.length) {
+                    clearInterval(typeInterval);
+                    document.getElementById('quoteCursor').style.display = 'none';
+                    // Fade out after 1.8s pause
+                    setTimeout(() => {
+                        overlay.style.transition = 'opacity 0.8s';
+                        overlay.style.opacity = '0';
+                        setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = '1'; overlay.style.transition = ''; }, 800);
+                    }, 1800);
+                }
+            }, 48);
+
+            document.getElementById('quoteSkip').onclick = () => {
+                clearInterval(typeInterval);
+                overlay.style.display = 'none';
+                typed.innerText = '';
+                document.getElementById('quoteCursor').style.display = 'inline-block';
+            };
+        }
+
+        // Run quote on first load of the session
+        if (!sessionStorage.getItem('bou_quoted')) {
+            sessionStorage.setItem('bou_quoted', '1');
+            setTimeout(runQuote, 400);
+        }
+
+        // ── Report System ────────────────────────────────────────────────────
+        let reportTargetUid  = null;
+        let reportTargetName = null;
+        let reportCategory   = null;
+        let reportImageB64   = null;
+
+        window.openReportModal = (uid, name) => {
+            reportTargetUid  = uid;
+            reportTargetName = name;
+            reportCategory   = null;
+            reportImageB64   = null;
+
+            // Reset all steps
+            document.getElementById('reportStep1').style.display = 'block';
+            document.getElementById('reportStep2').style.display = 'none';
+            document.getElementById('reportStep3').style.display = 'none';
+            document.getElementById('reportStep1Subtitle').innerText =
+                `Are you sure you want to report ${name}?`;
+            document.getElementById('reportDesc').value = '';
+            document.getElementById('reportImg').value  = '';
+            document.getElementById('reportImgStatus').innerText = '';
+            document.getElementById('reportError').style.display = 'none';
+            document.querySelectorAll('.report-cat-btn').forEach(b => b.classList.remove('selected'));
+
+            document.getElementById('reportModal').style.display = 'flex';
+        };
+
+        window.closeReportModal = () => {
+            document.getElementById('reportModal').style.display = 'none';
+        };
+
+        window.reportGoStep2 = () => {
+            document.getElementById('reportStep1').style.display = 'none';
+            document.getElementById('reportStep2').style.display = 'block';
+        };
+
+        // Category selection
+        document.querySelectorAll('.report-cat-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.report-cat-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                reportCategory = btn.dataset.cat;
+            };
+        });
+
+        // Image → base64 link
+        document.getElementById('reportImg').onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) { reportImageB64 = null; return; }
+            const reader = new FileReader();
+            reader.onload = () => {
+                reportImageB64 = reader.result; // data:image/...;base64,...
+                document.getElementById('reportImgStatus').innerText = `✅ Image attached: ${file.name}`;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.submitReport = async () => {
+            const desc  = document.getElementById('reportDesc').value.trim();
+            const errEl = document.getElementById('reportError');
+            errEl.style.display = 'none';
+
+            if (!reportCategory) { errEl.innerText = 'Please select a category.'; errEl.style.display = 'block'; return; }
+            if (!desc)           { errEl.innerText = 'Please write a description.'; errEl.style.display = 'block'; return; }
+
+            const btn = document.getElementById('submitReportBtn');
+            btn.disabled = true; btn.innerText = 'Submitting…';
+
+            try {
+                await addDoc(collection(db, "reports"), {
+                    reportedUid:   reportTargetUid,
+                    reportedName:  reportTargetName,
+                    reporterUid:   auth.currentUser.uid,
+                    reporterName:  userName,
+                    category:      reportCategory,
+                    description:   desc,
+                    imageData:     reportImageB64 || null,  // full base64 string stored as "link"
+                    status:        'pending',               // pending | ignored | banned
+                    createdAt:     serverTimestamp()
+                });
+                document.getElementById('reportStep2').style.display = 'none';
+                document.getElementById('reportStep3').style.display = 'block';
+            } catch (err) {
+                errEl.innerText = 'Failed to submit. Please try again.';
+                errEl.style.display = 'block';
+            }
+            btn.disabled = false; btn.innerText = 'Submit Report';
+        };
     </script>
 </body>
 </html>
