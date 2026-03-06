@@ -305,7 +305,7 @@
             location.reload();
         };
 
-        // Submission Logic
+        // Submission Logic - Community Request
         document.getElementById('submitReqBtn').onclick = async () => {
             const user = auth.currentUser;
             const title = document.getElementById('reqTitle').value.trim();
@@ -322,6 +322,48 @@
                 });
                 window.closeRequestModal();
             } catch (e) { alert("Error posting."); }
+        };
+
+        // ✅ FIX: Submission Logic - Lost & Found (was missing entirely)
+        document.getElementById('submitLFBtn').onclick = async () => {
+            const user = auth.currentUser;
+            const item = document.getElementById('lfItem').value.trim();
+            const locationStr = document.getElementById('lfLoc').value.trim();
+            if (!item || !locationStr) return alert("Item name and location required!");
+
+            // Handle optional photo upload (converted to base64)
+            let imageBase64 = null;
+            const imgFile = document.getElementById('lfImg').files[0];
+            if (imgFile) {
+                imageBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(imgFile);
+                });
+            }
+
+            try {
+                await addDoc(collection(db, "lostfound"), {
+                    type: document.getElementById('lfType').value,
+                    item,
+                    location: locationStr,
+                    region: userRegion,
+                    description: document.getElementById('lfDesc').value.trim(),
+                    image: imageBase64,
+                    userId: user.uid,
+                    userName: userName,
+                    createdAt: serverTimestamp()
+                });
+                // Clear form and close modal
+                document.getElementById('lfItem').value = '';
+                document.getElementById('lfLoc').value = '';
+                document.getElementById('lfDesc').value = '';
+                document.getElementById('lfImg').value = '';
+                document.getElementById('lfModal').style.display = 'none';
+            } catch (e) {
+                console.error(e);
+                alert("Error posting report. Please try again.");
+            }
         };
 
         // Feed Logic (Filtered by Region with Sharjah Fallback)
