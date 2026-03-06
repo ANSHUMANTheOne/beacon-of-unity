@@ -64,7 +64,8 @@
         input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
 
         #chatPopup { display:none; position:fixed; bottom:20px; right:100px; width:320px; height:500px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
-        .chat-list-item { padding: 12px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; border-radius: 12px; margin-bottom: 8px; background: white; }
+        .chat-list-item { padding: 12px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; border-radius: 12px; margin-bottom: 8px; background: white; transition: box-shadow 0.3s; }
+        .chat-unread { border-color: #ef4444 !important; box-shadow: 0 0 0 2px rgba(239,68,68,0.25), 0 0 12px rgba(239,68,68,0.2) !important; background: #fff8f8 !important; }
 
         /* ── Rating Modal ── */
         #ratingModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.85); z-index:3000; align-items:center; justify-content:center; }
@@ -132,13 +133,19 @@
                 </div>
 
                 <div id="leaderboardTab" class="tab-content">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
                         <div>
-                            <h3 style="margin:0;">🏆 Community Leaderboard</h3>
-                            <p style="font-size:13px; color:#64748b; margin:4px 0 0;">Top helpers in <span class="current-region-text">...</span> — 2 pts per resolved chat</p>
+                            <h3 style="margin:0;">🏆 Leaderboard</h3>
+                            <p style="font-size:13px; color:#64748b; margin:4px 0 0;">2 pts awarded per resolved chat</p>
                         </div>
                         <div id="myPointsBadge" style="background:#0f172a; color:#38bdf8; padding:8px 16px; border-radius:10px; font-weight:700; font-size:14px;">My Points: —</div>
                     </div>
+                    <!-- Toggle -->
+                    <div style="display:flex; gap:0; background:#f1f5f9; border-radius:10px; padding:4px; margin-bottom:20px; width:fit-content;">
+                        <button id="lbLocalBtn" onclick="setLbScope('local')" style="padding:7px 22px; border:none; border-radius:7px; font-weight:600; font-size:13px; cursor:pointer; background:#0f172a; color:white; transition:0.2s;">📍 Local</button>
+                        <button id="lbGlobalBtn" onclick="setLbScope('global')" style="padding:7px 22px; border:none; border-radius:7px; font-weight:600; font-size:13px; cursor:pointer; background:none; color:#64748b; transition:0.2s;">🌍 Global</button>
+                    </div>
+                    <p id="lbScopeLabel" style="font-size:12px; color:#94a3b8; margin:-12px 0 14px;">Showing top helpers in <span class="current-region-text">your region</span></p>
                     <div id="leaderboardFeed"><p style="color:#94a3b8;">Loading leaderboard...</p></div>
                 </div>
 
@@ -314,6 +321,7 @@
         let currentChatOtherUserId = null;
         let currentChatOtherName = null;
         let currentChatType = null;          // 'community' | 'lostfound'
+        let currentChatPostOwnerId = null;   // uid of whoever posted the original request
         let unsubscribeChat = null;
         let userRegion = null;
         let userName = "";
@@ -575,10 +583,15 @@
             currentChatType = chatType || 'community';
             currentChatOtherName = null;
 
+            // The person clicking "Chat" is always the post owner (they initiated from their volunteer list)
+            // For LF, the person clicking "Contact User" is the visitor — post owner is targetUserId
+            const postOwnerId = chatType === 'community' ? auth.currentUser.uid : targetUserId;
+
             await setDoc(doc(db, "chats", currentChatId), {
                 participants: [auth.currentUser.uid, targetUserId],
                 itemLabel: label,
                 chatType: currentChatType,
+                postOwnerId: postOwnerId,
                 lastUpdated: serverTimestamp()
             }, { merge: true });
 
@@ -594,6 +607,20 @@
                 const od = await getDoc(doc(db, "users", currentChatOtherUserId));
                 currentChatOtherName = od.exists() ? od.data().fullName : "User";
             }
+
+            // Load postOwnerId from chat doc if not already set
+            if (!currentChatPostOwnerId) {
+                const chatSnap = await getDoc(doc(db, "chats", currentChatId));
+                if (chatSnap.exists()) currentChatPostOwnerId = chatSnap.data().postOwnerId || auth.currentUser.uid;
+            }
+
+            // Mark chat as read — clear unread flag for this user
+            await updateDoc(doc(db, "chats", currentChatId), {
+                [`unread_${auth.currentUser.uid}`]: false
+            });
+            // Remove glow from sidebar item immediately
+            const chatItem = document.getElementById(`item-${currentChatId}`);
+            if (chatItem) chatItem.classList.remove('chat-unread');
 
             renderFooterBar();
 
@@ -614,21 +641,28 @@
             });
         }
 
-        // Inject the correct footer action bar based on chat type
+        // Inject the correct footer action bar based on chat type and who the post owner is
         function renderFooterBar() {
             const bar = document.getElementById('chatFooterBar');
-            const isSelf = (currentChatOtherUserId === auth.currentUser.uid);
             const name = currentChatOtherName || 'User';
+            const iAmPostOwner = (currentChatPostOwnerId === auth.currentUser.uid);
 
-            if (currentChatType === 'community' && !isSelf) {
-                // Community: Resolve & Rate
+            if (currentChatType === 'community' && iAmPostOwner) {
+                // Only the post owner sees Resolve & Rate
                 bar.innerHTML = `
                     <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#f0fdf4; border-top:1px solid #bbf7d0;">
                         <span style="font-size:11px; color:#166534;">Chat with <b>${name}</b></span>
                         <button onclick="window.openRatingModal()" style="background:#22c55e; color:white; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">✅ Resolve &amp; Rate</button>
                     </div>`;
+            } else if (currentChatType === 'community' && !iAmPostOwner) {
+                // Volunteer sees a plain End Chat (no rating)
+                bar.innerHTML = `
+                    <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#fff7f7; border-top:1px solid #fecaca;">
+                        <span style="font-size:11px; color:#991b1b;">Chat with <b>${name}</b></span>
+                        <button onclick="window.endChat()" style="background:#ef4444; color:white; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">🔴 End Chat</button>
+                    </div>`;
             } else {
-                // Lost & Found (or self): just End Chat
+                // Lost & Found: just End Chat for everyone
                 bar.innerHTML = `
                     <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#fff7f7; border-top:1px solid #fecaca;">
                         <span style="font-size:11px; color:#991b1b;">Chat with <b>${name}</b></span>
@@ -684,20 +718,29 @@
             const el = document.getElementById(`item-${currentChatId}`);
             if (el) el.remove();
             currentChatId = null; currentChatOtherUserId = null;
-            currentChatOtherName = null; currentChatType = null;
+            currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
         };
 
         // ── Send message ─────────────────────────────────────────────────────
-        document.getElementById('sendMsgBtn').onclick = async () => {
+        async function sendMessage() {
             const input = document.getElementById('msgInput');
-            if (!input.value.trim()) return;
+            if (!input.value.trim() || !currentChatId) return;
             await addDoc(collection(db, "chats", currentChatId, "messages"), {
                 text: input.value.trim(),
                 senderId: auth.currentUser.uid,
                 createdAt: serverTimestamp()
             });
+            // Mark as unread for the OTHER participant
+            await updateDoc(doc(db, "chats", currentChatId), {
+                [`unread_${currentChatOtherUserId}`]: true,
+                lastUpdated: serverTimestamp()
+            });
             input.value = "";
-        };
+        }
+        document.getElementById('sendMsgBtn').onclick = sendMessage;
+        document.getElementById('msgInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+        });
 
         // ── Active Chats sidebar ─────────────────────────────────────────────
         function loadActiveChats() {
@@ -709,7 +752,6 @@
                     if (change.type === 'removed') {
                         const el = document.getElementById(`item-${change.doc.id}`);
                         if (el) el.remove();
-                        // Show "no chats" if list is now empty
                         if (!list.querySelector('.chat-list-item')) {
                             if (!document.getElementById('noChatsMsg')) {
                                 const p = document.createElement('p');
@@ -734,6 +776,8 @@
                     const ratingTxt = await getRatingText(otherId);
                     const chatData = docSnap.data();
                     const cType = chatData.chatType || 'community';
+                    const pOwnerId = chatData.postOwnerId || '';
+                    const hasUnread = chatData[`unread_${auth.currentUser.uid}`] === true;
 
                     let chatDiv = document.getElementById(`item-${chatId}`);
                     if (!chatDiv) {
@@ -743,47 +787,89 @@
                         list.prepend(chatDiv);
                     }
 
+                    // Apply or remove unread glow
+                    if (hasUnread) {
+                        chatDiv.classList.add('chat-unread');
+                    } else {
+                        chatDiv.classList.remove('chat-unread');
+                    }
+
                     chatDiv.innerHTML = `
-                        <div>
-                            <span class="hovername" style="font-weight:bold; font-size:14px;">
+                        <div style="flex:1; min-width:0;">
+                            <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+                                <span style="font-size:10px; font-weight:700; padding:2px 7px; border-radius:99px; flex-shrink:0;
+                                    ${cType === 'community'
+                                        ? 'background:#e0f2fe; color:#0369a1;'
+                                        : 'background:#fee2e2; color:#991b1b;'}">
+                                    ${cType === 'community' ? '✨ Community' : '🔍 Lost & Found'}
+                                </span>
+                                ${hasUnread ? '<span style="background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;">NEW</span>' : ''}
+                            </div>
+                            <span class="hovername" style="font-weight:700; font-size:13px;">
                                 ${otherName}
                                 <span class="tip">${ratingTxt}</span>
                             </span>
-                            <br><small style="color:#64748b;">${chatData.itemLabel || ''}</small>
+                            <br><small style="color:#94a3b8; font-size:11px;">${chatData.itemLabel || ''}</small>
                         </div>
-                        <button onclick="resumeChat('${chatId}','${otherName}','${otherId}','${cType}')"
-                            style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px;">Open</button>`;
+                        <button onclick="resumeChat('${chatId}','${otherName}','${otherId}','${cType}','${pOwnerId}')"
+                            style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px; flex-shrink:0; margin-left:8px;">Open</button>`;
                 });
             });
         }
 
-        window.resumeChat = (id, name, otherId, cType) => {
+        window.resumeChat = (id, name, otherId, cType, pOwnerId) => {
             currentChatId = id;
             currentChatOtherName = name;
             currentChatOtherUserId = otherId;
             currentChatType = cType || 'community';
+            currentChatPostOwnerId = pOwnerId || null;
             openChatWindow(name);
         };
 
         // ── Leaderboard ──────────────────────────────────────────────────────
+        let lbScope = 'local';
+        let lbUnsubscribe = null;
+
+        window.setLbScope = (scope) => {
+            lbScope = scope;
+            document.getElementById('lbLocalBtn').style.background  = scope === 'local'  ? '#0f172a' : 'none';
+            document.getElementById('lbLocalBtn').style.color        = scope === 'local'  ? 'white'   : '#64748b';
+            document.getElementById('lbGlobalBtn').style.background = scope === 'global' ? '#0f172a' : 'none';
+            document.getElementById('lbGlobalBtn').style.color      = scope === 'global' ? 'white'   : '#64748b';
+            document.getElementById('lbScopeLabel').innerHTML =
+                scope === 'local'
+                    ? `Showing top helpers in <b>${userRegion}</b>`
+                    : `Showing top helpers across <b>all regions</b>`;
+            loadLeaderboard();
+        };
+
         function loadLeaderboard() {
             const feed = document.getElementById('leaderboardFeed');
-            // Listen to all users, filter by region, sort by points client-side
-            onSnapshot(query(collection(db, "users")), (snapshot) => {
+            feed.innerHTML = '<p style="color:#94a3b8;">Loading...</p>';
+            if (lbUnsubscribe) { lbUnsubscribe(); lbUnsubscribe = null; }
+
+            lbUnsubscribe = onSnapshot(query(collection(db, "users")), (snapshot) => {
                 const users = [];
                 snapshot.forEach(d => {
                     const data = d.data();
-                    if ((data.region || 'Sharjah') === userRegion && data.fullName) {
-                        users.push({ uid: d.id, name: data.fullName, pts: data.leaderboardPoints || 0,
-                            rating: data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : null,
-                            ratingCount: data.ratingCount || 0 });
-                    }
+                    if (!data.fullName) return;
+                    // Filter by region for local scope
+                    if (lbScope === 'local' && (data.region || 'Sharjah') !== userRegion) return;
+                    users.push({
+                        uid: d.id, name: data.fullName,
+                        pts: data.leaderboardPoints || 0,
+                        region: data.region || '—',
+                        rating: data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : null,
+                        ratingCount: data.ratingCount || 0
+                    });
                 });
                 users.sort((a, b) => b.pts - a.pts);
 
-                // Update "My Points" badge
-                const me = users.find(u => u.uid === auth.currentUser.uid);
-                document.getElementById('myPointsBadge').innerText = `My Points: ${me ? me.pts : 0}`;
+                // Update "My Points" badge from full list (not filtered)
+                const meAll = [];
+                snapshot.forEach(d => { if (d.id === auth.currentUser.uid) meAll.push(d.data()); });
+                const myPts = meAll.length ? (meAll[0].leaderboardPoints || 0) : 0;
+                document.getElementById('myPointsBadge').innerText = `My Points: ${myPts}`;
 
                 feed.innerHTML = '';
                 if (!users.length) {
@@ -794,10 +880,13 @@
                 users.forEach((u, i) => {
                     const rank = i + 1;
                     const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'other';
-                    const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
-                    const initial = u.name.charAt(0).toUpperCase();
-                    const isMe = u.uid === auth.currentUser.uid;
+                    const rankIcon  = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+                    const initial   = u.name.charAt(0).toUpperCase();
+                    const isMe      = u.uid === auth.currentUser.uid;
                     const ratingStr = u.rating ? `⭐ ${u.rating} (${u.ratingCount})` : 'No ratings yet';
+                    const regionTag = lbScope === 'global'
+                        ? `<span style="font-size:11px; background:#f1f5f9; color:#475569; padding:2px 7px; border-radius:99px; margin-left:6px;">${u.region}</span>`
+                        : '';
 
                     const row = document.createElement('div');
                     row.className = `lb-row${isMe ? ' is-me' : ''}`;
@@ -805,7 +894,11 @@
                         <div class="lb-rank ${rankClass}">${rankIcon}</div>
                         <div class="lb-avatar">${initial}</div>
                         <div class="lb-info">
-                            <div class="lb-name">${u.name}${isMe ? ' <span style="font-size:11px;background:#38bdf8;color:#0f172a;padding:2px 7px;border-radius:99px;font-weight:600;">You</span>' : ''}</div>
+                            <div class="lb-name">
+                                ${u.name}
+                                ${isMe ? '<span style="font-size:11px;background:#38bdf8;color:#0f172a;padding:2px 7px;border-radius:99px;font-weight:600;">You</span>' : ''}
+                                ${regionTag}
+                            </div>
                             <div class="lb-sub">${ratingStr}</div>
                         </div>
                         <div class="lb-pts">${u.pts} <span>pts</span></div>`;
