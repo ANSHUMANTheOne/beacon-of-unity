@@ -6,34 +6,18 @@
     <title>Community Hub | Beacon of Unity</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f8fafc; display: flex; color: #1e293b; }
-        
-        /* Sidebar Navigation */
         .sidebar { width: 260px; background: #0f172a; color: white; height: 100vh; padding: 25px; position: fixed; }
         .sidebar h2 { font-size: 22px; font-weight: 800; color: #38bdf8; margin-bottom: 5px; letter-spacing: -0.5px; }
         .region-tag { font-size: 12px; color: #94a3b8; margin-bottom: 25px; display: block; }
         .nav-item { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 8px; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
         .nav-item:hover { background: #1e293b; }
         .nav-item.active { background: #38bdf8; color: #0f172a; font-weight: 600; }
-
-        /* Main Content */
         .main-content { margin-left: 310px; padding: 40px; width: calc(100% - 310px); }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        
         .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
         .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; position: relative; }
-        
-        /* FAB */
-        .fab {
-            position: fixed; bottom: 30px; right: 30px;
-            width: 60px; height: 60px;
-            background: #38bdf8; color: #0f172a;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.4);
-            border: none; transition: 0.3s; z-index: 999;
-        }
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #38bdf8; color: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.4); border: none; transition: 0.3s; z-index: 999; }
         .fab:hover { transform: scale(1.1) rotate(90deg); background: #0ea5e9; }
-
-        /* Badges */
         .badge { font-size: 11px; padding: 4px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
         .badge-food { background: #e0f2fe; color: #0369a1; }
         .badge-transport { background: #fef9c3; color: #854d0e; }
@@ -42,27 +26,17 @@
         .badge-general, .badge-labor, .badge-tech { background: #f3e8ff; color: #6b21a8; }
         .badge-lost { background: #fee2e2; color: #991b1b; }
         .badge-found { background: #dcfce7; color: #166534; }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
         .request-card { border-left: 5px solid #38bdf8; }
         .urgency-high { border-left: 5px solid #ef4444; animation: pulse-border 2s infinite; }
-        
-        @keyframes pulse-border {
-            0% { border-left-color: #ef4444; }
-            50% { border-left-color: #fee2e2; }
-            100% { border-left-color: #ef4444; }
-        }
-
+        @keyframes pulse-border { 0% { border-left-color: #ef4444; } 50% { border-left-color: #fee2e2; } 100% { border-left-color: #ef4444; } }
         .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; }
         .btn-help:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
         .btn-delete { background: #fee2e2; color: #991b1b; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
-
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:1000; align-items:center; justify-content:center; }
         .modal-content { background:white; width:90%; max-width:450px; padding:30px; border-radius:20px; }
         input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
-
         #chatPopup { display:none; position:fixed; bottom:20px; right:100px; width:320px; height:450px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
         .chat-list-item { padding: 12px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; border-radius: 12px; margin-bottom: 8px; background: white; }
     </style>
@@ -94,7 +68,6 @@
                     <h3>Recent Requests in <span class="current-region-text">...</span></h3>
                     <div id="requestFeed"><p>Loading local requests...</p></div>
                 </div>
-
                 <div id="lostFoundTab" class="tab-content">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <h3>Lost & Found (<span class="current-region-text">...</span>)</h3>
@@ -103,13 +76,10 @@
                     <div id="lfFeed"></div>
                 </div>
             </div>
-            
             <div>
                 <div class="card">
                     <h3>Active Conversations</h3>
-                    <div id="activeChatsList">
-                        <p id="noChatsMsg">No active chats.</p>
-                    </div>
+                    <div id="activeChatsList"><p id="noChatsMsg">No active chats.</p></div>
                 </div>
             </div>
         </div>
@@ -117,112 +87,17 @@
 
     <button class="fab" id="fabBtn" onclick="openRequestModal()">+</button>
 
-    <div id="regionModal" class="modal">
-        <div class="modal-content">
-            <h2>Select Your Region</h2>
-            <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">Please select your Emirate to see local community requests.</p>
-            <label>Emirate</label>
-            <select id="initialRegionSelect">
-                <option value="Abu Dhabi">Abu Dhabi</option>
-                <option value="Dubai">Dubai</option>
-                <option value="Sharjah">Sharjah</option>
-                <option value="Ajman">Ajman</option>
-                <option value="Umm Al Quwain">Umm Al Quwain</option>
-                <option value="Ras Al Khaimah">Ras Al Khaimah</option>
-                <option value="Fujairah">Fujairah</option>
-            </select>
-            <button id="saveInitialRegionBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Set Region</button>
-        </div>
-    </div>
+    <div id="regionModal" class="modal"><div class="modal-content"><h2>Select Your Region</h2><select id="initialRegionSelect"><option value="Abu Dhabi">Abu Dhabi</option><option value="Dubai">Dubai</option><option value="Sharjah">Sharjah</option><option value="Ajman">Ajman</option><option value="Umm Al Quwain">Umm Al Quwain</option><option value="Ras Al Khaimah">Ras Al Khaimah</option><option value="Fujairah">Fujairah</option></select><button id="saveInitialRegionBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Set Region</button></div></div>
 
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Your Profile</h2>
-                <span onclick="closeProfileModal()" style="cursor:pointer; font-size:20px;">✕</span>
-            </div>
-            <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; margin: 15px 0;">
-                <label style="font-size: 12px; color: #64748b;">Verified Name (Permanent)</label>
-                <div id="profileNameDisplay" style="font-weight: bold; font-size: 18px;">...</div>
-            </div>
-            <label>Change Your Emirate</label>
-            <select id="profileRegionSelect">
-                <option value="Abu Dhabi">Abu Dhabi</option>
-                <option value="Dubai">Dubai</option>
-                <option value="Sharjah">Sharjah</option>
-                <option value="Ajman">Ajman</option>
-                <option value="Umm Al Quwain">Umm Al Quwain</option>
-                <option value="Ras Al Khaimah">Ras Al Khaimah</option>
-                <option value="Fujairah">Fujairah</option>
-            </select>
-            <button id="updateProfileBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px;">Update Region</button>
-        </div>
-    </div>
+    <div id="profileModal" class="modal"><div class="modal-content"><div style="display:flex; justify-content:space-between; align-items:center;"><h2>Your Profile</h2><span onclick="closeProfileModal()" style="cursor:pointer; font-size:20px;">✕</span></div><div id="profileNameDisplay" style="font-weight: bold; font-size: 18px; margin: 15px 0;">...</div><select id="profileRegionSelect"><option value="Abu Dhabi">Abu Dhabi</option><option value="Dubai">Dubai</option><option value="Sharjah">Sharjah</option><option value="Ajman">Ajman</option><option value="Umm Al Quwain">Umm Al Quwain</option><option value="Ras Al Khaimah">Ras Al Khaimah</option><option value="Fujairah">Fujairah</option></select><button id="updateProfileBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Update Region</button></div></div>
 
-    <div id="nameLockModal" class="modal">
-        <div class="modal-content">
-            <h2>Identity Verification</h2>
-            <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">Welcome! Please enter your real name to continue.</p>
-            <label>Full Name</label>
-            <input type="text" id="lockedFullName" placeholder="e.g. John Doe">
-            <button id="confirmNameBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Confirm Identity</button>
-        </div>
-    </div>
+    <div id="nameLockModal" class="modal"><div class="modal-content"><h2>Identity Verification</h2><input type="text" id="lockedFullName" placeholder="Full Name"><button id="confirmNameBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Confirm Identity</button></div></div>
 
-    <div id="requestModal" class="modal">
-        <div class="modal-content">
-            <h2>Post a Help Request</h2>
-            <label>Title</label><input type="text" id="reqTitle" placeholder="What do you need?">
-            <label>Category</label>
-            <select id="reqCat">
-                <option value="Food">Food / Groceries</option>
-                <option value="Transport">Transport / Lift</option>
-                <option value="Tools">Tools / Lending</option>
-                <option value="Medical">Medical / Pharmacy</option>
-                <option value="Labor">General Help</option>
-                <option value="Tech">Tech Support</option>
-            </select>
-            <label>Urgency</label>
-            <select id="reqUrg">
-                <option value="low">Low (Next few days)</option>
-                <option value="high">High (Immediate)</option>
-            </select>
-            <label>Area (Specific Location)</label><input type="text" id="reqLoc" placeholder="e.g. Al Majaz 2">
-            <label>Description</label><textarea id="reqDesc" placeholder="Detailed description..."></textarea>
-            <button id="submitReqBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button>
-            <button onclick="closeRequestModal()" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
-        </div>
-    </div>
+    <div id="requestModal" class="modal"><div class="modal-content"><h2>Post a Help Request</h2><input type="text" id="reqTitle" placeholder="What do you need?"><select id="reqCat"><option value="Food">Food</option><option value="Transport">Transport</option><option value="Tools">Tools</option><option value="Medical">Medical</option><option value="Labor">General</option><option value="Tech">Tech</option></select><select id="reqUrg"><option value="low">Low</option><option value="high">High</option></select><input type="text" id="reqLoc" placeholder="Area"><textarea id="reqDesc" placeholder="Details..."></textarea><button id="submitReqBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button><button onclick="closeRequestModal()" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button></div></div>
 
-    <div id="lfModal" class="modal">
-        <div class="modal-content">
-            <h2>Report Lost/Found Item</h2>
-            <label>I have...</label>
-            <select id="lfType">
-                <option value="Lost">Lost something</option>
-                <option value="Found">Found something</option>
-            </select>
-            <label>Item Name</label><input type="text" id="lfItem" placeholder="e.g. Blue Wallet">
-            <label>Area (Specific Location)</label><input type="text" id="lfLoc" placeholder="Where?">
-            <label>Description</label><textarea id="lfDesc" placeholder="Describe..."></textarea>
-            <label>Photo (Optional)</label>
-            <input type="file" id="lfImg" accept="image/*" style="font-size: 12px;">
-            <button id="submitLFBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Report</button>
-            <button onclick="document.getElementById('lfModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
-        </div>
-    </div>
+    <div id="lfModal" class="modal"><div class="modal-content"><h2>Report Lost/Found Item</h2><select id="lfType"><option value="Lost">Lost something</option><option value="Found">Found something</option></select><input type="text" id="lfItem" placeholder="Item Name"><input type="text" id="lfLoc" placeholder="Area"><textarea id="lfDesc" placeholder="Description..."></textarea><button id="submitLFBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Report</button><button onclick="document.getElementById('lfModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button></div></div>
 
-    <div id="chatPopup">
-        <div style="background:#0f172a; color:white; padding:12px; display:flex; justify-content:space-between; align-items:center;">
-            <span id="chatWith" style="font-weight:600; font-size:14px;">Chat</span>
-            <span onclick="document.getElementById('chatPopup').style.display='none'" style="cursor:pointer;">✕</span>
-        </div>
-        <div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc;"></div>
-        <div style="padding:10px; border-top:1px solid #e2e8f0; display:flex; gap:5px;">
-            <input type="text" id="msgInput" placeholder="Type a message..." style="flex:1; margin:0;">
-            <button id="sendMsgBtn" style="background:#38bdf8; border:none; color:white; padding:0 12px; border-radius:8px; cursor:pointer;">➔</button>
-        </div>
-    </div>
+    <div id="chatPopup"><div style="background:#0f172a; color:white; padding:12px; display:flex; justify-content:space-between; align-items:center;"><span id="chatWith">Chat</span><span onclick="document.getElementById('chatPopup').style.display='none'" style="cursor:pointer;">✕</span></div><div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc;"></div><div style="padding:10px; border-top:1px solid #e2e8f0; display:flex; gap:5px;"><input type="text" id="msgInput" style="flex:1; margin:0;"><button id="sendMsgBtn" style="background:#38bdf8; border:none; color:white; padding:0 12px; border-radius:8px;">➔</button></div></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
@@ -247,7 +122,7 @@
         let userRegion = null;
         let userName = "";
 
-        // Modal triggers
+        // --- GLOBAL UI FUNCTIONS ---
         window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
         window.closeRequestModal = () => document.getElementById('requestModal').style.display = 'none';
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
@@ -258,7 +133,7 @@
         };
         window.closeProfileModal = () => document.getElementById('profileModal').style.display = 'none';
 
-        // Auth Logic
+        // --- AUTH & SETUP ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDocRef = doc(db, "users", user.uid);
@@ -299,215 +174,161 @@
             }
         });
 
-        document.getElementById('updateProfileBtn').onclick = async () => {
-            const newRegion = document.getElementById('profileRegionSelect').value;
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { region: newRegion });
-            location.reload();
-        };
-
-        // Submission Logic - REQUESTS
+        // --- SUBMISSION LOGIC ---
         document.getElementById('submitReqBtn').onclick = async () => {
-            const user = auth.currentUser;
             const title = document.getElementById('reqTitle').value.trim();
             const locationStr = document.getElementById('reqLoc').value.trim();
             if(!title || !locationStr) return alert("Title and Location required!");
+            
             try {
                 await addDoc(collection(db, "requests"), {
                     title, category: document.getElementById('reqCat').value,
                     urgency: document.getElementById('reqUrg').value,
                     location: locationStr, region: userRegion,
                     description: document.getElementById('reqDesc').value.trim(),
-                    userId: user.uid, userName: userName,
+                    userId: auth.currentUser.uid, userName: userName,
                     volunteers: [], volunteerCount: 0, createdAt: serverTimestamp()
                 });
                 window.closeRequestModal();
-            } catch (e) { alert("Error posting."); }
+                document.getElementById('reqTitle').value = ""; document.getElementById('reqLoc').value = ""; document.getElementById('reqDesc').value = "";
+            } catch (e) { alert("Error posting request."); }
         };
 
-        // Submission Logic - LOST & FOUND
         document.getElementById('submitLFBtn').onclick = async () => {
-            const user = auth.currentUser;
             const item = document.getElementById('lfItem').value.trim();
             const locationStr = document.getElementById('lfLoc').value.trim();
             if(!item || !locationStr) return alert("Item name and Area required!");
-            
+
             try {
                 await addDoc(collection(db, "lostfound"), {
                     type: document.getElementById('lfType').value,
-                    item: item,
-                    location: locationStr,
-                    region: userRegion,
+                    item: item, location: locationStr, region: userRegion,
                     description: document.getElementById('lfDesc').value.trim(),
-                    userId: user.uid,
-                    userName: userName,
-                    image: null, // Image upload requires additional storage logic
-                    createdAt: serverTimestamp()
+                    userId: auth.currentUser.uid, userName: userName,
+                    image: null, createdAt: serverTimestamp()
                 });
                 document.getElementById('lfModal').style.display = 'none';
-                // Clear fields
-                document.getElementById('lfItem').value = "";
-                document.getElementById('lfLoc').value = "";
-                document.getElementById('lfDesc').value = "";
+                document.getElementById('lfItem').value = ""; document.getElementById('lfLoc').value = ""; document.getElementById('lfDesc').value = "";
             } catch (e) { alert("Error reporting item."); }
         };
 
-        // Feed Logic (Filtered by Region with Sharjah Fallback)
+        // --- FEED RENDERING ---
         function loadRequests() {
             const feed = document.getElementById('requestFeed');
-            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
-
-            onSnapshot(q, (snapshot) => {
+            onSnapshot(query(collection(db, "requests"), orderBy("createdAt", "desc")), (snapshot) => {
                 feed.innerHTML = "";
                 let hasPosts = false;
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
-                    const postRegion = data.region || "Sharjah"; // Fallback for old posts
-                    if (postRegion === userRegion) {
+                    if ((data.region || "Sharjah") === userRegion) {
                         hasPosts = true;
+                        const isOwner = auth.currentUser.uid === data.userId;
                         const card = document.createElement('div');
                         card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
-                        const isOwner = auth.currentUser.uid === data.userId;
-                        const hasVolunteered = (data.volunteers || []).some(v => v.uid === auth.currentUser.uid);
-                        
-                        let volListHtml = (data.volunteers || []).map(v => `
-                            <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
-                                <span style="font-size:12px;">👤 ${v.name}</span>
-                                ${isOwner ? `<button onclick="startChat('${docSnap.id}', '${v.uid}', '${data.title}')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
-                            </div>
-                        `).join('');
-
                         card.innerHTML = `
                             <div style="display:flex; justify-content:space-between; align-items:start;">
-                                <span class="badge badge-${data.category.toLowerCase()}">${data.category}</span>
-                                <div style="text-align:right;"><small>📍 ${data.location}</small>
-                                ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
+                                <span class="badge badge-general">${data.category}</span>
+                                ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}
                             </div>
-                            <h4 style="margin:10px 0;">${data.title}</h4>
-                            <p style="font-size:11px; color:#64748b;">Posted by: ${data.userName}</p>
-                            <p style="font-size:13px; color:#475569;">${data.description}</p>
-                            <div style="display:flex; gap:10px; align-items:center;">
-                                <button class="btn-help" ${isOwner || hasVolunteered ? 'disabled' : ''} onclick="offerHelp('${docSnap.id}')">
-                                    ${isOwner ? 'Your Post' : (hasVolunteered ? 'Waitlisted' : 'I Can Help')}
-                                </button>
-                                <span style="font-size:12px; color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="toggleVols('${docSnap.id}')">Volunteers (${data.volunteerCount || 0})</span>
-                            </div>
-                            <div id="vols-${docSnap.id}" style="display:none; margin-top:10px; padding:10px; background:#f8fafc; border-radius:8px;">${volListHtml || '<p style="font-size:11px;">Waiting for volunteers...</p>'}</div>`;
+                            <h4>${data.title}</h4>
+                            <p style="font-size:13px;">${data.description}</p>
+                            <button class="btn-help" ${isOwner ? 'disabled' : ''} onclick="offerHelp('${docSnap.id}')">${isOwner ? 'Your Post' : 'I Can Help'}</button>`;
                         feed.appendChild(card);
                     }
                 });
-                if (!hasPosts) feed.innerHTML = `<p style="text-align:center; padding:20px; color:#94a3b8;">No requests in ${userRegion} yet.</p>`;
+                if (!hasPosts) feed.innerHTML = "<p>No requests here yet.</p>";
             });
         }
 
         function loadLF() {
             const feed = document.getElementById('lfFeed');
-            const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
+            onSnapshot(query(collection(db, "lostfound"), orderBy("createdAt", "desc")), (snapshot) => {
                 feed.innerHTML = "";
                 let hasItems = false;
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
-                    const postRegion = data.region || "Sharjah";
-                    if (postRegion === userRegion) {
+                    if ((data.region || "Sharjah") === userRegion) {
                         hasItems = true;
                         const isOwner = auth.currentUser.uid === data.userId;
                         const card = document.createElement('div');
                         card.className = "card";
                         card.innerHTML = `
-                            <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <div style="display:flex; justify-content:space-between;">
                                 <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
-                                <div style="text-align:right;"><small>📍 ${data.location}</small>
-                                ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}</div>
+                                ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}
                             </div>
-                            ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
-                            <h4 style="margin:10px 0;">${data.item}</h4>
-                            <p style="font-size:11px; color:#64748b;">Reported by: ${data.userName}</p>
-                            <p style="font-size:13px; color:#475569;">${data.description}</p>
-                            ${!isOwner ? `<button class="btn-help" style="width:100%;" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.type}: ${data.item}')">Contact User</button>` : ''}`;
+                            <h4>${data.item}</h4>
+                            <p style="font-size:13px;">${data.description}</p>
+                            ${!isOwner ? `<button class="btn-help" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.item}')">Contact</button>` : ''}`;
                         feed.appendChild(card);
                     }
                 });
-                if (!hasItems) feed.innerHTML = `<p style="text-align:center; padding:20px; color:#94a3b8;">No items in ${userRegion} yet.</p>`;
+                if (!hasItems) feed.innerHTML = "<p>No reports here yet.</p>";
             });
         }
 
-        // Shared Functions
+        // --- GLOBAL ACTIONS ---
         window.deletePost = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "requests", id)); };
         window.deleteLF = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "lostfound", id)); };
-        window.toggleVols = (id) => { const el = document.getElementById(`vols-${id}`); el.style.display = el.style.display === 'none' ? 'block' : 'none'; };
         window.offerHelp = async (requestId) => {
-            const user = auth.currentUser;
-            const reqRef = doc(db, "requests", requestId);
-            await updateDoc(reqRef, { volunteers: arrayUnion({ uid: user.uid, name: userName }), volunteerCount: increment(1) });
-            alert("Added to queue!");
+            await updateDoc(doc(db, "requests", requestId), { volunteers: arrayUnion({ uid: auth.currentUser.uid, name: userName }), volunteerCount: increment(1) });
+            alert("Interest sent to owner!");
         };
 
-        // Chat & Tabs Logic
         window.startChat = async (itemId, targetUserId, label) => {
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
             await setDoc(doc(db, "chats", currentChatId), { participants: [auth.currentUser.uid, targetUserId], itemLabel: label, lastUpdated: serverTimestamp() }, { merge: true });
+            document.getElementById('chatPopup').style.display = 'flex';
             openChatWindow(label);
         };
 
         function openChatWindow(label) {
-            document.getElementById('chatWith').innerText = `Chat: ${label}`;
-            document.getElementById('chatPopup').style.display = 'flex';
+            document.getElementById('chatWith').innerText = label;
             if (unsubscribeChat) unsubscribeChat();
-            const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
-            unsubscribeChat = onSnapshot(q, (snapshot) => {
+            unsubscribeChat = onSnapshot(query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc")), (snapshot) => {
                 const area = document.getElementById('messageArea'); area.innerHTML = "";
                 snapshot.forEach(d => {
-                    const data = d.data(); const isMe = data.senderId === auth.currentUser.uid;
-                    const msgDiv = document.createElement('div');
-                    msgDiv.style = `max-width:80%; padding:8px 12px; border-radius:12px; font-size:13px; margin-bottom:4px; ${isMe ? 'align-self:flex-end; background:#38bdf8; color:white;' : 'align-self:flex-start; background:white; border:1px solid #e2e8f0;'}`;
-                    msgDiv.innerText = data.text; area.appendChild(msgDiv);
+                    const data = d.data();
+                    const msg = document.createElement('div');
+                    msg.style = `padding:8px; border-radius:8px; margin-bottom:4px; ${data.senderId === auth.currentUser.uid ? 'background:#38bdf8; align-self:flex-end;' : 'background:#eee; align-self:flex-start;'}`;
+                    msg.innerText = data.text; area.appendChild(msg);
                 });
-                area.scrollTop = area.scrollHeight;
             });
         }
 
         document.getElementById('sendMsgBtn').onclick = async () => {
-            const input = document.getElementById('msgInput'); if (!input.value) return;
+            const input = document.getElementById('msgInput'); if(!input.value) return;
             await addDoc(collection(db, "chats", currentChatId, "messages"), { text: input.value, senderId: auth.currentUser.uid, createdAt: serverTimestamp() });
             input.value = "";
         };
 
         function loadActiveChats() {
-            onSnapshot(query(collection(db, "chats")), (snapshot) => {
-                const list = document.getElementById('activeChatsList');
-                snapshot.forEach(async (docSnap) => {
-                    const chatId = docSnap.id;
-                    if (chatId.includes(auth.currentUser.uid)) {
-                        const noMsg = document.getElementById('noChatsMsg'); if(noMsg) noMsg.remove();
-                        const parts = chatId.split('_'); const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
-                        const otherDoc = await getDoc(doc(db, "users", otherId)); const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
-                        let chatDiv = document.getElementById(`item-${chatId}`);
-                        if (!chatDiv) { chatDiv = document.createElement('div'); chatDiv.id = `item-${chatId}`; chatDiv.className = "chat-list-item"; list.prepend(chatDiv); }
-                        chatDiv.innerHTML = `<div><b>${otherName}</b><br><small>${docSnap.data().itemLabel}</small></div>
-                        <button onclick="resumeChat('${chatId}', '${otherName}')" style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Open</button>`;
+            onSnapshot(collection(db, "chats"), (snapshot) => {
+                const list = document.getElementById('activeChatsList'); list.innerHTML = "";
+                snapshot.forEach(d => {
+                    if (d.id.includes(auth.currentUser.uid)) {
+                        const item = document.createElement('div'); item.className = "chat-list-item";
+                        item.innerHTML = `<span>${d.data().itemLabel}</span><button onclick="resumeChat('${d.id}', '${d.data().itemLabel}')">Open</button>`;
+                        list.appendChild(item);
                     }
                 });
             });
         }
+        window.resumeChat = (id, label) => { currentChatId = id; document.getElementById('chatPopup').style.display = 'flex'; openChatWindow(label); };
 
-        window.resumeChat = (id, name) => { currentChatId = id; openChatWindow(name); };
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(tab === 'community') {
-                document.getElementById('communityTab').classList.add('active');
-                document.querySelectorAll('.nav-item')[0].classList.add('active');
-                document.getElementById('pageTitle').innerText = "Community Hub";
-            } else {
-                document.getElementById('lostFoundTab').classList.add('active');
-                document.querySelectorAll('.nav-item')[1].classList.add('active');
-                document.getElementById('pageTitle').innerText = "Lost and Found";
-            }
+            if(tab === 'community') { document.getElementById('communityTab').classList.add('active'); document.querySelectorAll('.nav-item')[0].classList.add('active'); }
+            else { document.getElementById('lostFoundTab').classList.add('active'); document.querySelectorAll('.nav-item')[1].classList.add('active'); }
         };
 
-        const logout = () => signOut(auth).then(() => window.location.href = "login.html");
-        document.getElementById('logoutBtn').onclick = logout;
-        document.getElementById('logoutBtnNav').onclick = logout;
+        document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => window.location.href = "login.html");
+        document.getElementById('logoutBtnNav').onclick = () => signOut(auth).then(() => window.location.href = "login.html");
+        document.getElementById('updateProfileBtn').onclick = async () => {
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { region: document.getElementById('profileRegionSelect').value });
+            location.reload();
+        };
     </script>
 </body>
 </html>
