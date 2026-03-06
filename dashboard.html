@@ -305,7 +305,7 @@
             location.reload();
         };
 
-        // Submission Logic
+        // Submission Logic - REQUESTS
         document.getElementById('submitReqBtn').onclick = async () => {
             const user = auth.currentUser;
             const title = document.getElementById('reqTitle').value.trim();
@@ -322,6 +322,33 @@
                 });
                 window.closeRequestModal();
             } catch (e) { alert("Error posting."); }
+        };
+
+        // Submission Logic - LOST & FOUND
+        document.getElementById('submitLFBtn').onclick = async () => {
+            const user = auth.currentUser;
+            const item = document.getElementById('lfItem').value.trim();
+            const locationStr = document.getElementById('lfLoc').value.trim();
+            if(!item || !locationStr) return alert("Item name and Area required!");
+            
+            try {
+                await addDoc(collection(db, "lostfound"), {
+                    type: document.getElementById('lfType').value,
+                    item: item,
+                    location: locationStr,
+                    region: userRegion,
+                    description: document.getElementById('lfDesc').value.trim(),
+                    userId: user.uid,
+                    userName: userName,
+                    image: null, // Image upload requires additional storage logic
+                    createdAt: serverTimestamp()
+                });
+                document.getElementById('lfModal').style.display = 'none';
+                // Clear fields
+                document.getElementById('lfItem').value = "";
+                document.getElementById('lfLoc').value = "";
+                document.getElementById('lfDesc').value = "";
+            } catch (e) { alert("Error reporting item."); }
         };
 
         // Feed Logic (Filtered by Region with Sharjah Fallback)
