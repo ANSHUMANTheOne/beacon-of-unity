@@ -40,8 +40,6 @@
         .badge-tools { background: #f1f5f9; color: #475569; }
         .badge-medical { background: #ffedd5; color: #9a3412; }
         .badge-general, .badge-labor, .badge-tech { background: #f3e8ff; color: #6b21a8; }
-        
-        /* Lost & Found Badges */
         .badge-lost { background: #fee2e2; color: #991b1b; }
         .badge-found { background: #dcfce7; color: #166534; }
 
@@ -164,10 +162,7 @@
     <div id="nameLockModal" class="modal">
         <div class="modal-content">
             <h2>Identity Verification</h2>
-            <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">
-                Welcome! Please enter your real name to continue. 
-                <strong>Note: This is permanent and cannot be changed later.</strong>
-            </p>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">Welcome! Please enter your real name to continue.</p>
             <label>Full Name</label>
             <input type="text" id="lockedFullName" placeholder="e.g. John Doe">
             <button id="confirmNameBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Confirm Identity</button>
@@ -192,7 +187,7 @@
                 <option value="low">Low (Next few days)</option>
                 <option value="high">High (Immediate)</option>
             </select>
-            <label>Specific Location (Area)</label><input type="text" id="reqLoc" placeholder="e.g. Al Majaz 2">
+            <label>Area (Specific Location)</label><input type="text" id="reqLoc" placeholder="e.g. Al Majaz 2">
             <label>Description</label><textarea id="reqDesc" placeholder="Detailed description..."></textarea>
             <button id="submitReqBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button>
             <button onclick="closeRequestModal()" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
@@ -208,7 +203,7 @@
                 <option value="Found">Found something</option>
             </select>
             <label>Item Name</label><input type="text" id="lfItem" placeholder="e.g. Blue Wallet">
-            <label>Specific Location (Area)</label><input type="text" id="lfLoc" placeholder="Where?">
+            <label>Area (Specific Location)</label><input type="text" id="lfLoc" placeholder="Where?">
             <label>Description</label><textarea id="lfDesc" placeholder="Describe..."></textarea>
             <label>Photo (Optional)</label>
             <input type="file" id="lfImg" accept="image/*" style="font-size: 12px;">
@@ -252,6 +247,7 @@
         let userRegion = null;
         let userName = "";
 
+        // Modal triggers
         window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
         window.closeRequestModal = () => document.getElementById('requestModal').style.display = 'none';
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
@@ -262,13 +258,12 @@
         };
         window.closeProfileModal = () => document.getElementById('profileModal').style.display = 'none';
 
-        // --- AUTH & DATA LOCKDOWN ---
+        // Auth Logic
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDocRef = doc(db, "users", user.uid);
                 const userSnap = await getDoc(userDocRef);
 
-                // Step 1: Force Name
                 if (!userSnap.exists() || !userSnap.data().fullName) {
                     document.getElementById('nameLockModal').style.display = 'flex';
                     document.getElementById('confirmNameBtn').onclick = async () => {
@@ -280,7 +275,6 @@
                     return;
                 }
 
-                // Step 2: Force Region
                 if (!userSnap.data().region) {
                     document.getElementById('regionModal').style.display = 'flex';
                     document.getElementById('saveInitialRegionBtn').onclick = async () => {
@@ -291,7 +285,6 @@
                     return;
                 }
 
-                // Load App Data
                 userName = userSnap.data().fullName;
                 userRegion = userSnap.data().region;
                 document.getElementById('welcomeUser').innerText = `Hello, ${userName}`;
@@ -306,204 +299,126 @@
             }
         });
 
-        // Update Region from Profile
         document.getElementById('updateProfileBtn').onclick = async () => {
             const newRegion = document.getElementById('profileRegionSelect').value;
             await updateDoc(doc(db, "users", auth.currentUser.uid), { region: newRegion });
-            location.reload(); // Reload to refresh all filtered listeners
+            location.reload();
         };
 
-        // --- SUBMISSION (REQUESTS) ---
+        // Submission Logic
         document.getElementById('submitReqBtn').onclick = async () => {
             const user = auth.currentUser;
             const title = document.getElementById('reqTitle').value.trim();
             const locationStr = document.getElementById('reqLoc').value.trim();
             if(!title || !locationStr) return alert("Title and Location required!");
-
             try {
                 await addDoc(collection(db, "requests"), {
-                    title, 
-                    category: document.getElementById('reqCat').value,
+                    title, category: document.getElementById('reqCat').value,
                     urgency: document.getElementById('reqUrg').value,
-                    location: locationStr,
-                    region: userRegion, // Auto-tagging region
+                    location: locationStr, region: userRegion,
                     description: document.getElementById('reqDesc').value.trim(),
-                    userId: user.uid,
-                    userName: userName,
-                    volunteers: [],
-                    volunteerCount: 0,
-                    createdAt: serverTimestamp()
+                    userId: user.uid, userName: userName,
+                    volunteers: [], volunteerCount: 0, createdAt: serverTimestamp()
                 });
-                document.getElementById('reqTitle').value = "";
-                document.getElementById('reqLoc').value = "";
-                document.getElementById('reqDesc').value = "";
                 window.closeRequestModal();
             } catch (e) { alert("Error posting."); }
         };
 
-        // --- SUBMISSION (LOST & FOUND) ---
-        const processImage = (file) => new Promise((resolve) => {
-            if (!file) resolve("");
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                const img = new Image();
-                img.src = reader.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 400; 
-                    const scale = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scale;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    resolve(canvas.toDataURL('image/jpeg', 0.5));
-                };
-            };
-        });
-
-        document.getElementById('submitLFBtn').onclick = async () => {
-            const user = auth.currentUser;
-            const item = document.getElementById('lfItem').value.trim();
-            const loc = document.getElementById('lfLoc').value.trim();
-            if(!item || !loc) return alert("Item and Location required!");
-
-            try {
-                const imgFile = document.getElementById('lfImg').files[0];
-                const imgBase64 = await processImage(imgFile);
-
-                await addDoc(collection(db, "lostfound"), {
-                    item,
-                    type: document.getElementById('lfType').value,
-                    location: loc,
-                    region: userRegion, // Auto-tagging region
-                    description: document.getElementById('lfDesc').value.trim(),
-                    image: imgBase64,
-                    userId: user.uid,
-                    userName: userName,
-                    createdAt: serverTimestamp()
-                });
-
-                document.getElementById('lfItem').value = "";
-                document.getElementById('lfLoc').value = "";
-                document.getElementById('lfDesc').value = "";
-                document.getElementById('lfImg').value = "";
-                document.getElementById('lfModal').style.display = 'none';
-            } catch (e) { alert("Error posting report."); }
-        };
-
-        // --- FEED (REQUESTS) --- (Filtered by Region)
+        // Feed Logic (Filtered by Region with Sharjah Fallback)
         function loadRequests() {
-            const q = query(collection(db, "requests"), where("region", "==", userRegion), orderBy("createdAt", "desc"));
+            const feed = document.getElementById('requestFeed');
+            const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
+
             onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('requestFeed');
-                feed.innerHTML = snapshot.empty ? `<p style="color:gray;">No requests in ${userRegion} yet.</p>` : "";
+                feed.innerHTML = "";
+                let hasPosts = false;
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
-                    const currentUserId = auth.currentUser.uid;
-                    const isOwner = currentUserId === data.userId;
-                    const hasVolunteered = (data.volunteers || []).some(v => v.uid === currentUserId);
-
-                    const card = document.createElement('div');
-                    card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
-                    const badgeClass = `badge-${data.category.toLowerCase()}`;
-
-                    let volListHtml = (data.volunteers || []).map(v => `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
-                            <span style="font-size:12px;">👤 ${v.name}</span>
-                            ${isOwner ? `<button onclick="startChat('${docSnap.id}', '${v.uid}', '${data.title}')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
-                        </div>
-                    `).join('');
-
-                    card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:start;">
-                            <span class="badge ${badgeClass}">${data.category}</span>
-                            <div style="text-align:right;">
-                                <small style="display:block;">📍 ${data.location}</small>
-                                ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}
+                    const postRegion = data.region || "Sharjah"; // Fallback for old posts
+                    if (postRegion === userRegion) {
+                        hasPosts = true;
+                        const card = document.createElement('div');
+                        card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
+                        const isOwner = auth.currentUser.uid === data.userId;
+                        const hasVolunteered = (data.volunteers || []).some(v => v.uid === auth.currentUser.uid);
+                        
+                        let volListHtml = (data.volunteers || []).map(v => `
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
+                                <span style="font-size:12px;">👤 ${v.name}</span>
+                                ${isOwner ? `<button onclick="startChat('${docSnap.id}', '${v.uid}', '${data.title}')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
                             </div>
-                        </div>
-                        <h4 style="margin:10px 0;">${data.title}</h4>
-                        <p style="font-size:11px; color:#64748b; margin: -5px 0 10px 0;">Posted by: ${data.userName}</p>
-                        <p style="font-size:13px; color:#475569;">${data.description}</p>
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <button class="btn-help" ${isOwner || hasVolunteered ? 'disabled' : ''} onclick="offerHelp('${docSnap.id}')">
-                                ${isOwner ? 'Your Post' : (hasVolunteered ? 'Waitlisted' : 'I Can Help')}
-                            </button>
-                            <span style="font-size:12px; color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="toggleVols('${docSnap.id}')">
-                                Volunteers (${data.volunteerCount || 0})
-                            </span>
-                        </div>
-                        <div id="vols-${docSnap.id}" style="display:none; margin-top:10px; padding:10px; background:#f8fafc; border-radius:8px;">
-                            ${volListHtml || '<p style="font-size:11px; color:gray;">Waiting for volunteers...</p>'}
-                        </div>
-                    `;
-                    feed.appendChild(card);
+                        `).join('');
+
+                        card.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:start;">
+                                <span class="badge badge-${data.category.toLowerCase()}">${data.category}</span>
+                                <div style="text-align:right;"><small>📍 ${data.location}</small>
+                                ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
+                            </div>
+                            <h4 style="margin:10px 0;">${data.title}</h4>
+                            <p style="font-size:11px; color:#64748b;">Posted by: ${data.userName}</p>
+                            <p style="font-size:13px; color:#475569;">${data.description}</p>
+                            <div style="display:flex; gap:10px; align-items:center;">
+                                <button class="btn-help" ${isOwner || hasVolunteered ? 'disabled' : ''} onclick="offerHelp('${docSnap.id}')">
+                                    ${isOwner ? 'Your Post' : (hasVolunteered ? 'Waitlisted' : 'I Can Help')}
+                                </button>
+                                <span style="font-size:12px; color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="toggleVols('${docSnap.id}')">Volunteers (${data.volunteerCount || 0})</span>
+                            </div>
+                            <div id="vols-${docSnap.id}" style="display:none; margin-top:10px; padding:10px; background:#f8fafc; border-radius:8px;">${volListHtml || '<p style="font-size:11px;">Waiting for volunteers...</p>'}</div>`;
+                        feed.appendChild(card);
+                    }
                 });
+                if (!hasPosts) feed.innerHTML = `<p style="text-align:center; padding:20px; color:#94a3b8;">No requests in ${userRegion} yet.</p>`;
             });
         }
 
-        // --- FEED (LOST & FOUND) --- (Filtered by Region)
         function loadLF() {
-            const q = query(collection(db, "lostfound"), where("region", "==", userRegion), orderBy("createdAt", "desc"));
+            const feed = document.getElementById('lfFeed');
+            const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('lfFeed');
-                feed.innerHTML = snapshot.empty ? `<p style="color:gray;">No items in ${userRegion} yet.</p>` : "";
+                feed.innerHTML = "";
+                let hasItems = false;
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
-                    const isOwner = auth.currentUser.uid === data.userId;
-                    const card = document.createElement('div');
-                    card.className = "card";
-                    const badgeClass = data.type === 'Lost' ? 'badge-lost' : 'badge-found';
-
-                    card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:start;">
-                            <span class="badge ${badgeClass}">${data.type}</span>
-                            <div style="text-align:right;">
-                                <small style="display:block;">📍 ${data.location}</small>
-                                ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}
+                    const postRegion = data.region || "Sharjah";
+                    if (postRegion === userRegion) {
+                        hasItems = true;
+                        const isOwner = auth.currentUser.uid === data.userId;
+                        const card = document.createElement('div');
+                        card.className = "card";
+                        card.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:start;">
+                                <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
+                                <div style="text-align:right;"><small>📍 ${data.location}</small>
+                                ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}</div>
                             </div>
-                        </div>
-                        ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
-                        <h4 style="margin:10px 0;">${data.item}</h4>
-                        <p style="font-size:11px; color:#64748b; margin: -5px 0 10px 0;">Reported by: ${data.userName}</p>
-                        <p style="font-size:13px; color:#475569;">${data.description}</p>
-                        ${!isOwner ? `<button class="btn-help" style="width:100%; margin-top:10px;" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.type}: ${data.item}')">Contact Finder/Owner</button>` : ''}
-                    `;
-                    feed.appendChild(card);
+                            ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
+                            <h4 style="margin:10px 0;">${data.item}</h4>
+                            <p style="font-size:11px; color:#64748b;">Reported by: ${data.userName}</p>
+                            <p style="font-size:13px; color:#475569;">${data.description}</p>
+                            ${!isOwner ? `<button class="btn-help" style="width:100%;" onclick="startChat('${docSnap.id}', '${data.userId}', '${data.type}: ${data.item}')">Contact User</button>` : ''}`;
+                        feed.appendChild(card);
+                    }
                 });
+                if (!hasItems) feed.innerHTML = `<p style="text-align:center; padding:20px; color:#94a3b8;">No items in ${userRegion} yet.</p>`;
             });
         }
 
-        window.deletePost = async (id) => { if(confirm("Delete this request?")) await deleteDoc(doc(db, "requests", id)); };
-        window.deleteLF = async (id) => { if(confirm("Delete this report?")) await deleteDoc(doc(db, "lostfound", id)); };
+        // Shared Functions
+        window.deletePost = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "requests", id)); };
+        window.deleteLF = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "lostfound", id)); };
         window.toggleVols = (id) => { const el = document.getElementById(`vols-${id}`); el.style.display = el.style.display === 'none' ? 'block' : 'none'; };
-
         window.offerHelp = async (requestId) => {
             const user = auth.currentUser;
             const reqRef = doc(db, "requests", requestId);
-            const reqSnap = await getDoc(reqRef);
-            if(!reqSnap.exists()) return;
-            const data = reqSnap.data();
-            if(data.userId === user.uid) return alert("You cannot volunteer for your own post.");
-            const alreadyVolunteered = (data.volunteers || []).some(v => v.uid === user.uid);
-            if(alreadyVolunteered) return alert("Already offered help.");
-            await updateDoc(reqRef, {
-                volunteers: arrayUnion({ uid: user.uid, name: userName }),
-                volunteerCount: increment(1)
-            });
+            await updateDoc(reqRef, { volunteers: arrayUnion({ uid: user.uid, name: userName }), volunteerCount: increment(1) });
             alert("Added to queue!");
         };
 
-        // --- CHAT ---
+        // Chat & Tabs Logic
         window.startChat = async (itemId, targetUserId, label) => {
-            if(auth.currentUser.uid === targetUserId) return;
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
-            await setDoc(doc(db, "chats", currentChatId), {
-                participants: [auth.currentUser.uid, targetUserId],
-                itemLabel: label,
-                lastUpdated: serverTimestamp()
-            }, { merge: true });
+            await setDoc(doc(db, "chats", currentChatId), { participants: [auth.currentUser.uid, targetUserId], itemLabel: label, lastUpdated: serverTimestamp() }, { merge: true });
             openChatWindow(label);
         };
 
@@ -513,48 +428,34 @@
             if (unsubscribeChat) unsubscribeChat();
             const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
             unsubscribeChat = onSnapshot(q, (snapshot) => {
-                const area = document.getElementById('messageArea');
-                area.innerHTML = "";
+                const area = document.getElementById('messageArea'); area.innerHTML = "";
                 snapshot.forEach(d => {
-                    const data = d.data();
-                    const isMe = data.senderId === auth.currentUser.uid;
+                    const data = d.data(); const isMe = data.senderId === auth.currentUser.uid;
                     const msgDiv = document.createElement('div');
                     msgDiv.style = `max-width:80%; padding:8px 12px; border-radius:12px; font-size:13px; margin-bottom:4px; ${isMe ? 'align-self:flex-end; background:#38bdf8; color:white;' : 'align-self:flex-start; background:white; border:1px solid #e2e8f0;'}`;
-                    msgDiv.innerText = data.text;
-                    area.appendChild(msgDiv);
+                    msgDiv.innerText = data.text; area.appendChild(msgDiv);
                 });
                 area.scrollTop = area.scrollHeight;
             });
         }
 
         document.getElementById('sendMsgBtn').onclick = async () => {
-            const input = document.getElementById('msgInput');
-            if (!input.value || !currentChatId) return;
-            await addDoc(collection(db, "chats", currentChatId, "messages"), {
-                text: input.value, senderId: auth.currentUser.uid, createdAt: serverTimestamp()
-            });
+            const input = document.getElementById('msgInput'); if (!input.value) return;
+            await addDoc(collection(db, "chats", currentChatId, "messages"), { text: input.value, senderId: auth.currentUser.uid, createdAt: serverTimestamp() });
             input.value = "";
         };
 
         function loadActiveChats() {
-            const q = query(collection(db, "chats"));
-            onSnapshot(q, (snapshot) => {
+            onSnapshot(query(collection(db, "chats")), (snapshot) => {
                 const list = document.getElementById('activeChatsList');
                 snapshot.forEach(async (docSnap) => {
                     const chatId = docSnap.id;
                     if (chatId.includes(auth.currentUser.uid)) {
                         const noMsg = document.getElementById('noChatsMsg'); if(noMsg) noMsg.remove();
-                        const parts = chatId.split('_');
-                        const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
-                        const otherDoc = await getDoc(doc(db, "users", otherId));
-                        const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
+                        const parts = chatId.split('_'); const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
+                        const otherDoc = await getDoc(doc(db, "users", otherId)); const otherName = otherDoc.exists() ? otherDoc.data().fullName : "User";
                         let chatDiv = document.getElementById(`item-${chatId}`);
-                        if (!chatDiv) {
-                            chatDiv = document.createElement('div');
-                            chatDiv.id = `item-${chatId}`;
-                            chatDiv.className = "chat-list-item";
-                            list.prepend(chatDiv);
-                        }
+                        if (!chatDiv) { chatDiv = document.createElement('div'); chatDiv.id = `item-${chatId}`; chatDiv.className = "chat-list-item"; list.prepend(chatDiv); }
                         chatDiv.innerHTML = `<div><b>${otherName}</b><br><small>${docSnap.data().itemLabel}</small></div>
                         <button onclick="resumeChat('${chatId}', '${otherName}')" style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Open</button>`;
                     }
@@ -563,7 +464,6 @@
         }
 
         window.resumeChat = (id, name) => { currentChatId = id; openChatWindow(name); };
-
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -576,7 +476,6 @@
                 document.querySelectorAll('.nav-item')[1].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Lost and Found";
             }
-            document.getElementById('fabBtn').style.display = tab === 'community' ? 'flex' : 'none';
         };
 
         const logout = () => signOut(auth).then(() => window.location.href = "login.html");
