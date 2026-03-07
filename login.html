@@ -23,7 +23,6 @@
             
             <div id="uploadControls">
                 <input type="text" id="fullName" placeholder="Full Legal Name" style="width:90%; padding:10px; margin-bottom:15px; border: 1px solid #3498db; border-radius: 5px;">
-                
                 <input type="file" id="idPhoto" accept="image/*" style="margin-bottom:15px; font-size: 12px;">
                 <button id="uploadBtn" style="width:95%; padding:10px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer; font-weight: bold;">Submit for Admin Approval</button>
             </div>
@@ -34,7 +33,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -57,8 +56,18 @@
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 const userData = userDoc.exists() ? userDoc.data() : null;
 
+                // ── Banned check — fires before anything else ──
+                if (userData && userData.banned === true) {
+                    await signOut(auth);
+                    document.getElementById('loginForm').style.display = "block";
+                    document.getElementById('verifySection').style.display = "none";
+                    document.getElementById('statusMsg').style.color = "#e74c3c";
+                    document.getElementById('statusMsg').innerText = "🚫 Your account has been suspended. Please contact support.";
+                    return;
+                }
+
                 if (userData && userData.status === "approved") {
-                    window.location.href = "index.html"; 
+                    window.location.href = "index.html";
                     return;
                 }
 
@@ -93,14 +102,14 @@
 
         document.getElementById('googleLoginBtn').onclick = () => signInWithPopup(auth, provider);
 
-        // --- UPDATED UPLOAD LOGIC ---
+        // --- UPLOAD LOGIC ---
         document.getElementById('uploadBtn').onclick = async () => {
             const file = document.getElementById('idPhoto').files[0];
             const nameInput = document.getElementById('fullName').value.trim();
             const user = auth.currentUser;
             
-            if(!nameInput) return alert("Please enter your full legal name.");
-            if(!file) return alert("Please select a photo first.");
+            if (!nameInput) return alert("Please enter your full legal name.");
+            if (!file) return alert("Please select a photo first.");
 
             document.getElementById('uploadBtn').innerText = "Uploading...";
             document.getElementById('uploadBtn').disabled = true;
@@ -113,24 +122,21 @@
                     const userSnap = await getDoc(userRef);
                     let isRetry = userSnap.exists() ? (userSnap.data().hasPreviousDenial || false) : false;
 
-                    // 1. Add to review queue with the Full Name
                     await addDoc(collection(db, "id_reviews"), {
                         fullName: nameInput,
                         email: user.email,
                         userId: user.uid,
                         idCardUrl: reader.result,
-                        hasPreviousDenial: isRetry, 
+                        hasPreviousDenial: isRetry,
                         timestamp: serverTimestamp()
                     });
 
-                    // 2. Set status and save the name to the user profile
                     await setDoc(userRef, {
                         fullName: nameInput,
                         email: user.email,
                         status: "waiting for approval"
                     }, { merge: true });
 
-                    // 3. Update UI
                     document.getElementById('uploadControls').style.display = "none";
                     document.getElementById('instructionText').style.display = "none";
                     document.getElementById('statusMsg').innerText = "✅ Submitted! Admin will review your name and ID.";
