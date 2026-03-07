@@ -13,13 +13,101 @@
     </script>
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; }
-        .container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #1a73e8; border-bottom: 2px solid #e8eaed; padding-bottom: 15px; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
+
+        /* ════════════════════════════
+           AUTH GATE
+        ════════════════════════════ */
+        #authGate {
+            display: flex; position: fixed; inset: 0;
+            background: #0f172a; z-index: 9999;
+            align-items: center; justify-content: center;
+        }
+        .auth-box {
+            background: white; border-radius: 20px; padding: 40px 36px;
+            width: 90%; max-width: 380px; text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .auth-logo { font-size: 44px; margin-bottom: 8px; }
+        .auth-box h2 { margin: 0 0 4px; color: #0f172a; font-size: 20px; font-weight: 800; }
+        .auth-box p  { color: #64748b; font-size: 13px; margin: 0 0 24px; }
+        .auth-box input {
+            width: 100%; padding: 11px 14px; border: 1px solid #e2e8f0;
+            border-radius: 8px; font-size: 14px; margin-bottom: 12px;
+            outline: none; font-family: inherit;
+        }
+        .auth-box input:focus { border-color: #1a73e8; }
+        .auth-btn {
+            width: 100%; padding: 12px; background: #1a73e8; color: white;
+            border: none; border-radius: 8px; font-weight: 700; font-size: 15px;
+            cursor: pointer; transition: 0.2s; font-family: inherit;
+        }
+        .auth-btn:hover    { background: #1557b0; }
+        .auth-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        #authError { color: #ef4444; font-size: 13px; margin-top: 10px; min-height: 18px; }
+
+        /* ════════════════════════════
+           ACCESS DENIED
+        ════════════════════════════ */
+        #accessDenied {
+            display: none; position: fixed; inset: 0;
+            background: #0f172a; z-index: 9999;
+            align-items: center; justify-content: center;
+            flex-direction: column; text-align: center; padding: 20px;
+        }
+        #accessDenied .denied-icon { font-size: 56px; margin-bottom: 16px; }
+        #accessDenied h2 { color: white; margin: 0 0 8px; }
+        #accessDenied p  { color: #94a3b8; font-size: 14px; margin: 0 0 24px; max-width: 360px; }
+        #accessDenied button {
+            background: #ef4444; color: white; border: none; padding: 10px 28px;
+            border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; font-family: inherit;
+        }
+
+        /* ════════════════════════════
+           ADMIN CONTENT (hidden until auth)
+        ════════════════════════════ */
+        #adminContent { display: none; max-width: 1100px; margin: auto; }
+
+        /* Page header */
+        .page-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
+        .page-header h1 { margin: 0; font-size: 24px; color: #0f172a; font-weight: 800; flex: 1; }
+        .signout-btn {
+            background: #fee2e2; color: #991b1b; border: none; padding: 9px 18px;
+            border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px;
+            font-family: inherit; transition: 0.2s;
+        }
+        .signout-btn:hover { background: #fecaca; }
+
+        /* Section tabs */
+        .section-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        .sec-tab {
+            padding: 10px 22px; border: 2px solid #e2e8f0; border-radius: 8px;
+            background: white; font-weight: 600; font-size: 14px; cursor: pointer;
+            transition: 0.2s; color: #475569; font-family: inherit;
+        }
+        .sec-tab:hover  { border-color: #1a73e8; color: #1a73e8; }
+        .sec-tab.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+        .tab-badge {
+            background: #ef4444; color: white; font-size: 10px; font-weight: 700;
+            padding: 2px 6px; border-radius: 99px; margin-left: 6px;
+            animation: pulseBadge 1.5s infinite;
+        }
+        @keyframes pulseBadge { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+        /* Panels */
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        .section-panel { display: none; }
+        .section-panel.active { display: block; }
+
+        /* ════════════════════════════
+           VERIFICATION TABLE (original styles preserved exactly)
+        ════════════════════════════ */
+        h2 { color: #1a73e8; border-bottom: 2px solid #e8eaed; padding-bottom: 15px; margin-top: 0; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
         th { background: #f8f9fa; color: #5f6368; text-transform: uppercase; font-size: 12px; }
-        .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: inherit; }
         .btn-approve { background: #34a853; color: white; margin-right: 8px; }
         .btn-approve:hover { background: #2d8e47; }
         .btn-deny { background: #ea4335; color: white; }
@@ -28,35 +116,175 @@
         .btn-reset:hover { background: #3c4043; }
         .id-link { color: #1a73e8; text-decoration: none; font-weight: 500; }
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 10px; text-transform: uppercase; }
-        .badge-new { background: #e6f4ea; color: #1e8e3e; }
+        .badge-new   { background: #e6f4ea; color: #1e8e3e; }
         .badge-retry { background: #fce8e6; color: #d93025; }
+
+        /* ════════════════════════════
+           REPORTS SECTION
+        ════════════════════════════ */
+        @keyframes glowPulse {
+            0%,100% { box-shadow: 0 0 0 3px rgba(239,68,68,0.15), 0 0 20px rgba(239,68,68,0.1); }
+            50%      { box-shadow: 0 0 0 5px rgba(239,68,68,0.25), 0 0 30px rgba(239,68,68,0.2); }
+        }
+        .reports-glow { border: 2px solid #ef4444 !important; animation: glowPulse 2s infinite; }
+
+        /* User summary card */
+        .report-summary-card {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; background: #fff5f5; border: 1px solid #fecaca;
+            border-radius: 12px; margin-bottom: 4px; cursor: pointer; transition: 0.2s;
+        }
+        .report-summary-card:hover    { background: #fee2e2; }
+        .report-summary-card.expanded { background: #fee2e2; border-color: #ef4444; border-radius: 12px 12px 0 0; }
+        .rsc-left   { display: flex; align-items: center; gap: 14px; }
+        .rsc-avatar {
+            width: 42px; height: 42px; border-radius: 50%; background: #ef4444;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 16px; flex-shrink: 0;
+        }
+        .rsc-name { font-weight: 700; font-size: 15px; color: #0f172a; }
+        .rsc-meta { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .rsc-count { background: #ef4444; color: white; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; }
+        .rsc-count.multi { animation: glowPulse 1.5s infinite; }
+
+        /* Ban/Unban action row */
+        .user-action-row {
+            display: none; gap: 10px; align-items: center; padding: 10px 20px 14px;
+            flex-wrap: wrap; background: #fee2e2; border: 1px solid #ef4444;
+            border-top: none; margin-bottom: 4px;
+        }
+        .user-action-row.open { display: flex; }
+        .btn-ban-user { background: #0f172a; color: white; font-size: 13px; }
+        .btn-ban-user:hover { background: #1e293b; }
+        .btn-unban { background: #22c55e; color: white; font-size: 13px; }
+        .btn-unban:hover { background: #16a34a; }
+
+        /* Report detail cards */
+        .report-details { display: none; margin-bottom: 16px; }
+        .report-details.open { display: block; }
+        .report-item {
+            background: white; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 18px; margin-bottom: 8px; margin-left: 24px;
+        }
+        .report-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
+        .report-cat-pill { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: #fee2e2; color: #991b1b; text-transform: uppercase; }
+        .report-date     { font-size: 11px; color: #94a3b8; }
+        .report-desc     { font-size: 13px; color: #475569; line-height: 1.6; margin: 8px 0; }
+        .report-reporter { font-size: 12px; color: #64748b; }
+        .report-img-wrap { margin-top: 10px; }
+        .report-img-wrap img { max-width: 100%; max-height: 280px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s; }
+        .report-img-wrap img:hover { opacity: 0.85; }
+        .report-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f1f5f9; flex-wrap: wrap; }
+        .btn-ignore       { background: #f1f5f9; color: #475569; }
+        .btn-ignore:hover { background: #e2e8f0; }
+        .btn-ban          { background: #ef4444; color: white; }
+        .btn-ban:hover    { background: #dc2626; }
+        .pill-ignored  { font-size: 11px; background: #f1f5f9; color: #64748b; padding: 3px 10px; border-radius: 99px; font-weight: 600; }
+        .pill-actioned { font-size: 11px; background: #fee2e2; color: #991b1b; padding: 3px 10px; border-radius: 99px; font-weight: 600; }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: 48px 20px; color: #94a3b8; }
+        .empty-state .es-icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; margin: 0; }
+
+        /* Lightbox */
+        #imgLightbox {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.92); z-index: 99999;
+            align-items: center; justify-content: center; cursor: pointer;
+        }
+        #imgLightbox.open { display: flex; }
+        #imgLightbox img  { max-width: 92vw; max-height: 92vh; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Resident Verification Queue</h2>
-    
-    <button onclick="resetTester()" class="btn btn-reset">
-        🔄 Reset Tester (rashmibiswa2008@gmail.com)
-    </button>
-
-    <table id="requestsTable">
-        <thead>
-            <tr>
-                <th>Full Name</th>
-                <th>Resident Email</th>
-                <th>ID Document</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-    </table>
+<!-- Lightbox -->
+<div id="imgLightbox" onclick="this.classList.remove('open')">
+    <img id="lightboxImg" src="" alt="Report evidence">
 </div>
+
+<!-- ════ AUTH GATE ════ -->
+<div id="authGate">
+    <div class="auth-box">
+        <div class="auth-logo">🛡️</div>
+        <h2>Admin Access Only</h2>
+        <p>Sign in with your authorised admin account</p>
+        <input type="email"    id="adminEmail"    placeholder="Admin email" autocomplete="email">
+        <input type="password" id="adminPassword" placeholder="Password">
+        <button class="auth-btn" id="adminSignInBtn" onclick="adminSignIn()">Sign In</button>
+        <div id="authError"></div>
+    </div>
+</div>
+
+<!-- ════ ACCESS DENIED ════ -->
+<div id="accessDenied">
+    <div class="denied-icon">🚫</div>
+    <h2>Access Denied</h2>
+    <p id="deniedMsg">This account is not authorised to access the admin panel.</p>
+    <button onclick="adminSignOut()">Sign out &amp; try again</button>
+</div>
+
+<!-- ════ ADMIN CONTENT ════ -->
+<div id="adminContent">
+
+    <div class="page-header">
+        <div style="font-size:36px;">🛡️</div>
+        <div style="flex:1;">
+            <h1 style="margin:0 0 2px;">Beacon of Unity — Admin Panel</h1>
+            <span style="font-size:13px; color:#64748b;" id="adminEmailDisplay"></span>
+        </div>
+        <button class="signout-btn" onclick="adminSignOut()">Sign Out</button>
+    </div>
+
+    <div class="section-tabs">
+        <button class="sec-tab active" onclick="showSection('verification')" id="tab-verification">📋 Verification Queue</button>
+        <button class="sec-tab"        onclick="showSection('reports')"      id="tab-reports">🚨 User Reports</button>
+    </div>
+
+    <!-- Panel: Verification Queue (original layout preserved exactly) -->
+    <div class="section-panel active container" id="panel-verification">
+        <h2>Resident Verification Queue</h2>
+        <button onclick="resetTester()" class="btn btn-reset">
+            🔄 Reset Tester (rashmibiswa2008@gmail.com)
+        </button>
+        <table id="requestsTable">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Resident Email</th>
+                    <th>ID Document</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Panel: User Reports -->
+    <div class="section-panel container" id="panel-reports">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+            <div>
+                <h2 style="margin-bottom:4px;">🚨 Reported Users</h2>
+                <p style="color:#64748b; font-size:13px; margin:0;" id="reportsSubtitle">Loading…</p>
+            </div>
+            <button onclick="loadReports()" class="btn" style="background:#f1f5f9; color:#475569; font-size:13px;">🔄 Refresh</button>
+        </div>
+        <div id="reportsFeed">
+            <div class="empty-state"><div class="es-icon">⏳</div><p>Loading reports…</p></div>
+        </div>
+    </div>
+
+</div><!-- /adminContent -->
+
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc,
+             query, where, onSnapshot }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -67,66 +295,109 @@
         appId: "1:37918398882:web:205161bb147393f4defafb"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
 
+    // ── Only these two emails may access the panel ──
+    const ADMIN_EMAILS = ['luckyansh.t@gmail.com', 'beaconofunityofficial@gmail.com'];
+
+    // ── UI state helpers ──
+    function showGate() {
+        document.getElementById('authGate').style.display     = 'flex';
+        document.getElementById('accessDenied').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'none';
+    }
+    function showDenied(msg) {
+        document.getElementById('authGate').style.display     = 'none';
+        document.getElementById('accessDenied').style.display = 'flex';
+        document.getElementById('adminContent').style.display = 'none';
+        if (msg) document.getElementById('deniedMsg').innerText = msg;
+    }
+    function showAdmin(email) {
+        document.getElementById('authGate').style.display     = 'none';
+        document.getElementById('accessDenied').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        document.getElementById('adminEmailDisplay').innerText = `Signed in as ${email}`;
+    }
+
+    // ── Auth state — fires on every page load ──
+    onAuthStateChanged(auth, (user) => {
+        if (!user) { showGate(); return; }
+        if (!ADMIN_EMAILS.includes(user.email)) {
+            showDenied(`"${user.email}" is not an authorised admin account.`);
+            return;
+        }
+        showAdmin(user.email);
+        loadData();
+        loadReports();
+    });
+
+    // ── Sign in ──
+    window.adminSignIn = async () => {
+        const email = document.getElementById('adminEmail').value.trim();
+        const pass  = document.getElementById('adminPassword').value;
+        const errEl = document.getElementById('authError');
+        const btn   = document.getElementById('adminSignInBtn');
+        errEl.innerText = '';
+        if (!email || !pass) { errEl.innerText = 'Please enter your email and password.'; return; }
+        btn.disabled = true; btn.innerText = 'Signing in…';
+        try {
+            await signInWithEmailAndPassword(auth, email, pass);
+            // onAuthStateChanged handles the rest
+        } catch (e) {
+            errEl.innerText =
+                ['auth/invalid-credential', 'auth/wrong-password'].includes(e.code)
+                    ? 'Incorrect email or password.'
+                    : e.code === 'auth/user-not-found'
+                    ? 'No account found with this email.'
+                    : 'Sign in failed. Please try again.';
+        }
+        btn.disabled = false; btn.innerText = 'Sign In';
+    };
+    document.getElementById('adminPassword').addEventListener('keydown', e => {
+        if (e.key === 'Enter') window.adminSignIn();
+    });
+
+    // ── Sign out ──
+    window.adminSignOut = async () => { await signOut(auth); showGate(); };
+
+    // ── Tab switching ──
+    window.showSection = (name) => {
+        document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.sec-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(`panel-${name}`).classList.add('active');
+        document.getElementById(`tab-${name}`).classList.add('active');
+    };
+
+    // ════════════════════════════════════════
+    // VERIFICATION QUEUE  (original logic, unchanged)
+    // ════════════════════════════════════════
     window.resetTester = async () => {
         const testerEmail = "rashmibiswa2008@gmail.com";
         try {
             const q = query(collection(db, "users"), where("email", "==", testerEmail));
             const querySnapshot = await getDocs(q);
-            if (querySnapshot.empty) {
-                alert("Tester account not found.");
-                return;
-            }
+            if (querySnapshot.empty) { alert("Tester account not found."); return; }
             const userDoc = querySnapshot.docs[0];
-            const userRef = doc(db, "users", userDoc.id);
-
-            await updateDoc(userRef, {
-                status: "none",
-                hasPreviousDenial: false 
-            });
-
+            await updateDoc(doc(db, "users", userDoc.id), { status: "none", hasPreviousDenial: false });
             const reviewQ = query(collection(db, "id_reviews"), where("email", "==", testerEmail));
             const reviewDocs = await getDocs(reviewQ);
-            const deletePromises = reviewDocs.docs.map(d => deleteDoc(doc(db, "id_reviews", d.id)));
-            await Promise.all(deletePromises);
-
+            await Promise.all(reviewDocs.docs.map(d => deleteDoc(doc(db, "id_reviews", d.id))));
             alert("✅ Tester Reset! Completely clean slate.");
             loadData();
-        } catch (err) {
-            alert("Reset Error.");
-        }
+        } catch (err) { alert("Reset Error."); }
     };
 
     window.processUser = async (docId, userEmail, action, userId, fullName) => {
         const userRef = doc(db, "users", userId);
-
         if (action === 'approve') {
             try {
-                if (!userEmail || userEmail === "undefined") {
-                    throw new Error("Recipient address is empty or undefined.");
-                }
-
-                const templateParams = {
-                    email: userEmail,
-                    to_email: userEmail,
-                    name: fullName || userEmail.split('@')[0] // Uses the legal name in the email
-                };
-
-                // Send the email first
+                if (!userEmail || userEmail === "undefined") throw new Error("Recipient address is empty or undefined.");
+                const templateParams = { email: userEmail, to_email: userEmail, name: fullName || userEmail.split('@')[0] };
                 await emailjs.send("service_w3ai9pm", "template_zttw3uf", templateParams);
-
-                // Update Firestore status AND ensure fullName is synced to the user profile
-                await updateDoc(userRef, { 
-                    status: "approved", 
-                    fullName: fullName,
-                    approvedAt: new Date().toISOString() 
-                });
-
-                // Remove from the queue
+                await updateDoc(userRef, { status: "approved", fullName: fullName, approvedAt: new Date().toISOString() });
                 await deleteDoc(doc(db, "id_reviews", docId));
-                
                 alert("Success! Welcome email sent to " + userEmail);
                 loadData();
             } catch (e) {
@@ -135,17 +406,11 @@
             }
         } else {
             try {
-                await updateDoc(userRef, { 
-                    status: "rejected",
-                    hasPreviousDenial: true 
-                });
-
+                await updateDoc(userRef, { status: "rejected", hasPreviousDenial: true });
                 await deleteDoc(doc(db, "id_reviews", docId));
                 alert("User Denied. Flagged for retry.");
                 loadData();
-            } catch (err) {
-                alert("Error processing denial.");
-            }
+            } catch (err) { alert("Error processing denial."); }
         }
     };
 
@@ -155,19 +420,14 @@
         try {
             const querySnapshot = await getDocs(collection(db, "id_reviews"));
             tableBody.innerHTML = "";
-            if (querySnapshot.empty) {
-                tableBody.innerHTML = "<tr><td colspan='4'>No pending requests.</td></tr>";
-                return;
-            }
+            if (querySnapshot.empty) { tableBody.innerHTML = "<tr><td colspan='4'>No pending requests.</td></tr>"; return; }
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
                 const displayEmail = data.email || "Unknown Email";
                 const fullName = data.fullName || "No Name Provided";
-                
-                const tag = data.hasPreviousDenial 
-                    ? `<span class="badge badge-retry">Retrying</span>` 
+                const tag = data.hasPreviousDenial
+                    ? `<span class="badge badge-retry">Retrying</span>`
                     : `<span class="badge badge-new">New</span>`;
-
                 tableBody.innerHTML += `
                     <tr>
                         <td style="font-weight:600;">${fullName}</td>
@@ -184,7 +444,186 @@
             tableBody.innerHTML = "<tr><td colspan='4'>Error loading data.</td></tr>";
         }
     }
-    loadData();
+
+    // ════════════════════════════════════════
+    // REPORTS  (live onSnapshot listener)
+    // ════════════════════════════════════════
+    const expandedUsers = new Set();
+    let reportsUnsub = null;
+
+    window.loadReports = loadReports;
+
+    function loadReports() {
+        if (reportsUnsub) { reportsUnsub(); reportsUnsub = null; }
+        const feed = document.getElementById('reportsFeed');
+        feed.innerHTML = '<div class="empty-state"><div class="es-icon">⏳</div><p>Loading…</p></div>';
+
+        reportsUnsub = onSnapshot(collection(db, "reports"), async (snapshot) => {
+
+            // Group reports by reportedUid
+            const grouped = {};
+            snapshot.forEach(ds => {
+                const d = ds.data(), uid = d.reportedUid;
+                if (!grouped[uid]) grouped[uid] = { name: d.reportedName || 'Unknown User', reports: [], banned: false };
+                grouped[uid].reports.push({ id: ds.id, ...d });
+            });
+
+            // Fetch banned status for each user
+            if (Object.keys(grouped).length > 0) {
+                const usnap = await getDocs(collection(db, "users"));
+                usnap.forEach(d => { if (grouped[d.id]) grouped[d.id].banned = d.data().banned === true; });
+            }
+
+            const uids         = Object.keys(grouped);
+            const pendingCount = uids.filter(u => grouped[u].reports.some(r => r.status === 'pending')).length;
+
+            // Update tab badge
+            document.getElementById('tab-reports').innerHTML = pendingCount > 0
+                ? `🚨 User Reports <span class="tab-badge">${pendingCount}</span>`
+                : '🚨 User Reports';
+
+            // Glow the reports panel if there are pending reports
+            const panel = document.getElementById('panel-reports');
+            pendingCount > 0 ? panel.classList.add('reports-glow') : panel.classList.remove('reports-glow');
+
+            // Subtitle
+            document.getElementById('reportsSubtitle').innerText = uids.length === 0
+                ? 'No reports on file.'
+                : `${uids.length} user${uids.length !== 1 ? 's' : ''} reported · ${pendingCount} pending review`;
+
+            feed.innerHTML = '';
+            if (uids.length === 0) {
+                feed.innerHTML = '<div class="empty-state"><div class="es-icon">✅</div><p>No reports yet — all clear!</p></div>';
+                return;
+            }
+
+            // Sort: most reports first
+            uids.sort((a, b) => grouped[b].reports.length - grouped[a].reports.length);
+
+            uids.forEach(uid => {
+                const g          = grouped[uid];
+                const count      = g.reports.length;
+                const isExpanded = expandedUsers.has(uid);
+                const isBanned   = g.banned;
+                const safeName   = g.name.replace(/'/g, "\\'");
+
+                // Summary card
+                const card = document.createElement('div');
+                card.className = 'report-summary-card' + (isExpanded ? ' expanded' : '');
+                card.onclick   = () => toggleUser(uid);
+                card.innerHTML = `
+                    <div class="rsc-left">
+                        <div class="rsc-avatar">${g.name.charAt(0).toUpperCase()}</div>
+                        <div>
+                            <div class="rsc-name">${g.name}
+                                ${isBanned ? '<span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:99px;margin-left:8px;font-weight:700;">🔒 BANNED</span>' : ''}
+                            </div>
+                            <div class="rsc-meta">${count} report${count !== 1 ? 's' : ''} · UID: ${uid.slice(0,12)}…</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div class="rsc-count${count > 1 ? ' multi' : ''}">${count}</div>
+                        <span style="color:#94a3b8; font-size:16px;">${isExpanded ? '▲' : '▼'}</span>
+                    </div>`;
+                feed.appendChild(card);
+
+                // Ban / Unban action row
+                const ar = document.createElement('div');
+                ar.className = 'user-action-row' + (isExpanded ? ' open' : '');
+                ar.innerHTML = isBanned
+                    ? `<span style="font-size:13px;color:#7f1d1d;">This user is currently banned.</span>
+                       <button onclick="unbanUser('${uid}','${safeName}');event.stopPropagation();" class="btn btn-unban">✅ Unban User</button>`
+                    : `<span style="font-size:13px;color:#64748b;">Permanently ban this user from the platform?</span>
+                       <button onclick="banUser('${uid}','${safeName}');event.stopPropagation();" class="btn btn-ban-user btn">🔒 Ban User</button>`;
+                feed.appendChild(ar);
+
+                // Report detail cards
+                const details = document.createElement('div');
+                details.className = 'report-details' + (isExpanded ? ' open' : '');
+
+                // Pending reports first
+                const sorted = [...g.reports].sort((a, b) =>
+                    (a.status === 'pending' ? -1 : 1) - (b.status === 'pending' ? -1 : 1));
+
+                sorted.forEach(r => {
+                    const date = r.createdAt?.toDate
+                        ? r.createdAt.toDate().toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })
+                        : 'Unknown date';
+
+                    const imgHtml = r.imageData
+                        ? `<div class="report-img-wrap">
+                               <p style="font-size:11px;color:#64748b;margin:0 0 6px;">Attached evidence:</p>
+                               <img src="${r.imageData}" alt="evidence"
+                                    onclick="openLightbox(this); event.stopPropagation();">
+                           </div>` : '';
+
+                    const statusHtml =
+                        r.status === 'ignored' ? '<span class="pill-ignored">Ignored</span>' :
+                        r.status === 'banned'  ? '<span class="pill-actioned">Actioned</span>' : '';
+
+                    const actionsHtml = r.status === 'pending'
+                        ? `<div class="report-actions">
+                               <button onclick="ignoreReport('${r.id}');event.stopPropagation();" class="btn btn-ignore">👁 Ignore</button>
+                               <button onclick="banUser('${uid}','${safeName}');event.stopPropagation();" class="btn btn-ban">🔒 Ban User</button>
+                           </div>` : '';
+
+                    const item = document.createElement('div');
+                    item.className = 'report-item';
+                    item.innerHTML = `
+                        <div class="report-item-header">
+                            <span class="report-cat-pill">${r.category || 'Unknown'}</span>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                ${statusHtml}
+                                <span class="report-date">${date}</span>
+                            </div>
+                        </div>
+                        <div class="report-desc">${r.description || 'No description provided.'}</div>
+                        <div class="report-reporter">Reported by: <b>${r.reporterName || 'Anonymous'}</b></div>
+                        ${imgHtml}
+                        ${actionsHtml}`;
+                    details.appendChild(item);
+                });
+
+                feed.appendChild(details);
+            });
+        });
+    }
+
+    window.toggleUser = (uid) => {
+        expandedUsers.has(uid) ? expandedUsers.delete(uid) : expandedUsers.add(uid);
+        loadReports();
+    };
+
+    window.ignoreReport = async (id) => {
+        if (!confirm('Mark this report as ignored?')) return;
+        try { await updateDoc(doc(db, "reports", id), { status: 'ignored' }); }
+        catch { alert('Error updating report.'); }
+    };
+
+    window.banUser = async (uid, name) => {
+        if (!confirm(`Ban ${name}?\n\nThey will be locked out of the platform immediately.`)) return;
+        try {
+            await updateDoc(doc(db, "users", uid), { banned: true });
+            const q = query(collection(db, "reports"), where("reportedUid", "==", uid), where("status", "==", "pending"));
+            const s = await getDocs(q);
+            await Promise.all(s.docs.map(d => updateDoc(doc(db, "reports", d.id), { status: 'banned' })));
+            alert(`${name} has been banned.`);
+        } catch (e) { alert('Error: ' + e.message); }
+    };
+
+    window.unbanUser = async (uid, name) => {
+        if (!confirm(`Unban ${name}? They will regain full access.`)) return;
+        try {
+            await updateDoc(doc(db, "users", uid), { banned: false });
+            alert(`${name} has been unbanned.`);
+        } catch (e) { alert('Error: ' + e.message); }
+    };
+
+    // Lightbox — reads src from the clicked img element directly
+    window.openLightbox = (imgEl) => {
+        document.getElementById('lightboxImg').src = imgEl.src;
+        document.getElementById('imgLightbox').classList.add('open');
+    };
 </script>
 </body>
 </html>
