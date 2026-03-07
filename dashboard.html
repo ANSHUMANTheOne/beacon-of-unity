@@ -4,36 +4,220 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Hub | Beacon of Unity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f8fafc; display: flex; color: #1e293b; }
-        
-        /* Sidebar Navigation */
-        .sidebar { width: 260px; background: #0f172a; color: white; height: 100vh; padding: 25px; position: fixed; }
-        .sidebar h2 { font-size: 22px; font-weight: 800; color: #38bdf8; margin-bottom: 5px; letter-spacing: -0.5px; }
-        .region-tag { font-size: 12px; color: #94a3b8; margin-bottom: 25px; display: block; }
-        .nav-item { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 8px; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
-        .nav-item:hover { background: #1e293b; }
-        .nav-item.active { background: #38bdf8; color: #0f172a; font-weight: 600; }
+        body { font-family: 'DM Sans', 'Segoe UI', sans-serif; margin: 0; background: #f8fafc; display: flex; color: #1e293b; }
 
-        /* Main Content */
+        /* ══════════════════════════════════════
+           ENHANCED SIDEBAR
+        ══════════════════════════════════════ */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(170deg, #071828 0%, #0c2d48 55%, #0e3d5e 100%);
+            color: white;
+            height: 100vh;
+            padding: 28px 18px 24px;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-right: 1px solid rgba(14,165,233,.14);
+        }
+
+        /* Grid texture overlay */
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(14,165,233,.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14,165,233,.035) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+        }
+
+        /* Ambient glow orb bottom-right */
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14,165,233,.15) 0%, transparent 70%);
+            bottom: -50px;
+            right: -50px;
+            pointer-events: none;
+        }
+
+        .sidebar h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 19px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 3px;
+            letter-spacing: -.4px;
+            position: relative;
+            z-index: 1;
+        }
+        .sidebar h2 .brand-accent { color: #38bdf8; }
+
+        .region-tag {
+            font-size: 11px;
+            color: rgba(125,211,252,.5);
+            margin-bottom: 26px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: .3px;
+        }
+
+        /* ── Nav items ── */
+        .nav-item {
+            position: relative;
+            padding: 11px 14px;
+            cursor: pointer;
+            border-radius: 11px;
+            margin-bottom: 3px;
+            transition: all .22s cubic-bezier(.16,1,.3,1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: rgba(255,255,255,.5);
+            border: 1px solid transparent;
+            z-index: 1;
+            overflow: hidden;
+            letter-spacing: .1px;
+        }
+
+        /* Shimmer sweep on hover */
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(56,189,248,.08) 50%, transparent 100%);
+            transform: translateX(-150%);
+            transition: transform .55s ease;
+            border-radius: 11px;
+        }
+        .nav-item:hover::before { transform: translateX(150%); }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,.06);
+            border-color: rgba(14,165,233,.2);
+            color: rgba(255,255,255,.88);
+            transform: translateX(3px);
+        }
+
+        /* Active — glowing pill */
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(14,165,233,.2), rgba(6,182,212,.1));
+            border-color: rgba(14,165,233,.38);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 2px 12px rgba(14,165,233,.15);
+        }
+
+        /* Left accent bar */
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 22%; bottom: 22%;
+            width: 3px;
+            background: linear-gradient(180deg, #7dd3fc, #38bdf8, #06b6d4);
+            border-radius: 0 3px 3px 0;
+            box-shadow: 0 0 8px rgba(56,189,248,.6);
+        }
+
+        /* Icon glow on active */
+        .nav-item.active .nav-emoji {
+            filter: drop-shadow(0 0 5px rgba(56,189,248,.75));
+        }
+
+        /* Logout special */
+        #logoutBtnNav {
+            margin-top: auto !important;
+            opacity: .45;
+            font-size: 13px;
+            border-top: 1px solid rgba(255,255,255,.06);
+            padding-top: 16px !important;
+            border-radius: 0 !important;
+            background: none !important;
+            border-color: transparent !important;
+            transform: none !important;
+        }
+        #logoutBtnNav:hover { opacity: .8 !important; color: #fca5a5 !important; transform: none !important; }
+        #logoutBtnNav::after { display: none !important; }
+
+        /* ══════════════════════════════════════
+           MAIN CONTENT
+        ══════════════════════════════════════ */
         .main-content { margin-left: 310px; padding: 40px; width: calc(100% - 310px); }
+
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        
+
+        .header h1 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            letter-spacing: -1px;
+            color: #0c2d48;
+            margin: 0 0 2px;
+        }
+
         .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
-        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; position: relative; }
-        
+
+        /* ── Cards ── */
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(14,165,233,.06), 0 1px 3px rgba(0,0,0,.04);
+            border: 1px solid #e8f4fb;
+            margin-bottom: 20px;
+            position: relative;
+            transition: box-shadow .25s, border-color .25s;
+        }
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(14,165,233,.1), 0 2px 6px rgba(0,0,0,.05);
+            border-color: rgba(14,165,233,.2);
+        }
+
+        /* request-card top gradient bar */
+        .request-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #38bdf8, #06b6d4);
+            border-radius: 18px 18px 0 0;
+            opacity: .55;
+            transition: opacity .25s;
+        }
+        .request-card:hover::before { opacity: 1; }
+
         /* FAB */
         .fab {
             position: fixed; bottom: 30px; right: 30px;
             width: 60px; height: 60px;
-            background: #38bdf8; color: #0f172a;
+            background: linear-gradient(135deg, #38bdf8, #06b6d4);
+            color: #0f172a;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.4);
-            border: none; transition: 0.3s; z-index: 999;
+            font-size: 30px; cursor: pointer;
+            box-shadow: 0 8px 28px rgba(14,165,233,.45), 0 2px 8px rgba(6,182,212,.3);
+            border: none; transition: all .3s; z-index: 999;
         }
-        .fab:hover { transform: scale(1.1) rotate(90deg); background: #0ea5e9; }
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            box-shadow: 0 12px 36px rgba(14,165,233,.6);
+        }
 
-        /* Badges */
+        /* ── Badges ── */
         .badge { font-size: 11px; padding: 4px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
         .badge-food { background: #e0f2fe; color: #0369a1; }
         .badge-transport { background: #fef9c3; color: #854d0e; }
@@ -46,24 +230,47 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
+        .tab-content h3 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: -.4px;
+            color: #0c2d48;
+        }
+
         .request-card { border-left: 5px solid #38bdf8; }
         .urgency-high { border-left: 5px solid #ef4444; animation: pulse-border 2s infinite; }
-        
+        .urgency-high::before { background: linear-gradient(90deg, #ef4444, #f97316) !important; opacity: 1 !important; }
+
         @keyframes pulse-border {
             0% { border-left-color: #ef4444; }
             50% { border-left-color: #fee2e2; }
             100% { border-left-color: #ef4444; }
         }
 
-        .btn-help { background: #38bdf8; color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-        .btn-help:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+        .btn-help {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: #0f172a; border: none; padding: 8px 15px; border-radius: 6px;
+            font-weight: 600; cursor: pointer;
+            box-shadow: 0 3px 12px rgba(14,165,233,.3);
+            transition: all .2s;
+        }
+        .btn-help:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(14,165,233,.45); }
+        .btn-help:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
         .btn-delete { background: #fee2e2; color: #991b1b; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
 
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:1000; align-items:center; justify-content:center; }
         .modal-content { background:white; width:90%; max-width:450px; padding:30px; border-radius:20px; }
-        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
+        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
 
         #chatPopup { display:none; position:fixed; bottom:20px; right:100px; width:320px; height:500px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:2000; flex-direction:column; border:1px solid #e2e8f0; overflow:hidden; }
+
+        /* Chat header */
+        #chatPopup > div:first-child {
+            background: linear-gradient(135deg, #071828, #0c2d48) !important;
+            border-bottom: 1px solid rgba(14,165,233,.2) !important;
+        }
+
         .chat-list-item { padding: 12px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; border-radius: 12px; margin-bottom: 8px; background: white; transition: box-shadow 0.3s; }
         .chat-unread { border-color: #ef4444 !important; box-shadow: 0 0 0 2px rgba(239,68,68,0.25), 0 0 12px rgba(239,68,68,0.2) !important; background: #fff8f8 !important; }
 
@@ -106,8 +313,8 @@
         #chatFooterBar { padding:7px 10px; border-top:1px solid #f1f5f9; background:#f8fafc; }
 
         /* ── Leaderboard ── */
-        .lb-row { display:flex; align-items:center; gap:14px; background:white; border:1px solid #e2e8f0; border-radius:14px; padding:14px 18px; margin-bottom:12px; box-shadow:0 2px 4px rgba(0,0,0,0.04); transition:transform 0.15s; }
-        .lb-row:hover { transform:translateY(-1px); }
+        .lb-row { display:flex; align-items:center; gap:14px; background:white; border:1px solid #e8f4fb; border-radius:14px; padding:14px 18px; margin-bottom:12px; box-shadow:0 2px 6px rgba(14,165,233,.05); transition:all .18s; }
+        .lb-row:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(14,165,233,.1); border-color:rgba(14,165,233,.2); }
         .lb-rank { font-size:22px; font-weight:800; width:36px; text-align:center; flex-shrink:0; }
         .lb-rank.gold   { color:#f59e0b; }
         .lb-rank.silver { color:#94a3b8; }
@@ -115,11 +322,11 @@
         .lb-rank.other  { color:#cbd5e1; font-size:16px; }
         .lb-avatar { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#38bdf8,#0ea5e9); display:flex; align-items:center; justify-content:center; font-weight:700; color:white; font-size:16px; flex-shrink:0; }
         .lb-info { flex:1; }
-        .lb-name { font-weight:700; font-size:15px; }
+        .lb-name { font-weight:700; font-size:15px; font-family:'Syne',sans-serif; }
         .lb-sub  { font-size:12px; color:#64748b; margin-top:2px; }
-        .lb-pts  { font-size:20px; font-weight:800; color:#38bdf8; flex-shrink:0; }
+        .lb-pts  { font-size:20px; font-weight:800; color:#38bdf8; flex-shrink:0; font-family:'Syne',sans-serif; }
         .lb-pts span { font-size:11px; font-weight:500; color:#94a3b8; }
-        .lb-row.is-me { border-color:#38bdf8; background:#f0f9ff; }
+        .lb-row.is-me { border-color:#38bdf8; background:linear-gradient(135deg,#f0f9ff,#e0f2fe); }
 
         /* ── Settings icon ── */
         #settingsBtn { position:fixed; bottom:105px; right:38px; width:36px; height:36px; background:white; border:1px solid #e2e8f0; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:998; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:0.2s; font-size:16px; }
@@ -137,17 +344,47 @@
 
         /* ── Quote overlay ── */
         #quoteOverlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.92); z-index:9000; align-items:center; justify-content:center; flex-direction:column; }
-        #quoteText { color:white; font-size:22px; font-weight:300; max-width:520px; text-align:center; line-height:1.6; padding:0 30px; min-height:60px; }
+        #quoteText { color:white; font-size:22px; font-weight:300; max-width:520px; text-align:center; line-height:1.6; padding:0 30px; min-height:60px; font-family:'DM Sans',sans-serif; }
         #quoteCursor { display:inline-block; width:2px; height:1.1em; background:#38bdf8; margin-left:3px; vertical-align:middle; animation:blink 0.7s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
         #quoteSkip { margin-top:28px; color:#94a3b8; font-size:13px; cursor:pointer; border:1px solid #334155; background:none; padding:7px 18px; border-radius:8px; transition:0.2s; }
         #quoteSkip:hover { color:white; border-color:#64748b; }
 
+        /* ── Wtabs (Help / Lost&Found) ── */
+        .wtabs { gap: 6px; }
+        .wtab {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: .79rem;
+            letter-spacing: .2px;
+            transition: all .2s;
+        }
+        .wtab.on, .wtab:hover {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9) !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 14px rgba(14,165,233,.3) !important;
+        }
+
+        /* Active Conversations card panel */
+        .content-grid > div:last-child .card {
+            background: linear-gradient(160deg, #f8fcff 0%, #ffffff 100%);
+        }
+        .content-grid > div:last-child .card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0c2d48;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e8f4fb;
+            margin-bottom: 14px;
+        }
+
         /* ── Dark mode ── */
         body.dark { background:#0f172a; color:#e2e8f0; }
-        body.dark .sidebar { background:#020617; }
+        body.dark .sidebar { background: linear-gradient(170deg, #020617 0%, #071828 55%, #0c2240 100%); }
         body.dark .main-content { background:#0f172a; }
-        body.dark .card { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+        body.dark .card { background:#1e293b; border-color:rgba(14,165,233,.1) !important; color:#e2e8f0; box-shadow: 0 2px 12px rgba(0,0,0,.18) !important; }
+        body.dark .card:hover { border-color: rgba(14,165,233,.28) !important; }
         body.dark .card h3, body.dark .card h4 { color:#f1f5f9; }
         body.dark .card p, body.dark .card small { color:#94a3b8; }
         body.dark input, body.dark select, body.dark textarea { background:#1e293b; border-color:#334155; color:#e2e8f0; }
@@ -159,86 +396,55 @@
         body.dark #chatFooterBar { background:#1e293b; border-color:#334155; }
         body.dark .chat-list-item { background:#1e293b; border-color:#334155; color:#e2e8f0; }
         body.dark .chat-unread { background:#2d1515 !important; border-color:#ef4444 !important; }
-        body.dark .lb-row { background:#1e293b; border-color:#334155; color:#e2e8f0; }
-        body.dark .lb-row.is-me { background:#0c2233; border-color:#38bdf8; }
+        body.dark .lb-row { background:#1e293b; border-color:rgba(14,165,233,.1); color:#e2e8f0; }
+        body.dark .lb-row:hover { border-color:rgba(14,165,233,.3); }
+        body.dark .lb-row.is-me { background: linear-gradient(135deg,#0c2233,#0e2a3f); border-color:#38bdf8; }
         body.dark .lb-sub { color:#94a3b8; }
         body.dark #settingsBtn { background:#1e293b; border-color:#334155; color:#e2e8f0; }
         body.dark .settings-row { border-color:#334155; }
         body.dark .header h1 { color:#f1f5f9; }
+        body.dark .tab-content h3 { color:#f1f5f9; }
         body.dark .badge-tools { background:#334155; color:#94a3b8; }
-        body.dark .nav-item.active { background:#38bdf8; color:#0f172a; }
+        body.dark .nav-item.active { background: linear-gradient(135deg, rgba(14,165,233,.25), rgba(6,182,212,.14)); }
         body.dark #myPointsBadge { background:#1e293b; }
+        body.dark .content-grid > div:last-child .card { background: linear-gradient(160deg,#0e2235 0%,#1e293b 100%); }
+        body.dark .content-grid > div:last-child .card h3 { border-color:rgba(255,255,255,.06); }
 
-        /* ══════════════════════════════════════════════════════
+        /* ══════════════════════════════════════
            MOBILE ONLY  (max-width: 768px)
-           Desktop styles above are completely untouched.
-        ══════════════════════════════════════════════════════ */
-        #mobileTabBar { display: none; } /* hidden on desktop */
+        ══════════════════════════════════════ */
+        #mobileTabBar { display: none; }
 
         @media (max-width: 768px) {
-
-            /* ── Body & layout ── */
             body { display: block; }
             .sidebar { display: none; }
-            .main-content {
-                margin-left: 0;
-                width: 100%;
-                padding: 16px 14px 90px;
-                box-sizing: border-box;
-            }
+            .main-content { margin-left: 0; width: 100%; padding: 16px 14px 90px; box-sizing: border-box; }
             .header { margin-bottom: 16px; }
             .header h1 { font-size: 20px; }
             .header > button { padding: 7px 12px; font-size: 12px; }
             .content-grid { grid-template-columns: 1fr; gap: 0; }
             .card { padding: 16px; border-radius: 12px; margin-bottom: 14px; }
-
-            /* Active conversations panel hidden on mobile — accessible via Chats tab */
             .content-grid > div:last-child { display: none; }
-
-            /* ── FAB & settings move up above tab bar ── */
             .fab { bottom: 76px; right: 18px; width: 52px; height: 52px; font-size: 26px; }
             #settingsBtn { bottom: 140px; right: 18px; }
-
-            /* ── Chat popup → full screen ── */
-            #chatPopup {
-                bottom: 0 !important; right: 0 !important;
-                width: 100% !important; height: 100% !important;
-                border-radius: 0 !important; border: none !important;
-                z-index: 2500 !important;
-            }
-
-            /* ── Modals ── */
-            .modal-content {
-                width: 94% !important;
-                padding: 20px !important;
-                border-radius: 16px !important;
-                box-sizing: border-box;
-            }
+            #chatPopup { bottom: 0 !important; right: 0 !important; width: 100% !important; height: 100% !important; border-radius: 0 !important; border: none !important; z-index: 2500 !important; }
+            .modal-content { width: 94% !important; padding: 20px !important; border-radius: 16px !important; box-sizing: border-box; }
             #reportModal .modal-content { max-height: 92vh; overflow-y: auto; }
-
-            /* ── Leaderboard ── */
             .lb-row { padding: 10px 12px; gap: 10px; }
             .lb-avatar { width: 36px; height: 36px; font-size: 13px; }
             .lb-pts { font-size: 16px; }
             #leaderboardTab > div:first-child { flex-wrap: wrap; }
-
-            /* ── Hovercard on mobile — show below name, normal wrap ── */
-            .hovername .hovercard {
-                bottom: auto; top: 130%;
-                white-space: normal; min-width: 150px;
-            }
-
-            /* ── Quote text smaller ── */
+            .hovername .hovercard { bottom: auto; top: 130%; white-space: normal; min-width: 150px; }
             #quoteText { font-size: 17px; }
 
-            /* ── Bottom Tab Bar ── */
             #mobileTabBar {
                 display: flex !important;
                 position: fixed;
                 bottom: 0; left: 0; right: 0;
                 height: 62px;
-                background: #0f172a;
-                border-top: 1px solid #1e293b;
+                background: linear-gradient(0deg, #071828 0%, #0c2d48 100%);
+                border-top: 1px solid rgba(14,165,233,.18);
+                box-shadow: 0 -4px 24px rgba(0,0,0,.3);
                 z-index: 1200;
                 justify-content: space-around;
                 align-items: stretch;
@@ -247,45 +453,58 @@
             .mob-tab {
                 flex: 1; display: flex; flex-direction: column;
                 align-items: center; justify-content: center;
-                cursor: pointer; color: #64748b;
-                font-size: 9px; font-weight: 600; gap: 3px;
+                cursor: pointer; color: rgba(255,255,255,.35);
+                font-size: 9px; font-weight: 600; gap: 2px;
                 border: none; background: none;
                 text-transform: uppercase; letter-spacing: 0.3px;
                 -webkit-tap-highlight-color: transparent;
-                transition: color 0.15s;
+                transition: color .15s;
+                position: relative;
             }
-            .mob-tab .mob-icon { font-size: 19px; line-height: 1; transition: transform 0.15s; }
+            .mob-tab .mob-icon { font-size: 19px; line-height: 1; transition: transform .2s, filter .2s; }
             .mob-tab.active { color: #38bdf8; }
-            .mob-tab.active .mob-icon { transform: translateY(-2px); }
+            .mob-tab.active .mob-icon {
+                filter: drop-shadow(0 0 6px rgba(56,189,248,.7));
+                transform: translateY(-3px) scale(1.15);
+            }
+            /* active pip */
+            .mob-tab.active::after {
+                content: '';
+                position: absolute;
+                bottom: 6px;
+                width: 18px; height: 3px;
+                background: #38bdf8;
+                border-radius: 99px;
+                box-shadow: 0 0 6px rgba(56,189,248,.6);
+            }
 
-            /* ── Dark mode on mobile ── */
-            body.dark .main-content { background: #0f172a; }
-            body.dark #mobileTabBar { background: #020617; border-color: #0f172a; }
-            body.dark .mob-tab { color: #475569; }
+            body.dark #mobileTabBar { background: linear-gradient(0deg, #020617 0%, #071828 100%); }
+            body.dark .mob-tab { color: rgba(255,255,255,.3); }
             body.dark .mob-tab.active { color: #38bdf8; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ── Mobile Bottom Tab Bar (hidden on desktop via CSS) ── -->
+    <!-- ── Mobile Bottom Tab Bar ── -->
     <nav id="mobileTabBar">
-        <button class="mob-tab active"      onclick="switchTab('community')"     id="mob-community">
+        <button class="mob-tab active" onclick="switchTab('community')" id="mob-community">
             <span class="mob-icon">✨</span>Hub
         </button>
-        <button class="mob-tab"             onclick="switchTab('lostfound')"     id="mob-lostfound">
+        <button class="mob-tab" onclick="switchTab('lostfound')" id="mob-lostfound">
             <span class="mob-icon">🔍</span>Lost&Found
         </button>
-        <button class="mob-tab"             onclick="switchTab('leaderboard')"   id="mob-leaderboard">
+        <button class="mob-tab" onclick="switchTab('leaderboard')" id="mob-leaderboard">
             <span class="mob-icon">🏆</span>Ranks
         </button>
-        <button class="mob-tab"             onclick="switchTab('chats-mobile')"  id="mob-chats">
+        <button class="mob-tab" onclick="switchTab('chats-mobile')" id="mob-chats">
             <span class="mob-icon" id="mobChatsIcon">💬</span>Chats
         </button>
-        <button class="mob-tab"             onclick="openProfileModal()"         id="mob-profile">
+        <button class="mob-tab" onclick="openProfileModal()" id="mob-profile">
             <span class="mob-icon">👤</span>Profile
         </button>
     </nav>
+
     <div id="quoteOverlay">
         <div id="quoteText"><span id="quoteTyped"></span><span id="quoteCursor"></span></div>
         <button id="quoteSkip">Skip  ✕</button>
@@ -323,14 +542,14 @@
     </div>
 
     <div class="sidebar">
-        <h2>Beacon of Unity</h2>
-        <span class="region-tag" id="userRegionDisplay">Region: Loading...</span>
-        <div class="nav-item active" onclick="switchTab('community')">✨ Community Hub</div>
-        <div class="nav-item" onclick="switchTab('lostfound')">🔍 Lost and Found</div>
-        <div class="nav-item" onclick="switchTab('leaderboard')">🏆 Leaderboard</div>
-        <div class="nav-item" onclick="switchTab('volunteer-opps')">🤝 Volunteer Opportunities</div>
-        <div class="nav-item" onclick="openProfileModal()">👤 Profile & Region</div>
-        <div class="nav-item" onclick="switchTab('updates')">📢 Updates</div>
+        <h2>Beacon <span class="brand-accent">of Unity</span></h2>
+        <span class="region-tag" id="userRegionDisplay">📍 Region: Loading...</span>
+        <div class="nav-item active" onclick="switchTab('community')"><span class="nav-emoji">✨</span> Community Hub</div>
+        <div class="nav-item" onclick="switchTab('lostfound')"><span class="nav-emoji">🔍</span> Lost and Found</div>
+        <div class="nav-item" onclick="switchTab('leaderboard')"><span class="nav-emoji">🏆</span> Leaderboard</div>
+        <div class="nav-item" onclick="switchTab('volunteer-opps')"><span class="nav-emoji">🤝</span> Volunteer Opportunities</div>
+        <div class="nav-item" onclick="openProfileModal()"><span class="nav-emoji">👤</span> Profile & Region</div>
+        <div class="nav-item" onclick="switchTab('updates')"><span class="nav-emoji">📢</span> Updates</div>
         <div class="nav-item" id="logoutBtnNav" style="margin-top: 60px; opacity: 0.7;">Logout</div>
     </div>
 
@@ -338,9 +557,9 @@
         <div class="header">
             <div>
                 <h1 id="pageTitle">Community Hub</h1>
-                <p id="welcomeUser" style="color: #64748b; margin: 0;">Hello, Member</p>
+                <p id="welcomeUser" style="color: #64748b; margin: 0; font-size:14px;">Hello, Member</p>
             </div>
-            <button id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer;">Logout</button>
+            <button id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:600;">Logout</button>
         </div>
 
         <div class="content-grid">
@@ -356,12 +575,11 @@
                             <h3 style="margin:0;">🏆 Leaderboard</h3>
                             <p style="font-size:13px; color:#64748b; margin:4px 0 0;">2 pts awarded per resolved chat</p>
                         </div>
-                        <div id="myPointsBadge" style="background:#0f172a; color:#38bdf8; padding:8px 16px; border-radius:10px; font-weight:700; font-size:14px;">My Points: —</div>
+                        <div id="myPointsBadge" style="background:#0f172a; color:#38bdf8; padding:8px 16px; border-radius:10px; font-weight:700; font-size:14px; font-family:'Syne',sans-serif;">My Points: —</div>
                     </div>
-                    <!-- Toggle -->
                     <div style="display:flex; gap:0; background:#f1f5f9; border-radius:10px; padding:4px; margin-bottom:20px; width:fit-content;">
-                        <button id="lbLocalBtn" onclick="setLbScope('local')" style="padding:7px 22px; border:none; border-radius:7px; font-weight:600; font-size:13px; cursor:pointer; background:#0f172a; color:white; transition:0.2s;">📍 Local</button>
-                        <button id="lbGlobalBtn" onclick="setLbScope('global')" style="padding:7px 22px; border:none; border-radius:7px; font-weight:600; font-size:13px; cursor:pointer; background:none; color:#64748b; transition:0.2s;">🌍 Global</button>
+                        <button id="lbLocalBtn" onclick="setLbScope('local')" style="padding:7px 22px; border:none; border-radius:7px; font-weight:600; font-size:13px; cursor:pointer; background:#0f172a; color:white; transition:0.2s; font-family:'DM Sans',sans-serif;">📍 Local</button>
+                        <button id="lbGlobalBtn" onclick="setLbScope('global')" style="padding:7px 22px; border:none; border-radius:7px; font-weight:600; font-size:13px; cursor:pointer; background:none; color:#64748b; transition:0.2s; font-family:'DM Sans',sans-serif;">🌍 Global</button>
                     </div>
                     <p id="lbScopeLabel" style="font-size:12px; color:#94a3b8; margin:-12px 0 14px;">Showing top helpers in <span class="current-region-text">your region</span></p>
                     <div id="leaderboardFeed"><p style="color:#94a3b8;">Loading leaderboard...</p></div>
@@ -370,7 +588,7 @@
                 <div id="lostFoundTab" class="tab-content">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <h3>Lost & Found (<span class="current-region-text">...</span>)</h3>
-                        <button onclick="openLFModal()" style="background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">+ Report Item</button>
+                        <button onclick="openLFModal()" style="background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:600;">+ Report Item</button>
                     </div>
                     <div id="lfFeed"></div>
                 </div>
@@ -386,7 +604,7 @@
                     <div style="background:linear-gradient(135deg,#e0f2fe,#f0f9ff); border:1px solid #bae6fd; border-radius:16px; padding:28px; text-align:center;">
                         <div style="font-size:48px; margin-bottom:14px;">🚧</div>
                         <h3 style="margin:0 0 8px; color:#0369a1;">Coming Soon</h3>
-                        <p style="color:#0284c7; font-size:14px; margin:0; max-width:380px; margin:0 auto;">We're building a curated list of volunteering opportunities across the UAE. Check back soon — great things are on the way!</p>
+                        <p style="color:#0284c7; font-size:14px; margin:0 auto; max-width:380px;">We're building a curated list of volunteering opportunities across the UAE. Check back soon — great things are on the way!</p>
                     </div>
                 </div>
 
@@ -404,7 +622,7 @@
                                 <span style="background:#22c55e; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">🟢 Live</span>
                                 <span style="font-size:12px; color:#64748b;">March 2025</span>
                             </div>
-                            <h4 style="margin:0 0 8px; color:#166534;">Pilot Phase Now Live!</h4>
+                            <h4 style="margin:0 0 8px; color:#166534; font-family:'Syne',sans-serif;">Pilot Phase Now Live!</h4>
                             <p style="font-size:14px; color:#15803d; margin:0; line-height:1.6;">The pilot phase of the Beacon of Unity program is currently ongoing. We're testing, learning, and growing together — and we couldn't do it without you. <b>Thank you for being a part of this!</b> 🌟</p>
                         </div>
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -412,7 +630,7 @@
                                 <span style="background:#38bdf8; color:#0f172a; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">✨ Feature</span>
                                 <span style="font-size:12px; color:#64748b;">March 2025</span>
                             </div>
-                            <h4 style="margin:0 0 8px;">Volunteer Rank System Launched</h4>
+                            <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Volunteer Rank System Launched</h4>
                             <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points with every resolved chat and climb through volunteer ranks — from Newcomer all the way to Guardian of Unity. Check your rank on the Leaderboard!</p>
                         </div>
                     </div>
@@ -426,7 +644,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div>
                 <div class="card">
                     <h3>Active Conversations</h3>
@@ -466,14 +684,13 @@
             </div>
             <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; margin: 15px 0;">
                 <label style="font-size: 12px; color: #64748b;">Verified Name (Permanent)</label>
-                <div id="profileNameDisplay" style="font-weight: bold; font-size: 18px;">...</div>
+                <div id="profileNameDisplay" style="font-weight: bold; font-size: 18px; font-family:'Syne',sans-serif;">...</div>
             </div>
-            <!-- Volunteer Rank Badge -->
             <div id="profileRankBadge" style="display:flex; align-items:center; gap:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:16px;">
                 <div id="profileRankIcon" style="font-size:28px;">🌱</div>
                 <div>
                     <div style="font-size:11px; color:#94a3b8; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Volunteer Rank</div>
-                    <div id="profileRankLabel" style="font-weight:800; font-size:16px; color:#0f172a;">Newcomer</div>
+                    <div id="profileRankLabel" style="font-weight:800; font-size:16px; color:#0f172a; font-family:'Syne',sans-serif;">Newcomer</div>
                     <div id="profileRankPts" style="font-size:12px; color:#64748b; margin-top:1px;">0 pts</div>
                 </div>
             </div>
@@ -487,7 +704,7 @@
                 <option value="Ras Al Khaimah">Ras Al Khaimah</option>
                 <option value="Fujairah">Fujairah</option>
             </select>
-            <button id="updateProfileBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px;">Update Region</button>
+            <button id="updateProfileBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px; font-family:'DM Sans',sans-serif;">Update Region</button>
         </div>
     </div>
 
@@ -548,8 +765,6 @@
     <div id="reportModal">
         <div class="modal-content" style="position:relative;">
             <button onclick="closeReportModal()" style="position:absolute;top:12px;right:12px;background:#fee2e2;color:#991b1b;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;font-weight:700;cursor:pointer;">✕</button>
-
-            <!-- Step 1: Confirm -->
             <div id="reportStep1">
                 <div style="font-size:36px;text-align:center;margin-bottom:10px;">🚨</div>
                 <h2 style="margin:0 0 6px;text-align:center;">Report User</h2>
@@ -559,8 +774,6 @@
                     <button onclick="reportGoStep2()" style="flex:1;padding:11px;background:#ef4444;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Yes, Report</button>
                 </div>
             </div>
-
-            <!-- Step 2: Details -->
             <div id="reportStep2" style="display:none;">
                 <h2 style="margin:0 0 4px;">What's the issue?</h2>
                 <p style="color:#64748b;font-size:13px;margin:0 0 10px;">Select a category <span style="color:#ef4444;">*</span></p>
@@ -580,8 +793,6 @@
                 <button id="submitReportBtn" onclick="submitReport()" style="width:100%;padding:12px;background:#ef4444;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:14px;">Submit Report</button>
                 <p id="reportError" style="color:#ef4444;font-size:12px;text-align:center;margin-top:8px;display:none;"></p>
             </div>
-
-            <!-- Step 3: Success -->
             <div id="reportStep3" style="display:none;text-align:center;">
                 <div style="font-size:48px;margin-bottom:12px;">✅</div>
                 <h2 style="margin:0 0 8px;">Report Submitted</h2>
@@ -591,11 +802,10 @@
         </div>
     </div>
 
-    <!-- ★ RATING MODAL — Community Hub only -->
+    <!-- ★ RATING MODAL -->
     <div id="ratingModal">
         <div class="modal-content" style="position:relative;">
-            <!-- Cancel X — closes modal and returns to chat without doing anything -->
-            <button onclick="document.getElementById('ratingModal').style.display='none'" 
+            <button onclick="document.getElementById('ratingModal').style.display='none'"
                 style="position:absolute;top:12px;right:12px;background:#fee2e2;color:#991b1b;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
             <h2 style="margin-bottom:5px;">⭐ Rate the Volunteer</h2>
             <p id="ratingSubtitle" style="color:#64748b; font-size:14px; margin:0 0 5px;">How was your experience?</p>
@@ -614,16 +824,15 @@
 
     <!-- Chat popup -->
     <div id="chatPopup">
-        <div style="background:#0f172a; color:white; padding:12px; display:flex; justify-content:space-between; align-items:center;">
-            <span id="chatWith" style="font-weight:600; font-size:14px;">Chat</span>
+        <div style="background:linear-gradient(135deg,#071828,#0c2d48); color:white; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+            <span id="chatWith" style="font-weight:600; font-size:14px; font-family:'Syne',sans-serif;">Chat</span>
             <span onclick="document.getElementById('chatPopup').style.display='none'" style="cursor:pointer;">✕</span>
         </div>
         <div id="messageArea" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:8px; background:#f8fafc;"></div>
-        <!-- Resolve / End-chat bar injected here -->
         <div id="chatFooterBar"></div>
         <div style="padding:10px; border-top:1px solid #e2e8f0; display:flex; gap:5px;">
             <input type="text" id="msgInput" placeholder="Type a message..." style="flex:1; margin:0;">
-            <button id="sendMsgBtn" style="background:#38bdf8; border:none; color:white; padding:0 12px; border-radius:8px; cursor:pointer;">➔</button>
+            <button id="sendMsgBtn" style="background:linear-gradient(135deg,#38bdf8,#0ea5e9); border:none; color:white; padding:0 12px; border-radius:8px; cursor:pointer;">➔</button>
         </div>
     </div>
 
@@ -648,13 +857,12 @@
         let currentChatId = null;
         let currentChatOtherUserId = null;
         let currentChatOtherName = null;
-        let currentChatType = null;          // 'community' | 'lostfound'
-        let currentChatPostOwnerId = null;   // uid of whoever posted the original request
+        let currentChatType = null;
+        let currentChatPostOwnerId = null;
         let unsubscribeChat = null;
         let userRegion = null;
         let userName = "";
 
-        // ── Star-rating UI ───────────────────────────────────────────────────
         let selectedStars = 0;
         const starWords = ['','Poor','Fair','Good','Great','Excellent'];
 
@@ -676,7 +884,6 @@
                 b.classList.toggle('lit', +b.dataset.val <= n));
         }
 
-        // ── Fetch rating text for tooltip ────────────────────────────────────
         async function getRatingText(uid) {
             try {
                 const snap = await getDoc(doc(db, "users", uid));
@@ -688,8 +895,6 @@
             } catch { return 'No ratings yet'; }
         }
 
-        // Build hovercard HTML — rating line + report button
-        // uid/name are escaped so they're safe in onclick attributes
         function buildHoverCard(uid, name, ratingTxt) {
             const safeName = (name || 'User').replace(/'/g, "\\'");
             const isSelf   = uid === auth.currentUser.uid;
@@ -701,8 +906,6 @@
                     </span>`;
         }
 
-        // ── Volunteer Rank System ────────────────────────────────────────────
-        // Every 10 pts = new rank tier, 10 tiers total
         const VOLUNTEER_RANKS = [
             { min: 0,   label: 'Newcomer',            icon: '🌱', color: '#64748b' },
             { min: 10,  label: 'Kind Soul',            icon: '💙', color: '#0ea5e9' },
@@ -732,14 +935,12 @@
             return rank;
         }
 
-        // ── Modal openers ────────────────────────────────────────────────────
         window.openRequestModal = () => document.getElementById('requestModal').style.display = 'flex';
         window.closeRequestModal = () => document.getElementById('requestModal').style.display = 'none';
         window.openLFModal = () => document.getElementById('lfModal').style.display = 'flex';
         window.openProfileModal = async () => {
             document.getElementById('profileNameDisplay').innerText = userName;
             document.getElementById('profileRegionSelect').value = userRegion;
-            // Fetch latest points for rank display
             const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
             const pts = snap.exists() ? (snap.data().leaderboardPoints || 0) : 0;
             const rank = getVolunteerRank(pts);
@@ -751,7 +952,6 @@
         };
         window.closeProfileModal = () => document.getElementById('profileModal').style.display = 'none';
 
-        // ── Auth ─────────────────────────────────────────────────────────────
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDocRef = doc(db, "users", user.uid);
@@ -781,7 +981,7 @@
                 userName = userSnap.data().fullName;
                 userRegion = userSnap.data().region;
                 document.getElementById('welcomeUser').innerText = `Hello, ${userName}`;
-                document.getElementById('userRegionDisplay').innerText = `Region: ${userRegion}`;
+                document.getElementById('userRegionDisplay').innerText = `📍 Region: ${userRegion}`;
                 document.querySelectorAll('.current-region-text').forEach(el => el.innerText = userRegion);
 
                 loadRequests();
@@ -798,7 +998,6 @@
             location.reload();
         };
 
-        // ── Submit: Community Request ────────────────────────────────────────
         document.getElementById('submitReqBtn').onclick = async () => {
             const user = auth.currentUser;
             const title = document.getElementById('reqTitle').value.trim();
@@ -817,7 +1016,6 @@
             } catch (e) { alert("Error posting."); }
         };
 
-        // ── Submit: Lost & Found ─────────────────────────────────────────────
         document.getElementById('submitLFBtn').onclick = async () => {
             const user = auth.currentUser;
             const item = document.getElementById('lfItem').value.trim();
@@ -854,7 +1052,6 @@
             }
         };
 
-        // ── Feed: Community Requests ─────────────────────────────────────────
         function loadRequests() {
             const feed = document.getElementById('requestFeed');
             const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
@@ -872,7 +1069,6 @@
                         const isOwner = auth.currentUser.uid === data.userId;
                         const hasVolunteered = (data.volunteers || []).some(v => v.uid === auth.currentUser.uid);
 
-                        // Volunteer list — names get hover cards with rating + report
                         let volListHtml = (data.volunteers || []).map(v => `
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
                                 <span class="hovername" id="vn-${v.uid}-${docSnap.id}" style="font-size:12px;">
@@ -882,7 +1078,7 @@
                                         ${v.uid !== auth.currentUser.uid ? `<button class="report-btn" onclick="openReportModal('${v.uid}','${v.name.replace(/'/g,"\\'")}')">🚩 Report User</button>` : ''}
                                     </span>
                                 </span>
-                                ${isOwner ? `<button onclick="startChat('${docSnap.id}','${v.uid}','${data.title}','community')" style="background:#38bdf8; border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
+                                ${isOwner ? `<button onclick="startChat('${docSnap.id}','${v.uid}','${data.title}','community')" style="background:linear-gradient(135deg,#38bdf8,#0ea5e9); border:none; color:white; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer;">Chat</button>` : ''}
                             </div>`).join('');
 
                         card.innerHTML = `
@@ -891,7 +1087,7 @@
                                 <div style="text-align:right;"><small>📍 ${data.location}</small>
                                 ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
                             </div>
-                            <h4 style="margin:10px 0;">${data.title}</h4>
+                            <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.title}</h4>
                             <p style="font-size:11px; color:#64748b;">Posted by: ${data.userName}</p>
                             <p style="font-size:13px; color:#475569;">${data.description}</p>
                             <div style="display:flex; gap:10px; align-items:center;">
@@ -903,7 +1099,6 @@
                             <div id="vols-${docSnap.id}" style="display:none; margin-top:10px; padding:10px; background:#f8fafc; border-radius:8px;">${volListHtml || '<p style="font-size:11px;">Waiting for volunteers...</p>'}</div>`;
                         feed.appendChild(card);
 
-                        // Lazy-fill rating in hovercards
                         (data.volunteers || []).forEach(async v => {
                             const hcEl = document.getElementById(`hc-${v.uid}-${docSnap.id}`);
                             if (hcEl) {
@@ -918,7 +1113,6 @@
             });
         }
 
-        // ── Feed: Lost & Found ───────────────────────────────────────────────
         function loadLF() {
             const feed = document.getElementById('lfFeed');
             const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
@@ -940,7 +1134,7 @@
                                 ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}</div>
                             </div>
                             ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
-                            <h4 style="margin:10px 0;">${data.item}</h4>
+                            <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.item}</h4>
                             <p style="font-size:11px; color:#64748b;">Reported by: ${data.userName}</p>
                             <p style="font-size:13px; color:#475569;">${data.description}</p>
                             ${!isOwner ? `<button class="btn-help" style="width:100%;" onclick="startChat('${docSnap.id}','${data.userId}','${data.type}: ${data.item}','lostfound')">Contact User</button>` : ''}`;
@@ -951,7 +1145,6 @@
             });
         }
 
-        // ── Shared helpers ───────────────────────────────────────────────────
         window.deletePost = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "requests", id)); };
         window.deleteLF   = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "lostfound", id)); };
         window.toggleVols = (id) => { const el = document.getElementById(`vols-${id}`); el.style.display = el.style.display === 'none' ? 'block' : 'none'; };
@@ -962,8 +1155,6 @@
             alert("Added to queue!");
         };
 
-        // ── Chat ─────────────────────────────────────────────────────────────
-        // chatType = 'community' | 'lostfound'
         window.startChat = async (itemId, targetUserId, label, chatType) => {
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
             currentChatOtherUserId = targetUserId;
@@ -988,23 +1179,19 @@
             document.getElementById('chatWith').innerText = `Chat: ${label}`;
             document.getElementById('chatPopup').style.display = 'flex';
 
-            // Resolve other user's display name
             if (!currentChatOtherName && currentChatOtherUserId) {
                 const od = await getDoc(doc(db, "users", currentChatOtherUserId));
                 currentChatOtherName = od.exists() ? od.data().fullName : "User";
             }
 
-            // Load postOwnerId from chat doc if not already set
             if (!currentChatPostOwnerId) {
                 const chatSnap = await getDoc(doc(db, "chats", currentChatId));
                 if (chatSnap.exists()) currentChatPostOwnerId = chatSnap.data().postOwnerId || auth.currentUser.uid;
             }
 
-            // Mark chat as read — clear unread flag for this user
             await updateDoc(doc(db, "chats", currentChatId), {
                 [`unread_${auth.currentUser.uid}`]: false
             });
-            // Remove glow from sidebar item immediately
             const chatItem = document.getElementById(`item-${currentChatId}`);
             if (chatItem) chatItem.classList.remove('chat-unread');
 
@@ -1019,7 +1206,7 @@
                     const data = d.data();
                     const isMe = data.senderId === auth.currentUser.uid;
                     const msgDiv = document.createElement('div');
-                    msgDiv.style = `max-width:80%; padding:8px 12px; border-radius:12px; font-size:13px; margin-bottom:4px; ${isMe ? 'align-self:flex-end; background:#38bdf8; color:white;' : 'align-self:flex-start; background:white; border:1px solid #e2e8f0;'}`;
+                    msgDiv.style = `max-width:80%; padding:8px 12px; border-radius:12px; font-size:13px; margin-bottom:4px; ${isMe ? 'align-self:flex-end; background:linear-gradient(135deg,#38bdf8,#0ea5e9); color:white;' : 'align-self:flex-start; background:white; border:1px solid #e2e8f0;'}`;
                     msgDiv.innerText = data.text;
                     area.appendChild(msgDiv);
                 });
@@ -1027,28 +1214,18 @@
             });
         }
 
-        // Inject the correct footer action bar based on chat type and who the post owner is
         function renderFooterBar() {
             const bar = document.getElementById('chatFooterBar');
             const name = currentChatOtherName || 'User';
             const iAmPostOwner = (currentChatPostOwnerId === auth.currentUser.uid);
 
             if (currentChatType === 'community' && iAmPostOwner) {
-                // Only the post owner sees Resolve & Rate
                 bar.innerHTML = `
                     <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#f0fdf4; border-top:1px solid #bbf7d0;">
                         <span style="font-size:11px; color:#166534;">Chat with <b>${name}</b></span>
                         <button onclick="window.openRatingModal()" style="background:#22c55e; color:white; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">✅ Resolve &amp; Rate</button>
                     </div>`;
-            } else if (currentChatType === 'community' && !iAmPostOwner) {
-                // Volunteer sees a plain End Chat (no rating)
-                bar.innerHTML = `
-                    <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#fff7f7; border-top:1px solid #fecaca;">
-                        <span style="font-size:11px; color:#991b1b;">Chat with <b>${name}</b></span>
-                        <button onclick="window.endChat()" style="background:#ef4444; color:white; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">🔴 End Chat</button>
-                    </div>`;
             } else {
-                // Lost & Found: just End Chat for everyone
                 bar.innerHTML = `
                     <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#fff7f7; border-top:1px solid #fecaca;">
                         <span style="font-size:11px; color:#991b1b;">Chat with <b>${name}</b></span>
@@ -1057,12 +1234,8 @@
             }
         }
 
-        // ── Rating Modal ─────────────────────────────────────────────────────
         window.openRatingModal = () => {
-            // Guard: cannot rate yourself
-            if (currentChatOtherUserId === auth.currentUser.uid) {
-                window.endChat(); return;
-            }
+            if (currentChatOtherUserId === auth.currentUser.uid) { window.endChat(); return; }
             selectedStars = 0;
             lightStars(0);
             document.getElementById('starLabel').innerText = '';
@@ -1092,44 +1265,35 @@
             await resolveAndClose();
         };
 
-        // Called after rating (or skip) — notifies volunteer, then asks post owner about deleting request
         async function resolveAndClose() {
             const chatSnap = await getDoc(doc(db, "chats", currentChatId));
             const requestId = chatSnap.exists() ? chatSnap.data().requestId : null;
 
-            // 1. Send a system message so the volunteer sees the chat was ended
             try {
                 await addDoc(collection(db, "chats", currentChatId, "messages"), {
                     text: `✅ ${userName} has resolved and ended this chat. Thank you for your help!`,
                     senderId: 'system',
                     createdAt: serverTimestamp()
                 });
-                // Mark as unread for volunteer so they see the notice
                 await updateDoc(doc(db, "chats", currentChatId), {
                     [`unread_${currentChatOtherUserId}`]: true,
                     resolved: true
                 });
             } catch {}
 
-            // Small delay so message writes before we delete the chat
             await new Promise(r => setTimeout(r, 600));
 
-            // 2. Delete the chat
             try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
             document.getElementById('chatPopup').style.display = 'none';
             const el = document.getElementById(`item-${currentChatId}`);
             if (el) el.remove();
 
-            // 3. Ask post owner if they want to delete the request too
-            if (requestId) {
-                showDeleteRequestPrompt(requestId);
-            }
+            if (requestId) { showDeleteRequestPrompt(requestId); }
 
             currentChatId = null; currentChatOtherUserId = null;
             currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
         }
 
-        // Nice inline prompt to delete the request
         function showDeleteRequestPrompt(requestId) {
             const overlay = document.createElement('div');
             overlay.style = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.75);z-index:4000;display:flex;align-items:center;justify-content:center;';
@@ -1137,7 +1301,7 @@
                 <div style="background:white;padding:30px;border-radius:20px;max-width:380px;width:90%;text-align:center;position:relative;box-shadow:0 20px 40px rgba(0,0,0,0.2);">
                     <button id="deleteReqCancelX" style="position:absolute;top:10px;right:10px;background:#fee2e2;color:#991b1b;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;font-weight:700;cursor:pointer;">✕</button>
                     <div style="font-size:40px;margin-bottom:12px;">🎉</div>
-                    <h3 style="margin:0 0 8px;">Chat Resolved!</h3>
+                    <h3 style="margin:0 0 8px;font-family:'Syne',sans-serif;">Chat Resolved!</h3>
                     <p style="color:#64748b;font-size:14px;margin:0 0 22px;">Would you like to remove your request from the Community Hub now that it's been fulfilled?</p>
                     <div style="display:flex;gap:10px;">
                         <button id="deleteReqYes" style="flex:1;padding:11px;background:#ef4444;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Yes, delete it</button>
@@ -1154,7 +1318,6 @@
             document.getElementById('deleteReqCancelX').onclick = close;
         }
 
-        // ── End Chat (non-resolve path) ───────────────────────────────────────
         window.endChat = async (skipConfirm) => {
             if (!currentChatId) return;
             if (!skipConfirm) {
@@ -1169,7 +1332,6 @@
             currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
         };
 
-        // Styled end-chat confirm with a red X to cancel
         function showConfirmEndChat() {
             return new Promise((resolve) => {
                 const overlay = document.createElement('div');
@@ -1178,7 +1340,7 @@
                     <div style="background:white;padding:28px;border-radius:18px;max-width:340px;width:90%;text-align:center;position:relative;box-shadow:0 20px 40px rgba(0,0,0,0.2);">
                         <button id="endChatCancelX" style="position:absolute;top:10px;right:10px;background:#fee2e2;color:#991b1b;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;font-weight:700;cursor:pointer;">✕</button>
                         <div style="font-size:36px;margin-bottom:10px;">💬</div>
-                        <h3 style="margin:0 0 8px;">End this chat?</h3>
+                        <h3 style="margin:0 0 8px;font-family:'Syne',sans-serif;">End this chat?</h3>
                         <p style="color:#64748b;font-size:14px;margin:0 0 20px;">This conversation will be permanently closed.</p>
                         <div style="display:flex;gap:10px;">
                             <button id="endChatNo"  style="flex:1;padding:10px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
@@ -1193,7 +1355,6 @@
             });
         }
 
-        // ── Send message ─────────────────────────────────────────────────────
         async function sendMessage() {
             const input = document.getElementById('msgInput');
             if (!input.value.trim() || !currentChatId) return;
@@ -1202,7 +1363,6 @@
                 senderId: auth.currentUser.uid,
                 createdAt: serverTimestamp()
             });
-            // Mark as unread for the OTHER participant
             await updateDoc(doc(db, "chats", currentChatId), {
                 [`unread_${currentChatOtherUserId}`]: true,
                 lastUpdated: serverTimestamp()
@@ -1214,12 +1374,10 @@
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
         });
 
-        // ── Active Chats sidebar ─────────────────────────────────────────────
         function loadActiveChats() {
             onSnapshot(query(collection(db, "chats")), (snapshot) => {
                 const list = document.getElementById('activeChatsList');
 
-                // Handle deleted chats
                 snapshot.docChanges().forEach(change => {
                     if (change.type === 'removed') {
                         const el = document.getElementById(`item-${change.doc.id}`);
@@ -1259,14 +1417,9 @@
                         list.prepend(chatDiv);
                     }
 
-                    // Apply or remove unread glow
-                    if (hasUnread) {
-                        chatDiv.classList.add('chat-unread');
-                    } else {
-                        chatDiv.classList.remove('chat-unread');
-                    }
+                    if (hasUnread) { chatDiv.classList.add('chat-unread'); }
+                    else { chatDiv.classList.remove('chat-unread'); }
 
-                    // Update mobile tab bar unread indicator
                     const anyUnread = document.querySelector('.chat-unread');
                     const mobIcon = document.getElementById('mobChatsIcon');
                     if (mobIcon) mobIcon.innerText = anyUnread ? '🔴' : '💬';
@@ -1282,7 +1435,7 @@
                                 </span>
                                 ${hasUnread ? '<span style="background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;">NEW</span>' : ''}
                             </div>
-                            <span class="hovername" style="font-weight:700; font-size:13px;">
+                            <span class="hovername" style="font-weight:700; font-size:13px; font-family:'Syne',sans-serif;">
                                 ${otherName}
                                 <span class="hovercard">
                                     <div class="rating-line">${ratingTxt}</div>
@@ -1293,19 +1446,15 @@
                         </div>
                         <button onclick="resumeChat('${chatId}','${otherName}','${otherId}','${cType}','${pOwnerId}')"
                             style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px; flex-shrink:0; margin-left:8px;">Open</button>`;
-                    // Sync to mobile panel too
                     syncMobileChats();
                 });
             });
         }
 
-        // Sync desktop chat list to mobile panel (called after each snapshot)
         function syncMobileChats() {
             const desktop = document.getElementById('activeChatsList');
             const mobile  = document.getElementById('activeChatsMobile');
-            if (desktop && mobile) {
-                mobile.innerHTML = desktop.innerHTML;
-            }
+            if (desktop && mobile) { mobile.innerHTML = desktop.innerHTML; }
         }
 
         window.resumeChat = (id, name, otherId, cType, pOwnerId) => {
@@ -1317,7 +1466,6 @@
             openChatWindow(name);
         };
 
-        // ── Leaderboard ──────────────────────────────────────────────────────
         let lbScope = 'local';
         let lbUnsubscribe = null;
 
@@ -1344,9 +1492,8 @@
                 snapshot.forEach(d => {
                     const data = d.data();
                     if (!data.fullName) return;
-                    // Filter by region for local scope
                     if (lbScope === 'local' && (data.region || 'Sharjah') !== userRegion) return;
-                users.push({
+                    users.push({
                         uid: d.id, name: data.fullName,
                         pts: data.leaderboardPoints || 0,
                         region: data.region || '—',
@@ -1356,7 +1503,6 @@
                 });
                 users.sort((a, b) => b.pts - a.pts);
 
-                // Update "My Points" badge from full list (not filtered)
                 const meAll = [];
                 snapshot.forEach(d => { if (d.id === auth.currentUser.uid) meAll.push(d.data()); });
                 const myPts = meAll.length ? (meAll[0].leaderboardPoints || 0) : 0;
@@ -1411,7 +1557,6 @@
             });
         }
 
-        // ── Tab switching ────────────────────────────────────────────────────
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1454,9 +1599,7 @@
         document.getElementById('logoutBtn').onclick = logout;
         document.getElementById('logoutBtnNav').onclick = logout;
 
-        // ── Settings & Dark Mode ─────────────────────────────────────────────
         function applySettings() {
-            // Default: dark = false (light mode), quote = true
             const dark  = localStorage.getItem('bou_dark')  === 'true';
             const quote = localStorage.getItem('bou_quote') !== 'false';
             document.body.classList.toggle('dark', dark);
@@ -1477,7 +1620,6 @@
 
         applySettings();
 
-        // ── Inspirational Quote (typing animation) ───────────────────────────
         const QUOTES = [
             "Small acts of kindness change the world.",
             "You matter more than you know.",
@@ -1497,29 +1639,23 @@
 
         function runQuote() {
             if (localStorage.getItem('bou_quote') === 'false') return;
-
-            // Track shown quotes to avoid repeats (reset when all seen)
             let seen = JSON.parse(localStorage.getItem('bou_seen_quotes') || '[]');
             const remaining = QUOTES.filter((_, i) => !seen.includes(i));
             if (!remaining.length) { seen = []; localStorage.setItem('bou_seen_quotes', '[]'); }
-
             const idx = QUOTES.indexOf(remaining[Math.floor(Math.random() * remaining.length)]);
             seen.push(idx);
             localStorage.setItem('bou_seen_quotes', JSON.stringify(seen));
-
             const text   = QUOTES[idx];
             const overlay = document.getElementById('quoteOverlay');
             const typed   = document.getElementById('quoteTyped');
             overlay.style.display = 'flex';
             typed.innerText = '';
             let i = 0;
-
             const typeInterval = setInterval(() => {
                 typed.innerText += text[i++];
                 if (i >= text.length) {
                     clearInterval(typeInterval);
                     document.getElementById('quoteCursor').style.display = 'none';
-                    // Fade out after 1.8s pause
                     setTimeout(() => {
                         overlay.style.transition = 'opacity 0.8s';
                         overlay.style.opacity = '0';
@@ -1527,7 +1663,6 @@
                     }, 1800);
                 }
             }, 48);
-
             document.getElementById('quoteSkip').onclick = () => {
                 clearInterval(typeInterval);
                 overlay.style.display = 'none';
@@ -1536,13 +1671,11 @@
             };
         }
 
-        // Run quote on first load of the session
         if (!sessionStorage.getItem('bou_quoted')) {
             sessionStorage.setItem('bou_quoted', '1');
             setTimeout(runQuote, 400);
         }
 
-        // ── Report System ────────────────────────────────────────────────────
         let reportTargetUid  = null;
         let reportTargetName = null;
         let reportCategory   = null;
@@ -1553,32 +1686,24 @@
             reportTargetName = name;
             reportCategory   = null;
             reportImageB64   = null;
-
-            // Reset all steps
             document.getElementById('reportStep1').style.display = 'block';
             document.getElementById('reportStep2').style.display = 'none';
             document.getElementById('reportStep3').style.display = 'none';
-            document.getElementById('reportStep1Subtitle').innerText =
-                `Are you sure you want to report ${name}?`;
+            document.getElementById('reportStep1Subtitle').innerText = `Are you sure you want to report ${name}?`;
             document.getElementById('reportDesc').value = '';
             document.getElementById('reportImg').value  = '';
             document.getElementById('reportImgStatus').innerText = '';
             document.getElementById('reportError').style.display = 'none';
             document.querySelectorAll('.report-cat-btn').forEach(b => b.classList.remove('selected'));
-
             document.getElementById('reportModal').style.display = 'flex';
         };
 
-        window.closeReportModal = () => {
-            document.getElementById('reportModal').style.display = 'none';
-        };
-
+        window.closeReportModal = () => { document.getElementById('reportModal').style.display = 'none'; };
         window.reportGoStep2 = () => {
             document.getElementById('reportStep1').style.display = 'none';
             document.getElementById('reportStep2').style.display = 'block';
         };
 
-        // Category selection
         document.querySelectorAll('.report-cat-btn').forEach(btn => {
             btn.onclick = () => {
                 document.querySelectorAll('.report-cat-btn').forEach(b => b.classList.remove('selected'));
@@ -1587,13 +1712,12 @@
             };
         });
 
-        // Image → base64 link
         document.getElementById('reportImg').onchange = (e) => {
             const file = e.target.files[0];
             if (!file) { reportImageB64 = null; return; }
             const reader = new FileReader();
             reader.onload = () => {
-                reportImageB64 = reader.result; // data:image/...;base64,...
+                reportImageB64 = reader.result;
                 document.getElementById('reportImgStatus').innerText = `✅ Image attached: ${file.name}`;
             };
             reader.readAsDataURL(file);
@@ -1603,13 +1727,10 @@
             const desc  = document.getElementById('reportDesc').value.trim();
             const errEl = document.getElementById('reportError');
             errEl.style.display = 'none';
-
             if (!reportCategory) { errEl.innerText = 'Please select a category.'; errEl.style.display = 'block'; return; }
             if (!desc)           { errEl.innerText = 'Please write a description.'; errEl.style.display = 'block'; return; }
-
             const btn = document.getElementById('submitReportBtn');
             btn.disabled = true; btn.innerText = 'Submitting…';
-
             try {
                 await addDoc(collection(db, "reports"), {
                     reportedUid:   reportTargetUid,
@@ -1618,8 +1739,8 @@
                     reporterName:  userName,
                     category:      reportCategory,
                     description:   desc,
-                    imageData:     reportImageB64 || null,  // full base64 string stored as "link"
-                    status:        'pending',               // pending | ignored | banned
+                    imageData:     reportImageB64 || null,
+                    status:        'pending',
                     createdAt:     serverTimestamp()
                 });
                 document.getElementById('reportStep2').style.display = 'none';
