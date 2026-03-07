@@ -7,18 +7,14 @@
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-       (function(){
-          emailjs.init("QhpmiLS1azGRS4w23"); 
-       })();
+       (function(){ emailjs.init("QhpmiLS1azGRS4w23"); })();
     </script>
 
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
 
-        /* ════════════════════════════
-           AUTH GATE
-        ════════════════════════════ */
+        /* ════ AUTH GATE ════ */
         #authGate {
             display: flex; position: fixed; inset: 0;
             background: #0f172a; z-index: 9999;
@@ -47,9 +43,7 @@
         .auth-btn:disabled { background: #94a3b8; cursor: not-allowed; }
         #authError { color: #ef4444; font-size: 13px; margin-top: 10px; min-height: 18px; }
 
-        /* ════════════════════════════
-           ACCESS DENIED
-        ════════════════════════════ */
+        /* ════ ACCESS DENIED ════ */
         #accessDenied {
             display: none; position: fixed; inset: 0;
             background: #0f172a; z-index: 9999;
@@ -64,12 +58,9 @@
             border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; font-family: inherit;
         }
 
-        /* ════════════════════════════
-           ADMIN CONTENT (hidden until auth)
-        ════════════════════════════ */
+        /* ════ ADMIN CONTENT ════ */
         #adminContent { display: none; max-width: 1100px; margin: auto; }
 
-        /* Page header */
         .page-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
         .page-header h1 { margin: 0; font-size: 24px; color: #0f172a; font-weight: 800; flex: 1; }
         .signout-btn {
@@ -79,7 +70,7 @@
         }
         .signout-btn:hover { background: #fecaca; }
 
-        /* Section tabs */
+        /* ════ TABS ════ */
         .section-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
         .sec-tab {
             padding: 10px 22px; border: 2px solid #e2e8f0; border-radius: 8px;
@@ -95,14 +86,12 @@
         }
         @keyframes pulseBadge { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-        /* Panels */
+        /* ════ PANELS ════ */
         .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 24px; }
         .section-panel { display: none; }
         .section-panel.active { display: block; }
 
-        /* ════════════════════════════
-           VERIFICATION TABLE (original styles preserved exactly)
-        ════════════════════════════ */
+        /* ════ VERIFICATION TABLE ════ */
         h2 { color: #1a73e8; border-bottom: 2px solid #e8eaed; padding-bottom: 15px; margin-top: 0; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
@@ -119,16 +108,13 @@
         .badge-new   { background: #e6f4ea; color: #1e8e3e; }
         .badge-retry { background: #fce8e6; color: #d93025; }
 
-        /* ════════════════════════════
-           REPORTS SECTION
-        ════════════════════════════ */
+        /* ════ REPORTS ════ */
         @keyframes glowPulse {
             0%,100% { box-shadow: 0 0 0 3px rgba(239,68,68,0.15), 0 0 20px rgba(239,68,68,0.1); }
             50%      { box-shadow: 0 0 0 5px rgba(239,68,68,0.25), 0 0 30px rgba(239,68,68,0.2); }
         }
         .reports-glow { border: 2px solid #ef4444 !important; animation: glowPulse 2s infinite; }
 
-        /* User summary card */
         .report-summary-card {
             display: flex; align-items: center; justify-content: space-between;
             padding: 16px 20px; background: #fff5f5; border: 1px solid #fecaca;
@@ -136,7 +122,7 @@
         }
         .report-summary-card:hover    { background: #fee2e2; }
         .report-summary-card.expanded { background: #fee2e2; border-color: #ef4444; border-radius: 12px 12px 0 0; }
-        .rsc-left   { display: flex; align-items: center; gap: 14px; }
+        .rsc-left { display: flex; align-items: center; gap: 14px; }
         .rsc-avatar {
             width: 42px; height: 42px; border-radius: 50%; background: #ef4444;
             display: flex; align-items: center; justify-content: center;
@@ -147,7 +133,6 @@
         .rsc-count { background: #ef4444; color: white; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; }
         .rsc-count.multi { animation: glowPulse 1.5s infinite; }
 
-        /* Ban/Unban action row */
         .user-action-row {
             display: none; gap: 10px; align-items: center; padding: 10px 20px 14px;
             flex-wrap: wrap; background: #fee2e2; border: 1px solid #ef4444;
@@ -159,7 +144,6 @@
         .btn-unban { background: #22c55e; color: white; font-size: 13px; }
         .btn-unban:hover { background: #16a34a; }
 
-        /* Report detail cards */
         .report-details { display: none; margin-bottom: 16px; }
         .report-details.open { display: block; }
         .report-item {
@@ -182,12 +166,11 @@
         .pill-ignored  { font-size: 11px; background: #f1f5f9; color: #64748b; padding: 3px 10px; border-radius: 99px; font-weight: 600; }
         .pill-actioned { font-size: 11px; background: #fee2e2; color: #991b1b; padding: 3px 10px; border-radius: 99px; font-weight: 600; }
 
-        /* Empty state */
         .empty-state { text-align: center; padding: 48px 20px; color: #94a3b8; }
         .empty-state .es-icon { font-size: 48px; margin-bottom: 12px; }
         .empty-state p { font-size: 14px; margin: 0; }
 
-        /* Lightbox */
+        /* ════ LIGHTBOX ════ */
         #imgLightbox {
             display: none; position: fixed; inset: 0;
             background: rgba(0,0,0,0.92); z-index: 99999;
@@ -238,23 +221,18 @@
     </div>
 
     <div class="section-tabs">
-        <button class="sec-tab active" onclick="showSection('verification')" id="tab-verification">📋 Verification Queue</button>
-        <button class="sec-tab"        onclick="showSection('reports')"      id="tab-reports">🚨 User Reports</button>
+        <button class="sec-tab active" id="tab-verification" onclick="showSection('verification')">📋 Verification Queue</button>
+        <button class="sec-tab"        id="tab-reports"      onclick="showSection('reports')">🚨 User Reports</button>
     </div>
 
-    <!-- Panel: Verification Queue (original layout preserved exactly) -->
+    <!-- Panel: Verification Queue -->
     <div class="section-panel active container" id="panel-verification">
         <h2>Resident Verification Queue</h2>
-        <button onclick="resetTester()" class="btn btn-reset">
-            🔄 Reset Tester (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="097b687a6164606b607a7e683b393931496e64686065276a6664">[email&#160;protected]</a>)
-        </button>
+        <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (rashmibiswa2008@gmail.com)</button>
         <table id="requestsTable">
             <thead>
                 <tr>
-                    <th>Full Name</th>
-                    <th>Resident Email</th>
-                    <th>ID Document</th>
-                    <th>Action</th>
+                    <th>Full Name</th><th>Resident Email</th><th>ID Document</th><th>Action</th>
                 </tr>
             </thead>
             <tbody id="tableBody"></tbody>
@@ -277,23 +255,40 @@
 
 </div><!-- /adminContent -->
 
-<!-- ── Auth logic in plain script so onclick handlers work ── -->
+
+<!-- ══════════════════════════════════════════════════════
+     ALL JAVASCRIPT — single plain script, no modules.
+     Avoids all scope issues with onclick handlers.
+     Firebase loaded via compat CDN which exposes globals.
+════════════════════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
+    // ── Firebase init ──
+    const firebaseConfig = {
+        apiKey:            "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
+        authDomain:        "beaconofunityofficial.firebaseapp.com",
+        projectId:         "beaconofunityofficial",
+        storageBucket:     "beaconofunityofficial.firebasestorage.app",
+        messagingSenderId: "37918398882",
+        appId:             "1:37918398882:web:205161bb147393f4defafb"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ── Admin credentials ──
     const ADMINS = {
         'luckyansh.t@gmail.com':          'Aayansh_2009',
         'beaconofunityofficial@gmail.com': 'Aayansh_2009'
     };
 
+    // ════════════════════════════════════════
+    // AUTH
+    // ════════════════════════════════════════
     function showGate() {
         document.getElementById('authGate').style.display     = 'flex';
         document.getElementById('accessDenied').style.display = 'none';
         document.getElementById('adminContent').style.display = 'none';
-    }
-    function showDenied(msg) {
-        document.getElementById('authGate').style.display     = 'none';
-        document.getElementById('accessDenied').style.display = 'flex';
-        document.getElementById('adminContent').style.display = 'none';
-        if (msg) document.getElementById('deniedMsg').innerText = msg;
     }
     function showAdmin(email) {
         document.getElementById('authGate').style.display     = 'none';
@@ -307,15 +302,13 @@
         const pass  = document.getElementById('adminPassword').value;
         const errEl = document.getElementById('authError');
         errEl.innerText = '';
-
-        if (!email || !pass) { errEl.innerText = 'Please enter your email and password.'; return; }
-        if (!ADMINS.hasOwnProperty(email)) { errEl.innerText = 'This email is not authorised.'; return; }
-        if (ADMINS[email] !== pass)         { errEl.innerText = 'Incorrect password.'; return; }
-
+        if (!email || !pass)              { errEl.innerText = 'Please enter your email and password.'; return; }
+        if (!ADMINS.hasOwnProperty(email)){ errEl.innerText = 'This email is not authorised.'; return; }
+        if (ADMINS[email] !== pass)        { errEl.innerText = 'Incorrect password.'; return; }
         sessionStorage.setItem('adminEmail', email);
         showAdmin(email);
-        // Tell the module to load data
-        window._adminReady && window._adminReady();
+        loadData();
+        loadReports();
     }
 
     function adminSignOut() {
@@ -326,303 +319,296 @@
         showGate();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('adminPassword').addEventListener('keydown', e => {
-            if (e.key === 'Enter') adminSignIn();
-        });
+    // Enter key on password field
+    document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') adminSignIn();
+    });
 
-        // Check existing session on load
-        const sessionEmail = sessionStorage.getItem('adminEmail');
-        if (sessionEmail && ADMINS[sessionEmail]) {
-            showAdmin(sessionEmail);
-            window._adminReady && window._adminReady();
+    // Check session on page load
+    (function() {
+        const saved = sessionStorage.getItem('adminEmail');
+        if (saved && ADMINS[saved]) {
+            showAdmin(saved);
+            loadData();
+            loadReports();
         } else {
             showGate();
         }
-    });
-</script>
-
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-    import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc,
-             query, where, onSnapshot }
-        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
-        authDomain: "beaconofunityofficial.firebaseapp.com",
-        projectId: "beaconofunityofficial", 
-        storageBucket: "beaconofunityofficial.firebasestorage.app",
-        messagingSenderId: "37918398882",
-        appId: "1:37918398882:web:205161bb147393f4defafb"
-    };
-
-    const app  = initializeApp(firebaseConfig);
-    const db   = getFirestore(app);
-
-    // Called by the plain-script auth block once login is confirmed
-    window._adminReady = () => {
-        loadData();
-        loadReports();
-    };
-
-    // ── Tab switching ──
-    window.showSection = (name) => {
-        document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.sec-tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(`panel-${name}`).classList.add('active');
-        document.getElementById(`tab-${name}`).classList.add('active');
-    };
+    })();
 
     // ════════════════════════════════════════
-    // VERIFICATION QUEUE  (original logic, unchanged)
+    // TAB SWITCHING
     // ════════════════════════════════════════
-    window.resetTester = async () => {
-        const testerEmail = "rashmibiswa2008@gmail.com";
-        try {
-            const q = query(collection(db, "users"), where("email", "==", testerEmail));
-            const querySnapshot = await getDocs(q);
-            if (querySnapshot.empty) { alert("Tester account not found."); return; }
-            const userDoc = querySnapshot.docs[0];
-            await updateDoc(doc(db, "users", userDoc.id), { status: "none", hasPreviousDenial: false });
-            const reviewQ = query(collection(db, "id_reviews"), where("email", "==", testerEmail));
-            const reviewDocs = await getDocs(reviewQ);
-            await Promise.all(reviewDocs.docs.map(d => deleteDoc(doc(db, "id_reviews", d.id))));
-            alert("✅ Tester Reset! Completely clean slate.");
-            loadData();
-        } catch (err) { alert("Reset Error."); }
-    };
-
-    window.processUser = async (docId, userEmail, action, userId, fullName) => {
-        const userRef = doc(db, "users", userId);
-        if (action === 'approve') {
-            try {
-                if (!userEmail || userEmail === "undefined") throw new Error("Recipient address is empty or undefined.");
-                const templateParams = { email: userEmail, to_email: userEmail, name: fullName || userEmail.split('@')[0] };
-                await emailjs.send("service_w3ai9pm", "template_zttw3uf", templateParams);
-                await updateDoc(userRef, { status: "approved", fullName: fullName, approvedAt: new Date().toISOString() });
-                await deleteDoc(doc(db, "id_reviews", docId));
-                alert("Success! Welcome email sent to " + userEmail);
-                loadData();
-            } catch (e) {
-                console.error("Approval Error:", e);
-                alert("Approval Error: " + (e.text || e.message || "Check console"));
-            }
-        } else {
-            try {
-                await updateDoc(userRef, { status: "rejected", hasPreviousDenial: true });
-                await deleteDoc(doc(db, "id_reviews", docId));
-                alert("User Denied. Flagged for retry.");
-                loadData();
-            } catch (err) { alert("Error processing denial."); }
-        }
-    };
-
-    async function loadData() {
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = "<tr><td colspan='4'>Searching...</td></tr>";
-        try {
-            const querySnapshot = await getDocs(collection(db, "id_reviews"));
-            tableBody.innerHTML = "";
-            if (querySnapshot.empty) { tableBody.innerHTML = "<tr><td colspan='4'>No pending requests.</td></tr>"; return; }
-            querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const displayEmail = data.email || "Unknown Email";
-                const fullName = data.fullName || "No Name Provided";
-                const tag = data.hasPreviousDenial
-                    ? `<span class="badge badge-retry">Retrying</span>`
-                    : `<span class="badge badge-new">New</span>`;
-                tableBody.innerHTML += `
-                    <tr>
-                        <td style="font-weight:600;">${fullName}</td>
-                        <td>${displayEmail} ${tag}</td>
-                        <td><a href="${data.idCardUrl}" target="_blank" class="id-link">View ID</a></td>
-                        <td>
-                            <button onclick="processUser('${docSnap.id}', '${displayEmail}', 'approve', '${data.userId}', '${fullName}')" class="btn btn-approve">Approve</button>
-                            <button onclick="processUser('${docSnap.id}', '${displayEmail}', 'deny', '${data.userId}', '${fullName}')" class="btn btn-deny">Deny</button>
-                        </td>
-                    </tr>`;
-            });
-        } catch (err) {
-            console.error("Loading Error:", err);
-            tableBody.innerHTML = "<tr><td colspan='4'>Error loading data.</td></tr>";
-        }
+    function showSection(name) {
+        document.querySelectorAll('.section-panel').forEach(function(p) { p.classList.remove('active'); });
+        document.querySelectorAll('.sec-tab').forEach(function(t) { t.classList.remove('active'); });
+        document.getElementById('panel-' + name).classList.add('active');
+        document.getElementById('tab-' + name).classList.add('active');
     }
 
     // ════════════════════════════════════════
-    // REPORTS  (live onSnapshot listener)
+    // VERIFICATION QUEUE
     // ════════════════════════════════════════
-    const expandedUsers = new Set();
-    let reportsUnsub = null;
+    function resetTester() {
+        var testerEmail = "rashmibiswa2008@gmail.com";
+        db.collection("users").where("email", "==", testerEmail).get().then(function(snap) {
+            if (snap.empty) { alert("Tester account not found."); return; }
+            return snap.docs[0].ref.update({ status: "none", hasPreviousDenial: false })
+                .then(function() {
+                    return db.collection("id_reviews").where("email", "==", testerEmail).get();
+                })
+                .then(function(rsnap) {
+                    var deletes = rsnap.docs.map(function(d) { return d.ref.delete(); });
+                    return Promise.all(deletes);
+                })
+                .then(function() {
+                    alert("✅ Tester Reset! Completely clean slate.");
+                    loadData();
+                });
+        }).catch(function() { alert("Reset Error."); });
+    }
 
-    window.loadReports = loadReports;
+    function processUser(docId, userEmail, action, userId, fullName) {
+        var userRef = db.collection("users").doc(userId);
+        if (action === 'approve') {
+            if (!userEmail || userEmail === "undefined") { alert("Invalid email."); return; }
+            emailjs.send("service_w3ai9pm", "template_zttw3uf", {
+                email: userEmail, to_email: userEmail,
+                name: fullName || userEmail.split('@')[0]
+            }).then(function() {
+                return userRef.update({ status: "approved", fullName: fullName, approvedAt: new Date().toISOString() });
+            }).then(function() {
+                return db.collection("id_reviews").doc(docId).delete();
+            }).then(function() {
+                alert("Success! Welcome email sent to " + userEmail);
+                loadData();
+            }).catch(function(e) { alert("Approval Error: " + (e.text || e.message)); });
+        } else {
+            userRef.update({ status: "rejected", hasPreviousDenial: true })
+                .then(function() { return db.collection("id_reviews").doc(docId).delete(); })
+                .then(function() { alert("User Denied. Flagged for retry."); loadData(); })
+                .catch(function() { alert("Error processing denial."); });
+        }
+    }
+
+    function loadData() {
+        var tbody = document.getElementById('tableBody');
+        tbody.innerHTML = "<tr><td colspan='4'>Searching...</td></tr>";
+        db.collection("id_reviews").get().then(function(snap) {
+            tbody.innerHTML = "";
+            if (snap.empty) { tbody.innerHTML = "<tr><td colspan='4'>No pending requests.</td></tr>"; return; }
+            snap.forEach(function(docSnap) {
+                var d          = docSnap.data();
+                var email      = d.email || "Unknown Email";
+                var fullName   = d.fullName || "No Name Provided";
+                var tag        = d.hasPreviousDenial
+                    ? '<span class="badge badge-retry">Retrying</span>'
+                    : '<span class="badge badge-new">New</span>';
+                tbody.innerHTML += '<tr>' +
+                    '<td style="font-weight:600;">' + fullName + '</td>' +
+                    '<td>' + email + ' ' + tag + '</td>' +
+                    '<td><a href="' + d.idCardUrl + '" target="_blank" class="id-link">View ID</a></td>' +
+                    '<td>' +
+                        '<button onclick="processUser(\'' + docSnap.id + '\',\'' + email + '\',\'approve\',\'' + d.userId + '\',\'' + fullName + '\')" class="btn btn-approve">Approve</button>' +
+                        '<button onclick="processUser(\'' + docSnap.id + '\',\'' + email + '\',\'deny\',\'' + d.userId + '\',\'' + fullName + '\')" class="btn btn-deny">Deny</button>' +
+                    '</td></tr>';
+            });
+        }).catch(function() {
+            tbody.innerHTML = "<tr><td colspan='4'>Error loading data.</td></tr>";
+        });
+    }
+
+    // ════════════════════════════════════════
+    // REPORTS  (live onSnapshot)
+    // ════════════════════════════════════════
+    var expandedUsers = {};
+    var reportsUnsub  = null;
 
     function loadReports() {
         if (reportsUnsub) { reportsUnsub(); reportsUnsub = null; }
-        const feed = document.getElementById('reportsFeed');
+        var feed = document.getElementById('reportsFeed');
         feed.innerHTML = '<div class="empty-state"><div class="es-icon">⏳</div><p>Loading…</p></div>';
 
-        reportsUnsub = onSnapshot(collection(db, "reports"), async (snapshot) => {
+        reportsUnsub = db.collection("reports").onSnapshot(function(snapshot) {
 
-            // Group reports by reportedUid
-            const grouped = {};
-            snapshot.forEach(ds => {
-                const d = ds.data(), uid = d.reportedUid;
+            // Group by reportedUid
+            var grouped = {};
+            snapshot.forEach(function(ds) {
+                var d   = ds.data();
+                var uid = d.reportedUid;
                 if (!grouped[uid]) grouped[uid] = { name: d.reportedName || 'Unknown User', reports: [], banned: false };
-                grouped[uid].reports.push({ id: ds.id, ...d });
+                grouped[uid].reports.push(Object.assign({ id: ds.id }, d));
             });
 
-            // Fetch banned status for each user
-            if (Object.keys(grouped).length > 0) {
-                const usnap = await getDocs(collection(db, "users"));
-                usnap.forEach(d => { if (grouped[d.id]) grouped[d.id].banned = d.data().banned === true; });
-            }
-
-            const uids         = Object.keys(grouped);
-            const pendingCount = uids.filter(u => grouped[u].reports.some(r => r.status === 'pending')).length;
-
-            // Update tab badge
-            document.getElementById('tab-reports').innerHTML = pendingCount > 0
-                ? `🚨 User Reports <span class="tab-badge">${pendingCount}</span>`
-                : '🚨 User Reports';
-
-            // Glow the reports panel if there are pending reports
-            const panel = document.getElementById('panel-reports');
-            pendingCount > 0 ? panel.classList.add('reports-glow') : panel.classList.remove('reports-glow');
-
-            // Subtitle
-            document.getElementById('reportsSubtitle').innerText = uids.length === 0
-                ? 'No reports on file.'
-                : `${uids.length} user${uids.length !== 1 ? 's' : ''} reported · ${pendingCount} pending review`;
-
-            feed.innerHTML = '';
+            // Fetch banned status
+            var uids = Object.keys(grouped);
             if (uids.length === 0) {
-                feed.innerHTML = '<div class="empty-state"><div class="es-icon">✅</div><p>No reports yet — all clear!</p></div>';
+                renderReports(grouped);
                 return;
             }
-
-            // Sort: most reports first
-            uids.sort((a, b) => grouped[b].reports.length - grouped[a].reports.length);
-
-            uids.forEach(uid => {
-                const g          = grouped[uid];
-                const count      = g.reports.length;
-                const isExpanded = expandedUsers.has(uid);
-                const isBanned   = g.banned;
-                const safeName   = g.name.replace(/'/g, "\\'");
-
-                // Summary card
-                const card = document.createElement('div');
-                card.className = 'report-summary-card' + (isExpanded ? ' expanded' : '');
-                card.onclick   = () => toggleUser(uid);
-                card.innerHTML = `
-                    <div class="rsc-left">
-                        <div class="rsc-avatar">${g.name.charAt(0).toUpperCase()}</div>
-                        <div>
-                            <div class="rsc-name">${g.name}
-                                ${isBanned ? '<span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:99px;margin-left:8px;font-weight:700;">🔒 BANNED</span>' : ''}
-                            </div>
-                            <div class="rsc-meta">${count} report${count !== 1 ? 's' : ''} · UID: ${uid.slice(0,12)}…</div>
-                        </div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div class="rsc-count${count > 1 ? ' multi' : ''}">${count}</div>
-                        <span style="color:#94a3b8; font-size:16px;">${isExpanded ? '▲' : '▼'}</span>
-                    </div>`;
-                feed.appendChild(card);
-
-                // Ban / Unban action row
-                const ar = document.createElement('div');
-                ar.className = 'user-action-row' + (isExpanded ? ' open' : '');
-                ar.innerHTML = isBanned
-                    ? `<span style="font-size:13px;color:#7f1d1d;">This user is currently banned.</span>
-                       <button onclick="unbanUser('${uid}','${safeName}');event.stopPropagation();" class="btn btn-unban">✅ Unban User</button>`
-                    : `<span style="font-size:13px;color:#64748b;">Permanently ban this user from the platform?</span>
-                       <button onclick="banUser('${uid}','${safeName}');event.stopPropagation();" class="btn btn-ban-user btn">🔒 Ban User</button>`;
-                feed.appendChild(ar);
-
-                // Report detail cards
-                const details = document.createElement('div');
-                details.className = 'report-details' + (isExpanded ? ' open' : '');
-
-                // Pending reports first
-                const sorted = [...g.reports].sort((a, b) =>
-                    (a.status === 'pending' ? -1 : 1) - (b.status === 'pending' ? -1 : 1));
-
-                sorted.forEach(r => {
-                    const date = r.createdAt?.toDate
-                        ? r.createdAt.toDate().toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })
-                        : 'Unknown date';
-
-                    const imgHtml = r.imageData
-                        ? `<div class="report-img-wrap">
-                               <p style="font-size:11px;color:#64748b;margin:0 0 6px;">Attached evidence:</p>
-                               <img src="${r.imageData}" alt="evidence"
-                                    onclick="openLightbox(this); event.stopPropagation();">
-                           </div>` : '';
-
-                    const statusHtml =
-                        r.status === 'ignored' ? '<span class="pill-ignored">Ignored</span>' :
-                        r.status === 'banned'  ? '<span class="pill-actioned">Actioned</span>' : '';
-
-                    const actionsHtml = r.status === 'pending'
-                        ? `<div class="report-actions">
-                               <button onclick="ignoreReport('${r.id}');event.stopPropagation();" class="btn btn-ignore">👁 Ignore</button>
-                               <button onclick="banUser('${uid}','${safeName}');event.stopPropagation();" class="btn btn-ban">🔒 Ban User</button>
-                           </div>` : '';
-
-                    const item = document.createElement('div');
-                    item.className = 'report-item';
-                    item.innerHTML = `
-                        <div class="report-item-header">
-                            <span class="report-cat-pill">${r.category || 'Unknown'}</span>
-                            <div style="display:flex;align-items:center;gap:8px;">
-                                ${statusHtml}
-                                <span class="report-date">${date}</span>
-                            </div>
-                        </div>
-                        <div class="report-desc">${r.description || 'No description provided.'}</div>
-                        <div class="report-reporter">Reported by: <b>${r.reporterName || 'Anonymous'}</b></div>
-                        ${imgHtml}
-                        ${actionsHtml}`;
-                    details.appendChild(item);
-                });
-
-                feed.appendChild(details);
+            db.collection("users").get().then(function(usnap) {
+                usnap.forEach(function(d) { if (grouped[d.id]) grouped[d.id].banned = d.data().banned === true; });
+                renderReports(grouped);
             });
         });
     }
 
-    window.toggleUser = (uid) => {
-        expandedUsers.has(uid) ? expandedUsers.delete(uid) : expandedUsers.add(uid);
+    function renderReports(grouped) {
+        var uids         = Object.keys(grouped);
+        var pendingCount = uids.filter(function(u) {
+            return grouped[u].reports.some(function(r) { return r.status === 'pending'; });
+        }).length;
+
+        // Tab badge
+        document.getElementById('tab-reports').innerHTML = pendingCount > 0
+            ? '🚨 User Reports <span class="tab-badge">' + pendingCount + '</span>'
+            : '🚨 User Reports';
+
+        // Panel glow
+        var panel = document.getElementById('panel-reports');
+        if (pendingCount > 0) panel.classList.add('reports-glow');
+        else panel.classList.remove('reports-glow');
+
+        // Subtitle
+        document.getElementById('reportsSubtitle').innerText = uids.length === 0
+            ? 'No reports on file.'
+            : uids.length + ' user' + (uids.length !== 1 ? 's' : '') + ' reported · ' + pendingCount + ' pending review';
+
+        var feed = document.getElementById('reportsFeed');
+        feed.innerHTML = '';
+
+        if (uids.length === 0) {
+            feed.innerHTML = '<div class="empty-state"><div class="es-icon">✅</div><p>No reports yet — all clear!</p></div>';
+            return;
+        }
+
+        // Sort: most reports first
+        uids.sort(function(a, b) { return grouped[b].reports.length - grouped[a].reports.length; });
+
+        uids.forEach(function(uid) {
+            var g          = grouped[uid];
+            var count      = g.reports.length;
+            var isExpanded = !!expandedUsers[uid];
+            var isBanned   = g.banned;
+            var safeName   = g.name.replace(/'/g, "\\'");
+
+            // Summary card
+            var card = document.createElement('div');
+            card.className = 'report-summary-card' + (isExpanded ? ' expanded' : '');
+            card.setAttribute('onclick', 'toggleUser("' + uid + '")');
+            card.innerHTML =
+                '<div class="rsc-left">' +
+                    '<div class="rsc-avatar">' + g.name.charAt(0).toUpperCase() + '</div>' +
+                    '<div>' +
+                        '<div class="rsc-name">' + g.name +
+                            (isBanned ? ' <span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:99px;margin-left:8px;font-weight:700;">🔒 BANNED</span>' : '') +
+                        '</div>' +
+                        '<div class="rsc-meta">' + count + ' report' + (count !== 1 ? 's' : '') + ' · UID: ' + uid.slice(0,12) + '…</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div style="display:flex;align-items:center;gap:10px;">' +
+                    '<div class="rsc-count' + (count > 1 ? ' multi' : '') + '">' + count + '</div>' +
+                    '<span style="color:#94a3b8;font-size:16px;">' + (isExpanded ? '▲' : '▼') + '</span>' +
+                '</div>';
+            feed.appendChild(card);
+
+            // Ban/Unban row
+            var ar = document.createElement('div');
+            ar.className = 'user-action-row' + (isExpanded ? ' open' : '');
+            ar.innerHTML = isBanned
+                ? '<span style="font-size:13px;color:#7f1d1d;">This user is currently banned.</span>' +
+                  '<button onclick="unbanUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-unban">✅ Unban User</button>'
+                : '<span style="font-size:13px;color:#64748b;">Permanently ban this user from the platform?</span>' +
+                  '<button onclick="banUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-ban-user btn">🔒 Ban User</button>';
+            feed.appendChild(ar);
+
+            // Report detail cards
+            var details = document.createElement('div');
+            details.className = 'report-details' + (isExpanded ? ' open' : '');
+
+            var sorted = g.reports.slice().sort(function(a, b) {
+                return (a.status === 'pending' ? -1 : 1) - (b.status === 'pending' ? -1 : 1);
+            });
+
+            sorted.forEach(function(r) {
+                var date = (r.createdAt && r.createdAt.toDate)
+                    ? r.createdAt.toDate().toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })
+                    : 'Unknown date';
+
+                var imgHtml = r.imageData
+                    ? '<div class="report-img-wrap">' +
+                          '<p style="font-size:11px;color:#64748b;margin:0 0 6px;">Attached evidence:</p>' +
+                          '<img src="' + r.imageData + '" alt="evidence" onclick="openLightbox(this);event.stopPropagation();">' +
+                      '</div>'
+                    : '';
+
+                var statusHtml =
+                    r.status === 'ignored' ? '<span class="pill-ignored">Ignored</span>' :
+                    r.status === 'banned'  ? '<span class="pill-actioned">Actioned</span>' : '';
+
+                var actionsHtml = r.status === 'pending'
+                    ? '<div class="report-actions">' +
+                          '<button onclick="ignoreReport(\'' + r.id + '\');event.stopPropagation();" class="btn btn-ignore">👁 Ignore</button>' +
+                          '<button onclick="banUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-ban">🔒 Ban User</button>' +
+                      '</div>'
+                    : '';
+
+                var item = document.createElement('div');
+                item.className = 'report-item';
+                item.innerHTML =
+                    '<div class="report-item-header">' +
+                        '<span class="report-cat-pill">' + (r.category || 'Unknown') + '</span>' +
+                        '<div style="display:flex;align-items:center;gap:8px;">' + statusHtml + '<span class="report-date">' + date + '</span></div>' +
+                    '</div>' +
+                    '<div class="report-desc">' + (r.description || 'No description provided.') + '</div>' +
+                    '<div class="report-reporter">Reported by: <b>' + (r.reporterName || 'Anonymous') + '</b></div>' +
+                    imgHtml + actionsHtml;
+                details.appendChild(item);
+            });
+
+            feed.appendChild(details);
+        });
+    }
+
+    function toggleUser(uid) {
+        expandedUsers[uid] = !expandedUsers[uid];
         loadReports();
-    };
+    }
 
-    window.ignoreReport = async (id) => {
+    function ignoreReport(id) {
         if (!confirm('Mark this report as ignored?')) return;
-        try { await updateDoc(doc(db, "reports", id), { status: 'ignored' }); }
-        catch { alert('Error updating report.'); }
-    };
+        db.collection("reports").doc(id).update({ status: 'ignored' })
+            .catch(function() { alert('Error updating report.'); });
+    }
 
-    window.banUser = async (uid, name) => {
-        if (!confirm(`Ban ${name}?\n\nThey will be locked out of the platform immediately.`)) return;
-        try {
-            await updateDoc(doc(db, "users", uid), { banned: true });
-            const q = query(collection(db, "reports"), where("reportedUid", "==", uid), where("status", "==", "pending"));
-            const s = await getDocs(q);
-            await Promise.all(s.docs.map(d => updateDoc(doc(db, "reports", d.id), { status: 'banned' })));
-            alert(`${name} has been banned.`);
-        } catch (e) { alert('Error: ' + e.message); }
-    };
+    function banUser(uid, name) {
+        if (!confirm('Ban ' + name + '?\n\nThey will be locked out of the platform immediately.')) return;
+        db.collection("users").doc(uid).update({ banned: true })
+            .then(function() {
+                return db.collection("reports")
+                    .where("reportedUid", "==", uid)
+                    .where("status", "==", "pending")
+                    .get();
+            })
+            .then(function(snap) {
+                var updates = snap.docs.map(function(d) { return d.ref.update({ status: 'banned' }); });
+                return Promise.all(updates);
+            })
+            .then(function() { alert(name + ' has been banned.'); })
+            .catch(function(e) { alert('Error: ' + e.message); });
+    }
 
-    window.unbanUser = async (uid, name) => {
-        if (!confirm(`Unban ${name}? They will regain full access.`)) return;
-        try {
-            await updateDoc(doc(db, "users", uid), { banned: false });
-            alert(`${name} has been unbanned.`);
-        } catch (e) { alert('Error: ' + e.message); }
-    };
+    function unbanUser(uid, name) {
+        if (!confirm('Unban ' + name + '? They will regain full access.')) return;
+        db.collection("users").doc(uid).update({ banned: false })
+            .then(function() { alert(name + ' has been unbanned.'); })
+            .catch(function(e) { alert('Error: ' + e.message); });
+    }
 
-    // Lightbox — reads src from the
+    function openLightbox(imgEl) {
+        document.getElementById('lightboxImg').src = imgEl.src;
+        document.getElementById('imgLightbox').classList.add('open');
+    }
+</script>
+</body>
+</html>
