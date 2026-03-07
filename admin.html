@@ -228,7 +228,7 @@
     <!-- Panel: Verification Queue -->
     <div class="section-panel active container" id="panel-verification">
         <h2>Resident Verification Queue</h2>
-        <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (rashmibiswa2008@gmail.com)</button>
+        <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e99b889a8184808b809a9e88dbd9d9d1a98e84888085c78a8684">[email&#160;protected]</a>)</button>
         <table id="requestsTable">
             <thead>
                 <tr>
@@ -261,7 +261,7 @@
      Avoids all scope issues with onclick handlers.
      Firebase loaded via compat CDN which exposes globals.
 ════════════════════════════════════════════════════════ -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
     // ── Firebase init ──
@@ -460,19 +460,24 @@
         }).length;
 
         // Tab badge
-        document.getElementById('tab-reports').innerHTML = pendingCount > 0
-            ? '🚨 User Reports <span class="tab-badge">' + pendingCount + '</span>'
+        var totalPending = 0;
+        uids.forEach(function(u) {
+            grouped[u].reports.forEach(function(r) { if (r.status === 'pending') totalPending++; });
+        });
+
+        document.getElementById('tab-reports').innerHTML = totalPending > 0
+            ? '🚨 User Reports <span class="tab-badge">' + totalPending + '</span>'
             : '🚨 User Reports';
 
         // Panel glow
         var panel = document.getElementById('panel-reports');
-        if (pendingCount > 0) panel.classList.add('reports-glow');
+        if (totalPending > 0) panel.classList.add('reports-glow');
         else panel.classList.remove('reports-glow');
 
         // Subtitle
         document.getElementById('reportsSubtitle').innerText = uids.length === 0
             ? 'No reports on file.'
-            : uids.length + ' user' + (uids.length !== 1 ? 's' : '') + ' reported · ' + pendingCount + ' pending review';
+            : uids.length + ' user' + (uids.length !== 1 ? 's' : '') + ' reported · ' + totalPending + ' pending review';
 
         var feed = document.getElementById('reportsFeed');
         feed.innerHTML = '';
@@ -487,10 +492,11 @@
 
         uids.forEach(function(uid) {
             var g          = grouped[uid];
-            var count      = g.reports.length;
-            var isExpanded = !!expandedUsers[uid];
-            var isBanned   = g.banned;
-            var safeName   = g.name.replace(/'/g, "\\'");
+            var count         = g.reports.length;
+            var pendingCount  = g.reports.filter(function(r) { return r.status === 'pending'; }).length;
+            var isExpanded    = !!expandedUsers[uid];
+            var isBanned      = g.banned;
+            var safeName      = g.name.replace(/'/g, "\\'");
 
             // Summary card
             var card = document.createElement('div');
@@ -507,7 +513,7 @@
                     '</div>' +
                 '</div>' +
                 '<div style="display:flex;align-items:center;gap:10px;">' +
-                    '<div class="rsc-count' + (count > 1 ? ' multi' : '') + '">' + count + '</div>' +
+                    (pendingCount > 0 ? '<div class="rsc-count' + (pendingCount > 1 ? ' multi' : '') + '">' + pendingCount + ' pending</div>' : '<div style="font-size:11px;color:#22c55e;font-weight:600;">✅ All reviewed</div>') +
                     '<span style="color:#94a3b8;font-size:16px;">' + (isExpanded ? '▲' : '▼') + '</span>' +
                 '</div>';
             feed.appendChild(card);
@@ -602,13 +608,4 @@
         if (!confirm('Unban ' + name + '? They will regain full access.')) return;
         db.collection("users").doc(uid).update({ banned: false })
             .then(function() { alert(name + ' has been unbanned.'); })
-            .catch(function(e) { alert('Error: ' + e.message); });
-    }
-
-    function openLightbox(imgEl) {
-        document.getElementById('lightboxImg').src = imgEl.src;
-        document.getElementById('imgLightbox').classList.add('open');
-    }
-</script>
-</body>
-</html>
+            .catch(function(e) { alert(
