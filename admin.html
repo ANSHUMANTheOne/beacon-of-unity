@@ -4,180 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel | Beacon of Unity</title>
-    
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-       (function(){ emailjs.init("QhpmiLS1azGRS4w23"); })();
-    </script>
+
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>(function(){ emailjs.init("QhpmiLS1azGRS4w23"); })();</script>
+
+    <!-- Firebase compat (loaded in head so always ready before body script) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
 
-        /* ════ AUTH GATE ════ */
-        #authGate {
-            display: flex; position: fixed; inset: 0;
-            background: #0f172a; z-index: 9999;
-            align-items: center; justify-content: center;
-        }
-        .auth-box {
-            background: white; border-radius: 20px; padding: 40px 36px;
-            width: 90%; max-width: 380px; text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-        .auth-logo { font-size: 44px; margin-bottom: 8px; }
-        .auth-box h2 { margin: 0 0 4px; color: #0f172a; font-size: 20px; font-weight: 800; }
-        .auth-box p  { color: #64748b; font-size: 13px; margin: 0 0 24px; }
-        .auth-box input {
-            width: 100%; padding: 11px 14px; border: 1px solid #e2e8f0;
-            border-radius: 8px; font-size: 14px; margin-bottom: 12px;
-            outline: none; font-family: inherit;
-        }
-        .auth-box input:focus { border-color: #1a73e8; }
-        .auth-btn {
-            width: 100%; padding: 12px; background: #1a73e8; color: white;
-            border: none; border-radius: 8px; font-weight: 700; font-size: 15px;
-            cursor: pointer; transition: 0.2s; font-family: inherit;
-        }
-        .auth-btn:hover    { background: #1557b0; }
-        .auth-btn:disabled { background: #94a3b8; cursor: not-allowed; }
-        #authError { color: #ef4444; font-size: 13px; margin-top: 10px; min-height: 18px; }
+        /* AUTH GATE */
+        #authGate { display:flex; position:fixed; inset:0; background:#0f172a; z-index:9999; align-items:center; justify-content:center; }
+        .auth-box { background:white; border-radius:20px; padding:40px 36px; width:90%; max-width:380px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+        .auth-logo { font-size:44px; margin-bottom:8px; }
+        .auth-box h2 { margin:0 0 4px; color:#0f172a; font-size:20px; font-weight:800; }
+        .auth-box p  { color:#64748b; font-size:13px; margin:0 0 24px; }
+        .auth-box input { width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; margin-bottom:12px; outline:none; font-family:inherit; }
+        .auth-box input:focus { border-color:#1a73e8; }
+        .auth-btn { width:100%; padding:12px; background:#1a73e8; color:white; border:none; border-radius:8px; font-weight:700; font-size:15px; cursor:pointer; transition:0.2s; font-family:inherit; }
+        .auth-btn:hover { background:#1557b0; }
+        #authError { color:#ef4444; font-size:13px; margin-top:10px; min-height:18px; }
 
-        /* ════ ACCESS DENIED ════ */
-        #accessDenied {
-            display: none; position: fixed; inset: 0;
-            background: #0f172a; z-index: 9999;
-            align-items: center; justify-content: center;
-            flex-direction: column; text-align: center; padding: 20px;
-        }
-        #accessDenied .denied-icon { font-size: 56px; margin-bottom: 16px; }
-        #accessDenied h2 { color: white; margin: 0 0 8px; }
-        #accessDenied p  { color: #94a3b8; font-size: 14px; margin: 0 0 24px; max-width: 360px; }
-        #accessDenied button {
-            background: #ef4444; color: white; border: none; padding: 10px 28px;
-            border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; font-family: inherit;
-        }
+        /* ACCESS DENIED */
+        #accessDenied { display:none; position:fixed; inset:0; background:#0f172a; z-index:9999; align-items:center; justify-content:center; flex-direction:column; text-align:center; padding:20px; }
+        #accessDenied .denied-icon { font-size:56px; margin-bottom:16px; }
+        #accessDenied h2 { color:white; margin:0 0 8px; }
+        #accessDenied p  { color:#94a3b8; font-size:14px; margin:0 0 24px; max-width:360px; }
+        #accessDenied button { background:#ef4444; color:white; border:none; padding:10px 28px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px; font-family:inherit; }
 
-        /* ════ ADMIN CONTENT ════ */
-        #adminContent { display: none; max-width: 1100px; margin: auto; }
+        /* ADMIN CONTENT */
+        #adminContent { display:none; max-width:1100px; margin:auto; }
+        .page-header { display:flex; align-items:center; gap:14px; margin-bottom:28px; flex-wrap:wrap; }
+        .page-header h1 { margin:0; font-size:24px; color:#0f172a; font-weight:800; flex:1; }
+        .signout-btn { background:#fee2e2; color:#991b1b; border:none; padding:9px 18px; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px; font-family:inherit; transition:0.2s; }
+        .signout-btn:hover { background:#fecaca; }
 
-        .page-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
-        .page-header h1 { margin: 0; font-size: 24px; color: #0f172a; font-weight: 800; flex: 1; }
-        .signout-btn {
-            background: #fee2e2; color: #991b1b; border: none; padding: 9px 18px;
-            border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px;
-            font-family: inherit; transition: 0.2s;
-        }
-        .signout-btn:hover { background: #fecaca; }
-
-        /* ════ TABS ════ */
-        .section-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-        .sec-tab {
-            padding: 10px 22px; border: 2px solid #e2e8f0; border-radius: 8px;
-            background: white; font-weight: 600; font-size: 14px; cursor: pointer;
-            transition: 0.2s; color: #475569; font-family: inherit;
-        }
-        .sec-tab:hover  { border-color: #1a73e8; color: #1a73e8; }
-        .sec-tab.active { background: #1a73e8; color: white; border-color: #1a73e8; }
-        .tab-badge {
-            background: #ef4444; color: white; font-size: 10px; font-weight: 700;
-            padding: 2px 6px; border-radius: 99px; margin-left: 6px;
-            animation: pulseBadge 1.5s infinite;
-        }
+        /* TABS */
+        .section-tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+        .sec-tab { padding:10px 22px; border:2px solid #e2e8f0; border-radius:8px; background:white; font-weight:600; font-size:14px; cursor:pointer; transition:0.2s; color:#475569; font-family:inherit; }
+        .sec-tab:hover  { border-color:#1a73e8; color:#1a73e8; }
+        .sec-tab.active { background:#1a73e8; color:white; border-color:#1a73e8; }
+        .tab-badge { background:#ef4444; color:white; font-size:10px; font-weight:700; padding:2px 6px; border-radius:99px; margin-left:6px; animation:pulseBadge 1.5s infinite; }
         @keyframes pulseBadge { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-        /* ════ PANELS ════ */
-        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 24px; }
-        .section-panel { display: none; }
-        .section-panel.active { display: block; }
+        /* PANELS */
+        .container { background:white; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); margin-bottom:24px; }
+        .section-panel { display:none; }
+        .section-panel.active { display:block; }
 
-        /* ════ VERIFICATION TABLE ════ */
-        h2 { color: #1a73e8; border-bottom: 2px solid #e8eaed; padding-bottom: 15px; margin-top: 0; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f8f9fa; color: #5f6368; text-transform: uppercase; font-size: 12px; }
-        .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: inherit; }
-        .btn-approve { background: #34a853; color: white; margin-right: 8px; }
-        .btn-approve:hover { background: #2d8e47; }
-        .btn-deny { background: #ea4335; color: white; }
-        .btn-deny:hover { background: #d93025; }
-        .btn-reset { background: #5f6368; color: white; margin-bottom: 20px; }
-        .btn-reset:hover { background: #3c4043; }
-        .id-link { color: #1a73e8; text-decoration: none; font-weight: 500; }
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 10px; text-transform: uppercase; }
-        .badge-new   { background: #e6f4ea; color: #1e8e3e; }
-        .badge-retry { background: #fce8e6; color: #d93025; }
+        /* VERIFICATION */
+        h2 { color:#1a73e8; border-bottom:2px solid #e8eaed; padding-bottom:15px; margin-top:0; }
+        table { width:100%; border-collapse:collapse; margin-top:20px; }
+        th, td { padding:15px; text-align:left; border-bottom:1px solid #eee; }
+        th { background:#f8f9fa; color:#5f6368; text-transform:uppercase; font-size:12px; }
+        .btn { padding:8px 16px; border:none; border-radius:6px; cursor:pointer; font-weight:600; transition:0.3s; font-family:inherit; }
+        .btn-approve { background:#34a853; color:white; margin-right:8px; }
+        .btn-approve:hover { background:#2d8e47; }
+        .btn-deny { background:#ea4335; color:white; }
+        .btn-deny:hover { background:#d93025; }
+        .btn-reset { background:#5f6368; color:white; margin-bottom:20px; }
+        .btn-reset:hover { background:#3c4043; }
+        .id-link { color:#1a73e8; text-decoration:none; font-weight:500; }
+        .badge { padding:4px 8px; border-radius:4px; font-size:11px; font-weight:bold; margin-left:10px; text-transform:uppercase; }
+        .badge-new   { background:#e6f4ea; color:#1e8e3e; }
+        .badge-retry { background:#fce8e6; color:#d93025; }
 
-        /* ════ REPORTS ════ */
+        /* REPORTS */
         @keyframes glowPulse {
-            0%,100% { box-shadow: 0 0 0 3px rgba(239,68,68,0.15), 0 0 20px rgba(239,68,68,0.1); }
-            50%      { box-shadow: 0 0 0 5px rgba(239,68,68,0.25), 0 0 30px rgba(239,68,68,0.2); }
+            0%,100% { box-shadow:0 0 0 3px rgba(239,68,68,0.15),0 0 20px rgba(239,68,68,0.1); }
+            50%      { box-shadow:0 0 0 5px rgba(239,68,68,0.25),0 0 30px rgba(239,68,68,0.2); }
         }
-        .reports-glow { border: 2px solid #ef4444 !important; animation: glowPulse 2s infinite; }
+        .reports-glow { border:2px solid #ef4444 !important; animation:glowPulse 2s infinite; }
+        .report-summary-card { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; background:#fff5f5; border:1px solid #fecaca; border-radius:12px; margin-bottom:4px; cursor:pointer; transition:0.2s; }
+        .report-summary-card:hover    { background:#fee2e2; }
+        .report-summary-card.expanded { background:#fee2e2; border-color:#ef4444; border-radius:12px 12px 0 0; }
+        .rsc-left { display:flex; align-items:center; gap:14px; }
+        .rsc-avatar { width:42px; height:42px; border-radius:50%; background:#ef4444; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:16px; flex-shrink:0; }
+        .rsc-name { font-weight:700; font-size:15px; color:#0f172a; }
+        .rsc-meta { font-size:12px; color:#64748b; margin-top:2px; }
+        .rsc-count { background:#ef4444; color:white; font-size:12px; font-weight:700; padding:4px 12px; border-radius:99px; }
+        .rsc-count.multi { animation:glowPulse 1.5s infinite; }
+        .user-action-row { display:none; gap:10px; align-items:center; padding:10px 20px 14px; flex-wrap:wrap; background:#fee2e2; border:1px solid #ef4444; border-top:none; margin-bottom:4px; }
+        .user-action-row.open { display:flex; }
+        .btn-ban-user { background:#0f172a; color:white; font-size:13px; }
+        .btn-ban-user:hover { background:#1e293b; }
+        .btn-unban { background:#22c55e; color:white; font-size:13px; }
+        .btn-unban:hover { background:#16a34a; }
+        .report-details { display:none; margin-bottom:16px; }
+        .report-details.open { display:block; }
+        .report-item { background:white; border:1px solid #e2e8f0; border-radius:10px; padding:18px; margin-bottom:8px; margin-left:24px; }
+        .report-item-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; flex-wrap:wrap; gap:6px; }
+        .report-cat-pill { font-size:11px; font-weight:700; padding:3px 10px; border-radius:99px; background:#fee2e2; color:#991b1b; text-transform:uppercase; }
+        .report-date     { font-size:11px; color:#94a3b8; }
+        .report-desc     { font-size:13px; color:#475569; line-height:1.6; margin:8px 0; }
+        .report-reporter { font-size:12px; color:#64748b; }
+        .report-img-wrap { margin-top:10px; }
+        .report-img-wrap img { max-width:100%; max-height:280px; border-radius:8px; border:1px solid #e2e8f0; cursor:pointer; transition:0.2s; }
+        .report-img-wrap img:hover { opacity:0.85; }
+        .report-actions { display:flex; gap:8px; margin-top:14px; padding-top:14px; border-top:1px solid #f1f5f9; flex-wrap:wrap; }
+        .btn-ignore { background:#f1f5f9; color:#475569; }
+        .btn-ignore:hover { background:#e2e8f0; }
+        .btn-ban    { background:#ef4444; color:white; }
+        .btn-ban:hover { background:#dc2626; }
+        .pill-ignored  { font-size:11px; background:#f1f5f9; color:#64748b; padding:3px 10px; border-radius:99px; font-weight:600; }
+        .pill-actioned { font-size:11px; background:#fee2e2; color:#991b1b; padding:3px 10px; border-radius:99px; font-weight:600; }
+        .empty-state { text-align:center; padding:48px 20px; color:#94a3b8; }
+        .empty-state .es-icon { font-size:48px; margin-bottom:12px; }
+        .empty-state p { font-size:14px; margin:0; }
 
-        .report-summary-card {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 16px 20px; background: #fff5f5; border: 1px solid #fecaca;
-            border-radius: 12px; margin-bottom: 4px; cursor: pointer; transition: 0.2s;
-        }
-        .report-summary-card:hover    { background: #fee2e2; }
-        .report-summary-card.expanded { background: #fee2e2; border-color: #ef4444; border-radius: 12px 12px 0 0; }
-        .rsc-left { display: flex; align-items: center; gap: 14px; }
-        .rsc-avatar {
-            width: 42px; height: 42px; border-radius: 50%; background: #ef4444;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: 700; font-size: 16px; flex-shrink: 0;
-        }
-        .rsc-name { font-weight: 700; font-size: 15px; color: #0f172a; }
-        .rsc-meta { font-size: 12px; color: #64748b; margin-top: 2px; }
-        .rsc-count { background: #ef4444; color: white; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; }
-        .rsc-count.multi { animation: glowPulse 1.5s infinite; }
-
-        .user-action-row {
-            display: none; gap: 10px; align-items: center; padding: 10px 20px 14px;
-            flex-wrap: wrap; background: #fee2e2; border: 1px solid #ef4444;
-            border-top: none; margin-bottom: 4px;
-        }
-        .user-action-row.open { display: flex; }
-        .btn-ban-user { background: #0f172a; color: white; font-size: 13px; }
-        .btn-ban-user:hover { background: #1e293b; }
-        .btn-unban { background: #22c55e; color: white; font-size: 13px; }
-        .btn-unban:hover { background: #16a34a; }
-
-        .report-details { display: none; margin-bottom: 16px; }
-        .report-details.open { display: block; }
-        .report-item {
-            background: white; border: 1px solid #e2e8f0; border-radius: 10px;
-            padding: 18px; margin-bottom: 8px; margin-left: 24px;
-        }
-        .report-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
-        .report-cat-pill { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: #fee2e2; color: #991b1b; text-transform: uppercase; }
-        .report-date     { font-size: 11px; color: #94a3b8; }
-        .report-desc     { font-size: 13px; color: #475569; line-height: 1.6; margin: 8px 0; }
-        .report-reporter { font-size: 12px; color: #64748b; }
-        .report-img-wrap { margin-top: 10px; }
-        .report-img-wrap img { max-width: 100%; max-height: 280px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s; }
-        .report-img-wrap img:hover { opacity: 0.85; }
-        .report-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f1f5f9; flex-wrap: wrap; }
-        .btn-ignore       { background: #f1f5f9; color: #475569; }
-        .btn-ignore:hover { background: #e2e8f0; }
-        .btn-ban          { background: #ef4444; color: white; }
-        .btn-ban:hover    { background: #dc2626; }
-        .pill-ignored  { font-size: 11px; background: #f1f5f9; color: #64748b; padding: 3px 10px; border-radius: 99px; font-weight: 600; }
-        .pill-actioned { font-size: 11px; background: #fee2e2; color: #991b1b; padding: 3px 10px; border-radius: 99px; font-weight: 600; }
-
-        .empty-state { text-align: center; padding: 48px 20px; color: #94a3b8; }
-        .empty-state .es-icon { font-size: 48px; margin-bottom: 12px; }
-        .empty-state p { font-size: 14px; margin: 0; }
-
-        /* ════ LIGHTBOX ════ */
-        #imgLightbox {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.92); z-index: 99999;
-            align-items: center; justify-content: center; cursor: pointer;
-        }
-        #imgLightbox.open { display: flex; }
-        #imgLightbox img  { max-width: 92vw; max-height: 92vh; border-radius: 10px; }
+        /* LIGHTBOX */
+        #imgLightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:99999; align-items:center; justify-content:center; cursor:pointer; }
+        #imgLightbox.open { display:flex; }
+        #imgLightbox img  { max-width:92vw; max-height:92vh; border-radius:10px; }
     </style>
 </head>
 <body>
@@ -187,7 +129,7 @@
     <img id="lightboxImg" src="" alt="Report evidence">
 </div>
 
-<!-- ════ AUTH GATE ════ -->
+<!-- AUTH GATE -->
 <div id="authGate">
     <div class="auth-box">
         <div class="auth-logo">🛡️</div>
@@ -195,12 +137,12 @@
         <p>Sign in with your authorised admin account</p>
         <input type="email"    id="adminEmail"    placeholder="Admin email" autocomplete="email">
         <input type="password" id="adminPassword" placeholder="Password">
-        <button class="auth-btn" id="adminSignInBtn" onclick="adminSignIn()">Sign In</button>
+        <button class="auth-btn" onclick="adminSignIn()">Sign In</button>
         <div id="authError"></div>
     </div>
 </div>
 
-<!-- ════ ACCESS DENIED ════ -->
+<!-- ACCESS DENIED -->
 <div id="accessDenied">
     <div class="denied-icon">🚫</div>
     <h2>Access Denied</h2>
@@ -208,14 +150,13 @@
     <button onclick="adminSignOut()">Sign out &amp; try again</button>
 </div>
 
-<!-- ════ ADMIN CONTENT ════ -->
+<!-- ADMIN CONTENT -->
 <div id="adminContent">
-
     <div class="page-header">
         <div style="font-size:36px;">🛡️</div>
         <div style="flex:1;">
             <h1 style="margin:0 0 2px;">Beacon of Unity — Admin Panel</h1>
-            <span style="font-size:13px; color:#64748b;" id="adminEmailDisplay"></span>
+            <span style="font-size:13px;color:#64748b;" id="adminEmailDisplay"></span>
         </div>
         <button class="signout-btn" onclick="adminSignOut()">Sign Out</button>
     </div>
@@ -225,66 +166,52 @@
         <button class="sec-tab"        id="tab-reports"      onclick="showSection('reports')">🚨 User Reports</button>
     </div>
 
-    <!-- Panel: Verification Queue -->
     <div class="section-panel active container" id="panel-verification">
         <h2>Resident Verification Queue</h2>
-        <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e99b889a8184808b809a9e88dbd9d9d1a98e84888085c78a8684">[email&#160;protected]</a>)</button>
-        <table id="requestsTable">
-            <thead>
-                <tr>
-                    <th>Full Name</th><th>Resident Email</th><th>ID Document</th><th>Action</th>
-                </tr>
-            </thead>
+        <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (rashmibiswa2008@gmail.com)</button>
+        <table>
+            <thead><tr><th>Full Name</th><th>Resident Email</th><th>ID Document</th><th>Action</th></tr></thead>
             <tbody id="tableBody"></tbody>
         </table>
     </div>
 
-    <!-- Panel: User Reports -->
     <div class="section-panel container" id="panel-reports">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
             <div>
                 <h2 style="margin-bottom:4px;">🚨 Reported Users</h2>
-                <p style="color:#64748b; font-size:13px; margin:0;" id="reportsSubtitle">Loading…</p>
+                <p style="color:#64748b;font-size:13px;margin:0;" id="reportsSubtitle">Loading…</p>
             </div>
-            <button onclick="loadReports()" class="btn" style="background:#f1f5f9; color:#475569; font-size:13px;">🔄 Refresh</button>
+            <button onclick="loadReports()" class="btn" style="background:#f1f5f9;color:#475569;font-size:13px;">🔄 Refresh</button>
         </div>
         <div id="reportsFeed">
             <div class="empty-state"><div class="es-icon">⏳</div><p>Loading reports…</p></div>
         </div>
     </div>
+</div>
 
-</div><!-- /adminContent -->
-
-
-<!-- ══════════════════════════════════════════════════════
-     ALL JAVASCRIPT — single plain script, no modules.
-     Avoids all scope issues with onclick handlers.
-     Firebase loaded via compat CDN which exposes globals.
-════════════════════════════════════════════════════════ -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
     // ── Firebase init ──
-    const firebaseConfig = {
+    if (!firebase.apps.length) firebase.initializeApp({
         apiKey:            "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
         authDomain:        "beaconofunityofficial.firebaseapp.com",
         projectId:         "beaconofunityofficial",
         storageBucket:     "beaconofunityofficial.firebasestorage.app",
         messagingSenderId: "37918398882",
         appId:             "1:37918398882:web:205161bb147393f4defafb"
+    });
+    var db = firebase.firestore();
+    // Also add a visible error catcher so we can see what's breaking
+    window.onerror = function(msg, src, line) {
+        document.getElementById('authError').innerText = 'JS Error: ' + msg + ' (line ' + line + ')';
     };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
 
     // ── Admin credentials ──
-    const ADMINS = {
+    var ADMINS = {
         'luckyansh.t@gmail.com':          'Aayansh_2009',
         'beaconofunityofficial@gmail.com': 'Aayansh_2009'
     };
 
-    // ════════════════════════════════════════
-    // AUTH
-    // ════════════════════════════════════════
+    // ── Auth helpers ──
     function showGate() {
         document.getElementById('authGate').style.display     = 'flex';
         document.getElementById('accessDenied').style.display = 'none';
@@ -298,13 +225,13 @@
     }
 
     function adminSignIn() {
-        const email = document.getElementById('adminEmail').value.trim().toLowerCase();
-        const pass  = document.getElementById('adminPassword').value;
-        const errEl = document.getElementById('authError');
+        var email = document.getElementById('adminEmail').value.trim().toLowerCase();
+        var pass  = document.getElementById('adminPassword').value;
+        var errEl = document.getElementById('authError');
         errEl.innerText = '';
-        if (!email || !pass)              { errEl.innerText = 'Please enter your email and password.'; return; }
-        if (!ADMINS.hasOwnProperty(email)){ errEl.innerText = 'This email is not authorised.'; return; }
-        if (ADMINS[email] !== pass)        { errEl.innerText = 'Incorrect password.'; return; }
+        if (!email || !pass)               { errEl.innerText = 'Please enter your email and password.'; return; }
+        if (!ADMINS.hasOwnProperty(email)) { errEl.innerText = 'This email is not authorised.'; return; }
+        if (ADMINS[email] !== pass)         { errEl.innerText = 'Incorrect password.'; return; }
         sessionStorage.setItem('adminEmail', email);
         showAdmin(email);
         loadData();
@@ -319,14 +246,13 @@
         showGate();
     }
 
-    // Enter key on password field
     document.getElementById('adminPassword').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') adminSignIn();
     });
 
-    // Check session on page load
+    // Session restore on page load
     (function() {
-        const saved = sessionStorage.getItem('adminEmail');
+        var saved = sessionStorage.getItem('adminEmail');
         if (saved && ADMINS[saved]) {
             showAdmin(saved);
             loadData();
@@ -336,9 +262,7 @@
         }
     })();
 
-    // ════════════════════════════════════════
-    // TAB SWITCHING
-    // ════════════════════════════════════════
+    // ── Tab switching ──
     function showSection(name) {
         document.querySelectorAll('.section-panel').forEach(function(p) { p.classList.remove('active'); });
         document.querySelectorAll('.sec-tab').forEach(function(t) { t.classList.remove('active'); });
@@ -351,42 +275,30 @@
     // ════════════════════════════════════════
     function resetTester() {
         var testerEmail = "rashmibiswa2008@gmail.com";
-        db.collection("users").where("email", "==", testerEmail).get().then(function(snap) {
-            if (snap.empty) { alert("Tester account not found."); return; }
-            return snap.docs[0].ref.update({ status: "none", hasPreviousDenial: false })
-                .then(function() {
-                    return db.collection("id_reviews").where("email", "==", testerEmail).get();
-                })
-                .then(function(rsnap) {
-                    var deletes = rsnap.docs.map(function(d) { return d.ref.delete(); });
-                    return Promise.all(deletes);
-                })
-                .then(function() {
-                    alert("✅ Tester Reset! Completely clean slate.");
-                    loadData();
-                });
-        }).catch(function() { alert("Reset Error."); });
+        db.collection("users").where("email","==",testerEmail).get()
+            .then(function(snap) {
+                if (snap.empty) { alert("Tester account not found."); return; }
+                return snap.docs[0].ref.update({ status:"none", hasPreviousDenial:false })
+                    .then(function() { return db.collection("id_reviews").where("email","==",testerEmail).get(); })
+                    .then(function(rs) { return Promise.all(rs.docs.map(function(d){ return d.ref.delete(); })); })
+                    .then(function() { alert("✅ Tester Reset!"); loadData(); });
+            })
+            .catch(function() { alert("Reset Error."); });
     }
 
     function processUser(docId, userEmail, action, userId, fullName) {
         var userRef = db.collection("users").doc(userId);
         if (action === 'approve') {
             if (!userEmail || userEmail === "undefined") { alert("Invalid email."); return; }
-            emailjs.send("service_w3ai9pm", "template_zttw3uf", {
-                email: userEmail, to_email: userEmail,
-                name: fullName || userEmail.split('@')[0]
-            }).then(function() {
-                return userRef.update({ status: "approved", fullName: fullName, approvedAt: new Date().toISOString() });
-            }).then(function() {
-                return db.collection("id_reviews").doc(docId).delete();
-            }).then(function() {
-                alert("Success! Welcome email sent to " + userEmail);
-                loadData();
-            }).catch(function(e) { alert("Approval Error: " + (e.text || e.message)); });
-        } else {
-            userRef.update({ status: "rejected", hasPreviousDenial: true })
+            emailjs.send("service_w3ai9pm","template_zttw3uf",{ email:userEmail, to_email:userEmail, name:fullName||userEmail.split('@')[0] })
+                .then(function() { return userRef.update({ status:"approved", fullName:fullName, approvedAt:new Date().toISOString() }); })
                 .then(function() { return db.collection("id_reviews").doc(docId).delete(); })
-                .then(function() { alert("User Denied. Flagged for retry."); loadData(); })
+                .then(function() { alert("✅ Approved! Welcome email sent to "+userEmail); loadData(); })
+                .catch(function(e) { alert("Approval Error: "+(e.text||e.message)); });
+        } else {
+            userRef.update({ status:"rejected", hasPreviousDenial:true })
+                .then(function() { return db.collection("id_reviews").doc(docId).delete(); })
+                .then(function() { alert("User Denied."); loadData(); })
                 .catch(function() { alert("Error processing denial."); });
         }
     }
@@ -394,58 +306,52 @@
     function loadData() {
         var tbody = document.getElementById('tableBody');
         tbody.innerHTML = "<tr><td colspan='4'>Searching...</td></tr>";
-        db.collection("id_reviews").get().then(function(snap) {
-            tbody.innerHTML = "";
-            if (snap.empty) { tbody.innerHTML = "<tr><td colspan='4'>No pending requests.</td></tr>"; return; }
-            snap.forEach(function(docSnap) {
-                var d          = docSnap.data();
-                var email      = d.email || "Unknown Email";
-                var fullName   = d.fullName || "No Name Provided";
-                var tag        = d.hasPreviousDenial
-                    ? '<span class="badge badge-retry">Retrying</span>'
-                    : '<span class="badge badge-new">New</span>';
-                tbody.innerHTML += '<tr>' +
-                    '<td style="font-weight:600;">' + fullName + '</td>' +
-                    '<td>' + email + ' ' + tag + '</td>' +
-                    '<td><a href="' + d.idCardUrl + '" target="_blank" class="id-link">View ID</a></td>' +
-                    '<td>' +
-                        '<button onclick="processUser(\'' + docSnap.id + '\',\'' + email + '\',\'approve\',\'' + d.userId + '\',\'' + fullName + '\')" class="btn btn-approve">Approve</button>' +
-                        '<button onclick="processUser(\'' + docSnap.id + '\',\'' + email + '\',\'deny\',\'' + d.userId + '\',\'' + fullName + '\')" class="btn btn-deny">Deny</button>' +
-                    '</td></tr>';
-            });
-        }).catch(function() {
-            tbody.innerHTML = "<tr><td colspan='4'>Error loading data.</td></tr>";
-        });
+        db.collection("id_reviews").get()
+            .then(function(snap) {
+                tbody.innerHTML = "";
+                if (snap.empty) { tbody.innerHTML = "<tr><td colspan='4'>No pending requests.</td></tr>"; return; }
+                snap.forEach(function(ds) {
+                    var d    = ds.data();
+                    var em   = d.email    || "Unknown Email";
+                    var fn   = d.fullName || "No Name Provided";
+                    var tag  = d.hasPreviousDenial
+                        ? '<span class="badge badge-retry">Retrying</span>'
+                        : '<span class="badge badge-new">New</span>';
+                    tbody.innerHTML +=
+                        '<tr>' +
+                        '<td style="font-weight:600;">'+fn+'</td>' +
+                        '<td>'+em+' '+tag+'</td>' +
+                        '<td><a href="'+d.idCardUrl+'" target="_blank" class="id-link">View ID</a></td>' +
+                        '<td>' +
+                          '<button onclick="processUser(\''+ds.id+'\',\''+em+'\',\'approve\',\''+d.userId+'\',\''+fn+'\')" class="btn btn-approve">Approve</button>' +
+                          '<button onclick="processUser(\''+ds.id+'\',\''+em+'\',\'deny\',\''+d.userId+'\',\''+fn+'\')" class="btn btn-deny">Deny</button>' +
+                        '</td></tr>';
+                });
+            })
+            .catch(function() { document.getElementById('tableBody').innerHTML = "<tr><td colspan='4'>Error loading data.</td></tr>"; });
     }
 
     // ════════════════════════════════════════
-    // REPORTS  (live onSnapshot)
+    // REPORTS
     // ════════════════════════════════════════
     var expandedUsers = {};
     var reportsUnsub  = null;
 
     function loadReports() {
         if (reportsUnsub) { reportsUnsub(); reportsUnsub = null; }
-        var feed = document.getElementById('reportsFeed');
-        feed.innerHTML = '<div class="empty-state"><div class="es-icon">⏳</div><p>Loading…</p></div>';
+        document.getElementById('reportsFeed').innerHTML =
+            '<div class="empty-state"><div class="es-icon">⏳</div><p>Loading…</p></div>';
 
         reportsUnsub = db.collection("reports").onSnapshot(function(snapshot) {
-
-            // Group by reportedUid
             var grouped = {};
             snapshot.forEach(function(ds) {
-                var d   = ds.data();
-                var uid = d.reportedUid;
-                if (!grouped[uid]) grouped[uid] = { name: d.reportedName || 'Unknown User', reports: [], banned: false };
-                grouped[uid].reports.push(Object.assign({ id: ds.id }, d));
+                var d = ds.data(), uid = d.reportedUid;
+                if (!grouped[uid]) grouped[uid] = { name: d.reportedName||'Unknown User', reports:[], banned:false };
+                var r = {}; Object.assign(r, d); r.id = ds.id;
+                grouped[uid].reports.push(r);
             });
-
-            // Fetch banned status
             var uids = Object.keys(grouped);
-            if (uids.length === 0) {
-                renderReports(grouped);
-                return;
-            }
+            if (uids.length === 0) { renderReports(grouped); return; }
             db.collection("users").get().then(function(usnap) {
                 usnap.forEach(function(d) { if (grouped[d.id]) grouped[d.id].banned = d.data().banned === true; });
                 renderReports(grouped);
@@ -454,19 +360,17 @@
     }
 
     function renderReports(grouped) {
-        var uids         = Object.keys(grouped);
-        var pendingCount = uids.filter(function(u) {
-            return grouped[u].reports.some(function(r) { return r.status === 'pending'; });
-        }).length;
+        var uids = Object.keys(grouped);
 
-        // Tab badge
+        // Count truly pending reports
         var totalPending = 0;
         uids.forEach(function(u) {
             grouped[u].reports.forEach(function(r) { if (r.status === 'pending') totalPending++; });
         });
 
+        // Tab badge
         document.getElementById('tab-reports').innerHTML = totalPending > 0
-            ? '🚨 User Reports <span class="tab-badge">' + totalPending + '</span>'
+            ? '🚨 User Reports <span class="tab-badge">'+totalPending+'</span>'
             : '🚨 User Reports';
 
         // Panel glow
@@ -477,7 +381,7 @@
         // Subtitle
         document.getElementById('reportsSubtitle').innerText = uids.length === 0
             ? 'No reports on file.'
-            : uids.length + ' user' + (uids.length !== 1 ? 's' : '') + ' reported · ' + totalPending + ' pending review';
+            : uids.length+' user'+(uids.length!==1?'s':'')+' reported · '+totalPending+' pending review';
 
         var feed = document.getElementById('reportsFeed');
         feed.innerHTML = '';
@@ -487,87 +391,82 @@
             return;
         }
 
-        // Sort: most reports first
-        uids.sort(function(a, b) { return grouped[b].reports.length - grouped[a].reports.length; });
+        uids.sort(function(a,b){ return grouped[b].reports.length - grouped[a].reports.length; });
 
         uids.forEach(function(uid) {
-            var g          = grouped[uid];
-            var count         = g.reports.length;
-            var pendingCount  = g.reports.filter(function(r) { return r.status === 'pending'; }).length;
-            var isExpanded    = !!expandedUsers[uid];
-            var isBanned      = g.banned;
-            var safeName      = g.name.replace(/'/g, "\\'");
+            var g            = grouped[uid];
+            var count        = g.reports.length;
+            var pendingCount = g.reports.filter(function(r){ return r.status==='pending'; }).length;
+            var isExpanded   = !!expandedUsers[uid];
+            var isBanned     = g.banned;
+            var safeName     = g.name.replace(/'/g,"\\'");
 
             // Summary card
             var card = document.createElement('div');
-            card.className = 'report-summary-card' + (isExpanded ? ' expanded' : '');
-            card.setAttribute('onclick', 'toggleUser("' + uid + '")');
+            card.className = 'report-summary-card'+(isExpanded?' expanded':'');
+            card.setAttribute('onclick','toggleUser("'+uid+'")');
             card.innerHTML =
                 '<div class="rsc-left">' +
-                    '<div class="rsc-avatar">' + g.name.charAt(0).toUpperCase() + '</div>' +
-                    '<div>' +
-                        '<div class="rsc-name">' + g.name +
-                            (isBanned ? ' <span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:99px;margin-left:8px;font-weight:700;">🔒 BANNED</span>' : '') +
-                        '</div>' +
-                        '<div class="rsc-meta">' + count + ' report' + (count !== 1 ? 's' : '') + ' · UID: ' + uid.slice(0,12) + '…</div>' +
+                  '<div class="rsc-avatar">'+g.name.charAt(0).toUpperCase()+'</div>' +
+                  '<div>' +
+                    '<div class="rsc-name">'+g.name+
+                      (isBanned?' <span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:99px;margin-left:8px;font-weight:700;">🔒 BANNED</span>':'')+
                     '</div>' +
+                    '<div class="rsc-meta">'+count+' report'+(count!==1?'s':'')+' · UID: '+uid.slice(0,12)+'…</div>' +
+                  '</div>' +
                 '</div>' +
                 '<div style="display:flex;align-items:center;gap:10px;">' +
-                    (pendingCount > 0 ? '<div class="rsc-count' + (pendingCount > 1 ? ' multi' : '') + '">' + pendingCount + ' pending</div>' : '<div style="font-size:11px;color:#22c55e;font-weight:600;">✅ All reviewed</div>') +
-                    '<span style="color:#94a3b8;font-size:16px;">' + (isExpanded ? '▲' : '▼') + '</span>' +
+                  (pendingCount>0
+                    ? '<div class="rsc-count'+(pendingCount>1?' multi':'')+'">'+pendingCount+' pending</div>'
+                    : '<div style="font-size:11px;color:#22c55e;font-weight:600;">✅ All reviewed</div>') +
+                  '<span style="color:#94a3b8;font-size:16px;">'+(isExpanded?'▲':'▼')+'</span>' +
                 '</div>';
             feed.appendChild(card);
 
             // Ban/Unban row
             var ar = document.createElement('div');
-            ar.className = 'user-action-row' + (isExpanded ? ' open' : '');
+            ar.className = 'user-action-row'+(isExpanded?' open':'');
             ar.innerHTML = isBanned
                 ? '<span style="font-size:13px;color:#7f1d1d;">This user is currently banned.</span>' +
-                  '<button onclick="unbanUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-unban">✅ Unban User</button>'
+                  '<button onclick="unbanUser(\''+uid+'\',\''+safeName+'\');event.stopPropagation();" class="btn btn-unban">✅ Unban User</button>'
                 : '<span style="font-size:13px;color:#64748b;">Permanently ban this user from the platform?</span>' +
-                  '<button onclick="banUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-ban-user btn">🔒 Ban User</button>';
+                  '<button onclick="banUser(\''+uid+'\',\''+safeName+'\');event.stopPropagation();" class="btn btn-ban-user btn">🔒 Ban User</button>';
             feed.appendChild(ar);
 
             // Report detail cards
             var details = document.createElement('div');
-            details.className = 'report-details' + (isExpanded ? ' open' : '');
+            details.className = 'report-details'+(isExpanded?' open':'');
 
-            var sorted = g.reports.slice().sort(function(a, b) {
-                return (a.status === 'pending' ? -1 : 1) - (b.status === 'pending' ? -1 : 1);
+            var sorted = g.reports.slice().sort(function(a,b){
+                return (a.status==='pending'?-1:1)-(b.status==='pending'?-1:1);
             });
 
             sorted.forEach(function(r) {
                 var date = (r.createdAt && r.createdAt.toDate)
-                    ? r.createdAt.toDate().toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })
+                    ? r.createdAt.toDate().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})
                     : 'Unknown date';
-
                 var imgHtml = r.imageData
-                    ? '<div class="report-img-wrap">' +
-                          '<p style="font-size:11px;color:#64748b;margin:0 0 6px;">Attached evidence:</p>' +
-                          '<img src="' + r.imageData + '" alt="evidence" onclick="openLightbox(this);event.stopPropagation();">' +
-                      '</div>'
+                    ? '<div class="report-img-wrap"><p style="font-size:11px;color:#64748b;margin:0 0 6px;">Attached evidence:</p>' +
+                      '<img src="'+r.imageData+'" alt="evidence" onclick="openLightbox(this);event.stopPropagation();"></div>'
                     : '';
-
                 var statusHtml =
-                    r.status === 'ignored' ? '<span class="pill-ignored">Ignored</span>' :
-                    r.status === 'banned'  ? '<span class="pill-actioned">Actioned</span>' : '';
-
-                var actionsHtml = r.status === 'pending'
+                    r.status==='ignored' ? '<span class="pill-ignored">Ignored</span>' :
+                    r.status==='banned'  ? '<span class="pill-actioned">Actioned</span>' : '';
+                var actionsHtml = r.status==='pending'
                     ? '<div class="report-actions">' +
-                          '<button onclick="ignoreReport(\'' + r.id + '\');event.stopPropagation();" class="btn btn-ignore">👁 Ignore</button>' +
-                          '<button onclick="banUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-ban">🔒 Ban User</button>' +
+                      '<button onclick="ignoreReport(\''+r.id+'\');event.stopPropagation();" class="btn btn-ignore">👁 Ignore</button>' +
+                      '<button onclick="banUser(\''+uid+'\',\''+safeName+'\');event.stopPropagation();" class="btn btn-ban">🔒 Ban User</button>' +
                       '</div>'
                     : '';
-
                 var item = document.createElement('div');
                 item.className = 'report-item';
                 item.innerHTML =
                     '<div class="report-item-header">' +
-                        '<span class="report-cat-pill">' + (r.category || 'Unknown') + '</span>' +
-                        '<div style="display:flex;align-items:center;gap:8px;">' + statusHtml + '<span class="report-date">' + date + '</span></div>' +
+                      '<span class="report-cat-pill">'+(r.category||'Unknown')+'</span>' +
+                      '<div style="display:flex;align-items:center;gap:8px;">'+statusHtml+'<span class="report-date">'+date+'</span></div>' +
                     '</div>' +
-                    '<div class="report-desc">' + (r.description || 'No description provided.') + '</div>' +
-                    '<div class="report-reporter">Reported by: <b>' + (r.reporterName || 'Anonymous') + '</b></div>' +
+                    '<div class="report-desc">'+(r.description||'No description.')+'</div>' +
+                    '<div class="report-reporter">Reported by: <b>'+(r.reporterName||'Anonymous')+'</b></div>' +
                     imgHtml + actionsHtml;
                 details.appendChild(item);
             });
@@ -583,29 +482,37 @@
 
     function ignoreReport(id) {
         if (!confirm('Mark this report as ignored?')) return;
-        db.collection("reports").doc(id).update({ status: 'ignored' })
+        db.collection("reports").doc(id).update({ status:'ignored' })
             .catch(function() { alert('Error updating report.'); });
     }
 
     function banUser(uid, name) {
-        if (!confirm('Ban ' + name + '?\n\nThey will be locked out of the platform immediately.')) return;
-        db.collection("users").doc(uid).update({ banned: true })
+        if (!confirm('Ban '+name+'?\n\nThey will be locked out immediately.')) return;
+        db.collection("users").doc(uid).update({ banned:true })
             .then(function() {
                 return db.collection("reports")
-                    .where("reportedUid", "==", uid)
-                    .where("status", "==", "pending")
+                    .where("reportedUid","==",uid)
+                    .where("status","==","pending")
                     .get();
             })
             .then(function(snap) {
-                var updates = snap.docs.map(function(d) { return d.ref.update({ status: 'banned' }); });
-                return Promise.all(updates);
+                return Promise.all(snap.docs.map(function(d){ return d.ref.update({ status:'banned' }); }));
             })
-            .then(function() { alert(name + ' has been banned.'); })
-            .catch(function(e) { alert('Error: ' + e.message); });
+            .then(function() { alert(name+' has been banned.'); })
+            .catch(function(e) { alert('Error: '+e.message); });
     }
 
     function unbanUser(uid, name) {
-        if (!confirm('Unban ' + name + '? They will regain full access.')) return;
-        db.collection("users").doc(uid).update({ banned: false })
-            .then(function() { alert(name + ' has been unbanned.'); })
-            .catch(function(e) { alert(
+        if (!confirm('Unban '+name+'? They will regain full access.')) return;
+        db.collection("users").doc(uid).update({ banned:false })
+            .then(function() { alert(name+' has been unbanned.'); })
+            .catch(function(e) { alert('Error: '+e.message); });
+    }
+
+    function openLightbox(imgEl) {
+        document.getElementById('lightboxImg').src = imgEl.src;
+        document.getElementById('imgLightbox').classList.add('open');
+    }
+</script>
+</body>
+</html>
