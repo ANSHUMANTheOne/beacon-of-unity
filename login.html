@@ -10,6 +10,24 @@
 html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:#071e30;display:flex;align-items:center;justify-content:center;cursor:none;position:relative}
 
+/* ── Mobile ── */
+@media(max-width:600px){
+  html,body{height:auto;overflow-y:auto;overflow-x:hidden;min-height:100%}
+  body{align-items:flex-start;padding:24px 0 40px;cursor:auto}
+  #cd,#cr{display:none}
+  .card{border-radius:20px;padding:28px 22px;width:100%;max-width:calc(100vw - 28px);margin:auto}
+  .card-title{font-size:1.35rem}
+  .card-sub{font-size:.8rem;margin-bottom:22px}
+  .logo-row{margin-bottom:22px}
+  .back{margin-bottom:18px}
+  .inp{font-size:1rem;padding:14px 15px} /* 16px effective prevents iOS zoom */
+  .btn-primary{padding:15px;font-size:.9rem}
+  .btn-google{padding:14px;font-size:.86rem}
+  .verify-icon{width:48px;height:48px;font-size:1.35rem;margin-bottom:14px}
+  .trust-note{padding:10px 12px}
+  .trust-note-txt{font-size:.73rem}
+}
+
 /* ── Background ── */
 .bg{position:fixed;inset:0;z-index:0;overflow:hidden}
 .bg-grad{position:absolute;inset:0;background:
@@ -58,18 +76,18 @@ body.hov #cr{width:52px;height:52px;border-color:rgba(6,182,212,.4)}
 /* ── Inputs ── */
 .inp-wrap{position:relative;margin-bottom:12px}
 .inp-wrap label{display:block;font-size:.72rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px}
-.inp{width:100%;padding:13px 16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:13px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:#fff;outline:none;transition:border-color .2s,background .2s,box-shadow .2s;cursor:none}
+.inp{width:100%;padding:13px 16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:13px;font-family:'DM Sans',sans-serif;font-size:16px;color:#fff;outline:none;transition:border-color .2s,background .2s,box-shadow .2s;cursor:none}
 .inp::placeholder{color:rgba(255,255,255,.25)}
 .inp:focus{border-color:rgba(14,165,233,.5);background:rgba(14,165,233,.06);box-shadow:0 0 0 3px rgba(14,165,233,.08)}
 .inp:-webkit-autofill{-webkit-box-shadow:0 0 0 100px #0e3d5e inset;-webkit-text-fill-color:#fff}
 
 /* ── Buttons ── */
-.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);border:none;border-radius:13px;font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:#fff;cursor:none;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;margin-top:6px;letter-spacing:.2px}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);border:none;border-radius:13px;font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:#fff;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;margin-top:6px;letter-spacing:.2px}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(14,165,233,.45)}
 .btn-primary:active{transform:translateY(0)}
 .btn-primary:disabled{opacity:.55;transform:none;box-shadow:none}
 
-.btn-google{width:100%;padding:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:13px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.88rem;color:rgba(255,255,255,.8);cursor:none;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .2s,border-color .2s,transform .2s}
+.btn-google{width:100%;padding:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:13px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.88rem;color:rgba(255,255,255,.8);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .2s,border-color .2s,transform .2s}
 .btn-google:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28);transform:translateY(-1px)}
 .g-icon{width:18px;height:18px;flex-shrink:0}
 
@@ -226,7 +244,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     if (userData && userData.status === "approved") {
-      window.location.href = "index.html";
+      window.location.href = "dashboard.html";
       return;
     }
 
