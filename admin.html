@@ -246,7 +246,7 @@
     <div class="section-panel active container" id="panel-verification">
         <h2>Resident Verification Queue</h2>
         <button onclick="resetTester()" class="btn btn-reset">
-            🔄 Reset Tester (rashmibiswa2008@gmail.com)
+            🔄 Reset Tester (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="097b687a6164606b607a7e683b393931496e64686065276a6664">[email&#160;protected]</a>)
         </button>
         <table id="requestsTable">
             <thead>
@@ -278,10 +278,9 @@
 </div><!-- /adminContent -->
 
 
-<script type="module">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
     import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc,
              query, where, onSnapshot }
         from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -296,11 +295,13 @@
     };
 
     const app  = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db   = getFirestore(app);
 
-    // ── Only these two emails may access the panel ──
-    const ADMIN_EMAILS = ['luckyansh.t@gmail.com', 'beaconofunityofficial@gmail.com'];
+    // ── Allowed admins: email → password ──
+    const ADMINS = {
+        'luckyansh.t@gmail.com':          'Aayansh_2009',
+        'beaconofunityofficial@gmail.com': 'Aayansh_2009'
+    };
 
     // ── UI state helpers ──
     function showGate() {
@@ -321,46 +322,55 @@
         document.getElementById('adminEmailDisplay').innerText = `Signed in as ${email}`;
     }
 
-    // ── Auth state — fires on every page load ──
-    onAuthStateChanged(auth, (user) => {
-        if (!user) { showGate(); return; }
-        if (!ADMIN_EMAILS.includes(user.email)) {
-            showDenied(`"${user.email}" is not an authorised admin account.`);
-            return;
-        }
-        showAdmin(user.email);
+    // ── Check session on page load ──
+    const sessionEmail = sessionStorage.getItem('adminEmail');
+    if (sessionEmail && ADMINS[sessionEmail]) {
+        showAdmin(sessionEmail);
         loadData();
         loadReports();
-    });
+    } else {
+        showGate();
+    }
 
     // ── Sign in ──
-    window.adminSignIn = async () => {
-        const email = document.getElementById('adminEmail').value.trim();
+    window.adminSignIn = () => {
+        const email = document.getElementById('adminEmail').value.trim().toLowerCase();
         const pass  = document.getElementById('adminPassword').value;
         const errEl = document.getElementById('authError');
-        const btn   = document.getElementById('adminSignInBtn');
         errEl.innerText = '';
+
         if (!email || !pass) { errEl.innerText = 'Please enter your email and password.'; return; }
-        btn.disabled = true; btn.innerText = 'Signing in…';
-        try {
-            await signInWithEmailAndPassword(auth, email, pass);
-            // onAuthStateChanged handles the rest
-        } catch (e) {
-            errEl.innerText =
-                ['auth/invalid-credential', 'auth/wrong-password'].includes(e.code)
-                    ? 'Incorrect email or password.'
-                    : e.code === 'auth/user-not-found'
-                    ? 'No account found with this email.'
-                    : 'Sign in failed. Please try again.';
+
+        // Check email is an admin email
+        if (!ADMINS.hasOwnProperty(email)) {
+            errEl.innerText = 'This email is not authorised to access the admin panel.';
+            return;
         }
-        btn.disabled = false; btn.innerText = 'Sign In';
+        // Check password matches
+        if (ADMINS[email] !== pass) {
+            errEl.innerText = 'Incorrect password.';
+            return;
+        }
+
+        // ✅ Both match — grant access
+        sessionStorage.setItem('adminEmail', email);
+        showAdmin(email);
+        loadData();
+        loadReports();
     };
+
     document.getElementById('adminPassword').addEventListener('keydown', e => {
         if (e.key === 'Enter') window.adminSignIn();
     });
 
     // ── Sign out ──
-    window.adminSignOut = async () => { await signOut(auth); showGate(); };
+    window.adminSignOut = () => {
+        sessionStorage.removeItem('adminEmail');
+        document.getElementById('adminEmail').value    = '';
+        document.getElementById('adminPassword').value = '';
+        document.getElementById('authError').innerText = '';
+        showGate();
+    };
 
     // ── Tab switching ──
     window.showSection = (name) => {
@@ -619,11 +629,4 @@
         } catch (e) { alert('Error: ' + e.message); }
     };
 
-    // Lightbox — reads src from the clicked img element directly
-    window.openLightbox = (imgEl) => {
-        document.getElementById('lightboxImg').src = imgEl.src;
-        document.getElementById('imgLightbox').classList.add('open');
-    };
-</script>
-</body>
-</html>
+    // Lightbox — reads src from the
