@@ -2214,55 +2214,48 @@
 
         // Try every proxy in sequence, first success wins
         // Race all proxies for a single URL — first valid response wins, rest are cancelled
-        async function _raceFetch(feedUrl, src) {
-            const TIMEOUT = 7000;
-
-            const attempt = async (proxyUrl) => {
-                const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(TIMEOUT) });
-                if (!res.ok) throw new Error('not ok');
-                if (proxyUrl.includes('rss2json')) {
-                    const d = await res.json();
-                    if (d.status !== 'ok' || !d.items?.length) throw new Error('empty');
-                    return d.items.map(item => ({
-                        source: src.key, sourceName: src.name,
-                        badgeBg: src.badgeBg, badgeColor: src.badgeColor, placeholder: src.placeholder,
-                        title: _clean(item.title) || '',
-                        description: _clean(item.description || item.content) || '',
-                        link: item.link || item.guid || '',
-                        pubDate: item.pubDate || '',
-                        thumbnail: item.thumbnail || item.enclosure?.link || '',
-                    }));
-                }
-                const text = proxyUrl.includes('allorigins.win/get')
-                    ? ((await res.json()).contents || '')
-                    : await res.text();
-                if (!text.includes('<item')) throw new Error('no items');
-                const items = _parseXML(text, src);
-                if (!items?.length) throw new Error('parse fail');
-                return items;
-            };
-
-            const urls = [
-                `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=30`,
-                `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`,
-                `https://corsproxy.io/?${encodeURIComponent(feedUrl)}`,
-                `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`,
+        async function _fetchFeed(src) {
+            const PROXIES = [
+                u => `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}&count=30`,
+                u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+                u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+                u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
             ];
 
-            // Use Promise.any — resolves with first SUCCESS, ignores failures
-            // Falls back to null only if every proxy fails
-            try {
-                return await Promise.any(urls.map(u => attempt(u)));
-            } catch {
-                return null;
-            }
-        }
-
-        async function _fetchFeed(src) {
-            // Try each feed URL, racing all proxies simultaneously — stop at first success
             for (const feedUrl of src.urls) {
-                const items = await _raceFetch(feedUrl, src);
-                if (items?.length) return items;
+                for (const proxyFn of PROXIES) {
+                    try {
+                        const proxyUrl = proxyFn(feedUrl);
+                        const controller = new AbortController();
+                        const timer = setTimeout(() => controller.abort(), 8000);
+                        const res = await fetch(proxyUrl, { signal: controller.signal });
+                        clearTimeout(timer);
+                        if (!res.ok) continue;
+
+                        if (proxyUrl.includes('rss2json')) {
+                            const d = await res.json();
+                            if (d.status === 'ok' && d.items?.length) {
+                                return d.items.map(item => ({
+                                    source: src.key, sourceName: src.name,
+                                    badgeBg: src.badgeBg, badgeColor: src.badgeColor, placeholder: src.placeholder,
+                                    title: _clean(item.title) || '',
+                                    description: _clean(item.description || item.content) || '',
+                                    link: item.link || item.guid || '',
+                                    pubDate: item.pubDate || '',
+                                    thumbnail: item.thumbnail || item.enclosure?.link || '',
+                                }));
+                            }
+                            continue;
+                        }
+
+                        const text = proxyUrl.includes('allorigins.win/get')
+                            ? ((await res.json()).contents || '')
+                            : await res.text();
+                        if (!text.includes('<item')) continue;
+                        const items = _parseXML(text, src);
+                        if (items?.length) return items;
+                    } catch(e) { /* try next */ }
+                }
             }
             return [];
         }
