@@ -764,7 +764,6 @@
         </button>
     </nav>
 
-    <div id="gt_host" style="display:none;"></div>
     <div id="quoteOverlay">
         <div id="quoteText"><span id="quoteTyped"></span><span id="quoteCursor"></span></div>
         <button id="quoteSkip">Skip  ✕</button>
@@ -2066,8 +2065,9 @@
                 placeholder: '#f59e0b',
                 urls: [
                     'https://www.khaleejtimes.com/arc/outboundfeeds/rss/',
+                    'https://www.khaleejtimes.com/arc/outboundfeeds/rss/?outputType=rss',
                     'https://www.khaleejtimes.com/rss/',
-                    'https://www.khaleejtimes.com/feed/',
+                    'https://feeds.feedburner.com/khaleejtimes',
                 ]
             },
             {
@@ -2079,6 +2079,7 @@
                     'https://gulfnews.com/rss/uae.xml',
                     'https://gulfnews.com/rss/world.xml',
                     'https://gulfnews.com/rss/business.xml',
+                    'https://gulfnews.com/rss/opinion.xml',
                 ]
             },
             {
@@ -2089,6 +2090,7 @@
                 urls: [
                     'https://www.aljazeera.com/xml/rss/all.xml',
                     'https://www.aljazeera.com/xml/rss/world.xml',
+                    'https://www.aljazeera.com/xml/rss/middleeast.xml',
                 ]
             }
         ];
@@ -2176,7 +2178,7 @@
             for (const url of src.urls) {
                 try {
                     const r = await fetch(
-                        `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=30&api_key=`,
+                        `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=30`,
                         { signal: AbortSignal.timeout(9000) }
                     );
                     if (!r.ok) continue;
@@ -2274,29 +2276,19 @@
             const results = await Promise.allSettled(_FEEDS.map(src => _fetchFeed(src)));
             results.forEach(r => { if (r.status === 'fulfilled') _newsItems.push(...r.value); });
 
-            // Filter: last 24h, score > 0, deduplicate
+            // Score, deduplicate, sort — NO time gate (RSS feeds already return recent items)
             _newsItems = _newsItems
-                .filter(i => _within24h(i.pubDate))
+                .filter(i => i.title && i.title.length > 5)
                 .map(i => ({ ...i, score: _score(i.title, i.description) }))
-                .filter(i => i.score > 0 || _newsItems.length < 10) // fallback: show all if few results
-                .filter((i, idx, arr) => arr.findIndex(o => o.title.slice(0,48) === i.title.slice(0,48)) === idx)
+                .filter((i, idx, arr) => arr.findIndex(o => o.title.slice(0,50) === i.title.slice(0,50)) === idx)
                 .sort((a, b) => {
                     const da = new Date(a.pubDate||0), db = new Date(b.pubDate||0);
-                    if (Math.abs(da-db) > 1800000) return db - da;
+                    // Sort by date first; within same hour sort by score
+                    const hourDiff = Math.abs(da - db);
+                    if (hourDiff > 3600000) return db - da;
                     return b.score - a.score;
                 })
-                .slice(0, 50);
-
-            // If still empty after 24h filter, try without time filter
-            if (!_newsItems.length) {
-                _newsItems = results
-                    .filter(r => r.status === 'fulfilled')
-                    .flatMap(r => r.value)
-                    .map(i => ({ ...i, score: _score(i.title, i.description) }))
-                    .filter((i, idx, arr) => arr.findIndex(o => o.title.slice(0,48) === i.title.slice(0,48)) === idx)
-                    .sort((a, b) => new Date(b.pubDate||0) - new Date(a.pubDate||0))
-                    .slice(0, 30);
-            }
+                .slice(0, 60);
 
             if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh'; }
             _newsLoaded = true;
@@ -2393,7 +2385,6 @@
         // ══ Language / Translation ══
         window._currentLang = 'en';
 
-        // MyMemory API — free, no key, handles EN↔AR↔HI
         window.setLang = (lang) => {
             window._currentLang = lang;
             // Update active pill
@@ -2401,54 +2392,37 @@
             const ids = { en: 'langEn', ar: 'langAr', hi: 'langHi' };
             document.getElementById(ids[lang])?.classList.add('active');
 
-            // Arabic / Hindi: use Google Translate widget via cookie + reload
-            // English: clear translation cookie + reload
-            const gtLang = { en: '/en/en', ar: '/en/ar', hi: '/en/hi' }[lang] || '/en/en';
-            const wasAlready = document.cookie.includes('googtrans=' + gtLang);
-            if (wasAlready && lang === window._lastAppliedLang) return;
-            window._lastAppliedLang = lang;
-
-            // Set cookie for google translate
-            document.cookie = 'googtrans=' + gtLang + '; path=/';
-            document.cookie = 'googtrans=' + gtLang + '; path=/; domain=.' + location.hostname;
-
-            // Inject GT script once
-            if (!window._gtScriptLoaded) {
-                window._gtScriptLoaded = true;
-                window._gtTargetLang = lang;
-                window.googleTranslateElementInit = function() {
-                    new google.translate.TranslateElement({
-                        pageLanguage: 'en',
-                        includedLanguages: 'ar,hi,en',
-                        autoDisplay: false,
-                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-                    }, 'gt_host');
-                };
-                const s = document.createElement('script');
-                s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-                s.onerror = () => { window._gtScriptLoaded = false; };
-                document.head.appendChild(s);
-                // Give GT 1.5s to load then trigger
-                setTimeout(() => _triggerGT(lang), 1500);
-            } else {
-                _triggerGT(lang);
+            if (lang === 'en') {
+                // If currently on a Google Translate proxy URL, go back to original
+                const href = location.href;
+                if (href.includes('translate.google') || href.includes('translate.goog')) {
+                    // Extract original URL from GT proxy
+                    const m = href.match(/[?&]u=([^&]+)/);
+                    if (m) { location.href = decodeURIComponent(m[1]); return; }
+                }
+                // Already on original — nothing to do
+                return;
             }
+
+            // For AR / HI: redirect through Google Translate proxy
+            // This is the only method that works reliably cross-device with zero popups
+            const gtCodes = { ar: 'ar', hi: 'hi' };
+            const tl = gtCodes[lang] || lang;
+            const pageUrl = encodeURIComponent(location.href.split('?')[0]);
+            location.href = `https://translate.google.com/translate?sl=en&tl=${tl}&u=${pageUrl}`;
         };
 
-        function _triggerGT(lang) {
-            try {
-                const sel = document.querySelector('.goog-te-combo');
-                if (sel) {
-                    sel.value = lang === 'en' ? '' : lang;
-                    sel.dispatchEvent(new Event('change'));
-                    return;
-                }
-            } catch(e) {}
-            // Fallback: reload with cookie set
-            if (lang !== 'en' || document.cookie.includes('googtrans=/en/ar') || document.cookie.includes('googtrans=/en/hi')) {
-                location.reload();
+        // Detect if we're already on a GT proxy and highlight correct pill
+        (function() {
+            const href = location.href;
+            if (href.includes('translate.goog') || href.includes('translate.google')) {
+                // Try to detect language from URL
+                const m = href.match(/[?&]tl=([^&]+)/);
+                const tl = m ? m[1] : '';
+                if (tl === 'ar') { window._currentLang = 'ar'; document.getElementById('langAr')?.classList.add('active'); document.getElementById('langEn')?.classList.remove('active'); }
+                else if (tl === 'hi') { window._currentLang = 'hi'; document.getElementById('langHi')?.classList.add('active'); document.getElementById('langEn')?.classList.remove('active'); }
             }
-        }
+        })();
         // ══ Language END ══
 
                 const logout = () => signOut(auth).then(() => window.location.href = "login.html");
