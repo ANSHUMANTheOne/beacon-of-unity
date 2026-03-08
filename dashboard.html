@@ -2482,7 +2482,24 @@
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById({en:'langEn', ar:'langAr', hi:'langHi'}[lang] || 'langEn')?.classList.add('active');
             // Empty string = show original English; language code = translate
-            _gtSwitch(lang === 'en' ? '' : lang);
+            if (lang === 'en') {
+                // Reverting to English: '' doesn't always work — 'en' is the reliable way
+                _gtSwitch('en');
+                // Also try clicking the GT "show original" restore link as backup
+                setTimeout(() => {
+                    const restore = document.querySelector('.goog-te-banner-frame')
+                        ?.contentDocument?.querySelector('#restore');
+                    if (restore) restore.click();
+                    // Last resort: select 'en' again after a tick
+                    const sel = document.querySelector('.goog-te-combo');
+                    if (sel && sel.value !== 'en') {
+                        sel.value = 'en';
+                        sel.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                }, 200);
+            } else {
+                _gtSwitch(lang);
+            }
         };
         // ══ Language END ══
 
