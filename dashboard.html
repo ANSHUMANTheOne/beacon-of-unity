@@ -2239,8 +2239,17 @@
         }
 
         async function _tryProxy(proxyUrl, src) {
-            const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(9000) });
-            if (!res.ok) throw new Error('bad status');
+            const _ac = new AbortController();
+            const _t = setTimeout(() => _ac.abort(), 9000);
+            let res;
+            try {
+                res = await fetch(proxyUrl, { signal: _ac.signal });
+                clearTimeout(_t);
+            } catch(e) {
+                clearTimeout(_t);
+                throw e; // network error / timeout — let _firstSuccess handle it
+            }
+            if (!res || !res.ok) throw new Error('bad status');
             if (proxyUrl.includes('rss2json')) {
                 const d = await res.json();
                 if (d.status !== 'ok' || !d.items?.length) throw new Error('empty');
@@ -2278,7 +2287,7 @@
         }
 
         const _CACHE_KEY = 'bou_news_cache';
-        const _CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+        const _CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
         function _saveCache(items) {
             try { localStorage.setItem(_CACHE_KEY, JSON.stringify({ t: Date.now(), items })); } catch(e) {}
@@ -2336,13 +2345,23 @@
                 </div>`;
             if (btn) { btn.disabled = true; btn.textContent = '↻ Loading…'; }
 
-            const items = await _fetchAllFeeds();
+            // Try up to 3 times before giving up
+            let items = [];
+            for (let attempt = 0; attempt < 3; attempt++) {
+                items = await _fetchAllFeeds();
+                if (items.length) break;
+                if (attempt < 2) await new Promise(r => setTimeout(r, 1500)); // wait 1.5s before retry
+            }
+
             if (items.length) {
                 _newsItems = items;
                 _saveCache(items);
-            } else if (cached) {
-                // Fetch failed but we have stale cache — use it
-                _newsItems = cached;
+            } else {
+                // Check for any stale cache regardless of TTL
+                try {
+                    const stale = JSON.parse(localStorage.getItem(_CACHE_KEY) || 'null');
+                    if (stale?.items?.length) _newsItems = stale.items;
+                } catch(e) {}
             }
 
             if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh'; }
