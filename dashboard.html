@@ -2425,41 +2425,41 @@
         // ══ Language / Translation ══
         window._currentLang = 'en';
 
-        // Inject GT widget once — hidden, just needs to exist to enable doGTranslate
-        (function() {
-            window.googleTranslateElementInit = function() {
-                new google.translate.TranslateElement(
-                    { pageLanguage: 'en', autoDisplay: false },
-                    '_gtHost'
-                );
-            };
-            const s = document.createElement('script');
-            s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-            document.head.appendChild(s);
-        })();
+        // Step 1: Immediately nuke any stale googtrans cookie so page always loads English
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + location.hostname;
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + location.hostname;
 
+        // Step 2: Init GT widget — autoDisplay:false, no auto language detection
+        window.googleTranslateElementInit = function() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'ar,hi',
+                autoDisplay: false,
+            }, '_gtHost');
+        };
+        const _gtScript = document.createElement('script');
+        _gtScript.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.head.appendChild(_gtScript);
+
+        // Step 3: setLang — calls doGTranslate which is GT's own reliable internal switcher
         window.setLang = (lang) => {
             window._currentLang = lang;
-            // Highlight correct pill
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            ({ en:'langEn', ar:'langAr', hi:'langHi' }[lang] && 
-             document.getElementById({en:'langEn',ar:'langAr',hi:'langHi'}[lang])?.classList.add('active'));
 
-            // doGTranslate('en|ar') is Google Translate's own internal function
-            // It reliably switches language without any combo select race conditions
-            const pair = lang === 'en' ? 'en|en' : 'en|' + lang;
-            if (typeof doGTranslate !== 'undefined') {
-                doGTranslate(pair);
-            } else {
-                // GT script not loaded yet — wait and retry
-                let tries = 0;
-                const wait = setInterval(() => {
-                    if (typeof doGTranslate !== 'undefined') {
-                        clearInterval(wait);
-                        doGTranslate(pair);
-                    } else if (++tries > 20) clearInterval(wait);
-                }, 200);
-            }
+            // Highlight pill
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById({en:'langEn',ar:'langAr',hi:'langHi'}[lang] || 'langEn')?.classList.add('active');
+
+            // doGTranslate('en|ar') is the internal GT function — most reliable way to switch
+            const pair = 'en|' + (lang === 'en' ? 'en' : lang);
+            const tryTranslate = () => {
+                if (typeof doGTranslate === 'function') {
+                    doGTranslate(pair);
+                } else {
+                    setTimeout(tryTranslate, 150);
+                }
+            };
+            tryTranslate();
         };
         // ══ Language END ══
 
