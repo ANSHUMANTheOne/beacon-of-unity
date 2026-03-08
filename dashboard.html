@@ -529,57 +529,40 @@
             background: #38bdf8; color: white; border-color: #38bdf8;
             box-shadow: 0 4px 12px rgba(56,189,248,.28);
         }
+        .news-pill:disabled { opacity: .6; cursor: not-allowed; }
+        /* Card */
         .news-card {
-            background: white; border: 1px solid #e2e8f0;
-            border-radius: 14px; padding: 18px 20px;
-            margin-bottom: 14px; cursor: pointer;
-            transition: box-shadow .2s, border-color .2s, transform .2s;
-            text-decoration: none; display: block; color: inherit;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            transition: box-shadow .2s, border-color .2s, transform .18s;
         }
         .news-card:hover {
-            box-shadow: 0 8px 24px rgba(14,165,233,.1);
+            box-shadow: 0 8px 28px rgba(14,165,233,.11);
             border-color: rgba(56,189,248,.3);
             transform: translateY(-1px);
         }
-        .news-card-source {
-            display: inline-flex; align-items: center; gap: 5px;
-            font-size: 11px; font-weight: 700; text-transform: uppercase;
-            letter-spacing: .5px; padding: 3px 9px; border-radius: 99px;
-            margin-bottom: 10px;
+        /* Skeleton shimmer */
+        @keyframes shimmer {
+            0%   { background-position: -600px 0; }
+            100% { background-position: 600px 0; }
         }
-        .news-card-source.khaleej { background: #fef3c7; color: #92400e; }
-        .news-card-source.gulf    { background: #dbeafe; color: #1e40af; }
-        .news-card h4 {
-            margin: 0 0 7px; font-size: 15px; font-weight: 700;
-            color: #0f172a; line-height: 1.4;
+        .news-skel {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e9f0f7 50%, #f1f5f9 75%);
+            background-size: 600px 100%;
+            animation: shimmer 1.4s infinite linear;
+            border-radius: 4px;
         }
-        .news-card p {
-            margin: 0 0 10px; font-size: 13px; color: #475569;
-            line-height: 1.55; display: -webkit-box;
-            -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .news-card-meta {
-            display: flex; align-items: center; justify-content: space-between;
-            font-size: 11px; color: #94a3b8; margin-top: 4px;
-        }
-        .news-card-meta a {
-            color: #0ea5e9; font-weight: 600; text-decoration: none; font-size: 11.5px;
-        }
-        .news-card-meta a:hover { text-decoration: underline; }
-        .news-importance-tag {
-            font-size: 10px; font-weight: 700; padding: 2px 7px;
-            border-radius: 99px; text-transform: uppercase; letter-spacing: .3px;
-        }
-        .news-importance-tag.high   { background: #fee2e2; color: #991b1b; }
-        .news-importance-tag.medium { background: #fef9c3; color: #854d0e; }
-        .news-error {
-            text-align: center; padding: 36px 20px; color: #94a3b8;
-        }
+        /* Dark mode */
         body.dark .news-card { background: #1e293b; border-color: #334155; }
-        body.dark .news-card h4 { color: #f1f5f9; }
-        body.dark .news-card p { color: #94a3b8; }
         body.dark .news-pill { background: #1e293b; color: #38bdf8; border-color: #334155; }
-        body.dark .news-pill.active, body.dark .news-pill:hover { background: #38bdf8; color: white; }
+        body.dark .news-pill.active, body.dark .news-pill:hover { background: #38bdf8; color: white; border-color: #38bdf8; }
+        body.dark .news-skel { background: linear-gradient(90deg,#334155 25%,#3f4f66 50%,#334155 75%); background-size:600px 100%; animation: shimmer 1.4s infinite linear; }
 
         /* ══ Reliable News END ══ */
         body.dark { background:#0f172a; color:#e2e8f0; }
@@ -741,6 +724,15 @@
     <div class="sidebar">
         <h2>Beacon of Unity</h2>
         <span class="region-tag" id="userRegionDisplay">Region: Loading...</span>
+
+        <!-- Language Switcher -->
+        <div id="langSwitcher">
+            <button class="lang-btn active" id="langEn" onclick="setLang('en')">🇬🇧 EN</button>
+            <button class="lang-btn" id="langAr" onclick="setLang('ar')">🇦🇪 AR</button>
+            <button class="lang-btn" id="langHi" onclick="setLang('hi')">🇮🇳 हि</button>
+            <button class="lang-btn" id="langUr" onclick="setLang('ur')">اردو</button>
+        </div>
+
         <div class="nav-item active" onclick="switchTab('community')"><span class="nav-emoji">✨</span> Community Hub</div>
         <div class="nav-item" onclick="switchTab('lostfound')"><span class="nav-emoji">🔍</span> Lost and Found</div>
         <div class="nav-item" onclick="switchTab('leaderboard')"><span class="nav-emoji">🏆</span> Leaderboard</div>
@@ -858,6 +850,9 @@
                         </button>
                         <button class="news-pill" onclick="filterNews('gulf')">
                             <img src="https://gulfnews.com/favicon.ico" onerror="this.style.display='none'" style="width:14px;height:14px;border-radius:3px;vertical-align:middle;margin-right:4px;">Gulf News
+                        </button>
+                        <button class="news-pill" onclick="filterNews('aljazeera')">
+                            <img src="https://www.aljazeera.com/favicon.ico" onerror="this.style.display='none'" style="width:14px;height:14px;border-radius:3px;vertical-align:middle;margin-right:4px;">Al Jazeera
                         </button>
                         <button class="news-pill" onclick="loadNews()" style="margin-left:auto; background:none; border-color:#e2e8f0; color:#64748b;" id="newsRefreshBtn">↻ Refresh</button>
                     </div>
@@ -1519,6 +1514,53 @@
                         bub.textContent = data.text;
                         wrap.appendChild(bub);
 
+                        // Translate button — shows on hover
+                        const tBtn = document.createElement('button');
+                        tBtn.className = 'translate-btn';
+                        tBtn.innerHTML = '🌐 Translate';
+                        tBtn.title = 'Translate this message';
+                        (function(msgText, wrapEl, btnEl) {
+                            let translated = false;
+                            let resultEl = null;
+                            btnEl.onclick = async (e) => {
+                                e.stopPropagation();
+                                if (translated && resultEl) {
+                                    resultEl.remove(); resultEl = null;
+                                    translated = false; btnEl.innerHTML = '🌐 Translate';
+                                    return;
+                                }
+                                btnEl.innerHTML = '⏳';
+                                btnEl.disabled = true;
+                                const targetLang = window._currentLang || 'en';
+                                // Detect source — if target is en, translate to en; else to target
+                                const langpair = targetLang === 'en' ? 'ar|en' : 'en|' + targetLang;
+                                try {
+                                    const res = await fetch(
+                                        'https://api.mymemory.translated.net/get?q=' +
+                                        encodeURIComponent(msgText) + '&langpair=' + langpair
+                                    );
+                                    const data2 = await res.json();
+                                    const tx = data2.responseData?.translatedText || '';
+                                    if (tx && tx.toLowerCase() !== msgText.toLowerCase()) {
+                                        resultEl = document.createElement('div');
+                                        resultEl.className = 'translate-result';
+                                        resultEl.textContent = tx;
+                                        wrapEl.appendChild(resultEl);
+                                        translated = true;
+                                        btnEl.innerHTML = '✕ Hide';
+                                    } else {
+                                        btnEl.innerHTML = '🌐 Same lang';
+                                        setTimeout(() => { btnEl.innerHTML = '🌐 Translate'; }, 1800);
+                                    }
+                                } catch {
+                                    btnEl.innerHTML = '⚠ Error';
+                                    setTimeout(() => { btnEl.innerHTML = '🌐 Translate'; }, 1800);
+                                }
+                                btnEl.disabled = false;
+                            };
+                        })(data.text, wrap, tBtn);
+                        wrap.appendChild(tBtn);
+
                         // Timestamp below bubble — only on last in group
                         if (!sameSenderAsNext && ts) {
                             const time = document.createElement('div');
@@ -1925,255 +1967,373 @@
         // ══════════════════════════════════════════
         //  RELIABLE NEWS — Khaleej Times + Gulf News
         // ══════════════════════════════════════════
-        let allNewsItems = [];
-        let activeFilter = 'all';
+        let _newsItems = [];
+        let _newsFilter = 'all';
+        let _newsLoaded = false;
 
-        // Multiple CORS proxies for fallback
-        const PROXIES = [
-            url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-            url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-            url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-        ];
-
-        // Correct RSS feed URLs verified for these publications
-        const NEWS_SOURCES = [
+        // Feed config — rss2json handles CORS + image extraction
+        const _FEEDS = [
             {
                 key: 'khaleej',
                 name: 'Khaleej Times',
-                feeds: [
+                badgeBg: '#fef3c7', badgeColor: '#92400e',
+                placeholder: '#f59e0b',
+                urls: [
                     'https://www.khaleejtimes.com/arc/outboundfeeds/rss/',
-                    'https://www.khaleejtimes.com/arc/outboundfeeds/rss/?outputType=xml',
-                    'https://feeds.feedburner.com/khaleejtimes/news',
-                ],
+                    'https://www.khaleejtimes.com/rss',
+                    'https://feeds.feedburner.com/khaleejtimes/uaenews',
+                ]
             },
             {
                 key: 'gulf',
                 name: 'Gulf News',
-                feeds: [
+                badgeBg: '#dbeafe', badgeColor: '#1e40af',
+                placeholder: '#3b82f6',
+                urls: [
                     'https://gulfnews.com/rss/uae.xml',
+                    'https://gulfnews.com/rss/uae',
                     'https://gulfnews.com/rss/world.xml',
-                    'https://gulfnews.com/rss/business.xml',
-                ],
+                    'https://gulfnews.com/rss/world',
+                ]
+            },
+            {
+                key: 'aljazeera',
+                name: 'Al Jazeera',
+                badgeBg: '#fce7f3', badgeColor: '#9d174d',
+                placeholder: '#ec4899',
+                urls: [
+                    'https://www.aljazeera.com/xml/rss/all.xml',
+                    'https://www.aljazeera.com/xml/rss/middle-east.xml',
+                    'https://www.aljazeera.com/xml/rss/middleeast.xml',
+                ]
             }
         ];
 
-        const IMPORTANT_KEYWORDS = [
-            'uae','dubai','abu dhabi','sharjah','ajman','ras al khaimah','fujairah','umm al quwain',
-            'emirates','federal','ministry','government','law','regulation','visa','residency',
-            'traffic','health','hospital','emergency','warning','alert','recall',
-            'inflation','cost','salary','job','employment','economy',
-            'weather','storm','rain','flood','heat','temperature','humidity',
-            'crime','safety','scam','fraud','arrest','police',
-            'road','accident','closure','highway','metro','bus',
-            'school','university','education','student',
-            'property','rent','housing','real estate',
-            'expo','event','festival','holiday','ramadan','eid',
-            'fuel','petrol','price','electricity','water',
-            'flight','airport','travel','tourism',
-            'covid','health','disease','epidemic',
-            'fire','explosion','disaster','earthquake',
+        // UAE-relevant keywords for importance scoring
+        const _KW = [
+            'uae','dubai','abu dhabi','sharjah','ajman','emirates','ministry','government',
+            'law','visa','residency','traffic','health','hospital','emergency','warning',
+            'alert','weather','storm','rain','flood','crime','safety','scam','fraud','police',
+            'road','accident','metro','school','property','rent','fuel','petrol','price',
+            'electricity','flight','airport','ramadan','eid','holiday','economy','salary',
+            'inflation','job','real estate','covid','fire','disaster'
         ];
 
-        function scoreImportance(title, description) {
-            const text = (title + ' ' + (description||'')).toLowerCase();
-            let score = 0;
-            for (const kw of IMPORTANT_KEYWORDS) {
-                if (text.includes(kw)) score++;
-            }
-            return score;
+        function _score(title, desc) {
+            const t = (title + ' ' + (desc||'')).toLowerCase();
+            return _KW.reduce((n, kw) => n + (t.includes(kw) ? 1 : 0), 0);
         }
 
-        function isWithin24Hours(dateStr) {
-            if (!dateStr) return true; // include if no date
+        function _ago(dateStr) {
+            if (!dateStr) return '';
             const d = new Date(dateStr);
-            if (isNaN(d)) return true;
-            return (Date.now() - d.getTime()) < 24 * 60 * 60 * 1000;
+            if (isNaN(d)) return '';
+            const m = Math.floor((Date.now() - d) / 60000);
+            if (m < 2)    return 'Just now';
+            if (m < 60)   return m + 'm ago';
+            if (m < 1440) return Math.floor(m/60) + 'h ago';
+            return d.toLocaleDateString('en-AE', { day:'numeric', month:'short' });
         }
 
-        async function fetchWithProxy(proxyFn, url) {
-            const proxyUrl = proxyFn(url);
-            const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(7000) });
-            if (!res.ok) throw new Error('bad status');
-            const data = await res.json();
-            // allorigins wraps in .contents, codetabs returns raw
-            return data.contents || data;
+        function _within24h(dateStr) {
+            if (!dateStr) return true;
+            const d = new Date(dateStr);
+            return isNaN(d) || (Date.now() - d.getTime()) < 86400000;
         }
 
-        async function fetchFeedRobust(feedUrl) {
-            let xmlText = null;
-            for (const proxyFn of PROXIES) {
+        // Strip HTML tags and decode entities
+        function _clean(html) {
+            if (!html) return '';
+            return html
+                .replace(/<[^>]+>/g, ' ')
+                .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+                .replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/&nbsp;/g,' ')
+                .replace(/\s+/g,' ').trim();
+        }
+
+        async function _fetchFeed(src) {
+            for (const url of src.urls) {
                 try {
-                    const result = await fetchWithProxy(proxyFn, feedUrl);
-                    if (typeof result === 'string' && result.includes('<item')) {
-                        xmlText = result;
-                        break;
-                    }
-                } catch {}
-            }
-            if (!xmlText) return [];
-            try {
-                const parser = new DOMParser();
-                const xml = parser.parseFromString(xmlText, 'text/xml');
-                const items = xml.querySelectorAll('item');
-                const results = [];
-                items.forEach(item => {
-                    const title = item.querySelector('title')?.textContent?.trim() || '';
-                    const desc = item.querySelector('description')?.textContent?.replace(/<[^>]+>/g,'').trim() || '';
-                    const link = item.querySelector('link')?.textContent?.trim() || '';
-                    const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
-                    if (title) results.push({ title, description: desc, link, pubDate });
-                });
-                return results;
-            } catch { return []; }
-        }
-
-        // Fallback: use GNews API (free tier, no key needed for basic) or NewsData
-        async function fetchFallbackNews(source) {
-            // Use rss2json service as extra fallback — very reliable
-            const feedMap = {
-                khaleej: 'https://www.khaleejtimes.com/arc/outboundfeeds/rss/',
-                gulf: 'https://gulfnews.com/rss/uae.xml',
-            };
-            const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedMap[source.key])}&api_key=&count=30`;
-            try {
-                const res = await fetch(rss2jsonUrl, { signal: AbortSignal.timeout(8000) });
-                const data = await res.json();
-                if (data.status === 'ok' && data.items?.length) {
-                    return data.items.map(i => ({
-                        title: i.title || '',
-                        description: i.description?.replace(/<[^>]+>/g,'').trim() || i.content?.replace(/<[^>]+>/g,'').trim() || '',
-                        link: i.link || '',
-                        pubDate: i.pubDate || '',
+                    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=25`;
+                    const res = await fetch(apiUrl, { signal: AbortSignal.timeout(10000) });
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    if (data.status !== 'ok' || !data.items?.length) continue;
+                    // Success — map items
+                    return data.items.map(item => ({
+                        source: src.key,
+                        sourceName: src.name,
+                        badgeBg: src.badgeBg,
+                        badgeColor: src.badgeColor,
+                        placeholder: src.placeholder,
+                        title: _clean(item.title) || '',
+                        description: _clean(item.description || item.content) || '',
+                        link: item.link || item.guid || '',
+                        pubDate: item.pubDate || '',
+                        thumbnail: item.thumbnail || item.enclosure?.link || '',
                     }));
-                }
-            } catch {}
+                } catch(e) { /* try next url */ }
+            }
+            // If rss2json fails entirely, try allorigins as last resort
+            for (const url of src.urls.slice(0,1)) {
+                try {
+                    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                    const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    const xml = (new DOMParser()).parseFromString(data.contents || '', 'text/xml');
+                    const items = [...xml.querySelectorAll('item')];
+                    if (!items.length) continue;
+                    return items.map(el => {
+                        const thumb = el.querySelector('media\\:content,media\\:thumbnail')?.getAttribute('url')
+                            || el.querySelector('enclosure')?.getAttribute('url') || '';
+                        return {
+                            source: src.key, sourceName: src.name,
+                            badgeBg: src.badgeBg, badgeColor: src.badgeColor,
+                            placeholder: src.placeholder,
+                            title: _clean(el.querySelector('title')?.textContent) || '',
+                            description: _clean(el.querySelector('description')?.textContent) || '',
+                            link: el.querySelector('link')?.textContent?.trim() || '',
+                            pubDate: el.querySelector('pubDate')?.textContent?.trim() || '',
+                            thumbnail: thumb,
+                        };
+                    });
+                } catch(e) {}
+            }
             return [];
         }
 
         window.loadNews = async () => {
-            const feed = document.getElementById('newsFeed');
-            feed.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#94a3b8;">
-                <div style="font-size:28px;margin-bottom:10px;">📡</div>
-                <p style="margin:0;font-size:14px;font-weight:500;">Fetching latest headlines from UAE…</p>
-                <p style="margin:6px 0 0;font-size:12px;color:#cbd5e1;">This may take a few seconds</p>
-            </div>`;
-            const refreshBtn = document.getElementById('newsRefreshBtn');
-            if (refreshBtn) refreshBtn.textContent = '↻ Loading…';
+            if (!document.getElementById('newsFeed')) return;
+            document.getElementById('newsFeed').innerHTML = `
+                <div style="display:flex;flex-direction:column;gap:14px;">
+                    ${[1,2,3,4].map(() => `
+                    <div class="news-card" style="pointer-events:none;">
+                        <div style="display:flex;gap:16px;align-items:flex-start;">
+                            <div style="flex:1;">
+                                <div class="news-skel" style="width:100px;height:18px;margin-bottom:12px;"></div>
+                                <div class="news-skel" style="width:100%;height:17px;margin-bottom:7px;"></div>
+                                <div class="news-skel" style="width:75%;height:17px;margin-bottom:14px;"></div>
+                                <div class="news-skel" style="width:100%;height:12px;margin-bottom:5px;"></div>
+                                <div class="news-skel" style="width:92%;height:12px;margin-bottom:5px;"></div>
+                                <div class="news-skel" style="width:70%;height:12px;"></div>
+                            </div>
+                            <div class="news-skel" style="width:92px;height:92px;border-radius:10px;flex-shrink:0;"></div>
+                        </div>
+                    </div>`).join('')}
+                </div>`;
 
-            allNewsItems = [];
+            const btn = document.getElementById('newsRefreshBtn');
+            if (btn) { btn.disabled = true; btn.textContent = '↻ Loading…'; }
 
-            // Fetch all sources in parallel, with rss2json as primary (most reliable)
-            const fetchPromises = NEWS_SOURCES.map(async src => {
-                // Try rss2json first (most reliable CORS-free service)
-                let items = await fetchFallbackNews(src);
-                // If that fails, try direct proxy approach
-                if (!items.length) {
-                    for (const feedUrl of src.feeds) {
-                        const result = await fetchFeedRobust(feedUrl);
-                        if (result.length) { items = result; break; }
-                    }
-                }
-                return items.map(i => ({ ...i, source: src.key, sourceName: src.name }));
-            });
+            _newsItems = [];
+            const results = await Promise.allSettled(_FEEDS.map(src => _fetchFeed(src)));
+            results.forEach(r => { if (r.status === 'fulfilled') _newsItems.push(...r.value); });
 
-            const results = await Promise.allSettled(fetchPromises);
-            for (const r of results) {
-                if (r.status === 'fulfilled') allNewsItems.push(...r.value);
-            }
-
-            // Filter to past 24 hours + score for importance
-            allNewsItems = allNewsItems
-                .filter(item => isWithin24Hours(item.pubDate))
-                .map(item => ({ ...item, score: scoreImportance(item.title, item.description) }))
-                .filter(item => item.score > 0)
-                // Deduplicate
-                .filter((item, idx, arr) =>
-                    arr.findIndex(o => o.title.toLowerCase().slice(0,50) === item.title.toLowerCase().slice(0,50)) === idx
-                )
+            // Filter: last 24h, score > 0, deduplicate
+            _newsItems = _newsItems
+                .filter(i => _within24h(i.pubDate))
+                .map(i => ({ ...i, score: _score(i.title, i.description) }))
+                .filter(i => i.score > 0 || _newsItems.length < 10) // fallback: show all if few results
+                .filter((i, idx, arr) => arr.findIndex(o => o.title.slice(0,48) === i.title.slice(0,48)) === idx)
                 .sort((a, b) => {
                     const da = new Date(a.pubDate||0), db = new Date(b.pubDate||0);
-                    if (Math.abs(da - db) > 1800000) return db - da;
+                    if (Math.abs(da-db) > 1800000) return db - da;
                     return b.score - a.score;
                 })
                 .slice(0, 50);
 
-            if (refreshBtn) refreshBtn.textContent = '↻ Refresh';
-            renderNews();
+            // If still empty after 24h filter, try without time filter
+            if (!_newsItems.length) {
+                _newsItems = results
+                    .filter(r => r.status === 'fulfilled')
+                    .flatMap(r => r.value)
+                    .map(i => ({ ...i, score: _score(i.title, i.description) }))
+                    .filter((i, idx, arr) => arr.findIndex(o => o.title.slice(0,48) === i.title.slice(0,48)) === idx)
+                    .sort((a, b) => new Date(b.pubDate||0) - new Date(a.pubDate||0))
+                    .slice(0, 30);
+            }
+
+            if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh'; }
+            _newsLoaded = true;
+            _renderNews();
         };
 
         window.filterNews = (f) => {
-            activeFilter = f;
+            _newsFilter = f;
             document.querySelectorAll('.news-pill').forEach(p => p.classList.remove('active'));
             const pills = document.querySelectorAll('#newsFilterRow .news-pill');
-            if (f === 'all')     pills[0]?.classList.add('active');
-            if (f === 'khaleej') pills[1]?.classList.add('active');
-            if (f === 'gulf')    pills[2]?.classList.add('active');
-            renderNews();
+            if (f === 'all')        pills[0]?.classList.add('active');
+            if (f === 'khaleej')    pills[1]?.classList.add('active');
+            if (f === 'gulf')       pills[2]?.classList.add('active');
+            if (f === 'aljazeera')  pills[3]?.classList.add('active');
+            _renderNews();
         };
 
-        function formatDate(str) {
-            if (!str) return '';
-            const d = new Date(str);
-            if (isNaN(d)) return '';
-            const diff = Math.floor((Date.now() - d) / 60000);
-            if (diff < 1)   return 'Just now';
-            if (diff < 60)  return `${diff}m ago`;
-            if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
-            return d.toLocaleDateString('en-AE', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
-        }
-
-        function renderNews() {
+        function _renderNews() {
             const feed = document.getElementById('newsFeed');
-            const items = activeFilter === 'all'
-                ? allNewsItems
-                : allNewsItems.filter(i => i.source === activeFilter);
+            if (!feed) return;
+            const isDark = document.body.classList.contains('dark');
 
-            if (!items.length && allNewsItems.length === 0) {
-                feed.innerHTML = `<div class="news-error">
-                    <div style="font-size:36px;margin-bottom:12px;">📭</div>
-                    <p style="margin:0 0 6px;font-weight:600;color:#475569;">Could not load news</p>
-                    <p style="margin:0;font-size:13px;color:#94a3b8;">Check your internet connection and try refreshing.</p>
-                    <button onclick="loadNews()" style="margin-top:14px;background:#38bdf8;color:white;border:none;padding:8px 20px;border-radius:50px;font-weight:600;cursor:pointer;font-size:13px;">Try Again</button>
+            const items = _newsFilter === 'all'
+                ? _newsItems
+                : _newsItems.filter(i => i.source === _newsFilter);
+
+            if (!_newsLoaded) return;
+
+            if (!_newsItems.length) {
+                feed.innerHTML = `
+                <div style="text-align:center;padding:50px 20px;">
+                    <div style="font-size:42px;margin-bottom:14px;">📡</div>
+                    <p style="margin:0 0 6px;font-weight:700;font-size:16px;color:${isDark?'#f1f5f9':'#0f172a'};">Could not load news</p>
+                    <p style="margin:0 0 18px;font-size:13px;color:#94a3b8;">Check your internet connection and try again.</p>
+                    <button onclick="loadNews()" style="background:#38bdf8;color:white;border:none;padding:9px 22px;border-radius:50px;font-weight:600;cursor:pointer;font-size:13px;font-family:inherit;">↻ Try Again</button>
                 </div>`;
                 return;
             }
 
             if (!items.length) {
-                feed.innerHTML = `<div class="news-error">
+                feed.innerHTML = `
+                <div style="text-align:center;padding:40px 20px;">
                     <div style="font-size:36px;margin-bottom:12px;">🔍</div>
-                    <p style="margin:0 0 6px;font-weight:600;color:#475569;">No stories from this source</p>
-                    <p style="margin:0;font-size:13px;color:#94a3b8;">Try switching to All Sources.</p>
+                    <p style="margin:0;font-size:14px;color:#94a3b8;">No stories from this source right now.</p>
                 </div>`;
                 return;
             }
 
             feed.innerHTML = items.map(item => {
-                const srcClass = item.source;
-                const srcLabel = item.sourceName;
-                const importance = item.score >= 5 ? 'high' : item.score >= 2 ? 'medium' : '';
-                const importanceTag = importance
-                    ? `<span class="news-importance-tag ${importance}">${importance === 'high' ? '🔴 Breaking' : '🟡 Notable'}</span>`
+                const hasPic = item.thumbnail && item.thumbnail.startsWith('http');
+                const timeStr = _ago(item.pubDate);
+                const desc = item.description.slice(0, 260) + (item.description.length > 260 ? '…' : '');
+                const breakingTag = item.score >= 5
+                    ? `<span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.3px;">🔴 Breaking</span>`
+                    : item.score >= 3
+                    ? `<span style="background:#fef9c3;color:#854d0e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.3px;">🟡 Notable</span>`
                     : '';
-                const safeTitle = (item.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                const safeDesc  = (item.description||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,220);
-                const timeAgo = formatDate(item.pubDate);
+
+                const thumb = hasPic
+                    ? `<div style="width:92px;height:92px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#f1f5f9;">
+                           <img src="${item.thumbnail}" alt="" loading="lazy"
+                               style="width:100%;height:100%;object-fit:cover;display:block;"
+                               onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:${item.placeholder}20;font-size:28px;\'>📰</div>'">
+                       </div>`
+                    : `<div style="width:92px;height:92px;border-radius:10px;flex-shrink:0;background:${item.placeholder}18;display:flex;align-items:center;justify-content:center;font-size:30px;">📰</div>`;
+
                 return `
-                <a class="news-card" href="${item.link||'#'}" target="_blank" rel="noopener">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;flex-wrap:wrap;">
-                        <span class="news-card-source ${srcClass}">${srcLabel}</span>
-                        ${importanceTag}
-                        ${timeAgo ? `<span style="font-size:11px;color:#94a3b8;margin-left:auto;">${timeAgo}</span>` : ''}
-                    </div>
-                    <h4>${safeTitle}</h4>
-                    ${safeDesc ? `<p>${safeDesc}${(item.description||'').length > 220 ? '…' : ''}</p>` : ''}
-                    <div class="news-card-meta">
-                        <span></span>
-                        <a href="${item.link||'#'}" target="_blank" rel="noopener">Read full story →</a>
+                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="news-card" style="text-decoration:none;">
+                    <div style="display:flex;gap:16px;align-items:flex-start;">
+                        <div style="flex:1;min-width:0;">
+                            <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:9px;">
+                                <span style="background:${item.badgeBg};color:${item.badgeColor};font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:99px;">${item.sourceName}</span>
+                                ${breakingTag}
+                                ${timeStr ? `<span style="font-size:11px;color:#94a3b8;margin-left:auto;">${timeStr}</span>` : ''}
+                            </div>
+                            <h4 style="margin:0 0 7px;font-size:15px;font-weight:700;color:#0f172a;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.title}</h4>
+                            ${desc ? `<p style="margin:0 0 10px;font-size:13px;color:#64748b;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${desc}</p>` : ''}
+                            <span style="font-size:12px;font-weight:600;color:#0ea5e9;">Read full story →</span>
+                        </div>
+                        ${thumb}
                     </div>
                 </a>`;
             }).join('');
+
+            // Dark mode text fix
+            if (isDark) {
+                feed.querySelectorAll('h4').forEach(h => h.style.color = '#f1f5f9');
+                feed.querySelectorAll('p').forEach(p => p.style.color = '#94a3b8');
+            }
         }
         // ══════════════════════════════════════════
+
+        
+        // ══ Language / Translation ══
+        window._currentLang = localStorage.getItem('bou_lang') || 'en';
+
+        const _LANG_MAP = {
+            en: { dir: 'ltr', label: 'English', gtCode: 'en' },
+            ar: { dir: 'rtl', label: 'العربية', gtCode: 'ar' },
+            hi: { dir: 'ltr', label: 'हिन्दी',  gtCode: 'hi' },
+            ur: { dir: 'rtl', label: 'اردو',    gtCode: 'ur' },
+        };
+
+        window.setLang = (lang) => {
+            window._currentLang = lang;
+            localStorage.setItem('bou_lang', lang);
+            const info = _LANG_MAP[lang] || _LANG_MAP.en;
+
+            // RTL toggle
+            document.body.classList.toggle('rtl', info.dir === 'rtl');
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', info.dir);
+
+            // Update pill active state
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('lang' + lang.charAt(0).toUpperCase() + lang.slice(1))?.classList.add('active');
+
+            // Use Google Translate to translate page content
+            _applyGoogleTranslate(lang);
+        };
+
+        function _applyGoogleTranslate(lang) {
+            // Inject Google Translate element if not present
+            if (!document.getElementById('gt_element')) {
+                const el = document.createElement('div');
+                el.id = 'gt_element';
+                el.style.display = 'none';
+                document.body.appendChild(el);
+
+                const s = document.createElement('script');
+                s.src = '//translate.google.com/translate_a/element.js?cb=_gtInit';
+                document.head.appendChild(s);
+
+                window._gtInit = function() {
+                    new google.translate.TranslateElement(
+                        { pageLanguage: 'en', includedLanguages: 'ar,hi,ur,en', autoDisplay: false },
+                        'gt_element'
+                    );
+                    window._gtReady = true;
+                    if (window._pendingLang) _doGtTranslate(window._pendingLang);
+                };
+            }
+            if (lang === 'en') {
+                // Restore original — click the "Show original" banner if present
+                _doGtTranslate('en');
+            } else if (window._gtReady) {
+                _doGtTranslate(lang);
+            } else {
+                window._pendingLang = lang;
+            }
+        }
+
+        function _doGtTranslate(lang) {
+            try {
+                const sel = document.querySelector('.goog-te-combo');
+                if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
+                // Fallback: use the internal GT cookie approach
+                if (lang === 'en') {
+                    const frame = document.querySelector('.goog-te-banner-frame, iframe.goog-te-banner-frame');
+                    if (frame) { try { frame.contentDocument.querySelector('#restore')?.click(); } catch{} }
+                    document.cookie = 'googtrans=; path=/; domain=' + location.hostname;
+                    document.cookie = 'googtrans=/en/en; path=/';
+                } else {
+                    document.cookie = 'googtrans=/en/' + lang + '; path=/';
+                    document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + location.hostname;
+                }
+                location.reload();
+            } catch(e) {}
+        }
+
+        // Apply saved language on load
+        (function() {
+            const saved = localStorage.getItem('bou_lang') || 'en';
+            if (saved !== 'en') {
+                // Defer until DOM ready
+                setTimeout(() => window.setLang(saved), 800);
+            } else {
+                document.getElementById('langEn')?.classList.add('active');
+            }
+        })();
+        // ══ Language END ══
 
                 const logout = () => signOut(auth).then(() => window.location.href = "login.html");
         document.getElementById('logoutBtn').onclick = logout;
