@@ -2287,7 +2287,7 @@
         }
 
         const _CACHE_KEY = 'bou_news_cache';
-        const _CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+        const _CACHE_TTL = 5 * 60 * 1000; // 5 minutes — stale after this, forces fresh fetch
 
         function _saveCache(items) {
             try { localStorage.setItem(_CACHE_KEY, JSON.stringify({ t: Date.now(), items })); } catch(e) {}
@@ -2313,13 +2313,34 @@
             if (!document.getElementById('newsFeed')) return;
             const btn = document.getElementById('newsRefreshBtn');
 
-            // Show cached instantly if available
+            // Show cached instantly if available, always refresh in background
             const cached = _loadCache();
             if (cached && !forceRefresh) {
                 _newsItems = cached;
                 _newsLoaded = true;
                 _renderNews();
-                // Silently refresh in background
+                // Always fetch fresh in background and swap in silently
+                _fetchAllFeeds().then(items => {
+                    if (items.length) {
+                        _newsItems = items;
+                        _saveCache(items);
+                        _renderNews(); // swap to fresh results
+                    }
+                });
+                return;
+            }
+            // Also check stale cache (beyond TTL) — show it immediately while fetching
+            const staleCache = (() => {
+                try {
+                    const c = JSON.parse(localStorage.getItem(_CACHE_KEY) || 'null');
+                    return c?.items?.length ? c.items : null;
+                } catch(e) { return null; }
+            })();
+            if (staleCache && !forceRefresh) {
+                _newsItems = staleCache;
+                _newsLoaded = true;
+                _renderNews(); // show stale immediately
+                // fetch fresh and replace
                 _fetchAllFeeds().then(items => {
                     if (items.length) { _newsItems = items; _saveCache(items); _renderNews(); }
                 });
