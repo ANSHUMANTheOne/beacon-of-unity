@@ -107,7 +107,7 @@
 
         /* Logout — Uiverse pill button */
         #logoutBtnNav {
-            margin-top: auto !important;
+            margin-top: 30px !important;
             padding: 0 !important;
             background: none !important;
             border: none !important;
@@ -304,15 +304,21 @@
         #messageArea::-webkit-scrollbar { width: 3px; }
         #messageArea::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 3px; }
         /* Bubbles */
-        .imsg-row { display: flex; align-items: flex-end; gap: 6px; margin-bottom: 1px; }
+        .imsg-row { display: flex; align-items: flex-end; gap: 6px; margin-bottom: 2px; }
         .imsg-row.me   { justify-content: flex-end; }
         .imsg-row.them { justify-content: flex-start; }
         .imsg-row.sys  { justify-content: center; margin: 8px 0 4px; }
+        /* Tighter gap between consecutive same-sender messages */
+        .imsg-row.me.consec,
+        .imsg-row.them.consec { margin-bottom: 1px; }
+        /* Larger gap when switching sender */
+        .imsg-row.switch-sender { margin-top: 8px; }
         .imsg-bubble {
             max-width: 74%; padding: 9px 13px;
             font-size: 14.5px; line-height: 1.44; word-break: break-word;
             position: relative;
         }
+        /* Default (first in group) — full rounded with tail */
         .imsg-row.me .imsg-bubble {
             background: #007aff; color: white;
             border-radius: 18px 18px 5px 18px;
@@ -321,6 +327,20 @@
             background: #ffffff; color: #1c1c1e;
             border-radius: 18px 18px 18px 5px;
             box-shadow: 0 1px 2px rgba(0,0,0,.08);
+        }
+        /* Consecutive bubbles — fully rounded, no tail */
+        .imsg-row.me.consec .imsg-bubble {
+            border-radius: 18px 5px 5px 18px;
+        }
+        .imsg-row.them.consec .imsg-bubble {
+            border-radius: 5px 18px 18px 5px;
+        }
+        /* Last in consecutive group gets tail back */
+        .imsg-row.me.last-in-group .imsg-bubble {
+            border-radius: 18px 5px 5px 18px;
+        }
+        .imsg-row.them.last-in-group .imsg-bubble {
+            border-radius: 5px 18px 18px 5px;
         }
         .imsg-row.sys .imsg-bubble {
             background: none; color: #8e8e93;
@@ -1424,16 +1444,24 @@
             unsubscribeChat = onSnapshot(q, (snapshot) => {
                 const area = document.getElementById('messageArea');
                 area.innerHTML = '';
-                let lastSender = null;
+
+                // Collect all messages into array first for two-pass rendering
+                const msgs = [];
+                snapshot.forEach(d => msgs.push({ id: d.id, ...d.data() }));
+
                 let lastDateStr = null;
 
-                snapshot.forEach(d => {
-                    const data = d.data();
+                msgs.forEach((data, idx) => {
                     const isMe = data.senderId === auth.currentUser.uid;
                     const isSys = data.senderId === 'system';
-
-                    // Date chip
                     const ts = data.createdAt?.toDate?.();
+
+                    const prevMsg = msgs[idx - 1];
+                    const nextMsg = msgs[idx + 1];
+                    const sameSenderAsPrev = prevMsg && !isSys && prevMsg.senderId === data.senderId && prevMsg.senderId !== 'system';
+                    const sameSenderAsNext = nextMsg && !isSys && nextMsg.senderId === data.senderId && nextMsg.senderId !== 'system';
+
+                    // Date chip — reset on new day
                     if (ts) {
                         const ds = ts.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
                         if (ds !== lastDateStr) {
@@ -1446,6 +1474,7 @@
                     }
 
                     const row = document.createElement('div');
+
                     if (isSys) {
                         row.className = 'imsg-row sys';
                         const bub = document.createElement('div');
@@ -1453,10 +1482,16 @@
                         bub.textContent = data.text;
                         row.appendChild(bub);
                     } else {
-                        row.className = `imsg-row ${isMe ? 'me' : 'them'}`;
-                        const consecutive = lastSender === data.senderId;
-                        if (!isMe) row.classList.toggle('no-av', consecutive);
+                        const classes = ['imsg-row', isMe ? 'me' : 'them'];
+                        // Consecutive = same sender as previous message
+                        if (sameSenderAsPrev) classes.push('consec');
+                        // Switch = different sender than previous
+                        if (prevMsg && prevMsg.senderId !== data.senderId && !isSys) classes.push('switch-sender');
+                        // Hide avatar if same sender follows (no-av = not the last in group)
+                        if (!isMe && sameSenderAsPrev) classes.push('no-av');
+                        row.className = classes.join(' ');
 
+                        // Mini avatar for "them" side — only show on last bubble of their group
                         if (!isMe) {
                             const av = document.createElement('div');
                             av.className = 'imsg-mini-av';
@@ -1469,7 +1504,8 @@
                         bub.textContent = data.text;
                         row.appendChild(bub);
 
-                        if (ts) {
+                        // Timestamp — only show on last bubble of a group
+                        if (!sameSenderAsNext && ts) {
                             const time = document.createElement('div');
                             time.className = 'imsg-time';
                             time.textContent = ts.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
@@ -1478,7 +1514,6 @@
                     }
 
                     area.appendChild(row);
-                    lastSender = data.senderId;
                 });
                 area.scrollTop = area.scrollHeight;
             });
@@ -1877,39 +1912,54 @@
         let allNewsItems = [];
         let activeFilter = 'all';
 
+        // Multiple CORS proxies for fallback
+        const PROXIES = [
+            url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+            url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+            url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+        ];
+
+        // Correct RSS feed URLs verified for these publications
         const NEWS_SOURCES = [
             {
                 key: 'khaleej',
                 name: 'Khaleej Times',
-                // General + UAE news feeds
                 feeds: [
-                    'https://www.khaleejtimes.com/rss',
-                    'https://www.khaleejtimes.com/uae/rss',
+                    'https://www.khaleejtimes.com/arc/outboundfeeds/rss/',
+                    'https://www.khaleejtimes.com/arc/outboundfeeds/rss/?outputType=xml',
+                    'https://feeds.feedburner.com/khaleejtimes/news',
                 ],
             },
             {
                 key: 'gulf',
                 name: 'Gulf News',
                 feeds: [
-                    'https://gulfnews.com/rss/uae',
-                    'https://gulfnews.com/rss/world',
+                    'https://gulfnews.com/rss/uae.xml',
+                    'https://gulfnews.com/rss/world.xml',
+                    'https://gulfnews.com/rss/business.xml',
                 ],
             }
         ];
 
-        // Topics we consider "important" for UAE community
         const IMPORTANT_KEYWORDS = [
-            'uae','dubai','abu dhabi','sharjah','ajman','emirates','federal',
-            'ministry','government','law','regulation','visa','residency','traffic',
-            'health','hospital','emergency','warning','alert','recall',
-            'inflation','cost of living','salary','job','employment',
-            'weather','storm','rain','flood','heat','temperature',
-            'crime','safety','scam','fraud','arrest',
-            'road','accident','closure','highway'
+            'uae','dubai','abu dhabi','sharjah','ajman','ras al khaimah','fujairah','umm al quwain',
+            'emirates','federal','ministry','government','law','regulation','visa','residency',
+            'traffic','health','hospital','emergency','warning','alert','recall',
+            'inflation','cost','salary','job','employment','economy',
+            'weather','storm','rain','flood','heat','temperature','humidity',
+            'crime','safety','scam','fraud','arrest','police',
+            'road','accident','closure','highway','metro','bus',
+            'school','university','education','student',
+            'property','rent','housing','real estate',
+            'expo','event','festival','holiday','ramadan','eid',
+            'fuel','petrol','price','electricity','water',
+            'flight','airport','travel','tourism',
+            'covid','health','disease','epidemic',
+            'fire','explosion','disaster','earthquake',
         ];
 
         function scoreImportance(title, description) {
-            const text = (title + ' ' + description).toLowerCase();
+            const text = (title + ' ' + (description||'')).toLowerCase();
             let score = 0;
             for (const kw of IMPORTANT_KEYWORDS) {
                 if (text.includes(kw)) score++;
@@ -1917,71 +1967,121 @@
             return score;
         }
 
-        async function fetchFeed(url) {
-            // Use allorigins CORS proxy to fetch RSS
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+        function isWithin24Hours(dateStr) {
+            if (!dateStr) return true; // include if no date
+            const d = new Date(dateStr);
+            if (isNaN(d)) return true;
+            return (Date.now() - d.getTime()) < 24 * 60 * 60 * 1000;
+        }
+
+        async function fetchWithProxy(proxyFn, url) {
+            const proxyUrl = proxyFn(url);
+            const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(7000) });
+            if (!res.ok) throw new Error('bad status');
+            const data = await res.json();
+            // allorigins wraps in .contents, codetabs returns raw
+            return data.contents || data;
+        }
+
+        async function fetchFeedRobust(feedUrl) {
+            let xmlText = null;
+            for (const proxyFn of PROXIES) {
+                try {
+                    const result = await fetchWithProxy(proxyFn, feedUrl);
+                    if (typeof result === 'string' && result.includes('<item')) {
+                        xmlText = result;
+                        break;
+                    }
+                } catch {}
+            }
+            if (!xmlText) return [];
             try {
-                const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
-                if (!res.ok) return [];
-                const data = await res.json();
                 const parser = new DOMParser();
-                const xml = parser.parseFromString(data.contents, 'text/xml');
+                const xml = parser.parseFromString(xmlText, 'text/xml');
                 const items = xml.querySelectorAll('item');
                 const results = [];
                 items.forEach(item => {
                     const title = item.querySelector('title')?.textContent?.trim() || '';
-                    const description = item.querySelector('description')?.textContent?.replace(/<[^>]+>/g,'').trim() || '';
+                    const desc = item.querySelector('description')?.textContent?.replace(/<[^>]+>/g,'').trim() || '';
                     const link = item.querySelector('link')?.textContent?.trim() || '';
                     const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
-                    results.push({ title, description, link, pubDate });
+                    if (title) results.push({ title, description: desc, link, pubDate });
                 });
                 return results;
-            } catch {
-                return [];
-            }
+            } catch { return []; }
+        }
+
+        // Fallback: use GNews API (free tier, no key needed for basic) or NewsData
+        async function fetchFallbackNews(source) {
+            // Use rss2json service as extra fallback — very reliable
+            const feedMap = {
+                khaleej: 'https://www.khaleejtimes.com/arc/outboundfeeds/rss/',
+                gulf: 'https://gulfnews.com/rss/uae.xml',
+            };
+            const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedMap[source.key])}&api_key=&count=30`;
+            try {
+                const res = await fetch(rss2jsonUrl, { signal: AbortSignal.timeout(8000) });
+                const data = await res.json();
+                if (data.status === 'ok' && data.items?.length) {
+                    return data.items.map(i => ({
+                        title: i.title || '',
+                        description: i.description?.replace(/<[^>]+>/g,'').trim() || i.content?.replace(/<[^>]+>/g,'').trim() || '',
+                        link: i.link || '',
+                        pubDate: i.pubDate || '',
+                    }));
+                }
+            } catch {}
+            return [];
         }
 
         window.loadNews = async () => {
             const feed = document.getElementById('newsFeed');
             feed.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#94a3b8;">
-                <div style="font-size:28px;margin-bottom:10px;">⏳</div>
-                <p style="margin:0;font-size:14px;">Fetching latest headlines…</p>
+                <div style="font-size:28px;margin-bottom:10px;">📡</div>
+                <p style="margin:0;font-size:14px;font-weight:500;">Fetching latest headlines from UAE…</p>
+                <p style="margin:6px 0 0;font-size:12px;color:#cbd5e1;">This may take a few seconds</p>
             </div>`;
-            document.getElementById('newsRefreshBtn').textContent = '↻ Loading…';
+            const refreshBtn = document.getElementById('newsRefreshBtn');
+            if (refreshBtn) refreshBtn.textContent = '↻ Loading…';
 
             allNewsItems = [];
 
-            const fetches = [];
-            for (const src of NEWS_SOURCES) {
-                for (const feedUrl of src.feeds) {
-                    fetches.push(
-                        fetchFeed(feedUrl).then(items => items.map(i => ({ ...i, source: src.key, sourceName: src.name })))
-                    );
+            // Fetch all sources in parallel, with rss2json as primary (most reliable)
+            const fetchPromises = NEWS_SOURCES.map(async src => {
+                // Try rss2json first (most reliable CORS-free service)
+                let items = await fetchFallbackNews(src);
+                // If that fails, try direct proxy approach
+                if (!items.length) {
+                    for (const feedUrl of src.feeds) {
+                        const result = await fetchFeedRobust(feedUrl);
+                        if (result.length) { items = result; break; }
+                    }
                 }
-            }
+                return items.map(i => ({ ...i, source: src.key, sourceName: src.name }));
+            });
 
-            const results = await Promise.allSettled(fetches);
+            const results = await Promise.allSettled(fetchPromises);
             for (const r of results) {
                 if (r.status === 'fulfilled') allNewsItems.push(...r.value);
             }
 
-            // Score and filter to important only
+            // Filter to past 24 hours + score for importance
             allNewsItems = allNewsItems
+                .filter(item => isWithin24Hours(item.pubDate))
                 .map(item => ({ ...item, score: scoreImportance(item.title, item.description) }))
                 .filter(item => item.score > 0)
-                // Deduplicate by similar title
+                // Deduplicate
                 .filter((item, idx, arr) =>
-                    arr.findIndex(o => o.title.toLowerCase().slice(0,40) === item.title.toLowerCase().slice(0,40)) === idx
+                    arr.findIndex(o => o.title.toLowerCase().slice(0,50) === item.title.toLowerCase().slice(0,50)) === idx
                 )
-                // Sort: newest first, then by score
                 .sort((a, b) => {
-                    const da = new Date(a.pubDate || 0), db = new Date(b.pubDate || 0);
-                    if (Math.abs(da - db) > 3600000) return db - da; // more than 1hr apart → sort by date
+                    const da = new Date(a.pubDate||0), db = new Date(b.pubDate||0);
+                    if (Math.abs(da - db) > 1800000) return db - da;
                     return b.score - a.score;
                 })
-                .slice(0, 40); // cap at 40
+                .slice(0, 50);
 
-            document.getElementById('newsRefreshBtn').textContent = '↻ Refresh';
+            if (refreshBtn) refreshBtn.textContent = '↻ Refresh';
             renderNews();
         };
 
@@ -1998,13 +2098,12 @@
         function formatDate(str) {
             if (!str) return '';
             const d = new Date(str);
-            if (isNaN(d)) return str;
-            const now = new Date();
-            const diff = Math.floor((now - d) / 60000);
+            if (isNaN(d)) return '';
+            const diff = Math.floor((Date.now() - d) / 60000);
             if (diff < 1)   return 'Just now';
             if (diff < 60)  return `${diff}m ago`;
             if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
-            return d.toLocaleDateString('en-AE', { day:'numeric', month:'short' });
+            return d.toLocaleDateString('en-AE', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
         }
 
         function renderNews() {
@@ -2013,11 +2112,21 @@
                 ? allNewsItems
                 : allNewsItems.filter(i => i.source === activeFilter);
 
-            if (!items.length) {
+            if (!items.length && allNewsItems.length === 0) {
                 feed.innerHTML = `<div class="news-error">
                     <div style="font-size:36px;margin-bottom:12px;">📭</div>
-                    <p style="margin:0 0 6px;font-weight:600;color:#475569;">No important stories found</p>
-                    <p style="margin:0;font-size:13px;">Try refreshing or check back soon.</p>
+                    <p style="margin:0 0 6px;font-weight:600;color:#475569;">Could not load news</p>
+                    <p style="margin:0;font-size:13px;color:#94a3b8;">Check your internet connection and try refreshing.</p>
+                    <button onclick="loadNews()" style="margin-top:14px;background:#38bdf8;color:white;border:none;padding:8px 20px;border-radius:50px;font-weight:600;cursor:pointer;font-size:13px;">Try Again</button>
+                </div>`;
+                return;
+            }
+
+            if (!items.length) {
+                feed.innerHTML = `<div class="news-error">
+                    <div style="font-size:36px;margin-bottom:12px;">🔍</div>
+                    <p style="margin:0 0 6px;font-weight:600;color:#475569;">No stories from this source</p>
+                    <p style="margin:0;font-size:13px;color:#94a3b8;">Try switching to All Sources.</p>
                 </div>`;
                 return;
             }
@@ -2025,30 +2134,32 @@
             feed.innerHTML = items.map(item => {
                 const srcClass = item.source;
                 const srcLabel = item.sourceName;
-                const importance = item.score >= 4 ? 'high' : item.score >= 2 ? 'medium' : '';
+                const importance = item.score >= 5 ? 'high' : item.score >= 2 ? 'medium' : '';
                 const importanceTag = importance
                     ? `<span class="news-importance-tag ${importance}">${importance === 'high' ? '🔴 Breaking' : '🟡 Notable'}</span>`
                     : '';
-                const safeTitle = item.title.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                const safeDesc  = item.description.replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0, 220);
+                const safeTitle = (item.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                const safeDesc  = (item.description||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,220);
+                const timeAgo = formatDate(item.pubDate);
                 return `
-                <a class="news-card" href="${item.link}" target="_blank" rel="noopener">
+                <a class="news-card" href="${item.link||'#'}" target="_blank" rel="noopener">
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;flex-wrap:wrap;">
                         <span class="news-card-source ${srcClass}">${srcLabel}</span>
                         ${importanceTag}
+                        ${timeAgo ? `<span style="font-size:11px;color:#94a3b8;margin-left:auto;">${timeAgo}</span>` : ''}
                     </div>
                     <h4>${safeTitle}</h4>
-                    ${safeDesc ? `<p>${safeDesc}${item.description.length > 220 ? '…' : ''}</p>` : ''}
+                    ${safeDesc ? `<p>${safeDesc}${(item.description||'').length > 220 ? '…' : ''}</p>` : ''}
                     <div class="news-card-meta">
-                        <span>${formatDate(item.pubDate)}</span>
-                        <a href="${item.link}" target="_blank" rel="noopener">Read full story →</a>
+                        <span></span>
+                        <a href="${item.link||'#'}" target="_blank" rel="noopener">Read full story →</a>
                     </div>
                 </a>`;
             }).join('');
         }
         // ══════════════════════════════════════════
 
-        const logout = () => signOut(auth).then(() => window.location.href = "login.html");
+                const logout = () => signOut(auth).then(() => window.location.href = "login.html");
         document.getElementById('logoutBtn').onclick = logout;
         document.getElementById('logoutBtnNav').onclick = logout;
         document.getElementById('logoutBtnInner').onclick = logout;
