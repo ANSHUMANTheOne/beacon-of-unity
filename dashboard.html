@@ -950,13 +950,13 @@
                         <span style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-right:2px;">Source</span>
                         <button class="news-pill active" onclick="setNewsSource('all')" id="srcAll">All</button>
                         <button class="news-pill" onclick="setNewsSource('khaleej')" id="srcKhaleej">
-                            <img src="https://www.khaleejtimes.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">KT
+                            <img src="https://www.khaleejtimes.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Khaleej Times
                         </button>
                         <button class="news-pill" onclick="setNewsSource('gulf')" id="srcGulf">
-                            <img src="https://gulfnews.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">GN
+                            <img src="https://gulfnews.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Gulf News
                         </button>
                         <button class="news-pill" onclick="setNewsSource('aljazeera')" id="srcAJ">
-                            <img src="https://www.aljazeera.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">AJ
+                            <img src="https://www.aljazeera.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Al Jazeera
                         </button>
                         <button class="news-pill" onclick="loadNews()" style="margin-left:auto; background:none; border-color:#e2e8f0; color:#64748b;" id="newsRefreshBtn">↻ Refresh</button>
                     </div>
@@ -2215,13 +2215,11 @@
         // Try every proxy in sequence, first success wins
         // Race all proxies for a single URL — first valid response wins, rest are cancelled
         async function _raceFetch(feedUrl, src) {
-            const ac = new AbortController();
-            const TIMEOUT = 5000; // 5s hard limit per race
+            const TIMEOUT = 7000;
 
-            const makeAttempt = async (proxyUrl) => {
-                const res = await fetch(proxyUrl, { signal: ac.signal });
+            const attempt = async (proxyUrl) => {
+                const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(TIMEOUT) });
                 if (!res.ok) throw new Error('not ok');
-
                 if (proxyUrl.includes('rss2json')) {
                     const d = await res.json();
                     if (d.status !== 'ok' || !d.items?.length) throw new Error('empty');
@@ -2235,7 +2233,6 @@
                         thumbnail: item.thumbnail || item.enclosure?.link || '',
                     }));
                 }
-
                 const text = proxyUrl.includes('allorigins.win/get')
                     ? ((await res.json()).contents || '')
                     : await res.text();
@@ -2245,37 +2242,20 @@
                 return items;
             };
 
-            const proxyFns = [
-                u => `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}&count=30`,
-                u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
-                u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-                u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+            const urls = [
+                `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=30`,
+                `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`,
+                `https://corsproxy.io/?${encodeURIComponent(feedUrl)}`,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`,
             ];
 
-            return new Promise((resolve) => {
-                let settled = false;
-                let pending = proxyFns.length;
-                const timer = setTimeout(() => { if (!settled) { settled = true; ac.abort(); resolve(null); } }, TIMEOUT);
-
-                proxyFns.forEach(fn => {
-                    makeAttempt(fn(feedUrl))
-                        .then(items => {
-                            if (!settled) {
-                                settled = true;
-                                clearTimeout(timer);
-                                ac.abort(); // cancel remaining
-                                resolve(items);
-                            }
-                        })
-                        .catch(() => {
-                            if (--pending === 0 && !settled) {
-                                settled = true;
-                                clearTimeout(timer);
-                                resolve(null);
-                            }
-                        });
-                });
-            });
+            // Use Promise.any — resolves with first SUCCESS, ignores failures
+            // Falls back to null only if every proxy fails
+            try {
+                return await Promise.any(urls.map(u => attempt(u)));
+            } catch {
+                return null;
+            }
         }
 
         async function _fetchFeed(src) {
@@ -2440,66 +2420,41 @@
         // ══ Language / Translation ══
         window._currentLang = 'en';
 
-        // Clear any stale translation cookie so page always starts English
-        ['', '.' + location.hostname].forEach(d => {
-            document.cookie = 'googtrans=/en/en; path=/; domain=' + d;
-        });
+        // Ensure page always starts in English by setting cookie to en/en
+        document.cookie = 'googtrans=/en/en; path=/';
 
-        // Load GT widget — it will sit hidden in #_gtHost
+        // Load GT widget once
         window.googleTranslateElementInit = function() {
             new google.translate.TranslateElement(
                 { pageLanguage: 'en', includedLanguages: 'ar,hi', autoDisplay: false },
                 '_gtHost'
             );
         };
-        const _s = document.createElement('script');
-        _s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        document.head.appendChild(_s);
+        const _gts = document.createElement('script');
+        _gts.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.head.appendChild(_gts);
 
-        // Robust combo-select switcher — polls until .goog-te-combo exists then fires change
-        function _gtSwitch(langCode) {
+        function _switchLang(code) {
+            // Poll for the combo select the widget injects, then set it
             const apply = () => {
-                const sel = document.querySelector('.goog-te-combo');
+                const sel = document.querySelector('select.goog-te-combo');
                 if (!sel) return false;
-                sel.value = langCode;
-                // Fire both change and input events — GT needs both on some browsers
-                ['change', 'input'].forEach(ev => {
-                    const e = new Event(ev, { bubbles: true });
-                    sel.dispatchEvent(e);
-                });
+                if (sel.value === code) return true; // already set
+                sel.value = code;
+                sel.dispatchEvent(new Event('change', { bubbles: true }));
                 return true;
             };
             if (apply()) return;
-            // Widget not ready yet — poll every 100ms up to 3 seconds
-            let tries = 0;
-            const t = setInterval(() => {
-                if (apply() || ++tries > 30) clearInterval(t);
-            }, 100);
+            let n = 0;
+            const t = setInterval(() => { if (apply() || ++n > 40) clearInterval(t); }, 100);
         }
 
         window.setLang = (lang) => {
             window._currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById({en:'langEn', ar:'langAr', hi:'langHi'}[lang] || 'langEn')?.classList.add('active');
-            // Empty string = show original English; language code = translate
-            if (lang === 'en') {
-                // Reverting to English: '' doesn't always work — 'en' is the reliable way
-                _gtSwitch('en');
-                // Also try clicking the GT "show original" restore link as backup
-                setTimeout(() => {
-                    const restore = document.querySelector('.goog-te-banner-frame')
-                        ?.contentDocument?.querySelector('#restore');
-                    if (restore) restore.click();
-                    // Last resort: select 'en' again after a tick
-                    const sel = document.querySelector('.goog-te-combo');
-                    if (sel && sel.value !== 'en') {
-                        sel.value = 'en';
-                        sel.dispatchEvent(new Event('change', { bubbles: true }));
-                    }
-                }, 200);
-            } else {
-                _gtSwitch(lang);
-            }
+            // '' = revert to original English; language code = translate to that language
+            _switchLang(lang === 'en' ? '' : lang);
         };
         // ══ Language END ══
 
