@@ -2214,50 +2214,58 @@
 
         // Try every proxy in sequence, first success wins
         // Race all proxies for a single URL — first valid response wins, rest are cancelled
-        async function _fetchFeed(src) {
-            const PROXIES = [
-                u => `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}&count=30`,
-                u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
-                u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-                u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-            ];
+        // Fire all proxies in parallel, return first valid result, ignore the rest
+        function _firstSuccess(promises) {
+            return new Promise(resolve => {
+                let done = false;
+                let remaining = promises.length;
+                if (!remaining) { resolve(null); return; }
+                promises.forEach(p => {
+                    p.then(result => {
+                        if (!done && result) { done = true; resolve(result); }
+                        else if (!done && --remaining === 0) resolve(null);
+                    }).catch(() => {
+                        if (!done && --remaining === 0) resolve(null);
+                    });
+                });
+            });
+        }
 
-            for (const feedUrl of src.urls) {
-                for (const proxyFn of PROXIES) {
-                    try {
-                        const proxyUrl = proxyFn(feedUrl);
-                        const controller = new AbortController();
-                        const timer = setTimeout(() => controller.abort(), 8000);
-                        const res = await fetch(proxyUrl, { signal: controller.signal });
-                        clearTimeout(timer);
-                        if (!res.ok) continue;
-
-                        if (proxyUrl.includes('rss2json')) {
-                            const d = await res.json();
-                            if (d.status === 'ok' && d.items?.length) {
-                                return d.items.map(item => ({
-                                    source: src.key, sourceName: src.name,
-                                    badgeBg: src.badgeBg, badgeColor: src.badgeColor, placeholder: src.placeholder,
-                                    title: _clean(item.title) || '',
-                                    description: _clean(item.description || item.content) || '',
-                                    link: item.link || item.guid || '',
-                                    pubDate: item.pubDate || '',
-                                    thumbnail: item.thumbnail || item.enclosure?.link || '',
-                                }));
-                            }
-                            continue;
-                        }
-
-                        const text = proxyUrl.includes('allorigins.win/get')
-                            ? ((await res.json()).contents || '')
-                            : await res.text();
-                        if (!text.includes('<item')) continue;
-                        const items = _parseXML(text, src);
-                        if (items?.length) return items;
-                    } catch(e) { /* try next */ }
-                }
+        async function _tryProxy(proxyUrl, src) {
+            const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(6000) });
+            if (!res.ok) return null;
+            if (proxyUrl.includes('rss2json')) {
+                const d = await res.json();
+                if (d.status !== 'ok' || !d.items?.length) return null;
+                return d.items.map(item => ({
+                    source: src.key, sourceName: src.name,
+                    badgeBg: src.badgeBg, badgeColor: src.badgeColor, placeholder: src.placeholder,
+                    title: _clean(item.title) || '',
+                    description: _clean(item.description || item.content) || '',
+                    link: item.link || item.guid || '',
+                    pubDate: item.pubDate || '',
+                    thumbnail: item.thumbnail || item.enclosure?.link || '',
+                }));
             }
-            return [];
+            const text = proxyUrl.includes('allorigins.win/get')
+                ? ((await res.json()).contents || '')
+                : await res.text();
+            if (!text.includes('<item')) return null;
+            return _parseXML(text, src) || null;
+        }
+
+        async function _fetchFeed(src) {
+            // Fire all proxies for all URLs simultaneously — first valid result wins
+            const allAttempts = [];
+            for (const feedUrl of src.urls) {
+                allAttempts.push(
+                    _tryProxy(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=30`, src),
+                    _tryProxy(`https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`, src),
+                    _tryProxy(`https://corsproxy.io/?${encodeURIComponent(feedUrl)}`, src),
+                    _tryProxy(`https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`, src),
+                );
+            }
+            return await _firstSuccess(allAttempts) || [];
         }
 
         window.loadNews = async () => {
