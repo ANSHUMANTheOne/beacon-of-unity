@@ -442,9 +442,24 @@
 
     
         /* ── Google Translate widget — hide the toolbar it injects ── */
-        .goog-te-banner-frame, .skiptranslate { display: none !important; }
-        body { top: 0 !important; }
-        #goog-gt-tt, .goog-tooltip { display: none !important; }
+        /* ── Lock layout against ALL Google Translate interference ── */
+        .goog-te-banner-frame, .skiptranslate, #goog-gt-tt,
+        .goog-tooltip, .goog-te-balloon-frame,
+        .goog-te-ftab-float, .VIpgJd-ZVi9od-aZ2wEe { display: none !important; }
+
+        /* GT shifts body.top when it injects the toolbar — hard-lock it */
+        body { top: 0 !important; position: static !important; }
+
+        /* Prevent GT from changing text direction or layout on any element */
+        html, body, .sidebar, .main-content, .card, .header,
+        .nav-item, #chatPopup, .imsg-row, .imsg-bubble,
+        #reliable-newsTab, .news-card {
+            direction: ltr !important;
+            text-align: left !important;
+        }
+
+        /* GT wraps translated text in <font> tags — make sure they're inline only */
+        font[class^="notranslate"], .VIpgJd-yAWNEb-VIpgJd-fmcmS { display: inline !important; }
 
         /* ══ Language Switcher ══ */
         #langSwitcher {
@@ -2425,41 +2440,49 @@
         // ══ Language / Translation ══
         window._currentLang = 'en';
 
-        // Step 1: Immediately nuke any stale googtrans cookie so page always loads English
-        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + location.hostname;
-        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + location.hostname;
+        // Clear any stale translation cookie so page always starts English
+        ['', '.' + location.hostname].forEach(d => {
+            document.cookie = 'googtrans=/en/en; path=/; domain=' + d;
+        });
 
-        // Step 2: Init GT widget — autoDisplay:false, no auto language detection
+        // Load GT widget — it will sit hidden in #_gtHost
         window.googleTranslateElementInit = function() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'ar,hi',
-                autoDisplay: false,
-            }, '_gtHost');
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'ar,hi', autoDisplay: false },
+                '_gtHost'
+            );
         };
-        const _gtScript = document.createElement('script');
-        _gtScript.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        document.head.appendChild(_gtScript);
+        const _s = document.createElement('script');
+        _s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.head.appendChild(_s);
 
-        // Step 3: setLang — calls doGTranslate which is GT's own reliable internal switcher
+        // Robust combo-select switcher — polls until .goog-te-combo exists then fires change
+        function _gtSwitch(langCode) {
+            const apply = () => {
+                const sel = document.querySelector('.goog-te-combo');
+                if (!sel) return false;
+                sel.value = langCode;
+                // Fire both change and input events — GT needs both on some browsers
+                ['change', 'input'].forEach(ev => {
+                    const e = new Event(ev, { bubbles: true });
+                    sel.dispatchEvent(e);
+                });
+                return true;
+            };
+            if (apply()) return;
+            // Widget not ready yet — poll every 100ms up to 3 seconds
+            let tries = 0;
+            const t = setInterval(() => {
+                if (apply() || ++tries > 30) clearInterval(t);
+            }, 100);
+        }
+
         window.setLang = (lang) => {
             window._currentLang = lang;
-
-            // Highlight pill
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById({en:'langEn',ar:'langAr',hi:'langHi'}[lang] || 'langEn')?.classList.add('active');
-
-            // doGTranslate('en|ar') is the internal GT function — most reliable way to switch
-            const pair = 'en|' + (lang === 'en' ? 'en' : lang);
-            const tryTranslate = () => {
-                if (typeof doGTranslate === 'function') {
-                    doGTranslate(pair);
-                } else {
-                    setTimeout(tryTranslate, 150);
-                }
-            };
-            tryTranslate();
+            document.getElementById({en:'langEn', ar:'langAr', hi:'langHi'}[lang] || 'langEn')?.classList.add('active');
+            // Empty string = show original English; language code = translate
+            _gtSwitch(lang === 'en' ? '' : lang);
         };
         // ══ Language END ══
 
