@@ -314,7 +314,7 @@
         /* Larger gap when switching sender */
         /* switch-sender gap handled by base margin-bottom: 10px */
         .imsg-bubble {
-            max-width: 74%; padding: 9px 13px;
+            padding: 9px 13px;
             font-size: 14.5px; line-height: 1.44; word-break: break-word;
             position: relative;
         }
@@ -356,10 +356,22 @@
         }
         .imsg-row.them.no-av .imsg-mini-av { visibility: hidden; }
         /* Time on hover */
+        /* Bubble wrapper — stacks bubble + timestamp vertically */
+        .imsg-bubble-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 74%;
+        }
+        .imsg-row.me  .imsg-bubble-wrap { align-items: flex-end; }
+        .imsg-row.them .imsg-bubble-wrap { align-items: flex-start; }
+        /* Bubble itself no longer needs max-width (wrap handles it) */
+        .imsg-bubble { max-width: 100%; }
         .imsg-time {
             font-size: 10px; color: #8e8e93;
             opacity: 0; transition: opacity .2s;
-            white-space: nowrap; align-self: flex-end; margin-bottom: 3px;
+            white-space: nowrap; padding: 0 3px;
+            line-height: 1;
         }
         .imsg-row:hover .imsg-time { opacity: 1; }
         /* Date chip */
@@ -1499,18 +1511,22 @@
                             row.appendChild(av);
                         }
 
+                        const wrap = document.createElement('div');
+                        wrap.className = 'imsg-bubble-wrap';
+
                         const bub = document.createElement('div');
                         bub.className = 'imsg-bubble';
                         bub.textContent = data.text;
-                        row.appendChild(bub);
+                        wrap.appendChild(bub);
 
-                        // Timestamp — only show on last bubble of a group
+                        // Timestamp below bubble — only on last in group
                         if (!sameSenderAsNext && ts) {
                             const time = document.createElement('div');
                             time.className = 'imsg-time';
                             time.textContent = ts.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
-                            row.appendChild(time);
+                            wrap.appendChild(time);
                         }
+                        row.appendChild(wrap);
                     }
 
                     area.appendChild(row);
