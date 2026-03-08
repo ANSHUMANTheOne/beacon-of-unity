@@ -958,7 +958,7 @@
                         <button class="news-pill" onclick="setNewsSource('aljazeera')" id="srcAJ">
                             <img src="https://www.aljazeera.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Al Jazeera
                         </button>
-                        <button class="news-pill" onclick="loadNews()" style="margin-left:auto; background:none; border-color:#e2e8f0; color:#64748b;" id="newsRefreshBtn">↻ Refresh</button>
+                        <button class="news-pill" onclick="loadNews(true)" style="margin-left:auto; background:none; border-color:#e2e8f0; color:#64748b;" id="newsRefreshBtn">↻ Refresh</button>
                     </div>
                     <!-- Category filter pills -->
                     <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; align-items:center;" id="newsCatRow">
@@ -2232,7 +2232,7 @@
         }
 
         async function _tryProxy(proxyUrl, src) {
-            const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(6000) });
+            const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(9000) });
             if (!res.ok) return null;
             if (proxyUrl.includes('rss2json')) {
                 const d = await res.json();
@@ -2268,9 +2268,47 @@
             return await _firstSuccess(allAttempts) || [];
         }
 
-        window.loadNews = async () => {
+        const _CACHE_KEY = 'bou_news_cache';
+        const _CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+        function _saveCache(items) {
+            try { localStorage.setItem(_CACHE_KEY, JSON.stringify({ t: Date.now(), items })); } catch(e) {}
+        }
+        function _loadCache() {
+            try {
+                const c = JSON.parse(localStorage.getItem(_CACHE_KEY) || 'null');
+                if (c && Date.now() - c.t < _CACHE_TTL) return c.items;
+            } catch(e) {}
+            return null;
+        }
+
+        function _processItems(raw) {
+            return raw
+                .map(i => ({ ...i, category: _categorise(i.title, i.description) }))
+                .filter(i => i.title && i.title.length > 8)
+                .filter((i, idx, arr) => arr.findIndex(o => o.title.slice(0,50) === i.title.slice(0,50)) === idx)
+                .sort((a, b) => new Date(b.pubDate||0) - new Date(a.pubDate||0))
+                .slice(0, 80);
+        }
+
+        window.loadNews = async (forceRefresh) => {
             if (!document.getElementById('newsFeed')) return;
-            // Shimmer skeleton
+            const btn = document.getElementById('newsRefreshBtn');
+
+            // Show cached instantly if available
+            const cached = _loadCache();
+            if (cached && !forceRefresh) {
+                _newsItems = cached;
+                _newsLoaded = true;
+                _renderNews();
+                // Silently refresh in background
+                _fetchAllFeeds().then(items => {
+                    if (items.length) { _newsItems = items; _saveCache(items); _renderNews(); }
+                });
+                return;
+            }
+
+            // No cache — show skeleton and wait
             document.getElementById('newsFeed').innerHTML = `
                 <div style="display:flex;flex-direction:column;gap:14px;">
                     ${[1,2,3,4,5].map(() => `
@@ -2287,34 +2325,28 @@
                         </div>
                     </div>`).join('')}
                 </div>`;
-
-            const btn = document.getElementById('newsRefreshBtn');
             if (btn) { btn.disabled = true; btn.textContent = '↻ Loading…'; }
 
-            // Fetch all sources in parallel
-            const results = await Promise.allSettled(_FEEDS.map(src => _fetchFeed(src)));
-            _newsItems = [];
-            results.forEach(r => {
-                if (r.status === 'fulfilled' && r.value.length) {
-                    // Tag each item with category
-                    r.value.forEach(item => {
-                        item.category = _categorise(item.title, item.description);
-                        _newsItems.push(item);
-                    });
-                }
-            });
-
-            // Deduplicate by title prefix, sort newest first
-            _newsItems = _newsItems
-                .filter(i => i.title && i.title.length > 8)
-                .filter((i, idx, arr) => arr.findIndex(o => o.title.slice(0, 50) === i.title.slice(0, 50)) === idx)
-                .sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0))
-                .slice(0, 80);
+            const items = await _fetchAllFeeds();
+            if (items.length) {
+                _newsItems = items;
+                _saveCache(items);
+            } else if (cached) {
+                // Fetch failed but we have stale cache — use it
+                _newsItems = cached;
+            }
 
             if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh'; }
             _newsLoaded = true;
             _renderNews();
         };
+
+        async function _fetchAllFeeds() {
+            const results = await Promise.allSettled(_FEEDS.map(src => _fetchFeed(src)));
+            const raw = [];
+            results.forEach(r => { if (r.status === 'fulfilled') raw.push(...r.value); });
+            return _processItems(raw);
+        }
 
         window.setNewsSource = (src) => {
             _newsSource = src;
