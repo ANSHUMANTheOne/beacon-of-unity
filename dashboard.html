@@ -108,6 +108,7 @@
         /* Logout — Uiverse pill button */
         #logoutBtnNav {
             margin-top: auto !important;
+            margin-bottom: 18px !important;
             padding: 0 !important;
             background: none !important;
             border: none !important;
@@ -431,6 +432,80 @@
         /* Active chats list items */
         .chat-list-item { padding:12px; border:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center; border-radius:12px; margin-bottom:8px; background:white; transition:box-shadow .3s; }
         .chat-unread { border-color:#ef4444 !important; box-shadow:0 0 0 2px rgba(239,68,68,.25), 0 0 12px rgba(239,68,68,.2) !important; background:#fff8f8 !important; }
+
+        /* ══ Language Switcher ══ */
+        #langSwitcher {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin: 10px 0 8px;
+            padding: 3px;
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 8px;
+        }
+        .lang-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            color: rgba(255,255,255,.45);
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 5px 2px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all .16s;
+            font-family: inherit;
+            letter-spacing: .1px;
+            white-space: nowrap;
+        }
+        .lang-btn.active {
+            background: rgba(56,189,248,.22);
+            color: #7dd3fc;
+        }
+        .lang-btn:hover:not(.active) {
+            background: rgba(255,255,255,.08);
+            color: rgba(255,255,255,.75);
+        }
+        /* ══ Chat translate button ══ */
+        .translate-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 10.5px;
+            color: #8e8e93;
+            font-family: inherit;
+            padding: 2px 6px;
+            border-radius: 5px;
+            transition: background .15s, color .15s;
+            align-self: flex-start;
+            margin-top: 2px;
+            white-space: nowrap;
+        }
+        .translate-btn:hover { background: rgba(0,0,0,.06); color: #475569; }
+        .imsg-row:hover .translate-btn { display: inline-flex; align-items: center; gap: 3px; }
+        .translate-result {
+            font-size: 12.5px;
+            color: #6b7280;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: rgba(0,0,0,.05);
+            margin-top: 3px;
+            line-height: 1.4;
+            font-style: italic;
+            border-left: 2px solid #38bdf8;
+            max-width: 100%;
+        }
+        .imsg-row.me .translate-result {
+            background: rgba(255,255,255,.15);
+            color: rgba(255,255,255,.8);
+            border-left: none;
+            border-right: 2px solid rgba(255,255,255,.35);
+        }
+        body.dark .translate-result { background: rgba(255,255,255,.07); color: #94a3b8; }
+        /* ══ Language CSS END ══ */
+
         /* Dark mode */
         body.dark #chatPopup { background:#1c1c1e; }
         body.dark #chatHeader { background:rgba(28,28,30,.88); border-color:rgba(255,255,255,.1); }
@@ -685,6 +760,7 @@
         </button>
     </nav>
 
+    <div id="gt_host" style="display:none;"></div>
     <div id="quoteOverlay">
         <div id="quoteText"><span id="quoteTyped"></span><span id="quoteCursor"></span></div>
         <button id="quoteSkip">Skip  ✕</button>
@@ -725,12 +801,11 @@
         <h2>Beacon of Unity</h2>
         <span class="region-tag" id="userRegionDisplay">Region: Loading...</span>
 
-        <!-- Language Switcher -->
+        <!-- Language Switcher (discrete) -->
         <div id="langSwitcher">
-            <button class="lang-btn active" id="langEn" onclick="setLang('en')">🇬🇧 EN</button>
-            <button class="lang-btn" id="langAr" onclick="setLang('ar')">🇦🇪 AR</button>
-            <button class="lang-btn" id="langHi" onclick="setLang('hi')">🇮🇳 हि</button>
-            <button class="lang-btn" id="langUr" onclick="setLang('ur')">اردو</button>
+            <button class="lang-btn active" id="langEn" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" id="langAr" onclick="setLang('ar')">عر</button>
+            <button class="lang-btn" id="langHi" onclick="setLang('hi')">हिं</button>
         </div>
 
         <div class="nav-item active" onclick="switchTab('community')"><span class="nav-emoji">✨</span> Community Hub</div>
@@ -2247,92 +2322,64 @@
 
         
         // ══ Language / Translation ══
-        window._currentLang = localStorage.getItem('bou_lang') || 'en';
+        window._currentLang = 'en';
 
-        const _LANG_MAP = {
-            en: { dir: 'ltr', label: 'English', gtCode: 'en' },
-            ar: { dir: 'rtl', label: 'العربية', gtCode: 'ar' },
-            hi: { dir: 'ltr', label: 'हिन्दी',  gtCode: 'hi' },
-            ur: { dir: 'rtl', label: 'اردو',    gtCode: 'ur' },
-        };
-
+        // MyMemory API — free, no key, handles EN↔AR↔HI
         window.setLang = (lang) => {
             window._currentLang = lang;
-            localStorage.setItem('bou_lang', lang);
-            const info = _LANG_MAP[lang] || _LANG_MAP.en;
-
-            // RTL toggle
-            document.body.classList.toggle('rtl', info.dir === 'rtl');
-            document.documentElement.setAttribute('lang', lang);
-            document.documentElement.setAttribute('dir', info.dir);
-
-            // Update pill active state
+            // Update active pill
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('lang' + lang.charAt(0).toUpperCase() + lang.slice(1))?.classList.add('active');
+            const ids = { en: 'langEn', ar: 'langAr', hi: 'langHi' };
+            document.getElementById(ids[lang])?.classList.add('active');
 
-            // Use Google Translate to translate page content
-            _applyGoogleTranslate(lang);
+            // Arabic / Hindi: use Google Translate widget via cookie + reload
+            // English: clear translation cookie + reload
+            const gtLang = { en: '/en/en', ar: '/en/ar', hi: '/en/hi' }[lang] || '/en/en';
+            const wasAlready = document.cookie.includes('googtrans=' + gtLang);
+            if (wasAlready && lang === window._lastAppliedLang) return;
+            window._lastAppliedLang = lang;
+
+            // Set cookie for google translate
+            document.cookie = 'googtrans=' + gtLang + '; path=/';
+            document.cookie = 'googtrans=' + gtLang + '; path=/; domain=.' + location.hostname;
+
+            // Inject GT script once
+            if (!window._gtScriptLoaded) {
+                window._gtScriptLoaded = true;
+                window._gtTargetLang = lang;
+                window.googleTranslateElementInit = function() {
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'en',
+                        includedLanguages: 'ar,hi,en',
+                        autoDisplay: false,
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                    }, 'gt_host');
+                };
+                const s = document.createElement('script');
+                s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+                s.onerror = () => { window._gtScriptLoaded = false; };
+                document.head.appendChild(s);
+                // Give GT 1.5s to load then trigger
+                setTimeout(() => _triggerGT(lang), 1500);
+            } else {
+                _triggerGT(lang);
+            }
         };
 
-        function _applyGoogleTranslate(lang) {
-            // Inject Google Translate element if not present
-            if (!document.getElementById('gt_element')) {
-                const el = document.createElement('div');
-                el.id = 'gt_element';
-                el.style.display = 'none';
-                document.body.appendChild(el);
-
-                const s = document.createElement('script');
-                s.src = '//translate.google.com/translate_a/element.js?cb=_gtInit';
-                document.head.appendChild(s);
-
-                window._gtInit = function() {
-                    new google.translate.TranslateElement(
-                        { pageLanguage: 'en', includedLanguages: 'ar,hi,ur,en', autoDisplay: false },
-                        'gt_element'
-                    );
-                    window._gtReady = true;
-                    if (window._pendingLang) _doGtTranslate(window._pendingLang);
-                };
-            }
-            if (lang === 'en') {
-                // Restore original — click the "Show original" banner if present
-                _doGtTranslate('en');
-            } else if (window._gtReady) {
-                _doGtTranslate(lang);
-            } else {
-                window._pendingLang = lang;
-            }
-        }
-
-        function _doGtTranslate(lang) {
+        function _triggerGT(lang) {
             try {
                 const sel = document.querySelector('.goog-te-combo');
-                if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
-                // Fallback: use the internal GT cookie approach
-                if (lang === 'en') {
-                    const frame = document.querySelector('.goog-te-banner-frame, iframe.goog-te-banner-frame');
-                    if (frame) { try { frame.contentDocument.querySelector('#restore')?.click(); } catch{} }
-                    document.cookie = 'googtrans=; path=/; domain=' + location.hostname;
-                    document.cookie = 'googtrans=/en/en; path=/';
-                } else {
-                    document.cookie = 'googtrans=/en/' + lang + '; path=/';
-                    document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + location.hostname;
+                if (sel) {
+                    sel.value = lang === 'en' ? '' : lang;
+                    sel.dispatchEvent(new Event('change'));
+                    return;
                 }
-                location.reload();
             } catch(e) {}
-        }
-
-        // Apply saved language on load
-        (function() {
-            const saved = localStorage.getItem('bou_lang') || 'en';
-            if (saved !== 'en') {
-                // Defer until DOM ready
-                setTimeout(() => window.setLang(saved), 800);
-            } else {
-                document.getElementById('langEn')?.classList.add('active');
+            // Fallback: reload with cookie set
+            if (lang !== 'en' || document.cookie.includes('googtrans=/en/ar') || document.cookie.includes('googtrans=/en/hi')) {
+                location.reload();
             }
-        })();
+        }
         // ══ Language END ══
 
                 const logout = () => signOut(auth).then(() => window.location.href = "login.html");
