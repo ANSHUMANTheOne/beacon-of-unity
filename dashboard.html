@@ -107,7 +107,7 @@
 
         /* Logout — Uiverse pill button */
         #logoutBtnNav {
-            margin-top: 30px !important;
+            margin-top: auto !important;
             padding: 0 !important;
             background: none !important;
             border: none !important;
@@ -298,21 +298,21 @@
         #messageArea {
             flex: 1; overflow-y: auto;
             padding: 14px 12px 8px;
-            display: flex; flex-direction: column; gap: 2px;
+            display: flex; flex-direction: column; gap: 0;
             background: #f2f2f7; scroll-behavior: smooth;
         }
         #messageArea::-webkit-scrollbar { width: 3px; }
         #messageArea::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 3px; }
         /* Bubbles */
-        .imsg-row { display: flex; align-items: flex-end; gap: 6px; margin-bottom: 2px; }
+        .imsg-row { display: flex; align-items: flex-end; gap: 6px; margin-bottom: 10px; }
         .imsg-row.me   { justify-content: flex-end; }
         .imsg-row.them { justify-content: flex-start; }
         .imsg-row.sys  { justify-content: center; margin: 8px 0 4px; }
         /* Tighter gap between consecutive same-sender messages */
         .imsg-row.me.consec,
-        .imsg-row.them.consec { margin-bottom: 1px; }
+        .imsg-row.them.consec { margin-bottom: 2px; }
         /* Larger gap when switching sender */
-        .imsg-row.switch-sender { margin-top: 8px; }
+        /* switch-sender gap handled by base margin-bottom: 10px */
         .imsg-bubble {
             max-width: 74%; padding: 9px 13px;
             font-size: 14.5px; line-height: 1.44; word-break: break-word;
