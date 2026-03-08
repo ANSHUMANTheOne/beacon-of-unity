@@ -1344,6 +1344,8 @@
                 loadRequests();
                 loadLF();
                 loadActiveChats();
+                // Pre-fetch news immediately in background so it's ready when user navigates there
+                loadNews();
             } else {
                 window.location.href = "login.html";
             }
@@ -2222,10 +2224,15 @@
                 if (!remaining) { resolve(null); return; }
                 promises.forEach(p => {
                     p.then(result => {
-                        if (!done && result) { done = true; resolve(result); }
-                        else if (!done && --remaining === 0) resolve(null);
+                        // Only accept non-empty arrays
+                        if (!done && Array.isArray(result) && result.length > 0) {
+                            done = true;
+                            resolve(result);
+                        } else if (--remaining === 0 && !done) {
+                            resolve(null);
+                        }
                     }).catch(() => {
-                        if (!done && --remaining === 0) resolve(null);
+                        if (--remaining === 0 && !done) resolve(null);
                     });
                 });
             });
@@ -2233,10 +2240,10 @@
 
         async function _tryProxy(proxyUrl, src) {
             const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(9000) });
-            if (!res.ok) return null;
+            if (!res.ok) throw new Error('bad status');
             if (proxyUrl.includes('rss2json')) {
                 const d = await res.json();
-                if (d.status !== 'ok' || !d.items?.length) return null;
+                if (d.status !== 'ok' || !d.items?.length) throw new Error('empty');
                 return d.items.map(item => ({
                     source: src.key, sourceName: src.name,
                     badgeBg: src.badgeBg, badgeColor: src.badgeColor, placeholder: src.placeholder,
@@ -2250,8 +2257,10 @@
             const text = proxyUrl.includes('allorigins.win/get')
                 ? ((await res.json()).contents || '')
                 : await res.text();
-            if (!text.includes('<item')) return null;
-            return _parseXML(text, src) || null;
+            if (!text.includes('<item')) throw new Error('no items');
+            const parsed = _parseXML(text, src);
+            if (!parsed?.length) throw new Error('parse fail');
+            return parsed;
         }
 
         async function _fetchFeed(src) {
