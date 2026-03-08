@@ -108,7 +108,7 @@
         /* Logout — Uiverse pill button */
         #logoutBtnNav {
             margin-top: auto !important;
-            margin-bottom: 18px !important;
+            margin-bottom: 28px !important;
             padding: 0 !important;
             background: none !important;
             border: none !important;
@@ -362,17 +362,21 @@
             display: flex;
             flex-direction: column;
             gap: 2px;
-            max-width: 74%;
+            max-width: 72%;
         }
         .imsg-row.me  .imsg-bubble-wrap { align-items: flex-end; }
         .imsg-row.them .imsg-bubble-wrap { align-items: flex-start; }
         /* Bubble itself no longer needs max-width (wrap handles it) */
         .imsg-bubble { max-width: 100%; }
+        /* Time sits beside the bubble in the row — left for me, right for them */
         .imsg-time {
             font-size: 10px; color: #8e8e93;
             opacity: 0; transition: opacity .2s;
-            white-space: nowrap; padding: 0 3px;
+            white-space: nowrap;
             line-height: 1;
+            align-self: flex-end;
+            padding-bottom: 3px;
+            flex-shrink: 0;
         }
         .imsg-row:hover .imsg-time { opacity: 1; }
         /* Date chip */
@@ -1636,14 +1640,21 @@
                         })(data.text, wrap, tBtn);
                         wrap.appendChild(tBtn);
 
-                        // Timestamp below bubble — only on last in group
+                        row.appendChild(wrap);
+
+                        // Timestamp beside bubble — only on last in group
+                        // "me" = time on LEFT (prepended before wrap)
+                        // "them" = time on RIGHT (appended after wrap)
                         if (!sameSenderAsNext && ts) {
                             const time = document.createElement('div');
                             time.className = 'imsg-time';
                             time.textContent = ts.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
-                            wrap.appendChild(time);
+                            if (isMe) {
+                                row.insertBefore(time, wrap); // left of bubble
+                            } else {
+                                row.appendChild(time);        // right of bubble
+                            }
                         }
-                        row.appendChild(wrap);
                     }
 
                     area.appendChild(row);
@@ -2046,7 +2057,7 @@
         let _newsFilter = 'all';
         let _newsLoaded = false;
 
-        // Feed config — rss2json handles CORS + image extraction
+        // Feed config — verified working RSS URLs
         const _FEEDS = [
             {
                 key: 'khaleej',
@@ -2055,8 +2066,8 @@
                 placeholder: '#f59e0b',
                 urls: [
                     'https://www.khaleejtimes.com/arc/outboundfeeds/rss/',
-                    'https://www.khaleejtimes.com/rss',
-                    'https://feeds.feedburner.com/khaleejtimes/uaenews',
+                    'https://www.khaleejtimes.com/rss/',
+                    'https://www.khaleejtimes.com/feed/',
                 ]
             },
             {
@@ -2066,9 +2077,8 @@
                 placeholder: '#3b82f6',
                 urls: [
                     'https://gulfnews.com/rss/uae.xml',
-                    'https://gulfnews.com/rss/uae',
                     'https://gulfnews.com/rss/world.xml',
-                    'https://gulfnews.com/rss/world',
+                    'https://gulfnews.com/rss/business.xml',
                 ]
             },
             {
@@ -2078,8 +2088,7 @@
                 placeholder: '#ec4899',
                 urls: [
                     'https://www.aljazeera.com/xml/rss/all.xml',
-                    'https://www.aljazeera.com/xml/rss/middle-east.xml',
-                    'https://www.aljazeera.com/xml/rss/middleeast.xml',
+                    'https://www.aljazeera.com/xml/rss/world.xml',
                 ]
             }
         ];
@@ -2126,55 +2135,115 @@
                 .replace(/\s+/g,' ').trim();
         }
 
+        // Parse raw XML into items array
+        function _parseXML(xmlText, src) {
+            try {
+                const xml = (new DOMParser()).parseFromString(xmlText, 'text/xml');
+                const items = [...xml.querySelectorAll('item')];
+                if (!items.length) return null;
+                return items.map(el => {
+                    // Try multiple thumbnail sources
+                    const ns = el.ownerDocument;
+                    let thumb = '';
+                    const mcEl = el.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')[0]
+                               || el.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail')[0];
+                    if (mcEl) thumb = mcEl.getAttribute('url') || '';
+                    if (!thumb) thumb = el.querySelector('enclosure')?.getAttribute('url') || '';
+                    // Try to pull image from description HTML
+                    if (!thumb) {
+                        const desc = el.querySelector('description')?.textContent || '';
+                        const m = desc.match(/src=["']([^"']+\.(?:jpg|jpeg|png|webp))[^"']*/i);
+                        if (m) thumb = m[1];
+                    }
+                    const linkEl = el.querySelector('link');
+                    let link = linkEl?.textContent?.trim() || '';
+                    if (!link) link = el.querySelector('guid')?.textContent?.trim() || '';
+                    return {
+                        source: src.key, sourceName: src.name,
+                        badgeBg: src.badgeBg, badgeColor: src.badgeColor,
+                        placeholder: src.placeholder,
+                        title: _clean(el.querySelector('title')?.textContent) || '',
+                        description: _clean(el.querySelector('description')?.textContent) || '',
+                        link, pubDate: el.querySelector('pubDate')?.textContent?.trim() || '',
+                        thumbnail: thumb,
+                    };
+                });
+            } catch(e) { return null; }
+        }
+
         async function _fetchFeed(src) {
+            // Method 1: rss2json.com — handles media:content, returns JSON with thumbnails
             for (const url of src.urls) {
                 try {
-                    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=25`;
-                    const res = await fetch(apiUrl, { signal: AbortSignal.timeout(10000) });
-                    if (!res.ok) continue;
-                    const data = await res.json();
-                    if (data.status !== 'ok' || !data.items?.length) continue;
-                    // Success — map items
-                    return data.items.map(item => ({
-                        source: src.key,
-                        sourceName: src.name,
-                        badgeBg: src.badgeBg,
-                        badgeColor: src.badgeColor,
-                        placeholder: src.placeholder,
-                        title: _clean(item.title) || '',
-                        description: _clean(item.description || item.content) || '',
-                        link: item.link || item.guid || '',
-                        pubDate: item.pubDate || '',
-                        thumbnail: item.thumbnail || item.enclosure?.link || '',
-                    }));
-                } catch(e) { /* try next url */ }
-            }
-            // If rss2json fails entirely, try allorigins as last resort
-            for (const url of src.urls.slice(0,1)) {
-                try {
-                    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                    const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
-                    if (!res.ok) continue;
-                    const data = await res.json();
-                    const xml = (new DOMParser()).parseFromString(data.contents || '', 'text/xml');
-                    const items = [...xml.querySelectorAll('item')];
-                    if (!items.length) continue;
-                    return items.map(el => {
-                        const thumb = el.querySelector('media\\:content,media\\:thumbnail')?.getAttribute('url')
-                            || el.querySelector('enclosure')?.getAttribute('url') || '';
-                        return {
+                    const r = await fetch(
+                        `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=30&api_key=`,
+                        { signal: AbortSignal.timeout(9000) }
+                    );
+                    if (!r.ok) continue;
+                    const d = await r.json();
+                    if (d.status === 'ok' && d.items?.length) {
+                        return d.items.map(item => ({
                             source: src.key, sourceName: src.name,
                             badgeBg: src.badgeBg, badgeColor: src.badgeColor,
                             placeholder: src.placeholder,
-                            title: _clean(el.querySelector('title')?.textContent) || '',
-                            description: _clean(el.querySelector('description')?.textContent) || '',
-                            link: el.querySelector('link')?.textContent?.trim() || '',
-                            pubDate: el.querySelector('pubDate')?.textContent?.trim() || '',
-                            thumbnail: thumb,
-                        };
-                    });
+                            title: _clean(item.title) || '',
+                            description: _clean(item.description || item.content) || '',
+                            link: item.link || item.guid || '',
+                            pubDate: item.pubDate || '',
+                            thumbnail: item.thumbnail || item.enclosure?.link || '',
+                        }));
+                    }
+                } catch(e) {}
+                // Small delay between retries to avoid rate limit
+                await new Promise(r => setTimeout(r, 300));
+            }
+
+            // Method 2: corsproxy.io — fetch raw XML
+            for (const url of src.urls) {
+                try {
+                    const r = await fetch(
+                        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                        { signal: AbortSignal.timeout(9000) }
+                    );
+                    if (!r.ok) continue;
+                    const text = await r.text();
+                    if (!text.includes('<item')) continue;
+                    const items = _parseXML(text, src);
+                    if (items?.length) return items;
                 } catch(e) {}
             }
+
+            // Method 3: allorigins — JSON wrapper around raw content
+            for (const url of src.urls) {
+                try {
+                    const r = await fetch(
+                        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                        { signal: AbortSignal.timeout(9000) }
+                    );
+                    if (!r.ok) continue;
+                    const d = await r.json();
+                    const text = d.contents || '';
+                    if (!text.includes('<item')) continue;
+                    const items = _parseXML(text, src);
+                    if (items?.length) return items;
+                } catch(e) {}
+            }
+
+            // Method 4: htmlparser.me as last resort
+            try {
+                const r = await fetch(
+                    `https://api.allorigins.win/raw?url=${encodeURIComponent(src.urls[0])}`,
+                    { signal: AbortSignal.timeout(9000) }
+                );
+                if (r.ok) {
+                    const text = await r.text();
+                    if (text.includes('<item')) {
+                        const items = _parseXML(text, src);
+                        if (items?.length) return items;
+                    }
+                }
+            } catch(e) {}
+
             return [];
         }
 
