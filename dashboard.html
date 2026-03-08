@@ -107,8 +107,10 @@
 
         /* Logout — Uiverse pill button */
         #logoutBtnNav {
-            margin-top: auto !important;
-            margin-bottom: 30px !important;
+            position: fixed !important;
+            bottom: 30px !important;
+            left: 20px !important;
+            margin: 0 !important;
             padding: 0 !important;
             background: none !important;
             border: none !important;
@@ -119,6 +121,7 @@
             align-items: center;
             justify-content: flex-start;
             overflow: visible !important;
+            z-index: 999;
         }
         #logoutBtnNav:hover { background: none !important; transform: none !important; }
         #logoutBtnNav.active { background: none !important; box-shadow: none !important; }
@@ -2195,58 +2198,76 @@
         }
 
         // Try every proxy in sequence, first success wins
-        async function _fetchFeed(src) {
-            const PROXIES = [
+        // Race all proxies for a single URL — first valid response wins, rest are cancelled
+        async function _raceFetch(feedUrl, src) {
+            const ac = new AbortController();
+            const TIMEOUT = 5000; // 5s hard limit per race
+
+            const makeAttempt = async (proxyUrl) => {
+                const res = await fetch(proxyUrl, { signal: ac.signal });
+                if (!res.ok) throw new Error('not ok');
+
+                if (proxyUrl.includes('rss2json')) {
+                    const d = await res.json();
+                    if (d.status !== 'ok' || !d.items?.length) throw new Error('empty');
+                    return d.items.map(item => ({
+                        source: src.key, sourceName: src.name,
+                        badgeBg: src.badgeBg, badgeColor: src.badgeColor, placeholder: src.placeholder,
+                        title: _clean(item.title) || '',
+                        description: _clean(item.description || item.content) || '',
+                        link: item.link || item.guid || '',
+                        pubDate: item.pubDate || '',
+                        thumbnail: item.thumbnail || item.enclosure?.link || '',
+                    }));
+                }
+
+                const text = proxyUrl.includes('allorigins.win/get')
+                    ? ((await res.json()).contents || '')
+                    : await res.text();
+                if (!text.includes('<item')) throw new Error('no items');
+                const items = _parseXML(text, src);
+                if (!items?.length) throw new Error('parse fail');
+                return items;
+            };
+
+            const proxyFns = [
                 u => `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}&count=30`,
-                u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
                 u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+                u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
                 u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-                u => `https://thingproxy.freeboard.io/fetch/${u}`,
             ];
 
+            return new Promise((resolve) => {
+                let settled = false;
+                let pending = proxyFns.length;
+                const timer = setTimeout(() => { if (!settled) { settled = true; ac.abort(); resolve(null); } }, TIMEOUT);
+
+                proxyFns.forEach(fn => {
+                    makeAttempt(fn(feedUrl))
+                        .then(items => {
+                            if (!settled) {
+                                settled = true;
+                                clearTimeout(timer);
+                                ac.abort(); // cancel remaining
+                                resolve(items);
+                            }
+                        })
+                        .catch(() => {
+                            if (--pending === 0 && !settled) {
+                                settled = true;
+                                clearTimeout(timer);
+                                resolve(null);
+                            }
+                        });
+                });
+            });
+        }
+
+        async function _fetchFeed(src) {
+            // Try each feed URL, racing all proxies simultaneously — stop at first success
             for (const feedUrl of src.urls) {
-                for (const proxyFn of PROXIES) {
-                    try {
-                        const proxyUrl = proxyFn(feedUrl);
-                        const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(10000) });
-                        if (!res.ok) continue;
-
-                        // rss2json returns JSON
-                        if (proxyUrl.includes('rss2json')) {
-                            const d = await res.json();
-                            if (d.status === 'ok' && d.items?.length) {
-                                return d.items.map(item => ({
-                                    source: src.key, sourceName: src.name,
-                                    badgeBg: src.badgeBg, badgeColor: src.badgeColor, placeholder: src.placeholder,
-                                    title: _clean(item.title) || '',
-                                    description: _clean(item.description || item.content) || '',
-                                    link: item.link || item.guid || '',
-                                    pubDate: item.pubDate || '',
-                                    thumbnail: item.thumbnail || item.enclosure?.link || '',
-                                }));
-                            }
-                            continue; // rss2json returned error status
-                        }
-
-                        // allorigins /get returns JSON wrapper
-                        if (proxyUrl.includes('allorigins.win/get')) {
-                            const d = await res.json();
-                            const text = d.contents || '';
-                            if (text.includes('<item>') || text.includes('<item ')) {
-                                const items = _parseXML(text, src);
-                                if (items?.length) return items;
-                            }
-                            continue;
-                        }
-
-                        // All other proxies return raw XML/text
-                        const text = await res.text();
-                        if (text.includes('<item>') || text.includes('<item ')) {
-                            const items = _parseXML(text, src);
-                            if (items?.length) return items;
-                        }
-                    } catch(e) { /* try next */ }
-                }
+                const items = await _raceFetch(feedUrl, src);
+                if (items?.length) return items;
             }
             return [];
         }
@@ -2403,60 +2424,41 @@
         
         // ══ Language / Translation ══
         window._currentLang = 'en';
-        window._gtReady = false;
 
-        // Inject GT widget script once on first language switch
-        function _initGT() {
-            if (document.getElementById('_gtScript')) return;
+        // Inject GT widget once — hidden, just needs to exist to enable doGTranslate
+        (function() {
             window.googleTranslateElementInit = function() {
-                new google.translate.TranslateElement({
-                    pageLanguage: 'en',
-                    includedLanguages: 'ar,hi,en',
-                    autoDisplay: false,
-                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-                }, '_gtHost');
-                window._gtReady = true;
-                if (window._pendingGTLang) _applyGT(window._pendingGTLang);
+                new google.translate.TranslateElement(
+                    { pageLanguage: 'en', autoDisplay: false },
+                    '_gtHost'
+                );
             };
             const s = document.createElement('script');
-            s.id = '_gtScript';
             s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
             document.head.appendChild(s);
-        }
-
-        function _applyGT(lang) {
-            // Try the combo select the widget creates
-            const combo = document.querySelector('.goog-te-combo');
-            if (combo) {
-                combo.value = lang === 'en' ? '' : lang;
-                combo.dispatchEvent(new Event('change'));
-                return;
-            }
-            // Widget not ready yet — queue it
-            window._pendingGTLang = lang;
-        }
+        })();
 
         window.setLang = (lang) => {
             window._currentLang = lang;
-            // Update pill highlight
+            // Highlight correct pill
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            const ids = { en: 'langEn', ar: 'langAr', hi: 'langHi' };
-            document.getElementById(ids[lang])?.classList.add('active');
+            ({ en:'langEn', ar:'langAr', hi:'langHi' }[lang] && 
+             document.getElementById({en:'langEn',ar:'langAr',hi:'langHi'}[lang])?.classList.add('active'));
 
-            if (lang === 'en') {
-                // Revert: select empty value = original English
-                const combo = document.querySelector('.goog-te-combo');
-                if (combo) { combo.value = ''; combo.dispatchEvent(new Event('change')); }
-                return;
-            }
-            // First switch — load the GT widget script
-            if (!window._gtReady && !document.getElementById('_gtScript')) {
-                _initGT();
-                window._pendingGTLang = lang;
-            } else if (window._gtReady) {
-                _applyGT(lang);
+            // doGTranslate('en|ar') is Google Translate's own internal function
+            // It reliably switches language without any combo select race conditions
+            const pair = lang === 'en' ? 'en|en' : 'en|' + lang;
+            if (typeof doGTranslate !== 'undefined') {
+                doGTranslate(pair);
             } else {
-                window._pendingGTLang = lang; // still loading
+                // GT script not loaded yet — wait and retry
+                let tries = 0;
+                const wait = setInterval(() => {
+                    if (typeof doGTranslate !== 'undefined') {
+                        clearInterval(wait);
+                        doGTranslate(pair);
+                    } else if (++tries > 20) clearInterval(wait);
+                }, 200);
             }
         };
         // ══ Language END ══
