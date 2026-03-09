@@ -949,17 +949,17 @@
                     <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; align-items:center;" id="newsFilterRow">
                         <span style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-right:2px;">Source</span>
                         <button class="news-pill active" onclick="setNewsSource('all')" id="srcAll">All</button>
-                        <button class="news-pill" onclick="setNewsSource('khaleej')" id="srcKhaleej">
-                            <img src="https://www.khaleejtimes.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Khaleej Times
-                        </button>
-                        <button class="news-pill" onclick="setNewsSource('gulf')" id="srcGulf">
-                            <img src="https://gulfnews.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Gulf News
-                        </button>
                         <button class="news-pill" onclick="setNewsSource('aljazeera')" id="srcAJ">
                             <img src="https://www.aljazeera.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Al Jazeera
                         </button>
                         <button class="news-pill" onclick="setNewsSource('bbc')" id="srcBBC">
                             <img src="https://www.bbc.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">BBC News
+                        </button>
+                        <button class="news-pill" onclick="setNewsSource('dw')" id="srcDW">
+                            <img src="https://www.dw.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">DW News
+                        </button>
+                        <button class="news-pill" onclick="setNewsSource('guardian')" id="srcGuardian">
+                            <img src="https://www.theguardian.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">The Guardian
                         </button>
                         <button class="news-pill" onclick="setNewsSource('toi')" id="srcTOI">
                             <img src="https://timesofindia.indiatimes.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Times of India
@@ -969,6 +969,9 @@
                         </button>
                         <button class="news-pill" onclick="setNewsSource('thenational')" id="srcNational">
                             <img src="https://www.thenationalnews.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">The National
+                        </button>
+                        <button class="news-pill" onclick="setNewsSource('france24')" id="srcFrance24">
+                            <img src="https://www.france24.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">France 24
                         </button>
                         <button class="news-pill" onclick="loadNews(true)" style="margin-left:auto; background:none; border-color:#e2e8f0; color:#64748b;" id="newsRefreshBtn">↻ Refresh</button>
                     </div>
@@ -2112,32 +2115,11 @@
         let _newsCat    = 'all';
         let _newsLoaded = false;
 
-        // ── Feed sources (multiple fallback URLs per source) ──
+        // ── Feed sources ──
         const _FEEDS = [
-            {
-                key: 'khaleej', name: 'Khaleej Times',
-                badgeBg: '#fef3c7', badgeColor: '#92400e', placeholder: '#f59e0b',
-                urls: [
-                    'https://www.khaleejtimes.com/arc/outboundfeeds/rss/',
-                    'https://www.khaleejtimes.com/arc/outboundfeeds/rss/?outputType=rss',
-                    'https://feeds.feedburner.com/khaleejtimes',
-                    'https://www.khaleejtimes.com/rss/',
-                ]
-            },
-            {
-                key: 'gulf', name: 'Gulf News',
-                badgeBg: '#dbeafe', badgeColor: '#1e40af', placeholder: '#3b82f6',
-                urls: [
-                    'https://gulfnews.com/rss/uae.xml',
-                    'https://gulfnews.com/rss/world.xml',
-                    'https://gulfnews.com/rss/business.xml',
-                    'https://gulfnews.com/rss/sport.xml',
-                ]
-            },
             {
                 key: 'aljazeera', name: 'Al Jazeera',
                 badgeBg: '#fce7f3', badgeColor: '#9d174d', placeholder: '#ec4899',
-                fetchAll: true,
                 urls: [
                     'https://www.aljazeera.com/xml/rss/all.xml',
                     'https://www.aljazeera.com/xml/rss/sport.xml',
@@ -2148,28 +2130,43 @@
             {
                 key: 'bbc', name: 'BBC News',
                 badgeBg: '#fee2e2', badgeColor: '#991b1b', placeholder: '#ef4444',
-                fetchAll: true,
                 urls: [
+                    'https://feeds.bbci.co.uk/news/rss.xml',
                     'https://feeds.bbci.co.uk/news/world/rss.xml',
+                    'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml',
                     'https://feeds.bbci.co.uk/sport/rss.xml',
-                    'https://feeds.bbci.co.uk/news/technology/rss.xml',
-                    'https://feeds.bbci.co.uk/news/business/rss.xml',
+                ]
+            },
+            {
+                key: 'dw', name: 'DW News',
+                badgeBg: '#eff6ff', badgeColor: '#1d4ed8', placeholder: '#3b82f6',
+                urls: [
+                    'https://rss.dw.com/rdf/rss-en-all',
+                    'https://rss.dw.com/rdf/rss-en-world',
+                    'https://rss.dw.com/rdf/rss-en-top',
+                ]
+            },
+            {
+                key: 'guardian', name: 'The Guardian',
+                badgeBg: '#f0fdf4', badgeColor: '#15803d', placeholder: '#22c55e',
+                urls: [
+                    'https://www.theguardian.com/world/rss',
+                    'https://www.theguardian.com/international/rss',
+                    'https://www.theguardian.com/sport/rss',
                 ]
             },
             {
                 key: 'toi', name: 'Times of India',
                 badgeBg: '#fff7ed', badgeColor: '#9a3412', placeholder: '#f97316',
-                fetchAll: true,
                 urls: [
                     'https://timesofindia.indiatimes.com/rssfeedstopstories.cms',
+                    'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
                     'https://timesofindia.indiatimes.com/rssfeeds/4719148.cms',
-                    'https://timesofindia.indiatimes.com/rssfeeds/54829575.cms',
                 ]
             },
             {
                 key: 'wion', name: 'WION',
-                badgeBg: '#f0fdf4', badgeColor: '#166534', placeholder: '#22c55e',
-                fetchAll: false,
+                badgeBg: '#fdf4ff', badgeColor: '#7e22ce', placeholder: '#a855f7',
                 urls: [
                     'https://www.wionews.com/rss.xml',
                     'https://www.wionews.com/feeds/google-news.xml',
@@ -2178,12 +2175,19 @@
             {
                 key: 'thenational', name: 'The National',
                 badgeBg: '#f8fafc', badgeColor: '#0f172a', placeholder: '#64748b',
-                fetchAll: false,
                 urls: [
                     'https://www.thenationalnews.com/rss/',
-                    'https://www.thenationalnews.com/rss/world.xml',
+                    'https://www.thenationalnews.com/arc/outboundfeeds/rss/',
                 ]
-            }
+            },
+            {
+                key: 'france24', name: 'France 24',
+                badgeBg: '#fef2f2', badgeColor: '#b91c1c', placeholder: '#ef4444',
+                urls: [
+                    'https://www.france24.com/en/rss',
+                    'https://www.france24.com/en/world/rss',
+                ]
+            },
         ];
 
         // ── Category keyword maps ──
@@ -2347,12 +2351,17 @@
             ]);
         }
 
-        // Fetch a source — returns first successful URL only (fast)
+        // Fast fetch: try all URLs via rss2json in parallel, first success wins
         async function _fetchFeedFast(src) {
-            return await _fetchUrl(src.urls[0], src, 5000) || [];
+            return await _firstSuccess(
+                src.urls.map(u => _tryProxy(
+                    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}&count=50`,
+                    src, 5000
+                ))
+            ) || [];
         }
 
-        // Fetch ALL urls of a source and merge (for extra articles)
+        // Full fetch: all URLs, all proxies, merge everything
         async function _fetchFeedFull(src) {
             const results = await Promise.allSettled(src.urls.map(u => _fetchUrl(u, src, 5000)));
             const merged = [];
@@ -2425,7 +2434,7 @@
             const ajSrc = _FEEDS.find(f => f.key === 'aljazeera');
             const otherSrcs = _FEEDS.filter(f => f.key !== 'aljazeera');
 
-            // Step 1: Fetch ONLY AJ's first URL (all.xml) — fastest path, renders in ~2s
+            // Step 1: AJ fast — renders immediately on success (~2s)
             const ajFast = await _fetchFeedFast(ajSrc);
             if (ajFast.length) {
                 _newsItems = _processItems(ajFast);
@@ -2434,21 +2443,21 @@
                 _saveCache(_newsItems);
             }
 
-            // Step 2: Everything else fires in background simultaneously
-            // — AJ extra feeds (sport, economy, tech) + all other sources
-            const bgFeeds = [
-                ...ajSrc.urls.slice(1).map(u => _fetchUrl(u, ajSrc, 5000)), // AJ sport/economy/tech
-                ...otherSrcs.map(src => _fetchFeedFast(src)),                // BBC, TOI, WION, National
-            ];
-            Promise.allSettled(bgFeeds).then(results => {
+            // Step 2: All other sources fast-fetch in parallel in background
+            // Each tries all its URLs via rss2json simultaneously
+            Promise.allSettled(otherSrcs.map(src => _fetchFeedFast(src))).then(results => {
                 const extra = [];
-                results.forEach(r => { if (r.status === 'fulfilled' && r.value) extra.push(...r.value); });
-                if (extra.length) {
-                    const merged = _processItems([..._newsItems, ...extra]);
-                    _newsItems = merged;
-                    _saveCache(merged);
-                    _renderNews();
-                }
+                results.forEach(r => { if (r.status === 'fulfilled' && r.value?.length) extra.push(...r.value); });
+                // Also fire AJ extra feeds (sport/economy/tech) in same batch
+                Promise.allSettled(ajSrc.urls.slice(1).map(u => _fetchUrl(u, ajSrc, 5000))).then(ajExtra => {
+                    ajExtra.forEach(r => { if (r.status === 'fulfilled' && r.value?.length) extra.push(...r.value); });
+                    if (extra.length) {
+                        const merged = _processItems([..._newsItems, ...extra]);
+                        _newsItems = merged;
+                        _saveCache(merged);
+                        _renderNews();
+                    }
+                });
             });
 
             return ajFast;
@@ -2457,8 +2466,9 @@
         window.setNewsSource = (src) => {
             _newsSource = src;
             document.querySelectorAll('#newsFilterRow .news-pill').forEach(b => b.classList.remove('active'));
-            const map = { all: 'srcAll', khaleej: 'srcKhaleej', gulf: 'srcGulf', aljazeera: 'srcAJ',
-                          bbc: 'srcBBC', toi: 'srcTOI', wion: 'srcWION', thenational: 'srcNational' };
+            const map = { all: 'srcAll', aljazeera: 'srcAJ', bbc: 'srcBBC', dw: 'srcDW',
+                          guardian: 'srcGuardian', toi: 'srcTOI', wion: 'srcWION',
+                          thenational: 'srcNational', france24: 'srcFrance24' };
             document.getElementById(map[src])?.classList.add('active');
             _renderNews();
         };
