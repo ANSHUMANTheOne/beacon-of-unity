@@ -958,6 +958,18 @@
                         <button class="news-pill" onclick="setNewsSource('aljazeera')" id="srcAJ">
                             <img src="https://www.aljazeera.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Al Jazeera
                         </button>
+                        <button class="news-pill" onclick="setNewsSource('bbc')" id="srcBBC">
+                            <img src="https://www.bbc.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">BBC News
+                        </button>
+                        <button class="news-pill" onclick="setNewsSource('toi')" id="srcTOI">
+                            <img src="https://timesofindia.indiatimes.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">Times of India
+                        </button>
+                        <button class="news-pill" onclick="setNewsSource('wion')" id="srcWION">
+                            <img src="https://www.wionews.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">WION
+                        </button>
+                        <button class="news-pill" onclick="setNewsSource('thenational')" id="srcNational">
+                            <img src="https://www.thenationalnews.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;border-radius:2px;vertical-align:middle;margin-right:3px;">The National
+                        </button>
                         <button class="news-pill" onclick="loadNews(true)" style="margin-left:auto; background:none; border-color:#e2e8f0; color:#64748b;" id="newsRefreshBtn">↻ Refresh</button>
                     </div>
                     <!-- Category filter pills -->
@@ -970,6 +982,10 @@
                         <button class="news-pill" onclick="setNewsCat('tech')" id="catTech">💻 Tech</button>
                         <button class="news-pill" onclick="setNewsCat('health')" id="catHealth">🏥 Health</button>
                         <button class="news-pill" onclick="setNewsCat('uae')" id="catUAE">🇦🇪 UAE Local</button>
+                        <button class="news-pill" onclick="setNewsCat('india')" id="catIndia">🇮🇳 India</button>
+                        <button class="news-pill" onclick="setNewsCat('politics')" id="catPolitics">🏛️ Politics</button>
+                        <button class="news-pill" onclick="setNewsCat('entertainment')" id="catEntertainment">🎬 Entertainment</button>
+                        <button class="news-pill" onclick="setNewsCat('environment')" id="catEnvironment">🌍 Environment</button>
                     </div>
 
                     <!-- Feed -->
@@ -2121,7 +2137,6 @@
             {
                 key: 'aljazeera', name: 'Al Jazeera',
                 badgeBg: '#fce7f3', badgeColor: '#9d174d', placeholder: '#ec4899',
-                // fetchAll:true means fetch ALL urls and merge (not stop at first success)
                 fetchAll: true,
                 urls: [
                     'https://www.aljazeera.com/xml/rss/all.xml',
@@ -2129,34 +2144,96 @@
                     'https://www.aljazeera.com/xml/rss/economy.xml',
                     'https://www.aljazeera.com/xml/rss/scienceandtechnology.xml',
                 ]
+            },
+            {
+                key: 'bbc', name: 'BBC News',
+                badgeBg: '#fee2e2', badgeColor: '#991b1b', placeholder: '#ef4444',
+                fetchAll: true,
+                urls: [
+                    'https://feeds.bbci.co.uk/news/world/rss.xml',
+                    'https://feeds.bbci.co.uk/sport/rss.xml',
+                    'https://feeds.bbci.co.uk/news/technology/rss.xml',
+                    'https://feeds.bbci.co.uk/news/business/rss.xml',
+                ]
+            },
+            {
+                key: 'toi', name: 'Times of India',
+                badgeBg: '#fff7ed', badgeColor: '#9a3412', placeholder: '#f97316',
+                fetchAll: true,
+                urls: [
+                    'https://timesofindia.indiatimes.com/rssfeedstopstories.cms',
+                    'https://timesofindia.indiatimes.com/rssfeeds/4719148.cms',
+                    'https://timesofindia.indiatimes.com/rssfeeds/54829575.cms',
+                ]
+            },
+            {
+                key: 'wion', name: 'WION',
+                badgeBg: '#f0fdf4', badgeColor: '#166534', placeholder: '#22c55e',
+                fetchAll: false,
+                urls: [
+                    'https://www.wionews.com/rss.xml',
+                    'https://www.wionews.com/feeds/google-news.xml',
+                ]
+            },
+            {
+                key: 'thenational', name: 'The National',
+                badgeBg: '#f8fafc', badgeColor: '#0f172a', placeholder: '#64748b',
+                fetchAll: false,
+                urls: [
+                    'https://www.thenationalnews.com/rss/',
+                    'https://www.thenationalnews.com/rss/world.xml',
+                ]
             }
         ];
 
         // ── Category keyword maps ──
         const _CATS = {
-            conflict: ['war','conflict','attack','killed','bomb','missile','military','troops','soldier',
-                       'ceasefire','invasion','strike','airstrike','offensive','casualties','battle',
-                       'fighting','gunfire','siege','terrorist','hostage','refugee','displaced','gaza',
-                       'ukraine','russia','israel','hamas','hezbollah','nato','sanctions','coup'],
-            sports:   ['football','soccer','cricket','tennis','basketball','rugby','golf','formula 1',
-                       'f1','olympics','match','tournament','championship','league','cup','goal','score',
-                       'player','coach','transfer','fifa','icc','nba','premier league','serie a',
-                       'bundesliga','la liga','wimbledon','grand prix','medal','athlete','stadium'],
-            business: ['market','stock','economy','gdp','inflation','oil','trade','bank','investment',
-                       'profit','revenue','startup','ipo','merger','acquisition','currency','dollar',
-                       'euro','crypto','bitcoin','real estate','property','budget','tax','imf','world bank',
-                       'interest rate','recession','growth','fund','shares','nasdaq','dow jones'],
-            tech:     ['technology','tech','ai','artificial intelligence','robot','software','hardware',
-                       'cyber','hack','data','app','smartphone','5g','cloud','startup','elon musk',
-                       'openai','google','apple','microsoft','meta','samsung','spacex','satellite',
-                       'electric vehicle','ev','autonomous','machine learning','blockchain'],
-            health:   ['health','hospital','doctor','medical','disease','virus','vaccine','cancer',
-                       'surgery','medicine','outbreak','epidemic','pandemic','mental health','drug',
-                       'clinical','treatment','patient','hiv','diabetes','obesity','mortality','who'],
-            uae:      ['uae','dubai','abu dhabi','sharjah','ajman','ras al khaimah','fujairah',
-                       'emirates','etihad','emirates airline','expo','salik','rta','adnoc','dewa',
-                       'emaar','damac','visa','golden visa','sheikh','ministry','federal','dirhams',
-                       'ramadan','eid','national day','burj','palm','metro','maktoum','nahyan'],
+            conflict:      ['war','conflict','attack','killed','bomb','missile','military','troops','soldier',
+                            'ceasefire','invasion','strike','airstrike','offensive','casualties','battle',
+                            'fighting','gunfire','siege','terrorist','hostage','refugee','displaced','gaza',
+                            'ukraine','russia','israel','hamas','hezbollah','nato','sanctions','coup','drone',
+                            'weapons','armed','occupation','genocide','massacre','frontline','warzone'],
+            sports:        ['football','soccer','cricket','tennis','basketball','rugby','golf','formula 1',
+                            'f1','olympics','match','tournament','championship','league','cup','goal','score',
+                            'player','coach','transfer','fifa','icc','nba','premier league','serie a',
+                            'bundesliga','la liga','wimbledon','grand prix','medal','athlete','stadium',
+                            'ipl','test match','world cup','t20','odi','grand slam','motogp','ufc','boxing',
+                            'swimming','athletics','cycling','marathon','hockey','badminton','table tennis'],
+            business:      ['market','stock','economy','gdp','inflation','oil','trade','bank','investment',
+                            'profit','revenue','startup','ipo','merger','acquisition','currency','dollar',
+                            'euro','crypto','bitcoin','real estate','property','budget','tax','imf','world bank',
+                            'interest rate','recession','growth','fund','shares','nasdaq','dow jones',
+                            'opec','crude','gold','commodity','export','import','tariff','bond','hedge fund'],
+            tech:          ['technology','tech','ai','artificial intelligence','robot','software','hardware',
+                            'cyber','hack','data','app','smartphone','5g','cloud','elon musk',
+                            'openai','google','apple','microsoft','meta','samsung','spacex','satellite',
+                            'electric vehicle','ev','autonomous','machine learning','blockchain','chatgpt',
+                            'nvidia','chip','semiconductor','quantum','vr','ar','drone tech','deepfake'],
+            health:        ['health','hospital','doctor','medical','disease','virus','vaccine','cancer',
+                            'surgery','medicine','outbreak','epidemic','pandemic','mental health','drug',
+                            'clinical','treatment','patient','hiv','diabetes','obesity','mortality','who',
+                            'mpox','dengue','malaria','nutrition','fitness','pharmaceutical','fda','nhs'],
+            uae:           ['uae','dubai','abu dhabi','sharjah','ajman','ras al khaimah','fujairah',
+                            'emirates','etihad','emirates airline','expo','salik','rta','adnoc','dewa',
+                            'emaar','damac','visa','golden visa','sheikh','ministry','federal','dirhams',
+                            'ramadan','eid','national day','burj','palm','metro','maktoum','nahyan',
+                            'dubai police','dubai court','dubai mall','dubai airport','uae law'],
+            india:         ['india','indian','modi','delhi','mumbai','bangalore','chennai','kolkata',
+                            'bollywood','rupee','bcci','sensex','nifty','pakistan','kashmir','hindutva',
+                            'congress','bjp','lok sabha','rajya sabha','supreme court india','isro',
+                            'tata','reliance','infosys','wipro','hyderabad','pune','kerala','gujarat'],
+            politics:      ['election','vote','president','prime minister','parliament','congress','senate',
+                            'government','policy','diplomat','treaty','summit','bilateral','foreign minister',
+                            'sanctions','g7','g20','un','united nations','security council','nato','eu',
+                            'white house','kremlin','political','opposition','protest','democracy','coup'],
+            entertainment: ['film','movie','actor','actress','celebrity','music','album','concert','award',
+                            'oscar','grammy','bafta','netflix','disney','box office','bollywood','hollywood',
+                            'series','tv show','streaming','singer','band','tour','fashion','red carpet',
+                            'trailer','premiere','review','pop','rap','hip hop','comedy','drama'],
+            environment:   ['climate','global warming','carbon','emission','renewable','solar','wind energy',
+                            'flood','wildfire','drought','earthquake','tsunami','cyclone','hurricane',
+                            'pollution','plastic','deforestation','extinction','biodiversity','cop28','cop30',
+                            'green energy','electric','sustainability','glacier','sea level','ecosystem'],
         };
 
         function _categorise(title, desc) {
@@ -2393,7 +2470,8 @@
         window.setNewsSource = (src) => {
             _newsSource = src;
             document.querySelectorAll('#newsFilterRow .news-pill').forEach(b => b.classList.remove('active'));
-            const map = { all: 'srcAll', khaleej: 'srcKhaleej', gulf: 'srcGulf', aljazeera: 'srcAJ' };
+            const map = { all: 'srcAll', khaleej: 'srcKhaleej', gulf: 'srcGulf', aljazeera: 'srcAJ',
+                          bbc: 'srcBBC', toi: 'srcTOI', wion: 'srcWION', thenational: 'srcNational' };
             document.getElementById(map[src])?.classList.add('active');
             _renderNews();
         };
@@ -2402,7 +2480,9 @@
             _newsCat = cat;
             document.querySelectorAll('#newsCatRow .news-pill').forEach(b => b.classList.remove('active'));
             const map = { all: 'catAll', conflict: 'catConflict', sports: 'catSports',
-                          business: 'catBusiness', tech: 'catTech', health: 'catHealth', uae: 'catUAE' };
+                          business: 'catBusiness', tech: 'catTech', health: 'catHealth', uae: 'catUAE',
+                          india: 'catIndia', politics: 'catPolitics', entertainment: 'catEntertainment',
+                          environment: 'catEnvironment' };
             document.getElementById(map[cat])?.classList.add('active');
             _renderNews();
         };
@@ -2417,7 +2497,11 @@
             tech:     { label: '💻 Tech',     bg: '#ede9fe', color: '#5b21b6' },
             health:   { label: '🏥 Health',   bg: '#e0f2fe', color: '#0369a1' },
             uae:      { label: '🇦🇪 UAE',     bg: '#f0fdf4', color: '#166534' },
-            other:    { label: '🗞 General',  bg: '#f1f5f9', color: '#475569' },
+            other:         { label: '🗞 General',      bg: '#f1f5f9', color: '#475569' },
+            india:         { label: '🇮🇳 India',        bg: '#fff7ed', color: '#9a3412' },
+            politics:      { label: '🏛️ Politics',      bg: '#f5f3ff', color: '#4c1d95' },
+            entertainment: { label: '🎬 Entertainment', bg: '#fdf4ff', color: '#86198f' },
+            environment:   { label: '🌍 Environment',   bg: '#f0fdf4', color: '#14532d' },
         };
 
         function _renderNews() {
