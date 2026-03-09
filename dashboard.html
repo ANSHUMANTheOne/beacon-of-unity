@@ -2140,9 +2140,9 @@
                 key: 'cnn', name: 'CNN',
                 badgeBg: '#fef2f2', badgeColor: '#cc0000', placeholder: '#ef4444',
                 urls: [
-                    'http://rss.cnn.com/rss/edition.rss',
-                    'http://rss.cnn.com/rss/cnn_world.rss',
-                    'http://rss.cnn.com/rss/cnn_tech.rss',
+                    'https://rss.cnn.com/rss/edition.rss',
+                    'https://rss.cnn.com/rss/cnn_world.rss',
+                    'https://rss.cnn.com/rss/cnn_tech.rss',
                 ]
             },
             {
@@ -2336,19 +2336,7 @@
             return parsed;
         }
 
-        // Try one URL through rss2json only (most reliable, low request count)
-        async function _fetchFeedFast(src) {
-            for (const feedUrl of src.urls) {
-                try {
-                    const items = await _tryProxy(
-                        `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`,
-                        src, 7000
-                    );
-                    if (items?.length) return items;
-                } catch(e) {}
-            }
-            return [];
-        }
+
 
         const _CACHE_KEY = 'bou_news_cache';
 
@@ -2405,39 +2393,82 @@
                         </div>
                     </div>`).join('')}
                 </div>`;
-            // _fetchAllFeeds already renders AJ the moment it arrives (see below)
-            // just wait for it to complete
             await _fetchAllFeeds();
+            _newsLoaded = true;
+            if (!_newsItems.length) {
+                // Total failure — check stale cache one last time
+                const stale = _getAnyCache();
+                if (stale) { _newsItems = stale; _renderNews(); }
+            }
             if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh'; }
         };
 
+        // Fire all 4 proxies simultaneously for one URL — first valid response wins
+        function _fetchUrl(url, src) {
+            const enc = encodeURIComponent(url);
+            return _firstSuccess([
+                _tryProxy(`https://api.rss2json.com/v1/api.json?rss_url=${enc}&count=50`, src, 6000),
+                _tryProxy(`https://api.allorigins.win/get?url=${enc}`, src, 6000),
+                _tryProxy(`https://corsproxy.io/?${enc}`, src, 6000),
+                _tryProxy(`https://api.allorigins.win/raw?url=${enc}`, src, 6000),
+            ]);
+        }
+
+        // Try all URLs of a source — first one that returns items wins
+        async function _fetchSource(src) {
+            for (const url of src.urls) {
+                try {
+                    const items = await _fetchUrl(url, src);
+                    if (items?.length) return items;
+                } catch(e) {}
+            }
+            return [];
+        }
+
+        let _fetchingInProgress = false;
+
         async function _fetchAllFeeds() {
-            const ajSrc = _FEEDS.find(f => f.key === 'aljazeera');
+            _fetchingInProgress = true;
+            const ajSrc     = _FEEDS.find(f => f.key === 'aljazeera');
             const otherSrcs = _FEEDS.filter(f => f.key !== 'aljazeera');
 
-            // Step 1: AJ first — blocks until it loads, then renders immediately
-            const ajItems = await _fetchFeedFast(ajSrc);
+            // AJ: try all its URLs, each via 4 proxies in parallel
+            const ajItems = await _fetchSource(ajSrc) || [];
+            _newsLoaded = true;
             if (ajItems.length) {
                 _newsItems = _processItems(ajItems);
-                _newsLoaded = true;
-                _renderNews();
                 _saveCache(_newsItems);
+                _renderNews(); // AJ loaded — show immediately
             }
+            // If AJ failed, DON'T render yet — other sources are about to fire
 
-            // Step 2: Each other source fetches ONE AT A TIME sequentially (avoids rss2json rate limit)
-            // Each merges into feed the moment it loads
-            (async () => {
-                for (const src of otherSrcs) {
-                    try {
-                        const items = await _fetchFeedFast(src);
+            // Other sources: staggered starts so rss2json doesn't rate-limit all at once
+            // Each independently merges into feed the moment it loads
+            let pending = otherSrcs.length;
+            otherSrcs.forEach((src, i) => {
+                setTimeout(() => {
+                    _fetchSource(src).then(items => {
+                        pending--;
                         if (items?.length) {
                             _newsItems = _processItems([..._newsItems, ...items]);
                             _saveCache(_newsItems);
                             _renderNews();
+                        } else if (pending === 0 && !_newsItems.length) {
+                            // All sources done and nothing loaded — show error
+                            _fetchingInProgress = false;
+                            _renderNews();
                         }
-                    } catch(e) {}
-                }
-            })();
+                        if (pending === 0) _fetchingInProgress = false;
+                    }).catch(() => {
+                        pending--;
+                        if (pending === 0 && !_newsItems.length) {
+                            _fetchingInProgress = false;
+                            _renderNews();
+                        }
+                        if (pending === 0) _fetchingInProgress = false;
+                    });
+                }, i * 600); // 0ms, 600ms, 1200ms, 1800ms...
+            });
 
             return ajItems;
         }
@@ -2490,12 +2521,14 @@
             if (_newsCat !== 'all')    items = items.filter(i => i.category === _newsCat);
 
             if (!_newsItems.length) {
+                // Still fetching — keep skeleton showing, don't flash error
+                if (_fetchingInProgress) return;
                 feed.innerHTML = `
                 <div style="text-align:center;padding:50px 20px;">
                     <div style="font-size:42px;margin-bottom:14px;">📡</div>
                     <p style="margin:0 0 6px;font-weight:700;font-size:16px;color:${isDark?'#f1f5f9':'#0f172a'};">Could not load news</p>
                     <p style="margin:0 0 18px;font-size:13px;color:#94a3b8;">Check your connection and try again.</p>
-                    <button onclick="loadNews()" style="background:#38bdf8;color:white;border:none;padding:9px 22px;border-radius:50px;font-weight:600;cursor:pointer;font-size:13px;font-family:inherit;">↻ Try Again</button>
+                    <button onclick="loadNews(true)" style="background:#38bdf8;color:white;border:none;padding:9px 22px;border-radius:50px;font-weight:600;cursor:pointer;font-size:13px;font-family:inherit;">↻ Try Again</button>
                 </div>`;
                 return;
             }
