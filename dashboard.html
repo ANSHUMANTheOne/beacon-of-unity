@@ -2295,41 +2295,27 @@
         }
 
         // Try every proxy in sequence, first success wins
-        // Race all proxies for a single URL — first valid response wins, rest are cancelled
-        // Fire all proxies in parallel, return first valid result, ignore the rest
+        // First non-null, non-empty array result from a list of promises
         function _firstSuccess(promises) {
             return new Promise(resolve => {
-                let done = false;
-                let remaining = promises.length;
+                let done = false, remaining = promises.length;
                 if (!remaining) { resolve(null); return; }
-                promises.forEach(p => {
-                    p.then(result => {
-                        // Only accept non-empty arrays
-                        if (!done && Array.isArray(result) && result.length > 0) {
-                            done = true;
-                            resolve(result);
-                        } else if (--remaining === 0 && !done) {
-                            resolve(null);
-                        }
-                    }).catch(() => {
-                        if (--remaining === 0 && !done) resolve(null);
-                    });
-                });
+                promises.forEach(p => Promise.resolve(p).then(r => {
+                    if (!done && Array.isArray(r) && r.length) { done = true; resolve(r); }
+                    else if (!done && --remaining === 0) resolve(null);
+                }).catch(() => { if (!done && --remaining === 0) resolve(null); }));
             });
         }
 
-        async function _tryProxy(proxyUrl, src) {
-            const _ac = new AbortController();
-            const _t = setTimeout(() => _ac.abort(), 9000);
+        // Fetch one proxy URL, timeout after ms, return items array or throw
+        async function _tryProxy(proxyUrl, src, ms) {
+            const ac = new AbortController();
+            const t = setTimeout(() => ac.abort(), ms || 5000);
             let res;
-            try {
-                res = await fetch(proxyUrl, { signal: _ac.signal });
-                clearTimeout(_t);
-            } catch(e) {
-                clearTimeout(_t);
-                throw e; // network error / timeout — let _firstSuccess handle it
-            }
-            if (!res || !res.ok) throw new Error('bad status');
+            try { res = await fetch(proxyUrl, { signal: ac.signal }); }
+            catch(e) { clearTimeout(t); throw e; }
+            clearTimeout(t);
+            if (!res || !res.ok) throw new Error('bad');
             if (proxyUrl.includes('rss2json')) {
                 const d = await res.json();
                 if (d.status !== 'ok' || !d.items?.length) throw new Error('empty');
@@ -2344,39 +2330,34 @@
                 }));
             }
             const text = proxyUrl.includes('allorigins.win/get')
-                ? ((await res.json()).contents || '')
-                : await res.text();
+                ? ((await res.json()).contents || '') : await res.text();
             if (!text.includes('<item')) throw new Error('no items');
             const parsed = _parseXML(text, src);
             if (!parsed?.length) throw new Error('parse fail');
             return parsed;
         }
 
-        async function _fetchFeed(src) {
-            if (src.fetchAll) {
-                // Fetch ALL urls and merge results (used for AJ to get sports + world + tech)
-                const allResults = await Promise.allSettled(src.urls.map(feedUrl =>
-                    _firstSuccess([
-                        _tryProxy(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`, src),
-                        _tryProxy(`https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`, src),
-                        _tryProxy(`https://corsproxy.io/?${encodeURIComponent(feedUrl)}`, src),
-                    ])
-                ));
-                const merged = [];
-                allResults.forEach(r => { if (r.status === 'fulfilled' && r.value) merged.push(...r.value); });
-                return merged;
-            }
-            // Default: first URL that succeeds wins
-            const allAttempts = [];
-            for (const feedUrl of src.urls) {
-                allAttempts.push(
-                    _tryProxy(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`, src),
-                    _tryProxy(`https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`, src),
-                    _tryProxy(`https://corsproxy.io/?${encodeURIComponent(feedUrl)}`, src),
-                    _tryProxy(`https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`, src),
-                );
-            }
-            return await _firstSuccess(allAttempts) || [];
+        // Fetch one feed URL via all proxies in parallel, first success wins
+        function _fetchUrl(feedUrl, src, ms) {
+            return _firstSuccess([
+                _tryProxy(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`, src, ms),
+                _tryProxy(`https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`, src, ms),
+                _tryProxy(`https://corsproxy.io/?${encodeURIComponent(feedUrl)}`, src, ms),
+                _tryProxy(`https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`, src, ms),
+            ]);
+        }
+
+        // Fetch a source — returns first successful URL only (fast)
+        async function _fetchFeedFast(src) {
+            return await _fetchUrl(src.urls[0], src, 5000) || [];
+        }
+
+        // Fetch ALL urls of a source and merge (for extra articles)
+        async function _fetchFeedFull(src) {
+            const results = await Promise.allSettled(src.urls.map(u => _fetchUrl(u, src, 5000)));
+            const merged = [];
+            results.forEach(r => { if (r.status === 'fulfilled' && r.value) merged.push(...r.value); });
+            return merged;
         }
 
         const _CACHE_KEY = 'bou_news_cache';
@@ -2441,21 +2422,27 @@
         };
 
         async function _fetchAllFeeds() {
-            // Step 1: Fetch Al Jazeera first (most reliable) — render immediately
             const ajSrc = _FEEDS.find(f => f.key === 'aljazeera');
-            const ajItems = await _fetchFeed(ajSrc);
-            if (ajItems.length) {
-                _newsItems = _processItems(ajItems);
+            const otherSrcs = _FEEDS.filter(f => f.key !== 'aljazeera');
+
+            // Step 1: Fetch ONLY AJ's first URL (all.xml) — fastest path, renders in ~2s
+            const ajFast = await _fetchFeedFast(ajSrc);
+            if (ajFast.length) {
+                _newsItems = _processItems(ajFast);
                 _newsLoaded = true;
-                _renderNews(); // show AJ right away
+                _renderNews();
                 _saveCache(_newsItems);
             }
 
-            // Step 2: Fetch KT + GN in background, merge in when done
-            const otherFeeds = _FEEDS.filter(f => f.key !== 'aljazeera');
-            Promise.allSettled(otherFeeds.map(src => _fetchFeed(src))).then(results => {
+            // Step 2: Everything else fires in background simultaneously
+            // — AJ extra feeds (sport, economy, tech) + all other sources
+            const bgFeeds = [
+                ...ajSrc.urls.slice(1).map(u => _fetchUrl(u, ajSrc, 5000)), // AJ sport/economy/tech
+                ...otherSrcs.map(src => _fetchFeedFast(src)),                // BBC, TOI, WION, National
+            ];
+            Promise.allSettled(bgFeeds).then(results => {
                 const extra = [];
-                results.forEach(r => { if (r.status === 'fulfilled') extra.push(...r.value); });
+                results.forEach(r => { if (r.status === 'fulfilled' && r.value) extra.push(...r.value); });
                 if (extra.length) {
                     const merged = _processItems([..._newsItems, ...extra]);
                     _newsItems = merged;
@@ -2464,7 +2451,7 @@
                 }
             });
 
-            return ajItems; // return AJ items so loadNews knows fetch succeeded
+            return ajFast;
         }
 
         window.setNewsSource = (src) => {
