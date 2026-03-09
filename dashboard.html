@@ -2664,13 +2664,17 @@
         document.head.appendChild(_gts);
 
         function _switchLang(code) {
-            // Poll for the combo select the widget injects, then set it
             const apply = () => {
                 const sel = document.querySelector('select.goog-te-combo');
                 if (!sel) return false;
-                if (sel.value === code) return true; // already set
                 sel.value = code;
                 sel.dispatchEvent(new Event('change', { bubbles: true }));
+                // For English revert, also try clicking the "Show original" bar GT injects
+                if (code === '') {
+                    const restore = document.querySelector('.goog-te-banner-frame');
+                    if (restore) try { restore.contentDocument.querySelector('a[id=":1"]')?.click(); } catch(e) {}
+                    document.cookie = 'googtrans=/en/en; path=/';
+                }
                 return true;
             };
             if (apply()) return;
