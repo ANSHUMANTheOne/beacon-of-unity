@@ -2336,32 +2336,18 @@
             return parsed;
         }
 
-        // Fetch one feed URL via all proxies in parallel, first success wins
-        function _fetchUrl(feedUrl, src, ms) {
-            return _firstSuccess([
-                _tryProxy(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`, src, ms),
-                _tryProxy(`https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`, src, ms),
-                _tryProxy(`https://corsproxy.io/?${encodeURIComponent(feedUrl)}`, src, ms),
-                _tryProxy(`https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`, src, ms),
-            ]);
-        }
-
-        // Fast fetch: try all URLs via rss2json in parallel, first success wins
+        // Try one URL through rss2json only (most reliable, low request count)
         async function _fetchFeedFast(src) {
-            return await _firstSuccess(
-                src.urls.map(u => _tryProxy(
-                    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}&count=50`,
-                    src, 5000
-                ))
-            ) || [];
-        }
-
-        // Full fetch: all URLs, all proxies, merge everything
-        async function _fetchFeedFull(src) {
-            const results = await Promise.allSettled(src.urls.map(u => _fetchUrl(u, src, 5000)));
-            const merged = [];
-            results.forEach(r => { if (r.status === 'fulfilled' && r.value) merged.push(...r.value); });
-            return merged;
+            for (const feedUrl of src.urls) {
+                try {
+                    const items = await _tryProxy(
+                        `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`,
+                        src, 7000
+                    );
+                    if (items?.length) return items;
+                } catch(e) {}
+            }
+            return [];
         }
 
         const _CACHE_KEY = 'bou_news_cache';
@@ -2429,35 +2415,31 @@
             const ajSrc = _FEEDS.find(f => f.key === 'aljazeera');
             const otherSrcs = _FEEDS.filter(f => f.key !== 'aljazeera');
 
-            // Step 1: AJ first URL only — renders immediately (~2s)
-            const ajFast = await _fetchFeedFast(ajSrc);
-            if (ajFast.length) {
-                _newsItems = _processItems(ajFast);
+            // Step 1: AJ first — blocks until it loads, then renders immediately
+            const ajItems = await _fetchFeedFast(ajSrc);
+            if (ajItems.length) {
+                _newsItems = _processItems(ajItems);
                 _newsLoaded = true;
                 _renderNews();
                 _saveCache(_newsItems);
             }
 
-            // Step 2: Every other source fires independently — each one merges in the moment it loads
-            // AJ extra feeds (sport/economy/tech) also fire here
-            const bgSources = [
-                ...ajSrc.urls.slice(1).map(u => ({ p: _fetchUrl(u, ajSrc, 6000), label: 'aj-extra' })),
-                ...otherSrcs.map(src => ({ p: _fetchFeedFast(src), label: src.key })),
-            ];
+            // Step 2: Each other source fetches ONE AT A TIME sequentially (avoids rss2json rate limit)
+            // Each merges into feed the moment it loads
+            (async () => {
+                for (const src of otherSrcs) {
+                    try {
+                        const items = await _fetchFeedFast(src);
+                        if (items?.length) {
+                            _newsItems = _processItems([..._newsItems, ...items]);
+                            _saveCache(_newsItems);
+                            _renderNews();
+                        }
+                    } catch(e) {}
+                }
+            })();
 
-            bgSources.forEach(({ p }) => {
-                p.then(items => {
-                    if (items?.length) {
-                        // Merge this source in immediately without waiting for others
-                        const all = [..._newsItems, ...items];
-                        _newsItems = _processItems(all);
-                        _saveCache(_newsItems);
-                        _renderNews();
-                    }
-                }).catch(() => {});
-            });
-
-            return ajFast;
+            return ajItems;
         }
 
         window.setNewsSource = (src) => {
