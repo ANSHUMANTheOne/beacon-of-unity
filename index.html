@@ -753,5 +753,741 @@ function rLF(){const c=document.getElementById('tl');c.innerHTML='';lf.forEach(x
 rHelp();rLF();
 window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');const h=document.getElementById('th'),l=document.getElementById('tl');if(tab==='help'){h.style.display='flex';l.style.display='none'}else{h.style.display='none';l.style.display='grid'}};
 </script>
+<!-- ═══════════════════════════════════════════════════════
+     BEACON MASCOT  —  paste this entire block before </body>
+     ═══════════════════════════════════════════════════════ -->
+
+<style id="bav-css">
+/* ── root layer ──────────────────────────────────────── */
+#bav-root {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ── wrapper (physics moves this) ────────────────────── */
+#bav-wrap {
+  position: absolute;
+  width: 64px;
+  pointer-events: auto;
+  user-select: none;
+  cursor: none;          /* keeps site's custom cursor intact */
+  will-change: left, top;
+}
+
+/* ── glow rings ──────────────────────────────────────── */
+.bav-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(14,165,233,.22);
+  pointer-events: none;
+  animation: bav-ring 3s ease-in-out infinite;
+}
+.bav-ring:nth-child(2) { animation-delay: -1s; }
+
+@keyframes bav-ring {
+  0%,100% { opacity: .45; transform: scale(1); }
+  50%     { opacity: 0;   transform: scale(1.18); }
+}
+
+/* ── ground shadow ───────────────────────────────────── */
+#bav-shadow {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  height: 6px;
+  background: radial-gradient(ellipse, rgba(14,165,233,.45) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: width .15s, opacity .15s;
+}
+
+/* ── animation host ──────────────────────────────────── */
+#bav-anim {
+  width: 64px; height: 84px;
+  transform-origin: 50% 100%;
+  display: block;
+}
+
+/* state animations */
+@keyframes bav-idle {
+  0%,100% { transform: translateY(0)   rotate(-2deg) scaleY(1);   }
+  30%     { transform: translateY(-6px) rotate(0deg)  scaleY(1.02); }
+  65%     { transform: translateY(-3px) rotate(2deg)  scaleY(1);   }
+}
+@keyframes bav-walk {
+  0%,100% { transform: translateY(0)    rotate(-7deg) scaleX(.96); }
+  25%     { transform: translateY(-9px) rotate(-2deg) scaleX(1);   }
+  50%     { transform: translateY(0)    rotate(7deg)  scaleX(.96); }
+  75%     { transform: translateY(-9px) rotate(2deg)  scaleX(1);   }
+}
+@keyframes bav-sit {
+  0%,100% { transform: translateY(0)   scaleY(1);    }
+  50%     { transform: translateY(-3px) scaleY(1.03); }
+}
+/* ── dangling leg swing (applied per-leg via JS) ── */
+@keyframes bav-legswing-l {
+  0%   { transform: rotate(-28deg); }
+  50%  { transform: rotate(20deg);  }
+  100% { transform: rotate(-28deg); }
+}
+@keyframes bav-legswing-r {
+  0%   { transform: rotate(20deg);  }
+  50%  { transform: rotate(-28deg); }
+  100% { transform: rotate(20deg);  }
+}
+#bav-leg-l.swinging { animation: bav-legswing-l 1.6s cubic-bezier(.45,0,.55,1) infinite; }
+#bav-leg-r.swinging { animation: bav-legswing-r 1.6s cubic-bezier(.45,0,.55,1) infinite; }
+@keyframes bav-squish {
+  0%  { transform: scaleX(1)    scaleY(1);    }
+  15% { transform: scaleX(1.55) scaleY(.52); }
+  50% { transform: scaleX(.84)  scaleY(1.28); }
+  80% { transform: scaleX(1.06) scaleY(.96); }
+  100%{ transform: scaleX(1)    scaleY(1);    }
+}
+
+/* ── speech bubble ───────────────────────────────────── */
+#bav-bubble {
+  position: absolute;
+  bottom: calc(100% + 11px);
+  left: 50%;
+  transform: translateX(-50%) scale(.65);
+  transform-origin: 50% 100%;
+  background: rgba(5, 24, 40, .92);
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  border: 1px solid rgba(14,165,233,.55);
+  border-radius: 14px;
+  padding: 7px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #e0f2fe;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 22px rgba(14,165,233,.25),
+              inset 0 0 0 1px rgba(255,255,255,.06);
+  transition: transform .38s cubic-bezier(.34,1.56,.64,1),
+              opacity .26s ease;
+  z-index: 3;
+}
+#bav-bubble.on {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+/* tail */
+#bav-bubble::after {
+  content:'';
+  position: absolute; top:100%; left:50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: rgba(14,165,233,.55);
+}
+#bav-bubble::before {
+  content:'';
+  position: absolute; top:calc(100% + 1px); left:50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(5,24,40,.92);
+  z-index: 1;
+}
+
+/* light mode overrides */
+[data-theme="light"] #bav-bubble {
+  background: rgba(240,249,255,.95);
+  border-color: rgba(14,165,233,.45);
+  color: #0c2d48;
+  box-shadow: 0 4px 22px rgba(14,165,233,.2), 0 1px 4px rgba(0,0,0,.1);
+}
+[data-theme="light"] #bav-bubble::after  { border-top-color: rgba(14,165,233,.45); }
+[data-theme="light"] #bav-bubble::before { border-top-color: rgba(240,249,255,.95); }
+
+/* ── SVG internals ───────────────────────────────────── */
+.bav-eye-g {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform .07s;
+}
+#bav-ant-tip {
+  animation: bav-ant 1.9s ease-in-out infinite;
+}
+@keyframes bav-ant {
+  0%,100% { opacity:1;   r:3.5; }
+  50%     { opacity:.3;  r:5;   }
+}
+</style>
+
+<!-- ── DOM ─────────────────────────────────────────────── -->
+<div id="bav-root">
+  <div id="bav-wrap" title="Drag me! Double-click for a message 😊">
+
+    <!-- glow rings (sized around the body centre, not the full SVG) -->
+    <div class="bav-ring" style="width:76px;height:76px;top:7px;left:-6px"></div>
+    <div class="bav-ring" style="width:94px;height:94px;top:-2px;left:-15px"></div>
+
+    <!-- speech bubble -->
+    <div id="bav-bubble"><span id="bav-msg"></span></div>
+
+    <!-- ground glow -->
+    <div id="bav-shadow"></div>
+
+    <!-- animation host -->
+    <div id="bav-anim">
+      <svg id="bav-svg"
+           viewBox="0 0 64 84"
+           width="64" height="84"
+           fill="none"
+           xmlns="http://www.w3.org/2000/svg"
+           style="overflow:visible;display:block">
+        <defs>
+          <!-- body gradient -->
+          <radialGradient id="bav-rg1" cx="38%" cy="26%" r="70%">
+            <stop offset="0%"   stop-color="#7dd3fc"/>
+            <stop offset="42%"  stop-color="#0ea5e9"/>
+            <stop offset="100%" stop-color="#082c47"/>
+          </radialGradient>
+          <!-- eye gradient -->
+          <radialGradient id="bav-rg2" cx="30%" cy="28%" r="70%">
+            <stop offset="0%"   stop-color="#ffffff"/>
+            <stop offset="65%"  stop-color="#bae6fd"/>
+          </radialGradient>
+          <!-- face panel -->
+          <radialGradient id="bav-rg3" cx="50%" cy="40%" r="60%">
+            <stop offset="0%"   stop-color="rgba(6,182,212,0.26)"/>
+            <stop offset="100%" stop-color="rgba(7,26,44,0.72)"/>
+          </radialGradient>
+          <!-- glow filter (eyes, antenna) -->
+          <filter id="bav-gf1" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2.2" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <!-- outer-body blue halo -->
+          <filter id="bav-gf2" x="-28%" y="-28%" width="156%" height="156%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feFlood flood-color="#0ea5e9" flood-opacity=".42" result="c"/>
+            <feComposite in="c" in2="b" operator="in" result="d"/>
+            <feMerge><feMergeNode in="d"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- ── ground glow ── -->
+        <ellipse cx="32" cy="81" rx="20" ry="4.5" fill="rgba(14,165,233,0.18)"/>
+
+        <!-- ── legs (pivot at hip = top of group) ── -->
+        <g id="bav-leg-l" style="transform-box:fill-box;transform-origin:50% 0%">
+          <rect x="13" y="65" width="14" height="18" rx="7" fill="url(#bav-rg1)"/>
+        </g>
+        <g id="bav-leg-r" style="transform-box:fill-box;transform-origin:50% 0%">
+          <rect x="37" y="65" width="14" height="18" rx="7" fill="url(#bav-rg1)"/>
+        </g>
+
+        <!-- ── main body ── -->
+        <rect x="8" y="16" width="48" height="52"
+              rx="17" fill="url(#bav-rg1)" filter="url(#bav-gf2)"/>
+
+        <!-- body top highlight -->
+        <rect x="13" y="20" width="38" height="18"
+              rx="11" fill="rgba(186,230,253,0.12)"/>
+
+        <!-- ── face / visor panel ── -->
+        <rect x="12" y="24" width="40" height="36"
+              rx="11" fill="url(#bav-rg3)"
+              stroke="rgba(14,165,233,0.52)" stroke-width="1"/>
+
+        <!-- ── left eye ── -->
+        <g class="bav-eye-g" id="bav-el">
+          <circle cx="23" cy="38" r="7.5"
+                  fill="url(#bav-rg2)" filter="url(#bav-gf1)"/>
+          <circle cx="20.5" cy="35.5" r="2.5" fill="white" opacity=".88"/>
+          <circle cx="23"   cy="38"   r="2"   fill="rgba(6,182,212,0.6)"/>
+        </g>
+
+        <!-- ── right eye ── -->
+        <g class="bav-eye-g" id="bav-er">
+          <circle cx="41" cy="38" r="7.5"
+                  fill="url(#bav-rg2)" filter="url(#bav-gf1)"/>
+          <circle cx="38.5" cy="35.5" r="2.5" fill="white" opacity=".88"/>
+          <circle cx="41"   cy="38"   r="2"   fill="rgba(6,182,212,0.6)"/>
+        </g>
+
+        <!-- ── mouth ── -->
+        <path id="bav-mth"
+              d="M22 52 Q32 59 42 52"
+              stroke="#7dd3fc" stroke-width="2.5"
+              stroke-linecap="round" fill="none"/>
+
+        <!-- ── ear / side panels ── -->
+        <rect x="3"  y="30" width="7" height="18"
+              rx="3.5" fill="rgba(14,165,233,0.42)"
+              stroke="rgba(125,211,252,0.22)" stroke-width=".5"/>
+        <rect x="54" y="30" width="7" height="18"
+              rx="3.5" fill="rgba(14,165,233,0.42)"
+              stroke="rgba(125,211,252,0.22)" stroke-width=".5"/>
+
+
+
+        <!-- ── antenna shaft ── -->
+        <rect x="29.5" y="5" width="5" height="13" rx="2.5"
+              fill="rgba(14,165,233,0.68)"/>
+
+        <!-- ── antenna pulsing tip ── -->
+        <circle cx="32" cy="4" r="5.5" fill="#0ea5e9" filter="url(#bav-gf1)"/>
+        <circle id="bav-ant-tip" cx="32" cy="4" r="3.5" fill="#bae6fd"/>
+
+      </svg>
+    </div><!-- /bav-anim -->
+  </div><!-- /bav-wrap -->
+</div><!-- /bav-root -->
+
+<script>
+(function () {
+  'use strict';
+
+  // ── constants ────────────────────────────────────────
+  const W = 64, H = 84;          // avatar container size
+  const GRAVITY    = 0.36;
+  const AIR_FRIC   = 0.967;      // per-frame multiplier
+  const GND_FRIC   = 0.76;
+  const BOUNCE_Y   = 0.52;
+  const BOUNCE_X   = 0.68;
+  const MIN_BV     = 1.8;        // min speed to trigger bounce animation
+  const MAX_V      = 28;
+
+  // ── state ─────────────────────────────────────────────
+  let px = window.innerWidth  - 148;
+  let py = window.innerHeight * 0.32;
+  let vx = -1.2, vy = 0;
+  let mode     = 'idle';   // idle | walking | flying | sitting
+  let prevMode = '';
+  let dragging = false;
+  let dragOX = 0, dragOY = 0;
+  let mHist = [];          // mouse history for throw
+  let sitEl = null;
+  let sitSnapY = 0;
+  let flipped  = false;
+  let squishing = false;
+  let bubTimer = null;
+  let lastT = performance.now();
+  let flyRot = 0;
+  let dragSway = 0, dragSwayTarget = 0, lastDragX = 0;
+
+  // ── element refs ──────────────────────────────────────
+  const wrap   = document.getElementById('bav-wrap');
+  const animEl = document.getElementById('bav-anim');
+  const svg    = document.getElementById('bav-svg');
+  const bubble = document.getElementById('bav-bubble');
+  const msgEl  = document.getElementById('bav-msg');
+  const shadowEl = document.getElementById('bav-shadow');
+  const eyeL   = document.getElementById('bav-el');
+  const eyeR   = document.getElementById('bav-er');
+  const mouth  = document.getElementById('bav-mth');
+  const legL   = document.getElementById('bav-leg-l');
+  const legR   = document.getElementById('bav-leg-r');
+
+  function setLegsSwinging(on) {
+    legL.classList.toggle('swinging', on);
+    legR.classList.toggle('swinging', on);
+  }
+
+  // ── position helper ───────────────────────────────────
+  function applyPos() {
+    wrap.style.left = px + 'px';
+    wrap.style.top  = py + 'px';
+  }
+
+  // ── speech bubble ──────────────────────────────────────
+  function showBubble(text, ms) {
+    clearTimeout(bubTimer);
+    msgEl.textContent = text;
+    bubble.classList.add('on');
+    bubTimer = setTimeout(() => bubble.classList.remove('on'), ms || 3000);
+  }
+
+  // greetings
+  setTimeout(() => {
+    showBubble("Hi! I'm Beacon! 👋", 4000);
+    setTimeout(() => showBubble("Your community guardian ✨", 3200), 4700);
+  }, 1400);
+
+  // idle thoughts
+  const thoughts = [
+    "🛡️ Keeping UAE safe!",
+    "🤝 Community first!",
+    "🇦🇪 Proud to serve!",
+    "✨ Beacon of Unity",
+    "💪 Together we rise",
+    "🌟 Verified & trusted",
+    "Made by Anshuman! 🙌",
+    "Coded with ❤️ by Anshuman",
+  ];
+  setInterval(() => {
+    if ((mode === 'idle' || mode === 'sitting') && Math.random() < 0.28) {
+      showBubble(thoughts[Math.floor(Math.random() * thoughts.length)], 2800);
+    }
+  }, 11000);
+
+  // ── expressions ───────────────────────────────────────
+  const MOUTH = {
+    happy:     'M22 52 Q32 59 42 52',
+    surprised: 'M24 53 Q32 58 40 53',
+    sitting:   'M23 52 Q32 57 41 52',
+    flying:    'M24 54 Q32 50 40 54',
+  };
+  function setExpr(e) {
+    mouth.setAttribute('d', MOUTH[e] || MOUTH.happy);
+    if (e === 'surprised') {
+      [eyeL, eyeR].forEach(g => {
+        g.style.transform = 'scale(1.3)';
+        setTimeout(() => g.style.transform = 'scale(1)', 550);
+      });
+    }
+  }
+
+  // ── eye blink ─────────────────────────────────────────
+  function blink() {
+    if (squishing) return;
+    [eyeL, eyeR].forEach(g => {
+      g.style.transform = 'scaleY(0.06)';
+      setTimeout(() => g.style.transform = 'scaleY(1)', 110);
+    });
+    const delay = 2600 + Math.random() * 2800;
+    blinkTimer = setTimeout(() => {
+      blink();
+      if (Math.random() < 0.22) setTimeout(blink, 290); // occasional double-blink
+    }, delay);
+  }
+  let blinkTimer;
+  setTimeout(blink, 1800 + Math.random() * 1200);
+
+  // ── squish on impact ──────────────────────────────────
+  function squish() {
+    if (squishing) return;
+    squishing = true;
+    animEl.style.animation = 'none';
+    void animEl.offsetHeight;   // force reflow
+    animEl.style.animation = 'bav-squish .46s cubic-bezier(.36,.07,.19,.97) forwards';
+    setExpr('surprised');
+    setTimeout(() => {
+      squishing = false;
+      animEl.style.animation = '';
+      applyModeAnim();
+      setExpr(mode === 'sitting' ? 'sitting' : 'happy');
+    }, 460);
+  }
+
+  // ── CSS animation per mode ────────────────────────────
+  function applyModeAnim() {
+    if (squishing) return;
+    switch (mode) {
+      case 'idle':    animEl.style.animation = 'bav-idle 3.4s ease-in-out infinite';  break;
+      case 'walking': animEl.style.animation = 'bav-walk 0.46s ease-in-out infinite'; break;
+      case 'sitting': animEl.style.animation = 'bav-sit  2.9s ease-in-out infinite';  break;
+      case 'flying':  animEl.style.animation = '';                                     break;
+    }
+  }
+
+  // ── cached text elements (refreshed on scroll/resize) ─
+  let textEls = [];
+  function refreshText() {
+    textEls = Array.from(document.querySelectorAll(
+      'h1,h2,h3,h4,h5,h6,p,.ftitle,.stitle,.stept,.ctat,.nname,.pct,.ft,.tname,.rpt,figcaption,dt,dd'
+    )).filter(el => {
+      const r = el.getBoundingClientRect();
+      return r.width > 50 && r.height > 0 && r.bottom > 0 && r.top < window.innerHeight;
+    });
+  }
+  refreshText();
+  setInterval(refreshText, 700);
+  window.addEventListener('scroll', refreshText, { passive: true });
+  window.addEventListener('resize', refreshText, { passive: true });
+
+  // ── text surface detection ────────────────────────────
+  function findSurface() {
+    if (dragging) return null;
+    const feet  = py + H;                // avatar feet y (viewport)
+    const ctr   = px + W * 0.5;         // avatar centre x
+    for (const el of textEls) {
+      const r = el.getBoundingClientRect();
+      if (Math.abs(feet - r.top) < 28
+          && ctr > r.left + 10
+          && ctr < r.right - 10
+          && r.top > 55) {              // ignore elements under nav
+        return { el, snapY: r.top - 68 }; // body bottom (y=68 of SVG) sits ON text, legs dangle below
+      }
+    }
+    return null;
+  }
+
+  // ── reactions ─────────────────────────────────────────
+  const bounceQ = ["Oof! 😅", "Wheee! 🌀", "Boing! 🎯", "Hey! 😄", "Woo! 💫"];
+  const pickupQ = ["Whoa! 😲", "Wee! 🚀", "Flying! 🌟", "Catch me! 😄"];
+  const sitQ    = ["Nice read! 📖", "Interesting! 🤔", "Love this! ✨", "Reading... 👀"];
+
+  // ── main physics loop ─────────────────────────────────
+  function loop(now) {
+    const raw = now - lastT;
+    lastT = now;
+    const dt = Math.min(raw / 16.67, 3);   // normalised to 60fps, capped
+
+    const VW = window.innerWidth;
+    const VH = window.innerHeight;
+
+    if (!dragging) {
+      const surf = findSurface();
+
+      /* ── sitting on text ── */
+      if (surf && Math.abs(vy) < 7) {
+        if (mode !== 'sitting' || sitEl !== surf.el) {
+          sitEl   = surf.el;
+          sitSnapY = surf.snapY;
+          mode    = 'sitting';
+          vy = 0;
+          vx *= 0.35;
+          py = sitSnapY;
+          squish();
+          setExpr('sitting');
+          setLegsSwinging(true);
+          if (Math.abs(vx) > 1.2 || Math.abs(vy) > 2)
+            showBubble(sitQ[Math.floor(Math.random() * sitQ.length)], 2400);
+        } else {
+          // stay on element — track its viewport position (handles scroll)
+          sitSnapY = surf.snapY;
+          vy = 0;
+          vx *= GND_FRIC;
+          py = sitSnapY;
+        }
+      } else {
+        /* lost surface */
+        if (sitEl && !surf) { sitEl = null; mode = 'flying'; setLegsSwinging(false); }
+
+        /* gravity */
+        vy = Math.min(vy + GRAVITY * dt, MAX_V);
+
+        /* air friction */
+        vx *= Math.pow(AIR_FRIC, dt);
+
+        /* move */
+        px += vx * dt;
+        py += vy * dt;
+
+        /* ── left wall ── */
+        if (px < 0) {
+          px = 0;
+          if (Math.abs(vx) > MIN_BV) {
+            vx = Math.abs(vx) * BOUNCE_X;
+            squish();
+            if (Math.random() < .4) showBubble(bounceQ[Math.floor(Math.random()*bounceQ.length)], 1500);
+          } else { vx = 0; }
+          flipped = false;
+        }
+
+        /* ── right wall ── */
+        if (px + W > VW) {
+          px = VW - W;
+          if (Math.abs(vx) > MIN_BV) {
+            vx = -Math.abs(vx) * BOUNCE_X;
+            squish();
+            if (Math.random() < .4) showBubble(bounceQ[Math.floor(Math.random()*bounceQ.length)], 1500);
+          } else { vx = 0; }
+          flipped = true;
+        }
+
+        /* ── floor ── */
+        if (py + H > VH) {
+          py = VH - H;
+          if (Math.abs(vy) > MIN_BV) {
+            vy = -Math.abs(vy) * BOUNCE_Y;
+            vx *= GND_FRIC;
+            squish();
+            if (Math.random() < .28) showBubble(bounceQ[Math.floor(Math.random()*bounceQ.length)], 1500);
+          } else {
+            vy = 0;
+            vx *= GND_FRIC;
+            if (mode !== 'sitting') mode = Math.abs(vx) > 1.1 ? 'walking' : 'idle';
+          }
+        }
+
+        /* ── ceiling ── */
+        if (py < 0) { py = 0; vy = Math.abs(vy) * BOUNCE_Y; }
+
+        /* ── mode from velocity ── */
+        const spd = Math.sqrt(vx*vx + vy*vy);
+        if (mode !== 'sitting') {
+          if (spd > 3.5) {
+            mode = 'flying';
+          } else if (Math.abs(vx) > 1.0 && py + H >= VH - 2) {
+            mode = 'walking';
+          } else if (spd < 0.7) {
+            mode = 'idle';
+          }
+        }
+      }
+
+      /* ── direction flip ── */
+      if (vx < -0.3) flipped = true;
+      if (vx >  0.3) flipped = false;
+
+      /* ── flying tilt (smooth) ── */
+      if (mode === 'flying') {
+        const targetRot = Math.max(-30, Math.min(30, vx * 2.8));
+        flyRot += (targetRot - flyRot) * 0.18 * dt;
+        // also decay any leftover drag sway
+        dragSway += (0 - dragSway) * 0.12 * dt;
+        animEl.style.transform = `rotate(${(flyRot + dragSway).toFixed(2)}deg)`;
+      } else {
+        flyRot *= 0.8;
+        dragSway += (0 - dragSway) * 0.14 * dt;
+        const tot = flyRot + dragSway;
+        if (Math.abs(tot) < 0.2) { flyRot = 0; dragSway = 0; animEl.style.transform = ''; }
+        else animEl.style.transform = `rotate(${tot.toFixed(2)}deg)`;
+      }
+
+      /* ── flip SVG ── */
+      svg.style.transform = `scaleX(${flipped ? -1 : 1})`;
+
+      /* ── ground shadow ── */
+      const alt = Math.max(0, VH - (py + H));
+      const sc  = Math.max(0.15, 1 - alt / VH);
+      shadowEl.style.width   = (38 * sc) + 'px';
+      shadowEl.style.opacity = (0.72 * sc).toString();
+
+      /* ── trigger CSS animation on mode change ── */
+      if (mode !== prevMode && !squishing) {
+        applyModeAnim();
+        if (mode === 'sitting') setExpr('sitting');
+        else if (mode === 'flying') setExpr('flying');
+        else setExpr('happy');
+        prevMode = mode;
+      }
+    }
+
+    applyPos();
+    requestAnimationFrame(loop);
+  }
+
+  applyPos();
+  requestAnimationFrame(loop);
+
+  // ── cursor hover → site hov class ────────────────────
+  wrap.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  wrap.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+
+  // ── drag: start ───────────────────────────────────────
+  wrap.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    dragging = true;
+    dragOX = e.clientX - px;
+    dragOY = e.clientY - py;
+    lastDragX = e.clientX;
+    mHist  = [{ x: e.clientX, y: e.clientY, t: performance.now() }];
+    vx = 0; vy = 0;
+    sitEl = null;
+    mode = prevMode = 'flying';
+    animEl.style.animation  = '';
+    animEl.style.transform  = '';
+    setExpr('surprised');
+    showBubble(pickupQ[Math.floor(Math.random() * pickupQ.length)], 1000);
+  });
+
+  // ── drag: move ────────────────────────────────────────
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - lastDragX;
+    lastDragX = e.clientX;
+    dragSwayTarget = Math.max(-38, Math.min(38, -dx * 3.2));
+    px = e.clientX - dragOX;
+    py = e.clientY - dragOY;
+    mHist.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+    if (mHist.length > 10) mHist.shift();
+    // apply sway immediately in drag
+    dragSway += (dragSwayTarget - dragSway) * 0.28;
+    dragSwayTarget *= 0.82;
+    animEl.style.transform = `rotate(${dragSway.toFixed(1)}deg)`;
+    applyPos();
+  });
+
+  // ── drag: release → throw ─────────────────────────────
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    dragSwayTarget = 0;
+    setExpr('happy');
+    const now = performance.now();
+    const rec = mHist.filter(p => now - p.t < 130);
+    if (rec.length >= 2) {
+      const a = rec[0], b = rec[rec.length - 1];
+      const dT = Math.max(b.t - a.t, 5) / 16.67;
+      vx = Math.max(-MAX_V, Math.min(MAX_V, ((b.x - a.x) / dT) * 0.62));
+      vy = Math.max(-MAX_V, Math.min(MAX_V, ((b.y - a.y) / dT) * 0.62));
+    }
+    mode = 'flying'; prevMode = '';
+  });
+
+  // ── double-click: fun message + launch ────────────────
+  wrap.addEventListener('dblclick', () => {
+    const msgs = ["I'm Beacon! 🛡️", "UAE's guardian! 🇦🇪", "Building unity! 🤝", "Verified! ✅", "Hello friend! 👋"];
+    showBubble(msgs[Math.floor(Math.random() * msgs.length)], 3000);
+    if (!dragging) {
+      vy = -12 - Math.random() * 3;
+      vx = (Math.random() - 0.5) * 9;
+      mode = 'flying'; prevMode = '';
+      squish();
+    }
+  });
+
+  // ── touch support ─────────────────────────────────────
+  wrap.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    dragging = true;
+    dragOX = t.clientX - px; dragOY = t.clientY - py;
+    lastDragX = t.clientX;
+    mHist  = [{ x: t.clientX, y: t.clientY, t: performance.now() }];
+    vx = 0; vy = 0;
+    sitEl = null;
+    setLegsSwinging(false);
+    mode = prevMode = 'flying';
+    animEl.style.animation = '';
+    setExpr('surprised');
+    showBubble(pickupQ[Math.floor(Math.random() * pickupQ.length)], 1000);
+  }, { passive: false });
+
+  document.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    const dx = t.clientX - lastDragX;
+    lastDragX = t.clientX;
+    dragSwayTarget = Math.max(-38, Math.min(38, -dx * 3.2));
+    px = t.clientX - dragOX; py = t.clientY - dragOY;
+    mHist.push({ x: t.clientX, y: t.clientY, t: performance.now() });
+    if (mHist.length > 10) mHist.shift();
+    dragSway += (dragSwayTarget - dragSway) * 0.28;
+    dragSwayTarget *= 0.82;
+    animEl.style.transform = `rotate(${dragSway.toFixed(1)}deg)`;
+    applyPos();
+  }, { passive: false });
+
+  document.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false; setExpr('happy');
+    dragSwayTarget = 0;
+    const now = performance.now();
+    const rec = mHist.filter(p => now - p.t < 130);
+    if (rec.length >= 2) {
+      const a = rec[0], b = rec[rec.length - 1];
+      const dT = Math.max(b.t - a.t, 5) / 16.67;
+      vx = Math.max(-MAX_V, Math.min(MAX_V, ((b.x - a.x) / dT) * 0.62));
+      vy = Math.max(-MAX_V, Math.min(MAX_V, ((b.y - a.y) / dT) * 0.62));
+    }
+    mode = 'flying'; prevMode = '';
+  });
+
+})();
+</script>
+<!-- ═══════════════════════ END BEACON MASCOT ════════════ -->
+
 </body>
 </html>
