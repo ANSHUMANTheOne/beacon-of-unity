@@ -2121,10 +2121,13 @@
             {
                 key: 'aljazeera', name: 'Al Jazeera',
                 badgeBg: '#fce7f3', badgeColor: '#9d174d', placeholder: '#ec4899',
+                // fetchAll:true means fetch ALL urls and merge (not stop at first success)
+                fetchAll: true,
                 urls: [
                     'https://www.aljazeera.com/xml/rss/all.xml',
-                    'https://www.aljazeera.com/xml/rss/world.xml',
-                    'https://www.aljazeera.com/xml/rss/middleeast.xml',
+                    'https://www.aljazeera.com/xml/rss/sport.xml',
+                    'https://www.aljazeera.com/xml/rss/economy.xml',
+                    'https://www.aljazeera.com/xml/rss/scienceandtechnology.xml',
                 ]
             }
         ];
@@ -2273,7 +2276,20 @@
         }
 
         async function _fetchFeed(src) {
-            // Fire all proxies for all URLs simultaneously — first valid result wins
+            if (src.fetchAll) {
+                // Fetch ALL urls and merge results (used for AJ to get sports + world + tech)
+                const allResults = await Promise.allSettled(src.urls.map(feedUrl =>
+                    _firstSuccess([
+                        _tryProxy(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`, src),
+                        _tryProxy(`https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`, src),
+                        _tryProxy(`https://corsproxy.io/?${encodeURIComponent(feedUrl)}`, src),
+                    ])
+                ));
+                const merged = [];
+                allResults.forEach(r => { if (r.status === 'fulfilled' && r.value) merged.push(...r.value); });
+                return merged;
+            }
+            // Default: first URL that succeeds wins
             const allAttempts = [];
             for (const feedUrl of src.urls) {
                 allAttempts.push(
