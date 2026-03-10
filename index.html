@@ -1145,20 +1145,27 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
   }
 
   // ── eye blink ─────────────────────────────────────────
-  function blink() {
+  function doWink() {
     if (squishing) return;
     [eyeL, eyeR].forEach(g => {
       g.style.transform = 'scaleY(0.06)';
       setTimeout(() => g.style.transform = 'scaleY(1)', 110);
     });
+  }
+  function scheduleBlink() {
+    clearTimeout(blinkTimer);
     const delay = 2600 + Math.random() * 2800;
     blinkTimer = setTimeout(() => {
-      blink();
-      if (Math.random() < 0.22) setTimeout(blink, 290); // occasional double-blink
+      doWink();
+      // double-blink: just animate eyes again, never spawn a new loop
+      if (Math.random() < 0.22) {
+        setTimeout(doWink, 300);
+      }
+      scheduleBlink(); // one chain, always
     }, delay);
   }
   let blinkTimer;
-  setTimeout(blink, 1800 + Math.random() * 1200);
+  setTimeout(() => { doWink(); scheduleBlink(); }, 1800 + Math.random() * 1200);
 
   // ── squish on impact ──────────────────────────────────
   function squish() {
@@ -1234,9 +1241,32 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
     const VH = window.innerHeight;
 
     if (!dragging) {
+
+      /* ── if already sitting, track the element directly ── */
+      if (mode === 'sitting' && sitEl) {
+        const r = sitEl.getBoundingClientRect();
+        const stillVisible = r.top > 55 && r.top < VH + 20;   // in viewport, not under nav
+        const ctr = px + W * 0.5;
+        const overElement = ctr > r.left - 10 && ctr < r.right + 10; // still horizontally on it
+
+        if (stillVisible && overElement) {
+          // glued to element — ride it as page scrolls
+          py = r.top - 68;
+          vy = 0;
+          vx *= GND_FRIC;
+        } else {
+          // element scrolled away — fall off with a little dramatic kick
+          sitEl = null;
+          mode = 'flying';
+          setLegsSwinging(false);
+          vy = -1.5;   // tiny upward hop before gravity takes over, looks natural
+          const fallQ = ["Whoa! 😱","Aaaaah! 😵","Not again! 😤","Slipping! 🫨","Noooo! 😩","Help! 🙈","Gravity wins 😔","See ya! 👋","Wheee... 😬","Oh no no no! 😰"];
+          showBubble(fallQ[Math.floor(Math.random()*fallQ.length)], 1500);
+        }
+      } else {
+      /* ── not sitting: check for a surface to land on ── */
       const surf = findSurface();
 
-      /* ── sitting on text ── */
       if (surf && Math.abs(vy) < 7) {
         if (mode !== 'sitting' || sitEl !== surf.el) {
           sitEl   = surf.el;
@@ -1250,16 +1280,8 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
           setLegsSwinging(true);
           if (Math.abs(vx) > 1.2 || Math.abs(vy) > 2)
             showBubble(sitQ[Math.floor(Math.random() * sitQ.length)], 2400);
-        } else {
-          // stay on element — track its viewport position (handles scroll)
-          sitSnapY = surf.snapY;
-          vy = 0;
-          vx *= GND_FRIC;
-          py = sitSnapY;
         }
       } else {
-        /* lost surface */
-        if (sitEl && !surf) { sitEl = null; mode = 'flying'; setLegsSwinging(false); }
 
         /* gravity */
         vy = Math.min(vy + GRAVITY * dt, MAX_V);
@@ -1323,6 +1345,7 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
           }
         }
       }
+      } // end not-already-sitting branch
 
       /* ── direction flip ── */
       if (vx < -0.3) flipped = true;
