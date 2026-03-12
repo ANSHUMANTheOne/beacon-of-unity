@@ -1450,6 +1450,17 @@
 
                 userName = userSnap.data().fullName;
                 userRegion = userSnap.data().region;
+
+                // FCM: set up notifications via Android bridge
+                if (window.Android && window.Android.setupNotifications) {
+                    window.Android.setupNotifications(userRegion || 'General');
+                }
+                window.receiveFcmToken = function(token) {
+                    if (auth.currentUser && token) {
+                        updateDoc(doc(db, 'users', auth.currentUser.uid), { fcmToken: token });
+                    }
+                };
+
                 document.getElementById('welcomeUser').innerText = `Hello, ${userName}`;
                 document.getElementById('userRegionDisplay').innerText = `Region: ${userRegion}`;
                 document.querySelectorAll('.current-region-text').forEach(el => el.innerText = userRegion);
@@ -1484,6 +1495,17 @@
                     userId: user.uid, userName: userName,
                     volunteers: [], volunteerCount: 0, createdAt: serverTimestamp()
                 });
+                // FCM: notify region topic
+                fetch('https://beacon-fcm.anshorg.workers.dev/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'request',
+                        topic: 'region_' + (userRegion || 'General').replace(/[^a-zA-Z0-9_-]/g, '_'),
+                        title: '🆘 Help Needed in ' + userRegion,
+                        message: title
+                    })
+                });
                 window.closeRequestModal();
             } catch (e) { alert("Error posting."); }
         };
@@ -1512,6 +1534,18 @@
                     image: imageBase64,
                     userId: user.uid, userName: userName,
                     createdAt: serverTimestamp()
+                });
+                // FCM: notify region topic
+                const lfType = document.getElementById('lfType').value;
+                fetch('https://beacon-fcm.anshorg.workers.dev/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'community',
+                        topic: 'region_' + (userRegion || 'General').replace(/[^a-zA-Z0-9_-]/g, '_'),
+                        title: (lfType === 'lost' ? '🔍 Lost Item' : '✅ Found Item') + ' in ' + userRegion,
+                        message: item
+                    })
                 });
                 document.getElementById('lfItem').value = '';
                 document.getElementById('lfLoc').value = '';
@@ -1958,8 +1992,9 @@
         async function sendMessage() {
             const input = document.getElementById('msgInput');
             if (!input.value.trim() || !currentChatId) return;
+            const msgText = input.value.trim();
             await addDoc(collection(db, "chats", currentChatId, "messages"), {
-                text: input.value.trim(),
+                text: msgText,
                 senderId: auth.currentUser.uid,
                 createdAt: serverTimestamp()
             });
@@ -1967,6 +2002,23 @@
                 [`unread_${currentChatOtherUserId}`]: true,
                 lastUpdated: serverTimestamp()
             });
+            // FCM: notify recipient
+            try {
+                const recipSnap = await getDoc(doc(db, 'users', currentChatOtherUserId));
+                const recipToken = recipSnap.exists() ? recipSnap.data().fcmToken : null;
+                if (recipToken) {
+                    fetch('https://beacon-fcm.anshorg.workers.dev/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            type: 'chat',
+                            token: recipToken,
+                            title: userName,
+                            message: msgText.substring(0, 120)
+                        })
+                    });
+                }
+            } catch (e) { /* silently ignore notification errors */ }
             input.value = "";
         }
         document.getElementById('sendMsgBtn').onclick = sendMessage;
