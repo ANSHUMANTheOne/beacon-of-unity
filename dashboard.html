@@ -680,7 +680,18 @@
         body.dark .modal-content h2, body.dark .modal-content label { color:#f1f5f9; }
         body.dark .modal-content p { color:#94a3b8; }
         body.dark .chat-list-item { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+        @keyframes slideUp { from { opacity:0; transform:translateX(-50%) translateY(20px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+        .notif-item { display:flex; gap:10px; padding:10px 8px; border-radius:10px; cursor:pointer; transition:background .15s; border-bottom:1px solid #f8fafc; }
+        .notif-item:hover { background:#f8fafc; }
+        .notif-item.unread { background:#f0f9ff; }
+        .notif-item.unread:hover { background:#e0f2fe; }
+        .badge-chip { display:inline-flex; align-items:center; gap:5px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:99px; padding:4px 10px; font-size:12px; font-weight:600; }
         body.dark .chat-unread { background:#2d1515 !important; border-color:#ef4444 !important; box-shadow:0 0 0 2px rgba(239,68,68,.3), 0 0 14px rgba(239,68,68,.25) !important; }
+        body.dark #notifDrawer { background:#1e293b; color:#e2e8f0; }
+        body.dark .notif-item { border-color:#334155; }
+        body.dark .notif-item:hover { background:#334155; }
+        body.dark .notif-item.unread { background:#1e3a5f; }
+        body.dark .badge-chip { background:#334155; border-color:#475569; color:#e2e8f0; }
         body.dark .lb-row { background:#1e293b; border-color:#334155; color:#e2e8f0; }
         body.dark .lb-row.is-me { background:#0c2233; border-color:#38bdf8; }
         body.dark .lb-sub { color:#94a3b8; }
@@ -796,6 +807,22 @@
     </div>
 
     <!-- ── Settings Icon ── -->
+    <!-- Notification Drawer -->
+    <div id="notifDrawer" style="display:none; position:fixed; top:0; right:0; width:340px; max-width:100vw; height:100vh; background:white; box-shadow:-4px 0 30px rgba(0,0,0,.12); z-index:3500; flex-direction:column; overflow:hidden;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #f1f5f9;">
+            <div>
+                <h3 style="margin:0; font-family:'Syne',sans-serif;">Notifications</h3>
+                <p style="font-size:11px; color:#94a3b8; margin:2px 0 0;" id="notifSubtitle">Loading...</p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <button onclick="markAllNotifsRead()" style="font-size:11px; color:#38bdf8; background:none; border:none; cursor:pointer; font-weight:600;">Mark all read</button>
+                <button onclick="toggleNotifDrawer()" style="background:#f1f5f9; border:none; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:14px;">✕</button>
+            </div>
+        </div>
+        <div id="notifList" style="flex:1; overflow-y:auto; padding:12px;"></div>
+    </div>
+    <div id="notifOverlay" onclick="toggleNotifDrawer()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:3499;"></div>
+
     <button id="settingsBtn" onclick="document.getElementById('settingsModal').style.display='flex'" title="Settings">⚙️</button>
 
     <!-- ── Settings Modal ── -->
@@ -846,6 +873,7 @@
         <div class="nav-item" onclick="switchTab('volunteer-opps')"><span class="nav-emoji">🤝</span> Volunteer Opportunities</div>
         <div class="nav-item" onclick="openProfileModal()"><span class="nav-emoji">👤</span> Profile & Region</div>
         <div class="nav-item" onclick="switchTab('updates')"><span class="nav-emoji">📢</span> Updates</div>
+        <div class="nav-item" onclick="switchTab('thankyou')"><span class="nav-emoji">⭐</span> Thank You Wall</div>
         <div class="nav-item" onclick="switchTab('rewards')"><span class="nav-emoji">🎁</span> Rewards</div>
         <div class="nav-item" onclick="switchTab('reliable-news')"><span class="nav-emoji">📰</span> Reliable News</div>
         <div class="nav-item" id="logoutBtnNav">
@@ -862,13 +890,27 @@
                 <h1 id="pageTitle">Community Hub</h1>
                 <p id="welcomeUser" style="color: #64748b; margin: 0; font-size:14px;">Hello, Member</p>
             </div>
-            <button id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:600;">Logout</button>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <button id="bellBtn" onclick="toggleNotifDrawer()" style="position:relative; background:none; border:none; font-size:22px; cursor:pointer; padding:6px; border-radius:50%; transition:background .2s;" title="Notifications">
+                    🔔
+                    <span id="bellBadge" style="display:none; position:absolute; top:2px; right:2px; background:#ef4444; color:white; font-size:9px; font-weight:700; min-width:16px; height:16px; border-radius:99px; line-height:16px; text-align:center; padding:0 3px;">0</span>
+                </button>
+                <button id="logoutBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:600;">Logout</button>
+            </div>
         </div>
 
         <div class="content-grid">
             <div>
                 <div id="communityTab" class="tab-content active">
                     <h3>Recent Requests in <span class="current-region-text">...</span></h3>
+                    <div id="urgentAlertBanner" style="display:none; background:linear-gradient(135deg,#fef2f2,#fee2e2); border:2px solid #ef4444; border-radius:12px; padding:14px 18px; margin-bottom:16px; display:none; align-items:center; gap:12px;">
+                        <span style="font-size:24px; flex-shrink:0;">🆘</span>
+                        <div style="flex:1; min-width:0;">
+                            <div style="font-weight:700; font-size:13px; color:#dc2626; margin-bottom:2px;">URGENT in your area</div>
+                            <div id="urgentAlertText" style="font-size:13px; color:#991b1b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+                        </div>
+                        <button onclick="document.getElementById('urgentAlertBanner').style.display='none'" style="background:none; border:none; color:#ef4444; font-size:18px; cursor:pointer; flex-shrink:0;">✕</button>
+                    </div>
                     <div id="requestFeed"><p>Loading local requests...</p></div>
                 </div>
 
@@ -899,15 +941,60 @@
                 <div id="volunteer-oppsTab" class="tab-content">
                     <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
                         <div style="font-size:42px;">🤝</div>
-                        <div>
+                        <div style="flex:1;">
                             <h3 style="margin:0;">Volunteer Opportunities</h3>
-                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Find meaningful ways to give back to your community</p>
+                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Curated opportunities to give back to your community</p>
                         </div>
+                        <button id="addVolOppBtn" style="display:none; background:#0f172a; color:white; border:none; padding:9px 16px; border-radius:8px; font-weight:600; cursor:pointer; font-size:13px;">+ Post Opportunity</button>
                     </div>
-                    <div style="background:linear-gradient(135deg,#e0f2fe,#f0f9ff); border:1px solid #bae6fd; border-radius:16px; padding:28px; text-align:center;">
-                        <div style="font-size:48px; margin-bottom:14px;">🚧</div>
-                        <h3 style="margin:0 0 8px; color:#0369a1;">Coming Soon</h3>
-                        <p style="color:#0284c7; font-size:14px; margin:0 auto; max-width:380px;">We're building a curated list of volunteering opportunities across the UAE. Check back soon — great things are on the way!</p>
+                    <div id="volOppFeed"><p style="color:#94a3b8; text-align:center; padding:40px;">Loading opportunities...</p></div>
+                </div>
+
+                <!-- Admin: Post Volunteer Opp Modal -->
+                <!-- Thank You message modal (shown to person who got help, after chat resolves) -->
+    <div id="thankYouWriteModal" class="modal">
+        <div class="modal-content" style="text-align:center;">
+            <div style="font-size:48px; margin-bottom:12px;">💙</div>
+            <h2 style="margin:0 0 8px;">Say Thank You</h2>
+            <p style="color:#64748b; font-size:14px; margin:0 0 18px;">Leave a public message of appreciation for <b id="tyHelperName"></b>. This will appear on the Thank You Wall.</p>
+            <textarea id="tyMessage" rows="3" maxlength="200" placeholder="e.g. Thank you so much for bringing groceries when I needed them most! 🙏" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;resize:none;box-sizing:border-box;"></textarea>
+            <div id="tyCharCount" style="font-size:11px; color:#94a3b8; text-align:right; margin-top:4px;">0 / 200</div>
+            <div style="display:flex; gap:10px; margin-top:16px;">
+                <button id="tySkipBtn" style="flex:1; padding:11px; background:#f1f5f9; color:#475569; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Skip</button>
+                <button id="tySubmitBtn" style="flex:2; padding:11px; background:linear-gradient(135deg,#38bdf8,#0ea5e9); color:#0f172a; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Post Thank You 🙏</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="volOppModal" class="modal">
+                    <div class="modal-content">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                            <h2 style="margin:0;">Post Opportunity</h2>
+                            <span onclick="document.getElementById('volOppModal').style.display='none'" style="cursor:pointer; font-size:20px;">✕</span>
+                        </div>
+                        <label>Title</label>
+                        <input type="text" id="volOppTitle" placeholder="e.g. Beach Cleanup Drive">
+                        <label>Organisation / Host</label>
+                        <input type="text" id="volOppOrg" placeholder="e.g. Emirates Nature-WWF">
+                        <label>Date & Time</label>
+                        <input type="text" id="volOppDate" placeholder="e.g. Sat 22 Mar, 9:00 AM">
+                        <label>Location</label>
+                        <input type="text" id="volOppLoc" placeholder="e.g. JBR Beach, Dubai">
+                        <label>Description</label>
+                        <textarea id="volOppDesc" rows="3" placeholder="What will volunteers be doing?" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;resize:vertical;"></textarea>
+                        <label>Category</label>
+                        <select id="volOppCat">
+                            <option>Environment</option>
+                            <option>Education</option>
+                            <option>Food & Aid</option>
+                            <option>Animal Welfare</option>
+                            <option>Health</option>
+                            <option>Community</option>
+                            <option>Other</option>
+                        </select>
+                        <label>Link (optional)</label>
+                        <input type="text" id="volOppLink" placeholder="https://...">
+                        <button id="submitVolOppBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:8px;">Post Opportunity</button>
                     </div>
                 </div>
 
@@ -920,6 +1007,17 @@
                         </div>
                     </div>
                     <div style="display:flex; flex-direction:column; gap:16px;">
+
+                        <!-- ── Pinned ── -->
+                        <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7); border:2px solid #22c55e; border-radius:14px; padding:22px; position:relative;">
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                                <span style="background:#22c55e; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">🟢 Live</span>
+                                <span style="background:#fef9c3; color:#854d0e; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px;">📌 Pinned</span>
+                                <span style="font-size:12px; color:#64748b;">March 2025</span>
+                            </div>
+                            <h4 style="margin:0 0 8px; color:#166534; font-family:'Syne',sans-serif;">Pilot Phase Now Live!</h4>
+                            <p style="font-size:14px; color:#15803d; margin:0; line-height:1.6;">The pilot phase of the Beacon of Unity program is currently ongoing. We're testing, learning, and growing together — and we couldn't do it without you. <b>Thank you for being a part of this!</b> 🌟</p>
+                        </div>
 
                         <!-- ── March 2026 ── -->
                         <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border:1px solid #93c5fd; border-radius:14px; padding:22px;">
@@ -959,15 +1057,6 @@
                         </div>
 
                         <!-- ── March 2025 ── -->
-                        <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7); border:1px solid #86efac; border-radius:14px; padding:22px;">
-                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-                                <span style="background:#22c55e; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">🟢 Live</span>
-                                <span style="font-size:12px; color:#64748b;">March 2025</span>
-                            </div>
-                            <h4 style="margin:0 0 8px; color:#166534; font-family:'Syne',sans-serif;">Pilot Phase Now Live!</h4>
-                            <p style="font-size:14px; color:#15803d; margin:0; line-height:1.6;">The pilot phase of the Beacon of Unity program is currently ongoing. We're testing, learning, and growing together — and we couldn't do it without you. <b>Thank you for being a part of this!</b> 🌟</p>
-                        </div>
-
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
                             <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
                                 <span style="background:#8b5cf6; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">📱 Improvement</span>
@@ -1067,6 +1156,18 @@
                             <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The sidebar received a full visual overhaul — deep navy background (#0f172a), sky-blue active states, Segoe UI typography, smooth hover transitions, and a consistent icon layout across all nav items.</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- ══ Thank You Wall Tab ══ -->
+                <div id="thankyouTab" class="tab-content">
+                    <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+                        <div style="font-size:42px;">⭐</div>
+                        <div>
+                            <h3 style="margin:0;">Thank You Wall</h3>
+                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Public appreciation from the community</p>
+                        </div>
+                    </div>
+                    <div id="thankYouFeed"><p style="color:#94a3b8; text-align:center; padding:40px;">Loading messages...</p></div>
                 </div>
 
                 <!-- ══ Rewards Tab ══ -->
@@ -1189,7 +1290,7 @@
                 <label style="font-size: 12px; color: #64748b;">Verified Name (Permanent)</label>
                 <div id="profileNameDisplay" style="font-weight: bold; font-size: 18px; font-family:'Syne',sans-serif;">...</div>
             </div>
-            <div id="profileRankBadge" style="display:flex; align-items:center; gap:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:16px;">
+            <div id="profileRankBadge" style="display:flex; align-items:center; gap:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:12px;">
                 <div id="profileRankIcon" style="font-size:28px;">🌱</div>
                 <div>
                     <div style="font-size:11px; color:#94a3b8; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Volunteer Rank</div>
@@ -1197,6 +1298,27 @@
                     <div id="profileRankPts" style="font-size:12px; color:#64748b; margin-top:1px;">0 pts</div>
                 </div>
             </div>
+            <!-- Stats grid -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:12px; text-align:center;">
+                    <div id="statChatsHelped" style="font-size:22px; font-weight:800; color:#16a34a; font-family:'Syne',sans-serif;">—</div>
+                    <div style="font-size:11px; color:#15803d; font-weight:600;">Chats Resolved</div>
+                </div>
+                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px; text-align:center;">
+                    <div id="statRating" style="font-size:22px; font-weight:800; color:#1d4ed8; font-family:'Syne',sans-serif;">—</div>
+                    <div style="font-size:11px; color:#1e40af; font-weight:600;">Avg Rating</div>
+                </div>
+                <div style="background:#fdf4ff; border:1px solid #e9d5ff; border-radius:10px; padding:12px; text-align:center;">
+                    <div id="statBadges" style="font-size:22px; font-weight:800; color:#7c3aed; font-family:'Syne',sans-serif;">—</div>
+                    <div style="font-size:11px; color:#6d28d9; font-weight:600;">Badges Earned</div>
+                </div>
+                <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:12px; text-align:center;">
+                    <div id="statJoined" style="font-size:13px; font-weight:800; color:#c2410c; font-family:'Syne',sans-serif;">—</div>
+                    <div style="font-size:11px; color:#ea580c; font-weight:600;">Member Since</div>
+                </div>
+            </div>
+            <!-- Badges earned display -->
+            <div id="profileBadgesRow" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; min-height:0;"></div>
             <label>Change Your Emirate</label>
             <select id="profileRegionSelect">
                 <option value="Abu Dhabi">Abu Dhabi</option>
@@ -1354,7 +1476,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc, updateDoc, arrayUnion, increment, deleteDoc, where } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, setDoc, updateDoc, arrayUnion, increment, deleteDoc, where } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -1456,6 +1578,50 @@
         function getEquippedSkin(skinId) {
             return REWARD_SKINS.find(s => s.id === skinId) || REWARD_SKINS[0];
         }
+        const ADMIN_EMAILS = ['luckyansh.t@gmail.com','beaconofunityofficial@gmail.com'];
+        function isAdmin(email) { return ADMIN_EMAILS.includes(email); }
+
+        const ACHIEVEMENTS = [
+            { id:'first_help',   icon:'🌟', label:'First Helper',      desc:'Resolved your first chat',          check: d => (d.chatsResolved||0) >= 1 },
+            { id:'five_helps',   icon:'🤝', label:'Helping Hand',       desc:'Resolved 5 chats',                  check: d => (d.chatsResolved||0) >= 5 },
+            { id:'ten_helps',    icon:'💪', label:'10x Helper',         desc:'Resolved 10 chats',                 check: d => (d.chatsResolved||0) >= 10 },
+            { id:'fifty_helps',  icon:'🏅', label:'Community Pillar',   desc:'Resolved 50 chats',                 check: d => (d.chatsResolved||0) >= 50 },
+            { id:'first_lf',     icon:'🔍', label:'Finder',             desc:'Posted a Lost & Found item',        check: d => (d.lfPosts||0) >= 1 },
+            { id:'first_req',    icon:'✋', label:'Help Seeker',        desc:'Posted your first help request',    check: d => (d.reqPosts||0) >= 1 },
+            { id:'rated_five',   icon:'⭐', label:'Five Star Helper',   desc:'Received a 5-star rating',          check: d => (d.gotFiveStar||false) },
+            { id:'week_veteran', icon:'📅', label:'Week Veteran',       desc:'Member for 7+ days',                check: d => d.joinedAt && (Date.now() - d.joinedAt.toDate().getTime()) > 7*86400000 },
+            { id:'month_member', icon:'🗓️', label:'Month Member',       desc:'Member for 30+ days',               check: d => d.joinedAt && (Date.now() - d.joinedAt.toDate().getTime()) > 30*86400000 },
+            { id:'top10',        icon:'🏆', label:'Top 10',             desc:'Reached top 10 on leaderboard',     check: d => (d.leaderboardRank||999) <= 10 },
+            { id:'thank_you',    icon:'💙', label:'Appreciated',        desc:'Received a Thank You message',      check: d => (d.thankYousReceived||0) >= 1 },
+            { id:'pts100',       icon:'💯', label:'Century',            desc:'Earned 100 volunteer points',       check: d => (d.leaderboardPoints||0) >= 100 },
+            { id:'pts500',       icon:'👑', label:'Legend',             desc:'Earned 500 volunteer points',       check: d => (d.leaderboardPoints||0) >= 500 },
+        ];
+
+        async function checkAndAwardBadges(uid, userData) {
+            const earned = userData.badges || [];
+            const newBadges = [];
+            for (const ach of ACHIEVEMENTS) {
+                if (!earned.includes(ach.id) && ach.check(userData)) {
+                    newBadges.push(ach.id);
+                }
+            }
+            if (newBadges.length > 0) {
+                await updateDoc(doc(db, 'users', uid), { badges: [...earned, ...newBadges] });
+                newBadges.forEach(id => {
+                    const a = ACHIEVEMENTS.find(x => x.id === id);
+                    if (a) showBadgeToast(a);
+                });
+            }
+        }
+
+        function showBadgeToast(ach) {
+            const t = document.createElement('div');
+            t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1e293b,#0f172a);color:white;padding:14px 22px;border-radius:16px;z-index:9999;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.35);animation:slideUp .4s ease;pointer-events:none;';
+            t.innerHTML = `<span style="font-size:28px;">${ach.icon}</span><div><div style="font-weight:700;font-size:14px;">Badge Unlocked!</div><div style="color:#94a3b8;font-size:12px;">${ach.label} — ${ach.desc}</div></div>`;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 4000);
+        }
+
         function getEquippedBubble(bubbleId) {
             return REWARD_BUBBLES.find(b => b.id === bubbleId) || REWARD_BUBBLES[0];
         }
@@ -1503,12 +1669,16 @@
             document.getElementById('profileNameDisplay').innerText = userName;
             document.getElementById('profileRegionSelect').value = userRegion;
             const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
-            const pts = snap.exists() ? (snap.data().leaderboardPoints || 0) : 0;
+            const data = snap.exists() ? snap.data() : {};
+            const pts = data.leaderboardPoints || 0;
             const rank = getVolunteerRank(pts);
             document.getElementById('profileRankIcon').innerText  = rank.icon;
             document.getElementById('profileRankLabel').innerText = rank.label;
             document.getElementById('profileRankLabel').style.color = rank.color;
             document.getElementById('profileRankPts').innerText   = `${pts} pts earned`;
+            await loadProfileStats(data, pts);
+            // Check & award any newly earned badges
+            await checkAndAwardBadges(auth.currentUser.uid, data);
             document.getElementById('profileModal').style.display = 'flex';
         };
         window.closeProfileModal = () => document.getElementById('profileModal').style.display = 'none';
@@ -1558,6 +1728,8 @@
                 userEquippedChat   = userSnap.data().equippedChat   || 'default';
                 applyBubbleSkin();
                 applyChatBgSkin();
+                initNotifications(user.uid);
+                initUrgentBanner();
 
                 document.getElementById('welcomeUser').innerText = `Hello, ${userName}`;
                 document.getElementById('userRegionDisplay').innerText = `Region: ${userRegion}`;
@@ -1593,6 +1765,10 @@
                     userId: user.uid, userName: userName, equippedSkin: userEquippedSkin || 'ocean',
                     volunteers: [], volunteerCount: 0, createdAt: serverTimestamp()
                 });
+                // Track stats
+                await updateDoc(doc(db,'users',user.uid), { reqPosts: increment(1) });
+                const rSnap = await getDoc(doc(db,'users',user.uid));
+                if (rSnap.exists()) checkAndAwardBadges(user.uid, rSnap.data());
                 // FCM: notify region topic
                 fetch('https://beacon-fcm.anshorg.workers.dev/', {
                     method: 'POST',
@@ -1633,6 +1809,9 @@
                     userId: user.uid, userName: userName, equippedSkin: userEquippedSkin || 'ocean',
                     createdAt: serverTimestamp()
                 });
+                await updateDoc(doc(db,'users',user.uid), { lfPosts: increment(1) });
+                const lfSnap = await getDoc(doc(db,'users',user.uid));
+                if (lfSnap.exists()) checkAndAwardBadges(user.uid, lfSnap.data());
                 // FCM: notify region topic
                 const lfType = document.getElementById('lfType').value;
                 fetch('https://beacon-fcm.anshorg.workers.dev/', {
@@ -1755,7 +1934,12 @@
         window.offerHelp  = async (requestId) => {
             const user = auth.currentUser;
             const reqRef = doc(db, "requests", requestId);
+            const reqSnap = await getDoc(reqRef);
             await updateDoc(reqRef, { volunteers: arrayUnion({ uid: user.uid, name: userName }), volunteerCount: increment(1) });
+            if (reqSnap.exists()) {
+                const rd = reqSnap.data();
+                await pushNotif(rd.userId, '🤝', `${userName} wants to help!`, rd.title);
+            }
             alert("Added to queue!");
         };
 
@@ -1997,7 +2181,8 @@
             if (!selectedStars) return;
             await updateDoc(doc(db, "users", currentChatOtherUserId), {
                 ratingTotal: increment(selectedStars),
-                ratingCount: increment(1)
+                ratingCount: increment(1),
+                ...(selectedStars === 5 ? { gotFiveStar: true } : {})
             });
             await updateDoc(doc(db, "users", currentChatOtherUserId), { leaderboardPoints: increment(2) });
             document.getElementById('ratingModal').style.display = 'none';
@@ -2014,7 +2199,15 @@
 
         async function resolveAndClose() {
             const chatSnap = await getDoc(doc(db, "chats", currentChatId));
-            const requestId = chatSnap.exists() ? chatSnap.data().requestId : null;
+            const chatData = chatSnap.exists() ? chatSnap.data() : {};
+            const requestId = chatData.requestId || null;
+            // Determine who is the helper (non-post-owner)
+            const helperUid  = currentChatPostOwnerId === auth.currentUser.uid ? currentChatOtherUserId : auth.currentUser.uid;
+            const helperName = currentChatPostOwnerId === auth.currentUser.uid ? currentChatOtherName   : userName;
+            const helperSkin = currentChatPostOwnerId === auth.currentUser.uid
+                ? (await getDoc(doc(db,'users',helperUid))).data()?.equippedSkin || 'ocean'
+                : userEquippedSkin;
+            const iAmRequester = currentChatPostOwnerId === auth.currentUser.uid;
 
             try {
                 await addDoc(collection(db, "chats", currentChatId, "messages"), {
@@ -2028,6 +2221,12 @@
                 });
             } catch {}
 
+            // Track chatsResolved on the helper
+            try { await updateDoc(doc(db,'users',helperUid), { chatsResolved: increment(1) }); } catch {}
+
+            // Push in-app notification to the other user
+            await pushNotif(currentChatOtherUserId, '✅', 'Chat resolved', `${userName} resolved your chat.`);
+
             await new Promise(r => setTimeout(r, 600));
 
             try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
@@ -2035,10 +2234,27 @@
             const el = document.getElementById(`item-${currentChatId}`);
             if (el) el.remove();
 
-            if (requestId) { showDeleteRequestPrompt(requestId); }
+            const capturedRequestId = requestId;
+            const capturedHelperUid  = helperUid;
+            const capturedHelperName = helperName;
+            const capturedHelperSkin = helperSkin;
+            const capturedIAmReq     = iAmRequester;
 
             currentChatId = null; currentChatOtherUserId = null;
             currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
+
+            if (capturedRequestId) { showDeleteRequestPrompt(capturedRequestId); }
+
+            // Show thank you modal to the requester
+            if (capturedIAmReq) {
+                setTimeout(() => showThankYouModal(capturedHelperName, capturedHelperUid, capturedHelperSkin), capturedRequestId ? 4000 : 500);
+            }
+
+            // Check badge progress for helper
+            setTimeout(async () => {
+                const hSnap = await getDoc(doc(db,'users',capturedHelperUid));
+                if (hSnap.exists()) checkAndAwardBadges(capturedHelperUid, hSnap.data());
+            }, 1000);
         }
 
         function showDeleteRequestPrompt(requestId) {
@@ -2132,6 +2348,8 @@
                     });
                 }
             } catch (e) { /* silently ignore notification errors */ }
+            // In-app notification
+            try { await pushNotif(recipientUid, '💬', `New message from ${userName}`, msgText.slice(0,80)); } catch {}
             input.value = "";
         }
         document.getElementById('sendMsgBtn').onclick = sendMessage;
@@ -2533,6 +2751,240 @@
             });
         }
 
+        // ═══════════════════════════════════════════════
+        //  NOTIFICATIONS
+        // ═══════════════════════════════════════════════
+        let _notifUnsub = null;
+        function initNotifications(uid) {
+            const q = query(collection(db, 'notifications'), where('toUid','==',uid), orderBy('createdAt','desc'));
+            _notifUnsub = onSnapshot(q, snap => {
+                const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                const unread = items.filter(n => !n.read).length;
+                const badge = document.getElementById('bellBadge');
+                if (unread > 0) { badge.style.display = 'inline-block'; badge.textContent = unread > 9 ? '9+' : unread; }
+                else badge.style.display = 'none';
+                document.getElementById('notifSubtitle').textContent = `${unread} unread`;
+                renderNotifList(items);
+            });
+        }
+
+        function renderNotifList(items) {
+            const list = document.getElementById('notifList');
+            if (!items.length) { list.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:30px;font-size:13px;">No notifications yet</p>'; return; }
+            list.innerHTML = '';
+            items.slice(0, 50).forEach(n => {
+                const el = document.createElement('div');
+                el.className = 'notif-item' + (n.read ? '' : ' unread');
+                const ago = timeAgo(n.createdAt?.toDate?.() || new Date());
+                el.innerHTML = `<span style="font-size:22px;flex-shrink:0;">${n.icon||'🔔'}</span>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:13px;font-weight:${n.read?'400':'600'};color:#0f172a;">${n.title||''}</div>
+                        <div style="font-size:12px;color:#64748b;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.body||''}</div>
+                        <div style="font-size:10px;color:#94a3b8;margin-top:3px;">${ago}</div>
+                    </div>`;
+                if (!n.read) el.onclick = () => updateDoc(doc(db,'notifications',n.id),{read:true});
+                list.appendChild(el);
+            });
+        }
+
+        function timeAgo(date) {
+            if (!date) return '';
+            const s = Math.round((Date.now() - date.getTime()) / 1000);
+            if (s < 60) return 'just now';
+            if (s < 3600) return Math.floor(s/60) + 'm ago';
+            if (s < 86400) return Math.floor(s/3600) + 'h ago';
+            return Math.floor(s/86400) + 'd ago';
+        }
+
+        window.toggleNotifDrawer = () => {
+            const d = document.getElementById('notifDrawer');
+            const o = document.getElementById('notifOverlay');
+            const open = d.style.display === 'flex';
+            d.style.display = open ? 'none' : 'flex';
+            o.style.display = open ? 'none' : 'block';
+        };
+
+        window.markAllNotifsRead = async () => {
+            const uid = auth.currentUser?.uid;
+            if (!uid) return;
+            const snap = await getDocs(query(collection(db,'notifications'), where('toUid','==',uid), where('read','==',false)));
+            const batch_arr = snap.docs;
+            for (const d2 of batch_arr) await updateDoc(doc(db,'notifications',d2.id),{read:true});
+        };
+
+        async function pushNotif(toUid, icon, title, body) {
+            if (!toUid) return;
+            try {
+                await addDoc(collection(db,'notifications'), { toUid, icon, title, body, read:false, createdAt: serverTimestamp() });
+            } catch(e) {}
+        }
+
+        // ═══════════════════════════════════════════════
+        //  URGENT ALERT BANNER
+        // ═══════════════════════════════════════════════
+        function initUrgentBanner() {
+            const q = query(collection(db,'requests'), where('region','==',userRegion), where('urgency','==','high'), orderBy('createdAt','desc'));
+            onSnapshot(q, snap => {
+                const banner = document.getElementById('urgentAlertBanner');
+                const text = document.getElementById('urgentAlertText');
+                const urgent = snap.docs.filter(d => !d.data().resolved);
+                if (urgent.length > 0) {
+                    const first = urgent[0].data();
+                    text.textContent = `${first.title} — ${first.location}`;
+                    banner.style.display = 'flex';
+                } else {
+                    banner.style.display = 'none';
+                }
+            });
+        }
+
+        // ═══════════════════════════════════════════════
+        //  THANK YOU WALL
+        // ═══════════════════════════════════════════════
+        function loadThankYouWall() {
+            const feed = document.getElementById('thankYouFeed');
+            const q = query(collection(db,'thankyou'), orderBy('createdAt','desc'));
+            onSnapshot(q, snap => {
+                if (snap.empty) { feed.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:40px;font-size:14px;">No thank you messages yet. Resolve a chat to be the first! 💙</p>'; return; }
+                feed.innerHTML = '';
+                snap.docs.forEach(d2 => {
+                    const td = d2.data();
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.style.cssText = 'border-left:4px solid #38bdf8; position:relative;';
+                    const ago = timeAgo(td.createdAt?.toDate?.() || new Date());
+                    const skinStyle = `background:${getEquippedSkin(td.helperSkin||'ocean').gradient}`;
+                    const adminEdit = isAdmin(auth.currentUser?.email) ? `<button onclick="adminEditTY('${d2.id}','${(td.message||'').replace(/'/g,"\'")}')" style="position:absolute;top:12px;right:12px;background:#f1f5f9;border:none;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;color:#64748b;">✏️ Edit</button>` : '';
+                    card.innerHTML = `${adminEdit}
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                            <div style="width:36px;height:36px;border-radius:50%;${skinStyle};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0;">${(td.helperName||'?').charAt(0).toUpperCase()}</div>
+                            <div>
+                                <div style="font-weight:700;font-size:14px;">${td.helperName||'Anonymous'}</div>
+                                <div style="font-size:11px;color:#94a3b8;">${ago} · Helped ${td.fromName||'someone'}</div>
+                            </div>
+                            <span style="margin-left:auto;font-size:20px;">💙</span>
+                        </div>
+                        <p style="font-size:14px;color:#334155;margin:0;line-height:1.6;">"${td.message||''}"</p>`;
+                    feed.appendChild(card);
+                });
+            });
+        }
+
+        window.adminEditTY = (tyId, currentMsg) => {
+            const newMsg = prompt('Edit thank you message (admin):', currentMsg);
+            if (newMsg === null) return;
+            updateDoc(doc(db,'thankyou',tyId), { message: newMsg.trim() }).catch(()=>{});
+        };
+
+        function showThankYouModal(helperName, helperUid, helperSkin) {
+            document.getElementById('tyHelperName').textContent = helperName;
+            const ta = document.getElementById('tyMessage');
+            ta.value = '';
+            document.getElementById('tyCharCount').textContent = '0 / 200';
+            ta.oninput = () => document.getElementById('tyCharCount').textContent = `${ta.value.length} / 200`;
+            document.getElementById('thankYouWriteModal').style.display = 'flex';
+            document.getElementById('tySubmitBtn').onclick = async () => {
+                const msg = ta.value.trim();
+                if (!msg) return;
+                await addDoc(collection(db,'thankyou'), {
+                    helperUid, helperName, helperSkin: helperSkin||'ocean',
+                    fromName: userName, fromUid: auth.currentUser.uid,
+                    message: msg, createdAt: serverTimestamp()
+                });
+                await updateDoc(doc(db,'users',helperUid), { thankYousReceived: increment(1) });
+                await pushNotif(helperUid, '💙', `${userName} thanked you!`, msg.slice(0,80));
+                document.getElementById('thankYouWriteModal').style.display = 'none';
+                const helperSnap = await getDoc(doc(db,'users',helperUid));
+                if (helperSnap.exists()) checkAndAwardBadges(helperUid, helperSnap.data());
+            };
+            document.getElementById('tySkipBtn').onclick = () => document.getElementById('thankYouWriteModal').style.display = 'none';
+        }
+
+        // ═══════════════════════════════════════════════
+        //  VOLUNTEER OPPORTUNITIES (admin-only post)
+        // ═══════════════════════════════════════════════
+        function loadVolOpps() {
+            const feed = document.getElementById('volOppFeed');
+            if (!feed) return;
+            const addBtn = document.getElementById('addVolOppBtn');
+            if (addBtn && isAdmin(auth.currentUser?.email)) addBtn.style.display = 'inline-block';
+            if (addBtn) addBtn.onclick = () => document.getElementById('volOppModal').style.display = 'flex';
+
+            const submitBtn = document.getElementById('submitVolOppBtn');
+            if (submitBtn) submitBtn.onclick = async () => {
+                const title = document.getElementById('volOppTitle').value.trim();
+                const org   = document.getElementById('volOppOrg').value.trim();
+                const date  = document.getElementById('volOppDate').value.trim();
+                const loc   = document.getElementById('volOppLoc').value.trim();
+                const desc  = document.getElementById('volOppDesc').value.trim();
+                const cat   = document.getElementById('volOppCat').value;
+                const link  = document.getElementById('volOppLink').value.trim();
+                if (!title || !org || !date) return alert('Title, organisation and date are required.');
+                await addDoc(collection(db,'volopps'), { title, org, date, loc, desc, cat, link, createdAt: serverTimestamp() });
+                document.getElementById('volOppModal').style.display = 'none';
+                ['volOppTitle','volOppOrg','volOppDate','volOppLoc','volOppDesc','volOppLink'].forEach(id => document.getElementById(id).value = '');
+            };
+
+            const catColors = { Environment:'#10b981', Education:'#3b82f6', 'Food & Aid':'#f97316', 'Animal Welfare':'#a855f7', Health:'#ef4444', Community:'#38bdf8', Other:'#94a3b8' };
+            onSnapshot(query(collection(db,'volopps'), orderBy('createdAt','desc')), snap => {
+                if (snap.empty) { feed.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:40px;font-size:14px;">No opportunities posted yet. Check back soon! 🤝</p>'; return; }
+                feed.innerHTML = '';
+                snap.docs.forEach(d2 => {
+                    const od = d2.data();
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    const color = catColors[od.cat] || '#94a3b8';
+                    const adminDel = isAdmin(auth.currentUser?.email) ? `<button onclick="deleteVolOpp('${d2.id}')" style="background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;margin-left:6px;">Delete</button>` : '';
+                    card.innerHTML = `
+                        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px;">
+                            <span style="background:${color}20;color:${color};font-weight:700;font-size:11px;padding:3px 9px;border-radius:99px;">${od.cat||'Community'}</span>
+                            <div>${adminDel}</div>
+                        </div>
+                        <h4 style="margin:0 0 4px;font-family:'Syne',sans-serif;">${od.title||''}</h4>
+                        <p style="font-size:12px;color:#38bdf8;font-weight:600;margin:0 0 4px;">🏢 ${od.org||''}</p>
+                        <p style="font-size:12px;color:#64748b;margin:0 0 6px;">📅 ${od.date||''} &nbsp;·&nbsp; 📍 ${od.loc||''}</p>
+                        <p style="font-size:13px;color:#475569;margin:0 0 12px;">${od.desc||''}</p>
+                        ${od.link ? `<a href="${od.link}" target="_blank" style="font-size:12px;color:#0ea5e9;text-decoration:none;font-weight:600;">🔗 Learn more / Register →</a>` : ''}`;
+                    feed.appendChild(card);
+                });
+            });
+        }
+
+        window.deleteVolOpp = async (id) => {
+            if (!isAdmin(auth.currentUser?.email)) return;
+            if (confirm('Delete this opportunity?')) await deleteDoc(doc(db,'volopps',id));
+        };
+
+        // ═══════════════════════════════════════════════
+        //  PERSONAL STATS (fill profile modal)
+        // ═══════════════════════════════════════════════
+        async function loadProfileStats(data, pts) {
+            document.getElementById('statChatsHelped').textContent = data.chatsResolved || 0;
+            const rating = data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : '—';
+            document.getElementById('statRating').textContent = rating !== '—' ? `${rating}⭐` : '—';
+            const badgeIds = data.badges || [];
+            document.getElementById('statBadges').textContent = badgeIds.length;
+            if (data.joinedAt) {
+                const d2 = data.joinedAt.toDate();
+                document.getElementById('statJoined').textContent = d2.toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+            }
+            // Show badge chips
+            const row = document.getElementById('profileBadgesRow');
+            if (row) {
+                row.innerHTML = '';
+                badgeIds.forEach(id => {
+                    const a = ACHIEVEMENTS.find(x => x.id === id);
+                    if (a) {
+                        const chip = document.createElement('span');
+                        chip.className = 'badge-chip';
+                        chip.title = a.desc;
+                        chip.innerHTML = `${a.icon} ${a.label}`;
+                        row.appendChild(chip);
+                    }
+                });
+            }
+        }
+
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -2559,18 +3011,24 @@
                 document.getElementById('volunteer-oppsTab').classList.add('active');
                 navItems[3].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Volunteer Opportunities";
+                loadVolOpps();
             } else if (tab === 'updates') {
                 document.getElementById('updatesTab').classList.add('active');
-                navItems[5].classList.add('active');
+                navItems[4].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Updates";
+            } else if (tab === 'thankyou') {
+                document.getElementById('thankyouTab').classList.add('active');
+                navItems[5].classList.add('active');
+                document.getElementById('pageTitle').innerText = "Thank You Wall";
+                loadThankYouWall();
             } else if (tab === 'rewards') {
                 document.getElementById('rewardsTab').classList.add('active');
-                navItems[5].classList.add('active');
+                navItems[6].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Rewards";
                 loadRewards();
             } else if (tab === 'reliable-news') {
                 document.getElementById('reliable-newsTab').classList.add('active');
-                navItems[7].classList.add('active');
+                navItems[8].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Reliable News";
                 document.getElementById('mob-news')?.classList.add('active');
                 loadNews();
