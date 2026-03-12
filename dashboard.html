@@ -290,6 +290,7 @@
             background: linear-gradient(135deg, #38bdf8, #0ea5e9);
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; color: white; font-size: 14px; flex-shrink: 0;
+            transition: background 0.3s;
         }
         #chatHeaderMeta { flex: 1; min-width: 0; }
         #chatWith {
@@ -845,6 +846,7 @@
         <div class="nav-item" onclick="switchTab('volunteer-opps')"><span class="nav-emoji">🤝</span> Volunteer Opportunities</div>
         <div class="nav-item" onclick="openProfileModal()"><span class="nav-emoji">👤</span> Profile & Region</div>
         <div class="nav-item" onclick="switchTab('updates')"><span class="nav-emoji">📢</span> Updates</div>
+        <div class="nav-item" onclick="switchTab('rewards')"><span class="nav-emoji">🎁</span> Rewards</div>
         <div class="nav-item" onclick="switchTab('reliable-news')"><span class="nav-emoji">📰</span> Reliable News</div>
         <div class="nav-item" id="logoutBtnNav">
             <button class="logout-Btn" id="logoutBtnInner">
@@ -1065,6 +1067,18 @@
                             <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The sidebar received a full visual overhaul — deep navy background (#0f172a), sky-blue active states, Segoe UI typography, smooth hover transitions, and a consistent icon layout across all nav items.</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- ══ Rewards Tab ══ -->
+                <div id="rewardsTab" class="tab-content">
+                    <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+                        <div style="font-size:42px;">🎁</div>
+                        <div>
+                            <h3 style="margin:0;">Rewards</h3>
+                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Earn points by helping your community. Unlock cosmetic rewards.</p>
+                        </div>
+                    </div>
+                    <div id="rewardsFeed"><p style="color:#94a3b8; text-align:center; padding:40px;">Loading rewards...</p></div>
                 </div>
 
                 <!-- ══ Reliable News Tab ══ -->
@@ -1363,6 +1377,9 @@
         let unsubscribeChat = null;
         let userRegion = null;
         let userName = "";
+        let userEquippedSkin = null;    // gradient id for pfp
+        let userEquippedBubble = null;  // bubble color id
+        let userEquippedChat = null;    // chat background id
 
         let selectedStars = 0;
         const starWords = ['','Poor','Fair','Good','Great','Excellent'];
@@ -1405,6 +1422,49 @@
                         <div class="rating-line">${ratingTxt || 'No ratings yet'}</div>
                         ${reportBtn}
                     </span>`;
+        }
+
+        const REWARD_SKINS = [
+            { id: 'ocean',    label: 'Ocean',          gradient: 'linear-gradient(135deg,#38bdf8,#0ea5e9)', pts: 0,   desc: 'Default sky blue' },
+            { id: 'sunset',   label: 'Sunset',         gradient: 'linear-gradient(135deg,#f97316,#ec4899)', pts: 30,  desc: 'Warm orange to pink' },
+            { id: 'aurora',   label: 'Aurora',         gradient: 'linear-gradient(135deg,#8b5cf6,#6366f1)', pts: 60,  desc: 'Deep purple & indigo' },
+            { id: 'forest',   label: 'Forest',         gradient: 'linear-gradient(135deg,#10b981,#059669)', pts: 100, desc: 'Emerald green' },
+            { id: 'ember',    label: 'Ember',          gradient: 'linear-gradient(135deg,#ef4444,#f97316)', pts: 200, desc: 'Red hot ember' },
+            { id: 'midnight', label: 'Midnight',       gradient: 'linear-gradient(135deg,#1e293b,#334155)', pts: 300, desc: 'Dark navy slate' },
+            { id: 'prism',    label: 'Prism',          gradient: 'linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#38bdf8,#8b5cf6)', pts: 350, desc: 'Rainbow spectrum' },
+            { id: 'gold',     label: 'Gold Crown',     gradient: 'linear-gradient(135deg,#f59e0b,#d97706)',  pts: 500, desc: 'Legendary gold' },
+        ];
+
+        const REWARD_BUBBLES = [
+            { id: 'blue',     label: 'Classic Blue',   color: '#007aff',             textColor: 'white', pts: 0,   desc: 'Default iMessage blue' },
+            { id: 'teal',     label: 'Teal',           color: '#0d9488',             textColor: 'white', pts: 50,  desc: 'Deep teal' },
+            { id: 'violet',   label: 'Violet',         color: '#7c3aed',             textColor: 'white', pts: 150, desc: 'Royal purple' },
+            { id: 'rose',     label: 'Rose',           color: '#e11d48',             textColor: 'white', pts: 300, desc: 'Rose red' },
+            { id: 'amber',    label: 'Amber',          color: '#d97706',             textColor: 'white', pts: 400, desc: 'Warm amber' },
+            { id: 'gold',     label: 'Gold',           color: 'linear-gradient(135deg,#f59e0b,#d97706)', textColor: 'white', pts: 500, desc: 'Shimmering gold' },
+        ];
+
+        const REWARD_CHAT_BG = [
+            { id: 'default',  label: 'Default',        bg: '#f2f2f7',                       pts: 0,   desc: 'Standard light grey' },
+            { id: 'night',    label: 'Night',          bg: '#0f172a',                       pts: 50,  desc: 'Deep dark navy' },
+            { id: 'sakura',   label: 'Sakura',         bg: 'linear-gradient(160deg,#fce7f3,#fbcfe8)', pts: 100, desc: 'Soft pink blossom' },
+            { id: 'forest',   label: 'Forest Mist',    bg: 'linear-gradient(160deg,#d1fae5,#a7f3d0)', pts: 200, desc: 'Calm green mist' },
+            { id: 'galaxy',   label: 'Galaxy',         bg: 'linear-gradient(160deg,#1e1b4b,#312e81,#4c1d95)', pts: 350, desc: 'Deep space purple' },
+            { id: 'aurora',   label: 'Aurora',         bg: 'linear-gradient(160deg,#0f172a,#065f46,#1e3a5f)', pts: 500, desc: 'Northern lights' },
+        ];
+
+        function getEquippedSkin(skinId) {
+            return REWARD_SKINS.find(s => s.id === skinId) || REWARD_SKINS[0];
+        }
+        function getEquippedBubble(bubbleId) {
+            return REWARD_BUBBLES.find(b => b.id === bubbleId) || REWARD_BUBBLES[0];
+        }
+        function getEquippedChatBg(chatBgId) {
+            return REWARD_CHAT_BG.find(b => b.id === chatBgId) || REWARD_CHAT_BG[0];
+        }
+        function makePfpStyle(skinId) {
+            const skin = getEquippedSkin(skinId);
+            return `background:${skin.gradient};`;
         }
 
         const VOLUNTEER_RANKS = [
@@ -1492,6 +1552,13 @@
                     }
                 };
 
+                // Load equipped cosmetics
+                userEquippedSkin   = userSnap.data().equippedSkin   || 'ocean';
+                userEquippedBubble = userSnap.data().equippedBubble || 'blue';
+                userEquippedChat   = userSnap.data().equippedChat   || 'default';
+                applyBubbleSkin();
+                applyChatBgSkin();
+
                 document.getElementById('welcomeUser').innerText = `Hello, ${userName}`;
                 document.getElementById('userRegionDisplay').innerText = `Region: ${userRegion}`;
                 document.querySelectorAll('.current-region-text').forEach(el => el.innerText = userRegion);
@@ -1523,7 +1590,7 @@
                     urgency: document.getElementById('reqUrg').value,
                     location: locationStr, region: userRegion,
                     description: document.getElementById('reqDesc').value.trim(),
-                    userId: user.uid, userName: userName,
+                    userId: user.uid, userName: userName, equippedSkin: userEquippedSkin || 'ocean',
                     volunteers: [], volunteerCount: 0, createdAt: serverTimestamp()
                 });
                 // FCM: notify region topic
@@ -1563,7 +1630,7 @@
                     item, location: locationStr, region: userRegion,
                     description: document.getElementById('lfDesc').value.trim(),
                     image: imageBase64,
-                    userId: user.uid, userName: userName,
+                    userId: user.uid, userName: userName, equippedSkin: userEquippedSkin || 'ocean',
                     createdAt: serverTimestamp()
                 });
                 // FCM: notify region topic
@@ -1625,7 +1692,7 @@
                                 ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
                             </div>
                             <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.title}</h4>
-                            <p style="font-size:11px; color:#64748b;">Posted by: ${data.userName}</p>
+                            <p style="font-size:11px; color:#64748b;">Posted by: <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${getEquippedSkin(data.equippedSkin||'ocean').gradient};margin-right:3px;vertical-align:middle;"></span>${data.userName}</p>
                             <p style="font-size:13px; color:#475569;">${data.description}</p>
                             <div style="display:flex; gap:10px; align-items:center;">
                                 <button class="btn-help" ${isOwner || hasVolunteered ? 'disabled' : ''} onclick="offerHelp('${docSnap.id}')">
@@ -1672,7 +1739,7 @@
                             </div>
                             ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
                             <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.item}</h4>
-                            <p style="font-size:11px; color:#64748b;">Reported by: ${data.userName}</p>
+                            <p style="font-size:11px; color:#64748b;">Reported by: <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${getEquippedSkin(data.equippedSkin||'ocean').gradient};margin-right:3px;vertical-align:middle;"></span>${data.userName}</p>
                             <p style="font-size:13px; color:#475569;">${data.description}</p>
                             ${!isOwner ? `<button class="btn-help" style="width:100%;" onclick="startChat('${docSnap.id}','${data.userId}','${data.type}: ${data.item}','lostfound')">Contact User</button>` : ''}`;
                         feed.appendChild(card);
@@ -1716,9 +1783,13 @@
             // Set header
             const initials = label ? label.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : '?';
             document.getElementById('chatAvatarCircle').textContent = initials;
+            document.getElementById('chatAvatarCircle').style.background = getEquippedSkin(userEquippedSkin).gradient;
             document.getElementById('chatWith').textContent = label || 'Chat';
             document.getElementById('chatSubline').textContent = 'Community Helper';
             document.getElementById('chatPopup').style.display = 'flex';
+            // Apply chat background skin
+            const msgArea = document.getElementById('messageArea');
+            if (msgArea && window._chatBgStyle) msgArea.style.background = window._chatBgStyle;
 
             if (!currentChatOtherName && currentChatOtherUserId) {
                 const od = await getDoc(doc(db, "users", currentChatOtherUserId));
@@ -2226,7 +2297,8 @@
                         pts: data.leaderboardPoints || 0,
                         region: data.region || '—',
                         rating: data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : null,
-                        ratingCount: data.ratingCount || 0
+                        ratingCount: data.ratingCount || 0,
+                        equippedSkin: data.equippedSkin || 'ocean'
                     });
                 });
                 users.sort((a, b) => b.pts - a.pts);
@@ -2285,6 +2357,182 @@
             });
         }
 
+        function applyBubbleSkin() {
+            const b = getEquippedBubble(userEquippedBubble);
+            let styleEl = document.getElementById('_bubbleSkinStyle');
+            if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = '_bubbleSkinStyle'; document.head.appendChild(styleEl); }
+            const bg = b.color.startsWith('linear') ? b.color : b.color;
+            styleEl.textContent = `.imsg-row.me .imsg-bubble { background: ${bg} !important; color: ${b.textColor} !important; }`;
+        }
+
+        function applyChatBgSkin() {
+            const bg = getEquippedChatBg(userEquippedChat);
+            const area = document.getElementById('messageArea');
+            if (area) area.style.background = bg.bg;
+            // also store for when chat opens fresh
+            window._chatBgStyle = bg.bg;
+        }
+
+        function loadRewards() {
+            const uid = auth.currentUser?.uid;
+            if (!uid) return;
+            const feed = document.getElementById('rewardsFeed');
+            if (!feed) return;
+
+            // fetch current points
+            getDoc(doc(db, 'users', uid)).then(snap => {
+                const pts = snap.exists() ? (snap.data().leaderboardPoints || 0) : 0;
+                const eqSkin   = snap.exists() ? (snap.data().equippedSkin   || 'ocean')   : 'ocean';
+                const eqBubble = snap.exists() ? (snap.data().equippedBubble || 'blue')    : 'blue';
+                const eqChat   = snap.exists() ? (snap.data().equippedChat   || 'default') : 'default';
+
+                feed.innerHTML = '';
+
+                // ── PFP Skins section ──
+                const pfpSection = document.createElement('div');
+                pfpSection.innerHTML = `<h4 style="margin:0 0 14px; font-family:'Syne',sans-serif; font-size:16px;">🎨 Profile Gradient Skins</h4>`;
+                const pfpGrid = document.createElement('div');
+                pfpGrid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-bottom:28px;';
+                REWARD_SKINS.forEach(skin => {
+                    const unlocked = pts >= skin.pts;
+                    const equipped = eqSkin === skin.id;
+                    const card = document.createElement('div');
+                    card.style.cssText = `border-radius:14px; padding:16px 12px; text-align:center; border:2px solid ${equipped ? '#38bdf8' : unlocked ? '#e2e8f0' : '#f1f5f9'}; background:${equipped ? '#f0f9ff' : unlocked ? 'white' : '#f8fafc'}; position:relative; transition:all .2s;`;
+                    if (!unlocked) card.style.opacity = '0.6';
+                    const preview = document.createElement('div');
+                    preview.style.cssText = `width:52px; height:52px; border-radius:50%; ${skin.gradient.startsWith('linear') ? 'background:'+skin.gradient : 'background:'+skin.gradient}; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:18px; box-shadow:0 4px 12px rgba(0,0,0,.15);`;
+                    preview.textContent = userName.charAt(0).toUpperCase() || '?';
+                    card.appendChild(preview);
+                    card.innerHTML += `<div style="font-weight:700; font-size:13px; margin-bottom:2px;">${skin.label}</div>
+                        <div style="font-size:11px; color:#64748b; margin-bottom:10px;">${unlocked ? skin.desc : skin.pts + ' pts to unlock'}</div>`;
+                    if (equipped) {
+                        const eq = document.createElement('div');
+                        eq.style.cssText = 'background:#38bdf8; color:#0f172a; font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px;';
+                        eq.textContent = '✓ Equipped';
+                        card.appendChild(eq);
+                    } else if (unlocked) {
+                        const btn = document.createElement('button');
+                        btn.style.cssText = 'background:#0f172a; color:white; border:none; padding:5px 14px; border-radius:99px; font-size:12px; cursor:pointer; font-weight:600;';
+                        btn.textContent = 'Equip';
+                        btn.onclick = async () => {
+                            await updateDoc(doc(db, 'users', uid), { equippedSkin: skin.id });
+                            userEquippedSkin = skin.id;
+                            loadRewards();
+                        };
+                        card.appendChild(btn);
+                    } else {
+                        const lock = document.createElement('div');
+                        lock.style.cssText = 'font-size:18px;';
+                        lock.textContent = '🔒';
+                        card.appendChild(lock);
+                    }
+                    pfpGrid.appendChild(card);
+                });
+                pfpSection.appendChild(pfpGrid);
+                feed.appendChild(pfpSection);
+
+                // ── Bubble Skins section ──
+                const bubSection = document.createElement('div');
+                bubSection.innerHTML = `<h4 style="margin:0 0 14px; font-family:'Syne',sans-serif; font-size:16px;">💬 Chat Bubble Skins</h4>`;
+                const bubGrid = document.createElement('div');
+                bubGrid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-bottom:28px;';
+                REWARD_BUBBLES.forEach(bub => {
+                    const unlocked = pts >= bub.pts;
+                    const equipped = eqBubble === bub.id;
+                    const card = document.createElement('div');
+                    card.style.cssText = `border-radius:14px; padding:16px 12px; text-align:center; border:2px solid ${equipped ? '#38bdf8' : unlocked ? '#e2e8f0' : '#f1f5f9'}; background:${equipped ? '#f0f9ff' : unlocked ? 'white' : '#f8fafc'}; position:relative; transition:all .2s;`;
+                    if (!unlocked) card.style.opacity = '0.6';
+                    const bubBg = bub.color.startsWith('linear') ? bub.color : bub.color;
+                    card.innerHTML += `<div style="width:52px; height:26px; border-radius:13px; background:${bubBg}; margin:0 auto 10px; box-shadow:0 4px 10px rgba(0,0,0,.15);"></div>
+                        <div style="font-weight:700; font-size:13px; margin-bottom:2px;">${bub.label}</div>
+                        <div style="font-size:11px; color:#64748b; margin-bottom:10px;">${unlocked ? bub.desc : bub.pts + ' pts to unlock'}</div>`;
+                    if (equipped) {
+                        const eq = document.createElement('div');
+                        eq.style.cssText = 'background:#38bdf8; color:#0f172a; font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px;';
+                        eq.textContent = '✓ Equipped';
+                        card.appendChild(eq);
+                    } else if (unlocked) {
+                        const btn = document.createElement('button');
+                        btn.style.cssText = 'background:#0f172a; color:white; border:none; padding:5px 14px; border-radius:99px; font-size:12px; cursor:pointer; font-weight:600;';
+                        btn.textContent = 'Equip';
+                        btn.onclick = async () => {
+                            await updateDoc(doc(db, 'users', uid), { equippedBubble: bub.id });
+                            userEquippedBubble = bub.id;
+                            applyBubbleSkin();
+                            loadRewards();
+                        };
+                        card.appendChild(btn);
+                    } else {
+                        const lock = document.createElement('div');
+                        lock.style.cssText = 'font-size:18px;';
+                        lock.textContent = '🔒';
+                        card.appendChild(lock);
+                    }
+                    bubGrid.appendChild(card);
+                });
+                bubSection.appendChild(bubGrid);
+                feed.appendChild(bubSection);
+
+                // ── Chat Background section ──
+                const bgSection = document.createElement('div');
+                bgSection.innerHTML = `<h4 style="margin:0 0 14px; font-family:'Syne',sans-serif; font-size:16px;">🖼️ Chat Background Skins</h4>`;
+                const bgGrid = document.createElement('div');
+                bgGrid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-bottom:28px;';
+                REWARD_CHAT_BG.forEach(bg => {
+                    const unlocked = pts >= bg.pts;
+                    const equipped = eqChat === bg.id;
+                    const card = document.createElement('div');
+                    card.style.cssText = `border-radius:14px; padding:16px 12px; text-align:center; border:2px solid ${equipped ? '#38bdf8' : unlocked ? '#e2e8f0' : '#f1f5f9'}; background:${equipped ? '#f0f9ff' : unlocked ? 'white' : '#f8fafc'}; position:relative; transition:all .2s;`;
+                    if (!unlocked) card.style.opacity = '0.6';
+                    card.innerHTML += `<div style="width:52px; height:36px; border-radius:8px; background:${bg.bg}; margin:0 auto 10px; box-shadow:0 4px 10px rgba(0,0,0,.15); border:1px solid rgba(0,0,0,.06);"></div>
+                        <div style="font-weight:700; font-size:13px; margin-bottom:2px;">${bg.label}</div>
+                        <div style="font-size:11px; color:#64748b; margin-bottom:10px;">${unlocked ? bg.desc : bg.pts + ' pts to unlock'}</div>`;
+                    if (equipped) {
+                        const eq = document.createElement('div');
+                        eq.style.cssText = 'background:#38bdf8; color:#0f172a; font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px;';
+                        eq.textContent = '✓ Equipped';
+                        card.appendChild(eq);
+                    } else if (unlocked) {
+                        const btn = document.createElement('button');
+                        btn.style.cssText = 'background:#0f172a; color:white; border:none; padding:5px 14px; border-radius:99px; font-size:12px; cursor:pointer; font-weight:600;';
+                        btn.textContent = 'Equip';
+                        btn.onclick = async () => {
+                            await updateDoc(doc(db, 'users', uid), { equippedChat: bg.id });
+                            userEquippedChat = bg.id;
+                            applyChatBgSkin();
+                            loadRewards();
+                        };
+                        card.appendChild(btn);
+                    } else {
+                        const lock = document.createElement('div');
+                        lock.style.cssText = 'font-size:18px;';
+                        lock.textContent = '🔒';
+                        card.appendChild(lock);
+                    }
+                    bgGrid.appendChild(card);
+                });
+                bgSection.appendChild(bgGrid);
+                feed.appendChild(bgSection);
+
+                // pts progress bar at top
+                const nextLocked = [...REWARD_SKINS, ...REWARD_BUBBLES, ...REWARD_CHAT_BG]
+                    .filter(r => r.pts > pts).sort((a,b) => a.pts - b.pts)[0];
+                const headerBar = document.createElement('div');
+                headerBar.style.cssText = 'background:linear-gradient(135deg,#0f172a,#1e293b); border-radius:14px; padding:18px 20px; margin-bottom:24px; color:white;';
+                headerBar.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px;">Your Points</span>
+                        <span style="font-size:22px; font-weight:800; color:#38bdf8;">${pts} pts</span>
+                    </div>
+                    ${nextLocked ? `
+                    <div style="font-size:12px; color:#94a3b8; margin-bottom:6px;">Next unlock: <b style="color:white;">${nextLocked.label}</b> at ${nextLocked.pts} pts</div>
+                    <div style="background:#334155; border-radius:99px; height:6px; overflow:hidden;">
+                        <div style="background:linear-gradient(90deg,#38bdf8,#0ea5e9); height:100%; width:${Math.min(100, Math.round(pts/nextLocked.pts*100))}%; border-radius:99px; transition:width .5s;"></div>
+                    </div>` : '<div style="color:#38bdf8; font-weight:700;">🎉 All rewards unlocked!</div>'}`;
+                feed.insertBefore(headerBar, feed.firstChild);
+            });
+        }
+
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -2315,9 +2563,14 @@
                 document.getElementById('updatesTab').classList.add('active');
                 navItems[5].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Updates";
+            } else if (tab === 'rewards') {
+                document.getElementById('rewardsTab').classList.add('active');
+                navItems[5].classList.add('active');
+                document.getElementById('pageTitle').innerText = "Rewards";
+                loadRewards();
             } else if (tab === 'reliable-news') {
                 document.getElementById('reliable-newsTab').classList.add('active');
-                navItems[6].classList.add('active');
+                navItems[7].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Reliable News";
                 document.getElementById('mob-news')?.classList.add('active');
                 loadNews();
