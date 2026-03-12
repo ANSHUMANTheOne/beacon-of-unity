@@ -2114,12 +2114,11 @@
         }
 
         function loadActiveChats() {
-            onSnapshot(query(collection(db, "chats")), (snapshot) => {
+            onSnapshot(query(collection(db, "chats"), where("participants", "array-contains", auth.currentUser.uid)), (snapshot) => {
                 const list = document.getElementById('activeChatsList');
 
                 snapshot.docChanges().forEach((change) => {
                     const chatId = change.doc.id;
-                    if (!chatId.includes(auth.currentUser.uid)) return;
 
                     if (change.type === 'removed') {
                         const el = document.getElementById(`item-${chatId}`);
@@ -2143,11 +2142,22 @@
                     const parts = chatId.split('_');
                     const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
 
-                    // if element already rendered, update glow immediately without waiting
+                    // if element already rendered, update glow + NEW badge immediately without waiting
                     const existing = document.getElementById(`item-${chatId}`);
                     if (existing) {
                         const hasUnread = chatData[`unread_${auth.currentUser.uid}`] === true;
                         existing.className = 'chat-list-item' + (hasUnread ? ' chat-unread' : '');
+                        // add or remove the NEW badge instantly
+                        const existingBadge = existing.querySelector('span[style*="ef4444"]');
+                        if (hasUnread && !existingBadge) {
+                            const badgeSpan = document.createElement('span');
+                            badgeSpan.setAttribute('style', 'background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;');
+                            badgeSpan.textContent = 'NEW';
+                            const tagRow = existing.querySelector('div[style*="align-items:center"]');
+                            if (tagRow) tagRow.appendChild(badgeSpan);
+                        } else if (!hasUnread && existingBadge) {
+                            existingBadge.remove();
+                        }
                         const anyUnread = list.querySelector('.chat-unread');
                         const mobIcon = document.getElementById('mobChatsIcon');
                         if (mobIcon) mobIcon.innerText = anyUnread ? '🔴' : '💬';
