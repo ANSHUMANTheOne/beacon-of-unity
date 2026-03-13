@@ -711,15 +711,27 @@
         @media (max-width: 768px) {
             body { display: block; }
             .sidebar { display: none; }
-            .main-content { margin-left:0; width:100%; padding:16px 14px 90px; box-sizing:border-box; }
+            /* ── Content padding: bottom = tab bar (66px) + safe-area + buffer ── */
+            .main-content {
+                margin-left: 0; width: 100%;
+                padding: 16px 14px calc(80px + env(safe-area-inset-bottom, 0px));
+                box-sizing: border-box;
+            }
             .header { margin-bottom:16px; }
             .header h1 { font-size:20px; }
             .header > button { padding:7px 12px; font-size:12px; }
             .content-grid { grid-template-columns:1fr; gap:0; }
             .card { padding:16px; border-radius:12px; margin-bottom:14px; }
             .content-grid > div:last-child { display:none; }
-            .fab { bottom:76px; right:18px; width:52px; height:52px; font-size:26px; }
-            #settingsBtn { bottom:140px; right:18px; }
+            /* FAB clears the tab bar + safe area */
+            .fab {
+                bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+                right: 18px; width: 52px; height: 52px; font-size: 26px;
+            }
+            #settingsBtn {
+                bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+                right: 18px;
+            }
             #chatPopup { bottom:0 !important; right:0 !important; width:100% !important; height:100% !important; border-radius:0 !important; box-shadow:none !important; z-index:2500 !important; }
             .modal-content { width:94% !important; padding:20px !important; border-radius:16px !important; box-sizing:border-box; }
             #reportModal .modal-content { max-height:92vh; overflow-y:auto; }
@@ -730,119 +742,140 @@
             .hovername .hovercard { bottom:auto; top:130%; white-space:normal; min-width:150px; }
             #quoteText { font-size:17px; }
 
+            /* ── Frosted glass tab bar ── */
             #mobileTabBar {
-                display: flex !important;
+                display: block !important;
                 position: fixed;
                 bottom: 0; left: 0; right: 0;
-                height: 62px;
-                background: #0f172a;
-                border-top: 1px solid #1e293b;
-                box-shadow: 0 -4px 20px rgba(0,0,0,.2);
+                /* Frosted glass: semi-transparent navy + blur */
+                background: rgba(10, 18, 35, 0.72);
+                backdrop-filter: saturate(180%) blur(22px);
+                -webkit-backdrop-filter: saturate(180%) blur(22px);
+                /* Subtle top border as a light refraction line */
+                border-top: 1px solid rgba(56, 189, 248, 0.12);
+                box-shadow: 0 -1px 0 rgba(255,255,255,.04), 0 -8px 32px rgba(0,0,0,.35);
                 z-index: 1200;
-                justify-content: space-around;
-                align-items: stretch;
-                padding-bottom: env(safe-area-inset-bottom);
+                padding-bottom: env(safe-area-inset-bottom, 0px);
             }
+            /* Scrollable inner row */
+            #mobTabScroll {
+                display: flex;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scroll-behavior: smooth;
+                scrollbar-width: none;
+                height: 62px;
+                align-items: stretch;
+                padding: 0 6px;
+                gap: 2px;
+            }
+            #mobTabScroll::-webkit-scrollbar { display: none; }
+            /* Frosted edge fade hints */
+            #mobileTabBar::before, #mobileTabBar::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: env(safe-area-inset-bottom, 0);
+                width: 28px;
+                pointer-events: none;
+                z-index: 2;
+            }
+            #mobileTabBar::before { left: 0;  background: linear-gradient(to right, rgba(10,18,35,.9) 20%, transparent); }
+            #mobileTabBar::after  { right: 0; background: linear-gradient(to left,  rgba(10,18,35,.9) 20%, transparent); }
+
             .mob-tab {
-                flex: 1; display: flex; flex-direction: column;
+                flex: 0 0 auto;
+                display: flex; flex-direction: column;
                 align-items: center; justify-content: center;
-                cursor: pointer; color: #64748b;
-                font-size: 9px; font-weight: 600; gap: 3px;
-                border: none; background: none;
-                text-transform: uppercase; letter-spacing: .3px;
+                min-width: 66px;
+                padding: 0 10px;
+                margin: 5px 0;
+                border-radius: 12px;
+                cursor: pointer; color: rgba(148,163,184,.85);
+                font-size: 9.5px; font-weight: 600; gap: 4px;
+                border: none; background: transparent;
+                text-transform: uppercase; letter-spacing: .4px;
+                white-space: nowrap;
                 -webkit-tap-highlight-color: transparent;
-                transition: color .15s;
+                transition: color .15s, background .15s;
                 position: relative;
             }
-            .mob-tab .mob-icon { font-size: 19px; line-height: 1; transition: transform .18s, filter .18s; }
-            .mob-tab.active { color: #38bdf8; }
-            .mob-tab.active .mob-icon {
-                transform: translateY(-2px) scale(1.12);
-                filter: drop-shadow(0 0 5px rgba(56,189,248,.6));
+            .mob-tab .mob-icon {
+                font-size: 20px; line-height: 1;
+                transition: transform .18s, filter .18s;
             }
-            /* active pip — new, understated */
+            .mob-tab.active {
+                color: #38bdf8;
+                background: rgba(56,189,248,.12);
+            }
+            .mob-tab.active .mob-icon {
+                transform: translateY(-2px) scale(1.14);
+                filter: drop-shadow(0 0 6px rgba(56,189,248,.7));
+            }
             .mob-tab.active::after {
                 content: '';
                 position: absolute;
-                bottom: 7px;
-                width: 16px; height: 3px;
+                bottom: 5px;
+                width: 18px; height: 3px;
                 background: #38bdf8;
                 border-radius: 99px;
+                box-shadow: 0 0 6px rgba(56,189,248,.6);
             }
+            .mob-tab:active { background: rgba(56,189,248,.07); transform: scale(.95); }
 
-            body.dark #mobileTabBar { background: #020617; border-color: #0f172a; }
-            body.dark .mob-tab { color: #475569; }
-            body.dark .mob-tab.active { color: #38bdf8; }
-
-            .mob-more-btn {
-                display: flex; flex-direction: column; align-items: center; justify-content: center;
-                gap: 6px; padding: 14px 6px; border-radius: 14px;
-                background: #1e293b; border: 1px solid #334155;
-                color: #cbd5e1; font-size: 11px; font-weight: 600;
-                cursor: pointer; text-transform: uppercase; letter-spacing: .3px;
-                -webkit-tap-highlight-color: transparent;
-                transition: background .15s, color .15s, transform .1s;
+            /* Dark mode — deepen the frost */
+            body.dark #mobileTabBar {
+                background: rgba(2, 6, 23, 0.78);
+                border-color: rgba(56,189,248,.08);
             }
-            .mob-more-btn span { font-size: 24px; line-height: 1; }
-            .mob-more-btn:active { transform: scale(.94); background: #0f172a; }
-            .mob-more-btn.active-more {
-                background: rgba(56,189,248,.15);
-                border-color: #38bdf8;
-                color: #38bdf8;
-            }
-            #mob-more.active { color: #38bdf8; }
+            body.dark #mobileTabBar::before { background: linear-gradient(to right, rgba(2,6,23,.92) 20%, transparent); }
+            body.dark #mobileTabBar::after  { background: linear-gradient(to left,  rgba(2,6,23,.92) 20%, transparent); }
+            body.dark .mob-tab { color: rgba(71,85,105,.9); }
+            body.dark .mob-tab.active { color: #38bdf8; background: rgba(56,189,248,.1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- ── Mobile Bottom Tab Bar ── -->
+    <!-- ── Mobile Bottom Tab Bar (scrollable) ── -->
     <nav id="mobileTabBar">
-        <button class="mob-tab active" onclick="switchTab('community')" id="mob-community">
-            <span class="mob-icon">✨</span>Hub
-        </button>
-        <button class="mob-tab" onclick="switchTab('lostfound')" id="mob-lostfound">
-            <span class="mob-icon">🔍</span>L&amp;F
-        </button>
-        <button class="mob-tab" onclick="switchTab('leaderboard')" id="mob-leaderboard">
-            <span class="mob-icon">🏆</span>Ranks
-        </button>
-        <button class="mob-tab" onclick="switchTab('chats-mobile')" id="mob-chats">
-            <span class="mob-icon" id="mobChatsIcon">💬</span>Chats
-        </button>
-        <button class="mob-tab" onclick="openProfileModal()" id="mob-profile">
-            <span class="mob-icon">👤</span>Profile
-        </button>
-        <button class="mob-tab" onclick="toggleMobMore()" id="mob-more">
-            <span class="mob-icon">⋯</span>More
-        </button>
-    </nav>
-
-    <!-- ── Mobile "More" Bottom Sheet ── -->
-    <div id="mobMoreOverlay" onclick="closeMobMore()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:2900;"></div>
-    <div id="mobMoreSheet" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#0f172a; border-radius:20px 20px 0 0; z-index:3000; padding:16px 12px calc(16px + env(safe-area-inset-bottom)); box-shadow:0 -8px 40px rgba(0,0,0,.4); transform:translateY(100%); transition:transform .28s cubic-bezier(.32,1,.25,1);">
-        <div style="width:36px; height:4px; background:#334155; border-radius:99px; margin:0 auto 18px;"></div>
-        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px;">
-            <button class="mob-more-btn" onclick="mobMoreGo('reliable-news','mob-news-more')" id="mob-news-more">
-                <span>📰</span>News
+        <div id="mobTabScroll">
+            <button class="mob-tab active" onclick="switchTab('community')" id="mob-community">
+                <span class="mob-icon">✨</span>Hub
             </button>
-            <button class="mob-more-btn" onclick="mobMoreGo('volunteer-opps','mob-volopps-more')" id="mob-volopps-more">
-                <span>🤝</span>Vol. Opps
+            <button class="mob-tab" onclick="switchTab('lostfound')" id="mob-lostfound">
+                <span class="mob-icon">🔍</span>Lost &amp; Found
             </button>
-            <button class="mob-more-btn" onclick="mobMoreGo('updates','mob-updates-more')" id="mob-updates-more">
-                <span>📢</span>Updates
+            <button class="mob-tab" onclick="switchTab('leaderboard')" id="mob-leaderboard">
+                <span class="mob-icon">🏆</span>Leaderboard
             </button>
-            <button class="mob-more-btn" onclick="mobMoreGo('thankyou','mob-thankyou-more')" id="mob-thankyou-more">
-                <span>💝</span>Thank You
+            <button class="mob-tab" onclick="switchTab('chats-mobile')" id="mob-chats">
+                <span class="mob-icon" id="mobChatsIcon">💬</span>Chats
             </button>
-            <button class="mob-more-btn" onclick="mobMoreGo('rewards','mob-rewards-more')" id="mob-rewards-more">
-                <span>🎁</span>Rewards
+            <button class="mob-tab" onclick="openProfileModal()" id="mob-profile">
+                <span class="mob-icon">👤</span>Profile
             </button>
-            <button class="mob-more-btn" onclick="closeMobMore(); toggleNotifDrawer();" id="mob-notifs-more">
-                <span>🔔</span>Notifs
+            <button class="mob-tab" onclick="switchTab('reliable-news')" id="mob-news">
+                <span class="mob-icon">📰</span>News
+            </button>
+            <button class="mob-tab" onclick="switchTab('volunteer-opps')" id="mob-volopps">
+                <span class="mob-icon">🤝</span>Vol. Opps
+            </button>
+            <button class="mob-tab" onclick="switchTab('updates')" id="mob-updates">
+                <span class="mob-icon">📢</span>Updates
+            </button>
+            <button class="mob-tab" onclick="switchTab('thankyou')" id="mob-thankyou">
+                <span class="mob-icon">💝</span>Thank You
+            </button>
+            <button class="mob-tab" onclick="switchTab('rewards')" id="mob-rewards">
+                <span class="mob-icon">🎁</span>Rewards
+            </button>
+            <button class="mob-tab" onclick="toggleNotifDrawer()" id="mob-notifs">
+                <span class="mob-icon">🔔</span>Notifications
             </button>
         </div>
-    </div>
+    </nav>
 
     <div id="_gtHost" style="display:none;position:absolute;"></div>
     <div id="quoteOverlay">
@@ -2940,34 +2973,7 @@
             o.style.display = open ? 'none' : 'block';
         };
 
-        /* ── Mobile More Sheet ── */
-        window.toggleMobMore = () => {
-            const sheet = document.getElementById('mobMoreSheet');
-            const overlay = document.getElementById('mobMoreOverlay');
-            const open = sheet.style.display === 'flex';
-            if (open) { closeMobMore(); return; }
-            sheet.style.display = 'flex';
-            sheet.style.flexDirection = 'column';
-            overlay.style.display = 'block';
-            requestAnimationFrame(() => { sheet.style.transform = 'translateY(0)'; });
-        };
-        window.closeMobMore = () => {
-            const sheet = document.getElementById('mobMoreSheet');
-            const overlay = document.getElementById('mobMoreOverlay');
-            sheet.style.transform = 'translateY(100%)';
-            overlay.style.display = 'none';
-            setTimeout(() => { sheet.style.display = 'none'; }, 280);
-        };
-        window.mobMoreGo = (tabId, btnId) => {
-            closeMobMore();
-            // deactivate all main mob tabs
-            document.querySelectorAll('.mob-tab').forEach(b => b.classList.remove('active'));
-            document.getElementById('mob-more').classList.add('active');
-            // deactivate other more btns
-            document.querySelectorAll('.mob-more-btn').forEach(b => b.classList.remove('active-more'));
-            document.getElementById(btnId)?.classList.add('active-more');
-            switchTab(tabId);
-        };
+        /* ── Mobile More Sheet removed — using scrollable tab bar ── */
 
         window.markAllNotifsRead = async () => {
             const uid = auth.currentUser?.uid;
@@ -3154,66 +3160,65 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.mob-more-btn').forEach(b => b.classList.remove('active-more'));
             const navItems = document.querySelectorAll('.nav-item');
-            // Scroll main content area to top on tab switch
             const mainContent = document.querySelector('.main-content');
             if (mainContent) mainContent.scrollTop = 0;
+
+            // Helper: activate a mob tab and scroll it into view
+            const mobActivate = (id) => {
+                const el = document.getElementById(id);
+                if (el) { el.classList.add('active'); el.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' }); }
+            };
 
             if (tab === 'community') {
                 document.getElementById('communityTab').classList.add('active');
                 navItems[0].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Community Hub";
-                document.getElementById('mob-community')?.classList.add('active');
+                mobActivate('mob-community');
             } else if (tab === 'lostfound') {
                 document.getElementById('lostFoundTab').classList.add('active');
                 navItems[1].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Lost and Found";
-                document.getElementById('mob-lostfound')?.classList.add('active');
+                mobActivate('mob-lostfound');
             } else if (tab === 'leaderboard') {
                 document.getElementById('leaderboardTab').classList.add('active');
                 navItems[2].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Leaderboard";
-                document.getElementById('mob-leaderboard')?.classList.add('active');
+                mobActivate('mob-leaderboard');
                 loadLeaderboard();
             } else if (tab === 'volunteer-opps') {
                 document.getElementById('volunteer-oppsTab').classList.add('active');
                 navItems[3].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Volunteer Opportunities";
-                document.getElementById('mob-more')?.classList.add('active');
-                document.getElementById('mob-volopps-more')?.classList.add('active-more');
+                mobActivate('mob-volopps');
                 loadVolOpps();
             } else if (tab === 'updates') {
                 document.getElementById('updatesTab').classList.add('active');
                 navItems[5].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Updates";
-                document.getElementById('mob-more')?.classList.add('active');
-                document.getElementById('mob-updates-more')?.classList.add('active-more');
+                mobActivate('mob-updates');
             } else if (tab === 'thankyou') {
                 document.getElementById('thankyouTab').classList.add('active');
                 navItems[6].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Thank You Wall";
-                document.getElementById('mob-more')?.classList.add('active');
-                document.getElementById('mob-thankyou-more')?.classList.add('active-more');
+                mobActivate('mob-thankyou');
                 loadThankYouWall();
             } else if (tab === 'rewards') {
                 document.getElementById('rewardsTab').classList.add('active');
                 navItems[7].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Rewards";
-                document.getElementById('mob-more')?.classList.add('active');
-                document.getElementById('mob-rewards-more')?.classList.add('active-more');
+                mobActivate('mob-rewards');
                 loadRewards();
             } else if (tab === 'reliable-news') {
                 document.getElementById('reliable-newsTab').classList.add('active');
                 navItems[8].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Reliable News";
-                document.getElementById('mob-more')?.classList.add('active');
-                document.getElementById('mob-news-more')?.classList.add('active-more');
+                mobActivate('mob-news');
                 loadNews();
             } else if (tab === 'chats-mobile') {
                 document.getElementById('chats-mobileTab').classList.add('active');
                 document.getElementById('pageTitle').innerText = "Conversations";
-                document.getElementById('mob-chats')?.classList.add('active');
+                mobActivate('mob-chats');
                 syncMobileChats();
             }
         };
