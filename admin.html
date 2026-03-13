@@ -144,7 +144,7 @@
         <div class="auth-logo">🛡️</div>
         <h2>Admin Access Only</h2>
         <p>Sign in with your authorised admin Google/email account</p>
-        <button class="auth-btn" id="signInBtn" onclick="adminSignIn()">
+        <button class="auth-btn" id="signInBtn">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;vertical-align:middle;margin-right:8px;">
             Sign in with Google
         </button>
@@ -278,7 +278,7 @@
         var errEl = document.getElementById('authError');
         var btn   = document.getElementById('signInBtn');
         errEl.innerText = '';
-        btn.disabled = true; btn.innerText = 'Signing in…';
+        btn.disabled = true; btn.innerHTML = 'Signing in…';
 
         var provider = new firebase.auth.GoogleAuthProvider();
         auth.signInWithPopup(provider)
@@ -657,6 +657,16 @@
             .catch(function(e) { alert('Error deleting: ' + e.message); btn.disabled = false; });
     }
 
-    // ═══════════════════════════════════════════════════════════════
+        // ═══════════════════════════════════════════════════════════════
     //  LIGHTBOX
-    // ═══════════════════════════════════════════════════�
+    // ═══════════════════════════════════════════════════════════════
+    function openLightbox(imgEl) {
+        document.getElementById('lightboxImg').src = imgEl.src;
+        document.getElementById('imgLightbox').classList.add('open');
+    }
+
+    // Attach sign-in button click via JS (more reliable than inline onclick)
+    document.getElementById('signInBtn').addEventListener('click', adminSignIn);
+</script>
+</body>
+</html>
