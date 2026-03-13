@@ -9,8 +9,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>(function(){ emailjs.init("QhpmiLS1azGRS4w23"); })();</script>
 
-    <!-- Firebase compat (loaded in head so always ready before body script) -->
+    <!--
+        FIX #1 — firebase-auth-compat.js MUST be loaded.
+        Without it, firebase.auth() doesn't exist and Firestore
+        sees request.auth = null on every call, so ALL reads and
+        writes are blocked by security rules — silently.
+    -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
@@ -26,7 +32,8 @@
         .auth-box input { width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; margin-bottom:12px; outline:none; font-family:inherit; }
         .auth-box input:focus { border-color:#1a73e8; }
         .auth-btn { width:100%; padding:12px; background:#1a73e8; color:white; border:none; border-radius:8px; font-weight:700; font-size:15px; cursor:pointer; transition:0.2s; font-family:inherit; }
-        .auth-btn:hover { background:#1557b0; }
+        .auth-btn:hover   { background:#1557b0; }
+        .auth-btn:disabled { background:#94a3b8; cursor:not-allowed; }
         #authError { color:#ef4444; font-size:13px; margin-top:10px; min-height:18px; }
 
         /* ACCESS DENIED */
@@ -48,7 +55,7 @@
         .sec-tab { padding:10px 22px; border:2px solid #e2e8f0; border-radius:8px; background:white; font-weight:600; font-size:14px; cursor:pointer; transition:0.2s; color:#475569; font-family:inherit; }
         .sec-tab:hover  { border-color:#1a73e8; color:#1a73e8; }
         .sec-tab.active { background:#1a73e8; color:white; border-color:#1a73e8; }
-        .tab-badge { background:#ef4444; color:white; font-size:10px; font-weight:700; padding:2px 6px; border-radius:99px; margin-left:6px; animation:pulseBadge 1.5s infinite; }
+        .tab-badge { background:#ef4444; color:white; font-size:10px; font-weight:700; padding:2px 6px; border-radius:99px; margin-left:6px; animation:pulseBadge 1.5s infinite; vertical-align:middle; }
         @keyframes pulseBadge { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
         /* PANELS */
@@ -116,6 +123,14 @@
         .empty-state .es-icon { font-size:48px; margin-bottom:12px; }
         .empty-state p { font-size:14px; margin:0; }
 
+        /* THANK YOU WALL */
+        .ty-item { background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px; padding:16px; margin-bottom:10px; }
+        .ty-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px; }
+        .ty-edit-btn   { background:#e0f2fe; color:#0369a1; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; font-family:inherit; }
+        .ty-edit-btn:hover { background:#bae6fd; }
+        .ty-delete-btn { background:#fee2e2; color:#991b1b; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; margin-left:6px; font-family:inherit; }
+        .ty-delete-btn:hover { background:#fecaca; }
+
         /* LIGHTBOX */
         #imgLightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:99999; align-items:center; justify-content:center; cursor:pointer; }
         #imgLightbox.open { display:flex; }
@@ -134,10 +149,10 @@
     <div class="auth-box">
         <div class="auth-logo">🛡️</div>
         <h2>Admin Access Only</h2>
-        <p>Sign in with your authorised admin account</p>
+        <p>Sign in with your authorised admin Google/email account</p>
         <input type="email"    id="adminEmail"    placeholder="Admin email" autocomplete="email">
         <input type="password" id="adminPassword" placeholder="Password">
-        <button class="auth-btn" onclick="adminSignIn()">Sign In</button>
+        <button class="auth-btn" id="signInBtn" onclick="adminSignIn()">Sign In</button>
         <div id="authError"></div>
     </div>
 </div>
@@ -164,8 +179,10 @@
     <div class="section-tabs">
         <button class="sec-tab active" id="tab-verification" onclick="showSection('verification')">📋 Verification Queue</button>
         <button class="sec-tab"        id="tab-reports"      onclick="showSection('reports')">🚨 User Reports</button>
+        <button class="sec-tab"        id="tab-thankyou"     onclick="showSection('thankyou')">⭐ Thank You Wall</button>
     </div>
 
+    <!-- VERIFICATION -->
     <div class="section-panel active container" id="panel-verification">
         <h2>Resident Verification Queue</h2>
         <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (rashmibiswa2008@gmail.com)</button>
@@ -175,213 +192,313 @@
         </table>
     </div>
 
+    <!-- REPORTS -->
     <div class="section-panel container" id="panel-reports">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
             <div>
                 <h2 style="margin-bottom:4px;">🚨 Reported Users</h2>
                 <p style="color:#64748b;font-size:13px;margin:0;" id="reportsSubtitle">Loading…</p>
             </div>
-            <button onclick="loadReports()" class="btn" style="background:#f1f5f9;color:#475569;font-size:13px;">🔄 Refresh</button>
+            <button onclick="loadReports(true)" class="btn" style="background:#f1f5f9;color:#475569;font-size:13px;">🔄 Refresh</button>
         </div>
         <div id="reportsFeed">
             <div class="empty-state"><div class="es-icon">⏳</div><p>Loading reports…</p></div>
         </div>
     </div>
+
+    <!-- THANK YOU WALL -->
+    <div class="section-panel container" id="panel-thankyou">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+            <div>
+                <h2 style="margin-bottom:4px;">⭐ Thank You Wall</h2>
+                <p style="color:#64748b;font-size:13px;margin:0;" id="tySubtitle">Loading…</p>
+            </div>
+            <button onclick="loadThankYouWall()" class="btn" style="background:#f1f5f9;color:#475569;font-size:13px;">🔄 Refresh</button>
+        </div>
+        <div id="tyFeed">
+            <div class="empty-state"><div class="es-icon">⏳</div><p>Loading…</p></div>
+        </div>
+    </div>
 </div>
 
 <script>
-    // ── Firebase init ──
-    if (!firebase.apps.length) firebase.initializeApp({
-        apiKey:            "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
-        authDomain:        "beaconofunityofficial.firebaseapp.com",
-        projectId:         "beaconofunityofficial",
-        storageBucket:     "beaconofunityofficial.firebasestorage.app",
-        messagingSenderId: "37918398882",
-        appId:             "1:37918398882:web:205161bb147393f4defafb"
-    });
-    var db = firebase.firestore();
-    // Also add a visible error catcher so we can see what's breaking
-    window.onerror = function(msg, src, line) {
-        document.getElementById('authError').innerText = 'JS Error: ' + msg + ' (line ' + line + ')';
-    };
+    // ═══════════════════════════════════════════════════════════════
+    //  FIREBASE INIT
+    // ═══════════════════════════════════════════════════════════════
+    if (!firebase.apps.length) {
+        firebase.initializeApp({
+            apiKey:            "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
+            authDomain:        "beaconofunityofficial.firebaseapp.com",
+            projectId:         "beaconofunityofficial",
+            storageBucket:     "beaconofunityofficial.firebasestorage.app",
+            messagingSenderId: "37918398882",
+            appId:             "1:37918398882:web:205161bb147393f4defafb"
+        });
+    }
 
-    // ── Admin credentials ──
-    var ADMINS = {
-        'luckyansh.t@gmail.com':          'Aayansh_2009',
-        'beaconofunityofficial@gmail.com': 'Aayansh_2009'
-    };
+    var auth = firebase.auth();
+    var db   = firebase.firestore();
 
-    // ── Auth helpers ──
+    // Only these two emails are ever shown the admin panel
+    var ADMIN_EMAILS = ['luckyansh.t@gmail.com', 'beaconofunityofficial@gmail.com'];
+
+    // ═══════════════════════════════════════════════════════════════
+    //  AUTH  — uses real Firebase Auth so Firestore security rules
+    //          receive a valid request.auth token on every call.
+    //          FIX: removed hardcoded plaintext passwords and fake
+    //          sessionStorage auth which left Firestore unauthenticated.
+    // ═══════════════════════════════════════════════════════════════
     function showGate() {
         document.getElementById('authGate').style.display     = 'flex';
         document.getElementById('accessDenied').style.display = 'none';
         document.getElementById('adminContent').style.display = 'none';
+        var btn = document.getElementById('signInBtn');
+        btn.disabled  = false;
+        btn.innerText = 'Sign In';
     }
+
     function showAdmin(email) {
         document.getElementById('authGate').style.display     = 'none';
         document.getElementById('accessDenied').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
         document.getElementById('adminEmailDisplay').innerText = 'Signed in as ' + email;
+        loadData();
+        loadReports(false);
     }
+
+    function showDenied(msg) {
+        document.getElementById('authGate').style.display     = 'none';
+        document.getElementById('accessDenied').style.display = 'flex';
+        document.getElementById('deniedMsg').innerText        = msg || 'This account is not authorised.';
+        // Sign out immediately so the non-admin token doesn't linger
+        auth.signOut();
+    }
+
+    // Single source of truth — runs on every page load and after every sign-in/out
+    auth.onAuthStateChanged(function(user) {
+        if (!user) {
+            showGate();
+            return;
+        }
+        if (ADMIN_EMAILS.indexOf(user.email) === -1) {
+            showDenied('Account ' + user.email + ' is not an authorised admin.');
+            return;
+        }
+        showAdmin(user.email);
+    });
 
     function adminSignIn() {
         var email = document.getElementById('adminEmail').value.trim().toLowerCase();
         var pass  = document.getElementById('adminPassword').value;
         var errEl = document.getElementById('authError');
+        var btn   = document.getElementById('signInBtn');
         errEl.innerText = '';
-        if (!email || !pass)               { errEl.innerText = 'Please enter your email and password.'; return; }
-        if (!ADMINS.hasOwnProperty(email)) { errEl.innerText = 'This email is not authorised.'; return; }
-        if (ADMINS[email] !== pass)         { errEl.innerText = 'Incorrect password.'; return; }
-        sessionStorage.setItem('adminEmail', email);
-        showAdmin(email);
-        loadData();
-        loadReports();
+
+        if (!email || !pass) {
+            errEl.innerText = 'Please enter your email and password.';
+            return;
+        }
+        if (ADMIN_EMAILS.indexOf(email) === -1) {
+            errEl.innerText = 'This email address is not an admin account.';
+            return;
+        }
+
+        btn.disabled  = true;
+        btn.innerText = 'Signing in…';
+
+        auth.signInWithEmailAndPassword(email, pass)
+            .catch(function(e) {
+                var msg = (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found')
+                    ? 'Incorrect email or password.'
+                    : e.message;
+                errEl.innerText = msg;
+                btn.disabled  = false;
+                btn.innerText = 'Sign In';
+            });
+        // onAuthStateChanged handles the success case
     }
 
     function adminSignOut() {
-        sessionStorage.removeItem('adminEmail');
+        if (reportsUnsub) { reportsUnsub(); reportsUnsub = null; }
+        auth.signOut();
         document.getElementById('adminEmail').value    = '';
         document.getElementById('adminPassword').value = '';
-        document.getElementById('authError').innerText = '';
-        showGate();
     }
 
     document.getElementById('adminPassword').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') adminSignIn();
     });
 
-    // Session restore on page load
-    (function() {
-        var saved = sessionStorage.getItem('adminEmail');
-        if (saved && ADMINS[saved]) {
-            showAdmin(saved);
-            loadData();
-            loadReports();
-        } else {
-            showGate();
-        }
-    })();
-
-    // ── Tab switching ──
+    // ═══════════════════════════════════════════════════════════════
+    //  TABS
+    // ═══════════════════════════════════════════════════════════════
     function showSection(name) {
         document.querySelectorAll('.section-panel').forEach(function(p) { p.classList.remove('active'); });
         document.querySelectorAll('.sec-tab').forEach(function(t) { t.classList.remove('active'); });
         document.getElementById('panel-' + name).classList.add('active');
         document.getElementById('tab-' + name).classList.add('active');
+        if (name === 'thankyou') loadThankYouWall();
     }
 
-    // ════════════════════════════════════════
-    // VERIFICATION QUEUE
-    // ════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════
+    //  VERIFICATION QUEUE
+    // ═══════════════════════════════════════════════════════════════
     function resetTester() {
         var testerEmail = "rashmibiswa2008@gmail.com";
-        db.collection("users").where("email","==",testerEmail).get()
+        db.collection("users").where("email", "==", testerEmail).get()
             .then(function(snap) {
                 if (snap.empty) { alert("Tester account not found."); return; }
-                return snap.docs[0].ref.update({ status:"none", hasPreviousDenial:false })
-                    .then(function() { return db.collection("id_reviews").where("email","==",testerEmail).get(); })
-                    .then(function(rs) { return Promise.all(rs.docs.map(function(d){ return d.ref.delete(); })); })
+                return snap.docs[0].ref.update({ status: "none", hasPreviousDenial: false })
+                    .then(function() { return db.collection("id_reviews").where("email", "==", testerEmail).get(); })
+                    .then(function(rs) { return Promise.all(rs.docs.map(function(d) { return d.ref.delete(); })); })
                     .then(function() { alert("✅ Tester Reset!"); loadData(); });
             })
-            .catch(function() { alert("Reset Error."); });
+            .catch(function(e) { alert("Reset Error: " + e.message); });
     }
 
     function processUser(docId, userEmail, action, userId, fullName) {
         var userRef = db.collection("users").doc(userId);
         if (action === 'approve') {
-            if (!userEmail || userEmail === "undefined") { alert("Invalid email."); return; }
-            emailjs.send("service_w3ai9pm","template_zttw3uf",{ email:userEmail, to_email:userEmail, name:fullName||userEmail.split('@')[0] })
-                .then(function() { return userRef.update({ status:"approved", fullName:fullName, approvedAt:new Date().toISOString() }); })
+            if (!userEmail || userEmail === "undefined") { alert("Invalid email address."); return; }
+            emailjs.send("service_w3ai9pm", "template_zttw3uf", {
+                    email: userEmail, to_email: userEmail,
+                    name:  fullName || userEmail.split('@')[0]
+                })
+                .then(function() {
+                    return userRef.update({ status: "approved", fullName: fullName, approvedAt: new Date().toISOString() });
+                })
                 .then(function() { return db.collection("id_reviews").doc(docId).delete(); })
-                .then(function() { alert("✅ Approved! Welcome email sent to "+userEmail); loadData(); })
-                .catch(function(e) { alert("Approval Error: "+(e.text||e.message)); });
+                .then(function() { alert("✅ Approved! Welcome email sent to " + userEmail); loadData(); })
+                .catch(function(e) { alert("Approval Error: " + (e.text || e.message)); });
         } else {
-            userRef.update({ status:"rejected", hasPreviousDenial:true })
+            userRef.update({ status: "rejected", hasPreviousDenial: true })
                 .then(function() { return db.collection("id_reviews").doc(docId).delete(); })
-                .then(function() { alert("User Denied."); loadData(); })
-                .catch(function() { alert("Error processing denial."); });
+                .then(function() { alert("User denied."); loadData(); })
+                .catch(function(e) { alert("Error processing denial: " + e.message); });
         }
     }
 
     function loadData() {
         var tbody = document.getElementById('tableBody');
-        tbody.innerHTML = "<tr><td colspan='4'>Searching...</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='4' style='color:#94a3b8;'>Loading…</td></tr>";
         db.collection("id_reviews").get()
             .then(function(snap) {
                 tbody.innerHTML = "";
-                if (snap.empty) { tbody.innerHTML = "<tr><td colspan='4'>No pending requests.</td></tr>"; return; }
+                if (snap.empty) {
+                    tbody.innerHTML = "<tr><td colspan='4' style='color:#94a3b8;text-align:center;padding:24px;'>No pending verification requests.</td></tr>";
+                    return;
+                }
                 snap.forEach(function(ds) {
-                    var d    = ds.data();
-                    var em   = d.email    || "Unknown Email";
-                    var fn   = d.fullName || "No Name Provided";
-                    var tag  = d.hasPreviousDenial
+                    var d   = ds.data();
+                    var em  = d.email    || "Unknown Email";
+                    var fn  = d.fullName || "No Name Provided";
+                    var tag = d.hasPreviousDenial
                         ? '<span class="badge badge-retry">Retrying</span>'
                         : '<span class="badge badge-new">New</span>';
                     tbody.innerHTML +=
                         '<tr>' +
-                        '<td style="font-weight:600;">'+fn+'</td>' +
-                        '<td>'+em+' '+tag+'</td>' +
-                        '<td><a href="'+d.idCardUrl+'" target="_blank" class="id-link">View ID</a></td>' +
+                        '<td style="font-weight:600;">' + fn + '</td>' +
+                        '<td>' + em + ' ' + tag + '</td>' +
+                        '<td><a href="' + d.idCardUrl + '" target="_blank" class="id-link">View ID ↗</a></td>' +
                         '<td>' +
-                          '<button onclick="processUser(\''+ds.id+'\',\''+em+'\',\'approve\',\''+d.userId+'\',\''+fn+'\')" class="btn btn-approve">Approve</button>' +
-                          '<button onclick="processUser(\''+ds.id+'\',\''+em+'\',\'deny\',\''+d.userId+'\',\''+fn+'\')" class="btn btn-deny">Deny</button>' +
+                          '<button onclick="processUser(\'' + ds.id + '\',\'' + em + '\',\'approve\',\'' + d.userId + '\',\'' + fn + '\')" class="btn btn-approve">Approve</button>' +
+                          '<button onclick="processUser(\'' + ds.id + '\',\'' + em + '\',\'deny\',\''    + d.userId + '\',\'' + fn + '\')" class="btn btn-deny">Deny</button>' +
                         '</td></tr>';
                 });
             })
-            .catch(function() { document.getElementById('tableBody').innerHTML = "<tr><td colspan='4'>Error loading data.</td></tr>"; });
+            .catch(function(e) {
+                tbody.innerHTML = "<tr><td colspan='4' style='color:#ef4444;'>Error loading queue: " + e.message + "</td></tr>";
+            });
     }
 
-    // ════════════════════════════════════════
-    // REPORTS
-    // ════════════════════════════════════════
-    var expandedUsers = {};
-    var reportsUnsub  = null;
+    // ═══════════════════════════════════════════════════════════════
+    //  REPORTS
+    //  FIX: uses onSnapshot so new reports appear in real-time.
+    //  FIX: pending count includes reports with no status field.
+    //  FIX: ban status fetched per-uid, not full collection scan.
+    //  FIX: toggleUser no longer restarts snapshot — only re-renders.
+    // ═══════════════════════════════════════════════════════════════
+    var expandedUsers  = {};
+    var reportsUnsub   = null;
+    var cachedGrouped  = {};   // keeps last snapshot data so toggleUser can re-render without refetching
 
-    function loadReports() {
-        if (reportsUnsub) { reportsUnsub(); reportsUnsub = null; }
+    function loadReports(forceRestart) {
+        // Only (re)start the snapshot when explicitly requested or on first load
+        if (forceRestart && reportsUnsub) { reportsUnsub(); reportsUnsub = null; }
+        if (reportsUnsub) return; // already listening
+
         document.getElementById('reportsFeed').innerHTML =
-            '<div class="empty-state"><div class="es-icon">⏳</div><p>Loading…</p></div>';
+            '<div class="empty-state"><div class="es-icon">⏳</div><p>Loading reports…</p></div>';
 
-        reportsUnsub = db.collection("reports").onSnapshot(function(snapshot) {
-            var grouped = {};
-            snapshot.forEach(function(ds) {
-                var d = ds.data(), uid = d.reportedUid;
-                if (!grouped[uid]) grouped[uid] = { name: d.reportedName||'Unknown User', reports:[], banned:false };
-                var r = {}; Object.assign(r, d); r.id = ds.id;
-                grouped[uid].reports.push(r);
+        reportsUnsub = db.collection("reports")
+            .orderBy("createdAt", "desc")
+            .onSnapshot(function(snapshot) {
+                // Group reports by reported user
+                var grouped = {};
+                snapshot.forEach(function(ds) {
+                    var d   = ds.data();
+                    var uid = d.reportedUid || 'unknown';
+                    if (!grouped[uid]) grouped[uid] = { name: d.reportedName || 'Unknown User', reports: [], banned: false };
+                    var r = Object.assign({}, d, { id: ds.id });
+                    grouped[uid].reports.push(r);
+                });
+
+                var uids = Object.keys(grouped);
+                if (uids.length === 0) {
+                    cachedGrouped = {};
+                    renderReports({});
+                    return;
+                }
+
+                // FIX: fetch only the specific UIDs we need, not all users
+                var validUids = uids.filter(function(u) { return u !== 'unknown'; });
+                var banFetches = validUids.map(function(uid) {
+                    return db.collection("users").doc(uid).get()
+                        .then(function(snap) {
+                            if (snap.exists && grouped[uid]) {
+                                grouped[uid].banned = snap.data().banned === true;
+                            }
+                        })
+                        .catch(function() {}); // non-fatal if a user doc is missing
+                });
+
+                Promise.all(banFetches).then(function() {
+                    cachedGrouped = grouped;
+                    renderReports(grouped);
+                });
+            },
+            function(err) {
+                document.getElementById('reportsFeed').innerHTML =
+                    '<div class="empty-state"><div class="es-icon">❌</div>' +
+                    '<p>Could not load reports: ' + err.message + '</p></div>';
             });
-            var uids = Object.keys(grouped);
-            if (uids.length === 0) { renderReports(grouped); return; }
-            db.collection("users").get().then(function(usnap) {
-                usnap.forEach(function(d) { if (grouped[d.id]) grouped[d.id].banned = d.data().banned === true; });
-                renderReports(grouped);
-            });
-        });
     }
 
     function renderReports(grouped) {
         var uids = Object.keys(grouped);
 
-        // Count truly pending reports
+        // FIX: count reports with no status field as pending too
         var totalPending = 0;
-        uids.forEach(function(u) {
-            grouped[u].reports.forEach(function(r) { if (r.status === 'pending') totalPending++; });
+        uids.forEach(function(uid) {
+            grouped[uid].reports.forEach(function(r) {
+                if (!r.status || r.status === 'pending') totalPending++;
+            });
         });
 
-        // Tab badge
-        document.getElementById('tab-reports').innerHTML = totalPending > 0
-            ? '🚨 User Reports <span class="tab-badge">'+totalPending+'</span>'
+        // Badge on tab
+        var tabEl = document.getElementById('tab-reports');
+        tabEl.innerHTML = totalPending > 0
+            ? '🚨 User Reports <span class="tab-badge">' + totalPending + '</span>'
             : '🚨 User Reports';
 
-        // Panel glow
+        // Glow on panel when there are pending reports
         var panel = document.getElementById('panel-reports');
         if (totalPending > 0) panel.classList.add('reports-glow');
-        else panel.classList.remove('reports-glow');
+        else                  panel.classList.remove('reports-glow');
 
-        // Subtitle
         document.getElementById('reportsSubtitle').innerText = uids.length === 0
             ? 'No reports on file.'
-            : uids.length+' user'+(uids.length!==1?'s':'')+' reported · '+totalPending+' pending review';
+            : uids.length + ' user' + (uids.length !== 1 ? 's' : '') + ' reported · ' + totalPending + ' pending review';
 
         var feed = document.getElementById('reportsFeed');
         feed.innerHTML = '';
@@ -391,82 +508,100 @@
             return;
         }
 
-        uids.sort(function(a,b){ return grouped[b].reports.length - grouped[a].reports.length; });
+        // Sort: most reports first
+        uids.sort(function(a, b) { return grouped[b].reports.length - grouped[a].reports.length; });
 
         uids.forEach(function(uid) {
-            var g            = grouped[uid];
-            var count        = g.reports.length;
-            var pendingCount = g.reports.filter(function(r){ return r.status==='pending'; }).length;
+            var g        = grouped[uid];
+            var count    = g.reports.length;
+            // FIX: treat missing status as pending
+            var pendingCount = g.reports.filter(function(r) { return !r.status || r.status === 'pending'; }).length;
             var isExpanded   = !!expandedUsers[uid];
             var isBanned     = g.banned;
-            var safeName     = g.name.replace(/'/g,"\\'");
+            var safeName     = g.name.replace(/'/g, "\\'");
 
-            // Summary card
+            // ── Summary card ──
             var card = document.createElement('div');
-            card.className = 'report-summary-card'+(isExpanded?' expanded':'');
-            card.setAttribute('onclick','toggleUser("'+uid+'")');
+            card.className = 'report-summary-card' + (isExpanded ? ' expanded' : '');
+            card.setAttribute('onclick', 'toggleUser("' + uid + '")');
             card.innerHTML =
                 '<div class="rsc-left">' +
-                  '<div class="rsc-avatar">'+g.name.charAt(0).toUpperCase()+'</div>' +
+                  '<div class="rsc-avatar">' + g.name.charAt(0).toUpperCase() + '</div>' +
                   '<div>' +
-                    '<div class="rsc-name">'+g.name+
-                      (isBanned?' <span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:99px;margin-left:8px;font-weight:700;">🔒 BANNED</span>':'')+
+                    '<div class="rsc-name">' + g.name +
+                      (isBanned
+                        ? ' <span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:99px;margin-left:8px;font-weight:700;">🔒 BANNED</span>'
+                        : '') +
                     '</div>' +
-                    '<div class="rsc-meta">'+count+' report'+(count!==1?'s':'')+' · UID: '+uid.slice(0,12)+'…</div>' +
+                    '<div class="rsc-meta">' + count + ' report' + (count !== 1 ? 's' : '') + ' · UID: ' + uid.slice(0, 12) + '…</div>' +
                   '</div>' +
                 '</div>' +
                 '<div style="display:flex;align-items:center;gap:10px;">' +
-                  (pendingCount>0
-                    ? '<div class="rsc-count'+(pendingCount>1?' multi':'')+'">'+pendingCount+' pending</div>'
+                  (pendingCount > 0
+                    ? '<div class="rsc-count' + (pendingCount > 1 ? ' multi' : '') + '">' + pendingCount + ' pending</div>'
                     : '<div style="font-size:11px;color:#22c55e;font-weight:600;">✅ All reviewed</div>') +
-                  '<span style="color:#94a3b8;font-size:16px;">'+(isExpanded?'▲':'▼')+'</span>' +
+                  '<span style="color:#94a3b8;font-size:16px;">' + (isExpanded ? '▲' : '▼') + '</span>' +
                 '</div>';
             feed.appendChild(card);
 
-            // Ban/Unban row
+            // ── Ban/Unban action row ──
             var ar = document.createElement('div');
-            ar.className = 'user-action-row'+(isExpanded?' open':'');
+            ar.className = 'user-action-row' + (isExpanded ? ' open' : '');
             ar.innerHTML = isBanned
                 ? '<span style="font-size:13px;color:#7f1d1d;">This user is currently banned.</span>' +
-                  '<button onclick="unbanUser(\''+uid+'\',\''+safeName+'\');event.stopPropagation();" class="btn btn-unban">✅ Unban User</button>'
+                  '<button onclick="unbanUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-unban">✅ Unban User</button>'
                 : '<span style="font-size:13px;color:#64748b;">Permanently ban this user from the platform?</span>' +
-                  '<button onclick="banUser(\''+uid+'\',\''+safeName+'\');event.stopPropagation();" class="btn btn-ban-user btn">🔒 Ban User</button>';
+                  '<button onclick="banUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-ban-user btn">🔒 Ban User</button>';
             feed.appendChild(ar);
 
-            // Report detail cards
+            // ── Individual report cards ──
             var details = document.createElement('div');
-            details.className = 'report-details'+(isExpanded?' open':'');
+            details.className = 'report-details' + (isExpanded ? ' open' : '');
 
-            var sorted = g.reports.slice().sort(function(a,b){
-                return (a.status==='pending'?-1:1)-(b.status==='pending'?-1:1);
+            // Pending first
+            var sorted = g.reports.slice().sort(function(a, b) {
+                var aPending = (!a.status || a.status === 'pending') ? 0 : 1;
+                var bPending = (!b.status || b.status === 'pending') ? 0 : 1;
+                return aPending - bPending;
             });
 
             sorted.forEach(function(r) {
                 var date = (r.createdAt && r.createdAt.toDate)
-                    ? r.createdAt.toDate().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})
+                    ? r.createdAt.toDate().toLocaleString('en-GB', {
+                          day: 'numeric', month: 'short', year: 'numeric',
+                          hour: '2-digit', minute: '2-digit'
+                      })
                     : 'Unknown date';
+
                 var imgHtml = r.imageData
-                    ? '<div class="report-img-wrap"><p style="font-size:11px;color:#64748b;margin:0 0 6px;">Attached evidence:</p>' +
-                      '<img src="'+r.imageData+'" alt="evidence" onclick="openLightbox(this);event.stopPropagation();"></div>'
-                    : '';
-                var statusHtml =
-                    r.status==='ignored' ? '<span class="pill-ignored">Ignored</span>' :
-                    r.status==='banned'  ? '<span class="pill-actioned">Actioned</span>' : '';
-                var actionsHtml = r.status==='pending'
-                    ? '<div class="report-actions">' +
-                      '<button onclick="ignoreReport(\''+r.id+'\');event.stopPropagation();" class="btn btn-ignore">👁 Ignore</button>' +
-                      '<button onclick="banUser(\''+uid+'\',\''+safeName+'\');event.stopPropagation();" class="btn btn-ban">🔒 Ban User</button>' +
+                    ? '<div class="report-img-wrap">' +
+                      '<p style="font-size:11px;color:#64748b;margin:0 0 6px;">📎 Attached evidence:</p>' +
+                      '<img src="' + r.imageData + '" alt="evidence" onclick="openLightbox(this);event.stopPropagation();">' +
                       '</div>'
                     : '';
+
+                var isPending = !r.status || r.status === 'pending';
+                var statusHtml =
+                    r.status === 'ignored' ? '<span class="pill-ignored">Ignored</span>' :
+                    r.status === 'banned'  ? '<span class="pill-actioned">Actioned</span>' : '';
+
+                var actionsHtml = isPending
+                    ? '<div class="report-actions">' +
+                      '<button onclick="ignoreReport(\'' + r.id + '\');event.stopPropagation();" class="btn btn-ignore">👁 Ignore</button>' +
+                      '<button onclick="banUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-ban">🔒 Ban User</button>' +
+                      '</div>'
+                    : '';
+
                 var item = document.createElement('div');
                 item.className = 'report-item';
                 item.innerHTML =
                     '<div class="report-item-header">' +
-                      '<span class="report-cat-pill">'+(r.category||'Unknown')+'</span>' +
-                      '<div style="display:flex;align-items:center;gap:8px;">'+statusHtml+'<span class="report-date">'+date+'</span></div>' +
+                      '<span class="report-cat-pill">' + (r.category || 'Unknown') + '</span>' +
+                      '<div style="display:flex;align-items:center;gap:8px;">' + statusHtml +
+                        '<span class="report-date">' + date + '</span></div>' +
                     '</div>' +
-                    '<div class="report-desc">'+(r.description||'No description.')+'</div>' +
-                    '<div class="report-reporter">Reported by: <b>'+(r.reporterName||'Anonymous')+'</b></div>' +
+                    '<div class="report-desc">' + (r.description || 'No description provided.') + '</div>' +
+                    '<div class="report-reporter">Reported by: <b>' + (r.reporterName || 'Anonymous') + '</b></div>' +
                     imgHtml + actionsHtml;
                 details.appendChild(item);
             });
@@ -475,40 +610,114 @@
         });
     }
 
+    // FIX: toggleUser now just flips the flag and re-renders from cache.
+    //      No more onSnapshot restart on every click.
     function toggleUser(uid) {
         expandedUsers[uid] = !expandedUsers[uid];
-        loadReports();
+        renderReports(cachedGrouped);
     }
 
     function ignoreReport(id) {
         if (!confirm('Mark this report as ignored?')) return;
-        db.collection("reports").doc(id).update({ status:'ignored' })
-            .catch(function() { alert('Error updating report.'); });
+        db.collection("reports").doc(id)
+            .update({ status: 'ignored' })
+            .catch(function(e) { alert('Error updating report: ' + e.message); });
     }
 
     function banUser(uid, name) {
-        if (!confirm('Ban '+name+'?\n\nThey will be locked out immediately.')) return;
-        db.collection("users").doc(uid).update({ banned:true })
+        if (!confirm('Ban ' + name + '?\n\nThey will be locked out immediately.')) return;
+        db.collection("users").doc(uid).update({ banned: true })
             .then(function() {
+                // Mark all this user's pending reports as actioned
                 return db.collection("reports")
-                    .where("reportedUid","==",uid)
-                    .where("status","==","pending")
+                    .where("reportedUid", "==", uid)
+                    .where("status", "==", "pending")
                     .get();
             })
             .then(function(snap) {
-                return Promise.all(snap.docs.map(function(d){ return d.ref.update({ status:'banned' }); }));
+                return Promise.all(snap.docs.map(function(d) { return d.ref.update({ status: 'banned' }); }));
             })
-            .then(function() { alert(name+' has been banned.'); })
-            .catch(function(e) { alert('Error: '+e.message); });
+            .then(function() { alert(name + ' has been banned.'); })
+            .catch(function(e) { alert('Error banning user: ' + e.message); });
     }
 
     function unbanUser(uid, name) {
-        if (!confirm('Unban '+name+'? They will regain full access.')) return;
-        db.collection("users").doc(uid).update({ banned:false })
-            .then(function() { alert(name+' has been unbanned.'); })
-            .catch(function(e) { alert('Error: '+e.message); });
+        if (!confirm('Unban ' + name + '? They will regain full access.')) return;
+        db.collection("users").doc(uid).update({ banned: false })
+            .then(function() { alert(name + ' has been unbanned.'); })
+            .catch(function(e) { alert('Error unbanning user: ' + e.message); });
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    //  THANK YOU WALL  — admin can edit or delete any message
+    // ═══════════════════════════════════════════════════════════════
+    function loadThankYouWall() {
+        var feed  = document.getElementById('tyFeed');
+        var subEl = document.getElementById('tySubtitle');
+        feed.innerHTML = '<div class="empty-state"><div class="es-icon">⏳</div><p>Loading…</p></div>';
+
+        db.collection("thankyou").orderBy("createdAt", "desc").get()
+            .then(function(snap) {
+                subEl.innerText = snap.size + ' message' + (snap.size !== 1 ? 's' : '') + ' on the wall';
+                if (snap.empty) {
+                    feed.innerHTML = '<div class="empty-state"><div class="es-icon">💙</div><p>No thank-you messages yet.</p></div>';
+                    return;
+                }
+                feed.innerHTML = '';
+                snap.forEach(function(ds) {
+                    var d    = ds.data();
+                    var date = (d.createdAt && d.createdAt.toDate)
+                        ? d.createdAt.toDate().toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+                        : '';
+                    var div = document.createElement('div');
+                    div.className = 'ty-item';
+                    div.innerHTML =
+                        '<div class="ty-item-header">' +
+                          '<div>' +
+                            '<span style="font-weight:700;">' + (d.helperName || '?') + '</span>' +
+                            '<span style="font-size:12px;color:#64748b;margin-left:6px;">helped</span> ' +
+                            '<span style="font-weight:600;">' + (d.fromName || 'someone') + '</span>' +
+                          '</div>' +
+                          '<div style="display:flex;align-items:center;gap:6px;">' +
+                            '<span style="font-size:11px;color:#94a3b8;">' + date + '</span>' +
+                            '<button class="ty-edit-btn"   onclick="editTYMessage(\'' + ds.id + '\', this)">✏️ Edit</button>' +
+                            '<button class="ty-delete-btn" onclick="deleteTYMessage(\'' + ds.id + '\', this)">🗑 Delete</button>' +
+                          '</div>' +
+                        '</div>' +
+                        '<p id="ty-msg-' + ds.id + '" style="font-size:14px;color:#334155;margin:0;line-height:1.6;">"' + (d.message || '') + '"</p>';
+                    feed.appendChild(div);
+                });
+            })
+            .catch(function(e) {
+                feed.innerHTML = '<div class="empty-state"><div class="es-icon">❌</div><p>Error: ' + e.message + '</p></div>';
+            });
+    }
+
+    function editTYMessage(id, btn) {
+        var msgEl   = document.getElementById('ty-msg-' + id);
+        var current = msgEl.innerText.replace(/^"|"$/g, '');
+        var newMsg  = prompt('Edit thank-you message (max 200 chars):', current);
+        if (newMsg === null) return;
+        newMsg = newMsg.trim().slice(0, 200);
+        if (!newMsg) return;
+        btn.disabled = true;
+        db.collection("thankyou").doc(id).update({ message: newMsg })
+            .then(function() { msgEl.innerText = '"' + newMsg + '"'; })
+            .catch(function(e) { alert('Error saving: ' + e.message); })
+            .finally(function() { btn.disabled = false; });
+    }
+
+    function deleteTYMessage(id, btn) {
+        if (!confirm('Delete this thank-you message permanently?')) return;
+        btn.disabled = true;
+        db.collection("thankyou").doc(id).delete()
+            .then(function() { loadThankYouWall(); })
+            .catch(function(e) { alert('Error deleting: ' + e.message); btn.disabled = false; });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  LIGHTBOX
+    // ═══════════════════════════════════════════════════════════════
     function openLightbox(imgEl) {
         document.getElementById('lightboxImg').src = imgEl.src;
         document.getElementById('imgLightbox').classList.add('open');
