@@ -9,12 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>(function(){ emailjs.init("QhpmiLS1azGRS4w23"); })();</script>
 
-    <!--
-        FIX #1 — firebase-auth-compat.js MUST be loaded.
-        Without it, firebase.auth() doesn't exist and Firestore
-        sees request.auth = null on every call, so ALL reads and
-        writes are blocked by security rules — silently.
-    -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -239,14 +233,11 @@
     var auth = firebase.auth();
     var db   = firebase.firestore();
 
-    // Only these two emails are ever shown the admin panel
-    var ADMIN_EMAILS = ['luckyansh.t@gmail.com', 'beaconofunityofficial@gmail.com'];
+    // Admin UIDs only — no emails visible
+    var ADMIN_UIDS = ['vVzdX3mSWqWHgTLKQpfrrPb5dSv1'];
 
     // ═══════════════════════════════════════════════════════════════
-    //  AUTH  — uses real Firebase Auth so Firestore security rules
-    //          receive a valid request.auth token on every call.
-    //          FIX: removed hardcoded plaintext passwords and fake
-    //          sessionStorage auth which left Firestore unauthenticated.
+    //  AUTH
     // ═══════════════════════════════════════════════════════════════
     function showGate() {
         document.getElementById('authGate').style.display     = 'flex';
@@ -270,52 +261,35 @@
         document.getElementById('authGate').style.display     = 'none';
         document.getElementById('accessDenied').style.display = 'flex';
         document.getElementById('deniedMsg').innerText        = msg || 'This account is not authorised.';
-        // Sign out immediately so the non-admin token doesn't linger
         auth.signOut();
     }
 
-    // Single source of truth — runs on every page load and after every sign-in/out
     auth.onAuthStateChanged(function(user) {
-        if (!user) {
-            showGate();
-            return;
-        }
-        if (ADMIN_EMAILS.indexOf(user.email) === -1) {
-            showDenied('Account ' + user.email + ' is not an authorised admin.');
+        if (!user) { showGate(); return; }
+        if (ADMIN_UIDS.indexOf(user.uid) === -1) {
+            showDenied('This account is not authorised.');
             return;
         }
         showAdmin(user.email);
     });
 
     function adminSignIn() {
-        var email = document.getElementById('adminEmail').value.trim().toLowerCase();
+        var email = document.getElementById('adminEmail').value.trim();
         var pass  = document.getElementById('adminPassword').value;
         var errEl = document.getElementById('authError');
         var btn   = document.getElementById('signInBtn');
         errEl.innerText = '';
 
-        if (!email || !pass) {
-            errEl.innerText = 'Please enter your email and password.';
-            return;
-        }
-        if (ADMIN_EMAILS.indexOf(email) === -1) {
-            errEl.innerText = 'This email address is not an admin account.';
-            return;
-        }
+        if (!email || !pass) { errEl.innerText = 'Please enter your email and password.'; return; }
 
-        btn.disabled  = true;
-        btn.innerText = 'Signing in…';
+        btn.disabled = true; btn.innerText = 'Signing in…';
 
         auth.signInWithEmailAndPassword(email, pass)
             .catch(function(e) {
-                var msg = (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found')
-                    ? 'Incorrect email or password.'
-                    : e.message;
-                errEl.innerText = msg;
-                btn.disabled  = false;
-                btn.innerText = 'Sign In';
+                errEl.innerText = (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found')
+                    ? 'Incorrect email or password.' : e.message;
+                btn.disabled = false; btn.innerText = 'Sign In';
             });
-        // onAuthStateChanged handles the success case
     }
 
     function adminSignOut() {
@@ -413,19 +387,14 @@
 
     // ═══════════════════════════════════════════════════════════════
     //  REPORTS
-    //  FIX: uses onSnapshot so new reports appear in real-time.
-    //  FIX: pending count includes reports with no status field.
-    //  FIX: ban status fetched per-uid, not full collection scan.
-    //  FIX: toggleUser no longer restarts snapshot — only re-renders.
     // ═══════════════════════════════════════════════════════════════
     var expandedUsers  = {};
     var reportsUnsub   = null;
-    var cachedGrouped  = {};   // keeps last snapshot data so toggleUser can re-render without refetching
+    var cachedGrouped  = {};
 
     function loadReports(forceRestart) {
-        // Only (re)start the snapshot when explicitly requested or on first load
         if (forceRestart && reportsUnsub) { reportsUnsub(); reportsUnsub = null; }
-        if (reportsUnsub) return; // already listening
+        if (reportsUnsub) return;
 
         document.getElementById('reportsFeed').innerHTML =
             '<div class="empty-state"><div class="es-icon">⏳</div><p>Loading reports…</p></div>';
@@ -433,7 +402,6 @@
         reportsUnsub = db.collection("reports")
             .orderBy("createdAt", "desc")
             .onSnapshot(function(snapshot) {
-                // Group reports by reported user
                 var grouped = {};
                 snapshot.forEach(function(ds) {
                     var d   = ds.data();
@@ -444,13 +412,8 @@
                 });
 
                 var uids = Object.keys(grouped);
-                if (uids.length === 0) {
-                    cachedGrouped = {};
-                    renderReports({});
-                    return;
-                }
+                if (uids.length === 0) { cachedGrouped = {}; renderReports({}); return; }
 
-                // FIX: fetch only the specific UIDs we need, not all users
                 var validUids = uids.filter(function(u) { return u !== 'unknown'; });
                 var banFetches = validUids.map(function(uid) {
                     return db.collection("users").doc(uid).get()
@@ -459,7 +422,7 @@
                                 grouped[uid].banned = snap.data().banned === true;
                             }
                         })
-                        .catch(function() {}); // non-fatal if a user doc is missing
+                        .catch(function() {});
                 });
 
                 Promise.all(banFetches).then(function() {
@@ -477,7 +440,6 @@
     function renderReports(grouped) {
         var uids = Object.keys(grouped);
 
-        // FIX: count reports with no status field as pending too
         var totalPending = 0;
         uids.forEach(function(uid) {
             grouped[uid].reports.forEach(function(r) {
@@ -485,13 +447,11 @@
             });
         });
 
-        // Badge on tab
         var tabEl = document.getElementById('tab-reports');
         tabEl.innerHTML = totalPending > 0
             ? '🚨 User Reports <span class="tab-badge">' + totalPending + '</span>'
             : '🚨 User Reports';
 
-        // Glow on panel when there are pending reports
         var panel = document.getElementById('panel-reports');
         if (totalPending > 0) panel.classList.add('reports-glow');
         else                  panel.classList.remove('reports-glow');
@@ -508,19 +468,16 @@
             return;
         }
 
-        // Sort: most reports first
         uids.sort(function(a, b) { return grouped[b].reports.length - grouped[a].reports.length; });
 
         uids.forEach(function(uid) {
             var g        = grouped[uid];
             var count    = g.reports.length;
-            // FIX: treat missing status as pending
             var pendingCount = g.reports.filter(function(r) { return !r.status || r.status === 'pending'; }).length;
             var isExpanded   = !!expandedUsers[uid];
             var isBanned     = g.banned;
             var safeName     = g.name.replace(/'/g, "\\'");
 
-            // ── Summary card ──
             var card = document.createElement('div');
             card.className = 'report-summary-card' + (isExpanded ? ' expanded' : '');
             card.setAttribute('onclick', 'toggleUser("' + uid + '")');
@@ -544,7 +501,6 @@
                 '</div>';
             feed.appendChild(card);
 
-            // ── Ban/Unban action row ──
             var ar = document.createElement('div');
             ar.className = 'user-action-row' + (isExpanded ? ' open' : '');
             ar.innerHTML = isBanned
@@ -554,11 +510,9 @@
                   '<button onclick="banUser(\'' + uid + '\',\'' + safeName + '\');event.stopPropagation();" class="btn btn-ban-user btn">🔒 Ban User</button>';
             feed.appendChild(ar);
 
-            // ── Individual report cards ──
             var details = document.createElement('div');
             details.className = 'report-details' + (isExpanded ? ' open' : '');
 
-            // Pending first
             var sorted = g.reports.slice().sort(function(a, b) {
                 var aPending = (!a.status || a.status === 'pending') ? 0 : 1;
                 var bPending = (!b.status || b.status === 'pending') ? 0 : 1;
@@ -610,8 +564,6 @@
         });
     }
 
-    // FIX: toggleUser now just flips the flag and re-renders from cache.
-    //      No more onSnapshot restart on every click.
     function toggleUser(uid) {
         expandedUsers[uid] = !expandedUsers[uid];
         renderReports(cachedGrouped);
@@ -628,7 +580,6 @@
         if (!confirm('Ban ' + name + '?\n\nThey will be locked out immediately.')) return;
         db.collection("users").doc(uid).update({ banned: true })
             .then(function() {
-                // Mark all this user's pending reports as actioned
                 return db.collection("reports")
                     .where("reportedUid", "==", uid)
                     .where("status", "==", "pending")
@@ -649,7 +600,7 @@
     }
 
     // ═══════════════════════════════════════════════════════════════
-    //  THANK YOU WALL  — admin can edit or delete any message
+    //  THANK YOU WALL
     // ═══════════════════════════════════════════════════════════════
     function loadThankYouWall() {
         var feed  = document.getElementById('tyFeed');
