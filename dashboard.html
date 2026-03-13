@@ -566,7 +566,7 @@
         .hovercard .report-btn:hover { background:#dc2626; }
 
         /* ── Report Modal ── */
-        #reportModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,.85); z-index:6000; align-items:center; justify-content:center; }
+        #reportModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,.85); z-index:6000; align-items:center; justify-content:center; padding:16px; }
         #reportModal .modal-content { max-width:420px; max-height:90vh; overflow-y:auto; }
         .report-category-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 15px; }
         .report-cat-btn { padding:8px 10px; border:2px solid #e2e8f0; border-radius:8px; background:white; font-size:12px; cursor:pointer; text-align:left; transition:.15s; }
@@ -903,7 +903,7 @@
             <div>
                 <div id="communityTab" class="tab-content active">
                     <h3>Recent Requests in <span class="current-region-text">...</span></h3>
-                    <div id="urgentAlertBanner" style="display:none; background:linear-gradient(135deg,#fef2f2,#fee2e2); border:2px solid #ef4444; border-radius:12px; padding:14px 18px; margin-bottom:16px; display:none; align-items:center; gap:12px;">
+                    <div id="urgentAlertBanner" style="display:none; background:linear-gradient(135deg,#fef2f2,#fee2e2); border:2px solid #ef4444; border-radius:12px; padding:14px 18px; margin-bottom:16px; align-items:center; gap:12px;">
                         <span style="font-size:24px; flex-shrink:0;">🆘</span>
                         <div style="flex:1; min-width:0;">
                             <div style="font-weight:700; font-size:13px; color:#dc2626; margin-bottom:2px;">URGENT in your area</div>
@@ -1019,7 +1019,44 @@
                             <p style="font-size:14px; color:#15803d; margin:0; line-height:1.6;">The pilot phase of the Beacon of Unity program is currently ongoing. We're testing, learning, and growing together — and we couldn't do it without you. <b>Thank you for being a part of this!</b> 🌟</p>
                         </div>
 
-                        <!-- ── March 2026 ── -->
+                        <!-- ── March 2026 (new features) ── -->
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                                <span style="background:#7c3aed; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">✨ Feature</span>
+                                <span style="font-size:12px; color:#64748b;">March 2026</span>
+                            </div>
+                            <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Rewards, Badges & Cosmetics</h4>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points and unlock cosmetic rewards — gradient profile skins, chat bubble colours, and chat backgrounds. 13 achievement badges track your milestones automatically. View everything in the 🎁 Rewards tab and your Profile.</p>
+                        </div>
+
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                                <span style="background:#38bdf8; color:#0f172a; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">🔔 Feature</span>
+                                <span style="font-size:12px; color:#64748b;">March 2026</span>
+                            </div>
+                            <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">In-App Notification Centre</h4>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The bell 🔔 in the top bar now shows a live notification feed — messages, volunteers, resolves, and thank-yous appear there instantly without needing push notifications.</p>
+                        </div>
+
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                                <span style="background:#10b981; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">⭐ Feature</span>
+                                <span style="font-size:12px; color:#64748b;">March 2026</span>
+                            </div>
+                            <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Thank You Wall</h4>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">After a chat resolves, the person who received help can leave a public thank-you message for the volunteer. These appear on the ⭐ Thank You Wall tab for the whole community to see.</p>
+                        </div>
+
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                                <span style="background:#f97316; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">🤝 Improved</span>
+                                <span style="font-size:12px; color:#64748b;">March 2026</span>
+                            </div>
+                            <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Volunteer Opportunities Launched</h4>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The Volunteer Opportunities tab is now live. Curated opportunities are posted by our team — browse events by category, date, and location across the UAE.</p>
+                        </div>
+
+                        <!-- ── March 2026 (existing) ── -->
                         <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border:1px solid #93c5fd; border-radius:14px; padding:22px;">
                             <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
                                 <span style="background:#2563eb; color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">📱 New</span>
@@ -1286,9 +1323,13 @@
                 <h2>Your Profile</h2>
                 <span onclick="closeProfileModal()" style="cursor:pointer; font-size:20px;">✕</span>
             </div>
-            <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; margin: 15px 0;">
-                <label style="font-size: 12px; color: #64748b;">Verified Name (Permanent)</label>
-                <div id="profileNameDisplay" style="font-weight: bold; font-size: 18px; font-family:'Syne',sans-serif;">...</div>
+            <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; margin: 15px 0; display:flex; align-items:center; gap:14px;">
+                <div id="profileAvatarCircle" style="width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#38bdf8,#0ea5e9); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:22px; flex-shrink:0; box-shadow:0 4px 14px rgba(56,189,248,.3); transition:background .3s;">?</div>
+                <div>
+                    <label style="font-size: 12px; color: #64748b;">Verified Name (Permanent)</label>
+                    <div id="profileNameDisplay" style="font-weight: bold; font-size: 18px; font-family:'Syne',sans-serif;">...</div>
+                    <div id="profileEquippedLabel" style="font-size:11px; color:#64748b; margin-top:2px;"></div>
+                </div>
             </div>
             <div id="profileRankBadge" style="display:flex; align-items:center; gap:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:12px;">
                 <div id="profileRankIcon" style="font-size:28px;">🌱</div>
@@ -1677,6 +1718,18 @@
             document.getElementById('profileRankLabel').style.color = rank.color;
             document.getElementById('profileRankPts').innerText   = `${pts} pts earned`;
             await loadProfileStats(data, pts);
+            // Apply equipped skin to profile avatar
+            const profAvatar = document.getElementById('profileAvatarCircle');
+            if (profAvatar) {
+                profAvatar.style.background = getEquippedSkin(data.equippedSkin || 'ocean').gradient;
+                profAvatar.textContent = (userName.charAt(0) || '?').toUpperCase();
+            }
+            const profSkinLabel = document.getElementById('profileEquippedLabel');
+            if (profSkinLabel) {
+                const sk = getEquippedSkin(data.equippedSkin || 'ocean');
+                const bub = getEquippedBubble(data.equippedBubble || 'blue');
+                profSkinLabel.textContent = `Skin: ${sk.label} · Bubble: ${bub.label}`;
+            }
             // Check & award any newly earned badges
             await checkAndAwardBadges(auth.currentUser.uid, data);
             document.getElementById('profileModal').style.display = 'flex';
@@ -2551,7 +2604,7 @@
                     const safeName = u.name.replace(/'/g, "\\'");
                     row.innerHTML = `
                         <div class="lb-rank ${rankClass}">${rankIcon}</div>
-                        <div class="lb-avatar">${initial}</div>
+                        <div class="lb-avatar" style="${makePfpStyle(u.equippedSkin)}">${initial}</div>
                         <div class="lb-info">
                             <div class="lb-name">
                                 <span class="hovername">
@@ -2731,6 +2784,27 @@
                 });
                 bgSection.appendChild(bgGrid);
                 feed.appendChild(bgSection);
+
+                // ── Badges section ──
+                const earnedBadgeIds = snap.exists() && Array.isArray(snap.data().badges) ? snap.data().badges : [];
+                const badgeSection = document.createElement('div');
+                badgeSection.innerHTML = '<h4 style="margin:0 0 14px; font-family:\'Syne\',sans-serif; font-size:16px;">🏅 Achievement Badges</h4>';
+                const badgeGrid = document.createElement('div');
+                badgeGrid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:12px; margin-bottom:28px;';
+                ACHIEVEMENTS.forEach(ach => {
+                    const earned = earnedBadgeIds.includes(ach.id);
+                    const card = document.createElement('div');
+                    card.style.cssText = 'border-radius:14px; padding:16px 12px; text-align:center; border:2px solid ' + (earned ? '#38bdf8' : '#f1f5f9') + '; background:' + (earned ? '#f0f9ff' : '#f8fafc') + '; transition:all .2s; opacity:' + (earned ? '1' : '0.5') + ';';
+                    card.innerHTML = '<div style="font-size:30px; margin-bottom:8px;">' + ach.icon + '</div>' +
+                        '<div style="font-weight:700; font-size:13px; margin-bottom:3px;">' + ach.label + '</div>' +
+                        '<div style="font-size:11px; color:#64748b; line-height:1.4;">' + ach.desc + '</div>' +
+                        (earned
+                            ? '<div style="margin-top:8px; background:#38bdf8; color:#0f172a; font-size:11px; font-weight:700; padding:3px 10px; border-radius:99px; display:inline-block;">✓ Earned</div>'
+                            : '<div style="margin-top:8px; font-size:16px;">🔒</div>');
+                    badgeGrid.appendChild(card);
+                });
+                badgeSection.appendChild(badgeGrid);
+                feed.appendChild(badgeSection);
 
                 // pts progress bar at top
                 const nextLocked = [...REWARD_SKINS, ...REWARD_BUBBLES, ...REWARD_CHAT_BG]
@@ -2962,7 +3036,7 @@
             document.getElementById('statChatsHelped').textContent = data.chatsResolved || 0;
             const rating = data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : '—';
             document.getElementById('statRating').textContent = rating !== '—' ? `${rating}⭐` : '—';
-            const badgeIds = data.badges || [];
+            const badgeIds = Array.isArray(data.badges) ? data.badges : [];
             document.getElementById('statBadges').textContent = badgeIds.length;
             if (data.joinedAt) {
                 const d2 = data.joinedAt.toDate();
@@ -2990,6 +3064,9 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
             const navItems = document.querySelectorAll('.nav-item');
+            // Scroll main content area to top on tab switch
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) mainContent.scrollTop = 0;
 
             if (tab === 'community') {
                 document.getElementById('communityTab').classList.add('active');
@@ -3014,16 +3091,16 @@
                 loadVolOpps();
             } else if (tab === 'updates') {
                 document.getElementById('updatesTab').classList.add('active');
-                navItems[4].classList.add('active');
+                navItems[5].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Updates";
             } else if (tab === 'thankyou') {
                 document.getElementById('thankyouTab').classList.add('active');
-                navItems[5].classList.add('active');
+                navItems[6].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Thank You Wall";
                 loadThankYouWall();
             } else if (tab === 'rewards') {
                 document.getElementById('rewardsTab').classList.add('active');
-                navItems[6].classList.add('active');
+                navItems[7].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Rewards";
                 loadRewards();
             } else if (tab === 'reliable-news') {
@@ -3640,21 +3717,36 @@
             document.getElementById('reportStep2').style.display = 'block';
         };
 
-        document.querySelectorAll('.report-cat-btn').forEach(btn => {
-            btn.onclick = () => {
-                document.querySelectorAll('.report-cat-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-                reportCategory = btn.dataset.cat;
-            };
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.report-cat-btn');
+            if (!btn) return;
+            document.querySelectorAll('.report-cat-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            reportCategory = btn.dataset.cat;
         });
 
         document.getElementById('reportImg').onchange = (e) => {
             const file = e.target.files[0];
             if (!file) { reportImageB64 = null; return; }
+            const statusEl = document.getElementById('reportImgStatus');
+            statusEl.innerText = '⏳ Processing image...';
+            // Compress image to max 600x600, quality 0.6 to keep well under Firestore 1MB limit
             const reader = new FileReader();
-            reader.onload = () => {
-                reportImageB64 = reader.result;
-                document.getElementById('reportImgStatus').innerText = `✅ Image attached: ${file.name}`;
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX = 600;
+                    let w = img.width, h = img.height;
+                    if (w > h && w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                    else if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    reportImageB64 = canvas.toDataURL('image/jpeg', 0.6);
+                    const kb = Math.round(reportImageB64.length * 3 / 4 / 1024);
+                    statusEl.innerText = `✅ Image attached: ${file.name} (~${kb}KB)`;
+                };
+                img.src = ev.target.result;
             };
             reader.readAsDataURL(file);
         };
