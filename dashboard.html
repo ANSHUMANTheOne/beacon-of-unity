@@ -723,7 +723,8 @@
             /* ── Content padding: bottom = tab bar (66px) + safe-area + buffer ── */
             .main-content {
                 margin-left: 0; width: 100%;
-                padding: 16px 14px calc(80px + env(safe-area-inset-bottom, 0px));
+                /* pill is 58px tall + 14px bottom margin + 14px extra breathing room */
+                padding: 16px 14px calc(100px + env(safe-area-inset-bottom, 0px));
                 box-sizing: border-box;
             }
             .header { margin-bottom:16px; }
@@ -734,11 +735,11 @@
             .content-grid > div:last-child { display:none; }
             /* FAB clears the tab bar + safe area */
             .fab {
-                bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+                bottom: calc(90px + env(safe-area-inset-bottom, 0px));
                 right: 18px; width: 52px; height: 52px; font-size: 26px;
             }
             #settingsBtn {
-                bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+                bottom: calc(154px + env(safe-area-inset-bottom, 0px));
                 right: 18px;
             }
             #chatPopup { bottom:0 !important; right:0 !important; width:100% !important; height:100% !important; border-radius:0 !important; box-shadow:none !important; z-index:2500 !important; }
@@ -761,19 +762,23 @@
             #mobileTabBar {
                 display: block !important;
                 position: fixed;
-                bottom: 0; left: 0; right: 0;
-                /* Navy frosted glass — 70% opaque so page content blurs through */
-                background: rgba(8, 16, 32, 0.70);
+                bottom: 14px;
+                left: 14px; right: 14px;
+                /* Pill shape — fully rounded */
+                border-radius: 28px;
+                /* Navy frosted glass */
+                background: rgba(8, 16, 32, 0.72);
                 backdrop-filter: saturate(180%) blur(30px);
                 -webkit-backdrop-filter: saturate(180%) blur(30px);
-                /* Cyan hairline — brand accent catching the glass edge */
-                border-top: 0.5px solid rgba(56, 189, 248, 0.18);
-                /* Inner specular sheen + upward lift */
+                border: 0.5px solid rgba(56, 189, 248, 0.16);
                 box-shadow:
-                    inset 0 1px 0 rgba(255,255,255,.06),
-                    0 -8px 32px rgba(0,0,0,.28);
+                    inset 0 1px 0 rgba(255,255,255,.07),
+                    0 8px 40px rgba(0,0,0,.36),
+                    0 2px 12px rgba(0,0,0,.2);
                 z-index: 1200;
-                padding-bottom: env(safe-area-inset-bottom, 0px);
+                /* Account for floating pill — no safe-area padding needed on sides */
+                padding-bottom: 0;
+                overflow: hidden;
             }
 
             /* Scrollable inner row — tight Apple spacing */
@@ -791,24 +796,8 @@
             }
             #mobTabScroll::-webkit-scrollbar { display: none; }
 
-            /* Scroll-fade edges — match the glass background */
-            #mobileTabBar::before, #mobileTabBar::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                bottom: env(safe-area-inset-bottom, 0);
-                width: 30px;
-                pointer-events: none;
-                z-index: 2;
-            }
-            #mobileTabBar::before {
-                left: 0;
-                background: linear-gradient(to right, rgba(8,16,32,.88) 30%, transparent);
-            }
-            #mobileTabBar::after {
-                right: 0;
-                background: linear-gradient(to left, rgba(8,16,32,.88) 30%, transparent);
-            }
+            /* No edge fades needed — pill border handles the scroll cutoff naturally */
+            #mobileTabBar::before, #mobileTabBar::after { display: none; }
 
             /* Each tab button */
             .mob-tab {
@@ -860,19 +849,14 @@
                 transition: transform .08s ease;
             }
 
-            /* ── Dark mode: deep navy glass ── */
             body.dark #mobileTabBar {
-                background: rgba(15, 23, 42, 0.82);
-                border-top-color: rgba(255,255,255,.07);
-                box-shadow: 0 -0.5px 0 rgba(255,255,255,.04), 0 -4px 24px rgba(0,0,0,.4);
+                background: rgba(4, 10, 22, 0.80);
+                border-color: rgba(56,189,248,.10);
+                box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 8px 40px rgba(0,0,0,.5);
             }
-            body.dark #mobileTabBar::before {
-                background: linear-gradient(to right, rgba(15,23,42,.95) 30%, transparent);
-            }
-            body.dark #mobileTabBar::after {
-                background: linear-gradient(to left, rgba(15,23,42,.95) 30%, transparent);
-            }
-            body.dark .mob-tab { color: #8e8e93; }
+            body.dark #mobileTabBar::before,
+            body.dark #mobileTabBar::after { display: none; }
+            body.dark .mob-tab { color: rgba(148,163,184,.65); }
             body.dark .mob-tab.active { color: #38bdf8; }
             body.dark .mob-tab.active .mob-icon {
                 filter: drop-shadow(0 2px 6px rgba(56,189,248,.6));
