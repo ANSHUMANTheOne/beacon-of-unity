@@ -742,22 +742,27 @@
             .hovername .hovercard { bottom:auto; top:130%; white-space:normal; min-width:150px; }
             #quoteText { font-size:17px; }
 
-            /* ── Frosted glass tab bar ── */
+
+            /* ══════════════════════════════════════════
+               APPLE-STYLE FROSTED GLASS TAB BAR
+               Light translucent glass — content blurs through
+            ══════════════════════════════════════════ */
             #mobileTabBar {
                 display: block !important;
                 position: fixed;
                 bottom: 0; left: 0; right: 0;
-                /* Frosted glass: semi-transparent navy + blur */
-                background: rgba(10, 18, 35, 0.72);
-                backdrop-filter: saturate(180%) blur(22px);
-                -webkit-backdrop-filter: saturate(180%) blur(22px);
-                /* Subtle top border as a light refraction line */
-                border-top: 1px solid rgba(56, 189, 248, 0.12);
-                box-shadow: 0 -1px 0 rgba(255,255,255,.04), 0 -8px 32px rgba(0,0,0,.35);
+                /* Near-white semi-transparent base — page content blurs through */
+                background: rgba(248, 250, 252, 0.78);
+                backdrop-filter: saturate(200%) blur(28px);
+                -webkit-backdrop-filter: saturate(200%) blur(28px);
+                /* Apple's hairline separator — 0.5px, very faint */
+                border-top: 0.5px solid rgba(0, 0, 0, 0.10);
+                box-shadow: 0 -0.5px 0 rgba(0,0,0,.06), 0 -4px 24px rgba(0,0,0,.06);
                 z-index: 1200;
                 padding-bottom: env(safe-area-inset-bottom, 0px);
             }
-            /* Scrollable inner row */
+
+            /* Scrollable inner row — tight Apple spacing */
             #mobTabScroll {
                 display: flex;
                 overflow-x: auto;
@@ -765,74 +770,99 @@
                 -webkit-overflow-scrolling: touch;
                 scroll-behavior: smooth;
                 scrollbar-width: none;
-                height: 62px;
-                align-items: stretch;
-                padding: 0 6px;
-                gap: 2px;
+                height: 58px;
+                align-items: center;
+                padding: 0 4px;
+                gap: 0;
             }
             #mobTabScroll::-webkit-scrollbar { display: none; }
-            /* Frosted edge fade hints */
+
+            /* Scroll-fade edges — match the glass background */
             #mobileTabBar::before, #mobileTabBar::after {
                 content: '';
                 position: absolute;
                 top: 0;
                 bottom: env(safe-area-inset-bottom, 0);
-                width: 28px;
+                width: 30px;
                 pointer-events: none;
                 z-index: 2;
             }
-            #mobileTabBar::before { left: 0;  background: linear-gradient(to right, rgba(10,18,35,.9) 20%, transparent); }
-            #mobileTabBar::after  { right: 0; background: linear-gradient(to left,  rgba(10,18,35,.9) 20%, transparent); }
+            #mobileTabBar::before {
+                left: 0;
+                background: linear-gradient(to right, rgba(248,250,252,.95) 30%, transparent);
+            }
+            #mobileTabBar::after {
+                right: 0;
+                background: linear-gradient(to left, rgba(248,250,252,.95) 30%, transparent);
+            }
 
+            /* Each tab button */
             .mob-tab {
                 flex: 0 0 auto;
-                display: flex; flex-direction: column;
-                align-items: center; justify-content: center;
-                min-width: 66px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-width: 64px;
+                height: 48px;
                 padding: 0 10px;
-                margin: 5px 0;
-                border-radius: 12px;
-                cursor: pointer; color: rgba(148,163,184,.85);
-                font-size: 9.5px; font-weight: 600; gap: 4px;
-                border: none; background: transparent;
-                text-transform: uppercase; letter-spacing: .4px;
+                border-radius: 14px;
+                margin: 5px 1px;
+                cursor: pointer;
+                /* Apple's exact system gray for inactive tabs */
+                color: #8e8e93;
+                font-size: 9px;
+                font-weight: 600;
+                gap: 3px;
+                border: none;
+                background: transparent;
+                text-transform: uppercase;
+                letter-spacing: .5px;
                 white-space: nowrap;
                 -webkit-tap-highlight-color: transparent;
-                transition: color .15s, background .15s;
+                transition: color .18s cubic-bezier(.25,.46,.45,.94),
+                            background .18s cubic-bezier(.25,.46,.45,.94),
+                            transform .12s cubic-bezier(.25,.46,.45,.94);
                 position: relative;
             }
             .mob-tab .mob-icon {
-                font-size: 20px; line-height: 1;
-                transition: transform .18s, filter .18s;
+                font-size: 21px;
+                line-height: 1;
+                transition: transform .22s cubic-bezier(.34,1.56,.64,1), filter .22s ease;
             }
+
+            /* Active — brand cyan, icon springs up, no background pill (Apple-style) */
             .mob-tab.active {
-                color: #38bdf8;
-                background: rgba(56,189,248,.12);
+                color: #0ea5e9;
             }
             .mob-tab.active .mob-icon {
-                transform: translateY(-2px) scale(1.14);
-                filter: drop-shadow(0 0 6px rgba(56,189,248,.7));
+                transform: translateY(-2px) scale(1.18);
+                filter: drop-shadow(0 2px 6px rgba(14,165,233,.55));
             }
-            .mob-tab.active::after {
-                content: '';
-                position: absolute;
-                bottom: 5px;
-                width: 18px; height: 3px;
-                background: #38bdf8;
-                border-radius: 99px;
-                box-shadow: 0 0 6px rgba(56,189,248,.6);
-            }
-            .mob-tab:active { background: rgba(56,189,248,.07); transform: scale(.95); }
 
-            /* Dark mode — deepen the frost */
-            body.dark #mobileTabBar {
-                background: rgba(2, 6, 23, 0.78);
-                border-color: rgba(56,189,248,.08);
+            /* Press feedback — scale down slightly like a real button */
+            .mob-tab:active {
+                transform: scale(0.88);
+                transition: transform .08s ease;
             }
-            body.dark #mobileTabBar::before { background: linear-gradient(to right, rgba(2,6,23,.92) 20%, transparent); }
-            body.dark #mobileTabBar::after  { background: linear-gradient(to left,  rgba(2,6,23,.92) 20%, transparent); }
-            body.dark .mob-tab { color: rgba(71,85,105,.9); }
-            body.dark .mob-tab.active { color: #38bdf8; background: rgba(56,189,248,.1); }
+
+            /* ── Dark mode: deep navy glass ── */
+            body.dark #mobileTabBar {
+                background: rgba(15, 23, 42, 0.82);
+                border-top-color: rgba(255,255,255,.07);
+                box-shadow: 0 -0.5px 0 rgba(255,255,255,.04), 0 -4px 24px rgba(0,0,0,.4);
+            }
+            body.dark #mobileTabBar::before {
+                background: linear-gradient(to right, rgba(15,23,42,.95) 30%, transparent);
+            }
+            body.dark #mobileTabBar::after {
+                background: linear-gradient(to left, rgba(15,23,42,.95) 30%, transparent);
+            }
+            body.dark .mob-tab { color: #8e8e93; }
+            body.dark .mob-tab.active { color: #38bdf8; }
+            body.dark .mob-tab.active .mob-icon {
+                filter: drop-shadow(0 2px 6px rgba(56,189,248,.6));
+            }
         }
     </style>
 </head>
