@@ -972,8 +972,6 @@
     #minimap-close:hover { background:white; color:#0d47a1; }
     #minimap-widget.expanded #minimap-close { display:block; }
     #minimap-widget.expanded #minimap-label { display:none; }
-    #minimap-widget.expanded #minimap-waves-svg { height:22%; opacity:0.10; }
-    #minimap-widget.expanded #minimap-brand { font-size:10px; opacity:0.45; bottom:6px; letter-spacing:2px; }
     /* hide on mobile bottom nav so it doesn't overlap */
     @media(max-width:768px){
         #minimap-widget { display:none !important; }
@@ -1027,48 +1025,6 @@
     <!-- ── MINIMAP WIDGET ── -->
     <div id="minimap-widget" title="Click to expand map">
         <div id="minimap-el"></div>
-        <!-- Wave + branding overlay — pointer-events:none so map stays interactive -->
-        <div id="minimap-overlay" style="
-            position:absolute; inset:0; pointer-events:none; z-index:500; overflow:hidden;
-            border-radius:inherit;
-        ">
-            <!-- Waves on the LEFT side where the Gulf water is in UAE view -->
-            <svg id="minimap-waves-svg" xmlns="http://www.w3.org/2000/svg"
-                 style="position:absolute;top:0;left:0;width:38%;height:100%;opacity:0.12;"
-                 viewBox="0 0 60 400" preserveAspectRatio="none">
-                <defs>
-                    <style>
-                        #wv1 { animation: waveV 5s linear infinite; }
-                        #wv2 { animation: waveV 7s linear infinite reverse; }
-                        #wv3 { animation: waveV 9s linear infinite; }
-                        @keyframes waveV {
-                            0%   { transform: translateY(0); }
-                            100% { transform: translateY(-50%); }
-                        }
-                    </style>
-                </defs>
-                <path id="wv1" d="M30,0 C10,50 50,100 30,150 C10,200 50,250 30,300 C10,350 50,400 30,450 C10,500 50,550 30,600 C10,650 50,700 30,750 C10,800 50,850 30,900 L60,900 L60,0 Z" fill="#38bdf8"/>
-                <path id="wv2" d="M20,0 C0,60 40,120 20,180 C0,240 40,300 20,360 C0,420 40,480 20,540 C0,600 40,660 20,720 C0,780 40,840 20,900 L0,900 L0,0 Z" fill="#0ea5e9" opacity="0.7"/>
-                <path id="wv3" d="M40,0 C20,70 50,140 40,210 C20,280 50,350 40,420 C20,490 50,560 40,630 C20,700 50,770 40,840 L60,840 L60,0 Z" fill="#7dd3fc" opacity="0.5"/>
-            </svg>
-            <!-- Branding sits inside the water zone (left side), rotated vertically -->
-            <div id="minimap-brand" style="
-                position:absolute; top:50%; left:14%;
-                transform: translate(-50%, -50%) rotate(-90deg);
-                white-space:nowrap; pointer-events:none;
-                font-family:'Comic Sans MS','Chalkboard SE','Segoe Print',cursive;
-                font-size:7px; font-weight:700; letter-spacing:1.5px;
-                color:#fff; opacity:0.5;
-                text-shadow: 0 0 8px rgba(56,189,248,.9), 0 1px 2px rgba(0,0,0,.2);
-                animation: brandFloat 5s ease-in-out infinite;
-            ">✦ BEACON OF UNITY ✦</div>
-            <style>
-                @keyframes brandFloat {
-                    0%,100% { transform: translate(-50%,-50%) rotate(-90deg) translateY(0); }
-                    50%     { transform: translate(-50%,-50%) rotate(-90deg) translateY(-3px); }
-                }
-            </style>
-        </div>
         <div id="minimap-label">📍 Live Map</div>
         <button id="minimap-close" onclick="collapseMinimap(event)">✕</button>
     </div>
@@ -4427,7 +4383,7 @@
                 tap: false
             });
             // CartoDB Positron — clean white roads, English labels, no orange/red
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                 maxZoom: 19
             }).addTo(_map);
             // No CSS filter — Positron is already clean and neutral
@@ -4529,7 +4485,7 @@
             if (!_mobileMap) {
                 const center = (userLat && userLng) ? [userLat, userLng] : [25.3463, 55.4209];
                 _mobileMap = L.map('minimapModal-el', { center, zoom: 13, zoomControl: true, attributionControl: false });
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(_mobileMap);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(_mobileMap);
                 if (userLat && userLng) {
                     const gmapsPin = L.divIcon({
                         className: '',
