@@ -108,7 +108,7 @@
         /* Logout — Uiverse pill button */
         #logoutBtnNav {
             position: fixed !important;
-            bottom: 30px !important;
+            bottom: 198px !important;
             left: 20px !important;
             margin: 0 !important;
             padding: 0 !important;
@@ -882,8 +882,143 @@
             }
         }
     </style>
+    <!-- Leaflet map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+    /* ── ROLE BADGES ───────────────────────────────────── */
+    .role-badge { display:inline-flex; align-items:center; gap:3px; padding:2px 8px; border-radius:99px; font-size:10px; font-weight:700; letter-spacing:.3px; text-transform:uppercase; margin-left:4px; vertical-align:middle; }
+    .role-badge.volunteer  { background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; }
+    .role-badge.beta       { background:linear-gradient(135deg,#0ea5e9,#06b6d4); color:#fff; }
+    .role-badge.moderator  { background:linear-gradient(135deg,#f59e0b,#d97706); color:#fff; }
+    .role-badge.founder    { background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; }
+
+    /* ── USER PROFILE MODAL ────────────────────────────── */
+    #userProfileModal .modal-content { max-width:400px; padding:0; border-radius:22px; overflow:hidden; }
+    .upm-banner { height:96px; position:relative; }
+    .upm-avatar { position:absolute; bottom:-28px; left:24px; width:58px; height:58px; border-radius:50%; border:3px solid white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:22px; color:white; box-shadow:0 4px 14px rgba(0,0,0,.18); }
+    .upm-body { padding:40px 24px 24px; }
+    .upm-name { font-weight:800; font-size:18px; font-family:'Syne',sans-serif; margin-bottom:2px; }
+    .upm-roles { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px; margin-top:4px; }
+    .upm-rank-row { display:flex; align-items:center; gap:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; margin-bottom:14px; }
+    .upm-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px; }
+    .upm-stat { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 8px; text-align:center; }
+    .upm-stat-num { font-weight:800; font-size:16px; font-family:'Syne',sans-serif; color:#0f172a; }
+    .upm-stat-lbl { font-size:10px; color:#64748b; margin-top:2px; }
+    .upm-badges-grid { display:flex; flex-wrap:wrap; gap:6px; }
+    .upm-badge-chip { display:inline-flex; align-items:center; gap:4px; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:99px; padding:4px 10px; font-size:11px; font-weight:600; }
+    body.dark #userProfileModal .modal-content { background:#1e293b; }
+    body.dark .upm-body { color:#e2e8f0; }
+    body.dark .upm-rank-row,body.dark .upm-stat { background:#0f172a; border-color:#334155; }
+    body.dark .upm-stat-num { color:#f1f5f9; }
+    body.dark .upm-badge-chip { background:#334155; border-color:#475569; color:#cbd5e1; }
+
+    /* ── LOCATION SETUP MODAL ──────────────────────────── */
+    #locationSetupModal .modal-content { max-width:420px; text-align:center; }
+    #locationSetupModal .ls-icon { font-size:52px; margin-bottom:10px; }
+    #locationSetupModal input { width:100%; padding:11px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; margin-top:6px; font-family:inherit; outline:none; }
+    #locationSetupModal input:focus { border-color:#38bdf8; }
+    #lsSearchResults { max-height:180px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:10px; margin-top:6px; display:none; }
+    .ls-result-item { padding:10px 14px; cursor:pointer; font-size:13px; border-bottom:1px solid #f1f5f9; text-align:left; transition:background .15s; }
+    .ls-result-item:hover { background:#f0f9ff; }
+
+    /* ── MINIMAP ────────────────────────────────────────── */
+    #minimap-widget {
+        position:fixed; bottom:24px; left:24px; z-index:800;
+        width:160px; height:160px;
+        border-radius:50%;
+        overflow:hidden;
+        border:3px solid rgba(56,189,248,.7);
+        box-shadow:0 0 0 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
+        cursor:pointer;
+        transition:all .35s cubic-bezier(.34,1.56,.64,1);
+        background:#0c2233;
+    }
+    #minimap-widget:hover { transform:scale(1.06); border-color:#38bdf8; }
+    #minimap-widget.expanded {
+        width:360px; height:300px;
+        border-radius:18px;
+        cursor:default;
+    }
+    #minimap-el { width:100%; height:100%; }
+    #minimap-label {
+        position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+        background:rgba(7,30,48,.8); color:#7dd3fc;
+        font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+        padding:3px 8px; border-radius:99px; white-space:nowrap;
+        pointer-events:none;
+    }
+    #minimap-close {
+        display:none; position:absolute; top:8px; right:8px;
+        background:rgba(7,30,48,.8); color:#7dd3fc; border:none; border-radius:50%;
+        width:24px; height:24px; font-size:14px; cursor:pointer; line-height:24px; text-align:center;
+    }
+    #minimap-widget.expanded #minimap-close { display:block; }
+    #minimap-widget.expanded #minimap-label { display:none; }
+    /* hide on mobile bottom nav so it doesn't overlap */
+    @media(max-width:768px){ #minimap-widget { bottom:76px; left:10px; width:110px; height:110px; } }
+
+    /* Leaflet overrides for dark minimap */
+    #minimap-widget .leaflet-control-attribution { display:none !important; }
+    #minimap-widget .leaflet-control-zoom        { display:none !important; }
+
+    /* Distance chip on cards */
+    .dist-chip { display:inline-flex; align-items:center; gap:3px; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; border-radius:99px; padding:2px 8px; font-size:10px; font-weight:700; margin-left:6px; }
+    body.dark .dist-chip { background:#1e3a5f; color:#7dd3fc; border-color:#1e40af; }
+    </style>
 </head>
 <body>
+
+    <!-- ── MINIMAP WIDGET ── -->
+    <div id="minimap-widget" title="Click to expand map">
+        <div id="minimap-el"></div>
+        <div id="minimap-label">📍 Live Map</div>
+        <button id="minimap-close" onclick="collapseMinimap(event)">✕</button>
+    </div>
+
+    <!-- ── USER PROFILE MODAL ── -->
+    <div id="userProfileModal" class="modal" onclick="if(event.target===this)this.style.display='none'">
+        <div class="modal-content">
+            <div class="upm-banner" id="upmBanner"></div>
+            <div class="upm-body">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                    <div class="upm-avatar" id="upmAvatar" style="position:static;margin-top:-36px;margin-bottom:8px;">?</div>
+                    <button onclick="document.getElementById('userProfileModal').style.display='none'" style="background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;margin-top:8px;">✕</button>
+                </div>
+                <div class="upm-name" id="upmName"></div>
+                <div class="upm-roles" id="upmRoles"></div>
+                <div class="upm-rank-row">
+                    <span id="upmRankIcon" style="font-size:26px;">🌱</span>
+                    <div>
+                        <div id="upmRankLabel" style="font-weight:800;font-size:15px;font-family:'Syne',sans-serif;"></div>
+                        <div id="upmRankPts" style="font-size:12px;color:#64748b;"></div>
+                    </div>
+                </div>
+                <div class="upm-stats">
+                    <div class="upm-stat"><div class="upm-stat-num" id="upmHelps">0</div><div class="upm-stat-lbl">Helps</div></div>
+                    <div class="upm-stat"><div class="upm-stat-num" id="upmRating">—</div><div class="upm-stat-lbl">Rating</div></div>
+                    <div class="upm-stat"><div class="upm-stat-num" id="upmPosts">0</div><div class="upm-stat-lbl">Posts</div></div>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Badges</div>
+                <div class="upm-badges-grid" id="upmBadges"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── LOCATION SETUP MODAL ── -->
+    <div id="locationSetupModal" class="modal">
+        <div class="modal-content">
+            <div class="ls-icon">📍</div>
+            <h2 style="margin:0 0 6px;font-family:'Syne',sans-serif;">Set Your Area</h2>
+            <p style="font-size:13px;color:#64748b;margin:0 0 18px;">This helps show requests near you and powers the live map. Type your neighbourhood, landmark, or area in UAE.</p>
+            <input type="text" id="lsInput" placeholder="e.g. Al Majaz, Sharjah" oninput="lsDebounce()" autocomplete="off">
+            <div id="lsSearchResults"></div>
+            <div id="lsStatus" style="font-size:12px;color:#64748b;margin-top:8px;min-height:16px;"></div>
+            <button id="lsConfirmBtn" onclick="confirmLocation()" style="width:100%;padding:12px;background:#38bdf8;color:#0f172a;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;margin-top:14px;" disabled>📍 Set My Location</button>
+            <button onclick="skipLocationSetup()" style="width:100%;background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;margin-top:10px;padding:6px;">Skip for now</button>
+        </div>
+    </div>
 
     <!-- ── Mobile Bottom Tab Bar (scrollable) ── -->
     <nav id="mobileTabBar">
@@ -1933,11 +2068,14 @@
             const title = document.getElementById('reqTitle').value.trim();
             const locationStr = document.getElementById('reqLoc').value.trim();
             if(!title || !locationStr) return alert("Title and Location required!");
+            // Geocode the location silently
+            const coords = await geocodePostLocation(locationStr).catch(()=>null);
             try {
                 await addDoc(collection(db, "requests"), {
                     title, category: document.getElementById('reqCat').value,
                     urgency: document.getElementById('reqUrg').value,
                     location: locationStr, region: userRegion,
+                    ...(coords ? { lat: coords.lat, lng: coords.lng } : {}),
                     description: document.getElementById('reqDesc').value.trim(),
                     userId: user.uid, userName: userName, equippedSkin: userEquippedSkin || 'ocean',
                     volunteers: [], volunteerCount: 0, createdAt: serverTimestamp()
@@ -1978,9 +2116,11 @@
             }
 
             try {
+                const lfCoords = await geocodePostLocation(locationStr).catch(()=>null);
                 await addDoc(collection(db, "lostfound"), {
                     type: document.getElementById('lfType').value,
                     item, location: locationStr, region: userRegion,
+                    ...(lfCoords ? { lat: lfCoords.lat, lng: lfCoords.lng } : {}),
                     description: document.getElementById('lfDesc').value.trim(),
                     image: imageBase64,
                     userId: user.uid, userName: userName, equippedSkin: userEquippedSkin || 'ocean',
@@ -2028,6 +2168,9 @@
                         card.className = `card request-card ${data.urgency === 'high' ? 'urgency-high' : ''}`;
                         const isOwner = auth.currentUser.uid === data.userId;
                         const hasVolunteered = (data.volunteers || []).some(v => v.uid === auth.currentUser.uid);
+                        const distHtml = (userLat && data.lat && data.lng)
+                            ? `<span class="dist-chip">📍 ${fmtDist(haversineKm(userLat,userLng,data.lat,data.lng))}</span>`
+                            : '';
 
                         let volListHtml = (data.volunteers || []).map(v => `
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
@@ -2044,7 +2187,7 @@
                         card.innerHTML = `
                             <div style="display:flex; justify-content:space-between; align-items:start;">
                                 <span class="badge badge-${data.category.toLowerCase()}">${data.category}</span>
-                                <div style="text-align:right;"><small>📍 ${data.location}</small>
+                                <div style="text-align:right;"><small>📍 ${data.location}</small>${distHtml}
                                 ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
                             </div>
                             <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.title}</h4>
@@ -2087,10 +2230,13 @@
                         const isOwner = auth.currentUser.uid === data.userId;
                         const card = document.createElement('div');
                         card.className = "card";
+                        const lfDistHtml = (userLat && data.lat && data.lng)
+                            ? `<span class="dist-chip">📍 ${fmtDist(haversineKm(userLat,userLng,data.lat,data.lng))}</span>`
+                            : '';
                         card.innerHTML = `
                             <div style="display:flex; justify-content:space-between; align-items:start;">
                                 <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
-                                <div style="text-align:right;"><small>📍 ${data.location}</small>
+                                <div style="text-align:right;"><small>📍 ${data.location}</small>${lfDistHtml}
                                 ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}</div>
                             </div>
                             ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
@@ -2693,7 +2839,15 @@
                         region: data.region || '—',
                         rating: data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : null,
                         ratingCount: data.ratingCount || 0,
-                        equippedSkin: data.equippedSkin || 'ocean'
+                        equippedSkin: data.equippedSkin || 'ocean',
+                        isVolunteer: data.isVolunteer || false,
+                        isBetaTester: data.isBetaTester || false,
+                        roles: data.roles || [],
+                        chatsResolved: data.chatsResolved || 0,
+                        reqPosts: data.reqPosts || 0,
+                        lfPosts: data.lfPosts || 0,
+                        badges: data.badges || [],
+                        thankYousReceived: data.thankYousReceived || 0
                     });
                 });
                 users.sort((a, b) => b.pts - a.pts);
@@ -2723,22 +2877,25 @@
                         ? `<span style="font-size:11px; background:#f1f5f9; color:#475569; padding:2px 7px; border-radius:99px; margin-left:6px;">${u.region}</span>`
                         : '';
 
+                    // Build role badge chips
+                    let roleBadgesHtml = '';
+                    if (u.isVolunteer)  roleBadgesHtml += '<span class="role-badge volunteer">🤝 Volunteer</span>';
+                    if (u.isBetaTester) roleBadgesHtml += '<span class="role-badge beta">🧪 Beta</span>';
+                    if ((u.roles||[]).includes('moderator'))  roleBadgesHtml += '<span class="role-badge moderator">🛡 Mod</span>';
+                    if ((u.roles||[]).includes('founder'))    roleBadgesHtml += '<span class="role-badge founder">⚡ Founder</span>';
+
                     const row = document.createElement('div');
                     row.className = `lb-row${isMe ? ' is-me' : ''}`;
+                    row.style.cursor = 'pointer';
                     const safeName = u.name.replace(/'/g, "\\'");
                     row.innerHTML = `
                         <div class="lb-rank ${rankClass}">${rankIcon}</div>
                         <div class="lb-avatar" style="${makePfpStyle(u.equippedSkin)}">${initial}</div>
-                        <div class="lb-info">
-                            <div class="lb-name">
-                                <span class="hovername">
-                                    ${u.name}
-                                    <span class="hovercard">
-                                        <div class="rating-line">${ratingStr}</div>
-                                        ${!isMe ? `<button class="report-btn" onclick="openReportModal('${u.uid}','${safeName}')">🚩 Report User</button>` : '<div style="font-size:11px;color:#64748b;">This is you</div>'}
-                                    </span>
-                                </span>
-                                ${isMe ? '<span style="font-size:11px;background:#38bdf8;color:#0f172a;padding:2px 7px;border-radius:99px;font-weight:600;">You</span>' : ''}
+                        <div class="lb-info" style="flex:1;">
+                            <div class="lb-name" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px;">
+                                <span>${u.name}</span>
+                                ${roleBadgesHtml}
+                                ${isMe ? '<span style="font-size:11px;background:#38bdf8;color:#0f172a;padding:2px 7px;border-radius:99px;font-weight:600;margin-left:4px;">You</span>' : ''}
                                 ${regionTag}
                             </div>
                             <div class="lb-sub">
@@ -2747,6 +2904,7 @@
                             </div>
                         </div>
                         <div class="lb-pts">${u.pts} <span>pts</span></div>`;
+                    row.onclick = () => openUserProfile(u);
                     feed.appendChild(row);
                 });
             });
@@ -3932,6 +4090,303 @@
             }
             btn.disabled = false; btn.innerText = 'Submit Report';
         };
+
+        // ══════════════════════════════════════════════════════════
+        //  USER PROFILE MODAL
+        // ══════════════════════════════════════════════════════════
+        window.openUserProfile = async (u) => {
+            // u can be a pre-fetched object or just a uid string
+            let data = u;
+            if (typeof u === 'string') {
+                const snap = await getDoc(doc(db, 'users', u));
+                if (!snap.exists()) return;
+                data = { uid: u, ...snap.data(),
+                    pts: snap.data().leaderboardPoints || 0,
+                    equippedSkin: snap.data().equippedSkin || 'ocean',
+                    isVolunteer: snap.data().isVolunteer || false,
+                    isBetaTester: snap.data().isBetaTester || false,
+                    roles: snap.data().roles || [],
+                    name: snap.data().fullName || 'User',
+                    chatsResolved: snap.data().chatsResolved || 0,
+                    reqPosts: snap.data().reqPosts || 0,
+                    lfPosts: snap.data().lfPosts || 0,
+                    badges: snap.data().badges || [],
+                    rating: snap.data().ratingCount ? (snap.data().ratingTotal / snap.data().ratingCount).toFixed(1) : null,
+                    ratingCount: snap.data().ratingCount || 0,
+                };
+            }
+
+            const skin = getEquippedSkin(data.equippedSkin || 'ocean');
+            const vRank = getVolunteerRank(data.pts || 0);
+            const initial = (data.name || 'U').charAt(0).toUpperCase();
+
+            // Banner with gradient from skin
+            document.getElementById('upmBanner').style.background = skin.gradient;
+
+            // Avatar
+            const avatarEl = document.getElementById('upmAvatar');
+            avatarEl.style.background = skin.gradient;
+            avatarEl.textContent = initial;
+
+            document.getElementById('upmName').textContent = data.name || 'User';
+
+            // Roles
+            const rolesEl = document.getElementById('upmRoles');
+            rolesEl.innerHTML = '';
+            if (data.isVolunteer)  rolesEl.innerHTML += '<span class="role-badge volunteer">🤝 Volunteer</span>';
+            if (data.isBetaTester) rolesEl.innerHTML += '<span class="role-badge beta">🧪 Beta Tester</span>';
+            if ((data.roles||[]).includes('moderator')) rolesEl.innerHTML += '<span class="role-badge moderator">🛡 Moderator</span>';
+            if ((data.roles||[]).includes('founder'))   rolesEl.innerHTML += '<span class="role-badge founder">⚡ Founder</span>';
+
+            // Rank
+            document.getElementById('upmRankIcon').textContent  = vRank.icon;
+            document.getElementById('upmRankLabel').textContent = vRank.label;
+            document.getElementById('upmRankLabel').style.color = vRank.color;
+            document.getElementById('upmRankPts').textContent   = `${data.pts || 0} points`;
+
+            // Stats
+            document.getElementById('upmHelps').textContent  = data.chatsResolved || 0;
+            document.getElementById('upmRating').textContent = data.rating ? `${data.rating}⭐` : '—';
+            document.getElementById('upmPosts').textContent  = (data.reqPosts || 0) + (data.lfPosts || 0);
+
+            // Badges
+            const badgesEl = document.getElementById('upmBadges');
+            const earned = data.badges || [];
+            if (earned.length === 0) {
+                badgesEl.innerHTML = '<span style="font-size:12px;color:#94a3b8;">No badges yet</span>';
+            } else {
+                badgesEl.innerHTML = ACHIEVEMENTS
+                    .filter(a => earned.includes(a.id))
+                    .map(a => `<span class="upm-badge-chip" title="${a.desc}">${a.icon} ${a.label}</span>`)
+                    .join('');
+            }
+
+            document.getElementById('userProfileModal').style.display = 'flex';
+        };
+
+        // ══════════════════════════════════════════════════════════
+        //  GEOCODING (Nominatim / OpenStreetMap, free)
+        // ══════════════════════════════════════════════════════════
+        async function geocodeUAE(query) {
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', UAE')}&format=json&limit=5&countrycodes=ae`, {
+                    headers: { 'Accept-Language': 'en' }
+                });
+                return await res.json();
+            } catch { return []; }
+        }
+
+        // ── Location setup modal ────────────────────────────────
+        let _lsSelected = null, _lsTimer = null;
+        window.lsDebounce = () => {
+            clearTimeout(_lsTimer);
+            _lsTimer = setTimeout(lsSearch, 500);
+        };
+        async function lsSearch() {
+            const q = document.getElementById('lsInput').value.trim();
+            if (q.length < 2) { document.getElementById('lsSearchResults').style.display='none'; return; }
+            document.getElementById('lsStatus').textContent = 'Searching…';
+            const results = await geocodeUAE(q);
+            const box = document.getElementById('lsSearchResults');
+            if (!results.length) { box.style.display='none'; document.getElementById('lsStatus').textContent='No results found'; return; }
+            document.getElementById('lsStatus').textContent = '';
+            box.style.display = 'block';
+            box.innerHTML = results.slice(0,5).map((r,i) =>
+                `<div class="ls-result-item" onclick="selectLSResult(${r.lat},${r.lon},'${r.display_name.replace(/'/g,"\\'").slice(0,60)}')">
+                    📍 ${r.display_name.slice(0,70)}
+                </div>`).join('');
+        }
+        window.selectLSResult = (lat, lon, label) => {
+            _lsSelected = { lat: parseFloat(lat), lng: parseFloat(lon), label };
+            document.getElementById('lsInput').value = label;
+            document.getElementById('lsSearchResults').style.display = 'none';
+            document.getElementById('lsStatus').textContent = `✅ Selected: ${label.slice(0,50)}`;
+            document.getElementById('lsConfirmBtn').disabled = false;
+        };
+        window.confirmLocation = async () => {
+            if (!_lsSelected) return;
+            const uid = auth.currentUser.uid;
+            await updateDoc(doc(db, 'users', uid), {
+                userLat: _lsSelected.lat,
+                userLng: _lsSelected.lng,
+                landmark: _lsSelected.label
+            });
+            userLat = _lsSelected.lat;
+            userLng = _lsSelected.lng;
+            document.getElementById('locationSetupModal').style.display = 'none';
+            initMinimap();
+            refreshMapPins();
+        };
+        window.skipLocationSetup = () => {
+            document.getElementById('locationSetupModal').style.display = 'none';
+        };
+
+        // ── Auto-geocode location when posting ──────────────────
+        async function geocodePostLocation(locStr) {
+            const results = await geocodeUAE(locStr);
+            if (results.length) return { lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) };
+            return null;
+        }
+
+        // Haversine distance in km
+        function haversineKm(lat1, lng1, lat2, lng2) {
+            const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLon = (lng2-lng1)*Math.PI/180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+        function fmtDist(km) {
+            return km < 1 ? `${Math.round(km*1000)}m` : `${km.toFixed(1)}km`;
+        }
+
+        // ══════════════════════════════════════════════════════════
+        //  MINI-MAP
+        // ══════════════════════════════════════════════════════════
+        let _map = null, _userMarker = null, _postMarkers = [], _mapInited = false;
+        let userLat = null, userLng = null;
+
+        function initMinimap() {
+            if (_mapInited || !userLat) return;
+            _mapInited = true;
+            _map = L.map('minimap-el', {
+                center: [userLat, userLng],
+                zoom: 13,
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                tap: false
+            });
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19
+            }).addTo(_map);
+
+            // Pulsing user dot
+            const pulseIcon = L.divIcon({
+                className: '',
+                html: `<div style="width:14px;height:14px;border-radius:50%;background:#38bdf8;border:2px solid white;box-shadow:0 0 0 4px rgba(56,189,248,.3);animation:pulse 1.5s infinite;"></div>
+                       <style>@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(56,189,248,.3)}50%{box-shadow:0 0 0 8px rgba(56,189,248,.05)}}</style>`,
+                iconSize: [14,14], iconAnchor: [7,7]
+            });
+            _userMarker = L.marker([userLat, userLng], { icon: pulseIcon }).addTo(_map);
+        }
+
+        function refreshMapPins() {
+            if (!_map) return;
+            _postMarkers.forEach(m => _map.removeLayer(m));
+            _postMarkers = [];
+
+            // Load requests
+            getDocs(query(collection(db, 'requests'), orderBy('createdAt','desc'))).then(snap => {
+                snap.forEach(ds => {
+                    const d = ds.data();
+                    if (!d.lat || !d.lng) return;
+                    const color = d.urgency === 'high' ? '#ef4444' : '#38bdf8';
+                    const icon = L.divIcon({
+                        className: '',
+                        html: `<div title="${d.title||'Request'}" style="width:10px;height:10px;border-radius:50%;background:${color};border:1.5px solid white;cursor:pointer;"></div>`,
+                        iconSize: [10,10], iconAnchor: [5,5]
+                    });
+                    const m = L.marker([d.lat, d.lng], { icon })
+                        .bindPopup(`<b>${d.title||'Request'}</b><br>📍 ${d.location||''}`, { maxWidth: 160 })
+                        .addTo(_map);
+                    _postMarkers.push(m);
+                });
+            }).catch(()=>{});
+
+            // Load lost & found
+            getDocs(query(collection(db, 'lostfound'), orderBy('createdAt','desc'))).then(snap => {
+                snap.forEach(ds => {
+                    const d = ds.data();
+                    if (!d.lat || !d.lng) return;
+                    const color = d.type === 'Lost' ? '#f97316' : '#22c55e';
+                    const icon = L.divIcon({
+                        className: '',
+                        html: `<div title="${d.item||'Item'}" style="width:10px;height:10px;border-radius:50%;background:${color};border:1.5px solid white;cursor:pointer;"></div>`,
+                        iconSize: [10,10], iconAnchor: [5,5]
+                    });
+                    const m = L.marker([d.lat, d.lng], { icon })
+                        .bindPopup(`<b>${d.type||'Item'}: ${d.item||''}</b><br>📍 ${d.location||''}`, { maxWidth: 160 })
+                        .addTo(_map);
+                    _postMarkers.push(m);
+                });
+            }).catch(()=>{});
+        }
+
+        document.getElementById('minimap-widget').addEventListener('click', function(e) {
+            if (e.target.id === 'minimap-close') return;
+            if (!this.classList.contains('expanded')) {
+                this.classList.add('expanded');
+                if (_map) {
+                    setTimeout(() => { _map.invalidateSize(); _map.getContainer().addEventListener('click', e=>e.stopPropagation(), {once:true}); _map.dragging.enable(); _map.scrollWheelZoom.enable(); _map.doubleClickZoom.enable(); }, 320);
+                }
+            }
+        });
+        window.collapseMinimap = (e) => {
+            e.stopPropagation();
+            const w = document.getElementById('minimap-widget');
+            w.classList.remove('expanded');
+            if (_map) { _map.dragging.disable(); _map.scrollWheelZoom.disable(); _map.doubleClickZoom.disable(); }
+        };
+
+        // ── Patch request submit to geocode ─────────────────────
+        const _origReqSubmit = document.getElementById('submitReqBtn') ? document.getElementById('submitReqBtn').onclick : null;
+        // We patch via event override after DOM is ready
+        function patchSubmitButtons() {
+            const reqBtn = document.getElementById('submitReqBtn');
+            const lfBtn  = document.getElementById('submitLFBtn');
+
+            if (reqBtn) {
+                const originalReqClick = reqBtn.onclick;
+                reqBtn.onclick = null;
+                reqBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const locStr = document.getElementById('reqLoc').value.trim();
+                    if (locStr) {
+                        const coords = await geocodePostLocation(locStr);
+                        if (coords) {
+                            // Temporarily store for the addDoc call
+                            window._pendingPostCoords = coords;
+                        }
+                    }
+                    // Call original submit logic via the stored reference
+                    if (originalReqClick) originalReqClick.call(reqBtn, e);
+                    else reqBtn.dispatchEvent(new Event('_originalclick'));
+                }, {once: false});
+            }
+        }
+
+        // ── User location init after auth ─────────────────────
+        async function initUserLocation(uid) {
+            try {
+                const snap = await getDoc(doc(db, 'users', uid));
+                if (snap.exists()) {
+                    const d = snap.data();
+                    if (d.userLat && d.userLng) {
+                        userLat = d.userLat;
+                        userLng = d.userLng;
+                        initMinimap();
+                        setTimeout(refreshMapPins, 2000);
+                    } else {
+                        // Show location setup if not set
+                        setTimeout(() => {
+                            document.getElementById('locationSetupModal').style.display = 'flex';
+                        }, 2500);
+                    }
+                }
+            } catch(e) { console.warn('Location init failed:', e); }
+        }
+
+        // Hook into existing onAuthStateChanged — call our location init
+        // We do this by watching for auth user being set
+        (function watchForAuth() {
+            const check = setInterval(() => {
+                if (auth.currentUser) {
+                    clearInterval(check);
+                    initUserLocation(auth.currentUser.uid);
+                }
+            }, 500);
+        })();
     </script>
 </body>
 </html>
