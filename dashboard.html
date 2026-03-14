@@ -876,6 +876,19 @@
                 transition: transform .08s ease;
             }
 
+            /* Profile is a modal trigger, not a tab — never show active glow */
+            #mob-profile.active, #mob-profile:focus {
+                background: none !important;
+                box-shadow: none !important;
+            }
+            #mob-profile.active::before, #mob-profile:focus::before {
+                display: none !important;
+            }
+            #mob-profile.active .mob-icon {
+                transform: none !important;
+                filter: none !important;
+            }
+
             body.dark #mobileTabBar {
                 background: #080f1c;
                 border-color: rgba(56,189,248,.12);
@@ -929,13 +942,13 @@
         width:160px; height:160px;
         border-radius:50%;
         overflow:hidden;
-        border:3px solid rgba(56,189,248,.7);
+        border:3px solid rgba(66,133,244,.7);
         box-shadow:0 0 0 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
         cursor:pointer;
         transition:all .35s cubic-bezier(.34,1.56,.64,1);
-        background:#0c2233;
+        background:#e8f0fe;
     }
-    #minimap-widget:hover { transform:scale(1.06); border-color:#38bdf8; }
+    #minimap-widget:hover { transform:scale(1.06); border-color:#4285F4; }
     #minimap-widget.expanded {
         width:360px; height:300px;
         border-radius:18px;
@@ -944,14 +957,14 @@
     #minimap-el { width:100%; height:100%; }
     #minimap-label {
         position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
-        background:rgba(7,30,48,.8); color:#7dd3fc;
+        background:rgba(255,255,255,.88); color:#1a73e8;
         font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
         padding:3px 8px; border-radius:99px; white-space:nowrap;
         pointer-events:none;
     }
     #minimap-close {
         display:none; position:absolute; top:8px; right:8px;
-        background:rgba(7,30,48,.8); color:#7dd3fc; border:none; border-radius:50%;
+        background:rgba(255,255,255,.88); color:#1a73e8; border:none; border-radius:50%;
         width:24px; height:24px; font-size:14px; cursor:pointer; line-height:24px; text-align:center;
     }
     #minimap-widget.expanded #minimap-close { display:block; }
@@ -1991,9 +2004,22 @@
             }
             // Check & award any newly earned badges
             await checkAndAwardBadges(auth.currentUser.uid, data);
-            document.getElementById('profileModal').style.display = 'flex';
+
+            // Show modal WITHOUT changing which tab is active
+            const modal = document.getElementById('profileModal');
+            modal.style.display = 'flex';
+
+            // Remove the active glow from the profile button on mobile
+            // (profile is not a tab — the previously active tab should stay highlighted)
+            const mobProfileBtn = document.getElementById('mob-profile');
+            if (mobProfileBtn) mobProfileBtn.classList.remove('active');
         };
         window.closeProfileModal = () => document.getElementById('profileModal').style.display = 'none';
+
+        // Click-outside-to-dismiss for profileModal
+        document.getElementById('profileModal').addEventListener('click', function(e) {
+            if (e.target === this) this.style.display = 'none';
+        });
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -4168,19 +4194,51 @@
         //  GEOCODING (Nominatim / OpenStreetMap, free)
         // ══════════════════════════════════════════════════════════
         async function geocodeUAE(query) {
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', UAE')}&format=json&limit=5&countrycodes=ae`, {
-                    headers: { 'Accept-Language': 'en' }
-                });
-                return await res.json();
-            } catch { return []; }
+            const uaeBbox = '51.5,22.6,56.4,26.1';
+            const urls = [
+                // Try with Sharjah city hint first (most common UAE city for this app)
+                `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', Sharjah, United Arab Emirates')}&format=json&limit=5&addressdetails=1`,
+                // Try with Dubai in case it's a Dubai neighbourhood
+                `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', Dubai, United Arab Emirates')}&format=json&limit=5&addressdetails=1`,
+                // Generic UAE search biased to UAE bbox
+                `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', United Arab Emirates')}&format=json&limit=5&viewbox=${uaeBbox}&bounded=0&addressdetails=1`,
+                // Photon (Komoot) geocoder — great neighbourhood coverage, no rate limit
+                `https://photon.komoot.io/api/?q=${encodeURIComponent(query + ' UAE')}&limit=5&lang=en`,
+            ];
+            for (const url of urls) {
+                try {
+                    const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+                    const raw = await res.json();
+                    // Normalise Photon GeoJSON to Nominatim format
+                    if (raw.features) {
+                        const mapped = raw.features
+                            .filter(f => {
+                                const c = (f.properties.country || '').toLowerCase();
+                                return c.includes('emirates') || c.includes('uae') || c === 'ae';
+                            })
+                            .map(f => ({
+                                lat: f.geometry.coordinates[1],
+                                lon: f.geometry.coordinates[0],
+                                display_name: [
+                                    f.properties.name,
+                                    f.properties.city || f.properties.state,
+                                    f.properties.country
+                                ].filter(Boolean).join(', ')
+                            }));
+                        if (mapped.length) return mapped;
+                    }
+                    // Nominatim format
+                    if (raw && raw.length) return raw;
+                } catch {}
+            }
+            return [];
         }
 
         // ── Location setup modal ────────────────────────────────
         let _lsSelected = null, _lsTimer = null;
         window.lsDebounce = () => {
             clearTimeout(_lsTimer);
-            _lsTimer = setTimeout(lsSearch, 500);
+            _lsTimer = setTimeout(lsSearch, 400);
         };
         async function lsSearch() {
             const q = document.getElementById('lsInput').value.trim();
@@ -4188,13 +4246,30 @@
             document.getElementById('lsStatus').textContent = 'Searching…';
             const results = await geocodeUAE(q);
             const box = document.getElementById('lsSearchResults');
-            if (!results.length) { box.style.display='none'; document.getElementById('lsStatus').textContent='No results found'; return; }
+            if (!results.length) {
+                box.style.display='none';
+                document.getElementById('lsStatus').textContent = 'No results found — try a different spelling or nearby landmark';
+                return;
+            }
             document.getElementById('lsStatus').textContent = '';
             box.style.display = 'block';
-            box.innerHTML = results.slice(0,5).map((r,i) =>
-                `<div class="ls-result-item" onclick="selectLSResult(${r.lat},${r.lon},'${r.display_name.replace(/'/g,"\\'").slice(0,60)}')">
-                    📍 ${r.display_name.slice(0,70)}
-                </div>`).join('');
+            // Clean up display names — show shorter readable label
+            box.innerHTML = results.slice(0, 7).map((r) => {
+                const addr = r.address || {};
+                // Build a short readable label: neighbourhood/suburb, city, country
+                const parts = [
+                    addr.neighbourhood || addr.suburb || addr.quarter || addr.hamlet,
+                    addr.city || addr.town || addr.village || addr.county,
+                    addr.state,
+                    addr.country
+                ].filter(Boolean);
+                const shortLabel = parts.length >= 2 ? parts.slice(0, 3).join(', ') : r.display_name.slice(0, 65);
+                const safeLabel = shortLabel.replace(/'/g, "\\'");
+                return `<div class="ls-result-item" onclick="selectLSResult(${r.lat},${r.lon},'${safeLabel}')">
+                    📍 ${shortLabel}
+                    ${addr.country && addr.country !== 'United Arab Emirates' ? `<span style="font-size:10px;color:#94a3b8;margin-left:4px;">(${addr.country})</span>` : ''}
+                </div>`;
+            }).join('');
         }
         window.selectLSResult = (lat, lon, label) => {
             _lsSelected = { lat: parseFloat(lat), lng: parseFloat(lon), label };
@@ -4249,7 +4324,7 @@
             _mapInited = true;
             _map = L.map('minimap-el', {
                 center: [userLat, userLng],
-                zoom: 13,
+                zoom: 14,
                 zoomControl: false,
                 attributionControl: false,
                 dragging: false,
@@ -4257,18 +4332,38 @@
                 doubleClickZoom: false,
                 tap: false
             });
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            // Carto Voyager — clean Google Maps-like style
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                 maxZoom: 19
             }).addTo(_map);
 
-            // Pulsing user dot
-            const pulseIcon = L.divIcon({
+            // Shift tile water color toward Beacon of Unity cyan (#38bdf8)
+            // Voyager's water is a neutral blue — hue-rotate nudges it to our brand cyan
+            // saturate boosts it, brightness keeps it light
+            const tileStyle = document.createElement('style');
+            tileStyle.textContent = `
+                #minimap-el .leaflet-tile-pane {
+                    filter: hue-rotate(-20deg) saturate(1.6) brightness(1.02);
+                }
+            `;
+            document.head.appendChild(tileStyle);
+
+            // Google Maps-style teardrop pin for user location
+            const gmapsPin = L.divIcon({
                 className: '',
-                html: `<div style="width:14px;height:14px;border-radius:50%;background:#38bdf8;border:2px solid white;box-shadow:0 0 0 4px rgba(56,189,248,.3);animation:pulse 1.5s infinite;"></div>
-                       <style>@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(56,189,248,.3)}50%{box-shadow:0 0 0 8px rgba(56,189,248,.05)}}</style>`,
-                iconSize: [14,14], iconAnchor: [7,7]
+                html: `<div style="position:relative;width:28px;height:38px;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.35));">
+                    <svg viewBox="0 0 28 38" xmlns="http://www.w3.org/2000/svg" width="28" height="38">
+                        <path d="M14 0C6.27 0 0 6.27 0 14c0 9.54 14 24 14 24S28 23.54 28 14C28 6.27 21.73 0 14 0z" fill="#4285F4"/>
+                        <circle cx="14" cy="14" r="6" fill="white"/>
+                        <circle cx="14" cy="14" r="3.5" fill="#4285F4"/>
+                    </svg>
+                    <style>@keyframes mapbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}</style>
+                    </div>`,
+                iconSize: [28, 38], iconAnchor: [14, 38]
             });
-            _userMarker = L.marker([userLat, userLng], { icon: pulseIcon }).addTo(_map);
+            _userMarker = L.marker([userLat, userLng], { icon: gmapsPin })
+                .bindPopup('<b>📍 Your Location</b>', { maxWidth: 140 })
+                .addTo(_map);
         }
 
         function refreshMapPins() {
@@ -4276,37 +4371,46 @@
             _postMarkers.forEach(m => _map.removeLayer(m));
             _postMarkers = [];
 
-            // Load requests
+            function makePin(color, emoji, size) {
+                return L.divIcon({
+                    className: '',
+                    html: `<div style="
+                        width:${size}px; height:${size+4}px;
+                        position:relative;
+                        filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+                    ">
+                        <svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size+4}">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 8.2 12 20 12 20S24 20.2 24 12C24 5.37 18.63 0 12 0z" fill="${color}" stroke="white" stroke-width="1.5"/>
+                            <text x="12" y="15" text-anchor="middle" font-size="9" fill="white">${emoji}</text>
+                        </svg>
+                    </div>`,
+                    iconSize: [size, size+4], iconAnchor: [size/2, size+4]
+                });
+            }
+
+            // Load requests — red for urgent, blue for normal
             getDocs(query(collection(db, 'requests'), orderBy('createdAt','desc'))).then(snap => {
                 snap.forEach(ds => {
                     const d = ds.data();
                     if (!d.lat || !d.lng) return;
-                    const color = d.urgency === 'high' ? '#ef4444' : '#38bdf8';
-                    const icon = L.divIcon({
-                        className: '',
-                        html: `<div title="${d.title||'Request'}" style="width:10px;height:10px;border-radius:50%;background:${color};border:1.5px solid white;cursor:pointer;"></div>`,
-                        iconSize: [10,10], iconAnchor: [5,5]
-                    });
-                    const m = L.marker([d.lat, d.lng], { icon })
-                        .bindPopup(`<b>${d.title||'Request'}</b><br>📍 ${d.location||''}`, { maxWidth: 160 })
+                    const color = d.urgency === 'high' ? '#ef4444' : '#3b82f6';
+                    const emoji = d.urgency === 'high' ? '🆘' : '🤝';
+                    const m = L.marker([d.lat, d.lng], { icon: makePin(color, emoji, 22) })
+                        .bindPopup(`<b>${d.title||'Request'}</b><br><span style="font-size:11px;color:#64748b;">📍 ${d.location||''}</span>`, { maxWidth: 180 })
                         .addTo(_map);
                     _postMarkers.push(m);
                 });
             }).catch(()=>{});
 
-            // Load lost & found
+            // Load lost & found — orange for lost, green for found
             getDocs(query(collection(db, 'lostfound'), orderBy('createdAt','desc'))).then(snap => {
                 snap.forEach(ds => {
                     const d = ds.data();
                     if (!d.lat || !d.lng) return;
                     const color = d.type === 'Lost' ? '#f97316' : '#22c55e';
-                    const icon = L.divIcon({
-                        className: '',
-                        html: `<div title="${d.item||'Item'}" style="width:10px;height:10px;border-radius:50%;background:${color};border:1.5px solid white;cursor:pointer;"></div>`,
-                        iconSize: [10,10], iconAnchor: [5,5]
-                    });
-                    const m = L.marker([d.lat, d.lng], { icon })
-                        .bindPopup(`<b>${d.type||'Item'}: ${d.item||''}</b><br>📍 ${d.location||''}`, { maxWidth: 160 })
+                    const emoji = d.type === 'Lost' ? '🔍' : '✅';
+                    const m = L.marker([d.lat, d.lng], { icon: makePin(color, emoji, 22) })
+                        .bindPopup(`<b>${d.type||'Item'}: ${d.item||''}</b><br><span style="font-size:11px;color:#64748b;">📍 ${d.location||''}</span>`, { maxWidth: 180 })
                         .addTo(_map);
                     _postMarkers.push(m);
                 });
@@ -4326,7 +4430,17 @@
             e.stopPropagation();
             const w = document.getElementById('minimap-widget');
             w.classList.remove('expanded');
-            if (_map) { _map.dragging.disable(); _map.scrollWheelZoom.disable(); _map.doubleClickZoom.disable(); }
+            if (_map) {
+                _map.dragging.disable();
+                _map.scrollWheelZoom.disable();
+                _map.doubleClickZoom.disable();
+                // Snap back to user's location after the CSS transition ends
+                setTimeout(() => {
+                    if (userLat && userLng) {
+                        _map.setView([userLat, userLng], 14, { animate: true, duration: 0.6 });
+                    }
+                }, 320);
+            }
         };
 
         // ── Patch request submit to geocode ─────────────────────
