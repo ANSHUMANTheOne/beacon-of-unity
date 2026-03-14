@@ -975,7 +975,43 @@
     #minimap-widget.expanded #minimap-waves-svg { height:22%; opacity:0.10; }
     #minimap-widget.expanded #minimap-brand { font-size:10px; opacity:0.45; bottom:6px; letter-spacing:2px; }
     /* hide on mobile bottom nav so it doesn't overlap */
-    @media(max-width:768px){ #minimap-widget { bottom:76px; left:10px; width:110px; height:110px; } }
+    @media(max-width:768px){
+        #minimap-widget { display:none !important; }
+        #minimap-fab {
+            display:flex !important;
+        }
+    }
+    #minimap-fab {
+        display:none;
+        position:fixed; bottom:80px; right:16px; z-index:800;
+        width:44px; height:44px; border-radius:50%;
+        background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+        border:2px solid white;
+        box-shadow:0 4px 14px rgba(56,189,248,.45);
+        align-items:center; justify-content:center;
+        cursor:pointer; font-size:20px;
+        color:white;
+        transition:transform .2s;
+    }
+    #minimap-fab:hover { transform:scale(1.1); }
+    /* Full-screen map modal for mobile */
+    #minimapModal {
+        display:none; position:fixed; inset:0; z-index:3000;
+        background:rgba(0,0,0,.6); align-items:center; justify-content:center;
+    }
+    #minimapModal.open { display:flex; }
+    #minimapModal-box {
+        width:92vw; height:72vh; border-radius:20px; overflow:hidden;
+        position:relative; box-shadow:0 20px 60px rgba(0,0,0,.4);
+        border:3px solid rgba(66,133,244,.6);
+    }
+    #minimapModal-el { width:100%; height:100%; }
+    #minimapModal-close {
+        position:absolute; top:10px; right:10px; z-index:10;
+        background:white; color:#1a73e8; border:none; border-radius:50%;
+        width:32px; height:32px; font-size:16px; cursor:pointer;
+        box-shadow:0 2px 8px rgba(0,0,0,.2); line-height:32px; text-align:center;
+    }
 
     /* Leaflet overrides for dark minimap */
     #minimap-widget .leaflet-control-attribution { display:none !important; }
@@ -996,44 +1032,56 @@
             position:absolute; inset:0; pointer-events:none; z-index:500; overflow:hidden;
             border-radius:inherit;
         ">
+            <!-- Waves on the LEFT side where the Gulf water is in UAE view -->
             <svg id="minimap-waves-svg" xmlns="http://www.w3.org/2000/svg"
-                 style="position:absolute;bottom:0;left:0;width:100%;height:38%;opacity:0.13;"
-                 viewBox="0 0 400 60" preserveAspectRatio="none">
+                 style="position:absolute;top:0;left:0;width:38%;height:100%;opacity:0.12;"
+                 viewBox="0 0 60 400" preserveAspectRatio="none">
                 <defs>
                     <style>
-                        #w1 { animation: waveScroll 4s linear infinite; }
-                        #w2 { animation: waveScroll 6s linear infinite reverse; }
-                        #w3 { animation: waveScroll 8s linear infinite; }
-                        @keyframes waveScroll {
-                            0%   { transform: translateX(0); }
-                            100% { transform: translateX(-50%); }
+                        #wv1 { animation: waveV 5s linear infinite; }
+                        #wv2 { animation: waveV 7s linear infinite reverse; }
+                        #wv3 { animation: waveV 9s linear infinite; }
+                        @keyframes waveV {
+                            0%   { transform: translateY(0); }
+                            100% { transform: translateY(-50%); }
                         }
                     </style>
                 </defs>
-                <!-- Three stacked wave paths, doubled width for seamless scroll -->
-                <path id="w1" d="M0,30 C50,10 100,50 150,30 C200,10 250,50 300,30 C350,10 400,50 450,30 C500,10 550,50 600,30 C650,10 700,50 750,30 C800,10 850,50 900,30 L900,60 L0,60 Z" fill="#38bdf8"/>
-                <path id="w2" d="M0,38 C60,20 120,56 180,38 C240,20 300,56 360,38 C420,20 480,56 540,38 C600,20 660,56 720,38 C780,20 840,56 900,38 L900,60 L0,60 Z" fill="#0ea5e9" opacity="0.7"/>
-                <path id="w3" d="M0,44 C70,28 140,58 210,44 C280,28 350,58 420,44 C490,28 560,58 630,44 C700,28 770,58 840,44 L840,60 L0,60 Z" fill="#7dd3fc" opacity="0.5"/>
+                <path id="wv1" d="M30,0 C10,50 50,100 30,150 C10,200 50,250 30,300 C10,350 50,400 30,450 C10,500 50,550 30,600 C10,650 50,700 30,750 C10,800 50,850 30,900 L60,900 L60,0 Z" fill="#38bdf8"/>
+                <path id="wv2" d="M20,0 C0,60 40,120 20,180 C0,240 40,300 20,360 C0,420 40,480 20,540 C0,600 40,660 20,720 C0,780 40,840 20,900 L0,900 L0,0 Z" fill="#0ea5e9" opacity="0.7"/>
+                <path id="wv3" d="M40,0 C20,70 50,140 40,210 C20,280 50,350 40,420 C20,490 50,560 40,630 C20,700 50,770 40,840 L60,840 L60,0 Z" fill="#7dd3fc" opacity="0.5"/>
             </svg>
-            <!-- Branding text watermark in the water zone -->
+            <!-- Branding sits inside the water zone (left side), rotated vertically -->
             <div id="minimap-brand" style="
-                position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
+                position:absolute; top:50%; left:14%;
+                transform: translate(-50%, -50%) rotate(-90deg);
                 white-space:nowrap; pointer-events:none;
                 font-family:'Comic Sans MS','Chalkboard SE','Segoe Print',cursive;
-                font-size:7px; font-weight:700; letter-spacing:1.2px;
-                color:#fff; opacity:0.55;
-                text-shadow: 0 0 6px rgba(56,189,248,.8), 0 1px 2px rgba(0,0,0,.3);
+                font-size:7px; font-weight:700; letter-spacing:1.5px;
+                color:#fff; opacity:0.5;
+                text-shadow: 0 0 8px rgba(56,189,248,.9), 0 1px 2px rgba(0,0,0,.2);
                 animation: brandFloat 5s ease-in-out infinite;
             ">✦ BEACON OF UNITY ✦</div>
             <style>
                 @keyframes brandFloat {
-                    0%,100% { transform: translateX(-50%) translateY(0); }
-                    50%     { transform: translateX(-50%) translateY(-2px); }
+                    0%,100% { transform: translate(-50%,-50%) rotate(-90deg) translateY(0); }
+                    50%     { transform: translate(-50%,-50%) rotate(-90deg) translateY(-3px); }
                 }
             </style>
         </div>
         <div id="minimap-label">📍 Live Map</div>
         <button id="minimap-close" onclick="collapseMinimap(event)">✕</button>
+    </div>
+
+    <!-- ── MOBILE MAP FAB (shown only on mobile) ── -->
+    <div id="minimap-fab" onclick="openMinimapModal()" title="View live map">🗺️</div>
+
+    <!-- ── MOBILE MAP MODAL ── -->
+    <div id="minimapModal" onclick="if(event.target===this)closeMinimapModal()">
+        <div id="minimapModal-box">
+            <div id="minimapModal-el"></div>
+            <button id="minimapModal-close" onclick="closeMinimapModal()">✕</button>
+        </div>
     </div>
 
     <!-- ── USER PROFILE MODAL ── -->
@@ -4378,21 +4426,11 @@
                 doubleClickZoom: false,
                 tap: false
             });
-            // ESRI World Street Map — English labels globally, clean Google Maps-like style
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            // CartoDB Positron — clean white roads, English labels, no orange/red
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 maxZoom: 19
             }).addTo(_map);
-
-            // Shift tile water color toward Beacon of Unity cyan (#38bdf8)
-            // Voyager's water is a neutral blue — hue-rotate nudges it to our brand cyan
-            // saturate boosts it, brightness keeps it light
-            const tileStyle = document.createElement('style');
-            tileStyle.textContent = `
-                #minimap-el .leaflet-tile-pane {
-                    filter: hue-rotate(-20deg) saturate(1.6) brightness(1.02);
-                }
-            `;
-            document.head.appendChild(tileStyle);
+            // No CSS filter — Positron is already clean and neutral
 
             // Google Maps-style teardrop pin for user location
             const gmapsPin = L.divIcon({
@@ -4417,45 +4455,40 @@
             _postMarkers.forEach(m => _map.removeLayer(m));
             _postMarkers = [];
 
-            function makePin(color, emoji, size) {
+            function makePin(color, letter, size) {
                 return L.divIcon({
                     className: '',
-                    html: `<div style="
-                        width:${size}px; height:${size+4}px;
-                        position:relative;
-                        filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-                    ">
-                        <svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size+4}">
-                            <path d="M12 0C5.37 0 0 5.37 0 12c0 8.2 12 20 12 20S24 20.2 24 12C24 5.37 18.63 0 12 0z" fill="${color}" stroke="white" stroke-width="1.5"/>
-                            <text x="12" y="15" text-anchor="middle" font-size="9" fill="white">${emoji}</text>
+                    html: `<div style="filter:drop-shadow(0 2px 5px rgba(0,0,0,0.35));">
+                        <svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size+6}">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 8.2 12 20 12 20S24 20.2 24 12C24 5.37 18.63 0 12 0z" fill="${color}" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"/>
+                            <circle cx="12" cy="12" r="5.5" fill="rgba(255,255,255,0.25)"/>
+                            <text x="12" y="16" text-anchor="middle" font-size="8" font-weight="bold" fill="white" font-family="Arial,sans-serif">${letter}</text>
                         </svg>
                     </div>`,
-                    iconSize: [size, size+4], iconAnchor: [size/2, size+4]
+                    iconSize: [size, size+6], iconAnchor: [size/2, size+6]
                 });
             }
 
-            // Load requests — red for urgent, blue for normal
+            // Load requests — red for urgent (#ef4444), sky blue for normal (#38bdf8)
             getDocs(query(collection(db, 'requests'), orderBy('createdAt','desc'))).then(snap => {
                 snap.forEach(ds => {
                     const d = ds.data();
                     if (!d.lat || !d.lng) return;
-                    const color = d.urgency === 'high' ? '#ef4444' : '#3b82f6';
-                    const emoji = d.urgency === 'high' ? '🆘' : '🤝';
-                    const m = L.marker([d.lat, d.lng], { icon: makePin(color, emoji, 22) })
+                    const isUrgent = d.urgency === 'high';
+                    const m = L.marker([d.lat, d.lng], { icon: makePin(isUrgent ? '#ef4444' : '#38bdf8', isUrgent ? '!' : 'H', 22) })
                         .bindPopup(`<b>${d.title||'Request'}</b><br><span style="font-size:11px;color:#64748b;">📍 ${d.location||''}</span>`, { maxWidth: 180 })
                         .addTo(_map);
                     _postMarkers.push(m);
                 });
             }).catch(()=>{});
 
-            // Load lost & found — orange for lost, green for found
+            // Load lost & found — orange for lost (#f97316), green for found (#16a34a)
             getDocs(query(collection(db, 'lostfound'), orderBy('createdAt','desc'))).then(snap => {
                 snap.forEach(ds => {
                     const d = ds.data();
                     if (!d.lat || !d.lng) return;
-                    const color = d.type === 'Lost' ? '#f97316' : '#22c55e';
-                    const emoji = d.type === 'Lost' ? '🔍' : '✅';
-                    const m = L.marker([d.lat, d.lng], { icon: makePin(color, emoji, 22) })
+                    const isLost = d.type === 'Lost';
+                    const m = L.marker([d.lat, d.lng], { icon: makePin(isLost ? '#f97316' : '#16a34a', isLost ? 'L' : 'F', 22) })
                         .bindPopup(`<b>${d.type||'Item'}: ${d.item||''}</b><br><span style="font-size:11px;color:#64748b;">📍 ${d.location||''}</span>`, { maxWidth: 180 })
                         .addTo(_map);
                     _postMarkers.push(m);
@@ -4488,6 +4521,47 @@
                 }, 320);
             }
         };
+
+        // ── Mobile map modal ─────────────────────────────────────
+        let _mobileMap = null;
+        window.openMinimapModal = () => {
+            document.getElementById('minimapModal').classList.add('open');
+            if (!_mobileMap) {
+                const center = (userLat && userLng) ? [userLat, userLng] : [25.3463, 55.4209];
+                _mobileMap = L.map('minimapModal-el', { center, zoom: 13, zoomControl: true, attributionControl: false });
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(_mobileMap);
+                if (userLat && userLng) {
+                    const gmapsPin = L.divIcon({
+                        className: '',
+                        html: `<div style="filter:drop-shadow(0 3px 6px rgba(0,0,0,0.35));">
+                            <svg viewBox="0 0 28 38" xmlns="http://www.w3.org/2000/svg" width="28" height="38">
+                                <path d="M14 0C6.27 0 0 6.27 0 14c0 9.54 14 24 14 24S28 23.54 28 14C28 6.27 21.73 0 14 0z" fill="#4285F4"/>
+                                <circle cx="14" cy="14" r="6" fill="white"/>
+                                <circle cx="14" cy="14" r="3.5" fill="#4285F4"/>
+                            </svg></div>`,
+                        iconSize: [28,38], iconAnchor: [14,38]
+                    });
+                    L.marker([userLat, userLng], { icon: gmapsPin }).bindPopup('<b>📍 Your Location</b>').addTo(_mobileMap);
+                }
+                // Copy existing post markers to mobile map
+                if (_postMarkers.length === 0) setTimeout(() => addMobileMapPins(_mobileMap), 800);
+                else addMobileMapPins(_mobileMap);
+            } else {
+                setTimeout(() => _mobileMap.invalidateSize(), 100);
+            }
+        };
+        window.closeMinimapModal = () => {
+            document.getElementById('minimapModal').classList.remove('open');
+        };
+        function addMobileMapPins(map) {
+            function makePin2(color, letter) {
+                return L.divIcon({ className:'', html:`<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg" width="22" height="28" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))"><path d="M12 0C5.37 0 0 5.37 0 12c0 8.2 12 20 12 20S24 20.2 24 12C24 5.37 18.63 0 12 0z" fill="${color}" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/><text x="12" y="16" text-anchor="middle" font-size="8" font-weight="bold" fill="white" font-family="Arial">${letter}</text></svg>`, iconSize:[22,28], iconAnchor:[11,28] });
+            }
+            getDocs(query(collection(db,'requests'),orderBy('createdAt','desc'))).then(snap=>{
+                snap.forEach(ds=>{ const d=ds.data(); if(!d.lat||!d.lng) return; L.marker([d.lat,d.lng],{icon:makePin2(d.urgency==='high'?'#ef4444':'#38bdf8',d.urgency==='high'?'!':'H')}).bindPopup(`<b>${d.title||'Request'}</b><br><small>📍 ${d.location||''}</small>`).addTo(map); }); }).catch(()=>{});
+            getDocs(query(collection(db,'lostfound'),orderBy('createdAt','desc'))).then(snap=>{
+                snap.forEach(ds=>{ const d=ds.data(); if(!d.lat||!d.lng) return; L.marker([d.lat,d.lng],{icon:makePin2(d.type==='Lost'?'#f97316':'#16a34a',d.type==='Lost'?'L':'F')}).bindPopup(`<b>${d.item||''}</b><br><small>📍 ${d.location||''}</small>`).addTo(map); }); }).catch(()=>{});
+        }
 
         // ── Patch request submit to geocode ─────────────────────
         const _origReqSubmit = document.getElementById('submitReqBtn') ? document.getElementById('submitReqBtn').onclick : null;
