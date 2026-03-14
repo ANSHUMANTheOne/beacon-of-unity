@@ -965,10 +965,15 @@
     #minimap-close {
         display:none; position:absolute; top:8px; right:8px;
         background:rgba(255,255,255,.88); color:#1a73e8; border:none; border-radius:50%;
-        width:24px; height:24px; font-size:14px; cursor:pointer; line-height:24px; text-align:center;
+        width:28px; height:28px; font-size:15px; cursor:pointer; line-height:28px; text-align:center;
+        z-index:600; box-shadow:0 2px 6px rgba(0,0,0,.2);
+        pointer-events:all;
     }
+    #minimap-close:hover { background:white; color:#0d47a1; }
     #minimap-widget.expanded #minimap-close { display:block; }
     #minimap-widget.expanded #minimap-label { display:none; }
+    #minimap-widget.expanded #minimap-waves-svg { height:22%; opacity:0.10; }
+    #minimap-widget.expanded #minimap-brand { font-size:10px; opacity:0.45; bottom:6px; letter-spacing:2px; }
     /* hide on mobile bottom nav so it doesn't overlap */
     @media(max-width:768px){ #minimap-widget { bottom:76px; left:10px; width:110px; height:110px; } }
 
@@ -986,6 +991,47 @@
     <!-- ── MINIMAP WIDGET ── -->
     <div id="minimap-widget" title="Click to expand map">
         <div id="minimap-el"></div>
+        <!-- Wave + branding overlay — pointer-events:none so map stays interactive -->
+        <div id="minimap-overlay" style="
+            position:absolute; inset:0; pointer-events:none; z-index:500; overflow:hidden;
+            border-radius:inherit;
+        ">
+            <svg id="minimap-waves-svg" xmlns="http://www.w3.org/2000/svg"
+                 style="position:absolute;bottom:0;left:0;width:100%;height:38%;opacity:0.13;"
+                 viewBox="0 0 400 60" preserveAspectRatio="none">
+                <defs>
+                    <style>
+                        #w1 { animation: waveScroll 4s linear infinite; }
+                        #w2 { animation: waveScroll 6s linear infinite reverse; }
+                        #w3 { animation: waveScroll 8s linear infinite; }
+                        @keyframes waveScroll {
+                            0%   { transform: translateX(0); }
+                            100% { transform: translateX(-50%); }
+                        }
+                    </style>
+                </defs>
+                <!-- Three stacked wave paths, doubled width for seamless scroll -->
+                <path id="w1" d="M0,30 C50,10 100,50 150,30 C200,10 250,50 300,30 C350,10 400,50 450,30 C500,10 550,50 600,30 C650,10 700,50 750,30 C800,10 850,50 900,30 L900,60 L0,60 Z" fill="#38bdf8"/>
+                <path id="w2" d="M0,38 C60,20 120,56 180,38 C240,20 300,56 360,38 C420,20 480,56 540,38 C600,20 660,56 720,38 C780,20 840,56 900,38 L900,60 L0,60 Z" fill="#0ea5e9" opacity="0.7"/>
+                <path id="w3" d="M0,44 C70,28 140,58 210,44 C280,28 350,58 420,44 C490,28 560,58 630,44 C700,28 770,58 840,44 L840,60 L0,60 Z" fill="#7dd3fc" opacity="0.5"/>
+            </svg>
+            <!-- Branding text watermark in the water zone -->
+            <div id="minimap-brand" style="
+                position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
+                white-space:nowrap; pointer-events:none;
+                font-family:'Comic Sans MS','Chalkboard SE','Segoe Print',cursive;
+                font-size:7px; font-weight:700; letter-spacing:1.2px;
+                color:#fff; opacity:0.55;
+                text-shadow: 0 0 6px rgba(56,189,248,.8), 0 1px 2px rgba(0,0,0,.3);
+                animation: brandFloat 5s ease-in-out infinite;
+            ">✦ BEACON OF UNITY ✦</div>
+            <style>
+                @keyframes brandFloat {
+                    0%,100% { transform: translateX(-50%) translateY(0); }
+                    50%     { transform: translateX(-50%) translateY(-2px); }
+                }
+            </style>
+        </div>
         <div id="minimap-label">📍 Live Map</div>
         <button id="minimap-close" onclick="collapseMinimap(event)">✕</button>
     </div>
@@ -4332,8 +4378,8 @@
                 doubleClickZoom: false,
                 tap: false
             });
-            // Carto Voyager — clean Google Maps-like style
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            // ESRI World Street Map — English labels globally, clean Google Maps-like style
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 19
             }).addTo(_map);
 
