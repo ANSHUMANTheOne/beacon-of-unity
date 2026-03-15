@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service | Beacon of Unity</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden;scroll-behavior:smooth}
+:root{--ease:cubic-bezier(.16,1,.3,1);--blue:#0ea5e9;--cyan:#06b6d4}
+body{font-family:'DM Sans',sans-serif;background:#071e30;color:#e0f2fe;cursor:none;min-height:100vh}
+#cd{position:fixed;top:0;left:0;width:10px;height:10px;background:#0ea5e9;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s}
+#cr{position:fixed;top:0;left:0;width:36px;height:36px;border:1.5px solid rgba(14,165,233,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease)}
+body.hov #cd{width:18px;height:18px;background:#06b6d4}
+body.hov #cr{width:54px;height:54px}
+@media(max-width:768px){#cd,#cr{display:none}body{cursor:auto}}
+.bg{position:fixed;inset:0;z-index:0}
+.bg-grad{position:absolute;inset:0;background:linear-gradient(155deg,#071e30 0%,#0e3d5e 55%,#0c2d48 100%)}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.03) 1px,transparent 1px);background-size:64px 64px}
+nav{position:fixed;inset:0 0 auto;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(7,30,48,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(14,165,233,.1)}
+@media(max-width:768px){nav{padding:14px 18px}}
+.nlogo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:none}
+.nlogo img{height:36px;width:36px;border-radius:50%;object-fit:cover}
+.nname{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:#fff;letter-spacing:-.3px}
+.back-btn{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;padding:9px 22px;border-radius:50px;border:1px solid rgba(14,165,233,.3);background:rgba(14,165,233,.15);color:#7dd3fc;cursor:none;transition:all .2s;text-decoration:none}
+.back-btn:hover{background:rgba(14,165,233,.28);color:#fff}
+.hero{position:relative;z-index:1;padding:140px 48px 60px;text-align:center;max-width:760px;margin:0 auto}
+@media(max-width:768px){.hero{padding:110px 20px 40px}}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.25);padding:6px 18px;border-radius:50px;font-size:.72rem;font-weight:600;color:rgba(255,255,255,.8);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.6rem);letter-spacing:-2px;color:#fff;margin-bottom:14px;line-height:1.05}
+.hero p{font-size:.93rem;color:rgba(255,255,255,.45);line-height:1.7;font-weight:300}
+.updated{display:inline-block;margin-top:16px;background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.2);padding:5px 16px;border-radius:50px;font-size:.72rem;color:#7dd3fc;font-weight:500}
+.content{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 48px 100px}
+@media(max-width:768px){.content{padding:0 20px 80px}}
+.section{background:rgba(14,165,233,.04);border:1px solid rgba(14,165,233,.12);border-radius:20px;padding:32px 36px;margin-bottom:20px;transition:border-color .3s}
+.section:hover{border-color:rgba(14,165,233,.25)}
+@media(max-width:768px){.section{padding:22px 20px}}
+.sec-num{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(14,165,233,.7);margin-bottom:8px}
+.section h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;color:#e0f2fe;margin-bottom:14px;letter-spacing:-.3px}
+.section p,.section li{font-size:.88rem;color:rgba(255,255,255,.55);line-height:1.8;font-weight:300;margin-bottom:10px}
+.section li{margin-left:20px;margin-bottom:6px}
+.section li::marker{color:rgba(14,165,233,.6)}
+.section p:last-child{margin-bottom:0}
+.highlight{background:rgba(239,68,68,.08);border-left:3px solid #ef4444;padding:12px 18px;border-radius:0 10px 10px 0;margin:14px 0;font-size:.85rem;color:#fca5a5}
+.highlight-blue{background:rgba(14,165,233,.1);border-left:3px solid #0ea5e9;padding:12px 18px;border-radius:0 10px 10px 0;margin:14px 0;font-size:.85rem;color:#bae6fd}
+footer{position:relative;z-index:1;background:rgba(7,20,35,.9);padding:28px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid rgba(14,165,233,.1)}
+@media(max-width:768px){footer{padding:20px;flex-direction:column;text-align:center}}
+.flogn{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff}
+.fcopy{font-size:.77rem;color:rgba(255,255,255,.3)}
+.flinks a{font-size:.77rem;color:rgba(255,255,255,.4);text-decoration:none;margin-left:18px;transition:color .2s;cursor:none}
+.flinks a:hover{color:#7dd3fc}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.hero,.section{animation:fadeUp .6s var(--ease) both}
+.section:nth-child(2){animation-delay:.05s}.section:nth-child(3){animation-delay:.1s}
+.section:nth-child(4){animation-delay:.15s}.section:nth-child(5){animation-delay:.2s}
+.section:nth-child(6){animation-delay:.25s}.section:nth-child(7){animation-delay:.3s}
+.section:nth-child(8){animation-delay:.35s}.section:nth-child(9){animation-delay:.4s}
+</style>
+</head>
+<body>
+<div id="cd"></div><div id="cr"></div>
+<div class="bg"><div class="bg-grad"></div><div class="bg-grid"></div></div>
+
+<nav>
+  <a href="index.html" class="nlogo">
+    <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAARCAAoACgDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAMEAgH/xAAiEAACAQMEAwEAAAAAAAAAAAABAgMABBEhMUFRYXH/xAAWAQEBAQAAAAAAAAAAAAAAAAABAAL/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A+f6V01NSTJJK7BVOAQcZz86s3uoXFtMs0bEMwwxHQ9vv/NN6OhS0kjkYcyBiCO2Cc0XqI3mW3DngMOWfTkVTSNWZra9jnAAHPoc+tTXN7Bc3AEjFVCjCg4yfWqWm6g1pNyrkmNjhh6+9NX1pFdqVkjLBOhI2X+Voo0U5Zt7LFxdRxysqxlHIyQep96jtmaWSJY4gd5JZnHGPQeaKKcRiuSVnYM7FiB0ye1FFFF/2Q==" alt="Beacon of Unity">
+    <span class="nname">Beacon of Unity</span>
+  </a>
+  <a href="index.html" class="back-btn">← Back to Home</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">📋 Legal</div>
+  <h1>Terms of Service</h1>
+  <p>The rules and guidelines that govern your use of the Beacon of Unity community platform.</p>
+  <span class="updated">Last updated: June 2025</span>
+</div>
+
+<div class="content">
+
+  <div class="section">
+    <div class="sec-num">01 — Agreement</div>
+    <h2>Acceptance of Terms</h2>
+    <p>By accessing or using Beacon of Unity ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Platform.</p>
+    <p>These Terms apply to all users, including verified members, visitors, and administrators. We reserve the right to update these Terms at any time, and continued use of the Platform after changes constitutes acceptance.</p>
+    <div class="highlight-blue">📌 Beacon of Unity is currently available exclusively to UAE residents and individuals working in the UAE who can provide a valid Emirates ID for verification.</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">02 — Eligibility</div>
+    <h2>Who Can Join</h2>
+    <p>To become a verified member of Beacon of Unity, you must:</p>
+    <ul>
+      <li>Be a resident of or currently working in the UAE</li>
+      <li>Hold a valid Emirates ID</li>
+      <li>Be at least 13 years of age</li>
+      <li>Provide an accurate live selfie with your physical Emirates ID during verification</li>
+      <li>Agree to these Terms and our Privacy Policy</li>
+    </ul>
+    <p>Accounts created with false information or fraudulent IDs will be permanently banned and may be reported to relevant authorities.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">03 — Community Standards</div>
+    <h2>Acceptable Use</h2>
+    <p>Beacon of Unity is a trust-first platform. All members must:</p>
+    <ul>
+      <li>Treat fellow community members with respect and dignity</li>
+      <li>Post accurate, honest information in help requests and listings</li>
+      <li>Only use the platform for lawful community purposes</li>
+      <li>Respect the privacy of other members</li>
+      <li>Report suspicious or harmful behaviour through our reporting system</li>
+    </ul>
+    <div class="highlight">🚫 Strictly prohibited: harassment, hate speech, spam, scams, fake accounts, sharing private information of others, and any illegal activity.</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">04 — Verification & Identity</div>
+    <h2>Identity Verification Policy</h2>
+    <p>Our identity verification process exists to protect the entire community. By submitting verification:</p>
+    <ul>
+      <li>You confirm that all submitted information is accurate and truthful</li>
+      <li>You consent to a human admin reviewing your selfie and Emirates ID photo</li>
+      <li>You understand that your verification image is deleted after review</li>
+      <li>You acknowledge that providing false documents may result in a permanent ban</li>
+    </ul>
+    <p>Verification decisions are made at the sole discretion of Beacon of Unity administrators. Approved status can be revoked at any time for violations of these Terms.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">05 — Unity Points</div>
+    <h2>Points & Rewards System</h2>
+    <p>Unity Points are awarded for positive community contributions. Important notes:</p>
+    <ul>
+      <li>Unity Points have no monetary value and cannot be exchanged for cash</li>
+      <li>Points may be adjusted, revoked, or reset by administrators for violations</li>
+      <li>Leaderboard rankings are for community recognition purposes only</li>
+      <li>Attempting to game or manipulate the points system will result in account suspension</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">06 — Content</div>
+    <h2>User-Generated Content</h2>
+    <p>By posting content on Beacon of Unity (help requests, messages, posts, thank-you messages), you:</p>
+    <ul>
+      <li>Grant us a non-exclusive, royalty-free licence to display and distribute that content on the Platform</li>
+      <li>Confirm the content does not violate any laws or third-party rights</li>
+      <li>Accept that administrators may remove content that violates these Terms</li>
+    </ul>
+    <p>You retain ownership of content you create. We will never use your content for advertising or sell it to third parties.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">07 — Banning & Suspension</div>
+    <h2>Account Actions</h2>
+    <p>We reserve the right to suspend or permanently ban accounts that:</p>
+    <ul>
+      <li>Violate any section of these Terms</li>
+      <li>Are reported multiple times for harmful behaviour</li>
+      <li>Are found to have used fraudulent verification documents</li>
+      <li>Engage in harassment, discrimination, or abuse of any kind</li>
+    </ul>
+    <p>Banned users may not create new accounts. Attempting to circumvent a ban is itself a violation and may result in further action.</p>
+    <div class="highlight">⚠️ Serious violations involving illegal activity may be reported to UAE authorities in accordance with applicable law.</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">08 — Liability</div>
+    <h2>Limitation of Liability</h2>
+    <p>Beacon of Unity is provided "as is" and we make no warranties about uninterrupted or error-free service. To the fullest extent permitted by UAE law:</p>
+    <ul>
+      <li>We are not liable for interactions between community members</li>
+      <li>We are not responsible for the accuracy of user-posted content</li>
+      <li>Our liability is limited to the maximum extent permitted by applicable law</li>
+    </ul>
+    <p>Users interact with each other at their own discretion. Always exercise personal judgment when responding to help requests or meeting community members.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">09 — Contact</div>
+    <h2>Questions About These Terms?</h2>
+    <p>For any questions about these Terms of Service, please contact us:</p>
+    <p>📧 <strong>anshuman@beaconofunity.com</strong></p>
+    <p>These Terms are governed by the laws of the United Arab Emirates.</p>
+  </div>
+
+</div>
+
+<footer>
+  <span class="flogn">Beacon of Unity</span>
+  <span class="fcopy">© 2025 Beacon of Unity. All rights reserved.</span>
+  <div class="flinks">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+const cd=document.getElementById('cd'),cr=document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+if(window.innerWidth>768){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px'});
+  (function tick(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(tick)})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+  });
+}
+</script>
+</body>
+</html>

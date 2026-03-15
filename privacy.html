@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy | Beacon of Unity</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden;scroll-behavior:smooth}
+:root{--ease:cubic-bezier(.16,1,.3,1);--blue:#0ea5e9;--cyan:#06b6d4}
+body{font-family:'DM Sans',sans-serif;background:#071e30;color:#e0f2fe;cursor:none;min-height:100vh}
+
+#cd{position:fixed;top:0;left:0;width:10px;height:10px;background:#0ea5e9;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s}
+#cr{position:fixed;top:0;left:0;width:36px;height:36px;border:1.5px solid rgba(14,165,233,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease)}
+body.hov #cd{width:18px;height:18px;background:#06b6d4}
+body.hov #cr{width:54px;height:54px}
+@media(max-width:768px){#cd,#cr{display:none}body{cursor:auto}}
+
+/* BG */
+.bg{position:fixed;inset:0;z-index:0}
+.bg-grad{position:absolute;inset:0;background:linear-gradient(155deg,#071e30 0%,#0e3d5e 55%,#0c2d48 100%)}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.03) 1px,transparent 1px);background-size:64px 64px}
+
+/* NAV */
+nav{position:fixed;inset:0 0 auto;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(7,30,48,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(14,165,233,.1)}
+@media(max-width:768px){nav{padding:14px 18px}}
+.nlogo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:none}
+.nlogo img{height:36px;width:36px;border-radius:50%;object-fit:cover}
+.nname{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:#fff;letter-spacing:-.3px}
+.back-btn{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;padding:9px 22px;border-radius:50px;border:none;background:rgba(14,165,233,.15);color:#7dd3fc;cursor:none;border:1px solid rgba(14,165,233,.3);transition:all .2s;text-decoration:none}
+.back-btn:hover{background:rgba(14,165,233,.28);color:#fff}
+
+/* HERO */
+.hero{position:relative;z-index:1;padding:140px 48px 60px;text-align:center;max-width:760px;margin:0 auto}
+@media(max-width:768px){.hero{padding:110px 20px 40px}}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.25);padding:6px 18px;border-radius:50px;font-size:.72rem;font-weight:600;color:rgba(255,255,255,.8);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.6rem);letter-spacing:-2px;color:#fff;margin-bottom:14px;line-height:1.05}
+.hero p{font-size:.93rem;color:rgba(255,255,255,.45);line-height:1.7;font-weight:300}
+.updated{display:inline-block;margin-top:16px;background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.2);padding:5px 16px;border-radius:50px;font-size:.72rem;color:#7dd3fc;font-weight:500}
+
+/* CONTENT */
+.content{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 48px 100px}
+@media(max-width:768px){.content{padding:0 20px 80px}}
+
+.section{background:rgba(14,165,233,.04);border:1px solid rgba(14,165,233,.12);border-radius:20px;padding:32px 36px;margin-bottom:20px;transition:border-color .3s}
+.section:hover{border-color:rgba(14,165,233,.25)}
+@media(max-width:768px){.section{padding:22px 20px}}
+.sec-num{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(14,165,233,.7);margin-bottom:8px}
+.section h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;color:#e0f2fe;margin-bottom:14px;letter-spacing:-.3px}
+.section p,.section li{font-size:.88rem;color:rgba(255,255,255,.55);line-height:1.8;font-weight:300;margin-bottom:10px}
+.section li{margin-left:20px;margin-bottom:6px}
+.section li::marker{color:rgba(14,165,233,.6)}
+.section p:last-child{margin-bottom:0}
+.highlight{background:rgba(14,165,233,.1);border-left:3px solid #0ea5e9;padding:12px 18px;border-radius:0 10px 10px 0;margin:14px 0;font-size:.85rem;color:#bae6fd}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:rgba(7,20,35,.9);padding:28px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid rgba(14,165,233,.1)}
+@media(max-width:768px){footer{padding:20px;flex-direction:column;text-align:center}}
+.flogn{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff}
+.fcopy{font-size:.77rem;color:rgba(255,255,255,.3)}
+.flinks a{font-size:.77rem;color:rgba(255,255,255,.4);text-decoration:none;margin-left:18px;transition:color .2s;cursor:none}
+.flinks a:hover{color:#7dd3fc}
+@media(max-width:768px){.flinks a:first-child{margin-left:0}}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.hero,.section{animation:fadeUp .6s var(--ease) both}
+.section:nth-child(2){animation-delay:.05s}
+.section:nth-child(3){animation-delay:.1s}
+.section:nth-child(4){animation-delay:.15s}
+.section:nth-child(5){animation-delay:.2s}
+.section:nth-child(6){animation-delay:.25s}
+.section:nth-child(7){animation-delay:.3s}
+</style>
+</head>
+<body>
+<div id="cd"></div><div id="cr"></div>
+<div class="bg"><div class="bg-grad"></div><div class="bg-grid"></div></div>
+
+<nav>
+  <a href="index.html" class="nlogo">
+    <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAARCAAoACgDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAMEAgH/xAAiEAACAQMEAwEAAAAAAAAAAAABAgMABBEhMUFRYXH/xAAWAQEBAQAAAAAAAAAAAAAAAAABAAL/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A+f6V01NSTJJK7BVOAQcZz86s3uoXFtMs0bEMwwxHQ9vv/NN6OhS0kjkYcyBiCO2Cc0XqI3mW3DngMOWfTkVTSNWZra9jnAAHPoc+tTXN7Bc3AEjFVCjCg4yfWqWm6g1pNyrkmNjhh6+9NX1pFdqVkjLBOhI2X+Voo0U5Zt7LFxdRxysqxlHIyQep96jtmaWSJY4gd5JZnHGPQeaKKcRiuSVnYM7FiB0ye1FFFF/2Q==" alt="Beacon of Unity">
+    <span class="nname">Beacon of Unity</span>
+  </a>
+  <a href="index.html" class="back-btn">← Back to Home</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">🔒 Legal</div>
+  <h1>Privacy Policy</h1>
+  <p>How we collect, use, and protect your personal information on the Beacon of Unity platform.</p>
+  <span class="updated">Last updated: June 2025</span>
+</div>
+
+<div class="content">
+
+  <div class="section">
+    <div class="sec-num">01 — Overview</div>
+    <h2>Our Commitment to Your Privacy</h2>
+    <p>Beacon of Unity ("we", "us", or "our") is built on trust. We are committed to protecting the privacy and security of every member of our verified UAE community platform. This Privacy Policy explains how we handle your personal information when you use our services.</p>
+    <p>By using Beacon of Unity, you agree to the collection and use of information in accordance with this policy.</p>
+    <div class="highlight">⚠️ We never sell your personal data to third parties. Your information is used solely to operate and improve the Beacon of Unity platform.</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">02 — Information We Collect</div>
+    <h2>What We Collect</h2>
+    <p>To provide a verified, trust-first community experience, we collect:</p>
+    <ul>
+      <li><strong>Identity Information:</strong> Your full legal name and Emirates ID (submitted during verification)</li>
+      <li><strong>Account Information:</strong> Email address, profile details, and authentication data</li>
+      <li><strong>Activity Data:</strong> Help requests, posts, responses, Unity Points earned, and community interactions</li>
+      <li><strong>Device & Technical Data:</strong> IP address, browser type, device identifiers, and usage logs</li>
+      <li><strong>Communications:</strong> Messages you send through our platform</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">03 — Identity Verification</div>
+    <h2>Emirates ID & Selfie Verification</h2>
+    <p>Beacon of Unity requires a live selfie with a physical Emirates ID for membership verification. This is our most sensitive data category, and we treat it with the highest level of protection:</p>
+    <ul>
+      <li>Your ID photo is reviewed <strong>only by human admins</strong> — never by automated systems alone</li>
+      <li>Verification photos are <strong>deleted after approval or rejection</strong> — we do not retain them</li>
+      <li>We do not share ID images with any third party under any circumstances</li>
+      <li>Rejection decisions are stored only as a flag (no personal image retained)</li>
+    </ul>
+    <div class="highlight">🛡️ Verification data is handled under strict internal protocols. Only designated admin accounts can access submitted ID reviews.</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">04 — How We Use Your Data</div>
+    <h2>Purpose of Data Collection</h2>
+    <p>We use your information to:</p>
+    <ul>
+      <li>Verify your identity and maintain a trusted, scam-free community</li>
+      <li>Operate and improve platform features (help requests, lost & found, community hub)</li>
+      <li>Calculate and display Unity Points and leaderboard rankings</li>
+      <li>Send important account notifications (approval, rejection, updates)</li>
+      <li>Investigate and act on reported misconduct or abuse</li>
+      <li>Comply with applicable UAE laws and regulations</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">05 — Data Storage & Security</div>
+    <h2>How We Protect Your Data</h2>
+    <p>Your data is stored securely using Google Firebase infrastructure, which complies with international security standards. We implement:</p>
+    <ul>
+      <li>End-to-end encryption for data in transit</li>
+      <li>Firestore security rules ensuring only authenticated users access their own data</li>
+      <li>Admin-only access controls for sensitive review data</li>
+      <li>Regular security audits of our platform</li>
+    </ul>
+    <p>While we take every precaution, no method of electronic transmission is 100% secure. We encourage you to use a strong, unique password for your account.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">06 — Your Rights</div>
+    <h2>Your Data Rights</h2>
+    <p>As a member of Beacon of Unity, you have the right to:</p>
+    <ul>
+      <li><strong>Access</strong> the personal data we hold about you</li>
+      <li><strong>Correct</strong> inaccurate information in your profile</li>
+      <li><strong>Delete</strong> your account and associated data</li>
+      <li><strong>Object</strong> to certain uses of your data</li>
+      <li><strong>Export</strong> your data in a portable format</li>
+    </ul>
+    <p>To exercise any of these rights, contact us at <strong>anshuman@beaconofunity.com</strong>. We will respond within 30 days.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-num">07 — Contact</div>
+    <h2>Questions About Privacy?</h2>
+    <p>If you have any questions, concerns, or requests regarding your privacy and personal data, please reach out to us:</p>
+    <p>📧 <strong>anshuman@beaconofunity.com</strong></p>
+    <p>We are committed to addressing your concerns promptly and transparently.</p>
+  </div>
+
+</div>
+
+<footer>
+  <span class="flogn">Beacon of Unity</span>
+  <span class="fcopy">© 2025 Beacon of Unity. All rights reserved.</span>
+  <div class="flinks">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+const cd=document.getElementById('cd'),cr=document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+if(window.innerWidth>768){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px'});
+  (function tick(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(tick)})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+  });
+}
+</script>
+</body>
+</html>

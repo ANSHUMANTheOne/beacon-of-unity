@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | Beacon of Unity</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden;scroll-behavior:smooth}
+:root{--ease:cubic-bezier(.16,1,.3,1);--blue:#0ea5e9;--cyan:#06b6d4}
+body{font-family:'DM Sans',sans-serif;background:#071e30;color:#e0f2fe;cursor:none;min-height:100vh}
+#cd{position:fixed;top:0;left:0;width:10px;height:10px;background:#0ea5e9;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s}
+#cr{position:fixed;top:0;left:0;width:36px;height:36px;border:1.5px solid rgba(14,165,233,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease)}
+body.hov #cd{width:18px;height:18px;background:#06b6d4}
+body.hov #cr{width:54px;height:54px}
+@media(max-width:768px){#cd,#cr{display:none}body{cursor:auto}}
+.bg{position:fixed;inset:0;z-index:0}
+.bg-grad{position:absolute;inset:0;background:linear-gradient(155deg,#071e30 0%,#0e3d5e 55%,#0c2d48 100%)}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.03) 1px,transparent 1px);background-size:64px 64px}
+nav{position:fixed;inset:0 0 auto;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(7,30,48,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(14,165,233,.1)}
+@media(max-width:768px){nav{padding:14px 18px}}
+.nlogo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:none}
+.nlogo img{height:36px;width:36px;border-radius:50%;object-fit:cover}
+.nname{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:#fff;letter-spacing:-.3px}
+.back-btn{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;padding:9px 22px;border-radius:50px;border:1px solid rgba(14,165,233,.3);background:rgba(14,165,233,.15);color:#7dd3fc;cursor:none;transition:all .2s;text-decoration:none}
+.back-btn:hover{background:rgba(14,165,233,.28);color:#fff}
+
+/* LAYOUT */
+.main{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:140px 48px 100px;display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:start}
+@media(max-width:900px){.main{grid-template-columns:1fr;gap:40px;padding:110px 20px 80px}}
+
+/* LEFT */
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.25);padding:6px 18px;border-radius:50px;font-size:.72rem;font-weight:600;color:rgba(255,255,255,.8);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.4rem,5vw,3.8rem);letter-spacing:-2px;color:#fff;line-height:1.05;margin-bottom:16px}
+.sub{font-size:.93rem;color:rgba(255,255,255,.45);line-height:1.75;font-weight:300;max-width:380px;margin-bottom:36px}
+
+.contact-cards{display:flex;flex-direction:column;gap:12px}
+.cc{display:flex;align-items:center;gap:14px;background:rgba(14,165,233,.06);border:1px solid rgba(14,165,233,.14);border-radius:16px;padding:16px 20px;cursor:none;transition:all .25s;text-decoration:none}
+.cc:hover{background:rgba(14,165,233,.12);border-color:rgba(14,165,233,.32);transform:translateX(5px)}
+.cc-ico{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(14,165,233,.2),rgba(6,182,212,.12));border:1px solid rgba(14,165,233,.25);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.cc-info{}
+.cc-label{font-size:.7rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(14,165,233,.8);margin-bottom:3px}
+.cc-val{font-size:.88rem;font-weight:500;color:#e0f2fe}
+
+.response-note{margin-top:24px;background:rgba(14,165,233,.07);border:1px solid rgba(14,165,233,.18);border-radius:14px;padding:14px 18px;font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.6}
+.response-note strong{color:#7dd3fc}
+
+/* RIGHT — FORM */
+.form-card{background:rgba(14,165,233,.05);border:1px solid rgba(14,165,233,.16);border-radius:24px;padding:36px 32px}
+@media(max-width:768px){.form-card{padding:24px 20px}}
+.form-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;color:#fff;margin-bottom:6px}
+.form-sub{font-size:.82rem;color:rgba(255,255,255,.38);margin-bottom:26px;font-weight:300}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:7px}
+.field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(14,165,233,.2);border-radius:12px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:#fff;outline:none;transition:border-color .2s,background .2s;cursor:none;resize:none}
+.field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.22)}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(14,165,233,.5);background:rgba(14,165,233,.06)}
+.field select option{background:#0c2d48;color:#fff}
+.field textarea{height:130px}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.row-2{grid-template-columns:1fr}}
+
+.submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);border:none;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:#fff;cursor:none;position:relative;overflow:hidden;transition:transform .22s,box-shadow .22s;margin-top:6px;letter-spacing:.2px}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(14,165,233,.45)}
+.submit-btn:disabled{opacity:.55;transform:none;box-shadow:none;cursor:not-allowed}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.3);transform:scale(0);animation:rgo .5s ease-out forwards;pointer-events:none}
+@keyframes rgo{to{transform:scale(4);opacity:0}}
+
+#form-status{margin-top:14px;font-size:.82rem;font-weight:500;text-align:center;min-height:20px;border-radius:10px;padding:0;transition:all .3s}
+#form-status.ok{color:#10b981;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);padding:10px}
+#form-status.err{color:#ef4444;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);padding:10px}
+
+footer{position:relative;z-index:1;background:rgba(7,20,35,.9);padding:28px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid rgba(14,165,233,.1)}
+@media(max-width:768px){footer{padding:20px;flex-direction:column;text-align:center}}
+.flogn{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff}
+.fcopy{font-size:.77rem;color:rgba(255,255,255,.3)}
+.flinks a{font-size:.77rem;color:rgba(255,255,255,.4);text-decoration:none;margin-left:18px;transition:color .2s;cursor:none}
+.flinks a:hover{color:#7dd3fc}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.left-col,.form-card{animation:fadeUp .6s var(--ease) both}
+.form-card{animation-delay:.1s}
+</style>
+</head>
+<body>
+<div id="cd"></div><div id="cr"></div>
+<div class="bg"><div class="bg-grad"></div><div class="bg-grid"></div></div>
+
+<nav>
+  <a href="index.html" class="nlogo">
+    <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAARCAAoACgDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAMEAgH/xAAiEAACAQMEAwEAAAAAAAAAAAABAgMABBEhMUFRYXH/xAAWAQEBAQAAAAAAAAAAAAAAAAABAAL/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A+f6V01NSTJJK7BVOAQcZz86s3uoXFtMs0bEMwwxHQ9vv/NN6OhS0kjkYcyBiCO2Cc0XqI3mW3DngMOWfTkVTSNWZra9jnAAHPoc+tTXN7Bc3AEjFVCjCg4yfWqWm6g1pNyrkmNjhh6+9NX1pFdqVkjLBOhI2X+Voo0U5Zt7LFxdRxysqxlHIyQep96jtmaWSJY4gd5JZnHGPQeaKKcRiuSVnYM7FiB0ye1FFFF/2Q==" alt="Beacon of Unity">
+    <span class="nname">Beacon of Unity</span>
+  </a>
+  <a href="index.html" class="back-btn">← Back to Home</a>
+</nav>
+
+<div class="main">
+  <!-- LEFT -->
+  <div class="left-col">
+    <div class="badge">📬 Get in Touch</div>
+    <h1>Contact Us</h1>
+    <p class="sub">Have a question, feedback, or need help with your account? We're here for you — reach out and we'll get back to you as soon as possible.</p>
+
+    <div class="contact-cards">
+      <a href="mailto:anshuman@beaconofunity.com" class="cc">
+        <div class="cc-ico">📧</div>
+        <div class="cc-info">
+          <div class="cc-label">Email</div>
+          <div class="cc-val">anshuman@beaconofunity.com</div>
+        </div>
+      </a>
+      <div class="cc" style="cursor:default">
+        <div class="cc-ico">📍</div>
+        <div class="cc-info">
+          <div class="cc-label">Based In</div>
+          <div class="cc-val">United Arab Emirates 🇦🇪</div>
+        </div>
+      </div>
+      <div class="cc" style="cursor:default">
+        <div class="cc-ico">⏰</div>
+        <div class="cc-info">
+          <div class="cc-label">Response Time</div>
+          <div class="cc-val">Usually within 24–48 hours</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="response-note">
+      🔒 <strong>Verification issues?</strong> If your account was rejected or you need help with Emirates ID verification, please include your registered email in the message and we'll review it promptly.
+    </div>
+  </div>
+
+  <!-- RIGHT — FORM -->
+  <div class="form-card">
+    <div class="form-title">Send a Message</div>
+    <div class="form-sub">Fill in the form below and we'll get back to you via email.</div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>First Name</label>
+        <input type="text" id="firstName" placeholder="Ahmad">
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input type="text" id="lastName" placeholder="Al Mansoori">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Email Address</label>
+      <input type="email" id="fromEmail" placeholder="you@example.com">
+    </div>
+
+    <div class="field">
+      <label>Topic</label>
+      <select id="topic">
+        <option value="">Select a topic…</option>
+        <option value="Verification Issue">Verification Issue</option>
+        <option value="Account Help">Account Help</option>
+        <option value="Report a Problem">Report a Problem</option>
+        <option value="Feature Suggestion">Feature Suggestion</option>
+        <option value="Partnership Enquiry">Partnership Enquiry</option>
+        <option value="Privacy / Data Request">Privacy / Data Request</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Message</label>
+      <textarea id="message" placeholder="Tell us how we can help you…"></textarea>
+    </div>
+
+    <button class="submit-btn" id="sendBtn" onclick="sendMsg()">
+      <span id="btnText">Send Message →</span>
+    </button>
+    <div id="form-status"></div>
+  </div>
+</div>
+
+<footer>
+  <span class="flogn">Beacon of Unity</span>
+  <span class="fcopy">© 2025 Beacon of Unity. All rights reserved.</span>
+  <div class="flinks">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+/* cursor */
+const cd=document.getElementById('cd'),cr=document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+if(window.innerWidth>768){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px'});
+  (function tick(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(tick)})();
+  document.querySelectorAll('a,button,input,textarea,select').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+  });
+}
+
+/* ripple */
+document.querySelector('.submit-btn').addEventListener('click',function(e){
+  const r=document.createElement('span');r.className='rip';
+  const rc=this.getBoundingClientRect(),sz=Math.max(rc.width,rc.height);
+  r.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rc.left-sz/2}px;top:${e.clientY-rc.top-sz/2}px;position:absolute`;
+  this.appendChild(r);r.addEventListener('animationend',()=>r.remove());
+});
+
+/* send */
+function sendMsg(){
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName  = document.getElementById('lastName').value.trim();
+  const email     = document.getElementById('fromEmail').value.trim();
+  const topic     = document.getElementById('topic').value;
+  const message   = document.getElementById('message').value.trim();
+  const statusEl  = document.getElementById('form-status');
+
+  statusEl.className=''; statusEl.textContent='';
+
+  if(!firstName||!email||!message){
+    statusEl.className='err';
+    statusEl.textContent='Please fill in your name, email, and message.';
+    return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    statusEl.className='err';
+    statusEl.textContent='Please enter a valid email address.';
+    return;
+  }
+
+  const subject = encodeURIComponent((topic||'General Enquiry') + ' \u2014 Beacon of Unity');
+  const body    = encodeURIComponent('Name: ' + firstName + ' ' + lastName + '\nEmail: ' + email + '\nTopic: ' + (topic||'General') + '\n\n' + message);
+  window.location.href = 'mailto:anshuman@beaconofunity.com?subject=' + subject + '&body=' + body;
+
+  statusEl.className='ok';
+  statusEl.textContent='\u2705 Your email client is opening \u2014 just hit Send!';
+}
+
+/* enter to submit */
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.ctrlKey)sendMsg()});
+</script>
+</body>
+</html>
