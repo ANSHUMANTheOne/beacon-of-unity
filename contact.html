@@ -239,12 +239,17 @@ function sendMsg(){
   const fullText = 'To: anshuman@beaconofunity.com\nSubject: ' + subject + '\n\n' + body;
   navigator.clipboard.writeText(fullText).catch(()=>{});
 
-  // Try opening mailto in new tab (less disruptive)
+  // Use hidden anchor click — works across all browsers
   const mailtoLink = 'mailto:anshuman@beaconofunity.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-  window.open(mailtoLink, '_blank');
+  const a = document.createElement('a');
+  a.href = mailtoLink;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => document.body.removeChild(a), 500);
 
   statusEl.className='ok';
-  statusEl.innerHTML = '\u2705 Message copied to clipboard! If your email client didn\'t open, send it manually to <strong>anshuman@beaconofunity.com</strong>';
+  statusEl.innerHTML = '\u2705 Message copied to clipboard! If your email client didn\'t open, email us directly at <strong>anshuman@beaconofunity.com</strong>';
 }
 
 /* enter to submit */
