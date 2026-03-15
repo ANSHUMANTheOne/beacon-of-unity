@@ -4383,7 +4383,7 @@
                 tap: false
             });
             // CartoDB Positron — clean white roads, English labels, no orange/red
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 19
             }).addTo(_map);
             // No CSS filter — Positron is already clean and neutral
@@ -4485,7 +4485,7 @@
             if (!_mobileMap) {
                 const center = (userLat && userLng) ? [userLat, userLng] : [25.3463, 55.4209];
                 _mobileMap = L.map('minimapModal-el', { center, zoom: 13, zoomControl: true, attributionControl: false });
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(_mobileMap);
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(_mobileMap);
                 if (userLat && userLng) {
                     const gmapsPin = L.divIcon({
                         className: '',
