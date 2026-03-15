@@ -456,7 +456,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <a href="#live">Community</a>
     <a href="#trust">Trust</a>
   </div>
-  <button class="nsign" onclick="window.location.href='login.html'"><span>Sign In →</span></button>
+  <button class="nsign" id="navAuthBtn" onclick="window.location.href='login.html'"><span>Sign In →</span></button>
 </nav>
 
 <!-- ═══ CINEMATIC HERO ═══ -->
@@ -754,7 +754,57 @@ rHelp();rLF();
 window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');const h=document.getElementById('th'),l=document.getElementById('tl');if(tab==='help'){h.style.display='flex';l.style.display='none'}else{h.style.display='none';l.style.display='grid'}};
 </script>
 <!-- ═══════════════════════════════════════════════════════
-     BEACON MASCOT  —  paste this entire block before </body>
+     BEACON MASCOT  —  paste this entire block before 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
+  authDomain: "beaconofunityofficial.firebaseapp.com",
+  projectId: "beaconofunityofficial",
+  storageBucket: "beaconofunityofficial.firebasestorage.app",
+  messagingSenderId: "37918398882",
+  appId: "1:37918398882:web:205161bb147393f4defafb"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  const btn = document.getElementById('navAuthBtn');
+  if (!btn) return;
+
+  if (user) {
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const userData = userDoc.exists() ? userDoc.data() : null;
+
+    if (!userData || userData.status !== "approved" || userData.banned === true) {
+      // Not yet approved — send them back to login
+      window.location.href = "login.html";
+      return;
+    }
+
+    // Approved — show their name + logout
+    const displayName = userData.fullName || user.email.split("@")[0];
+    btn.onclick = null;
+    btn.innerHTML = '<span>' + displayName + ' &nbsp;|&nbsp; Logout</span>';
+    btn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+
+  } else {
+    // Not logged in — keep "Sign In →" pointing to login.html
+    btn.innerHTML = '<span>Sign In →</span>';
+    btn.onclick = () => window.location.href = 'login.html';
+  }
+});
+</script>
+
+</body>
      ═══════════════════════════════════════════════════════ -->
 
 <style id="bav-css">
@@ -1511,6 +1561,56 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
 })();
 </script>
 <!-- ═══════════════════════ END BEACON MASCOT ════════════ -->
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
+  authDomain: "beaconofunityofficial.firebaseapp.com",
+  projectId: "beaconofunityofficial",
+  storageBucket: "beaconofunityofficial.firebasestorage.app",
+  messagingSenderId: "37918398882",
+  appId: "1:37918398882:web:205161bb147393f4defafb"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  const btn = document.getElementById('navAuthBtn');
+  if (!btn) return;
+
+  if (user) {
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const userData = userDoc.exists() ? userDoc.data() : null;
+
+    if (!userData || userData.status !== "approved" || userData.banned === true) {
+      // Not yet approved — send them back to login
+      window.location.href = "login.html";
+      return;
+    }
+
+    // Approved — show their name + logout
+    const displayName = userData.fullName || user.email.split("@")[0];
+    btn.onclick = null;
+    btn.innerHTML = '<span>' + displayName + ' &nbsp;|&nbsp; Logout</span>';
+    btn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+
+  } else {
+    // Not logged in — keep "Sign In →" pointing to login.html
+    btn.innerHTML = '<span>Sign In →</span>';
+    btn.onclick = () => window.location.href = 'login.html';
+  }
+});
+</script>
 
 </body>
 </html>
