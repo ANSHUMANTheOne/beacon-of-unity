@@ -1074,11 +1074,25 @@
         <div class="modal-content">
             <div class="ls-icon">📍</div>
             <h2 style="margin:0 0 6px;font-family:'Syne',sans-serif;">Set Your Area</h2>
-            <p style="font-size:13px;color:#64748b;margin:0 0 18px;">This helps show requests near you and powers the live map. Type your neighbourhood, landmark, or area in UAE.</p>
-            <input type="text" id="lsInput" placeholder="e.g. Al Majaz, Sharjah" oninput="lsDebounce()" autocomplete="off">
+            <p style="font-size:13px;color:#64748b;margin:0 0 14px;">We need your location to show nearby requests and power the live map.</p>
+
+            <!-- GPS button — primary option -->
+            <button onclick="useGPSLocation()" id="lsGpsBtn" style="width:100%;padding:12px;background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:white;border:none;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+                🛰️ Use My GPS Location
+            </button>
+            <p style="font-size:11px;color:#94a3b8;margin:8px 0 12px;">Works best on mobile. On desktop, drag the pin below to your exact location.</p>
+
+            <!-- Draggable map for desktop / manual correction -->
+            <div id="lsDragMap" style="width:100%;height:180px;border-radius:12px;border:1.5px solid #e2e8f0;overflow:hidden;margin-bottom:10px;"></div>
+            <p style="font-size:11px;color:#64748b;margin:0 0 10px;text-align:left;">📌 Drag the pin to your exact location</p>
+
+            <!-- Text search fallback -->
+            <div style="position:relative;">
+                <input type="text" id="lsInput" placeholder="Or type: Al Majaz, Sharjah…" oninput="lsDebounce()" autocomplete="off">
+            </div>
             <div id="lsSearchResults"></div>
             <div id="lsStatus" style="font-size:12px;color:#64748b;margin-top:8px;min-height:16px;"></div>
-            <button id="lsConfirmBtn" onclick="confirmLocation()" style="width:100%;padding:12px;background:#38bdf8;color:#0f172a;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;margin-top:14px;" disabled>📍 Set My Location</button>
+            <button id="lsConfirmBtn" onclick="confirmLocation()" style="width:100%;padding:12px;background:#38bdf8;color:#0f172a;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;margin-top:14px;" disabled>📍 Confirm My Location</button>
             <button onclick="skipLocationSetup()" style="width:100%;background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;margin-top:10px;padding:6px;">Skip for now</button>
         </div>
     </div>
@@ -1724,7 +1738,12 @@
                 <option value="low">Low (Next few days)</option>
                 <option value="high">High (Immediate)</option>
             </select>
-            <label>Area (Specific Location)</label><input type="text" id="reqLoc" placeholder="e.g. Al Majaz 2">
+            <label>Area (Specific Location)</label>
+            <div style="display:flex;gap:6px;align-items:center;">
+                <input type="text" id="reqLoc" placeholder="e.g. Al Majaz 2" style="flex:1;">
+                <button type="button" onclick="gpsAutoFill('reqLoc','reqLocStatus')" title="Use my GPS" style="padding:9px 10px;background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;flex-shrink:0;">🛰️</button>
+            </div>
+            <div id="reqLocStatus" style="font-size:11px;color:#64748b;min-height:14px;margin-top:3px;"></div>
             <label>Description</label><textarea id="reqDesc" placeholder="Detailed description..."></textarea>
             <button id="submitReqBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Post Request</button>
             <button onclick="closeRequestModal()" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
@@ -1740,7 +1759,12 @@
                 <option value="Found">Found something</option>
             </select>
             <label>Item Name</label><input type="text" id="lfItem" placeholder="e.g. Blue Wallet">
-            <label>Area (Specific Location)</label><input type="text" id="lfLoc" placeholder="Where?">
+            <label>Area (Specific Location)</label>
+            <div style="display:flex;gap:6px;align-items:center;">
+                <input type="text" id="lfLoc" placeholder="Where?" style="flex:1;">
+                <button type="button" onclick="gpsAutoFill('lfLoc','lfLocStatus')" title="Use my GPS" style="padding:9px 10px;background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;flex-shrink:0;">🛰️</button>
+            </div>
+            <div id="lfLocStatus" style="font-size:11px;color:#64748b;min-height:14px;margin-top:3px;"></div>
             <label>Description</label><textarea id="lfDesc" placeholder="Describe..."></textarea>
             <label>Photo (Optional)</label>
             <input type="file" id="lfImg" accept="image/*" style="font-size: 12px;">
@@ -2144,8 +2168,11 @@
             const title = document.getElementById('reqTitle').value.trim();
             const locationStr = document.getElementById('reqLoc').value.trim();
             if(!title || !locationStr) return alert("Title and Location required!");
-            // Geocode the location silently
-            const coords = await geocodePostLocation(locationStr).catch(()=>null);
+            // Use GPS coords stored by the 🛰️ button, or fall back to geocoding the text
+            const reqLocEl = document.getElementById('reqLoc');
+            const coords = (reqLocEl.dataset.lat && reqLocEl.dataset.lng)
+                ? { lat: parseFloat(reqLocEl.dataset.lat), lng: parseFloat(reqLocEl.dataset.lng) }
+                : await geocodePostLocation(locationStr).catch(()=>null);
             try {
                 await addDoc(collection(db, "requests"), {
                     title, category: document.getElementById('reqCat').value,
@@ -2192,7 +2219,10 @@
             }
 
             try {
-                const lfCoords = await geocodePostLocation(locationStr).catch(()=>null);
+                const lfLocEl = document.getElementById('lfLoc');
+                const lfCoords = (lfLocEl.dataset.lat && lfLocEl.dataset.lng)
+                    ? { lat: parseFloat(lfLocEl.dataset.lat), lng: parseFloat(lfLocEl.dataset.lng) }
+                    : await geocodePostLocation(locationStr).catch(()=>null);
                 await addDoc(collection(db, "lostfound"), {
                     type: document.getElementById('lfType').value,
                     item, location: locationStr, region: userRegion,
@@ -4285,7 +4315,105 @@
         }
 
         // ── Location setup modal ────────────────────────────────
-        let _lsSelected = null, _lsTimer = null;
+        let _lsSelected = null, _lsTimer = null, _lsDragMap = null, _lsDragMarker = null;
+
+        // Init draggable map inside location setup modal
+        function initLSDragMap(lat, lng) {
+            if (_lsDragMap) {
+                _lsDragMap.setView([lat, lng], 15);
+                _lsDragMarker.setLatLng([lat, lng]);
+                return;
+            }
+            _lsDragMap = L.map('lsDragMap', { center:[lat,lng], zoom:15, zoomControl:true, attributionControl:false });
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', { maxZoom:19 }).addTo(_lsDragMap);
+            _lsDragMarker = L.marker([lat,lng], { draggable:true,
+                icon: L.divIcon({ className:'', html:`<svg viewBox="0 0 28 38" xmlns="http://www.w3.org/2000/svg" width="28" height="38" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))"><path d="M14 0C6.27 0 0 6.27 0 14c0 9.54 14 24 14 24S28 23.54 28 14C28 6.27 21.73 0 14 0z" fill="#4285F4"/><circle cx="14" cy="14" r="6" fill="white"/><circle cx="14" cy="14" r="3.5" fill="#4285F4"/></svg>`, iconSize:[28,38], iconAnchor:[14,38] })
+            }).addTo(_lsDragMap);
+            _lsDragMarker.on('dragend', async () => {
+                const pos = _lsDragMarker.getLatLng();
+                document.getElementById('lsStatus').textContent = 'Reverse geocoding…';
+                const label = await reverseGeocode(pos.lat, pos.lng);
+                _lsSelected = { lat: pos.lat, lng: pos.lng, label };
+                document.getElementById('lsInput').value = label;
+                document.getElementById('lsStatus').textContent = `✅ ${label.slice(0,55)}`;
+                document.getElementById('lsConfirmBtn').disabled = false;
+            });
+            // Set initial selection from map center
+            _lsSelected = { lat, lng, label: 'Drag pin to your location' };
+        }
+
+        // Reverse geocode coords → readable address string
+        async function reverseGeocode(lat, lng) {
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`, { headers:{'Accept-Language':'en'} });
+                const d = await res.json();
+                if (d && d.address) {
+                    const a = d.address;
+                    const parts = [a.neighbourhood||a.suburb||a.quarter||a.road, a.city||a.town||a.village, a.country].filter(Boolean);
+                    return parts.slice(0,3).join(', ');
+                }
+                return d.display_name ? d.display_name.slice(0,70) : `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            } catch { return `${lat.toFixed(4)}, ${lng.toFixed(4)}`; }
+        }
+
+        // GPS button in location setup modal
+        window.useGPSLocation = () => {
+            const btn = document.getElementById('lsGpsBtn');
+            const statusEl = document.getElementById('lsStatus');
+            if (!navigator.geolocation) { statusEl.textContent = 'GPS not supported on this device.'; return; }
+            btn.textContent = '⏳ Getting GPS…';
+            btn.disabled = true;
+            navigator.geolocation.getCurrentPosition(
+                async (pos) => {
+                    const lat = pos.coords.lat || pos.coords.latitude;
+                    const lng = pos.coords.lon || pos.coords.longitude;
+                    const latV = pos.coords.latitude;
+                    const lngV = pos.coords.longitude;
+                    statusEl.textContent = 'Got GPS! Reverse geocoding…';
+                    const label = await reverseGeocode(latV, lngV);
+                    _lsSelected = { lat: latV, lng: lngV, label };
+                    document.getElementById('lsInput').value = label;
+                    statusEl.textContent = `✅ ${label.slice(0,55)}`;
+                    document.getElementById('lsConfirmBtn').disabled = false;
+                    btn.innerHTML = '✅ GPS Location Set';
+                    btn.style.background = '#22c55e';
+                    // Move drag map to GPS location
+                    initLSDragMap(latV, lngV);
+                },
+                (err) => {
+                    statusEl.textContent = err.code === 1
+                        ? '⚠️ Permission denied — drag the pin on the map instead.'
+                        : '⚠️ GPS failed — drag the pin or type your area below.';
+                    btn.innerHTML = '🛰️ Use My GPS Location';
+                    btn.disabled = false;
+                    // Init map at default UAE center so user can still drag
+                    initLSDragMap(25.3463, 55.4209);
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        };
+
+        // Init drag map when modal opens (default to Sharjah if no GPS yet)
+        const _origInitUserLocation = window.initUserLocation;
+        async function initUserLocationWithMap(uid) {
+            try {
+                const snap = await getDoc(doc(db, 'users', uid));
+                if (snap.exists()) {
+                    const d = snap.data();
+                    if (d.userLat && d.userLng) {
+                        userLat = d.userLat; userLng = d.userLng;
+                        initMinimap(); setTimeout(refreshMapPins, 2000);
+                    } else {
+                        setTimeout(() => {
+                            document.getElementById('locationSetupModal').style.display = 'flex';
+                            // Init the drag map at UAE center; GPS button will refine it
+                            setTimeout(() => initLSDragMap(25.3463, 55.4209), 200);
+                        }, 2500);
+                    }
+                }
+            } catch(e) { console.warn('Location init failed:', e); }
+        }
+
         window.lsDebounce = () => {
             clearTimeout(_lsTimer);
             _lsTimer = setTimeout(lsSearch, 400);
@@ -4303,15 +4431,12 @@
             }
             document.getElementById('lsStatus').textContent = '';
             box.style.display = 'block';
-            // Clean up display names — show shorter readable label
             box.innerHTML = results.slice(0, 7).map((r) => {
                 const addr = r.address || {};
-                // Build a short readable label: neighbourhood/suburb, city, country
                 const parts = [
                     addr.neighbourhood || addr.suburb || addr.quarter || addr.hamlet,
                     addr.city || addr.town || addr.village || addr.county,
-                    addr.state,
-                    addr.country
+                    addr.state, addr.country
                 ].filter(Boolean);
                 const shortLabel = parts.length >= 2 ? parts.slice(0, 3).join(', ') : r.display_name.slice(0, 65);
                 const safeLabel = shortLabel.replace(/'/g, "\\'");
@@ -4327,23 +4452,43 @@
             document.getElementById('lsSearchResults').style.display = 'none';
             document.getElementById('lsStatus').textContent = `✅ Selected: ${label.slice(0,50)}`;
             document.getElementById('lsConfirmBtn').disabled = false;
+            // Move drag map pin to selected location
+            if (_lsDragMap) { _lsDragMap.setView([lat, lon], 15); _lsDragMarker.setLatLng([lat, lon]); }
         };
         window.confirmLocation = async () => {
             if (!_lsSelected) return;
             const uid = auth.currentUser.uid;
             await updateDoc(doc(db, 'users', uid), {
-                userLat: _lsSelected.lat,
-                userLng: _lsSelected.lng,
-                landmark: _lsSelected.label
+                userLat: _lsSelected.lat, userLng: _lsSelected.lng, landmark: _lsSelected.label
             });
-            userLat = _lsSelected.lat;
-            userLng = _lsSelected.lng;
+            userLat = _lsSelected.lat; userLng = _lsSelected.lng;
             document.getElementById('locationSetupModal').style.display = 'none';
-            initMinimap();
-            refreshMapPins();
+            initMinimap(); refreshMapPins();
         };
         window.skipLocationSetup = () => {
             document.getElementById('locationSetupModal').style.display = 'none';
+        };
+
+        // ── GPS auto-fill for post modals (🛰️ button) ──────────
+        window.gpsAutoFill = (inputId, statusId) => {
+            const statusEl = document.getElementById(statusId);
+            if (!navigator.geolocation) { statusEl.textContent = 'GPS not available — type manually.'; return; }
+            statusEl.textContent = '⏳ Getting GPS…';
+            navigator.geolocation.getCurrentPosition(
+                async (pos) => {
+                    statusEl.textContent = 'Reverse geocoding…';
+                    const label = await reverseGeocode(pos.coords.latitude, pos.coords.longitude);
+                    document.getElementById(inputId).value = label;
+                    // Also store coords for the post submit geocode step
+                    document.getElementById(inputId).dataset.lat = pos.coords.latitude;
+                    document.getElementById(inputId).dataset.lng = pos.coords.longitude;
+                    statusEl.textContent = `✅ ${label.slice(0,50)}`;
+                },
+                (err) => {
+                    statusEl.textContent = err.code === 1 ? '⚠️ Permission denied — type manually.' : '⚠️ GPS failed — type manually.';
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+            );
         };
 
         // ── Auto-geocode location when posting ──────────────────
@@ -4573,7 +4718,7 @@
             const check = setInterval(() => {
                 if (auth.currentUser) {
                     clearInterval(check);
-                    initUserLocation(auth.currentUser.uid);
+                    initUserLocationWithMap(auth.currentUser.uid);
                 }
             }, 500);
         })();
