@@ -3967,17 +3967,19 @@
         document.head.appendChild(_gts);
 
         function _switchLang(code) {
+            // Reverting to English: clear the translation cookie and reload
+            if (code === '') {
+                document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'googtrans=/en/en; path=/';
+                // Small delay so cookie is written before reload
+                setTimeout(() => window.location.reload(), 50);
+                return;
+            }
             const apply = () => {
                 const sel = document.querySelector('select.goog-te-combo');
                 if (!sel) return false;
                 sel.value = code;
                 sel.dispatchEvent(new Event('change', { bubbles: true }));
-                // For English revert, also try clicking the "Show original" bar GT injects
-                if (code === '') {
-                    const restore = document.querySelector('.goog-te-banner-frame');
-                    if (restore) try { restore.contentDocument.querySelector('a[id=":1"]')?.click(); } catch(e) {}
-                    document.cookie = 'googtrans=/en/en; path=/';
-                }
                 return true;
             };
             if (apply()) return;
