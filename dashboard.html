@@ -3950,66 +3950,34 @@
 
         
         // ══ Language / Translation ══
-        // ── Language: restore saved preference on every load ──────────────
-        window._currentLang = localStorage.getItem('preferredLang') || 'en';
+        window._currentLang = 'en';
 
-        // Reflect the saved button state immediately (before GT loads)
-        (function() {
-            const saved = window._currentLang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById({en:'langEn', ar:'langAr', hi:'langHi'}[saved] || 'langEn')?.classList.add('active');
-        })();
+        // Ensure page always starts in English by setting cookie to en/en
+        document.cookie = 'googtrans=/en/en; path=/';
 
-        // If English is active, make sure no stale googtrans cookie triggers GT
-        if (window._currentLang === 'en') {
-            const clr = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-            document.cookie = clr;
-            document.cookie = clr + '; domain=' + location.hostname;
-            document.cookie = clr + '; domain=.' + location.hostname;
-        }
-
-        // Load GT widget once; after it's ready, apply saved non-English language
+        // Load GT widget once
         window.googleTranslateElementInit = function() {
             new google.translate.TranslateElement(
                 { pageLanguage: 'en', includedLanguages: 'ar,hi', autoDisplay: false },
                 '_gtHost'
             );
-            const saved = localStorage.getItem('preferredLang') || 'en';
-            if (saved !== 'en') {
-                // Wait for the combo to appear, then apply
-                let n = 0;
-                const t = setInterval(() => {
-                    const sel = document.querySelector('select.goog-te-combo');
-                    if (sel) {
-                        sel.value = saved;
-                        sel.dispatchEvent(new Event('change', { bubbles: true }));
-                        clearInterval(t);
-                    } else if (++n > 40) clearInterval(t);
-                }, 100);
-            }
         };
         const _gts = document.createElement('script');
         _gts.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
         document.head.appendChild(_gts);
 
         function _switchLang(code) {
-            if (code === '') {
-                // Switching to English: save preference, wipe GT cookies, reload clean
-                localStorage.setItem('preferredLang', 'en');
-                const clr = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-                document.cookie = clr;
-                document.cookie = clr + '; domain=' + location.hostname;
-                document.cookie = clr + '; domain=.' + location.hostname;
-                setTimeout(() => window.location.reload(), 50);
-                return;
-            }
-            // Switching to ar / hi
-            localStorage.setItem('preferredLang', code);
             const apply = () => {
                 const sel = document.querySelector('select.goog-te-combo');
                 if (!sel) return false;
                 sel.value = code;
                 sel.dispatchEvent(new Event('change', { bubbles: true }));
+                // For English revert, also try clicking the "Show original" bar GT injects
+                if (code === '') {
+                    const restore = document.querySelector('.goog-te-banner-frame');
+                    if (restore) try { restore.contentDocument.querySelector('a[id=":1"]')?.click(); } catch(e) {}
+                    document.cookie = 'googtrans=/en/en; path=/';
+                }
                 return true;
             };
             if (apply()) return;
@@ -4021,6 +3989,7 @@
             window._currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById({en:'langEn', ar:'langAr', hi:'langHi'}[lang] || 'langEn')?.classList.add('active');
+            // '' = revert to original English; language code = translate to that language
             _switchLang(lang === 'en' ? '' : lang);
         };
         // ══ Language END ══
@@ -4488,7 +4457,16 @@
             if (!this.classList.contains('expanded')) {
                 this.classList.add('expanded');
                 if (_map) {
-                    setTimeout(() => { _map.invalidateSize(); _map.getContainer().addEventListener('click', e=>e.stopPropagation(), {once:true}); _map.dragging.enable(); _map.scrollWheelZoom.enable(); _map.doubleClickZoom.enable(); }, 320);
+                    setTimeout(() => {
+                        _map.invalidateSize({ animate: false });
+                        if (userLat && userLng) {
+                            _map.setView([userLat, userLng], 14, { animate: false });
+                        }
+                        _map.getContainer().addEventListener('click', e => e.stopPropagation(), { once: true });
+                        _map.dragging.enable();
+                        _map.scrollWheelZoom.enable();
+                        _map.doubleClickZoom.enable();
+                    }, 370);
                 }
             }
         });
@@ -4500,12 +4478,16 @@
                 _map.dragging.disable();
                 _map.scrollWheelZoom.disable();
                 _map.doubleClickZoom.disable();
-                // Snap back to user's location after the CSS transition ends
+                // Wait for CSS transition to finish, THEN tell Leaflet the
+                // container is now 160x160 again (invalidateSize), THEN
+                // re-center exactly on the user pin with no animation so
+                // there is no second pan that overshoots.
                 setTimeout(() => {
+                    _map.invalidateSize({ animate: false });
                     if (userLat && userLng) {
-                        _map.setView([userLat, userLng], 14, { animate: true, duration: 0.6 });
+                        _map.setView([userLat, userLng], 14, { animate: false });
                     }
-                }, 320);
+                }, 370);
             }
         };
 
