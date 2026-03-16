@@ -3950,30 +3950,76 @@
 
         
         // ══ Language / Translation ══
-        window._currentLang = 'en';
 
-        // Ensure page always starts in English by setting cookie to en/en
-        document.cookie = 'googtrans=/en/en; path=/';
+        // ── Helper: nuke every variant of the googtrans cookie ──
+        function _clearGTCookies() {
+            const exp = 'expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            const hosts = ['', location.hostname, '.' + location.hostname];
+            const paths = ['/', '/dashboard'];
+            hosts.forEach(d => paths.forEach(p => {
+                const base = `googtrans=; path=${p}; ${exp}`;
+                document.cookie = d ? base + `; domain=${d}` : base;
+            }));
+        }
 
-        // Load GT widget once
+        // ── On every page load: if user last chose English, block GT completely ──
+        const _savedLang = localStorage.getItem('bouLang') || 'en';
+        window._currentLang = _savedLang;
+
+        if (_savedLang === 'en') {
+            // Wipe cookies BEFORE GT loads so it has nothing to read
+            _clearGTCookies();
+        } else {
+            // Set cookie so GT will translate to the saved language
+            document.cookie = `googtrans=/en/${_savedLang}; path=/`;
+        }
+
+        // ── Highlight the correct button immediately ──
+        (function() {
+            const map = { en: 'langEn', ar: 'langAr', hi: 'langHi' };
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(map[_savedLang] || 'langEn')?.classList.add('active');
+        })();
+
+        // ── Load GT widget ──
         window.googleTranslateElementInit = function() {
             new google.translate.TranslateElement(
                 { pageLanguage: 'en', includedLanguages: 'ar,hi', autoDisplay: false },
                 '_gtHost'
             );
+
+            // After GT initialises, if English is chosen force it back to en
+            // (GT sometimes re-applies the last translation from its own cache)
+            if ((localStorage.getItem('bouLang') || 'en') === 'en') {
+                // Poll until the combo appears then hard-reset it to ''
+                let n = 0;
+                const guard = setInterval(() => {
+                    const sel = document.querySelector('select.goog-te-combo');
+                    if (sel) {
+                        sel.value = '';
+                        sel.dispatchEvent(new Event('change', { bubbles: true }));
+                        clearInterval(guard);
+                    } else if (++n > 40) clearInterval(guard);
+                }, 100);
+            }
         };
         const _gts = document.createElement('script');
         _gts.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
         document.head.appendChild(_gts);
 
+        // ── Switch language ──
         function _switchLang(code) {
-            // Reverting to English: clear the translation cookie and reload
             if (code === '') {
-                document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                document.cookie = 'googtrans=/en/en; path=/';
-                setTimeout(() => window.location.reload(), 50);
+                // Save English preference FIRST
+                localStorage.setItem('bouLang', 'en');
+                _clearGTCookies();
+                // Small delay so storage + cookies are committed, then reload
+                setTimeout(() => window.location.reload(), 80);
                 return;
             }
+            // Save non-English preference
+            localStorage.setItem('bouLang', code);
+            document.cookie = `googtrans=/en/${code}; path=/`;
             const apply = () => {
                 const sel = document.querySelector('select.goog-te-combo');
                 if (!sel) return false;
@@ -3989,8 +4035,7 @@
         window.setLang = (lang) => {
             window._currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById({en:'langEn', ar:'langAr', hi:'langHi'}[lang] || 'langEn')?.classList.add('active');
-            // '' = revert to original English; language code = translate to that language
+            document.getElementById({ en:'langEn', ar:'langAr', hi:'langHi' }[lang] || 'langEn')?.classList.add('active');
             _switchLang(lang === 'en' ? '' : lang);
         };
         // ══ Language END ══
