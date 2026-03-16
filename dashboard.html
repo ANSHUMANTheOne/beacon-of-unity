@@ -3950,31 +3950,61 @@
 
         
         // ══ Language / Translation ══
-        window._currentLang = 'en';
+        // ── Language: restore saved preference on every load ──────────────
+        window._currentLang = localStorage.getItem('preferredLang') || 'en';
 
-        // Ensure page always starts in English by setting cookie to en/en
-        document.cookie = 'googtrans=/en/en; path=/';
+        // Reflect the saved button state immediately (before GT loads)
+        (function() {
+            const saved = window._currentLang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById({en:'langEn', ar:'langAr', hi:'langHi'}[saved] || 'langEn')?.classList.add('active');
+        })();
 
-        // Load GT widget once
+        // If English is active, make sure no stale googtrans cookie triggers GT
+        if (window._currentLang === 'en') {
+            const clr = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+            document.cookie = clr;
+            document.cookie = clr + '; domain=' + location.hostname;
+            document.cookie = clr + '; domain=.' + location.hostname;
+        }
+
+        // Load GT widget once; after it's ready, apply saved non-English language
         window.googleTranslateElementInit = function() {
             new google.translate.TranslateElement(
                 { pageLanguage: 'en', includedLanguages: 'ar,hi', autoDisplay: false },
                 '_gtHost'
             );
+            const saved = localStorage.getItem('preferredLang') || 'en';
+            if (saved !== 'en') {
+                // Wait for the combo to appear, then apply
+                let n = 0;
+                const t = setInterval(() => {
+                    const sel = document.querySelector('select.goog-te-combo');
+                    if (sel) {
+                        sel.value = saved;
+                        sel.dispatchEvent(new Event('change', { bubbles: true }));
+                        clearInterval(t);
+                    } else if (++n > 40) clearInterval(t);
+                }, 100);
+            }
         };
         const _gts = document.createElement('script');
         _gts.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
         document.head.appendChild(_gts);
 
         function _switchLang(code) {
-            // Reverting to English: clear the translation cookie and reload
             if (code === '') {
-                document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                document.cookie = 'googtrans=/en/en; path=/';
-                // Small delay so cookie is written before reload
+                // Switching to English: save preference, wipe GT cookies, reload clean
+                localStorage.setItem('preferredLang', 'en');
+                const clr = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                document.cookie = clr;
+                document.cookie = clr + '; domain=' + location.hostname;
+                document.cookie = clr + '; domain=.' + location.hostname;
                 setTimeout(() => window.location.reload(), 50);
                 return;
             }
+            // Switching to ar / hi
+            localStorage.setItem('preferredLang', code);
             const apply = () => {
                 const sel = document.querySelector('select.goog-te-combo');
                 if (!sel) return false;
@@ -3991,7 +4021,6 @@
             window._currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById({en:'langEn', ar:'langAr', hi:'langHi'}[lang] || 'langEn')?.classList.add('active');
-            // '' = revert to original English; language code = translate to that language
             _switchLang(lang === 'en' ? '' : lang);
         };
         // ══ Language END ══
