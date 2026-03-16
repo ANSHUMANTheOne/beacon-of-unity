@@ -3967,17 +3967,18 @@
         document.head.appendChild(_gts);
 
         function _switchLang(code) {
+            // Reverting to English: clear the translation cookie and reload
+            if (code === '') {
+                document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'googtrans=/en/en; path=/';
+                setTimeout(() => window.location.reload(), 50);
+                return;
+            }
             const apply = () => {
                 const sel = document.querySelector('select.goog-te-combo');
                 if (!sel) return false;
                 sel.value = code;
                 sel.dispatchEvent(new Event('change', { bubbles: true }));
-                // For English revert, also try clicking the "Show original" bar GT injects
-                if (code === '') {
-                    const restore = document.querySelector('.goog-te-banner-frame');
-                    if (restore) try { restore.contentDocument.querySelector('a[id=":1"]')?.click(); } catch(e) {}
-                    document.cookie = 'googtrans=/en/en; path=/';
-                }
                 return true;
             };
             if (apply()) return;
@@ -4478,10 +4479,6 @@
                 _map.dragging.disable();
                 _map.scrollWheelZoom.disable();
                 _map.doubleClickZoom.disable();
-                // Wait for CSS transition to finish, THEN tell Leaflet the
-                // container is now 160x160 again (invalidateSize), THEN
-                // re-center exactly on the user pin with no animation so
-                // there is no second pan that overshoots.
                 setTimeout(() => {
                     _map.invalidateSize({ animate: false });
                     if (userLat && userLng) {
