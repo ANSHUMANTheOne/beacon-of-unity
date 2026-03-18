@@ -753,6 +753,15 @@
             #leaderboardTab > div:first-child { flex-wrap:wrap; }
             .hovername .hovercard { bottom:auto; top:130%; white-space:normal; min-width:150px; }
             #quoteText { font-size:17px; }
+            /* Fix UPM modal — keep padding:0 for banner, add scroll */
+            #userProfileModal .modal-content {
+                padding: 0 !important;
+                max-height: 90vh !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            /* Allow lb-sub to wrap on narrow screens */
+            .lb-sub { flex-wrap: wrap; white-space: normal; }
 
 
             /* ══════════════════════════════════════
@@ -926,6 +935,21 @@
     body.dark .upm-rank-row,body.dark .upm-stat { background:#0f172a; border-color:#334155; }
     body.dark .upm-stat-num { color:#f1f5f9; }
     body.dark .upm-badge-chip { background:#334155; border-color:#475569; color:#cbd5e1; }
+
+    /* ── ONLINE INDICATOR ──────────────────────────────── */
+    .online-dot {
+        display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+        flex-shrink: 0; vertical-align: middle; margin-right: 3px;
+    }
+    .online-dot.active  { background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,.25); }
+    .online-dot.offline { background: #94a3b8; }
+    .online-label { font-size: 10px; color: #94a3b8; }
+    .online-label.active { color: #16a34a; }
+
+    /* ── READ RECEIPTS ─────────────────────────────────── */
+    .msg-tick { font-size: 11px; margin-left: 4px; user-select: none; flex-shrink: 0; }
+    .msg-tick.seen { color: #38bdf8; }
+    .msg-tick.sent { color: #94a3b8; }
     .upm-status-box { display:flex; align-items:flex-start; gap:8px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px; padding:9px 12px; margin-bottom:12px; }
     .upm-status-box span { font-size:13px; color:#0369a1; font-style:italic; line-height:1.4; }
     body.dark .upm-status-box { background:#0c2233; border-color:#1e40af; }
@@ -1836,7 +1860,7 @@
     <div id="chatPopup">
         <!-- Header -->
         <div id="chatHeader">
-            <button id="chatBackBtn" onclick="document.getElementById('chatPopup').style.display='none'">‹</button>
+            <button id="chatBackBtn" onclick="if(_unsubChatDoc){_unsubChatDoc();_unsubChatDoc=null;} if(unsubscribeChat){unsubscribeChat();unsubscribeChat=null;} document.getElementById('chatPopup').style.display='none'">‹</button>
             <div id="chatAvatarCircle">?</div>
             <div id="chatHeaderMeta">
                 <span id="chatWith">Chat</span>
@@ -1882,6 +1906,7 @@
         let currentChatType = null;
         let currentChatPostOwnerId = null;
         let unsubscribeChat = null;
+        let _unsubChatDoc = null;   // chat doc subscription for read receipts
         let userRegion = null;
         let userName = "";
         let userEquippedSkin = null;    // gradient id for pfp
@@ -1918,6 +1943,21 @@
                 const avg = (d.ratingTotal / d.ratingCount).toFixed(1);
                 return `⭐ ${avg} / 5  (${d.ratingCount} rating${d.ratingCount > 1 ? 's' : ''})`;
             } catch { return 'No ratings yet'; }
+        }
+
+        // Returns { dot: htmlString, isOnline: bool } from a Firestore Timestamp or null
+        function getOnlineInfo(lastSeen) {
+            if (!lastSeen) return { dot: `<span class="online-dot offline"></span>`, label: '', isOnline: false };
+            const diffMs = Date.now() - lastSeen.toDate().getTime();
+            const diffMin = Math.floor(diffMs / 60000);
+            if (diffMin < 3) {
+                return { dot: `<span class="online-dot active"></span>`, label: '<span class="online-label active">Online</span>', isOnline: true };
+            }
+            let ago;
+            if (diffMin < 60)       ago = `${diffMin}m ago`;
+            else if (diffMin < 1440) ago = `${Math.floor(diffMin/60)}h ago`;
+            else                     ago = `${Math.floor(diffMin/1440)}d ago`;
+            return { dot: `<span class="online-dot offline"></span>`, label: `<span class="online-label">Last seen ${ago}</span>`, isOnline: false };
         }
 
         function buildHoverCard(uid, name, ratingTxt) {
@@ -2001,10 +2041,22 @@
 
         function showBadgeToast(ach) {
             const t = document.createElement('div');
-            t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1e293b,#0f172a);color:white;padding:14px 22px;border-radius:16px;z-index:9999;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.35);animation:slideUp .4s ease;pointer-events:none;';
+            t.style.cssText = 'position:fixed;bottom:calc(90px + env(safe-area-inset-bottom, 0px));left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1e293b,#0f172a);color:white;padding:14px 22px;border-radius:16px;z-index:9999;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.35);animation:slideUp .4s ease;pointer-events:none;max-width:90vw;';
             t.innerHTML = `<span style="font-size:28px;">${ach.icon}</span><div><div style="font-weight:700;font-size:14px;">Badge Unlocked!</div><div style="color:#94a3b8;font-size:12px;">${ach.label} — ${ach.desc}</div></div>`;
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 4000);
+        }
+
+        function showExpiryToast() {
+            const t = document.createElement('div');
+            t.style.cssText = 'position:fixed;bottom:calc(90px + env(safe-area-inset-bottom, 0px));left:50%;transform:translateX(-50%);background:#1e293b;color:#94a3b8;padding:11px 20px;border-radius:12px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 6px 24px rgba(0,0,0,.3);animation:slideUp .35s ease;pointer-events:none;font-size:13px;max-width:90vw;text-align:center;';
+            t.innerHTML = `<span style="font-size:15px;flex-shrink:0;">⏳</span> Posts in Community Hub expire after <b style="color:#e2e8f0;">7 days</b>`;
+            document.body.appendChild(t);
+            setTimeout(() => {
+                t.style.transition = 'opacity 0.5s';
+                t.style.opacity = '0';
+                setTimeout(() => t.remove(), 500);
+            }, 3500);
         }
 
         function getEquippedBubble(bubbleId) {
@@ -2151,6 +2203,13 @@
                 loadRequests();
                 loadLF();
                 loadActiveChats();
+                // ── Online presence heartbeat ──
+                const _presenceRef = doc(db, 'users', user.uid);
+                const _updatePresence = () => updateDoc(_presenceRef, { lastSeen: serverTimestamp() }).catch(()=>{});
+                _updatePresence();
+                setInterval(_updatePresence, 120000); // every 2 min
+                document.addEventListener('visibilitychange', () => { if (!document.hidden) _updatePresence(); });
+                window.addEventListener('focus', _updatePresence);
                 // Pre-fetch news immediately in background so it's ready when user navigates there
                 loadNews();
             } else {
@@ -2166,10 +2225,18 @@
         };
 
         document.getElementById('submitReqBtn').onclick = async () => {
+            const btn = document.getElementById('submitReqBtn');
+            if (btn.disabled) return;
+            btn.disabled = true;
+            const origText = btn.textContent;
+            btn.textContent = 'Posting…';
             const user = auth.currentUser;
             const title = document.getElementById('reqTitle').value.trim();
             const locationStr = document.getElementById('reqLoc').value.trim();
-            if(!title || !locationStr) return alert("Title and Location required!");
+            if (!title || !locationStr) {
+                btn.disabled = false; btn.textContent = origText;
+                return alert("Title and Location required!");
+            }
             // Geocode the location silently
             const coords = await geocodePostLocation(locationStr).catch(()=>null);
             try {
@@ -2198,14 +2265,31 @@
                     })
                 });
                 window.closeRequestModal();
-            } catch (e) { alert("Error posting."); }
+                // Clear form fields
+                document.getElementById('reqTitle').value = '';
+                document.getElementById('reqLoc').value = '';
+                document.getElementById('reqDesc').value = '';
+                showExpiryToast();
+            } catch (e) {
+                alert("Error posting.");
+            }
+            btn.disabled = false;
+            btn.textContent = origText;
         };
 
         document.getElementById('submitLFBtn').onclick = async () => {
+            const btn = document.getElementById('submitLFBtn');
+            if (btn.disabled) return;
+            btn.disabled = true;
+            const origText = btn.textContent;
+            btn.textContent = 'Posting…';
             const user = auth.currentUser;
             const item = document.getElementById('lfItem').value.trim();
             const locationStr = document.getElementById('lfLoc').value.trim();
-            if (!item || !locationStr) return alert("Item name and location required!");
+            if (!item || !locationStr) {
+                btn.disabled = false; btn.textContent = origText;
+                return alert("Item name and location required!");
+            }
 
             let imageBase64 = null;
             const imgFile = document.getElementById('lfImg').files[0];
@@ -2231,7 +2315,6 @@
                 await updateDoc(doc(db,'users',user.uid), { lfPosts: increment(1) });
                 const lfSnap = await getDoc(doc(db,'users',user.uid));
                 if (lfSnap.exists()) checkAndAwardBadges(user.uid, lfSnap.data());
-                // FCM: notify region topic
                 const lfType = document.getElementById('lfType').value;
                 fetch('https://beacon-fcm.anshorg.workers.dev/', {
                     method: 'POST',
@@ -2252,7 +2335,11 @@
                 console.error(e);
                 alert("Error posting report. Please try again.");
             }
+            btn.disabled = false;
+            btn.textContent = origText;
         };
+
+        const EXPIRY_DAYS = 7;
 
         function loadRequests() {
             const feed = document.getElementById('requestFeed');
@@ -2261,9 +2348,19 @@
             onSnapshot(q, (snapshot) => {
                 feed.innerHTML = "";
                 let hasPosts = false;
+                const nowMs = Date.now();
+                const expiryMs = EXPIRY_DAYS * 24 * 60 * 60 * 1000;
+
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
                     const postRegion = data.region || "Sharjah";
+
+                    // Skip expired posts (older than 7 days)
+                    if (data.createdAt) {
+                        const ageMs = nowMs - data.createdAt.toDate().getTime();
+                        if (ageMs > expiryMs) return;
+                    }
+
                     if (postRegion === userRegion) {
                         hasPosts = true;
                         const card = document.createElement('div');
@@ -2273,6 +2370,30 @@
                         const distHtml = (userLat && data.lat && data.lng)
                             ? `<span class="dist-chip">📍 ${fmtDist(haversineKm(userLat,userLng,data.lat,data.lng))}</span>`
                             : '';
+
+                        // Days remaining chip
+                        let daysLeftHtml = '';
+                        let expiryWarningHtml = '';
+                        if (data.createdAt) {
+                            const ageMs = nowMs - data.createdAt.toDate().getTime();
+                            const daysLeft = Math.max(0, EXPIRY_DAYS - Math.floor(ageMs / (24*60*60*1000)));
+                            const chipColor = daysLeft <= 1 ? '#ef4444' : daysLeft <= 2 ? '#f97316' : '#64748b';
+                            daysLeftHtml = `<span style="font-size:10px;color:${chipColor};font-weight:600;background:${chipColor}12;border:1px solid ${chipColor}30;border-radius:99px;padding:1px 7px;margin-left:4px;">⏳ ${daysLeft}d left</span>`;
+
+                            // 2-day warning — only show to post owner and only if not dismissed this session
+                            const dismissed = sessionStorage.getItem(`exp_dismissed_${docSnap.id}`);
+                            if (isOwner && daysLeft <= 2 && !dismissed) {
+                                expiryWarningHtml = `
+                                <div id="expwarn-${docSnap.id}" style="display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fed7aa;border-radius:10px;padding:10px 12px;margin-bottom:10px;">
+                                    <span style="font-size:18px;flex-shrink:0;">⏳</span>
+                                    <div style="flex:1;min-width:0;">
+                                        <div style="font-size:12px;font-weight:700;color:#c2410c;">Is this request still relevant?</div>
+                                        <div style="font-size:11px;color:#ea580c;margin-top:1px;">This post expires in <b>${daysLeft === 0 ? 'less than a day' : daysLeft + (daysLeft === 1 ? ' day' : ' days')}</b>. Keep it if you still need help.</div>
+                                    </div>
+                                    <button onclick="sessionStorage.setItem('exp_dismissed_${docSnap.id}','1');document.getElementById('expwarn-${docSnap.id}').remove();" style="background:none;border:none;color:#94a3b8;font-size:16px;cursor:pointer;flex-shrink:0;line-height:1;">✕</button>
+                                </div>`;
+                            }
+                        }
 
                         let volListHtml = (data.volunteers || []).map(v => `
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f1f5f9;">
@@ -2289,12 +2410,13 @@
                         card.innerHTML = `
                             <div style="display:flex; justify-content:space-between; align-items:start;">
                                 <span class="badge badge-${data.category.toLowerCase()}">${data.category}</span>
-                                <div style="text-align:right;"><small>📍 ${data.location}</small>${distHtml}
+                                <div style="text-align:right;"><small>📍 ${data.location}</small>${distHtml}${daysLeftHtml}
                                 ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
                             </div>
                             <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.title}</h4>
                             <p style="font-size:11px; color:#64748b;">Posted by: <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${getEquippedSkin(data.equippedSkin||'ocean').gradient};margin-right:3px;vertical-align:middle;"></span>${data.userName}</p>
                             <p style="font-size:13px; color:#475569;">${data.description}</p>
+                            ${expiryWarningHtml}
                             <div style="display:flex; gap:10px; align-items:center;">
                                 <button class="btn-help" ${isOwner || hasVolunteered ? 'disabled' : ''} onclick="offerHelp('${docSnap.id}')">
                                     ${isOwner ? 'Your Post' : (hasVolunteered ? 'Waitlisted' : 'I Can Help')}
@@ -2360,6 +2482,9 @@
             const user = auth.currentUser;
             const reqRef = doc(db, "requests", requestId);
             const reqSnap = await getDoc(reqRef);
+            // Disable button immediately to prevent double-tap
+            const btn = document.querySelector(`button[onclick="offerHelp('${requestId}')"]`);
+            if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
             await updateDoc(reqRef, { volunteers: arrayUnion({ uid: user.uid, name: userName }), volunteerCount: increment(1) });
             if (reqSnap.exists()) {
                 const rd = reqSnap.data();
@@ -2433,6 +2558,24 @@
             renderFooterBar();
 
             if (unsubscribeChat) unsubscribeChat();
+            // Track seen status via chat doc subscription
+            let _otherHasSeen = false;
+            if (_unsubChatDoc) { _unsubChatDoc(); _unsubChatDoc = null; }
+            _unsubChatDoc = onSnapshot(doc(db, 'chats', currentChatId), (snap) => {
+                if (!snap.exists()) return;
+                const newSeen = snap.data()[`unread_${currentChatOtherUserId}`] === false;
+                if (newSeen !== _otherHasSeen) {
+                    _otherHasSeen = newSeen;
+                    // Update the tick on the last "me" message without re-rendering
+                    const ticks = document.querySelectorAll('#messageArea .msg-tick');
+                    ticks.forEach(t => {
+                        t.className = 'msg-tick ' + (_otherHasSeen ? 'seen' : 'sent');
+                        t.title = _otherHasSeen ? 'Seen' : 'Sent';
+                        t.textContent = _otherHasSeen ? '✓✓' : '✓✓';
+                    });
+                }
+            });
+
             const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
             unsubscribeChat = onSnapshot(q, (snapshot) => {
                 const area = document.getElementById('messageArea');
@@ -2557,6 +2700,15 @@
                             time.className = 'imsg-time';
                             time.textContent = ts.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
                             if (isMe) {
+                                // Add read receipt tick only on very last "me" message
+                                const isLastMeMsg = !msgs.slice(idx+1).some(m => m.senderId === auth.currentUser.uid);
+                                if (isLastMeMsg) {
+                                    const tick = document.createElement('span');
+                                    tick.className = 'msg-tick ' + (_otherHasSeen ? 'seen' : 'sent');
+                                    tick.textContent = '✓✓';
+                                    tick.title = _otherHasSeen ? 'Seen' : 'Sent';
+                                    time.appendChild(tick);
+                                }
                                 row.insertBefore(time, wrap); // left of bubble
                             } else {
                                 row.appendChild(time);        // right of bubble
@@ -2658,6 +2810,8 @@
             document.getElementById('chatPopup').style.display = 'none';
             const el = document.getElementById(`item-${currentChatId}`);
             if (el) el.remove();
+            if (_unsubChatDoc) { _unsubChatDoc(); _unsubChatDoc = null; }
+            if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
 
             const capturedRequestId = requestId;
             const capturedHelperUid  = helperUid;
@@ -2716,6 +2870,8 @@
             document.getElementById('chatPopup').style.display = 'none';
             const el = document.getElementById(`item-${currentChatId}`);
             if (el) el.remove();
+            if (_unsubChatDoc) { _unsubChatDoc(); _unsubChatDoc = null; }
+            if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
             currentChatId = null; currentChatOtherUserId = null;
             currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
         };
@@ -2774,7 +2930,7 @@
                 }
             } catch (e) { /* silently ignore notification errors */ }
             // In-app notification
-            try { await pushNotif(recipientUid, '💬', `New message from ${userName}`, msgText.slice(0,80)); } catch {}
+            try { await pushNotif(currentChatOtherUserId, '💬', `New message from ${userName}`, msgText.slice(0,80)); } catch {}
             input.value = "";
         }
         document.getElementById('sendMsgBtn').onclick = sendMessage;
@@ -2810,16 +2966,27 @@
                         ${hasUnread ? '<span style="background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;">NEW</span>' : ''}
                     </div>
                     <span class="hovername" style="font-weight:700; font-size:13px; font-family:'Syne',sans-serif;">
-                        ${otherName}
+                        <span id="cli-dot-${chatId}"></span>${otherName}
                         <span class="hovercard">
                             <div class="rating-line">${ratingTxt}</div>
                             <button class="report-btn" onclick="openReportModal('${otherId}','${otherName.replace(/'/g,"\\'")}')">🚩 Report User</button>
                         </span>
                     </span>
-                    <br><small style="color:#94a3b8; font-size:11px;">${chatData.itemLabel || ''}</small>
+                    <br><small id="cli-status-${chatId}" style="color:#94a3b8; font-size:11px;">${chatData.itemLabel || ''}</small>
                 </div>
                 <button onclick="resumeChat('${chatId}','${otherName}','${otherId}','${cType}','${pOwnerId}')"
                     style="background:#0f172a; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px; flex-shrink:0; margin-left:8px;">Open</button>`;
+
+            // Inject online dot async
+            getDoc(doc(db, 'users', otherId)).then(snap => {
+                const dotEl   = document.getElementById(`cli-dot-${chatId}`);
+                const statEl  = document.getElementById(`cli-status-${chatId}`);
+                if (!dotEl) return;
+                const info = getOnlineInfo(snap.exists() ? snap.data().lastSeen : null);
+                dotEl.innerHTML = info.dot;
+                if (statEl && info.isOnline) statEl.innerHTML = `<span class="online-label active">● Online</span>`;
+                else if (statEl && info.label) statEl.innerHTML = info.label;
+            }).catch(()=>{});
 
             const anyUnread = list.querySelector('.chat-unread');
             const mobIcon = document.getElementById('mobChatsIcon');
@@ -2951,6 +3118,7 @@
                         badges: data.badges || [],
                         thankYousReceived: data.thankYousReceived || 0,
                         statusMsg: data.statusMsg || '',
+                        lastSeen: data.lastSeen || null,
                     });
                 });
                 users.sort((a, b) => b.pts - a.pts);
@@ -2991,18 +3159,19 @@
                     row.className = `lb-row${isMe ? ' is-me' : ''}`;
                     row.style.cursor = 'pointer';
                     const safeName = u.name.replace(/'/g, "\\'");
+                    const onlineInfo = getOnlineInfo(u.lastSeen);
                     row.innerHTML = `
                         <div class="lb-rank ${rankClass}">${rankIcon}</div>
                         <div class="lb-avatar" style="${makePfpStyle(u.equippedSkin)}">${initial}</div>
                         <div class="lb-info" style="flex:1;">
                             <div class="lb-name" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px;">
-                                <span>${u.name}</span>
+                                ${onlineInfo.dot}<span>${u.name}</span>
                                 ${roleBadgesHtml}
                                 ${isMe ? '<span style="font-size:11px;background:#38bdf8;color:#0f172a;padding:2px 7px;border-radius:99px;font-weight:600;margin-left:4px;">You</span>' : ''}
                                 ${regionTag}
                             </div>
                             <div class="lb-sub">
-                                <span style="color:${vRank.color}; font-weight:600;">${vRank.icon} ${vRank.label}</span>
+                                ${onlineInfo.label}&nbsp;·&nbsp;<span style="color:${vRank.color}; font-weight:600;">${vRank.icon} ${vRank.label}</span>
                                 &nbsp;·&nbsp; ${ratingStr}
                             </div>
                         </div>
@@ -4625,33 +4794,6 @@
                 snap.forEach(ds=>{ const d=ds.data(); if(!d.lat||!d.lng) return; L.marker([d.lat,d.lng],{icon:makePin2(d.urgency==='high'?'#ef4444':'#38bdf8',d.urgency==='high'?'!':'H')}).bindPopup(`<b>${d.title||'Request'}</b><br><small>📍 ${d.location||''}</small>`).addTo(map); }); }).catch(()=>{});
             getDocs(query(collection(db,'lostfound'),orderBy('createdAt','desc'))).then(snap=>{
                 snap.forEach(ds=>{ const d=ds.data(); if(!d.lat||!d.lng) return; L.marker([d.lat,d.lng],{icon:makePin2(d.type==='Lost'?'#f97316':'#16a34a',d.type==='Lost'?'L':'F')}).bindPopup(`<b>${d.item||''}</b><br><small>📍 ${d.location||''}</small>`).addTo(map); }); }).catch(()=>{});
-        }
-
-        // ── Patch request submit to geocode ─────────────────────
-        const _origReqSubmit = document.getElementById('submitReqBtn') ? document.getElementById('submitReqBtn').onclick : null;
-        // We patch via event override after DOM is ready
-        function patchSubmitButtons() {
-            const reqBtn = document.getElementById('submitReqBtn');
-            const lfBtn  = document.getElementById('submitLFBtn');
-
-            if (reqBtn) {
-                const originalReqClick = reqBtn.onclick;
-                reqBtn.onclick = null;
-                reqBtn.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    const locStr = document.getElementById('reqLoc').value.trim();
-                    if (locStr) {
-                        const coords = await geocodePostLocation(locStr);
-                        if (coords) {
-                            // Temporarily store for the addDoc call
-                            window._pendingPostCoords = coords;
-                        }
-                    }
-                    // Call original submit logic via the stored reference
-                    if (originalReqClick) originalReqClick.call(reqBtn, e);
-                    else reqBtn.dispatchEvent(new Event('_originalclick'));
-                }, {once: false});
-            }
         }
 
         // ── User location init after auth ─────────────────────
