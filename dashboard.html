@@ -926,6 +926,14 @@
     body.dark .upm-rank-row,body.dark .upm-stat { background:#0f172a; border-color:#334155; }
     body.dark .upm-stat-num { color:#f1f5f9; }
     body.dark .upm-badge-chip { background:#334155; border-color:#475569; color:#cbd5e1; }
+    .upm-status-box { display:flex; align-items:flex-start; gap:8px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px; padding:9px 12px; margin-bottom:12px; }
+    .upm-status-box span { font-size:13px; color:#0369a1; font-style:italic; line-height:1.4; }
+    body.dark .upm-status-box { background:#0c2233; border-color:#1e40af; }
+    body.dark .upm-status-box span { color:#7dd3fc; }
+    .upm-report-btn { width:100%; padding:10px; background:#fee2e2; color:#991b1b; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:13px; margin-top:14px; transition:background .18s, transform .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .upm-report-btn:hover { background:#fecaca; transform:translateY(-1px); }
+    body.dark .upm-report-btn { background:#2d1515; color:#fca5a5; }
+    body.dark .upm-report-btn:hover { background:#3f1a1a; }
 
     /* ── LOCATION SETUP MODAL ──────────────────────────── */
     #locationSetupModal .modal-content { max-width:420px; text-align:center; }
@@ -1051,6 +1059,11 @@
                 </div>
                 <div class="upm-name" id="upmName"></div>
                 <div class="upm-roles" id="upmRoles"></div>
+                <!-- Status message -->
+                <div class="upm-status-box" id="upmStatusBox" style="display:none;">
+                    <span style="font-size:15px;flex-shrink:0;">💬</span>
+                    <span id="upmStatusText"></span>
+                </div>
                 <div class="upm-rank-row">
                     <span id="upmRankIcon" style="font-size:26px;">🌱</span>
                     <div>
@@ -1065,6 +1078,12 @@
                 </div>
                 <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Badges</div>
                 <div class="upm-badges-grid" id="upmBadges"></div>
+                <!-- Report button — hidden for own profile -->
+                <div id="upmReportBtnWrap" style="display:none;">
+                    <button class="upm-report-btn" id="upmReportBtn">
+                        🚩 Report User
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1682,6 +1701,9 @@
             </div>
             <!-- Badges earned display -->
             <div id="profileBadgesRow" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; min-height:0;"></div>
+            <!-- Status Message -->
+            <label style="font-size:13px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Status Message <span style="font-weight:400; color:#94a3b8;">(optional)</span></label>
+            <input type="text" id="profileStatusInput" maxlength="80" placeholder="e.g. Happy to help! 😊" style="margin-bottom:12px;">
             <label>Change Your Emirate</label>
             <select id="profileRegionSelect">
                 <option value="Abu Dhabi">Abu Dhabi</option>
@@ -2040,6 +2062,9 @@
             document.getElementById('profileRankLabel').style.color = rank.color;
             document.getElementById('profileRankPts').innerText   = `${pts} pts earned`;
             await loadProfileStats(data, pts);
+            // Load status message
+            const statusInput = document.getElementById('profileStatusInput');
+            if (statusInput) statusInput.value = data.statusMsg || '';
             // Apply equipped skin to profile avatar
             const profAvatar = document.getElementById('profileAvatarCircle');
             if (profAvatar) {
@@ -2135,7 +2160,8 @@
 
         document.getElementById('updateProfileBtn').onclick = async () => {
             const newRegion = document.getElementById('profileRegionSelect').value;
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { region: newRegion });
+            const newStatus = (document.getElementById('profileStatusInput')?.value || '').trim().slice(0, 80);
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { region: newRegion, statusMsg: newStatus });
             location.reload();
         };
 
@@ -2923,7 +2949,8 @@
                         reqPosts: data.reqPosts || 0,
                         lfPosts: data.lfPosts || 0,
                         badges: data.badges || [],
-                        thankYousReceived: data.thankYousReceived || 0
+                        thankYousReceived: data.thankYousReceived || 0,
+                        statusMsg: data.statusMsg || '',
                     });
                 });
                 users.sort((a, b) => b.pts - a.pts);
@@ -4235,6 +4262,7 @@
                     badges: snap.data().badges || [],
                     rating: snap.data().ratingCount ? (snap.data().ratingTotal / snap.data().ratingCount).toFixed(1) : null,
                     ratingCount: snap.data().ratingCount || 0,
+                    statusMsg: snap.data().statusMsg || '',
                 };
             }
 
@@ -4251,6 +4279,31 @@
             avatarEl.textContent = initial;
 
             document.getElementById('upmName').textContent = data.name || 'User';
+
+            // Status message
+            const statusBox = document.getElementById('upmStatusBox');
+            const statusText = document.getElementById('upmStatusText');
+            if (data.statusMsg && data.statusMsg.trim()) {
+                statusText.textContent = data.statusMsg.trim();
+                statusBox.style.display = 'flex';
+            } else {
+                statusBox.style.display = 'none';
+            }
+
+            // Report button — only show for other users
+            const reportWrap = document.getElementById('upmReportBtnWrap');
+            const reportBtn  = document.getElementById('upmReportBtn');
+            const isSelf = data.uid === auth.currentUser.uid;
+            if (isSelf) {
+                reportWrap.style.display = 'none';
+            } else {
+                reportWrap.style.display = 'block';
+                const safeName = (data.name || 'User').replace(/'/g, "\\'");
+                reportBtn.onclick = () => {
+                    document.getElementById('userProfileModal').style.display = 'none';
+                    openReportModal(data.uid, data.name || 'User');
+                };
+            }
 
             // Roles
             const rolesEl = document.getElementById('upmRoles');
