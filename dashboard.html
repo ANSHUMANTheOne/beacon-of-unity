@@ -1117,12 +1117,28 @@
         <div class="modal-content">
             <div class="ls-icon">📍</div>
             <h2 style="margin:0 0 6px;font-family:'Syne',sans-serif;">Set Your Area</h2>
-            <p style="font-size:13px;color:#64748b;margin:0 0 18px;">This helps show requests near you and powers the live map. Type your neighbourhood, landmark, or area in UAE.</p>
-            <input type="text" id="lsInput" placeholder="e.g. Al Majaz, Sharjah" oninput="lsDebounce()" autocomplete="off">
+            <p style="font-size:13px;color:#64748b;margin:0 0 18px;">Search for your street, neighbourhood, building, or landmark in the UAE — the more specific, the better.</p>
+            <input type="text" id="lsInput" placeholder="e.g. Al Majaz 2, Rolla Square, Al Nahda…" oninput="lsDebounce()" autocomplete="off">
             <div id="lsSearchResults"></div>
             <div id="lsStatus" style="font-size:12px;color:#64748b;margin-top:8px;min-height:16px;"></div>
             <button id="lsConfirmBtn" onclick="confirmLocation()" style="width:100%;padding:12px;background:#38bdf8;color:#0f172a;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;margin-top:14px;" disabled>📍 Set My Location</button>
             <button onclick="skipLocationSetup()" style="width:100%;background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;margin-top:10px;padding:6px;">Skip for now</button>
+        </div>
+    </div>
+
+    <!-- ── UPDATE LOCATION MODAL ── -->
+    <div id="updateLocationModal" class="modal" onclick="if(event.target===this)this.style.display='none'">
+        <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                <h2 style="margin:0;font-family:'Syne',sans-serif;">📍 Update Your Location</h2>
+                <button onclick="document.getElementById('updateLocationModal').style.display='none'" style="background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;">✕</button>
+            </div>
+            <p style="font-size:13px;color:#64748b;margin:0 0 16px;">Search for your neighbourhood, street, building, or landmark anywhere in the UAE.</p>
+            <input type="text" id="ulInput" placeholder="e.g. Al Nahda, Al Qasimia, Gold Souk…" oninput="ulDebounce()" autocomplete="off" style="margin-bottom:0;">
+            <div id="ulSearchResults" style="max-height:200px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;margin-top:6px;display:none;"></div>
+            <div id="ulStatus" style="font-size:12px;color:#64748b;margin-top:8px;min-height:16px;"></div>
+            <button id="ulConfirmBtn" onclick="confirmUpdateLocation()" style="width:100%;padding:12px;background:#38bdf8;color:#0f172a;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;margin-top:14px;" disabled>✅ Save Location</button>
+            <button onclick="document.getElementById('updateLocationModal').style.display='none'" style="width:100%;background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;margin-top:8px;padding:6px;">Cancel</button>
         </div>
     </div>
 
@@ -1738,7 +1754,16 @@
                 <option value="Ras Al Khaimah">Ras Al Khaimah</option>
                 <option value="Fujairah">Fujairah</option>
             </select>
-            <button id="updateProfileBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px; font-family:'DM Sans',sans-serif;">Update Region</button>
+            <!-- Current precise location + update button -->
+            <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:11px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+                <span style="font-size:18px;flex-shrink:0;">📍</span>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-size:11px;font-weight:600;color:#0369a1;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">Precise Location</div>
+                    <div id="profileLandmarkDisplay" style="font-size:13px;color:#0c4a6e;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Not set</div>
+                </div>
+                <button onclick="openUpdateLocationModal()" style="background:#38bdf8;color:#0f172a;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap;">Update</button>
+            </div>
+            <button id="updateProfileBtn" style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:0; font-family:'DM Sans',sans-serif;">Save Changes</button>
         </div>
     </div>
 
@@ -2117,6 +2142,9 @@
             // Load status message
             const statusInput = document.getElementById('profileStatusInput');
             if (statusInput) statusInput.value = data.statusMsg || '';
+            // Load current precise location
+            const landmarkEl = document.getElementById('profileLandmarkDisplay');
+            if (landmarkEl) landmarkEl.textContent = data.landmark || 'Not set';
             // Apply equipped skin to profile avatar
             const profAvatar = document.getElementById('profileAvatarCircle');
             if (profAvatar) {
@@ -4572,16 +4600,16 @@
             document.getElementById('lsStatus').textContent = '';
             box.style.display = 'block';
             // Clean up display names — show shorter readable label
-            box.innerHTML = results.slice(0, 7).map((r) => {
+            box.innerHTML = results.slice(0, 10).map((r) => {
                 const addr = r.address || {};
-                // Build a short readable label: neighbourhood/suburb, city, country
+                // Build a short readable label: road first, then neighbourhood, city, state
                 const parts = [
+                    addr.road || addr.pedestrian || addr.footway,
                     addr.neighbourhood || addr.suburb || addr.quarter || addr.hamlet,
                     addr.city || addr.town || addr.village || addr.county,
-                    addr.state,
-                    addr.country
+                    addr.state
                 ].filter(Boolean);
-                const shortLabel = parts.length >= 2 ? parts.slice(0, 3).join(', ') : r.display_name.slice(0, 65);
+                const shortLabel = parts.length >= 2 ? parts.slice(0, 3).join(', ') : r.display_name.slice(0, 70);
                 const safeLabel = shortLabel.replace(/'/g, "\\'");
                 return `<div class="ls-result-item" onclick="selectLSResult(${r.lat},${r.lon},'${safeLabel}')">
                     📍 ${shortLabel}
@@ -4612,6 +4640,103 @@
         };
         window.skipLocationSetup = () => {
             document.getElementById('locationSetupModal').style.display = 'none';
+        };
+
+        // ── Update Location Modal (from profile) ────────────────
+        let _ulSelected = null, _ulTimer = null;
+
+        window.openUpdateLocationModal = () => {
+            _ulSelected = null;
+            document.getElementById('ulInput').value = '';
+            document.getElementById('ulSearchResults').style.display = 'none';
+            document.getElementById('ulSearchResults').innerHTML = '';
+            document.getElementById('ulStatus').textContent = '';
+            document.getElementById('ulConfirmBtn').disabled = true;
+            document.getElementById('updateLocationModal').style.display = 'flex';
+            // Close profile modal so the two don't stack
+            document.getElementById('profileModal').style.display = 'none';
+            setTimeout(() => document.getElementById('ulInput').focus(), 100);
+        };
+
+        window.ulDebounce = () => {
+            clearTimeout(_ulTimer);
+            _ulTimer = setTimeout(ulSearch, 400);
+        };
+
+        async function ulSearch() {
+            const q = document.getElementById('ulInput').value.trim();
+            if (q.length < 2) { document.getElementById('ulSearchResults').style.display = 'none'; return; }
+            document.getElementById('ulStatus').textContent = 'Searching…';
+            const results = await geocodeUAE(q);
+            const box = document.getElementById('ulSearchResults');
+            if (!results.length) {
+                box.style.display = 'none';
+                document.getElementById('ulStatus').textContent = 'No results — try a street name, building, or nearby landmark';
+                return;
+            }
+            document.getElementById('ulStatus').textContent = '';
+            box.style.display = 'block';
+            box.innerHTML = results.slice(0, 10).map((r) => {
+                const addr = r.address || {};
+                const parts = [
+                    addr.road || addr.pedestrian || addr.footway,
+                    addr.neighbourhood || addr.suburb || addr.quarter || addr.hamlet,
+                    addr.city || addr.town || addr.village || addr.county,
+                    addr.state
+                ].filter(Boolean);
+                const shortLabel = parts.length >= 2 ? parts.slice(0, 3).join(', ') : r.display_name.slice(0, 70);
+                const safeLabel = shortLabel.replace(/'/g, "\\'");
+                return `<div class="ls-result-item" onclick="selectULResult(${r.lat},${r.lon},'${safeLabel}')">
+                    📍 ${shortLabel}
+                    ${addr.country && addr.country !== 'United Arab Emirates' ? `<span style="font-size:10px;color:#94a3b8;margin-left:4px;">(${addr.country})</span>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        window.selectULResult = (lat, lon, label) => {
+            _ulSelected = { lat: parseFloat(lat), lng: parseFloat(lon), label };
+            document.getElementById('ulInput').value = label;
+            document.getElementById('ulSearchResults').style.display = 'none';
+            document.getElementById('ulStatus').textContent = `✅ Selected: ${label.slice(0, 55)}`;
+            document.getElementById('ulConfirmBtn').disabled = false;
+        };
+
+        window.confirmUpdateLocation = async () => {
+            if (!_ulSelected) return;
+            const btn = document.getElementById('ulConfirmBtn');
+            btn.disabled = true;
+            btn.textContent = 'Saving…';
+            try {
+                const uid = auth.currentUser.uid;
+                await updateDoc(doc(db, 'users', uid), {
+                    userLat: _ulSelected.lat,
+                    userLng: _ulSelected.lng,
+                    landmark: _ulSelected.label
+                });
+                userLat = _ulSelected.lat;
+                userLng = _ulSelected.lng;
+                document.getElementById('updateLocationModal').style.display = 'none';
+                // Update map
+                if (_mapInited && _map) {
+                    if (_userMarker) _map.removeLayer(_userMarker);
+                    _mapInited = false;
+                    initMinimap();
+                    setTimeout(refreshMapPins, 600);
+                } else {
+                    initMinimap();
+                    setTimeout(refreshMapPins, 600);
+                }
+                // Show confirmation toast
+                const t = document.createElement('div');
+                t.style.cssText = 'position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#0f172a;color:#38bdf8;padding:11px 20px;border-radius:12px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 6px 24px rgba(0,0,0,.3);animation:slideUp .35s ease;pointer-events:none;font-size:13px;font-weight:600;max-width:90vw;';
+                t.innerHTML = `<span>📍</span> Location updated!`;
+                document.body.appendChild(t);
+                setTimeout(() => { t.style.transition='opacity .5s'; t.style.opacity='0'; setTimeout(()=>t.remove(),500); }, 2500);
+            } catch(e) {
+                document.getElementById('ulStatus').textContent = 'Failed to save — please try again.';
+            }
+            btn.disabled = false;
+            btn.textContent = '✅ Save Location';
         };
 
         // ── Auto-geocode location when posting ──────────────────
