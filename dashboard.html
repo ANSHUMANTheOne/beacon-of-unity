@@ -2587,7 +2587,7 @@
             if (chatItem) {
                 chatItem.classList.remove('chat-unread');
                 // remove NEW badge from DOM immediately
-                const newBadge = chatItem.querySelector('span[style*="ef4444"]');
+                const newBadge = chatItem.querySelector('.chat-new-badge');
                 if (newBadge) newBadge.remove();
                 // update mobile icon
                 const anyUnread = document.querySelector('#activeChatsList .chat-unread');
@@ -3005,7 +3005,7 @@
                             ${cType === 'community' ? 'background:#e0f2fe; color:#0369a1;' : 'background:#fee2e2; color:#991b1b;'}">
                             ${cType === 'community' ? '✨ Community' : '🔍 Lost & Found'}
                         </span>
-                        ${hasUnread ? '<span style="background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;">NEW</span>' : ''}
+                        ${hasUnread ? '<span class="chat-new-badge" style="background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;">NEW</span>' : ''}
                     </div>
                     <span class="hovername" style="font-weight:700; font-size:13px; font-family:'Syne',sans-serif;">
                         <span id="cli-dot-${chatId}"></span>${otherName}
@@ -3071,9 +3071,10 @@
                         const hasUnread = chatData[`unread_${auth.currentUser.uid}`] === true;
                         existing.className = 'chat-list-item' + (hasUnread ? ' chat-unread' : '');
                         // add or remove the NEW badge instantly
-                        const existingBadge = existing.querySelector('span[style*="ef4444"]');
+                        const existingBadge = existing.querySelector('.chat-new-badge');
                         if (hasUnread && !existingBadge) {
                             const badgeSpan = document.createElement('span');
+                            badgeSpan.className = 'chat-new-badge';
                             badgeSpan.setAttribute('style', 'background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;');
                             badgeSpan.textContent = 'NEW';
                             const tagRow = existing.querySelector('div[style*="align-items:center"]');
@@ -3085,6 +3086,12 @@
                         const mobIcon = document.getElementById('mobChatsIcon');
                         if (mobIcon) mobIcon.innerText = anyUnread ? '🔴' : '💬';
                         syncMobileChats();
+                        // Stop here — do NOT kick off an async re-render for modified events.
+                        // The async render uses a captured chatData snapshot and can race with
+                        // subsequent fast-path updates, causing the glow to flip back incorrectly.
+                        // Name and rating don't change on every message, so a full re-render
+                        // is only needed when the item is first created (below).
+                        if (change.type === 'modified') return;
                     }
 
                     // cancel stale render, kick off fresh async render
@@ -4966,6 +4973,234 @@
                 }
             }, 500);
         })();
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CUSTOM PIXEL CURSOR — blue theme, tilt-on-move
+    ═══════════════════════════════════════════════════════════ -->
+    <script>
+    (function () {
+        'use strict';
+        // Skip on touch-only devices
+        if (window.matchMedia('(hover: none)').matches) return;
+
+        const P  = 3;           // px per logical pixel
+        const C1 = '#0f172a';   // outline  — dashboard navy
+        const C2 = '#e0f2fe';   // fill     — sky-blue tint
+        const C3 = '#7dd3fc';   // highlight — sky-300 (inner edge sheen)
+
+        /* ── Pixel art maps ─────────────────────────────────────────
+           '#' = outline   '.' = fill   ',' = highlight   ' ' = transparent  */
+
+        const ARROW = [
+            '#           ',
+            '##          ',
+            '#.#         ',
+            '#..#        ',
+            '#...#       ',
+            '#....#      ',
+            '#.....#     ',
+            '#......#    ',
+            '#.......#   ',
+            '#.......####',
+            '#......#    ',
+            '#.....#     ',
+            '#....#      ',
+            '#...#       ',
+            '#..#        ',
+            '#.#         ',
+            '##          ',
+            '#           ',
+        ];
+
+        const POINTER = [
+            '   #       ',
+            '  #.#      ',
+            '  #.#      ',
+            '  #.#      ',
+            '  #.####   ',
+            '  #.#...#  ',
+            '###.#...#  ',
+            '#.......#  ',
+            '#.......#  ',
+            '#.......#  ',
+            ' #......#  ',
+            ' ########  ',
+        ];
+
+        const IBEAM = [
+            '###',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            ' # ',
+            '###',
+        ];
+
+        // [ pixel-art rows, hotspot [col, row] ]
+        const DEFS = [
+            { rows: ARROW,   hot: [0, 0]  },  // arrow  — tip at top-left
+            { rows: POINTER, hot: [3, 0]  },  // pointer — tip of finger
+            { rows: IBEAM,   hot: [1, 7]  },  // I-beam  — vertical center
+        ];
+
+        /* ── SVG generation ─────────────────────────────────────── */
+        function artToSVG(rows) {
+            let W = 0;
+            rows.forEach(r => { if (r.length > W) W = r.length; });
+            const svgW = W * P, svgH = rows.length * P;
+            let rects = '';
+            rows.forEach((row, y) => {
+                for (let x = 0; x < row.length; x++) {
+                    const ch = row[x];
+                    if (ch === ' ') continue;
+                    const col = ch === '#' ? C1 : ch === ',' ? C3 : C2;
+                    rects += `<rect x="${x*P}" y="${y*P}" width="${P}" height="${P}" fill="${col}"/>`;
+                }
+            });
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" shape-rendering="crispEdges">${rects}</svg>`;
+        }
+
+        const SVGS = DEFS.map(d => artToSVG(d.rows));
+
+        /* ── Cursor DOM element ─────────────────────────────────── */
+        const el = document.createElement('div');
+        el.id = '_pcur';
+        Object.assign(el.style, {
+            position:      'fixed',
+            top:           '0',
+            left:          '0',
+            pointerEvents: 'none',
+            zIndex:        '2147483647',  // max z-index
+            display:       'none',
+            willChange:    'transform',
+            filter:        'drop-shadow(0 1px 5px rgba(56,189,248,.55))',
+            lineHeight:    '0',
+            userSelect:    'none',
+            webkitUserSelect: 'none',
+        });
+        document.body.appendChild(el);
+
+        // Hide native cursor everywhere
+        const styleTag = document.createElement('style');
+        styleTag.textContent = '* { cursor: none !important; }';
+        document.head.appendChild(styleTag);
+
+        /* ── State ──────────────────────────────────────────────── */
+        let mx = 0, my = 0;         // mouse position
+        let px = 0, py = 0;         // previous position for velocity
+        let vx = 0, vy = 0;         // smoothed velocity
+        let tilt = 0;               // current tilt angle (degrees)
+        let type = -1;              // current cursor type index
+        let raf  = null;            // rAF handle
+        let show = false;           // whether cursor is visible
+
+        /* ── Cursor type switching ──────────────────────────────── */
+        function setType(t) {
+            if (t === type) return;
+            if (t === 2) tilt = 0;  // reset tilt when switching to I-beam
+            type = t;
+            el.innerHTML = SVGS[t];
+            if (!raf && show) raf = requestAnimationFrame(tick);
+        }
+        setType(0);
+
+        /* ── Cursor type detection ──────────────────────────────── */
+        function getType(node) {
+            let n = node;
+            while (n && n !== document.documentElement) {
+                if (!n.tagName) { n = n.parentElement; continue; }
+                const tag = n.tagName.toLowerCase();
+
+                // Text input
+                if (tag === 'textarea' || n.isContentEditable) return 2;
+                if (tag === 'input') {
+                    const it = (n.type || 'text').toLowerCase();
+                    if (/^(text|email|password|search|url|number|tel|date|time|month|week|datetime-local)$/.test(it) || it === '') return 2;
+                }
+
+                // Pointer
+                if (/^(a|button|select|label|summary|option)$/.test(tag)) return 1;
+                const role = (n.getAttribute && n.getAttribute('role')) || '';
+                if (/^(button|link|tab|menuitem|checkbox|radio|switch|option)$/.test(role)) return 1;
+                if (n.getAttribute && n.getAttribute('onclick')) return 1;
+
+                // Computed style fallback
+                try {
+                    const cs = getComputedStyle(n).cursor;
+                    if (cs === 'pointer') return 1;
+                    if (cs === 'text' || cs === 'vertical-text') return 2;
+                } catch (e) {}
+
+                n = n.parentElement;
+            }
+            return 0;
+        }
+
+        /* ── rAF render loop ────────────────────────────────────── */
+        function tick() {
+            raf = null;
+
+            // Delta position → velocity via leaky integrator
+            // (auto-smooths & auto-decays to 0 when stopped)
+            const dx = mx - px, dy = my - py;
+            px = mx; py = my;
+            vx = vx * 0.65 + dx * 0.35;
+            vy = vy * 0.65 + dy * 0.35;
+
+            // Tilt: right motion = lean clockwise, down = slight clockwise lean
+            // I-beam gets no tilt (maxT = 0)
+            const maxT  = type === 2 ? 0 : 14;
+            const tgtT  = Math.max(-maxT, Math.min(maxT, vx * 1.15 + vy * 0.28));
+            tilt = tilt * 0.82 + tgtT * 0.18;
+
+            // Apply: translate cursor to mouse, rotate around hotspot, offset so hotspot = mouse
+            const [hc, hr] = DEFS[type].hot;
+            const hx = hc * P, hy = hr * P;
+            el.style.transform =
+                `translate(${mx}px,${my}px) rotate(${tilt.toFixed(2)}deg) translate(${-hx}px,${-hy}px)`;
+
+            // Keep loop alive while motion/tilt remains perceptible
+            if (Math.abs(vx) > 0.02 || Math.abs(vy) > 0.02 || Math.abs(tilt) > 0.05) {
+                raf = requestAnimationFrame(tick);
+            }
+        }
+
+        function kick() {
+            if (!raf) raf = requestAnimationFrame(tick);
+        }
+
+        /* ── Events ─────────────────────────────────────────────── */
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            if (!show) { show = true; el.style.display = 'block'; }
+            setType(getType(e.target));
+            kick();
+        }, { passive: true });
+
+        document.addEventListener('mouseleave', () => {
+            show = false;
+            el.style.display = 'none';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            if (!show) { show = true; el.style.display = 'block'; kick(); }
+        });
+
+        // Update cursor type when hovering into a new element (via mouseout/over)
+        document.addEventListener('mouseover', e => {
+            setType(getType(e.target));
+        }, { passive: true });
+
+    })();
     </script>
 </body>
 </html>
