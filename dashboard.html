@@ -4981,204 +4981,207 @@
     <script>
     (function () {
         'use strict';
-        // Skip on touch-only devices
+        // Skip on touch / stylus-only devices — no hover support
         if (window.matchMedia('(hover: none)').matches) return;
 
-        const P  = 3;           // px per logical pixel
-        const C1 = '#0f172a';   // outline  — dashboard navy
-        const C2 = '#e0f2fe';   // fill     — sky-blue tint
-        const C3 = '#7dd3fc';   // highlight — sky-300 (inner edge sheen)
+        // ── Config ────────────────────────────────────────────────
+        const P  = 2;          // CSS px per logical pixel — 2 = tight pixel art
+        const C1 = '#0f172a';  // dark navy outline   (matches sidebar)
+        const C2 = '#bfdbfe';  // blue-200 fill       — clearly visible on any bg
+        const C3 = '#60a5fa';  // blue-400 highlight  — inner edge sheen
 
-        /* ── Pixel art maps ─────────────────────────────────────────
-           '#' = outline   '.' = fill   ',' = highlight   ' ' = transparent  */
-
+        // ── Pixel art ─────────────────────────────────────────────
+        //  '#' = outline (C1)   '.' = fill (C2)   ',' = highlight (C3)   ' ' = transparent
+        //
+        //  ARROW  — classic Windows-style arrow, tip at top-left
+        //           16 rows × 12 cols  →  32 × 24 CSS px
         const ARROW = [
-            '#           ',
-            '##          ',
-            '#.#         ',
-            '#..#        ',
-            '#...#       ',
-            '#....#      ',
-            '#.....#     ',
-            '#......#    ',
-            '#.......#   ',
-            '#.......####',
-            '#......#    ',
-            '#.....#     ',
-            '#....#      ',
-            '#...#       ',
-            '#..#        ',
-            '#.#         ',
-            '##          ',
-            '#           ',
+            '#           ',   // row  0
+            '##          ',   // row  1
+            '#.#         ',   // row  2
+            '#..#        ',   // row  3
+            '#...#       ',   // row  4
+            '#....#      ',   // row  5
+            '#.....#     ',   // row  6
+            '#......#    ',   // row  7
+            '#.......#   ',   // row  8
+            '#.......####',   // row  9 — horizontal notch
+            '#.....#     ',   // row 10 — tail begins
+            '#....#      ',   // row 11
+            '#...#       ',   // row 12
+            '#..#        ',   // row 13
+            '#.#         ',   // row 14
+            '##          ',   // row 15
         ];
 
+        //  POINTER — pointing hand, index finger up
+        //            9 rows × 9 cols  →  18 × 18 CSS px
+        //            hotspot: col 2, row 0  (fingertip)
         const POINTER = [
-            '   #       ',
-            '  #.#      ',
-            '  #.#      ',
-            '  #.#      ',
-            '  #.####   ',
-            '  #.#...#  ',
-            '###.#...#  ',
-            '#.......#  ',
-            '#.......#  ',
-            '#.......#  ',
-            ' #......#  ',
-            ' ########  ',
+            '  #      ',   // row 0 — fingertip
+            ' #.#     ',   // row 1
+            ' #.#     ',   // row 2
+            ' #.####  ',   // row 3 — finger meets knuckle
+            '##.....# ',   // row 4 — thumb + palm starts
+            '#......# ',   // row 5
+            '#......# ',   // row 6
+            '#......# ',   // row 7
+            ' ######  ',   // row 8 — cuff
         ];
 
+        //  IBEAM — text cursor, center crossbar is the hotspot
+        //          12 rows × 5 cols  →  24 × 10 CSS px
+        //          hotspot: col 2, row 5  (vertical midpoint)
         const IBEAM = [
-            '###',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            ' # ',
-            '###',
+            '#####',   // top crossbar
+            '  #  ',
+            '  #  ',
+            '  #  ',
+            '  #  ',
+            '  #  ',   // ← hotspot row
+            '  #  ',
+            '  #  ',
+            '  #  ',
+            '  #  ',
+            '  #  ',
+            '#####',   // bottom crossbar
         ];
 
-        // [ pixel-art rows, hotspot [col, row] ]
         const DEFS = [
-            { rows: ARROW,   hot: [0, 0]  },  // arrow  — tip at top-left
-            { rows: POINTER, hot: [3, 0]  },  // pointer — tip of finger
-            { rows: IBEAM,   hot: [1, 7]  },  // I-beam  — vertical center
+            { rows: ARROW,   hot: [0, 0]  },   // tip of arrow
+            { rows: POINTER, hot: [2, 0]  },   // tip of index finger
+            { rows: IBEAM,   hot: [2, 5]  },   // vertical center
         ];
 
-        /* ── SVG generation ─────────────────────────────────────── */
-        function artToSVG(rows) {
+        // ── SVG renderer ──────────────────────────────────────────
+        function toSVG(rows) {
             let W = 0;
             rows.forEach(r => { if (r.length > W) W = r.length; });
-            const svgW = W * P, svgH = rows.length * P;
             let rects = '';
             rows.forEach((row, y) => {
                 for (let x = 0; x < row.length; x++) {
                     const ch = row[x];
                     if (ch === ' ') continue;
-                    const col = ch === '#' ? C1 : ch === ',' ? C3 : C2;
-                    rects += `<rect x="${x*P}" y="${y*P}" width="${P}" height="${P}" fill="${col}"/>`;
+                    const fill = ch === '#' ? C1 : ch === ',' ? C3 : C2;
+                    rects += `<rect x="${x*P}" y="${y*P}" width="${P}" height="${P}" fill="${fill}"/>`;
                 }
             });
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" shape-rendering="crispEdges">${rects}</svg>`;
+            return `<svg xmlns="http://www.w3.org/2000/svg" ` +
+                   `width="${W*P}" height="${rows.length*P}" ` +
+                   `shape-rendering="crispEdges">${rects}</svg>`;
         }
 
-        const SVGS = DEFS.map(d => artToSVG(d.rows));
+        const SVGS = DEFS.map(d => toSVG(d.rows));
 
-        /* ── Cursor DOM element ─────────────────────────────────── */
+        // ── DOM element ───────────────────────────────────────────
         const el = document.createElement('div');
         el.id = '_pcur';
         Object.assign(el.style, {
-            position:      'fixed',
-            top:           '0',
-            left:          '0',
-            pointerEvents: 'none',
-            zIndex:        '2147483647',  // max z-index
-            display:       'none',
-            willChange:    'transform',
-            filter:        'drop-shadow(0 1px 5px rgba(56,189,248,.55))',
-            lineHeight:    '0',
-            userSelect:    'none',
+            position:         'fixed',
+            top:              '0',
+            left:             '0',
+            pointerEvents:    'none',
+            zIndex:           '2147483647',
+            display:          'none',
+            willChange:       'transform',
+            lineHeight:       '0',
+            userSelect:       'none',
             webkitUserSelect: 'none',
+            // soft blue glow — ties cursor to the sky-blue theme
+            filter: 'drop-shadow(0 2px 5px rgba(56,189,248,.55))',
         });
         document.body.appendChild(el);
 
         // Hide native cursor everywhere
-        const styleTag = document.createElement('style');
-        styleTag.textContent = '* { cursor: none !important; }';
-        document.head.appendChild(styleTag);
+        const styleEl = document.createElement('style');
+        styleEl.textContent = '*, *::before, *::after { cursor: none !important; }';
+        document.head.appendChild(styleEl);
 
-        /* ── State ──────────────────────────────────────────────── */
-        let mx = 0, my = 0;         // mouse position
-        let px = 0, py = 0;         // previous position for velocity
-        let vx = 0, vy = 0;         // smoothed velocity
-        let tilt = 0;               // current tilt angle (degrees)
-        let type = -1;              // current cursor type index
-        let raf  = null;            // rAF handle
-        let show = false;           // whether cursor is visible
+        // ── State ─────────────────────────────────────────────────
+        let mx = 0, my = 0;   // current mouse position
+        let px = 0, py = 0;   // previous mouse position (for velocity)
+        let vx = 0, vy = 0;   // smoothed velocity
+        let tilt = 0;         // current tilt angle in degrees
+        let type = -1;        // active cursor index
+        let raf  = null;      // rAF handle
+        let show = false;
 
-        /* ── Cursor type switching ──────────────────────────────── */
-        function setType(t) {
-            if (t === type) return;
-            if (t === 2) tilt = 0;  // reset tilt when switching to I-beam
-            type = t;
-            el.innerHTML = SVGS[t];
-            if (!raf && show) raf = requestAnimationFrame(tick);
-        }
-        setType(0);
-
-        /* ── Cursor type detection ──────────────────────────────── */
-        function getType(node) {
-            let n = node;
+        // ── Type detection ────────────────────────────────────────
+        function getType(target) {
+            let n = target;
             while (n && n !== document.documentElement) {
                 if (!n.tagName) { n = n.parentElement; continue; }
                 const tag = n.tagName.toLowerCase();
 
-                // Text input
+                // I-beam: text inputs and editable regions
                 if (tag === 'textarea' || n.isContentEditable) return 2;
                 if (tag === 'input') {
-                    const it = (n.type || 'text').toLowerCase();
-                    if (/^(text|email|password|search|url|number|tel|date|time|month|week|datetime-local)$/.test(it) || it === '') return 2;
+                    const t = (n.type || 'text').toLowerCase();
+                    if (/^(text|email|password|search|url|number|tel|date|time|month|week|datetime-local)$/.test(t) || t === '')
+                        return 2;
                 }
 
-                // Pointer
+                // Pointer: interactive elements
                 if (/^(a|button|select|label|summary|option)$/.test(tag)) return 1;
                 const role = (n.getAttribute && n.getAttribute('role')) || '';
-                if (/^(button|link|tab|menuitem|checkbox|radio|switch|option)$/.test(role)) return 1;
+                if (/^(button|link|tab|menuitem|checkbox|radio|switch)$/.test(role)) return 1;
                 if (n.getAttribute && n.getAttribute('onclick')) return 1;
 
-                // Computed style fallback
+                // Computed cursor fallback (handles custom-styled clickables)
                 try {
                     const cs = getComputedStyle(n).cursor;
                     if (cs === 'pointer') return 1;
                     if (cs === 'text' || cs === 'vertical-text') return 2;
-                } catch (e) {}
+                } catch (_) {}
 
                 n = n.parentElement;
             }
             return 0;
         }
 
-        /* ── rAF render loop ────────────────────────────────────── */
+        function setType(t) {
+            if (t === type) return;
+            type = t;
+            el.innerHTML = SVGS[t];
+            kick();
+        }
+        setType(0);
+
+        // ── Animation loop ────────────────────────────────────────
         function tick() {
             raf = null;
 
-            // Delta position → velocity via leaky integrator
-            // (auto-smooths & auto-decays to 0 when stopped)
+            // Velocity — leaky integrator: smooths noise, auto-decays to 0
             const dx = mx - px, dy = my - py;
             px = mx; py = my;
-            vx = vx * 0.65 + dx * 0.35;
-            vy = vy * 0.65 + dy * 0.35;
+            vx = vx * 0.70 + dx * 0.30;
+            vy = vy * 0.70 + dy * 0.30;
 
-            // Tilt: right motion = lean clockwise, down = slight clockwise lean
-            // I-beam gets no tilt (maxT = 0)
-            const maxT  = type === 2 ? 0 : 14;
-            const tgtT  = Math.max(-maxT, Math.min(maxT, vx * 1.15 + vy * 0.28));
-            tilt = tilt * 0.82 + tgtT * 0.18;
+            // Tilt — horizontal velocity drives lean, vertical adds subtle forward tilt
+            // I-beam gets no tilt (would look odd on a text cursor)
+            if (type !== 2) {
+                const maxT = 18;
+                const tgt  = Math.max(-maxT, Math.min(maxT, vx * 1.2 + vy * 0.30));
+                tilt = tilt * 0.78 + tgt * 0.22;
+            } else {
+                tilt = tilt * 0.80; // decay to 0 when I-beam is shown
+            }
 
-            // Apply: translate cursor to mouse, rotate around hotspot, offset so hotspot = mouse
+            // Transform: move to mouse, rotate around hotspot, offset so hotspot lands on mouse
             const [hc, hr] = DEFS[type].hot;
             const hx = hc * P, hy = hr * P;
             el.style.transform =
                 `translate(${mx}px,${my}px) rotate(${tilt.toFixed(2)}deg) translate(${-hx}px,${-hy}px)`;
 
-            // Keep loop alive while motion/tilt remains perceptible
-            if (Math.abs(vx) > 0.02 || Math.abs(vy) > 0.02 || Math.abs(tilt) > 0.05) {
+            // Keep loop alive until motion and tilt fully settle
+            if (Math.abs(vx) > 0.02 || Math.abs(vy) > 0.02 || Math.abs(tilt) > 0.04) {
                 raf = requestAnimationFrame(tick);
             }
         }
 
-        function kick() {
-            if (!raf) raf = requestAnimationFrame(tick);
-        }
+        function kick() { if (!raf) raf = requestAnimationFrame(tick); }
 
-        /* ── Events ─────────────────────────────────────────────── */
+        // ── Events ────────────────────────────────────────────────
         document.addEventListener('mousemove', e => {
             mx = e.clientX; my = e.clientY;
             if (!show) { show = true; el.style.display = 'block'; }
@@ -5187,15 +5190,12 @@
         }, { passive: true });
 
         document.addEventListener('mouseleave', () => {
-            show = false;
-            el.style.display = 'none';
+            show = false; el.style.display = 'none';
         });
-
         document.addEventListener('mouseenter', () => {
-            if (!show) { show = true; el.style.display = 'block'; kick(); }
+            show = true; el.style.display = 'block'; kick();
         });
-
-        // Update cursor type when hovering into a new element (via mouseout/over)
+        // Re-evaluate type on every element entry (covers hover-only CSS changes)
         document.addEventListener('mouseover', e => {
             setType(getType(e.target));
         }, { passive: true });
