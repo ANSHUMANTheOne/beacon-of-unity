@@ -289,8 +289,16 @@
             color: #007aff; font-size: 22px; line-height: 1;
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%; transition: background .15s; flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
         }
         #chatBackBtn:hover { background: rgba(0,122,255,.1); }
+        @media (max-width: 768px) {
+            #chatBackBtn {
+                width: 44px; height: 44px;
+                font-size: 26px;
+                margin-left: -8px; /* keep visual alignment */
+            }
+        }
         #chatAvatarCircle {
             width: 36px; height: 36px; border-radius: 50%;
             background: linear-gradient(135deg, #38bdf8, #0ea5e9);
@@ -1885,7 +1893,7 @@
     <div id="chatPopup">
         <!-- Header -->
         <div id="chatHeader">
-            <button id="chatBackBtn" onclick="if(_unsubChatDoc){_unsubChatDoc();_unsubChatDoc=null;} if(unsubscribeChat){unsubscribeChat();unsubscribeChat=null;} document.getElementById('chatPopup').style.display='none'">‹</button>
+            <button id="chatBackBtn" onclick="closeChatPopup()">‹</button>
             <div id="chatAvatarCircle">?</div>
             <div id="chatHeaderMeta">
                 <span id="chatWith">Chat</span>
@@ -1932,6 +1940,12 @@
         let currentChatPostOwnerId = null;
         let unsubscribeChat = null;
         let _unsubChatDoc = null;   // chat doc subscription for read receipts
+
+        window.closeChatPopup = () => {
+            if (_unsubChatDoc)   { _unsubChatDoc();   _unsubChatDoc   = null; }
+            if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
+            document.getElementById('chatPopup').style.display = 'none';
+        };
         let userRegion = null;
         let userName = "";
         let userEquippedSkin = null;    // gradient id for pfp
