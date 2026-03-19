@@ -4975,165 +4975,79 @@
         })();
     </script>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         CUSTOM PIXEL CURSOR — blue theme, tilt-on-move
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- ── CUSTOM CURSOR — Mickey hand, directional ── -->
     <script>
     (function () {
         'use strict';
-        // Skip on touch / stylus-only devices — no hover support
         if (window.matchMedia('(hover: none)').matches) return;
 
-        // ── Config ────────────────────────────────────────────────
-        const P  = 2;          // CSS px per logical pixel — 2 = tight pixel art
-        const C1 = '#0f172a';  // dark navy outline   (matches sidebar)
-        const C2 = '#bfdbfe';  // blue-200 fill       — clearly visible on any bg
-        const C3 = '#60a5fa';  // blue-400 highlight  — inner edge sheen
-
-        // ── Pixel art ─────────────────────────────────────────────
-        //  '#' = outline (C1)   '.' = fill (C2)   ',' = highlight (C3)   ' ' = transparent
-        //
-        //  ARROW  — classic Windows-style arrow, tip at top-left
-        //           16 rows × 12 cols  →  32 × 24 CSS px
-        const ARROW = [
-            '#           ',   // row  0
-            '##          ',   // row  1
-            '#.#         ',   // row  2
-            '#..#        ',   // row  3
-            '#...#       ',   // row  4
-            '#....#      ',   // row  5
-            '#.....#     ',   // row  6
-            '#......#    ',   // row  7
-            '#.......#   ',   // row  8
-            '#.......####',   // row  9 — horizontal notch
-            '#.....#     ',   // row 10 — tail begins
-            '#....#      ',   // row 11
-            '#...#       ',   // row 12
-            '#..#        ',   // row 13
-            '#.#         ',   // row 14
-            '##          ',   // row 15
+        // ── Cursor images (64×64 px images displayed at 32×32 CSS px = crisp 2x) ─
+        //   hx/hy = hotspot in CSS px at the 32px display size
+        const CURSORS = [
+            // 0 — Arrow (normal)
+            { src: 'data:image/png;base64,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',   hx: 1,  hy: 2  },
+            // 1 — Hand pointer (links, buttons) — finger naturally points UP
+            { src: 'data:image/png;base64,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', hx: 3,  hy: 5  },
+            // 2 — I-beam (text)
+            { src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABQUlEQVR4nO2aMUoEQRBF/+qCmXiFBXMPIMKEc6M5Q0UeZ9NKvIXgAUxkQVBkV5NqdmgQW9T5WP0fNNUz3cGf3x86mFoNw3AGANM0vWCGmW1i+hx1F/UNANz9gAScsAWwWZeTH8exXnsAADO7mr9098dlpC1D9wloMeAmxnmMVHSfgHXDnouo6U4fUAKaEnAaNaVZKT/qO/zEgFWMf40SwBbApnsDWm6Bz3j/NRVEuk+ADGALYCMD2ALYyAC2ADYygC2AjQxgC2AjA9gC2MgAtgA2MoAtgI0MYAtgIwPYAtjIALYANi3/BfZRU3SF1SgBZnYZ8/v5gpndxvQp6g4ASl+hu78uIfCvUQIQJzvrB7yu9txFLZ2ieyRCCcDxZAvb6rnuFU51GygBOHZ/lx7gVL3AX9F9AoQQQgghhBBCCNEfH5oNMiGD+05QAAAAAElFTkSuQmCC',    hx: 1,  hy: 9  },
         ];
 
-        //  POINTER — pointing hand, index finger up
-        //            9 rows × 9 cols  →  18 × 18 CSS px
-        //            hotspot: col 2, row 0  (fingertip)
-        const POINTER = [
-            '  #      ',   // row 0 — fingertip
-            ' #.#     ',   // row 1
-            ' #.#     ',   // row 2
-            ' #.####  ',   // row 3 — finger meets knuckle
-            '##.....# ',   // row 4 — thumb + palm starts
-            '#......# ',   // row 5
-            '#......# ',   // row 6
-            '#......# ',   // row 7
-            ' ######  ',   // row 8 — cuff
-        ];
+        // Pre-load all images
+        CURSORS.forEach(c => { const i = new Image(); i.src = c.src; });
 
-        //  IBEAM — text cursor, center crossbar is the hotspot
-        //          12 rows × 5 cols  →  24 × 10 CSS px
-        //          hotspot: col 2, row 5  (vertical midpoint)
-        const IBEAM = [
-            '#####',   // top crossbar
-            '  #  ',
-            '  #  ',
-            '  #  ',
-            '  #  ',
-            '  #  ',   // ← hotspot row
-            '  #  ',
-            '  #  ',
-            '  #  ',
-            '  #  ',
-            '  #  ',
-            '#####',   // bottom crossbar
-        ];
-
-        const DEFS = [
-            { rows: ARROW,   hot: [0, 0]  },   // tip of arrow
-            { rows: POINTER, hot: [2, 0]  },   // tip of index finger
-            { rows: IBEAM,   hot: [2, 5]  },   // vertical center
-        ];
-
-        // ── SVG renderer ──────────────────────────────────────────
-        function toSVG(rows) {
-            let W = 0;
-            rows.forEach(r => { if (r.length > W) W = r.length; });
-            let rects = '';
-            rows.forEach((row, y) => {
-                for (let x = 0; x < row.length; x++) {
-                    const ch = row[x];
-                    if (ch === ' ') continue;
-                    const fill = ch === '#' ? C1 : ch === ',' ? C3 : C2;
-                    rects += `<rect x="${x*P}" y="${y*P}" width="${P}" height="${P}" fill="${fill}"/>`;
-                }
-            });
-            return `<svg xmlns="http://www.w3.org/2000/svg" ` +
-                   `width="${W*P}" height="${rows.length*P}" ` +
-                   `shape-rendering="crispEdges">${rects}</svg>`;
-        }
-
-        const SVGS = DEFS.map(d => toSVG(d.rows));
-
-        // ── DOM element ───────────────────────────────────────────
-        const el = document.createElement('div');
-        el.id = '_pcur';
+        // ── DOM ──────────────────────────────────────────────────
+        const el = document.createElement('img');
+        el.id = '_cur';
         Object.assign(el.style, {
             position:         'fixed',
             top:              '0',
             left:             '0',
+            width:            '32px',
+            height:           '32px',
             pointerEvents:    'none',
             zIndex:           '2147483647',
             display:          'none',
             willChange:       'transform',
-            lineHeight:       '0',
             userSelect:       'none',
             webkitUserSelect: 'none',
-            // soft blue glow — ties cursor to the sky-blue theme
-            filter: 'drop-shadow(0 2px 5px rgba(56,189,248,.55))',
+            imageRendering:   'pixelated',
+            filter:           'drop-shadow(0 4px 8px rgba(56,189,248,0.7)) drop-shadow(0 2px 4px rgba(147,197,253,0.5))',
         });
         document.body.appendChild(el);
 
-        // Hide native cursor everywhere
-        const styleEl = document.createElement('style');
-        styleEl.textContent = '*, *::before, *::after { cursor: none !important; }';
-        document.head.appendChild(styleEl);
+        const ss = document.createElement('style');
+        ss.textContent = '*, *::before, *::after { cursor: none !important; }';
+        document.head.appendChild(ss);
 
-        // ── State ─────────────────────────────────────────────────
-        let mx = 0, my = 0;   // current mouse position
-        let px = 0, py = 0;   // previous mouse position (for velocity)
-        let vx = 0, vy = 0;   // smoothed velocity
-        let tilt = 0;         // current tilt angle in degrees
-        let type = -1;        // active cursor index
-        let raf  = null;      // rAF handle
-        let show = false;
+        // ── State ────────────────────────────────────────────────
+        let mx = 0, my = 0;
+        let px = 0, py = 0;
+        let vx = 0, vy = 0;    // smoothed velocity
+        let angle = 0;          // current rotation angle in degrees
+        let type  = -1;
+        let raf   = null;
+        let shown = false;
 
-        // ── Type detection ────────────────────────────────────────
-        function getType(target) {
+        // ── Type detection ───────────────────────────────────────
+        function detect(target) {
             let n = target;
             while (n && n !== document.documentElement) {
                 if (!n.tagName) { n = n.parentElement; continue; }
                 const tag = n.tagName.toLowerCase();
-
-                // I-beam: text inputs and editable regions
                 if (tag === 'textarea' || n.isContentEditable) return 2;
                 if (tag === 'input') {
                     const t = (n.type || 'text').toLowerCase();
-                    if (/^(text|email|password|search|url|number|tel|date|time|month|week|datetime-local)$/.test(t) || t === '')
-                        return 2;
+                    if (/^(text|email|password|search|url|number|tel|date|time|month|week|datetime-local)$/.test(t) || t === '') return 2;
                 }
-
-                // Pointer: interactive elements
-                if (/^(a|button|select|label|summary|option)$/.test(tag)) return 1;
+                if (/^(a|button|select|label|summary)$/.test(tag)) return 1;
                 const role = (n.getAttribute && n.getAttribute('role')) || '';
                 if (/^(button|link|tab|menuitem|checkbox|radio|switch)$/.test(role)) return 1;
                 if (n.getAttribute && n.getAttribute('onclick')) return 1;
-
-                // Computed cursor fallback (handles custom-styled clickables)
                 try {
-                    const cs = getComputedStyle(n).cursor;
-                    if (cs === 'pointer') return 1;
-                    if (cs === 'text' || cs === 'vertical-text') return 2;
+                    const c = getComputedStyle(n).cursor;
+                    if (c === 'pointer') return 1;
+                    if (c === 'text' || c === 'vertical-text') return 2;
                 } catch (_) {}
-
                 n = n.parentElement;
             }
             return 0;
@@ -5142,63 +5056,65 @@
         function setType(t) {
             if (t === type) return;
             type = t;
-            el.innerHTML = SVGS[t];
+            el.src = CURSORS[t].src;
             kick();
         }
         setType(0);
 
-        // ── Animation loop ────────────────────────────────────────
+        // ── Shortest-path angle lerp ─────────────────────────────
+        // Ensures rotation goes the short way around (e.g. 350°→10° goes +20°, not -340°)
+        function lerpAngle(current, target, t) {
+            let diff = ((target - current + 540) % 360) - 180;
+            return current + diff * t;
+        }
+
+        // ── Animation loop ───────────────────────────────────────
         function tick() {
             raf = null;
-
-            // Velocity — leaky integrator: smooths noise, auto-decays to 0
             const dx = mx - px, dy = my - py;
             px = mx; py = my;
-            vx = vx * 0.70 + dx * 0.30;
-            vy = vy * 0.70 + dy * 0.30;
 
-            // Tilt — horizontal velocity drives lean, vertical adds subtle forward tilt
-            // I-beam gets no tilt (would look odd on a text cursor)
-            if (type !== 2) {
-                const maxT = 18;
-                const tgt  = Math.max(-maxT, Math.min(maxT, vx * 1.2 + vy * 0.30));
-                tilt = tilt * 0.78 + tgt * 0.22;
+            // Leaky integrator velocity — smooth + auto-decays to 0
+            vx = vx * 0.75 + dx * 0.25;
+            vy = vy * 0.75 + dy * 0.25;
+
+            const speed = Math.sqrt(vx * vx + vy * vy);
+            let targetAngle = 0;
+
+            if (type === 2) {
+                // ── I-BEAM: no rotation ──────────────────────────
+                angle *= 0.80;
             } else {
-                tilt = tilt * 0.80; // decay to 0 when I-beam is shown
+                // ── ARROW + POINTER: lean based on horizontal velocity ─
+                // Base offset of -10° compensates for the artwork's natural right-lean
+                // so both left and right tilts are equally visible
+                const maxLean = 30;
+                const raw = Math.max(-maxLean, Math.min(maxLean, vx * 3.5 + vy * 0.4));
+                targetAngle = raw - 10;
+                angle = angle * 0.78 + targetAngle * 0.22;
             }
 
-            // Transform: move to mouse, rotate around hotspot, offset so hotspot lands on mouse
-            const [hc, hr] = DEFS[type].hot;
-            const hx = hc * P, hy = hr * P;
+            // Transform: place hotspot at mouse, rotate around it
+            const { hx, hy } = CURSORS[type];
             el.style.transform =
-                `translate(${mx}px,${my}px) rotate(${tilt.toFixed(2)}deg) translate(${-hx}px,${-hy}px)`;
+                `translate(${mx}px,${my}px) rotate(${angle.toFixed(2)}deg) translate(${-hx}px,${-hy}px)`;
 
-            // Keep loop alive until motion and tilt fully settle
-            if (Math.abs(vx) > 0.02 || Math.abs(vy) > 0.02 || Math.abs(tilt) > 0.04) {
+            if (speed > 0.02 || Math.abs(angle) > 0.08)
                 raf = requestAnimationFrame(tick);
-            }
         }
 
         function kick() { if (!raf) raf = requestAnimationFrame(tick); }
 
-        // ── Events ────────────────────────────────────────────────
+        // ── Events ───────────────────────────────────────────────
         document.addEventListener('mousemove', e => {
             mx = e.clientX; my = e.clientY;
-            if (!show) { show = true; el.style.display = 'block'; }
-            setType(getType(e.target));
+            if (!shown) { shown = true; el.style.display = 'block'; }
+            setType(detect(e.target));
             kick();
         }, { passive: true });
-
-        document.addEventListener('mouseleave', () => {
-            show = false; el.style.display = 'none';
-        });
-        document.addEventListener('mouseenter', () => {
-            show = true; el.style.display = 'block'; kick();
-        });
-        // Re-evaluate type on every element entry (covers hover-only CSS changes)
-        document.addEventListener('mouseover', e => {
-            setType(getType(e.target));
-        }, { passive: true });
+        document.addEventListener('mouseleave', () => { shown = false; el.style.display = 'none'; });
+        document.addEventListener('mouseenter', () => { shown = true; el.style.display = 'block'; kick(); });
+        document.addEventListener('mouseover', e => { setType(detect(e.target)); }, { passive: true });
 
     })();
     </script>
