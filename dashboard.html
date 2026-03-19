@@ -709,6 +709,18 @@
         body.dark .notif-item:hover { background:#334155; }
         body.dark .notif-item.unread { background:#1e3a5f; }
         body.dark .badge-chip { background:#334155; border-color:#475569; color:#e2e8f0; }
+        body.dark #badgesFeed h4 { color:#f1f5f9 !important; }
+        body.dark #badgesFeed > div > div > div { background:#1e293b !important; border-color:#334155 !important; }
+        body.dark #badgesFeed > div > div > div div[style*="color:#0f172a"] { color:#f1f5f9 !important; }
+        body.dark #badgesFeed > div > div > div div[style*="color:#475569"] { color:#94a3b8 !important; }
+        body.dark #rewardsFeed h4 { color:#f1f5f9 !important; }
+        body.dark #rewardsFeed > div > div > div[style*="border-radius:14px"] {
+            background:#1e293b !important;
+            border-color:#334155 !important;
+            color:#e2e8f0 !important;
+        }
+        body.dark #rewardsFeed div[style*="font-weight:700; font-size:13px"] { color:#f1f5f9 !important; }
+        body.dark #rewardsFeed div[style*="color:#64748b"] { color:#94a3b8 !important; }
         body.dark .lb-row { background:#1e293b; border-color:#334155; color:#e2e8f0; }
         body.dark .lb-row.is-me { background:#0c2233; border-color:#38bdf8; }
         body.dark .lb-sub { color:#94a3b8; }
@@ -1183,6 +1195,9 @@
             <button class="mob-tab" onclick="switchTab('rewards')" id="mob-rewards">
                 <span class="mob-icon">🎁</span>Rewards
             </button>
+            <button class="mob-tab" onclick="switchTab('badges')" id="mob-badges">
+                <span class="mob-icon">🏅</span>Badges
+            </button>
             <button class="mob-tab" onclick="toggleNotifDrawer()" id="mob-notifs">
                 <span class="mob-icon">🔔</span>Notifications
             </button>
@@ -1264,6 +1279,7 @@
         <div class="nav-item" onclick="switchTab('updates')"><span class="nav-emoji">📢</span> Updates</div>
         <div class="nav-item" onclick="switchTab('thankyou')"><span class="nav-emoji">⭐</span> Thank You Wall</div>
         <div class="nav-item" onclick="switchTab('rewards')"><span class="nav-emoji">🎁</span> Rewards</div>
+        <div class="nav-item" onclick="switchTab('badges')"><span class="nav-emoji">🏅</span> Badges</div>
         <div class="nav-item" onclick="switchTab('reliable-news')"><span class="nav-emoji">📰</span> Reliable News</div>
         <div class="nav-item" id="logoutBtnNav">
             <button class="logout-Btn" id="logoutBtnInner">
@@ -1415,7 +1431,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2026</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Rewards, Badges & Cosmetics</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points and unlock cosmetic rewards — gradient profile skins, chat bubble colours, and chat backgrounds. 13 achievement badges track your milestones automatically. View everything in the 🎁 Rewards tab and your Profile.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points and unlock cosmetic rewards — gradient profile skins, chat bubble colours, and chat backgrounds. 35 achievement badges track your milestones automatically. View cosmetic rewards in 🎁 Rewards and all badges in 🏅 Badges.</p>
                         </div>
 
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -1606,6 +1622,18 @@
                         </div>
                     </div>
                     <div id="rewardsFeed"><p style="color:#94a3b8; text-align:center; padding:40px;">Loading rewards...</p></div>
+                </div>
+
+                <!-- ══ Badges Tab ══ -->
+                <div id="badgesTab" class="tab-content">
+                    <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+                        <div style="font-size:42px;">🏅</div>
+                        <div>
+                            <h3 style="margin:0;">Badges</h3>
+                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Earn badges by being active in the community. How many can you collect?</p>
+                        </div>
+                    </div>
+                    <div id="badgesFeed"><p style="color:#94a3b8; text-align:center; padding:40px;">Loading badges...</p></div>
                 </div>
 
                 <!-- ══ Reliable News Tab ══ -->
@@ -2011,31 +2039,53 @@
         }
 
         const REWARD_SKINS = [
-            { id: 'ocean',    label: 'Ocean',          gradient: 'linear-gradient(135deg,#38bdf8,#0ea5e9)', pts: 0,   desc: 'Default sky blue' },
-            { id: 'sunset',   label: 'Sunset',         gradient: 'linear-gradient(135deg,#f97316,#ec4899)', pts: 30,  desc: 'Warm orange to pink' },
-            { id: 'aurora',   label: 'Aurora',         gradient: 'linear-gradient(135deg,#8b5cf6,#6366f1)', pts: 60,  desc: 'Deep purple & indigo' },
-            { id: 'forest',   label: 'Forest',         gradient: 'linear-gradient(135deg,#10b981,#059669)', pts: 100, desc: 'Emerald green' },
-            { id: 'ember',    label: 'Ember',          gradient: 'linear-gradient(135deg,#ef4444,#f97316)', pts: 200, desc: 'Red hot ember' },
-            { id: 'midnight', label: 'Midnight',       gradient: 'linear-gradient(135deg,#1e293b,#334155)', pts: 300, desc: 'Dark navy slate' },
+            { id: 'ocean',    label: 'Ocean',          gradient: 'linear-gradient(135deg,#38bdf8,#0ea5e9)',  pts: 0,   desc: 'Default sky blue' },
+            { id: 'mint',     label: 'Mint',           gradient: 'linear-gradient(135deg,#6ee7b7,#34d399)',  pts: 4,   desc: 'Fresh mint green' },
+            { id: 'lavender', label: 'Lavender',       gradient: 'linear-gradient(135deg,#c4b5fd,#a78bfa)',  pts: 10,  desc: 'Soft lavender' },
+            { id: 'peach',    label: 'Peach',          gradient: 'linear-gradient(135deg,#fca5a5,#fb923c)',  pts: 20,  desc: 'Warm peach glow' },
+            { id: 'sunset',   label: 'Sunset',         gradient: 'linear-gradient(135deg,#f97316,#ec4899)',  pts: 30,  desc: 'Warm orange to pink' },
+            { id: 'sky',      label: 'Sky',            gradient: 'linear-gradient(135deg,#7dd3fc,#2563eb)',  pts: 45,  desc: 'Deep sky blue' },
+            { id: 'aurora',   label: 'Aurora',         gradient: 'linear-gradient(135deg,#8b5cf6,#6366f1)',  pts: 60,  desc: 'Deep purple & indigo' },
+            { id: 'coral',    label: 'Coral',          gradient: 'linear-gradient(135deg,#fb7185,#f43f5e)',  pts: 80,  desc: 'Vivid coral red' },
+            { id: 'forest',   label: 'Forest',         gradient: 'linear-gradient(135deg,#10b981,#059669)',  pts: 100, desc: 'Emerald green' },
+            { id: 'storm',    label: 'Storm',          gradient: 'linear-gradient(135deg,#64748b,#334155)',  pts: 130, desc: 'Stormy slate' },
+            { id: 'cherry',   label: 'Cherry Blossom', gradient: 'linear-gradient(135deg,#f9a8d4,#ec4899)',  pts: 160, desc: 'Cherry blossom pink' },
+            { id: 'ember',    label: 'Ember',          gradient: 'linear-gradient(135deg,#ef4444,#f97316)',  pts: 200, desc: 'Red hot ember' },
+            { id: 'ocean2',   label: 'Deep Ocean',     gradient: 'linear-gradient(135deg,#0c4a6e,#0369a1)',  pts: 250, desc: 'Deep ocean abyss' },
+            { id: 'midnight', label: 'Midnight',       gradient: 'linear-gradient(135deg,#1e293b,#334155)',  pts: 300, desc: 'Dark navy slate' },
             { id: 'prism',    label: 'Prism',          gradient: 'linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#38bdf8,#8b5cf6)', pts: 350, desc: 'Rainbow spectrum' },
+            { id: 'lava',     label: 'Lava',           gradient: 'linear-gradient(135deg,#dc2626,#7c2d12)',  pts: 400, desc: 'Volcanic lava' },
+            { id: 'galaxy',   label: 'Galaxy',         gradient: 'linear-gradient(135deg,#1e1b4b,#7c3aed,#db2777)', pts: 450, desc: 'Cosmic galaxy' },
             { id: 'gold',     label: 'Gold Crown',     gradient: 'linear-gradient(135deg,#f59e0b,#d97706)',  pts: 500, desc: 'Legendary gold' },
         ];
 
         const REWARD_BUBBLES = [
             { id: 'blue',     label: 'Classic Blue',   color: '#007aff',             textColor: 'white', pts: 0,   desc: 'Default classic blue' },
+            { id: 'slate',    label: 'Slate',          color: '#475569',             textColor: 'white', pts: 4,   desc: 'Cool slate grey' },
+            { id: 'green',    label: 'Forest Green',   color: '#16a34a',             textColor: 'white', pts: 10,  desc: 'Natural green' },
+            { id: 'sky',      label: 'Sky',            color: '#0284c7',             textColor: 'white', pts: 25,  desc: 'Sky blue' },
             { id: 'teal',     label: 'Teal',           color: '#0d9488',             textColor: 'white', pts: 50,  desc: 'Deep teal' },
-            { id: 'violet',   label: 'Violet',         color: '#7c3aed',             textColor: 'white', pts: 150, desc: 'Royal purple' },
-            { id: 'rose',     label: 'Rose',           color: '#e11d48',             textColor: 'white', pts: 300, desc: 'Rose red' },
-            { id: 'amber',    label: 'Amber',          color: '#d97706',             textColor: 'white', pts: 400, desc: 'Warm amber' },
+            { id: 'indigo',   label: 'Indigo',         color: '#4338ca',             textColor: 'white', pts: 80,  desc: 'Deep indigo' },
+            { id: 'violet',   label: 'Violet',         color: '#7c3aed',             textColor: 'white', pts: 120, desc: 'Royal purple' },
+            { id: 'coral',    label: 'Coral',          color: '#f43f5e',             textColor: 'white', pts: 160, desc: 'Vivid coral' },
+            { id: 'rose',     label: 'Rose',           color: '#e11d48',             textColor: 'white', pts: 220, desc: 'Rose red' },
+            { id: 'orange',   label: 'Ember',          color: '#ea580c',             textColor: 'white', pts: 280, desc: 'Ember orange' },
+            { id: 'amber',    label: 'Amber',          color: '#d97706',             textColor: 'white', pts: 350, desc: 'Warm amber' },
             { id: 'gold',     label: 'Gold',           color: 'linear-gradient(135deg,#f59e0b,#d97706)', textColor: 'white', pts: 500, desc: 'Shimmering gold' },
         ];
 
         const REWARD_CHAT_BG = [
-            { id: 'default',  label: 'Default',        bg: '#f2f2f7',                       pts: 0,   desc: 'Standard light grey' },
-            { id: 'night',    label: 'Night',          bg: '#0f172a',                       pts: 50,  desc: 'Deep dark navy' },
-            { id: 'sakura',   label: 'Sakura',         bg: 'linear-gradient(160deg,#fce7f3,#fbcfe8)', pts: 100, desc: 'Soft pink blossom' },
-            { id: 'forest',   label: 'Forest Mist',    bg: 'linear-gradient(160deg,#d1fae5,#a7f3d0)', pts: 200, desc: 'Calm green mist' },
-            { id: 'galaxy',   label: 'Galaxy',         bg: 'linear-gradient(160deg,#1e1b4b,#312e81,#4c1d95)', pts: 350, desc: 'Deep space purple' },
+            { id: 'default',  label: 'Default',        bg: '#f2f2f7',                        pts: 0,   desc: 'Standard light grey' },
+            { id: 'cream',    label: 'Cream',          bg: '#fefce8',                        pts: 4,   desc: 'Warm cream white' },
+            { id: 'mist',     label: 'Ocean Mist',     bg: 'linear-gradient(160deg,#e0f2fe,#bae6fd)', pts: 10, desc: 'Light ocean mist' },
+            { id: 'night',    label: 'Night',          bg: '#0f172a',                        pts: 30,  desc: 'Deep dark navy' },
+            { id: 'sakura',   label: 'Sakura',         bg: 'linear-gradient(160deg,#fce7f3,#fbcfe8)', pts: 60, desc: 'Soft pink blossom' },
+            { id: 'dusk',     label: 'Dusk',           bg: 'linear-gradient(160deg,#fef3c7,#fde68a)', pts: 90, desc: 'Golden dusk' },
+            { id: 'forest',   label: 'Forest Mist',    bg: 'linear-gradient(160deg,#d1fae5,#a7f3d0)', pts: 130, desc: 'Calm green mist' },
+            { id: 'slate',    label: 'Midnight Slate', bg: 'linear-gradient(160deg,#1e293b,#0f172a)', pts: 180, desc: 'Dark slate' },
+            { id: 'lavender', label: 'Lavender Dream', bg: 'linear-gradient(160deg,#ede9fe,#ddd6fe)', pts: 230, desc: 'Dreamy lavender' },
+            { id: 'galaxy',   label: 'Galaxy',         bg: 'linear-gradient(160deg,#1e1b4b,#312e81,#4c1d95)', pts: 300, desc: 'Deep space purple' },
+            { id: 'ember',    label: 'Ember Glow',     bg: 'linear-gradient(160deg,#1c0a00,#7c2d12,#991b1b)', pts: 380, desc: 'Molten ember dark' },
             { id: 'aurora',   label: 'Aurora',         bg: 'linear-gradient(160deg,#0f172a,#065f46,#1e3a5f)', pts: 500, desc: 'Northern lights' },
         ];
 
@@ -2046,19 +2096,53 @@
         function isAdmin(email) { return ADMIN_EMAILS.includes(email); }
 
         const ACHIEVEMENTS = [
-            { id:'first_help',   icon:'🌟', label:'First Helper',      desc:'Resolved your first chat',          check: d => (d.chatsResolved||0) >= 1 },
-            { id:'five_helps',   icon:'🤝', label:'Helping Hand',       desc:'Resolved 5 chats',                  check: d => (d.chatsResolved||0) >= 5 },
-            { id:'ten_helps',    icon:'💪', label:'10x Helper',         desc:'Resolved 10 chats',                 check: d => (d.chatsResolved||0) >= 10 },
-            { id:'fifty_helps',  icon:'🏅', label:'Community Pillar',   desc:'Resolved 50 chats',                 check: d => (d.chatsResolved||0) >= 50 },
-            { id:'first_lf',     icon:'🔍', label:'Finder',             desc:'Posted a Lost & Found item',        check: d => (d.lfPosts||0) >= 1 },
-            { id:'first_req',    icon:'✋', label:'Help Seeker',        desc:'Posted your first help request',    check: d => (d.reqPosts||0) >= 1 },
-            { id:'rated_five',   icon:'⭐', label:'Five Star Helper',   desc:'Received a 5-star rating',          check: d => (d.gotFiveStar||false) },
-            { id:'week_veteran', icon:'📅', label:'Week Veteran',       desc:'Member for 7+ days',                check: d => d.joinedAt && (Date.now() - d.joinedAt.toDate().getTime()) > 7*86400000 },
-            { id:'month_member', icon:'🗓️', label:'Month Member',       desc:'Member for 30+ days',               check: d => d.joinedAt && (Date.now() - d.joinedAt.toDate().getTime()) > 30*86400000 },
-            { id:'top10',        icon:'🏆', label:'Top 10',             desc:'Reached top 10 on leaderboard',     check: d => (d.leaderboardRank||999) <= 10 },
-            { id:'thank_you',    icon:'💙', label:'Appreciated',        desc:'Received a Thank You message',      check: d => (d.thankYousReceived||0) >= 1 },
-            { id:'pts100',       icon:'💯', label:'Century',            desc:'Earned 100 volunteer points',       check: d => (d.leaderboardPoints||0) >= 100 },
-            { id:'pts500',       icon:'👑', label:'Legend',             desc:'Earned 500 volunteer points',       check: d => (d.leaderboardPoints||0) >= 500 },
+            // ── Helping / resolving chats ──
+            { id:'first_help',     icon:'🌟', label:'First Step',          desc:'Resolved your very first chat',                    check: d => (d.chatsResolved||0) >= 1 },
+            { id:'three_helps',    icon:'🤜', label:'Getting Started',     desc:'Resolved 3 chats',                                 check: d => (d.chatsResolved||0) >= 3 },
+            { id:'five_helps',     icon:'🤝', label:'Helping Hand',        desc:'Resolved 5 chats',                                 check: d => (d.chatsResolved||0) >= 5 },
+            { id:'ten_helps',      icon:'💪', label:'10x Helper',          desc:'Resolved 10 chats',                                check: d => (d.chatsResolved||0) >= 10 },
+            { id:'twenty_helps',   icon:'🦾', label:'Committed Helper',    desc:'Resolved 20 chats',                                check: d => (d.chatsResolved||0) >= 20 },
+            { id:'fifty_helps',    icon:'🏅', label:'Community Pillar',    desc:'Resolved 50 chats',                                check: d => (d.chatsResolved||0) >= 50 },
+            { id:'hundred_helps',  icon:'🎖️', label:'Centurion',           desc:'Resolved 100 chats — incredible dedication',       check: d => (d.chatsResolved||0) >= 100 },
+            // ── Requests ──
+            { id:'first_req',      icon:'✋', label:'Help Seeker',         desc:'Posted your first help request',                   check: d => (d.reqPosts||0) >= 1 },
+            { id:'five_reqs',      icon:'📋', label:'Frequent Asker',      desc:'Posted 5 help requests',                           check: d => (d.reqPosts||0) >= 5 },
+            { id:'ten_reqs',       icon:'📬', label:'Community Voice',     desc:'Posted 10 help requests',                          check: d => (d.reqPosts||0) >= 10 },
+            // ── Lost & Found ──
+            { id:'first_lf',       icon:'🔍', label:'Finder',              desc:'Posted a Lost & Found item',                       check: d => (d.lfPosts||0) >= 1 },
+            { id:'five_lf',        icon:'🗺️', label:'Area Scout',          desc:'Posted 5 Lost & Found items',                      check: d => (d.lfPosts||0) >= 5 },
+            { id:'ten_lf',         icon:'🧭', label:'Lost & Found Pro',    desc:'Posted 10 Lost & Found items',                     check: d => (d.lfPosts||0) >= 10 },
+            // ── Ratings ──
+            { id:'rated_five',     icon:'⭐', label:'Five Star Helper',    desc:'Received a 5-star rating',                         check: d => (d.gotFiveStar||false) },
+            { id:'rated_ten',      icon:'🌠', label:'Star Performer',      desc:'Received 10 ratings',                              check: d => (d.ratingCount||0) >= 10 },
+            { id:'perfect_avg',    icon:'✨', label:'Flawless',            desc:'Average rating of 5.0 with 5+ ratings',            check: d => (d.ratingCount||0) >= 5 && (d.ratingTotal||0)/(d.ratingCount||1) >= 4.9 },
+            // ── Thank Yous ──
+            { id:'thank_you',      icon:'💙', label:'Appreciated',         desc:'Received your first Thank You',                    check: d => (d.thankYousReceived||0) >= 1 },
+            { id:'thank_you_5',    icon:'💜', label:'Beloved Helper',      desc:'Received 5 Thank You messages',                    check: d => (d.thankYousReceived||0) >= 5 },
+            { id:'thank_you_10',   icon:'🫶', label:'Heart of the Hub',    desc:'Received 10 Thank You messages',                   check: d => (d.thankYousReceived||0) >= 10 },
+            // ── Points milestones ──
+            { id:'pts10',          icon:'🔵', label:'First Points',        desc:'Earned your first 10 points',                      check: d => (d.leaderboardPoints||0) >= 10 },
+            { id:'pts50',          icon:'🟢', label:'On the Board',        desc:'Earned 50 points',                                 check: d => (d.leaderboardPoints||0) >= 50 },
+            { id:'pts100',         icon:'💯', label:'Century',             desc:'Earned 100 volunteer points',                      check: d => (d.leaderboardPoints||0) >= 100 },
+            { id:'pts250',         icon:'🔶', label:'Quarter Legend',      desc:'Earned 250 points',                                check: d => (d.leaderboardPoints||0) >= 250 },
+            { id:'pts500',         icon:'👑', label:'Legend',              desc:'Earned 500 volunteer points',                      check: d => (d.leaderboardPoints||0) >= 500 },
+            // ── Leaderboard ──
+            { id:'top10',          icon:'🏆', label:'Top 10',              desc:'Reached top 10 on the leaderboard',                check: d => (d.leaderboardRank||999) <= 10 },
+            { id:'top3',           icon:'🥇', label:'Podium Finish',       desc:'Reached top 3 on the leaderboard',                 check: d => (d.leaderboardRank||999) <= 3 },
+            // ── Membership time ──
+            { id:'day1',           icon:'🐣', label:'Day One',             desc:'Joined Beacon of Unity',                           check: d => !!d.joinedAt },
+            { id:'week_veteran',   icon:'📅', label:'Week Veteran',        desc:'Member for 7+ days',                               check: d => d.joinedAt && (Date.now() - d.joinedAt.toDate().getTime()) > 7*86400000 },
+            { id:'month_member',   icon:'🗓️', label:'Month Member',        desc:'Member for 30+ days',                              check: d => d.joinedAt && (Date.now() - d.joinedAt.toDate().getTime()) > 30*86400000 },
+            { id:'three_months',   icon:'🌳', label:'Rooted',              desc:'Member for 90+ days',                              check: d => d.joinedAt && (Date.now() - d.joinedAt.toDate().getTime()) > 90*86400000 },
+            { id:'half_year',      icon:'🎂', label:'Half Year',           desc:'Member for 6 months',                              check: d => d.joinedAt && (Date.now() - d.joinedAt.toDate().getTime()) > 182*86400000 },
+            // ── Combined activity ──
+            { id:'all_rounder',    icon:'🌈', label:'All-Rounder',         desc:'Posted a request, an LF item, and resolved a chat', check: d => (d.reqPosts||0) >= 1 && (d.lfPosts||0) >= 1 && (d.chatsResolved||0) >= 1 },
+            { id:'super_active',   icon:'⚡', label:'Super Active',        desc:'10+ helps, 5+ requests and 5+ LF posts',           check: d => (d.chatsResolved||0) >= 10 && (d.reqPosts||0) >= 5 && (d.lfPosts||0) >= 5 },
+            { id:'community_hero', icon:'🦸', label:'Community Hero',      desc:'50+ helps, 5-star rating, and 5 thank yous',       check: d => (d.chatsResolved||0) >= 50 && (d.thankYousReceived||0) >= 5 && (d.ratingCount||0) >= 1 && (d.ratingTotal||0)/(d.ratingCount||1) >= 4.5 },
+            // ── Cosmetics & exploration ──
+            { id:'first_reward',   icon:'🎁', label:'Reward Unlocked',     desc:'Unlocked your first cosmetic reward',              check: d => (d.leaderboardPoints||0) >= 4 },
+            { id:'collector',      icon:'🧩', label:'Collector',           desc:'Earned 10 badges',                                 check: d => (d.badges||[]).length >= 10 },
+            { id:'badge_hunter',   icon:'🎯', label:'Badge Hunter',        desc:'Earned 20 badges',                                 check: d => (d.badges||[]).length >= 20 },
         ];
 
         async function checkAndAwardBadges(uid, userData) {
@@ -3252,6 +3336,7 @@
             if (!uid) return;
             const feed = document.getElementById('rewardsFeed');
             if (!feed) return;
+            const dark = document.body.classList.contains('dark');
 
             // fetch current points
             getDoc(doc(db, 'users', uid)).then(snap => {
@@ -3388,27 +3473,6 @@
                 bgSection.appendChild(bgGrid);
                 feed.appendChild(bgSection);
 
-                // ── Badges section ──
-                const earnedBadgeIds = snap.exists() && Array.isArray(snap.data().badges) ? snap.data().badges : [];
-                const badgeSection = document.createElement('div');
-                badgeSection.innerHTML = '<h4 style="margin:0 0 14px; font-family:\'Syne\',sans-serif; font-size:16px;">🏅 Achievement Badges</h4>';
-                const badgeGrid = document.createElement('div');
-                badgeGrid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:12px; margin-bottom:28px;';
-                ACHIEVEMENTS.forEach(ach => {
-                    const earned = earnedBadgeIds.includes(ach.id);
-                    const card = document.createElement('div');
-                    card.style.cssText = 'border-radius:14px; padding:16px 12px; text-align:center; border:2px solid ' + (earned ? '#38bdf8' : '#f1f5f9') + '; background:' + (earned ? '#f0f9ff' : '#f8fafc') + '; transition:all .2s; opacity:' + (earned ? '1' : '0.5') + ';';
-                    card.innerHTML = '<div style="font-size:30px; margin-bottom:8px;">' + ach.icon + '</div>' +
-                        '<div style="font-weight:700; font-size:13px; margin-bottom:3px;">' + ach.label + '</div>' +
-                        '<div style="font-size:11px; color:#64748b; line-height:1.4;">' + ach.desc + '</div>' +
-                        (earned
-                            ? '<div style="margin-top:8px; background:#38bdf8; color:#0f172a; font-size:11px; font-weight:700; padding:3px 10px; border-radius:99px; display:inline-block;">✓ Earned</div>'
-                            : '<div style="margin-top:8px; font-size:16px;">🔒</div>');
-                    badgeGrid.appendChild(card);
-                });
-                badgeSection.appendChild(badgeGrid);
-                feed.appendChild(badgeSection);
-
                 // pts progress bar at top
                 const nextLocked = [...REWARD_SKINS, ...REWARD_BUBBLES, ...REWARD_CHAT_BG]
                     .filter(r => r.pts > pts).sort((a,b) => a.pts - b.pts)[0];
@@ -3425,6 +3489,88 @@
                         <div style="background:linear-gradient(90deg,#38bdf8,#0ea5e9); height:100%; width:${Math.min(100, Math.round(pts/nextLocked.pts*100))}%; border-radius:99px; transition:width .5s;"></div>
                     </div>` : '<div style="color:#38bdf8; font-weight:700;">🎉 All rewards unlocked!</div>'}`;
                 feed.insertBefore(headerBar, feed.firstChild);
+            });
+        }
+
+        // ═══════════════════════════════════════════════
+        //  BADGES
+        // ═══════════════════════════════════════════════
+        function loadBadges() {
+            const uid = auth.currentUser?.uid;
+            if (!uid) return;
+            const feed = document.getElementById('badgesFeed');
+            if (!feed) return;
+            const dark = document.body.classList.contains('dark');
+
+            getDoc(doc(db, 'users', uid)).then(snap => {
+                const earnedIds = snap.exists() && Array.isArray(snap.data().badges) ? snap.data().badges : [];
+                const earnedCount = earnedIds.length;
+                const total = ACHIEVEMENTS.length;
+
+                feed.innerHTML = '';
+
+                // Progress header
+                const header = document.createElement('div');
+                header.style.cssText = 'background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:14px;padding:18px 20px;margin-bottom:24px;color:white;';
+                const pct = Math.round(earnedCount / total * 100);
+                header.innerHTML = `
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">Your Badges</span>
+                        <span style="font-size:18px;font-weight:800;color:#38bdf8;">${earnedCount} <span style="font-size:13px;color:#94a3b8;font-weight:500;">/ ${total}</span></span>
+                    </div>
+                    <div style="font-size:12px;color:#94a3b8;margin-bottom:6px;">${pct}% collected — keep helping to unlock more!</div>
+                    <div style="background:#334155;border-radius:99px;height:6px;overflow:hidden;">
+                        <div style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);height:100%;width:${pct}%;border-radius:99px;transition:width .5s;"></div>
+                    </div>`;
+                feed.appendChild(header);
+
+                // Grouped categories
+                const GROUPS = [
+                    { label: '🤝 Helping',          ids: ['first_help','three_helps','five_helps','ten_helps','twenty_helps','fifty_helps','hundred_helps'] },
+                    { label: '📋 Requests',          ids: ['first_req','five_reqs','ten_reqs'] },
+                    { label: '🔍 Lost & Found',      ids: ['first_lf','five_lf','ten_lf'] },
+                    { label: '⭐ Ratings',            ids: ['rated_five','rated_ten','perfect_avg'] },
+                    { label: '💙 Thank Yous',         ids: ['thank_you','thank_you_5','thank_you_10'] },
+                    { label: '🏆 Points',             ids: ['pts10','pts50','pts100','pts250','pts500'] },
+                    { label: '📊 Leaderboard',        ids: ['top10','top3'] },
+                    { label: '📅 Membership',         ids: ['day1','week_veteran','month_member','three_months','half_year'] },
+                    { label: '🌈 Combined Activity',  ids: ['all_rounder','super_active','community_hero'] },
+                    { label: '🧩 Exploration',        ids: ['first_reward','collector','badge_hunter'] },
+                ];
+
+                GROUPS.forEach(group => {
+                    const badges = group.ids.map(id => ACHIEVEMENTS.find(a => a.id === id)).filter(Boolean);
+                    if (!badges.length) return;
+
+                    const section = document.createElement('div');
+                    section.style.cssText = 'margin-bottom:28px;';
+                    section.innerHTML = `<h4 style="margin:0 0 14px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:${dark?'#f1f5f9':'#0f172a'};">${group.label}</h4>`;
+
+                    const grid = document.createElement('div');
+                    grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;';
+
+                    badges.forEach(ach => {
+                        const earned = earnedIds.includes(ach.id);
+                        const cardBg     = earned ? (dark ? '#0c2233' : '#f0f9ff') : (dark ? '#1e293b' : '#f8fafc');
+                        const cardBorder = earned ? '#38bdf8' : (dark ? '#334155' : '#e2e8f0');
+                        const labelColor = dark ? '#e2e8f0' : (earned ? '#0f172a' : '#475569');
+                        const card = document.createElement('div');
+                        card.style.cssText = `border-radius:14px;padding:16px 12px;text-align:center;border:2px solid ${cardBorder};background:${cardBg};transition:all .2s;opacity:${earned ? '1' : '0.55'};`;
+                        card.innerHTML =
+                            `<div style="font-size:28px;margin-bottom:8px;">${ach.icon}</div>` +
+                            `<div style="font-weight:700;font-size:12px;margin-bottom:4px;color:${labelColor};">${ach.label}</div>` +
+                            `<div style="font-size:11px;color:#64748b;line-height:1.4;">${ach.desc}</div>` +
+                            (earned
+                                ? `<div style="margin-top:8px;background:#38bdf8;color:#0f172a;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;display:inline-block;">✓ Earned</div>`
+                                : `<div style="margin-top:8px;font-size:15px;">🔒</div>`);
+                        grid.appendChild(card);
+                    });
+                    section.appendChild(grid);
+                    feed.appendChild(section);
+                });
+            }).catch(() => {
+                const feed2 = document.getElementById('badgesFeed');
+                if (feed2) feed2.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:40px;">Could not load badges.</p>';
             });
         }
 
@@ -3735,9 +3881,15 @@
                 document.getElementById('pageTitle').innerText = "Rewards";
                 mobActivate('mob-rewards');
                 loadRewards();
+            } else if (tab === 'badges') {
+                document.getElementById('badgesTab').classList.add('active');
+                navItems[8].classList.add('active');
+                document.getElementById('pageTitle').innerText = "Badges";
+                mobActivate('mob-badges');
+                loadBadges();
             } else if (tab === 'reliable-news') {
                 document.getElementById('reliable-newsTab').classList.add('active');
-                navItems[8].classList.add('active');
+                navItems[9].classList.add('active');
                 document.getElementById('pageTitle').innerText = "Reliable News";
                 mobActivate('mob-news');
                 loadNews();
