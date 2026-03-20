@@ -709,7 +709,8 @@ window.addEventListener('scroll',()=>{
   } else {
     p2.style.transform=`translateY(${50*(1-e2)}px) scale(${.92+e2*.08})`;
   }
-  p2.classList.toggle('on',e2>.05);
+  p2.classList.toggle('on',e2>.05); 
+  p2.style.visibility = e2 > 0.01 ? 'visible' : 'hidden';
   scue.style.opacity=cl(1-map(s,0,vh*.2)*3,0,1);
   hbg.style.transform=`translateY(${s*.08}px)`;
 },{passive:true});
