@@ -107,14 +107,16 @@
         .ty-edit-btn:hover { background:#bae6fd; }
         .ty-delete-btn { background:#fee2e2; color:#991b1b; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; margin-left:6px; font-family:inherit; }
         .ty-delete-btn:hover { background:#fecaca; }
-        #imgLightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:99999; align-items:center; justify-content:center; cursor:pointer; }
+        #imgLightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:99999; align-items:center; justify-content:center; cursor:zoom-out; }
         #imgLightbox.open { display:flex; }
-        #imgLightbox img  { max-width:92vw; max-height:92vh; border-radius:10px; }
+        #imgLightbox img  { max-width:92vw; max-height:92vh; border-radius:10px; cursor:default; box-shadow:0 8px 40px rgba(0,0,0,0.6); }
+        .id-thumb { height:52px; width:auto; max-width:90px; border-radius:6px; border:1px solid #e2e8f0; cursor:zoom-in; object-fit:cover; transition:0.2s; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+        .id-thumb:hover { opacity:0.82; transform:scale(1.05); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
     </style>
 </head>
 <body>
 
-<div id="imgLightbox" onclick="this.classList.remove('open')">
+<div id="imgLightbox" onclick="if(event.target===this)this.classList.remove('open')">
     <img id="lightboxImg" src="" alt="Report evidence">
 </div>
 
@@ -174,7 +176,7 @@
             </div>
         </div>
 
-        <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (rashmibiswa2008@gmail.com)</button>
+        <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a1d3c0d2c9ccc8c3c8d2d6c093919199e1c6ccc0c8cd8fc2cecc">[email&#160;protected]</a>)</button>
         <table>
             <thead>
                 <tr>
@@ -217,7 +219,7 @@
     </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     if (!firebase.apps.length) {
         firebase.initializeApp({
             apiKey:"AIzaSyBqNYQbkHf9yQqGzN9qNRePHxQ5Z1dgfeE",
@@ -341,7 +343,7 @@
                     '<tr>'+
                     '<td style="font-weight:600;">'+fn+'</td>'+
                     '<td>'+em+' '+tag+'</td>'+
-                    '<td><a href="'+d.idCardUrl+'" target="_blank" class="id-link">View ID ↗</a></td>'+
+                    '<td>'+(d.idCardUrl?'<img src="'+d.idCardUrl+'" alt="ID Document" class="id-thumb" onclick="openLightbox(this)" title="Click to enlarge">':'<span style="color:#94a3b8;font-size:12px;">No image</span>')+'</td>'+
                     '<td style="white-space:nowrap;">'+
                       '<button onclick="processUser(\''+ds.id+'\',\''+em+'\',\'approve\',\''+d.userId+'\',\''+fnS+'\')" class="btn btn-approve">✅ Approve</button>'+
                       '<button onclick="markAsVolunteer(\''+ds.id+'\',\''+d.userId+'\',\''+fnS+'\')" class="btn btn-volunteer">🤝 Volunteer</button>'+
@@ -460,8 +462,10 @@
         db.collection("thankyou").doc(id).delete().then(function(){loadThankYouWall();}).catch(function(e){alert('Error: '+e.message);btn.disabled=false;});
     }
 
-    function openLightbox(imgEl){document.getElementById('lightboxImg').src=imgEl.src;document.getElementById('imgLightbox').classList.add('open');}
-    document.getElementById('signInBtn').addEventListener('click',adminSignIn);
+    function openLightbox(img){
+        document.getElementById('lightboxImg').src=img.src;
+        document.getElementById('imgLightbox').classList.add('open');
+    }
 </script>
 </body>
 </html>
