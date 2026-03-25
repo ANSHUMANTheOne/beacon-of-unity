@@ -32,6 +32,19 @@
             box-shadow: 4px 0 24px rgba(0,0,0,.18);
         }
 
+        /* Scrollable nav wrapper — always present, scrolls when content overflows */
+        .sidebar-nav-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            /* bottom padding reserves space for fixed logout button + map circle */
+            padding-bottom: 220px;
+            /* hide scrollbar visually but keep it functional */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .sidebar-nav-scroll::-webkit-scrollbar { display: none; }
+
         /* Very faint top-right ambient orb — barely noticeable, just adds life */
         .sidebar::after {
             content: '';
@@ -1070,15 +1083,27 @@
 
     /* ── Minimap responsive scaling for smaller desktop/laptop screens ──
        Only applies on desktop (min-width:769px) so mobile is unaffected.
-       Shrinks the circle and adjusts the logout button bottom offset to
-       maintain the same visual gap between them on all screen heights. ── */
+       Nav tabs are in .sidebar-nav-scroll which scrolls invisibly, so tabs
+       are always reachable. Map shrinks and logout button adjusts accordingly. ── */
+
+    /* Make sidebar scrollable so nav tabs never get cut off */
+    @media (min-width: 769px) {
+        .sidebar-nav-scroll {
+            /* bottom padding = map height (160px) + map bottom (24px) + logout button area (~60px) + gap */
+            padding-bottom: 260px;
+        }
+    }
+
     @media (max-height: 760px) and (min-width: 769px) {
         #minimap-widget {
             width: 130px !important;
             height: 130px !important;
         }
         #logoutBtnNav {
-            bottom: 168px !important; /* 130 + 24 (bottom offset) + 14 (gap) */
+            bottom: 168px !important;
+        }
+        .sidebar-nav-scroll {
+            padding-bottom: 230px !important;
         }
     }
     @media (max-height: 650px) and (min-width: 769px) {
@@ -1087,7 +1112,10 @@
             height: 100px !important;
         }
         #logoutBtnNav {
-            bottom: 138px !important; /* 100 + 24 + 14 */
+            bottom: 138px !important;
+        }
+        .sidebar-nav-scroll {
+            padding-bottom: 200px !important;
         }
     }
     @media (max-height: 540px) and (min-width: 769px) {
@@ -1096,6 +1124,9 @@
         }
         #logoutBtnNav {
             bottom: 24px !important;
+        }
+        .sidebar-nav-scroll {
+            padding-bottom: 80px !important;
         }
     }
 
@@ -1300,6 +1331,7 @@
             <button class="lang-btn" id="langHi" onclick="setLang('hi')">हिं</button>
         </div>
 
+        <div class="sidebar-nav-scroll">
         <div class="nav-item active" onclick="switchTab('community')"><span class="nav-emoji">✨</span> Community Hub</div>
         <div class="nav-item" onclick="switchTab('lostfound')"><span class="nav-emoji">🔍</span> Lost and Found</div>
         <div class="nav-item" onclick="switchTab('leaderboard')"><span class="nav-emoji">🏆</span> Leaderboard</div>
@@ -1310,6 +1342,7 @@
         <div class="nav-item" onclick="switchTab('badges')"><span class="nav-emoji">🏅</span> Badges</div>
         <div class="nav-item" onclick="switchTab('updates')"><span class="nav-emoji">📢</span> Updates</div>
         <div class="nav-item" onclick="openProfileModal()"><span class="nav-emoji">👤</span> Profile & Region</div>
+        </div><!-- end sidebar-nav-scroll -->
         <div class="nav-item" id="logoutBtnNav">
             <button class="logout-Btn" id="logoutBtnInner">
                 <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
