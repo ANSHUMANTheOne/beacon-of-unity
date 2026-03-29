@@ -36,10 +36,10 @@ html,body{overflow-x:hidden;scroll-behavior:smooth}
   --bg-hero-start:#dff0fb;--bg-hero-mid:#c8e8f7;--bg-hero-end:#a8d8f0;
   --navy:#0c2d48;--sky:#e0f2fe;--sky2:#bae6fd;--sky3:#38bdf8;
   --muted:#4a7c9e;--off:#f0f9ff;
-  --body-bg:#fff;--card-bg:#fff;--text:#0c2d48;
+  --body-bg:#d6edfa;--card-bg:#eaf6ff;--text:#0c2d48;
   --border:rgba(14,165,233,.15);--hero-text:#0c2d48;
   --nav-scroll-bg:rgba(255,255,255,.96);--nav-logo-text:#0c2d48;--nav-logo-scroll:#0c2d48;
-  --trust-bg:#0c2d48;--feat-bg:#f0f9ff;--cta-bg:linear-gradient(135deg,#e0f2fe,rgba(186,230,253,.4));
+  --trust-bg:#0c2d48;--feat-bg:#bce8fb;--cta-bg:linear-gradient(135deg,#bae6fd,rgba(125,211,252,.35));
   --footer-bg:#0c2d48;
   --grid-color:rgba(14,165,233,.06);
   --orb1:rgba(14,165,233,.25);--orb2:rgba(6,182,212,.18);--orb3:rgba(56,189,248,.2);
@@ -422,6 +422,31 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
   .srow { grid-template-columns: 1fr; }
   .hh1 { font-size: 2rem; }
 }
+
+/* ── SEO ABOUT SECTION ── */
+.seo-section{padding:72px 48px;background:var(--body-bg);transition:background .5s}
+[data-theme="light"] .seo-section{background:#e8f5fd}
+[data-theme="dark"]  .seo-section{background:#040f1a}
+.seo-inner{max-width:1100px;margin:0 auto}
+.seo-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px 64px;margin-top:48px}
+.seo-block h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:-.2px;color:var(--blue);margin-bottom:10px;border:none;padding:0}
+.seo-block p{font-size:.88rem;color:var(--muted);line-height:1.78;font-weight:300}
+[data-theme="dark"] .seo-block h2{color:#38bdf8}
+[data-theme="dark"] .seo-block p{color:rgba(125,211,252,.38)}
+.seo-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:1.55rem;letter-spacing:-1px;color:var(--navy);margin-bottom:10px;transition:color .5s}
+[data-theme="dark"] .seo-h1{color:rgba(186,230,253,.55)}
+.seo-intro{font-size:.92rem;color:var(--muted);line-height:1.78;max-width:580px;font-weight:300}
+[data-theme="dark"] .seo-intro{color:rgba(125,211,252,.32)}
+.seo-divider{width:48px;height:2px;background:linear-gradient(90deg,rgba(14,165,233,.4),rgba(6,182,212,.25));border-radius:2px;margin:20px 0 36px}
+[data-theme="light"] .seo-divider{background:linear-gradient(90deg,var(--blue),var(--cyan))}
+@media(max-width:768px){.seo-section{padding:52px 20px}.seo-grid{grid-template-columns:1fr;gap:28px}}
+[data-theme="light"] .fc,[data-theme="light"] .tcard,[data-theme="light"] .lfc,[data-theme="light"] .pcard{background:#fff;border-color:rgba(14,165,233,.28);box-shadow:0 4px 18px rgba(14,165,233,.13)}
+[data-theme="light"] .fi{background:rgba(186,230,253,.4)}
+[data-theme="light"] .fi:hover{background:rgba(14,165,233,.1)}
+[data-theme="light"] .pcs{background:linear-gradient(135deg,rgba(186,230,253,.55),rgba(125,211,252,.25));border-color:rgba(14,165,233,.22)}
+[data-theme="light"] .stepn{background:#fff}
+[data-theme="light"] .ctaw::before{background-image:linear-gradient(rgba(14,165,233,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.12) 1px,transparent 1px)}
+[data-theme="light"] .wtab{border-color:rgba(14,165,233,.3)}
 </style>
 </head>
 <body>
@@ -645,6 +670,21 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     </div>
   </div>
 </div>
+
+
+<section class="seo-section" aria-label="About Beacon of Unity">
+  <div class="seo-inner">
+    <h1 class="seo-h1 rv">What is Beacon of Unity?</h1>
+    <div class="seo-divider rv d1"></div>
+    <p class="seo-intro rv d1">Beacon of Unity is a verified community platform built exclusively for UAE residents — connecting neighbours through trust, identity verification, and a shared commitment to helping one another.</p>
+    <div class="seo-grid">
+      <div class="seo-block rv d1"><h2>Our Mission</h2><p>To create a zero-anonymous, trust-first digital community where every member is a verified UAE resident. We believe meaningful help starts with knowing who you are helping — and who is helping you.</p></div>
+      <div class="seo-block rv d2"><h2>Our Vision</h2><p>A UAE where no resident faces a crisis alone. Through verified connections, community volunteering, and real-time support systems, Beacon of Unity aims to become the backbone of neighbourly support across every emirate.</p></div>
+      <div class="seo-block rv d1"><h2>How the Platform Works</h2><p>Residents sign in, complete a live Emirates ID verification, then gain access to help requests, a lost &amp; found board, community news, and a volunteer leaderboard. Every interaction is between verified members — no bots, no anonymous accounts.</p></div>
+      <div class="seo-block rv d2"><h2>Community Impact</h2><p>From grocery runs for elderly neighbours to reuniting families with lost belongings, Beacon of Unity turns small acts of kindness into measurable community impact — rewarded through Unity Points and celebrated on our public leaderboard.</p></div>
+    </div>
+  </div>
+</section>
 
 </div><!-- #body -->
 
@@ -989,20 +1029,24 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
               rx="11" fill="url(#bav-rg3)"
               stroke="rgba(14,165,233,0.52)" stroke-width="1"/>
 
-        <!-- ── left eye ── -->
-        <g class="bav-eye-g" id="bav-el">
-          <circle cx="23" cy="38" r="7.5"
-                  fill="url(#bav-rg2)" filter="url(#bav-gf1)"/>
-          <circle cx="20.5" cy="35.5" r="2.5" fill="white" opacity=".88"/>
-          <circle cx="23"   cy="38"   r="2"   fill="rgba(6,182,212,0.6)"/>
+        <!-- ── left eye (puppy) ── -->
+        <g id="bav-el" style="transform-box:fill-box;transform-origin:50% 50%">
+          <circle cx="23" cy="38" r="8.5" fill="white" filter="url(#bav-gf1)"/>
+          <circle id="bav-iris-l" cx="23" cy="38" r="5.8" fill="#7dd3fc"/>
+          <circle id="bav-pupil-l" cx="23" cy="38" r="3.4" fill="#0a1f33"/>
+          <circle cx="20.2" cy="35.2" r="2.2" fill="white" opacity=".95"/>
+          <circle cx="25.2" cy="40.2" r="1.1" fill="white" opacity=".7"/>
+          <path d="M16.5 41 Q23 45 29.5 41" stroke="rgba(10,31,51,0.18)" stroke-width="1" fill="none" stroke-linecap="round"/>
         </g>
 
-        <!-- ── right eye ── -->
-        <g class="bav-eye-g" id="bav-er">
-          <circle cx="41" cy="38" r="7.5"
-                  fill="url(#bav-rg2)" filter="url(#bav-gf1)"/>
-          <circle cx="38.5" cy="35.5" r="2.5" fill="white" opacity=".88"/>
-          <circle cx="41"   cy="38"   r="2"   fill="rgba(6,182,212,0.6)"/>
+        <!-- ── right eye (puppy) ── -->
+        <g id="bav-er" style="transform-box:fill-box;transform-origin:50% 50%">
+          <circle cx="41" cy="38" r="8.5" fill="white" filter="url(#bav-gf1)"/>
+          <circle id="bav-iris-r" cx="41" cy="38" r="5.8" fill="#7dd3fc"/>
+          <circle id="bav-pupil-r" cx="41" cy="38" r="3.4" fill="#0a1f33"/>
+          <circle cx="38.2" cy="35.2" r="2.2" fill="white" opacity=".95"/>
+          <circle cx="43.2" cy="40.2" r="1.1" fill="white" opacity=".7"/>
+          <path d="M34.5 41 Q41 45 47.5 41" stroke="rgba(10,31,51,0.18)" stroke-width="1" fill="none" stroke-linecap="round"/>
         </g>
 
         <!-- ── mouth ── -->
@@ -1501,6 +1545,73 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
     }
     mode = 'flying'; prevMode = '';
   });
+
+
+  // ── cursor-tracking eyes (desktop only, inversion-aware) ────────────────
+  const isTouchDevice = ('ontouchstart' in window) || (window.innerWidth <= 768);
+  if (!isTouchDevice) {
+    let curX = window.innerWidth / 2, curY = window.innerHeight / 2;
+    document.addEventListener('mousemove', e => { curX = e.clientX; curY = e.clientY; });
+
+    const pupilL = document.getElementById('bav-pupil-l');
+    const irisL  = document.getElementById('bav-iris-l');
+    const pupilR = document.getElementById('bav-pupil-r');
+    const irisR  = document.getElementById('bav-iris-r');
+
+    const EYE_L = { x: 23, y: 38 };
+    const EYE_R = { x: 41, y: 38 };
+    const MAX_TRAVEL = 2.6;
+
+    function trackEyes() {
+      if (dragging) { requestAnimationFrame(trackEyes); return; }
+
+      const svgEl = document.getElementById('bav-svg');
+      const rect  = svgEl.getBoundingClientRect();
+      const scale = rect.width / 64;
+
+      // KEY FIX: when robot is flipped (scaleX -1), mirror the x offset
+      const xDir = flipped ? -1 : 1;
+
+      [
+        { base: EYE_L, pupil: pupilL, iris: irisL },
+        { base: EYE_R, pupil: pupilR, iris: irisR },
+      ].forEach(({ base, pupil, iris }) => {
+        const ex = rect.left + base.x * scale;
+        const ey = rect.top  + base.y * scale;
+        const dx = curX - ex;
+        const dy = curY - ey;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const travel = Math.min(dist / 55, 1) * MAX_TRAVEL;
+        const ox = (dx / dist) * travel * xDir;   // ← inversion fix here
+        const oy = (dy / dist) * travel;
+        pupil.setAttribute('cx', (base.x + ox).toFixed(2));
+        pupil.setAttribute('cy', (base.y + oy).toFixed(2));
+        iris.setAttribute('cx',  (base.x + ox * 0.55).toFixed(2));
+        iris.setAttribute('cy',  (base.y + oy * 0.55).toFixed(2));
+      });
+
+      requestAnimationFrame(trackEyes);
+    }
+    trackEyes();
+
+    // ── held reaction ─────────────────────────────────────────────────────
+    let holdTimer = null;
+    let heartShown = false;
+    wrap.addEventListener('mousedown', () => {
+      heartShown = false;
+      holdTimer = setTimeout(() => {
+        if (dragging && !heartShown) {
+          heartShown = true;
+          showBubble('🥰 Squeezing me!', 1800);
+          [eyeL, eyeR].forEach(g => {
+            g.style.transform = 'scale(1.22)';
+            setTimeout(() => g.style.transform = 'scale(1)', 700);
+          });
+        }
+      }, 1200);
+    });
+    document.addEventListener('mouseup', () => clearTimeout(holdTimer));
+  }
 
 })();
 </script>
