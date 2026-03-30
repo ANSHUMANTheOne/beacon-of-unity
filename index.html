@@ -13,6 +13,21 @@
 <meta name="twitter:title" content="Beacon of Unity | Reliable News, Help Requests, Volunteer Opportunities & Lost & Found">
 <meta name="twitter:description" content="A trust-first platform for reliable news, community help requests, volunteer opportunities, and lost & found — connecting UAE neighbours through shared support.">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Beacon of Unity",
+  "url": "https://beaconofunity.com",
+  "logo": "https://beaconofunity.com/logo.png",
+  "description": "A verified community platform connecting UAE residents through trust, identity verification, and mutual support.",
+  "sameAs": [
+    "https://www.youtube.com/@BeaconOfUnityHQ",
+    "https://www.instagram.com/beaconofunityhq/",
+    "https://www.tiktok.com/@beaconofunity"
+  ]
+}
+</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{overflow-x:hidden;scroll-behavior:smooth}
@@ -434,20 +449,25 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 /* ── SEO ABOUT SECTION ── */
 .seo-section{padding:72px 48px;background:var(--body-bg);transition:background .5s}
 [data-theme="light"] .seo-section{background:#e8f5fd}
-[data-theme="dark"]  .seo-section{background:#040f1a}
+[data-theme="dark"]  .seo-section{background:linear-gradient(180deg,#071828 0%,#0a1f33 100%)}
 .seo-inner{max-width:1100px;margin:0 auto}
-.seo-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px 64px;margin-top:48px}
+.seo-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
+.seo-block{padding:28px 30px;border-radius:20px;transition:background .5s,border-color .5s}
+[data-theme="light"] .seo-block{background:#fff;border:1px solid rgba(14,165,233,.14);box-shadow:0 4px 18px rgba(14,165,233,.08)}
+[data-theme="dark"]  .seo-block{background:rgba(14,165,233,.05);border:1px solid rgba(14,165,233,.12)}
+[data-theme="dark"]  .seo-block:hover{background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.22)}
 .seo-block h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:-.2px;color:var(--blue);margin-bottom:10px;border:none;padding:0}
 .seo-block p{font-size:.88rem;color:var(--muted);line-height:1.78;font-weight:300}
-[data-theme="dark"] .seo-block h2{color:#38bdf8}
-[data-theme="dark"] .seo-block p{color:rgba(125,211,252,.38)}
+[data-theme="dark"] .seo-block h2{color:#7dd3fc}
+[data-theme="dark"] .seo-block p{color:rgba(186,230,253,.7)}
 .seo-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:1.55rem;letter-spacing:-1px;color:var(--navy);margin-bottom:10px;transition:color .5s}
-[data-theme="dark"] .seo-h1{color:rgba(186,230,253,.55)}
+[data-theme="dark"] .seo-h1{color:#e0f2fe}
 .seo-intro{font-size:.92rem;color:var(--muted);line-height:1.78;max-width:580px;font-weight:300}
-[data-theme="dark"] .seo-intro{color:rgba(125,211,252,.32)}
+[data-theme="dark"] .seo-intro{color:rgba(186,230,253,.6)}
 .seo-divider{width:48px;height:2px;background:linear-gradient(90deg,rgba(14,165,233,.4),rgba(6,182,212,.25));border-radius:2px;margin:20px 0 36px}
 [data-theme="light"] .seo-divider{background:linear-gradient(90deg,var(--blue),var(--cyan))}
-@media(max-width:768px){.seo-section{padding:52px 20px}.seo-grid{grid-template-columns:1fr;gap:28px}}
+[data-theme="dark"]  .seo-divider{background:linear-gradient(90deg,#0ea5e9,#06b6d4);opacity:.7}
+@media(max-width:768px){.seo-section{padding:52px 20px}.seo-grid{grid-template-columns:1fr;gap:16px}}
 [data-theme="light"] .fc,[data-theme="light"] .tcard,[data-theme="light"] .lfc,[data-theme="light"] .pcard{background:#fff;border-color:rgba(14,165,233,.28);box-shadow:0 4px 18px rgba(14,165,233,.13)}
 [data-theme="light"] .fi{background:rgba(186,230,253,.4)}
 [data-theme="light"] .fi:hover{background:rgba(14,165,233,.1)}
@@ -455,6 +475,61 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 [data-theme="light"] .stepn{background:#fff}
 [data-theme="light"] .ctaw::before{background-image:linear-gradient(rgba(14,165,233,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.12) 1px,transparent 1px)}
 [data-theme="light"] .wtab{border-color:rgba(14,165,233,.3)}
+
+/* ── SOCIAL LINKS ── */
+.seo-social{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.soc-pill{display:inline-flex;align-items:center;gap:10px;padding:11px 20px;border-radius:50px;border:1px solid rgba(14,165,233,.18);background:rgba(14,165,233,.06);text-decoration:none;transition:all .25s var(--ease);cursor:none}
+.soc-pill:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(14,165,233,.18);border-color:rgba(14,165,233,.45);background:rgba(14,165,233,.12)}
+[data-theme="light"] .soc-pill{background:#fff;border-color:rgba(14,165,233,.22);box-shadow:0 2px 10px rgba(14,165,233,.08)}
+[data-theme="light"] .soc-pill:hover{box-shadow:0 10px 28px rgba(14,165,233,.18)}
+.soc-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.soc-yt .soc-icon{background:rgba(255,0,0,.12)}
+.soc-ig .soc-icon{background:linear-gradient(135deg,rgba(255,110,60,.12),rgba(180,0,120,.1))}
+.soc-tt .soc-icon{background:rgba(0,0,0,.12)}
+[data-theme="light"] .soc-tt .soc-icon{background:rgba(0,0,0,.07)}
+.soc-icon svg{width:16px;height:16px}
+.soc-info{display:flex;flex-direction:column}
+.soc-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase}
+.soc-yt .soc-name{color:#ff0000}
+.soc-ig .soc-name{color:#c0006a}
+[data-theme="dark"] .soc-ig .soc-name{color:#f472b6}
+.soc-tt .soc-name{color:#0c2d48}
+[data-theme="dark"] .soc-tt .soc-name{color:rgba(255,255,255,.8)}
+.soc-handle{font-size:.76rem;font-weight:400;color:var(--muted);margin-top:1px}
+[data-theme="dark"] .soc-handle{color:rgba(125,211,252,.4)}
+
+/* Footer social icons */
+.fsoc{display:flex;align-items:center;gap:10px}
+.fsoc-btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;cursor:none}
+.fsoc-btn:hover{border-color:rgba(125,211,252,.5);background:rgba(125,211,252,.1);transform:translateY(-2px)}
+.fsoc-btn svg{width:14px;height:14px;fill:rgba(255,255,255,.45);transition:fill .2s}
+.fsoc-btn:hover svg{fill:var(--sky3)}
+@media(max-width:768px){.seo-social{gap:10px}.soc-pill{padding:9px 14px}.fsoc{gap:8px}}
+
+/* ── NAV SOCIAL ICONS ── */
+.nav-soc{display:flex;align-items:center;gap:6px;margin-right:8px}
+.nav-soc-btn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(255,255,255,.18);transition:all .2s var(--ease);cursor:none;flex-shrink:0}
+.nav-soc-btn svg{width:13px;height:13px;fill:rgba(255,255,255,.55);transition:fill .2s,transform .2s}
+.nav-soc-btn:hover svg{transform:scale(1.15)}
+.nav-soc-btn.nsb-yt:hover{border-color:rgba(255,0,0,.5);background:rgba(255,0,0,.1)}
+.nav-soc-btn.nsb-yt:hover svg{fill:#ff4444}
+.nav-soc-btn.nsb-ig:hover{border-color:rgba(200,60,180,.5);background:rgba(200,60,180,.1)}
+.nav-soc-btn.nsb-ig:hover svg{fill:#e040c0}
+.nav-soc-btn.nsb-tt:hover{border-color:rgba(125,211,252,.4);background:rgba(125,211,252,.1)}
+.nav-soc-btn.nsb-tt:hover svg{fill:var(--sky3)}
+/* Scrolled nav */
+#nav.s .nav-soc-btn{border-color:rgba(12,45,72,.14)}
+#nav.s .nav-soc-btn svg{fill:rgba(12,45,72,.4)}
+#nav.s .nav-soc-btn.nsb-yt:hover{background:rgba(255,0,0,.08)}
+#nav.s .nav-soc-btn.nsb-yt:hover svg{fill:#cc0000}
+#nav.s .nav-soc-btn.nsb-ig:hover{background:rgba(180,0,120,.08)}
+#nav.s .nav-soc-btn.nsb-ig:hover svg{fill:#c0006a}
+#nav.s .nav-soc-btn.nsb-tt:hover{background:rgba(14,165,233,.08)}
+#nav.s .nav-soc-btn.nsb-tt:hover svg{fill:var(--blue)}
+/* Light mode */
+[data-theme="light"] .nav-soc-btn{border-color:rgba(12,45,72,.14)}
+[data-theme="light"] .nav-soc-btn svg{fill:rgba(12,45,72,.4)}
+@media(max-width:768px){.nav-soc{display:none}}
 </style>
 </head>
 <body>
@@ -488,6 +563,17 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <a href="#how">How It Works</a>
     <a href="#live">Community</a>
     <a href="#trust">Trust</a>
+  </div>
+  <div class="nav-soc">
+    <a href="https://www.youtube.com/@BeaconOfUnityHQ" target="_blank" rel="noopener" class="nav-soc-btn nsb-yt" aria-label="YouTube">
+      <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/beaconofunityhq/" target="_blank" rel="noopener" class="nav-soc-btn nsb-ig" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 4 2.3 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9C.3 21.3 2.7 23.7 7.1 23.9 8.3 24 8.7 24 12 24s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7C24 15.7 24 15.3 24 12s0-3.7-.1-4.9C23.7 2.7 21.3.3 16.9.1 15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4A6.2 6.2 0 0 0 12 5.8zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>
+    </a>
+    <a href="https://www.tiktok.com/@beaconofunity" target="_blank" rel="noopener" class="nav-soc-btn nsb-tt" aria-label="TikTok">
+      <svg viewBox="0 0 24 24"><path d="M19.6 3.3A4.9 4.9 0 0 1 14.7 0h-3.8v16.4a2.9 2.9 0 1 1-2-2.8V9.7a6.8 6.8 0 1 0 5.8 6.7V8.2a8.6 8.6 0 0 0 5 1.6V6A4.9 4.9 0 0 1 19.6 3.3z"/></svg>
+    </a>
   </div>
   <button class="nsign" onclick="window.location.href='login.html'"><span>Sign In →</span></button>
 </nav>
@@ -691,6 +777,38 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
       <div class="seo-block rv d1"><h2>How the Platform Works</h2><p>Residents sign in, complete a live Emirates ID verification, then gain access to help requests, a lost &amp; found board, community news, and a volunteer leaderboard. Every interaction is between verified members — no bots, no anonymous accounts.</p></div>
       <div class="seo-block rv d2"><h2>Community Impact</h2><p>From grocery runs for elderly neighbours to reuniting families with lost belongings, Beacon of Unity turns small acts of kindness into measurable community impact — rewarded through Unity Points and celebrated on our public leaderboard.</p></div>
     </div>
+
+    <!-- Social Profiles -->
+    <div class="seo-social rv d2" aria-label="Beacon of Unity on social media">
+      <a href="https://www.youtube.com/@BeaconOfUnityHQ" target="_blank" rel="noopener" class="soc-pill soc-yt" aria-label="Beacon of Unity on YouTube">
+        <div class="soc-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#ff0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z"/></svg>
+        </div>
+        <div class="soc-info">
+          <span class="soc-name">YouTube</span>
+          <span class="soc-handle">@BeaconOfUnityHQ</span>
+        </div>
+      </a>
+      <a href="https://www.instagram.com/beaconofunityhq/" target="_blank" rel="noopener" class="soc-pill soc-ig" aria-label="Beacon of Unity on Instagram">
+        <div class="soc-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="url(#ig-grad)" d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 4 2.3 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9C.3 21.3 2.7 23.7 7.1 23.9 8.3 24 8.7 24 12 24s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7C24 15.7 24 15.3 24 12s0-3.7-.1-4.9C23.7 2.7 21.3.3 16.9.1 15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4A6.2 6.2 0 0 0 12 5.8zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/><defs><linearGradient id="ig-grad" x1="0" y1="24" x2="24" y2="0"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs></svg>
+        </div>
+        <div class="soc-info">
+          <span class="soc-name">Instagram</span>
+          <span class="soc-handle">@beaconofunityhq</span>
+        </div>
+      </a>
+      <a href="https://www.tiktok.com/@beaconofunity" target="_blank" rel="noopener" class="soc-pill soc-tt" aria-label="Beacon of Unity on TikTok">
+        <div class="soc-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.6 3.3A4.9 4.9 0 0 1 14.7 0h-3.8v16.4a2.9 2.9 0 1 1-2-2.8V9.7a6.8 6.8 0 1 0 5.8 6.7V8.2a8.6 8.6 0 0 0 5 1.6V6A4.9 4.9 0 0 1 19.6 3.3z" fill="#0c2d48"/></svg>
+        </div>
+        <div class="soc-info">
+          <span class="soc-name">TikTok</span>
+          <span class="soc-handle">@beaconofunity</span>
+        </div>
+      </a>
+    </div>
+
   </div>
 </section>
 
@@ -699,6 +817,17 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 <footer>
   <div class="flog"><img id="footer-logo" src="" alt=""><span class="flogn">Beacon of Unity</span></div>
   <span class="fcopy">© 2026 Beacon of Unity.</span>
+  <div class="fsoc" aria-label="Social media">
+    <a href="https://www.youtube.com/@BeaconOfUnityHQ" target="_blank" rel="noopener" class="fsoc-btn" aria-label="YouTube">
+      <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.75 15.5V8.5l6.25 3.5-6.25 3.5z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/beaconofunityhq/" target="_blank" rel="noopener" class="fsoc-btn" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 4 2.3 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9C.3 21.3 2.7 23.7 7.1 23.9 8.3 24 8.7 24 12 24s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7C24 15.7 24 15.3 24 12s0-3.7-.1-4.9C23.7 2.7 21.3.3 16.9.1 15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4A6.2 6.2 0 0 0 12 5.8zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>
+    </a>
+    <a href="https://www.tiktok.com/@beaconofunity" target="_blank" rel="noopener" class="fsoc-btn" aria-label="TikTok">
+      <svg viewBox="0 0 24 24"><path d="M19.6 3.3A4.9 4.9 0 0 1 14.7 0h-3.8v16.4a2.9 2.9 0 1 1-2-2.8V9.7a6.8 6.8 0 1 0 5.8 6.7V8.2a8.6 8.6 0 0 0 5 1.6V6A4.9 4.9 0 0 1 19.6 3.3z"/></svg>
+    </a>
+  </div>
   <div class="flinks"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><a href="credits.html">Credits</a></div>
 </footer>
 
