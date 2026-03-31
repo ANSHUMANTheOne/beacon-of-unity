@@ -2731,14 +2731,15 @@
             await updateDoc(doc(db, "chats", currentChatId), {
                 [`unread_${auth.currentUser.uid}`]: false
             });
-            const chatItem = document.getElementById(`item-${currentChatId}`);
+            const _acl = document.getElementById('activeChatsList');
+            const chatItem = _acl ? _acl.querySelector(`#item-${currentChatId}`) : null;
             if (chatItem) {
                 chatItem.classList.remove('chat-unread');
                 // remove NEW badge from DOM immediately
                 const newBadge = chatItem.querySelector('.chat-new-badge');
                 if (newBadge) newBadge.remove();
                 // update mobile icon
-                const anyUnread = document.querySelector('#activeChatsList .chat-unread');
+                const anyUnread = _acl ? _acl.querySelector('.chat-unread') : null;
                 const mobIcon = document.getElementById('mobChatsIcon');
                 if (mobIcon) mobIcon.innerText = anyUnread ? '🔴' : '💬';
                 // sync mobile panel
@@ -2998,7 +2999,8 @@
 
             try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
             document.getElementById('chatPopup').style.display = 'none';
-            const el = document.getElementById(`item-${currentChatId}`);
+            const _aclRC = document.getElementById('activeChatsList');
+            const el = _aclRC ? _aclRC.querySelector(`#item-${currentChatId}`) : null;
             if (el) el.remove();
             if (_unsubChatDoc) { _unsubChatDoc(); _unsubChatDoc = null; }
             if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
@@ -3058,7 +3060,8 @@
             }
             try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
             document.getElementById('chatPopup').style.display = 'none';
-            const el = document.getElementById(`item-${currentChatId}`);
+            const _aclE = document.getElementById('activeChatsList');
+            const el = _aclE ? _aclE.querySelector(`#item-${currentChatId}`) : null;
             if (el) el.remove();
             if (_unsubChatDoc) { _unsubChatDoc(); _unsubChatDoc = null; }
             if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
@@ -3139,7 +3142,7 @@
             const pOwnerId = chatData.postOwnerId || '';
             const hasUnread = chatData[`unread_${auth.currentUser.uid}`] === true;
 
-            let chatDiv = document.getElementById(`item-${chatId}`);
+            let chatDiv = list.querySelector(`#item-${chatId}`);
             if (!chatDiv) {
                 chatDiv = document.createElement('div');
                 chatDiv.id = `item-${chatId}`;
@@ -3192,7 +3195,7 @@
                     const chatId = change.doc.id;
 
                     if (change.type === 'removed') {
-                        const el = document.getElementById(`item-${chatId}`);
+                        const el = list.querySelector(`#item-${chatId}`);
                         if (el) el.remove();
                         _chatRenderQueue.delete(chatId);
                         if (!list.querySelector('.chat-list-item')) {
@@ -3214,7 +3217,7 @@
                     const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
 
                     // if element already rendered, update glow + NEW badge immediately without waiting
-                    const existing = document.getElementById(`item-${chatId}`);
+                    const existing = list.querySelector(`#item-${chatId}`);
                     if (existing) {
                         const hasUnread = chatData[`unread_${auth.currentUser.uid}`] === true;
                         existing.className = 'chat-list-item' + (hasUnread ? ' chat-unread' : '');
@@ -5231,6 +5234,9 @@
             filter:           'drop-shadow(0 4px 8px rgba(56,189,248,0.7)) drop-shadow(0 2px 4px rgba(147,197,253,0.5))',
         });
         document.body.appendChild(el);
+
+        // Skip custom cursor on touch / mobile devices (no mouse pointer)
+        if (window.matchMedia('(pointer: coarse)').matches) return;
 
         const ss = document.createElement('style');
         ss.textContent = '*, *::before, *::after { cursor: none !important; }';
