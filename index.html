@@ -20,7 +20,7 @@
   "name": "Beacon of Unity",
   "url": "https://beaconofunity.com",
   "logo": "https://beaconofunity.com/logo.png",
-  "description": "A verified community platform connecting UAE residents through trust, identity verification, and mutual support.",
+  "description": "A UAE-verified community platform for help requests, lost & found, volunteer opportunities, and reliable local news — connecting Emirates ID-verified residents through proximity-based community support.",
   "sameAs": [
     "https://www.youtube.com/@BeaconOfUnityHQ",
     "https://www.instagram.com/beaconofunityhq/",
@@ -44,7 +44,7 @@ html,body{overflow-x:hidden;scroll-behavior:smooth}
   --body-bg:#fff;--card-bg:#fff;--text:#0c2d48;
   --border:rgba(14,165,233,.1);--hero-text:#fff;
   --nav-scroll-bg:rgba(255,255,255,.92);--nav-logo-text:#fff;--nav-logo-scroll:#0c2d48;
-  --trust-bg:#0c2d48;--feat-bg:#f0f9ff;--cta-bg:linear-gradient(135deg,#e0f2fe,rgba(186,230,253,.4));
+  --trust-bg:#0c2d48;--feat-bg:#daeef9;--cta-bg:linear-gradient(135deg,#e0f2fe,rgba(186,230,253,.4));
   --footer-bg:#0c2d48;
   --grid-color:rgba(255,255,255,.03);
   --orb1:rgba(14,165,233,.16);--orb2:rgba(6,182,212,.13);--orb3:rgba(125,211,252,.18);
@@ -216,6 +216,10 @@ section{padding:100px 48px}
 .fc:hover::after{transform:scaleX(1)}
 .fc:hover .fshine{left:135%}
 .fc:hover .fico{transform:scale(1.12) rotate(-4deg)}
+.fc-key{border-color:rgba(14,165,233,.22);position:relative}
+[data-theme="dark"] .fc{background:#fff;box-shadow:0 4px 22px rgba(14,165,233,.13),0 1px 5px rgba(0,0,0,.06);border-color:rgba(14,165,233,.2)}
+[data-theme="dark"] .fc-key{background:#fff}
+.fc-keytag{position:absolute;top:16px;right:16px;font-size:.58rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2);padding:3px 9px;border-radius:50px;opacity:.8}
 .fico{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,rgba(14,165,233,.1),rgba(6,182,212,.06));border:1px solid rgba(14,165,233,.15);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:16px;transition:transform .3s}
 .ftitle{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--navy);margin-bottom:8px;letter-spacing:-.2px;transition:color .5s}
 .fdesc{font-size:.83rem;color:var(--muted);line-height:1.68;font-weight:300}
@@ -506,6 +510,16 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 .fsoc-btn:hover svg{fill:var(--sky3)}
 @media(max-width:768px){.seo-social{gap:10px}.soc-pill{padding:9px 14px}.fsoc{gap:8px}}
 
+/* ── NEWS CARDS ── */
+.newscards{display:flex;flex-direction:column;gap:10px}
+.newscard{background:var(--card-bg);border:1px solid var(--border);border-radius:15px;padding:14px 16px;cursor:none;transition:all .25s;animation:cin .35s var(--ease) both}
+.newscard:hover{border-color:rgba(14,165,233,.32);box-shadow:0 6px 20px rgba(14,165,233,.1);transform:translateX(5px)}
+.nc-meta{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.nc-src{font-family:'Syne',sans-serif;font-weight:700;font-size:.68rem;color:var(--blue);background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2);padding:2px 8px;border-radius:50px}
+.nc-topic{font-size:.66rem;font-weight:600;color:var(--muted);background:var(--feat-bg);padding:2px 8px;border-radius:50px;border:1px solid var(--border)}
+.nc-time{font-size:.66rem;color:var(--muted);margin-left:auto}
+.nc-title{font-size:.84rem;font-weight:500;color:var(--navy);line-height:1.5;transition:color .5s}
+
 /* ── NAV SOCIAL ICONS ── */
 .nav-soc{display:flex;align-items:center;gap:6px;margin-right:8px}
 .nav-soc-btn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(255,255,255,.18);transition:all .2s var(--ease);cursor:none;flex-shrink:0}
@@ -563,6 +577,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <a href="#how">How It Works</a>
     <a href="#live">Community</a>
     <a href="#trust">Trust</a>
+    <a href="blog.html">Blog</a>
   </div>
   <div class="nav-soc">
     <a href="https://www.youtube.com/@BeaconOfUnityHQ" target="_blank" rel="noopener" class="nav-soc-btn nsb-yt" aria-label="YouTube">
@@ -610,34 +625,34 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
         </div>
         <div class="cfw-items">
           <div class="cfw-item">
-            <div class="cfw-ico">🛒</div>
+            <div class="cfw-ico">🆘</div>
             <div class="cfw-txt">
-              <div class="cfw-name">Help needed: Grocery run — Al Nahda</div>
-              <div class="cfw-sub">Ahmad K. · Verified ✓ · 3 mins ago</div>
+              <div class="cfw-name">Help needed: Grocery run — Abu Shagara</div>
+              <div class="cfw-sub">Ahmad K. · Verified ✓ · 1.0km · 3 mins ago</div>
             </div>
             <span class="cfw-tag urgent">Urgent</span>
           </div>
           <div class="cfw-item">
             <div class="cfw-ico">🔑</div>
             <div class="cfw-txt">
-              <div class="cfw-name">Found: House keys near Mirdif Park</div>
-              <div class="cfw-sub">Sara M. · Verified ✓ · 12 mins ago</div>
+              <div class="cfw-name">Found: House keys near Mega Mall</div>
+              <div class="cfw-sub">Sara M. · Verified ✓ · 0.6km · 11 mins ago</div>
             </div>
             <span class="cfw-tag found">Found</span>
           </div>
           <div class="cfw-item">
-            <div class="cfw-ico">📢</div>
+            <div class="cfw-ico">🤝</div>
             <div class="cfw-txt">
-              <div class="cfw-name">Community cleanup this Friday — Join us!</div>
-              <div class="cfw-sub">Beacon HQ · 1 hr ago</div>
+              <div class="cfw-name">Beach Cleanup — Al Mamzar · This Friday</div>
+              <div class="cfw-sub">Volunteers.ae · Register now</div>
             </div>
-            <span class="cfw-tag event">Event</span>
+            <span class="cfw-tag event">Volunteer</span>
           </div>
         </div>
         <div class="cfw-stats">
-          <div class="cfw-stat"><div class="cfw-sn">2.4K</div><div class="cfw-sl">Active Members</div></div>
-          <div class="cfw-stat"><div class="cfw-sn">847</div><div class="cfw-sl">Tasks Done</div></div>
-          <div class="cfw-stat"><div class="cfw-sn">99%</div><div class="cfw-sl">Verified Users</div></div>
+          <div class="cfw-stat"><div class="cfw-sn">—</div><div class="cfw-sl">Active Members</div></div>
+          <div class="cfw-stat"><div class="cfw-sn">—</div><div class="cfw-sl">Tasks Done</div></div>
+          <div class="cfw-stat"><div class="cfw-sn">—</div><div class="cfw-sl">Verified Users</div></div>
         </div>
       </div>
     </div>
@@ -653,25 +668,26 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 <div id="body">
 
 <div class="tbar">
-  <div class="tbi">🇦🇪 <em>Currently Working in UAE</em></div><div class="tbdiv"></div>
+  <div class="tbi">🇦🇪 <em>UAE Residents Only</em></div><div class="tbdiv"></div>
   <div class="tbi">🆔 <em>Emirates ID Verified</em></div><div class="tbdiv"></div>
   <div class="tbi">🔒 <em>Zero Anonymous Users</em></div><div class="tbdiv"></div>
-  <div class="tbi">⚡ <em>Real-Time Requests</em></div><div class="tbdiv"></div>
-  <div class="tbi">🏆 <em>Unity Points Rewards</em></div>
+  <div class="tbi">📍 <em>Proximity-Based Help</em></div><div class="tbdiv"></div>
+  <div class="tbi">🏆 <em>37 Badges · Unity Points</em></div><div class="tbdiv"></div>
+  <div class="tbi">🌐 <em>English · Arabic · Hindi</em></div>
 </div>
 
 <section id="features" class="fbg">
   <div class="si">
     <div class="rv"><span class="stag">Platform Features</span></div>
-    <div class="rv d1"><h2 class="stitle">Everything Your Community Needs</h2></div>
-    <div class="rv d2"><p class="ssub">From local news to emergency help requests — one trusted platform built for UAE residents.</p></div>
+    <div class="rv d1"><h2 class="stitle">Four Pillars. One Community.</h2></div>
+    <div class="rv d2"><p class="ssub">Help requests, lost & found, volunteering, and trusted news — all in one verified platform built for UAE residents.</p></div>
     <div class="fgrid">
-      <div class="fc rv d1"><div class="fshine"></div><div class="fico">📰</div><div class="ftitle">Verified Local News</div><p class="fdesc">Stay updated with real news from verified community members. No misinformation, no bots.</p></div>
-      <div class="fc rv d2"><div class="fshine"></div><div class="fico">🆘</div><div class="ftitle">Help Request System</div><p class="fdesc">Post urgent requests and get instant help from neighbors. Every responder is ID-verified.</p></div>
-      <div class="fc rv d3"><div class="fshine"></div><div class="fico">🔍</div><div class="ftitle">Lost & Found Board</div><p class="fdesc">Community-powered lost and found. Reunite with belongings through trusted locals.</p></div>
-      <div class="fc rv d1"><div class="fshine"></div><div class="fico">💬</div><div class="ftitle">Community Hub</div><p class="fdesc">Connect with neighbors, join discussions, and build real relationships within your area.</p></div>
-      <div class="fc rv d2"><div class="fshine"></div><div class="fico">⭐</div><div class="ftitle">Unity Points</div><p class="fdesc">Get rewarded for every helpful act. Build your reputation and rise on the leaderboard.</p></div>
-      <div class="fc rv d3"><div class="fshine"></div><div class="fico">🛡️</div><div class="ftitle">Trust-First Safety</div><p class="fdesc">Live selfie verification with physical Emirates ID. Real people, real accountability.</p></div>
+      <div class="fc fc-key rv d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🆘</div><div class="ftitle">Community Help Requests</div><p class="fdesc">Post requests by category — groceries, tech, transport, and more. Each card shows exact distance from your location, time remaining, and volunteer count. Every responder is Emirates ID-verified.</p></div>
+      <div class="fc fc-key rv d2"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🔍</div><div class="ftitle">Lost & Found</div><p class="fdesc">Report and recover lost items with photo uploads, FOUND/LOST status tags, and exact Emirate location. A single "Contact User" button connects owner and finder directly — no middlemen.</p></div>
+      <div class="fc fc-key rv d3"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🤝</div><div class="ftitle">Volunteer Opportunities</div><p class="fdesc">Browse curated community service events — beach cleanups, food drives, and more — sourced from Volunteers.ae. Includes event dates, locations, and direct registration links.</p></div>
+      <div class="fc fc-key rv d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">📰</div><div class="ftitle">Reliable News</div><p class="fdesc">Trusted stories aggregated from Khaleej Times, Gulf News, Al Jazeera, and BBC. Filter by source or topic — War & Conflict, Tech, Environment. No misinformation, no bots.</p></div>
+      <div class="fc rv d2"><div class="fshine"></div><div class="fico">🏆</div><div class="ftitle">Badges & Rewards</div><p class="fdesc">Earn Unity Points for every helpful act. Unlock 37 achievement badges across Helping and Requests milestones. Redeem points for profile gradient skins and rise on the public leaderboard.</p></div>
+      <div class="fc rv d3"><div class="fshine"></div><div class="fico">💬</div><div class="ftitle">Thank You Wall & Chats</div><p class="fdesc">Post public appreciation notes for neighbours who helped you. Track resolved chats, your average rating, and engage with the community through in-app messaging and notifications.</p></div>
     </div>
   </div>
 </section>
@@ -679,12 +695,12 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 <section id="how">
   <div class="si">
     <div class="rv"><span class="stag">How It Works</span></div>
-    <div class="rv d1"><h2 class="stitle">Join in Four Simple Steps</h2></div>
+    <div class="rv d1"><h2 class="stitle">Verified & Active in Minutes</h2></div>
     <div class="srow">
-      <div class="step rv d1"><div class="stepn">1</div><div class="stept">Sign In</div><p class="stepd">Create your account and start the identity gate process.</p></div>
-      <div class="step rv d2"><div class="stepn">2</div><div class="stept">Verify Identity</div><p class="stepd">Complete a live selfie verification with your physical Emirates ID.</p></div>
-      <div class="step rv d3"><div class="stepn">3</div><div class="stept">Join Community</div><p class="stepd">Access the full platform — news, help requests, lost & found, and more.</p></div>
-      <div class="step rv d4"><div class="stepn">4</div><div class="stept">Earn Points</div><p class="stepd">Help neighbors, earn Unity Points, and build your community reputation.</p></div>
+      <div class="step rv d1"><div class="stepn">1</div><div class="stept">Create Account</div><p class="stepd">Sign up and enter the identity gate — available in English, Arabic, and Hindi.</p></div>
+      <div class="step rv d2"><div class="stepn">2</div><div class="stept">Verify with Emirates ID</div><p class="stepd">Take a live selfie holding your physical Emirates ID. No digital scans accepted. Verification is permanent.</p></div>
+      <div class="step rv d3"><div class="stepn">3</div><div class="stept">Access the Dashboard</div><p class="stepd">Post help requests, browse lost & found, volunteer, and read reliable local news — all proximity-sorted.</p></div>
+      <div class="step rv d4"><div class="stepn">4</div><div class="stept">Earn & Rise</div><p class="stepd">Collect Unity Points, unlock badges, customise your profile, and build your community rank.</p></div>
     </div>
   </div>
 </section>
@@ -700,9 +716,13 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
           <div class="wtabs">
             <button class="wtab on" onclick="showTab('help',this)">Help Requests</button>
             <button class="wtab" onclick="showTab('lf',this)">Lost & Found</button>
+            <button class="wtab" onclick="showTab('vol',this)">Volunteer</button>
+            <button class="wtab" onclick="showTab('news',this)">News</button>
           </div>
           <div id="th" class="tcards"></div>
           <div id="tl" class="lfgrid" style="display:none"></div>
+          <div id="tv" class="tcards" style="display:none"></div>
+          <div id="tn" class="newscards" style="display:none"></div>
         </div>
         <p style="font-size:.72rem;color:var(--muted);margin-top:14px;font-style:italic">Sample preview data — labeled for testing</p>
       </div>
@@ -710,9 +730,9 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
         <div class="pcard">
           <div class="pch"><span class="pct">Community Feed</span><span class="lpill"><span class="ldot"></span>LIVE</span></div>
           <div class="feed">
-            <div class="fi"><div class="fic fib">🛒</div><div><div class="ft">Help needed: Groceries  — Al Nahda</div><div class="fm">Ahmad K. · Verified ✓ · 3 mins ago</div></div></div>
-            <div class="fi"><div class="fic fig">🔑</div><div><div class="ft">Found: House keys near Mirdif Park</div><div class="fm">Sara M. · Verified ✓ · 12 mins ago</div></div></div>
-            <div class="fi"><div class="fic fia">📢</div><div><div class="ft">Community cleanup this Friday — Join us!</div><div class="fm">Beacon HQ · 1 hr ago</div></div></div>
+            <div class="fi"><div class="fic fib">🆘</div><div><div class="ft">Help: Groceries needed — Abu Shagara</div><div class="fm">Ahmad K. · Verified ✓ · 3 mins ago</div></div></div>
+            <div class="fi"><div class="fic fig">🔑</div><div><div class="ft">Found: House keys near Mega Mall</div><div class="fm">Sara M. · Verified ✓ · 11 mins ago</div></div></div>
+            <div class="fi"><div class="fic fia">🤝</div><div><div class="ft">Beach Cleanup — Al Mamzar · This Fri</div><div class="fm">Volunteers.ae · 1 hr ago</div></div></div>
           </div>
           <div class="pcstats">
             <div class="pcs"><div class="pcsn">—</div><div class="pcsl">Active Members</div></div>
@@ -770,12 +790,14 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
   <div class="seo-inner">
     <h1 class="seo-h1 rv">What is Beacon of Unity?</h1>
     <div class="seo-divider rv d1"></div>
-    <p class="seo-intro rv d1">Beacon of Unity is a verified community platform built exclusively for UAE residents — connecting neighbours through trust, identity verification, and a shared commitment to helping one another.</p>
+    <p class="seo-intro rv d1">Beacon of Unity is a verified community platform built exclusively for UAE residents — connecting neighbours through trust, Emirates ID verification, and a shared commitment to helping one another across every emirate.</p>
     <div class="seo-grid">
-      <div class="seo-block rv d1"><h2>Our Mission</h2><p>To create a zero-anonymous, trust-first digital community where every member is a verified UAE resident. We believe meaningful help starts with knowing who you are helping — and who is helping you.</p></div>
-      <div class="seo-block rv d2"><h2>Our Vision</h2><p>A UAE where no resident faces a crisis alone. Through verified connections, community volunteering, and real-time support systems, Beacon of Unity aims to become the backbone of neighbourly support across every emirate.</p></div>
-      <div class="seo-block rv d1"><h2>How the Platform Works</h2><p>Residents sign in, complete a live Emirates ID verification, then gain access to help requests, a lost &amp; found board, community news, and a volunteer leaderboard. Every interaction is between verified members — no bots, no anonymous accounts.</p></div>
-      <div class="seo-block rv d2"><h2>Community Impact</h2><p>From grocery runs for elderly neighbours to reuniting families with lost belongings, Beacon of Unity turns small acts of kindness into measurable community impact — rewarded through Unity Points and celebrated on our public leaderboard.</p></div>
+      <div class="seo-block rv d1"><h2>Community Help Requests</h2><p>Residents post help requests categorised by type — groceries, tech, transport, and more. Every card shows the requester's distance from you, time remaining, and how many volunteers have responded. All interactions are between Emirates ID-verified members.</p></div>
+      <div class="seo-block rv d2"><h2>Lost & Found Board</h2><p>A dedicated space for reporting and recovering lost items. Posts include photos, FOUND or LOST status tags, and exact Emirate locations like Mega Mall or Abu Shagara. A direct "Contact User" button connects owners and finders — no middlemen, no delays.</p></div>
+      <div class="seo-block rv d1"><h2>Volunteer Opportunities</h2><p>A curated list of community service events sourced from Volunteers.ae — beach cleanups, food drives, tree planting, and tutoring sessions. Each listing shows the event date, location, and a direct registration link so you can act immediately.</p></div>
+      <div class="seo-block rv d2"><h2>Reliable News</h2><p>A news aggregator pulling trusted stories from Khaleej Times, Gulf News, Al Jazeera, and BBC. Filter by source or topic — War & Conflict, Tech, Environment — so you stay informed on what matters most to your community, without misinformation.</p></div>
+      <div class="seo-block rv d1"><h2>Gamification & Rewards</h2><p>Every helpful act earns Unity Points. Unlock 37 achievement badges across Helping and Requests milestones — from "First Step" to "10x Helper." Redeem points for profile gradient skins like Ocean, Mint, and Sunset on the public leaderboard.</p></div>
+      <div class="seo-block rv d2"><h2>Profile, Thank You Wall & More</h2><p>Your verified name is permanent. Track your volunteer rank, resolved chats, average rating, and badge count on your profile. Post public appreciation notes on the Thank You Wall. Change your Emirate or update your live GPS location anytime from the dashboard.</p></div>
     </div>
 
     <!-- Social Profiles -->
@@ -905,24 +927,46 @@ document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
 
 /* ── TABS ── */
 const tasks=[
-  {e:'🛒',n:'Vegetables needed for my kid | Out of Stock in stores near my area',l:'Al Nahda, Dubai',b:'bu',bl:'Urgent'},
-  {e:'🚗',n:'Car battery jumpstart',l:'Mirdif Parking C',b:'bo',bl:'Open'},
-  {e:'📦',n:'Help moving furniture',l:'Jumeirah',b:'bn',bl:'Nearby'},
-  {e:'👴',n:'Elderly neighbour needs help',l:'Deira, Dubai',b:'bu',bl:'Urgent'},
-  {e:'📚',n:'Maths tutoring — Grade 8',l:'Silicon Oasis',b:'bn',bl:'Nearby'},
+  {e:'🆘',n:'Groceries needed — elderly neighbour out of stock',l:'Abu Shagara, Sharjah · 1.0km',b:'bu',bl:'Urgent'},
+  {e:'💻',n:'Laptop won\'t connect to WiFi — need tech help',l:'Al Qasimia, Sharjah · 1.4km',b:'bo',bl:'Open'},
+  {e:'🚗',n:'Car battery jumpstart needed ASAP',l:'Mega Mall parking, Sharjah · 2.1km',b:'bu',bl:'Urgent'},
+  {e:'👴',n:'Elderly neighbour needs pharmacy pickup',l:'Al Nahda, Dubai · 3.2km',b:'bn',bl:'Nearby'},
+  {e:'📦',n:'Help moving furniture — 2 hours max',l:'Muwaileh, Sharjah · 4.0km',b:'bo',bl:'Open'},
 ];
 const lf=[
-  {e:'🔑',n:'House Keys',w:'Mirdif Park',s:'stf',sl:'Found'},
-  {e:'👜',n:'Black Handbag',w:'Dubai Mall',s:'stl',sl:'Lost'},
-  {e:'📱',n:'Phone',w:'Al Quoz Metro',s:'stl',sl:'Lost'},
-  {e:'💼',n:'Brown Wallet',w:'Deira Souq',s:'stf',sl:'Found'},
-  {e:'🐈',n:'Orange Tabby',w:'Jumeirah',s:'stl',sl:'Lost'},
-  {e:'🎒',n:'Kids Backpack',w:'Silicon Oasis',s:'stf',sl:'Found'},
+  {e:'🔑',n:'House Keys',w:'Mega Mall, Sharjah',s:'stf',sl:'Found'},
+  {e:'👜',n:'Black Handbag',w:'Al Qasimia, Sharjah',s:'stl',sl:'Lost'},
+  {e:'📱',n:'Samsung Phone',w:'Sharjah City Centre',s:'stl',sl:'Lost'},
+  {e:'💼',n:'Brown Wallet',w:'Deira Souq, Dubai',s:'stf',sl:'Found'},
+  {e:'🐈',n:'Orange Tabby Cat',w:'Muwaileh, Sharjah',s:'stl',sl:'Lost'},
+  {e:'🎒',n:'Kids Backpack',w:'Abu Shagara, Sharjah',s:'stf',sl:'Found'},
+];
+const volunteers=[
+  {e:'🏖️',n:'Beach Cleanup — Al Mamzar',d:'This Friday · 7:00 AM',src:'Volunteers.ae',b:'bo',bl:'Register'},
+  {e:'🍱',n:'Food Drive — Sharjah Charity Int\'l',d:'Saturday · 9:00 AM',src:'Volunteers.ae',b:'bn',bl:'Open'},
+  {e:'🌳',n:'Tree Planting — Al Qasimia Park',d:'Sunday · 6:30 AM',src:'Beacon HQ',b:'bo',bl:'Register'},
+  {e:'📚',n:'Free Tutoring — Community Centre',d:'Mon & Wed · 4:00 PM',src:'Beacon HQ',b:'bn',bl:'Open'},
+];
+const newsItems=[
+  {src:'Khaleej Times',topic:'UAE',n:'UAE Launches New Community Volunteering Initiative Across All Emirates',t:'15 mins ago'},
+  {src:'Gulf News',topic:'Local',n:'Sharjah Announces Expansion of Neighbourhood Support Programmes',t:'1 hr ago'},
+  {src:'Al Jazeera',topic:'Environment',n:'UAE\'s Coastal Cleanup Drives See Record Volunteer Turnout This Season',t:'2 hrs ago'},
+  {src:'BBC',topic:'Tech',n:'How UAE Residents Are Using Verified Platforms to Help Neighbours',t:'3 hrs ago'},
 ];
 function rHelp(){const c=document.getElementById('th');c.innerHTML='';tasks.forEach((t,i)=>{const d=document.createElement('div');d.className='tcard';d.style.animationDelay=(i*.07)+'s';d.innerHTML=`<div class="temo">${t.e}</div><div class="tinfo"><div class="tname">${t.n}</div><div class="tloc">📍 ${t.l}</div></div><span class="tbadge ${t.b}">${t.bl}</span>`;c.appendChild(d);d.addEventListener('mouseenter',()=>document.body.classList.add('hov'));d.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))})}
 function rLF(){const c=document.getElementById('tl');c.innerHTML='';lf.forEach(x=>{const d=document.createElement('div');d.className='lfc';d.innerHTML=`<div class="lfemo">${x.e}</div><div class="lfname">${x.n}</div><div class="lfwhere">📍 ${x.w}</div><span class="lfst ${x.s}">${x.sl}</span>`;c.appendChild(d);d.addEventListener('mouseenter',()=>document.body.classList.add('hov'));d.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))})}
-rHelp();rLF();
-window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');const h=document.getElementById('th'),l=document.getElementById('tl');if(tab==='help'){h.style.display='flex';l.style.display='none'}else{h.style.display='none';l.style.display='grid'}};
+function rVol(){const c=document.getElementById('tv');c.innerHTML='';volunteers.forEach((v,i)=>{const d=document.createElement('div');d.className='tcard';d.style.animationDelay=(i*.07)+'s';d.innerHTML=`<div class="temo">${v.e}</div><div class="tinfo"><div class="tname">${v.n}</div><div class="tloc">🗓️ ${v.d} · <span style="opacity:.6">${v.src}</span></div></div><span class="tbadge ${v.b}">${v.bl}</span>`;c.appendChild(d);d.addEventListener('mouseenter',()=>document.body.classList.add('hov'));d.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))})}
+function rNews(){const c=document.getElementById('tn');c.innerHTML='';newsItems.forEach((x,i)=>{const d=document.createElement('div');d.className='newscard';d.style.animationDelay=(i*.07)+'s';d.innerHTML=`<div class="nc-meta"><span class="nc-src">${x.src}</span><span class="nc-topic">${x.topic}</span><span class="nc-time">${x.t}</span></div><div class="nc-title">${x.n}</div>`;c.appendChild(d);d.addEventListener('mouseenter',()=>document.body.classList.add('hov'));d.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))})}
+rHelp();rLF();rVol();rNews();
+window.showTab=(tab,btn)=>{
+  document.querySelectorAll('.wtab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  const h=document.getElementById('th'),l=document.getElementById('tl'),v=document.getElementById('tv'),n=document.getElementById('tn');
+  h.style.display='none';l.style.display='none';v.style.display='none';n.style.display='none';
+  if(tab==='help'){h.style.display='flex';}
+  else if(tab==='lf'){l.style.display='grid';}
+  else if(tab==='vol'){v.style.display='flex';}
+  else{n.style.display='flex';}
+};
 </script>
 <!-- ═══════════════════════════════════════════════════════
      BEACON MASCOT  —  paste this entire block before </body>
@@ -1080,8 +1124,10 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
   -webkit-backdrop-filter: blur(14px);
   display: flex; align-items: center; justify-content: center;
   font-size: 1.05rem;
-  cursor: none;
+  cursor: pointer;
   pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform .2s, box-shadow .2s, border-color .2s, background .3s;
 }
 #bav-toggle:hover {
@@ -1111,6 +1157,7 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
   transform-origin: bottom left;
   transform: scale(.8) translateY(8px);
   opacity: 0;
+  will-change: transform, opacity;
   transition: transform .22s cubic-bezier(.34,1.56,.64,1), opacity .18s ease;
   pointer-events: none;
 }
@@ -1145,7 +1192,9 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
-  cursor: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform .15s, box-shadow .15s, background .25s, border-color .25s, color .25s;
   pointer-events: auto;
   white-space: nowrap;
@@ -1936,22 +1985,33 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
   let popOpen     = false;
 
   /* ── toggle popover ─────────────────────────────────── */
-  toggleBtn.addEventListener('click', () => {
+  function doToggle() {
     popOpen = !popOpen;
     popover.classList.toggle('open', popOpen);
     toggleBtn.style.borderColor = popOpen ? 'rgba(14,165,233,.7)' : '';
     toggleBtn.style.background  = popOpen ? 'rgba(14,165,233,.22)' : '';
-  });
+  }
+  toggleBtn.addEventListener('click', doToggle);
+  toggleBtn.addEventListener('touchend', e => { e.preventDefault(); e.stopPropagation(); doToggle(); });
 
-  // Close if clicking outside
-  document.addEventListener('click', e => {
+  // Close if clicking/tapping outside
+  function handleOutside(e) {
     if (popOpen && !popover.contains(e.target) && e.target !== toggleBtn) {
       popOpen = false;
       popover.classList.remove('open');
       toggleBtn.style.borderColor = '';
       toggleBtn.style.background  = '';
     }
-  });
+  }
+  document.addEventListener('click', handleOutside);
+  document.addEventListener('touchstart', e => {
+    if (popOpen && !popover.contains(e.target) && e.target !== toggleBtn) {
+      popOpen = false;
+      popover.classList.remove('open');
+      toggleBtn.style.borderColor = '';
+      toggleBtn.style.background  = '';
+    }
+  }, { passive: true });
 
   /* ── switch button between modes ──────────────────────── */
   function setMode(mode) {
@@ -1971,7 +2031,7 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
   /* ══════════════════════════════════════════════════
      ACTION BUTTON  —  either delete or spawn
   ══════════════════════════════════════════════════ */
-  actionBtn.addEventListener('click', () => {
+  function doAction() {
     if (mascotAlive) {
       doDelete();
     } else {
@@ -1982,7 +2042,9 @@ window.showTab=(tab,btn)=>{document.querySelectorAll('.wtab').forEach(t=>t.class
     popover.classList.remove('open');
     toggleBtn.style.borderColor = '';
     toggleBtn.style.background  = '';
-  });
+  }
+  actionBtn.addEventListener('click', doAction);
+  actionBtn.addEventListener('touchend', e => { e.preventDefault(); e.stopPropagation(); doAction(); });
 
   /* ══════════════════════════════════════════════════
      DELETE  —  blackhole suck-in
