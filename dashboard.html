@@ -5875,15 +5875,16 @@
       o.start(t); o.stop(t + (dur || 0.06) + 0.02);
     } catch(e) {}
   }
-  function playBlip()     { tone(700 + Math.random()*200, 'square', 0.022, 0.018); }
-  function playChime()    { tone(660,'sine',0.08,0.07); tone(880,'sine',0.12,0.055,0.09); }
-  function playWhoosh()   { tone(200,'sine',0.18,0.05); tone(400,'sine',0.14,0.04,0.06); }
+  function playBlip()     { tone(520 + Math.random()*120, 'sine', 0.035, 0.009); }
+  function playChime()    { tone(528,'sine',0.18,0.045); tone(792,'sine',0.22,0.03,0.14); tone(1056,'sine',0.16,0.02,0.32); }
+  function playWhoosh()   { tone(180,'sine',0.22,0.04); tone(360,'sine',0.18,0.03,0.08); }
   function playEntrance() {
-    tone(80,'sine',0.6,0.07); tone(120,'sine',0.5,0.05,0.15);
-    tone(200,'sine',0.35,0.04,0.35); tone(300,'sine',0.25,0.035,0.55);
+    tone(60,'sine',0.9,0.05); tone(90,'sine',0.7,0.04,0.2);
+    tone(150,'sine',0.5,0.035,0.45); tone(240,'sine',0.35,0.03,0.75);
+    tone(480,'sine',0.2,0.025,1.1);
   }
   function playFinish() {
-    [523,659,784,1047].forEach((f,i) => tone(f,'sine',0.28,0.065,i*0.09));
+    [396,528,660,792].forEach((f,i) => tone(f,'sine',0.38,0.05,i*0.12));
   }
 
   /* ══ BEACON SVG ════════════════════════════════════════════ */
@@ -5937,27 +5938,27 @@
   /* ══ STEPS ══════════════════════════════════════════════════ */
   const STEPS = [
     {
-      tab:'community', target:'communityTab', side:'right', yFrac:0.40,
+      tab:'community', target:'communityTab', side:'left', yFrac:0.40,
       say: n => `Hey ${n}! I'm Beacon — your guide on Beacon of Unity! 🌟 I'll walk you through every single feature here so you feel completely at home. Ready to explore? Let's go!`
     },
     {
-      tab:'community', target:'requestFeed', side:'right', yFrac:0.48,
+      tab:'community', target:'requestFeed', side:'left', yFrac:0.48,
       say: () => `This is your Community Hub — your main feed! 🏠 You'll see help requests from neighbours nearby. Posts that are urgent will pulse in red so you never miss someone who needs you.`
     },
     {
-      tab:'community', target:'.fab', side:'left', yFrac:0.82,
+      tab:'community', target:'.fab', side:'right', yFrac:0.82,
       say: () => `See that glowing ＋ button? That's how you create a post! ✍️ Tap it to ask for help — food, transport, medical, tools, general help. Your neighbours are here for you!`
     },
     {
-      tab:'community', target:'requestFeed', side:'right', yFrac:0.52,
+      tab:'community', target:'requestFeed', side:'left', yFrac:0.52,
       say: () => `Each post shows the type, distance, and urgency. 💬 Click "I can help" on any post to open a private chat with that person. Helping others earns you points — more on that soon!`
     },
     {
-      tab:'lostfound', target:'lostFoundTab', side:'right', yFrac:0.40,
+      tab:'lostfound', target:'lostFoundTab', side:'left', yFrac:0.40,
       say: () => `Lost & Found! 🔍 Lost your keys? Found a wallet? Report it here with a photo and location. Items are clearly tagged LOST or FOUND so the community can help reunite them.`
     },
     {
-      tab:'volunteer-opps', target:'volunteer-oppsTab', side:'right', yFrac:0.40,
+      tab:'volunteer-opps', target:'volunteer-oppsTab', side:'left', yFrac:0.40,
       say: () => `Volunteer Opportunities! 🤝 Beach cleanups, food drives, education events — browse and sign up here. Admins can manually award you up to 10 points if your volunteer work is verified!`
     },
     {
@@ -5965,23 +5966,23 @@
       say: () => `Here's how points work! ⭐ Resolving a chat = 2 pts. A 4-star rating = 3 pts total. A 5-star rating = 4 pts total. The rating already includes the base 2 pts — no double-counting. Posting on the Thank You Wall = +1 pt!`
     },
     {
-      tab:'thankyou', target:'thankyouTab', side:'right', yFrac:0.40,
+      tab:'thankyou', target:'thankyouTab', side:'left', yFrac:0.40,
       say: () => `The Thank You Wall! 💙 When someone gives you a public shoutout for helping them, you earn +1 point. It's the community saying "you made a real difference today." Small acts, big hearts!`
     },
     {
-      tab:'leaderboard', target:'leaderboardTab', side:'right', yFrac:0.40,
+      tab:'leaderboard', target:'leaderboardTab', side:'left', yFrac:0.40,
       say: () => `The Leaderboard! 🏆 Rankings are based on your total points. Switch between Local (your area) and Global (all UAE). At the end of every month, the Top 3 earners receive an official Beacon of Unity certificate!`
     },
     {
-      tab:'reliable-news', target:'reliable-newsTab', side:'right', yFrac:0.40,
+      tab:'reliable-news', target:'reliable-newsTab', side:'left', yFrac:0.40,
       say: () => `Reliable News! 📰 Curated, verified news for your UAE community. No misinformation here — only trusted sources. Stay informed about everything that matters to your neighbourhood.`
     },
     {
-      tab:'rewards', target:'rewardsTab', side:'right', yFrac:0.40,
+      tab:'rewards', target:'rewardsTab', side:'left', yFrac:0.40,
       say: () => `Rewards! 🎁 Spend your hard-earned points on profile skins, picture frame colours, and exclusive perks. Your good deeds have real tangible value here. Keep helping to unlock more!`
     },
     {
-      tab:'badges', target:'badgesTab', side:'right', yFrac:0.40,
+      tab:'badges', target:'badgesTab', side:'left', yFrac:0.40,
       say: () => `Badges! 🏅 Earn these by hitting milestones — first help, streaks, top helper of the month, and more. They live on your profile and show the community your story. Collect them all!`
     },
     {
@@ -5989,7 +5990,7 @@
       say: () => `Your Region Minimap! 📍 That glowing map on the bottom-left shows live activity around you. Click it to expand and see exactly what's happening in your neighbourhood in real time!`
     },
     {
-      tab:null, target:'settingsBtn', side:'left', yFrac:0.82,
+      tab:null, target:'settingsBtn', side:'right', yFrac:0.82,
       say: n => `Last one, ${n}! ⚙️ That's the Settings button. Want to replay this tour anytime? Just go to Settings → "View Tutorial". I'll always be here for you. Welcome to Beacon of Unity! 🌟`
     },
   ];
@@ -6034,9 +6035,11 @@
 #bt-go-btn:hover{box-shadow:0 12px 38px rgba(56,189,248,.62);transform:translateY(-3px) scale(1.04)!important}
 @keyframes bt-glitch{0%{clip-path:inset(12% 0 78% 0);transform:translate(-4px,0) skew(.5deg)}20%{clip-path:inset(52% 0 28% 0);transform:translate(4px,0) skew(-.5deg)}40%{clip-path:inset(22% 0 58% 0);transform:translate(-2px,0)}60%{clip-path:inset(78% 0 7% 0);transform:translate(3px,0) skew(.3deg)}80%{clip-path:inset(7% 0 88% 0);transform:translate(-1px,0)}100%{clip-path:inset(0 0 0 0);transform:none}}
 .btg{animation:bt-glitch .38s steps(2) both}
-#bt-dk{position:fixed;inset:0;z-index:18000;background:rgba(5,9,18,.76);pointer-events:all;opacity:0;transition:opacity .5s;display:none}
-#bt-dk.on{opacity:1;display:block}
-#bt-spl{position:fixed;z-index:18500;pointer-events:none;box-shadow:0 0 0 9999px rgba(5,9,18,.76);transition:left .55s cubic-bezier(.34,1.2,.64,1),top .55s cubic-bezier(.34,1.2,.64,1),width .55s cubic-bezier(.34,1.2,.64,1),height .55s cubic-bezier(.34,1.2,.64,1),border-radius .3s;display:none;border-radius:12px}
+/* bt-dk is pointer-events blocker only — NO background */
+#bt-dk{position:fixed;inset:0;z-index:18000;background:transparent;pointer-events:all;display:none}
+#bt-dk.on{display:block}
+/* spotlight: the box-shadow creates the dim AROUND the element, the element itself stays bright */
+#bt-spl{position:fixed;z-index:18100;pointer-events:none;background:transparent;box-shadow:0 0 0 9999px rgba(5,9,18,.82);border-radius:12px;transition:left .55s cubic-bezier(.34,1.2,.64,1),top .55s cubic-bezier(.34,1.2,.64,1),width .55s cubic-bezier(.34,1.2,.64,1),height .55s cubic-bezier(.34,1.2,.64,1),border-radius .3s;display:none}
 #bt-spl.on{display:block}
 .btc{position:absolute;width:18px;height:18px;border-color:rgba(56,189,248,.9);border-style:solid}
 .btc-tl{top:-3px;left:-3px;border-width:3px 0 0 3px;border-radius:4px 0 0 0}
@@ -6080,10 +6083,10 @@
 .btd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .32s}
 .btd.act{background:#38bdf8;width:22px;border-radius:3px}
 .btd.dn{background:rgba(56,189,248,.38)}
-#bt-nxt{position:fixed;bottom:24px;right:96px;z-index:19600;padding:11px 30px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;border-radius:50px;color:#0f172a;font-family:'Syne','Segoe UI',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:none;box-shadow:0 4px 22px rgba(56,189,248,.42);transition:transform .2s,box-shadow .2s;pointer-events:all}
+#bt-nxt{position:fixed;bottom:24px;left:24px;z-index:19600;padding:11px 30px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;border-radius:50px;color:#0f172a;font-family:'Syne','Segoe UI',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:none;box-shadow:0 4px 22px rgba(56,189,248,.42);transition:transform .2s,box-shadow .2s;pointer-events:all}
 #bt-nxt.on{display:block}
 #bt-nxt:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(56,189,248,.58)}
-#bt-skp{position:fixed;bottom:28px;right:22px;z-index:19600;padding:9px 20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;color:rgba(255,255,255,.32);font-size:12px;cursor:pointer;display:none;transition:all .22s;pointer-events:all;font-family:'Segoe UI',system-ui,sans-serif}
+#bt-skp{position:fixed;bottom:28px;right:24px;z-index:19600;padding:9px 20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;color:rgba(255,255,255,.32);font-size:12px;cursor:pointer;display:none;transition:all .22s;pointer-events:all;font-family:'Segoe UI',system-ui,sans-serif}
 #bt-skp.on{display:block}
 #bt-skp:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.62);border-color:rgba(255,255,255,.22)}
 #bt-wrn{position:fixed;inset:0;z-index:20000;background:rgba(5,9,18,.88);display:none;align-items:center;justify-content:center}
@@ -6228,7 +6231,7 @@
     typingTimer = setInterval(() => {
       if (i < text.length) {
         cur.insertAdjacentText('beforebegin', text[i++]);
-        if (i % 2 === 0) playBlip();
+        if (i % 6 === 0) playBlip();
       } else {
         clearInterval(typingTimer);
         cur.remove();
@@ -6274,10 +6277,12 @@
     guide.style.left = gx + 'px';
     guide.style.top  = gy + 'px';
     /* bubble — arrow points toward Beacon */
-    const onLeft = (step.side !== 'right');
-    bub.className = onLeft ? 'btl' : 'btr';
+    const beaconOnLeft = (step.side === 'left');
+    /* btr = bubble has left-facing arrow (Beacon is on the LEFT of bubble) */
+    /* btl = bubble has right-facing arrow (Beacon is on the RIGHT of bubble) */
+    bub.className = beaconOnLeft ? 'btr' : 'btl';
     const bw = 310;
-    let bx = onLeft ? gx - bw - 20 : gx + GW + 20;
+    let bx = beaconOnLeft ? gx + GW + 20 : gx - bw - 20;
     let by = gy - 12;
     bx = Math.max(10, Math.min(VW - bw - 10, bx));
     by = Math.max(70, Math.min(VH - 230, by));
