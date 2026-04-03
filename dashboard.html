@@ -5845,24 +5845,14 @@
     };
     </script>
 
-<!-- ── Beacon Tutorial v2 ── -->
+<!-- ── Beacon Tutorial v3 — Interactive Simulation ── -->
 <script>
-/**
- * BEACON TUTORIAL v2 — Cinematic Onboarding for Beacon of Unity
- * ══════════════════════════════════════════════════════════════
- * Auto-starts once for new users (localStorage: bou_tutorial_done).
- * Reads window.currentUserFirstName set by Firebase auth.
- * Replayable from Settings → View Tutorial → BeaconTutorial.start()
- */
 (function () {
   'use strict';
 
-  /* ══ WEB AUDIO ═════════════════════════════════════════════ */
+  /* ══ WEB AUDIO ════════════════════════════════════════════════ */
   let _ctx = null;
-  function actx() {
-    if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)();
-    return _ctx;
-  }
+  function actx() { if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)(); return _ctx; }
   function tone(freq, type, dur, vol, delay) {
     try {
       const c = actx(), o = c.createOscillator(), g = c.createGain();
@@ -5876,41 +5866,24 @@
     } catch(e) {}
   }
   function playBlip()     { tone(520 + Math.random()*120, 'sine', 0.035, 0.009); }
-  function playChime()    { tone(528,'sine',0.18,0.045); tone(792,'sine',0.22,0.03,0.14); tone(1056,'sine',0.16,0.02,0.32); }
+  function playChime()    { tone(528,'sine',0.18,0.04); tone(792,'sine',0.22,0.028,0.14); tone(1056,'sine',0.16,0.018,0.32); }
   function playWhoosh()   { tone(180,'sine',0.22,0.04); tone(360,'sine',0.18,0.03,0.08); }
+  function playPop()      { tone(660,'sine',0.1,0.05); tone(880,'sine',0.08,0.04,0.06); }
   function playEntrance() {
     tone(60,'sine',0.9,0.05); tone(90,'sine',0.7,0.04,0.2);
-    tone(150,'sine',0.5,0.035,0.45); tone(240,'sine',0.35,0.03,0.75);
-    tone(480,'sine',0.2,0.025,1.1);
+    tone(150,'sine',0.5,0.035,0.45); tone(240,'sine',0.35,0.03,0.75); tone(480,'sine',0.2,0.025,1.1);
   }
-  function playFinish() {
-    [396,528,660,792].forEach((f,i) => tone(f,'sine',0.38,0.05,i*0.12));
-  }
+  function playFinish() { [396,528,660,792].forEach((f,i) => tone(f,'sine',0.38,0.05,i*0.12)); }
+  function playPoints()   { [528,660,792,1056].forEach((f,i)=>tone(f,'sine',0.15,0.06,i*0.07)); }
 
-  /* ══ BEACON SVG ════════════════════════════════════════════ */
+  /* ══ BEACON SVG ═══════════════════════════════════════════════ */
   function mkSVG(id, w, h) {
-    return `<svg id="${id}" viewBox="0 0 64 84" width="${w}" height="${h}"
-      fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;display:block">
+    return `<svg id="${id}" viewBox="0 0 64 84" width="${w}" height="${h}" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;display:block">
       <defs>
-        <radialGradient id="${id}-g1" cx="38%" cy="26%" r="70%">
-          <stop offset="0%" stop-color="#7dd3fc"/>
-          <stop offset="42%" stop-color="#0ea5e9"/>
-          <stop offset="100%" stop-color="#082c47"/>
-        </radialGradient>
-        <radialGradient id="${id}-g3" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stop-color="rgba(6,182,212,0.26)"/>
-          <stop offset="100%" stop-color="rgba(7,26,44,0.72)"/>
-        </radialGradient>
-        <filter id="${id}-f1" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2.2" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="${id}-f2" x="-28%" y="-28%" width="156%" height="156%">
-          <feGaussianBlur stdDeviation="4" result="b"/>
-          <feFlood flood-color="#0ea5e9" flood-opacity=".42" result="c"/>
-          <feComposite in="c" in2="b" operator="in" result="d"/>
-          <feMerge><feMergeNode in="d"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
+        <radialGradient id="${id}-g1" cx="38%" cy="26%" r="70%"><stop offset="0%" stop-color="#7dd3fc"/><stop offset="42%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#082c47"/></radialGradient>
+        <radialGradient id="${id}-g3" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="rgba(6,182,212,0.26)"/><stop offset="100%" stop-color="rgba(7,26,44,0.72)"/></radialGradient>
+        <filter id="${id}-f1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="${id}-f2" x="-28%" y="-28%" width="156%" height="156%"><feGaussianBlur stdDeviation="4" result="b"/><feFlood flood-color="#0ea5e9" flood-opacity=".42" result="c"/><feComposite in="c" in2="b" operator="in" result="d"/><feMerge><feMergeNode in="d"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
       <ellipse cx="32" cy="81" rx="20" ry="4.5" fill="rgba(14,165,233,0.18)"/>
       <rect x="13" y="65" width="14" height="18" rx="7" fill="url(#${id}-g1)"/>
@@ -5935,82 +5908,102 @@
     </svg>`;
   }
 
-  /* ══ STEPS ══════════════════════════════════════════════════ */
+  /* ══ STATE ════════════════════════════════════════════════════ */
+  let idx = 0, typingTimer = null, uName = 'friend', simState = {};
+
+  /* ══ SIMULATION CONFIG ════════════════════════════════════════
+     Steps can be:
+       type:'guide'      — Beacon speaks, user clicks Continue
+       type:'interact'   — user must click a real/fake element
+       type:'sim-chat'   — fake chat simulation (bot messages)
+       type:'sim-post'   — user fills fake post form
+       type:'sim-rate'   — user rates the bot
+       type:'points'     — points celebration overlay
+  ══════════════════════════════════════════════════════════════ */
   const STEPS = [
-    {
-      tab:'community', target:'communityTab', side:'left', yFrac:0.40,
-      say: n => `Hey ${n}! I'm Beacon — your guide on Beacon of Unity! 🌟 I'll walk you through every single feature here so you feel completely at home. Ready to explore? Let's go!`
-    },
-    {
-      tab:'community', target:'requestFeed', side:'left', yFrac:0.48,
-      say: () => `This is your Community Hub — your main feed! 🏠 You'll see help requests from neighbours nearby. Posts that are urgent will pulse in red so you never miss someone who needs you.`
-    },
-    {
-      tab:'community', target:'.fab', side:'right', yFrac:0.82,
-      say: () => `See that glowing ＋ button? That's how you create a post! ✍️ Tap it to ask for help — food, transport, medical, tools, general help. Your neighbours are here for you!`
-    },
-    {
-      tab:'community', target:'requestFeed', side:'left', yFrac:0.52,
-      say: () => `Each post shows the type, distance, and urgency. 💬 Click "I can help" on any post to open a private chat with that person. Helping others earns you points — more on that soon!`
-    },
-    {
-      tab:'lostfound', target:'lostFoundTab', side:'left', yFrac:0.40,
-      say: () => `Lost & Found! 🔍 Lost your keys? Found a wallet? Report it here with a photo and location. Items are clearly tagged LOST or FOUND so the community can help reunite them.`
-    },
-    {
-      tab:'volunteer-opps', target:'volunteer-oppsTab', side:'left', yFrac:0.40,
-      say: () => `Volunteer Opportunities! 🤝 Beach cleanups, food drives, education events — browse and sign up here. Admins can manually award you up to 10 points if your volunteer work is verified!`
-    },
-    {
-      tab:'community', target:null, side:'center', yFrac:0.50,
-      say: () => `Here's how points work! ⭐ Resolving a chat = 2 pts. A 4-star rating = 3 pts total. A 5-star rating = 4 pts total. The rating already includes the base 2 pts — no double-counting. Posting on the Thank You Wall = +1 pt!`
-    },
-    {
-      tab:'thankyou', target:'thankyouTab', side:'left', yFrac:0.40,
-      say: () => `The Thank You Wall! 💙 When someone gives you a public shoutout for helping them, you earn +1 point. It's the community saying "you made a real difference today." Small acts, big hearts!`
-    },
-    {
-      tab:'leaderboard', target:'leaderboardTab', side:'left', yFrac:0.40,
-      say: () => `The Leaderboard! 🏆 Rankings are based on your total points. Switch between Local (your area) and Global (all UAE). At the end of every month, the Top 3 earners receive an official Beacon of Unity certificate!`
-    },
-    {
-      tab:'reliable-news', target:'reliable-newsTab', side:'left', yFrac:0.40,
-      say: () => `Reliable News! 📰 Curated, verified news for your UAE community. No misinformation here — only trusted sources. Stay informed about everything that matters to your neighbourhood.`
-    },
-    {
-      tab:'rewards', target:'rewardsTab', side:'left', yFrac:0.40,
-      say: () => `Rewards! 🎁 Spend your hard-earned points on profile skins, picture frame colours, and exclusive perks. Your good deeds have real tangible value here. Keep helping to unlock more!`
-    },
-    {
-      tab:'badges', target:'badgesTab', side:'left', yFrac:0.40,
-      say: () => `Badges! 🏅 Earn these by hitting milestones — first help, streaks, top helper of the month, and more. They live on your profile and show the community your story. Collect them all!`
-    },
-    {
-      tab:null, target:'minimap-widget', side:'right', yFrac:0.75,
-      say: () => `Your Region Minimap! 📍 That glowing map on the bottom-left shows live activity around you. Click it to expand and see exactly what's happening in your neighbourhood in real time!`
-    },
-    {
-      tab:null, target:'settingsBtn', side:'right', yFrac:0.82,
-      say: n => `Last one, ${n}! ⚙️ That's the Settings button. Want to replay this tour anytime? Just go to Settings → "View Tutorial". I'll always be here for you. Welcome to Beacon of Unity! 🌟`
-    },
+    /* 0 */ { type:'guide', tab:'community', target:'communityTab', side:'left', yFrac:.38,
+      say: n=>`Hey ${n}! I'm Beacon — your guide on Beacon of Unity! 🌟 This is your Community Hub. I'll walk you through every feature interactively — you'll actually try things yourself. Let's start!` },
+
+    /* 1 */ { type:'guide', tab:'community', target:'requestFeed', side:'left', yFrac:.48,
+      say: ()=>`This is the request feed. Neighbours post help requests here. I've added a demo post so you can see how it works. Notice the category badge, urgency indicator, and the "I can help" button. Let's try it!` },
+
+    /* 2 */ { type:'interact', tab:'community', target:'#bt-sim-post', side:'left', yFrac:.48,
+      say: ()=>`👆 Click "I can help" on the demo post below to open a chat with the person who needs help!`,
+      hint:'Click the "I can help" button on the demo post' },
+
+    /* 3 */ { type:'sim-chat', tab:'community', target:'#chatPopup', side:null, yFrac:.5,
+      say: ()=>`Great! A chat opened with Ahmed (the demo person). He'll send you a message — respond to him and experience how the chat works!`,
+      botName:'Ahmed Al Rashid', botInitial:'A',
+      messages:[
+        { from:'bot', text:'Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?', delay:1200 },
+        { from:'user-prompt', text:'Type a reply and press Send…', delay:0 },
+        { from:'bot', text:'That's perfect, thank you so much! I really appreciate your help. 🙏', delay:1000 },
+        { from:'bot', text:'I'll be ready at 8:50am outside Block 3, Al Majaz 2.', delay:2200 },
+      ]},
+
+    /* 4 */ { type:'guide', tab:'community', target:'#chatPopup', side:null, yFrac:.5,
+      say: ()=>`Nice work! Now Ahmed wants to end the chat and resolve the request. Click the "End Chat" button at the top of the chat to finish helping him.`,
+      hint:'Click "End Chat" in the chat header' },
+
+    /* 5 */ { type:'sim-rate', tab:'community', target:null, side:null, yFrac:.5,
+      say: ()=>`Ahmed is rating you! He's giving you 5 stars. Watch what happens with your points…` },
+
+    /* 6 */ { type:'points', tab:'community', target:null, side:'left', yFrac:.45,
+      say: ()=>`🎉 You earned 4 points! (2 base + 2 bonus for 5 stars). Points fuel your leaderboard ranking and unlock rewards. The more you help, the more you earn!` },
+
+    /* 7 */ { type:'guide', tab:'community', target:'#fabBtn', side:'right', yFrac:.82,
+      say: ()=>`Now let's learn how to post your own request. See that glowing ＋ button? Tap it to create a help request!`,
+      hint:'Click the + button' },
+
+    /* 8 */ { type:'interact', tab:'community', target:'#fabBtn', side:'right', yFrac:.82,
+      say: ()=>`👆 Go ahead — tap the ＋ button to open the post form!`,
+      hint:'Tap the + button' },
+
+    /* 9 */ { type:'sim-post', tab:'community', target:'#requestModal', side:null, yFrac:.5,
+      say: ()=>`Fill in the form! I've pre-filled a demo for you — just click "Post Request" to see it appear in the feed.` },
+
+    /* 10 */ { type:'guide', tab:'community', target:'#requestFeed', side:'left', yFrac:.48,
+      say: ()=>`Your post appeared in the feed! Your neighbours can now see it and offer help. Posts with high urgency glow red so no-one misses them.` },
+
+    /* 11 */ { type:'guide', tab:'lostfound', target:'lostFoundTab', side:'left', yFrac:.4,
+      say: ()=>`Lost & Found! 🔍 Report lost keys, wallets, phones — or items you've found. Everything is tagged LOST or FOUND so the community can reunite them with their owners.` },
+
+    /* 12 */ { type:'guide', tab:'volunteer-opps', target:'volunteer-oppsTab', side:'left', yFrac:.4,
+      say: ()=>`Volunteer Opportunities! 🤝 Join beach cleanups, food drives, and education events. Admins can award you up to 10 manual points if your contribution is verified.` },
+
+    /* 13 */ { type:'guide', tab:'thankyou', target:'thankyouTab', side:'left', yFrac:.4,
+      say: ()=>`The Thank You Wall! 💙 Ahmed just posted a shoutout thanking you for the ride. That earns you +1 point. It's the community's way of saying you made a real difference!` },
+
+    /* 14 */ { type:'guide', tab:'leaderboard', target:'leaderboardTab', side:'left', yFrac:.4,
+      say: ()=>`The Leaderboard! 🏆 Your points rank you against neighbours locally and globally across UAE. Top 3 at month-end get an official Beacon of Unity certificate!` },
+
+    /* 15 */ { type:'guide', tab:'reliable-news', target:'reliable-newsTab', side:'left', yFrac:.4,
+      say: ()=>`Reliable News! 📰 Only verified, trusted sources — no misinformation. Stay informed about what matters in your neighbourhood and across the UAE.` },
+
+    /* 16 */ { type:'guide', tab:'rewards', target:'rewardsTab', side:'left', yFrac:.4,
+      say: ()=>`Rewards! 🎁 Spend your points on profile skins, picture frame colours, and exclusive perks. Your good deeds have real tangible value here!` },
+
+    /* 17 */ { type:'guide', tab:'badges', target:'badgesTab', side:'left', yFrac:.4,
+      say: ()=>`Badges! 🏅 Earn them by hitting milestones — first help, streaks, top helper, and more. They show on your profile and tell your story to the community.` },
+
+    /* 18 */ { type:'guide', tab:null, target:'minimap-widget', side:'right', yFrac:.75,
+      say: ()=>`Your Region Minimap! 📍 Live activity around you. Click it to expand and see exactly what's happening in your neighbourhood right now.` },
+
+    /* 19 */ { type:'guide', tab:null, target:'settingsBtn', side:'right', yFrac:.82,
+      say: n=>`Last one, ${n}! ⚙️ The Settings button. Want to replay this tour anytime? Settings → "View Tutorial". I'll always be here. Welcome to Beacon of Unity! 🌟` },
   ];
 
-  /* ══ STATE ══════════════════════════════════════════════════ */
-  let idx = 0, typingTimer = null, uName = 'friend';
-
-  /* ══ CSS ════════════════════════════════════════════════════ */
+  /* ══ CSS ══════════════════════════════════════════════════════ */
   function buildCSS() {
-    const old = document.getElementById('bt-css');
-    if (old) old.remove();
-    const s = document.createElement('style');
-    s.id = 'bt-css';
+    const old = document.getElementById('bt-css'); if (old) old.remove();
+    const s = document.createElement('style'); s.id = 'bt-css';
     s.textContent = `
 #bt-root *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+/* ── INTRO OVERLAY ── */
 #bt-ov{position:fixed;inset:0;z-index:19000;background:#050912;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .7s}
 #bt-ov.hid{opacity:0;pointer-events:none}
 #bt-bar-t,#bt-bar-b{position:absolute;left:0;right:0;background:#000;z-index:10;transition:height .95s cubic-bezier(.77,0,.18,1)}
-#bt-bar-t{top:0;height:80px}
-#bt-bar-b{bottom:0;height:80px}
+#bt-bar-t{top:0;height:80px}#bt-bar-b{bottom:0;height:80px}
 #bt-ov.bo #bt-bar-t,#bt-ov.bo #bt-bar-b{height:0}
 #bt-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
 .bt-star{position:absolute;border-radius:50%;background:#fff;animation:bt-tw 3s ease-in-out infinite alternate}
@@ -6035,10 +6028,10 @@
 #bt-go-btn:hover{box-shadow:0 12px 38px rgba(56,189,248,.62);transform:translateY(-3px) scale(1.04)!important}
 @keyframes bt-glitch{0%{clip-path:inset(12% 0 78% 0);transform:translate(-4px,0) skew(.5deg)}20%{clip-path:inset(52% 0 28% 0);transform:translate(4px,0) skew(-.5deg)}40%{clip-path:inset(22% 0 58% 0);transform:translate(-2px,0)}60%{clip-path:inset(78% 0 7% 0);transform:translate(3px,0) skew(.3deg)}80%{clip-path:inset(7% 0 88% 0);transform:translate(-1px,0)}100%{clip-path:inset(0 0 0 0);transform:none}}
 .btg{animation:bt-glitch .38s steps(2) both}
-/* bt-dk is pointer-events blocker only — NO background */
+/* ── DARK OVERLAY (pointer blocker) ── */
 #bt-dk{position:fixed;inset:0;z-index:18000;background:transparent;pointer-events:all;display:none}
 #bt-dk.on{display:block}
-/* spotlight: the box-shadow creates the dim AROUND the element, the element itself stays bright */
+/* ── SPOTLIGHT ── */
 #bt-spl{position:fixed;z-index:18100;pointer-events:none;background:transparent;box-shadow:0 0 0 9999px rgba(5,9,18,.82);border-radius:12px;transition:left .55s cubic-bezier(.34,1.2,.64,1),top .55s cubic-bezier(.34,1.2,.64,1),width .55s cubic-bezier(.34,1.2,.64,1),height .55s cubic-bezier(.34,1.2,.64,1),border-radius .3s;display:none}
 #bt-spl.on{display:block}
 .btc{position:absolute;width:18px;height:18px;border-color:rgba(56,189,248,.9);border-style:solid}
@@ -6048,19 +6041,20 @@
 .btc-br{bottom:-3px;right:-3px;border-width:0 3px 3px 0;border-radius:0 0 4px 0}
 @keyframes btc-draw{from{width:0;height:0;opacity:0}to{width:18px;height:18px;opacity:1}}
 #bt-spl.on .btc{animation:btc-draw .35s cubic-bezier(.34,1.56,.64,1) both}
-#bt-spl.on .btc-tr{animation-delay:.05s}
-#bt-spl.on .btc-bl{animation-delay:.09s}
-#bt-spl.on .btc-br{animation-delay:.13s}
+#bt-spl.on .btc-tr{animation-delay:.05s}#bt-spl.on .btc-bl{animation-delay:.09s}#bt-spl.on .btc-br{animation-delay:.13s}
 #bt-spl-glow{position:absolute;inset:-8px;border-radius:16px;box-shadow:0 0 28px 4px rgba(56,189,248,.32),inset 0 0 16px 2px rgba(56,189,248,.12);pointer-events:none;animation:bt-sglow 2s ease-in-out infinite}
 @keyframes bt-sglow{0%,100%{opacity:.5}50%{opacity:1}}
+/* ── SCAN SWIPE ── */
 #bt-scanswipe{position:fixed;inset:0;z-index:19200;pointer-events:none;background:linear-gradient(180deg,transparent 0%,rgba(56,189,248,.1) 50%,transparent 100%);transform:translateY(-110%)}
 #bt-scanswipe.swipe{transition:transform .42s linear;transform:translateY(110%)}
+/* ── GUIDE BEACON ── */
 #bt-guide{position:fixed;z-index:19500;pointer-events:none;transition:left .65s cubic-bezier(.34,1.3,.64,1),top .65s cubic-bezier(.34,1.3,.64,1);display:none}
 #bt-guide.on{display:block}
 #bt-guide-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.18) 0%,transparent 70%);pointer-events:none;animation:bt-gp 2.5s ease-in-out infinite}
 #bt-gs2{filter:drop-shadow(0 0 14px rgba(56,189,248,.55));animation:bt-gfl 3s ease-in-out infinite;position:relative;z-index:1}
 @keyframes bt-gfl{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-#bt-bub{position:fixed;z-index:19600;width:clamp(240px,30vw,320px);background:linear-gradient(135deg,rgba(15,23,42,.97),rgba(5,9,18,.97));border:1.5px solid rgba(56,189,248,.42);border-radius:16px;padding:14px 16px 12px;pointer-events:none;opacity:0;transform:scale(.9);transition:opacity .38s,transform .38s,left .6s cubic-bezier(.34,1.3,.64,1),top .6s cubic-bezier(.34,1.3,.64,1);box-shadow:0 8px 38px rgba(0,0,0,.5),0 0 0 1px rgba(56,189,248,.07),0 0 20px rgba(56,189,248,.08);display:none;backdrop-filter:blur(4px)}
+/* ── SPEECH BUBBLE ── */
+#bt-bub{position:fixed;z-index:19600;width:clamp(240px,30vw,320px);background:linear-gradient(135deg,rgba(15,23,42,.97),rgba(5,9,18,.97));border:1.5px solid rgba(56,189,248,.42);border-radius:16px;padding:14px 16px 12px;pointer-events:none;opacity:0;transform:scale(.9);transition:opacity .38s,transform .38s,left .6s cubic-bezier(.34,1.3,.64,1),top .6s cubic-bezier(.34,1.3,.64,1);box-shadow:0 8px 38px rgba(0,0,0,.5),0 0 0 1px rgba(56,189,248,.07);display:none;backdrop-filter:blur(4px)}
 #bt-bub.on{opacity:1;transform:scale(1);display:block}
 #bt-bub::before{content:'';position:absolute;width:0;height:0;border:8px solid transparent;pointer-events:none}
 #bt-bub.btr::before{left:-15px;top:28px;border-right-color:rgba(56,189,248,.42)}
@@ -6070,25 +6064,29 @@
 @keyframes bt-dp{0%,100%{box-shadow:0 0 0 0 rgba(56,189,248,.6)}50%{box-shadow:0 0 0 6px rgba(56,189,248,0)}}
 #bt-bwav{display:flex;gap:2px;align-items:flex-end;margin-left:auto;height:14px}
 #bt-bwav span{display:block;width:3px;border-radius:2px;background:#38bdf8;opacity:.5;animation:bt-wv 1.1s ease-in-out infinite}
-#bt-bwav span:nth-child(2){animation-delay:.1s}
-#bt-bwav span:nth-child(3){animation-delay:.2s}
-#bt-bwav span:nth-child(4){animation-delay:.3s}
+#bt-bwav span:nth-child(2){animation-delay:.1s}#bt-bwav span:nth-child(3){animation-delay:.2s}#bt-bwav span:nth-child(4){animation-delay:.3s}
 @keyframes bt-wv{0%,100%{height:3px;opacity:.25}50%{height:12px;opacity:.9}}
 #bt-bwav.done span{animation:none!important;height:3px;opacity:.18}
 #bt-bt{font-size:13px;color:rgba(255,255,255,.88);line-height:1.68;font-family:'Segoe UI',system-ui,sans-serif;min-height:40px}
 .bt-cur{display:inline-block;width:2px;height:13px;background:#38bdf8;vertical-align:middle;margin-left:1px;border-radius:1px;animation:bt-bl .58s step-end infinite}
 @keyframes bt-bl{0%,100%{opacity:1}50%{opacity:0}}
+/* ── HINT BADGE ── */
+#bt-hint{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:19600;background:rgba(56,189,248,.18);border:1px solid rgba(56,189,248,.4);border-radius:50px;padding:8px 20px;font-size:12px;color:#7dd3fc;font-family:'Syne','Segoe UI',sans-serif;font-weight:600;pointer-events:none;display:none;white-space:nowrap;animation:bt-pulse 2s ease-in-out infinite}
+#bt-hint.on{display:block}
+@keyframes bt-pulse{0%,100%{opacity:.7}50%{opacity:1;box-shadow:0 0 16px rgba(56,189,248,.4)}}
+/* ── PROGRESS DOTS ── */
 #bt-dots{position:fixed;top:18px;left:50%;transform:translateX(-50%);display:none;gap:5px;align-items:center;z-index:19600}
 #bt-dots.on{display:flex}
 .btd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .32s}
-.btd.act{background:#38bdf8;width:22px;border-radius:3px}
-.btd.dn{background:rgba(56,189,248,.38)}
+.btd.act{background:#38bdf8;width:22px;border-radius:3px}.btd.dn{background:rgba(56,189,248,.38)}
+/* ── BUTTONS ── */
 #bt-nxt{position:fixed;bottom:24px;left:24px;z-index:19600;padding:11px 30px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;border-radius:50px;color:#0f172a;font-family:'Syne','Segoe UI',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:none;box-shadow:0 4px 22px rgba(56,189,248,.42);transition:transform .2s,box-shadow .2s;pointer-events:all}
 #bt-nxt.on{display:block}
 #bt-nxt:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(56,189,248,.58)}
 #bt-skp{position:fixed;bottom:28px;right:24px;z-index:19600;padding:9px 20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;color:rgba(255,255,255,.32);font-size:12px;cursor:pointer;display:none;transition:all .22s;pointer-events:all;font-family:'Segoe UI',system-ui,sans-serif}
 #bt-skp.on{display:block}
-#bt-skp:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.62);border-color:rgba(255,255,255,.22)}
+#bt-skp:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.62)}
+/* ── SKIP WARNING ── */
 #bt-wrn{position:fixed;inset:0;z-index:20000;background:rgba(5,9,18,.88);display:none;align-items:center;justify-content:center}
 #bt-wrn.on{display:flex}
 #bt-wb{background:linear-gradient(135deg,#0f172a,#1e293b);border:1.5px solid rgba(239,68,68,.38);border-radius:20px;padding:34px 38px;max-width:430px;width:90%;text-align:center;box-shadow:0 26px 80px rgba(0,0,0,.65);animation:bt-win .38s cubic-bezier(.34,1.56,.64,1)}
@@ -6101,9 +6099,66 @@
 #bt-wbtns button:first-child{background:rgba(56,189,248,.15);border:1.5px solid rgba(56,189,248,.38);color:#38bdf8}
 #bt-wbtns button:last-child{background:rgba(239,68,68,.15);border:1.5px solid rgba(239,68,68,.38);color:#f87171}
 #bt-wbtns button:hover{transform:translateY(-2px)}
+/* ── POINTS BURST ── */
+#bt-pts{position:fixed;inset:0;z-index:19700;pointer-events:none;display:none;align-items:center;justify-content:center;flex-direction:column}
+#bt-pts.on{display:flex}
+#bt-pts-num{font-family:'Syne','Segoe UI',sans-serif;font-size:clamp(60px,12vw,100px);font-weight:900;background:linear-gradient(135deg,#fbbf24,#f59e0b,#fde68a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:bt-ptspop .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bt-ptspop{from{transform:scale(0) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(0deg);opacity:1}}
+#bt-pts-label{font-family:'Syne','Segoe UI',sans-serif;font-size:18px;color:rgba(255,255,255,.7);margin-top:8px;animation:bt-ptspop .6s .1s cubic-bezier(.34,1.56,.64,1) both}
+.bt-pts-confetti{position:absolute;border-radius:2px;animation:bt-conf 1.4s ease-out forwards}
+@keyframes bt-conf{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(200px) rotate(720deg);opacity:0}}
+/* ── FAKE DEMO POST ── */
+#bt-sim-feed{margin-bottom:12px}
+.bt-sim-card{background:white;border-radius:16px;border:1px solid #e2e8f0;padding:16px 18px;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:box-shadow .2s}
+body.dark .bt-sim-card{background:#1e293b;border-color:#334155}
+.bt-sim-card:hover{box-shadow:0 4px 20px rgba(56,189,248,.18)}
+.bt-sim-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.bt-sim-title{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:4px}
+body.dark .bt-sim-title{color:#f1f5f9}
+.bt-sim-meta{font-size:12px;color:#64748b;margin-bottom:10px}
+.bt-sim-desc{font-size:13px;color:#475569;margin-bottom:12px;line-height:1.5}
+body.dark .bt-sim-desc{color:#94a3b8}
+.bt-sim-help-btn{padding:9px 20px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:#0f172a;border:none;border-radius:50px;font-size:13px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 3px 14px rgba(56,189,248,.35)}
+.bt-sim-help-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(56,189,248,.5)}
+.bt-sim-help-btn.pulse{animation:bt-helpulse 1.5s ease-in-out infinite}
+@keyframes bt-helpulse{0%,100%{box-shadow:0 3px 14px rgba(56,189,248,.35)}50%{box-shadow:0 3px 28px rgba(56,189,248,.7),0 0 0 6px rgba(56,189,248,.15)}}
+/* ── FAKE CHAT IN TUTORIAL ── */
+#bt-sim-chat{position:fixed;inset:0;z-index:19100;display:none;flex-direction:column;background:white;pointer-events:all}
+body.dark #bt-sim-chat{background:#1c1c1e}
+#bt-sim-chat.on{display:flex}
+#bt-sim-chat-header{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid #e2e8f0;font-family:'Syne','Segoe UI',sans-serif}
+body.dark #bt-sim-chat-header{background:rgba(28,28,30,.9);border-color:rgba(255,255,255,.1)}
+#bt-sim-chat-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#38bdf8);display:flex;align-items:center;justify-content:center;color:#0f172a;font-weight:800;font-size:15px;flex-shrink:0}
+#bt-sim-chat-name{font-weight:700;font-size:15px;color:#0f172a}
+body.dark #bt-sim-chat-name{color:#f1f5f9}
+#bt-sim-chat-sub{font-size:11px;color:#8e8e93}
+#bt-sim-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px}
+.bt-msg-row{display:flex;gap:8px;max-width:80%}
+.bt-msg-row.mine{align-self:flex-end;flex-direction:row-reverse}
+.bt-msg-bubble{padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.5;position:relative}
+.bt-msg-row.theirs .bt-msg-bubble{background:#f1f5f9;color:#0f172a;border-radius:4px 18px 18px 18px}
+.bt-msg-row.mine .bt-msg-bubble{background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:#0f172a;border-radius:18px 18px 4px 18px}
+body.dark .bt-msg-row.theirs .bt-msg-bubble{background:#2c2c2e;color:#f1f5f9}
+#bt-sim-chat-input{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #e2e8f0;background:white}
+body.dark #bt-sim-chat-input{background:#1c1c1e;border-color:rgba(255,255,255,.1)}
+#bt-sim-msg-field{flex:1;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:22px;font-size:14px;outline:none;font-family:'Segoe UI',system-ui,sans-serif;transition:border-color .2s}
+#bt-sim-msg-field:focus{border-color:#38bdf8}
+body.dark #bt-sim-msg-field{background:#2c2c2e;border-color:#3a3a3c;color:#f1f5f9}
+#bt-sim-send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s}
+#bt-sim-send-btn:hover{transform:scale(1.1)}
+#bt-sim-end-btn{padding:8px 18px;background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.3);border-radius:20px;color:#ef4444;font-size:12px;font-weight:700;cursor:pointer;margin-left:auto}
+/* ── FAKE RATING ── */
+#bt-sim-rating{position:fixed;inset:0;z-index:19150;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.85)}
+#bt-sim-rating.on{display:flex}
+#bt-sim-rating-box{background:white;border-radius:20px;padding:32px 36px;max-width:380px;width:90%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:bt-win .35s cubic-bezier(.34,1.56,.64,1)}
+body.dark #bt-sim-rating-box{background:#1e293b}
+.bt-star-row{display:flex;gap:8px;justify-content:center;margin:16px 0}
+.bt-star-btn{background:none;border:none;font-size:32px;cursor:pointer;color:#e2e8f0;transition:color .15s,transform .15s}
+.bt-star-btn.lit{color:#fbbf24}
+.bt-star-btn:hover{transform:scale(1.2)}
+/* ── FINISH SCREEN ── */
 #bt-fin{position:fixed;inset:0;z-index:19800;background:#050912;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .55s}
-#bt-fin.on{display:flex}
-#bt-fin.vis{opacity:1}
+#bt-fin.on{display:flex}#bt-fin.vis{opacity:1}
 #bt-fi{text-align:center;padding:24px;max-width:500px}
 #bt-fg{position:absolute;inset:-35px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.22) 0%,transparent 70%);animation:bt-gp 2s infinite}
 #bt-fsvg{filter:drop-shadow(0 0 24px rgba(56,189,248,.65));animation:bt-fl 3s ease-in-out infinite;position:relative;z-index:1}
@@ -6117,23 +6172,18 @@
     document.head.appendChild(s);
   }
 
-  /* ══ DOM ════════════════════════════════════════════════════ */
+  /* ══ DOM ══════════════════════════════════════════════════════ */
   function buildDOM() {
-    const r = document.createElement('div');
-    r.id = 'bt-root';
+    const r = document.createElement('div'); r.id = 'bt-root';
     r.innerHTML = `
 <div id="bt-ov">
   <div id="bt-stars"></div><div id="bt-scan"></div>
   <div id="bt-bar-t"></div><div id="bt-bar-b"></div>
   <div id="bt-stage">
     <div id="bt-beam"></div>
-    <div id="bt-big-wrap">
-      <div id="bt-big-ring"></div>
-      ${mkSVG('bt-big',168,220)}
-    </div>
+    <div id="bt-big-wrap"><div id="bt-big-ring"></div>${mkSVG('bt-big',168,220)}</div>
     <div id="bt-greet-wrap">
-      <div id="bt-gl"></div>
-      <div id="bt-gsub"></div>
+      <div id="bt-gl"></div><div id="bt-gsub"></div>
       <button id="bt-go-btn" onclick="BeaconTutorial._begin()">Let's explore! ✨</button>
     </div>
   </div>
@@ -6144,33 +6194,74 @@
   <div class="btc btc-tl"></div><div class="btc btc-tr"></div>
   <div class="btc btc-bl"></div><div class="btc btc-br"></div>
 </div>
-<div id="bt-guide">
-  <div id="bt-guide-glow"></div>
-  ${mkSVG('bt-gs2',76,100)}
-</div>
+<div id="bt-guide"><div id="bt-guide-glow"></div>${mkSVG('bt-gs2',76,100)}</div>
 <div id="bt-bub" class="btr">
-  <div id="bt-bh">
-    <div id="bt-bdot"></div><span>BEACON</span>
+  <div id="bt-bh"><div id="bt-bdot"></div><span>BEACON</span>
     <div id="bt-bwav"><span></span><span></span><span></span><span></span></div>
   </div>
   <div id="bt-bt"></div>
 </div>
+<div id="bt-hint"></div>
 <div id="bt-dots"></div>
 <button id="bt-nxt" onclick="BeaconTutorial._next()">Continue →</button>
 <button id="bt-skp" onclick="BeaconTutorial._warnSkip()">Skip tutorial</button>
 <div id="bt-scanswipe"></div>
+
+<!-- Fake interactive chat -->
+<div id="bt-sim-chat">
+  <div id="bt-sim-chat-header">
+    <div id="bt-sim-chat-avatar">A</div>
+    <div><div id="bt-sim-chat-name">Ahmed Al Rashid</div><div id="bt-sim-chat-sub">Community Helper</div></div>
+    <button id="bt-sim-end-btn" style="margin-left:auto" onclick="BeaconTutorial._simEndChat()">End Chat</button>
+  </div>
+  <div id="bt-sim-msgs"></div>
+  <div id="bt-sim-chat-input">
+    <input id="bt-sim-msg-field" placeholder="Type a message…" autocomplete="off"/>
+    <button id="bt-sim-send-btn" onclick="BeaconTutorial._simSend()">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- Fake rating -->
+<div id="bt-sim-rating">
+  <div id="bt-sim-rating-box">
+    <div style="font-size:44px;margin-bottom:8px">⭐</div>
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#0f172a" class="bt-rating-title">Ahmed is rating you!</div>
+    <div style="font-size:13px;color:#64748b;margin:6px 0 0">He had a great experience with your help</div>
+    <div class="bt-star-row" id="bt-sim-stars">
+      <button class="bt-star-btn" data-v="1">★</button>
+      <button class="bt-star-btn" data-v="2">★</button>
+      <button class="bt-star-btn" data-v="3">★</button>
+      <button class="bt-star-btn" data-v="4">★</button>
+      <button class="bt-star-btn lit" data-v="5">★</button>
+    </div>
+    <div style="font-size:13px;color:#64748b;margin-bottom:16px">Ahmed gives you ⭐⭐⭐⭐⭐ 5 stars!</div>
+    <button onclick="BeaconTutorial._simRatingDone()" style="width:100%;padding:13px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer;color:#0f172a">Collect Points! 🎉</button>
+  </div>
+</div>
+
+<!-- Points burst -->
+<div id="bt-pts">
+  <div id="bt-pts-num">+4</div>
+  <div id="bt-pts-label">Points earned! ⭐⭐⭐⭐⭐</div>
+</div>
+
+<!-- Skip warning -->
 <div id="bt-wrn">
   <div id="bt-wb">
     <div style="font-size:44px;margin-bottom:16px">⚠️</div>
     <div id="bt-wt">Skip the tutorial?</div>
-    <div id="bt-wd">You won't be able to see this automatically again. Beacon was really looking forward to showing you around!</div>
-    <div id="bt-wh">💡 You can always replay it later:<br><strong>Settings ⚙️ → "View Tutorial"</strong></div>
+    <div id="bt-wd">You won't see this automatically again. Beacon was really looking forward to showing you around!</div>
+    <div id="bt-wh">💡 Replay anytime: <strong>Settings ⚙️ → "View Tutorial"</strong></div>
     <div id="bt-wbtns">
       <button onclick="BeaconTutorial._cancelSkip()">Keep going</button>
       <button onclick="BeaconTutorial._confirmSkip()">Skip anyway</button>
     </div>
   </div>
 </div>
+
+<!-- Finish screen -->
 <div id="bt-fin">
   <div id="bt-fi">
     <div style="position:relative;display:inline-block;margin-bottom:10px">
@@ -6178,212 +6269,354 @@
     </div>
     <div id="bt-ft"></div>
     <div id="bt-fsub">You now know everything Beacon of Unity has to offer.</div>
-    <div id="bt-fhint">💡 To replay this tour anytime:<br>Click <strong>Settings ⚙️</strong> → <strong>"View Tutorial"</strong></div>
+    <div id="bt-fhint">💡 To replay this tour: <strong>Settings ⚙️</strong> → <strong>"View Tutorial"</strong></div>
     <button id="bt-fgo" onclick="BeaconTutorial._enterDash()">Enter Dashboard →</button>
   </div>
 </div>`;
     document.body.appendChild(r);
+
+    // dark mode fix for rating title
+    if (document.body.classList.contains('dark')) {
+      const t = r.querySelector('.bt-rating-title');
+      if (t) t.style.color = '#f1f5f9';
+    }
+
+    // star hover for fake rating (all 5 already lit - Ahmed gave 5 stars)
+    document.querySelectorAll('#bt-sim-stars .bt-star-btn').forEach(b => {
+      b.style.pointerEvents = 'none'; // Ahmed is rating, not user
+    });
+
+    // enter to send in fake chat
+    const field = document.getElementById('bt-sim-msg-field');
+    if (field) field.addEventListener('keydown', e => { if (e.key==='Enter') BeaconTutorial._simSend(); });
   }
 
-  /* ══ STARS ══════════════════════════════════════════════════ */
+  /* ══ STARS / DOTS ═════════════════════════════════════════════ */
   function buildStars() {
-    const c = document.getElementById('bt-stars');
-    if (!c) return;
+    const c = document.getElementById('bt-stars'); if (!c) return;
     for (let i = 0; i < 140; i++) {
-      const s = document.createElement('div');
-      s.className = 'bt-star';
-      const z = Math.random() * 2.2 + 0.3;
+      const s = document.createElement('div'); s.className = 'bt-star';
+      const z = Math.random()*2.2+0.3;
       s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${z}px;height:${z}px;animation-delay:${(Math.random()*3).toFixed(2)}s;animation-duration:${(2+Math.random()*3.5).toFixed(2)}s`;
       c.appendChild(s);
     }
   }
-
-  /* ══ DOTS ═══════════════════════════════════════════════════ */
   function buildDots() {
-    const w = document.getElementById('bt-dots');
-    if (!w) return;
+    const w = document.getElementById('bt-dots'); if (!w) return;
     w.innerHTML = '';
-    STEPS.forEach((_,i) => {
-      const d = document.createElement('div');
-      d.className = 'btd'; d.id = 'btd-'+i;
-      w.appendChild(d);
-    });
+    STEPS.forEach((_,i) => { const d=document.createElement('div'); d.className='btd'; d.id='btd-'+i; w.appendChild(d); });
   }
   function updateDots(a) {
-    STEPS.forEach((_,i) => {
-      const d = document.getElementById('btd-'+i);
-      if (d) d.className = 'btd'+(i===a?' act':i<a?' dn':'');
-    });
+    STEPS.forEach((_,i)=>{ const d=document.getElementById('btd-'+i); if(d) d.className='btd'+(i===a?' act':i<a?' dn':''); });
   }
 
-  /* ══ TYPEWRITER ═════════════════════════════════════════════ */
-  function typeText(text) {
+  /* ══ TYPEWRITER ═══════════════════════════════════════════════ */
+  function typeText(text, cb) {
     clearInterval(typingTimer);
-    const el  = document.getElementById('bt-bt');
-    const wav = document.getElementById('bt-bwav');
-    if (!el) return;
-    el.innerHTML = '';
-    if (wav) wav.classList.remove('done');
-    let i = 0;
-    const cur = document.createElement('span');
-    cur.className = 'bt-cur';
-    el.appendChild(cur);
-    typingTimer = setInterval(() => {
-      if (i < text.length) {
-        cur.insertAdjacentText('beforebegin', text[i++]);
-        if (i % 6 === 0) playBlip();
-      } else {
-        clearInterval(typingTimer);
-        cur.remove();
-        if (wav) wav.classList.add('done');
-      }
-    }, 26);
+    const el=document.getElementById('bt-bt'), wav=document.getElementById('bt-bwav');
+    if(!el) return;
+    el.innerHTML=''; if(wav) wav.classList.remove('done');
+    let i=0;
+    const cur=document.createElement('span'); cur.className='bt-cur'; el.appendChild(cur);
+    typingTimer=setInterval(()=>{
+      if(i<text.length){ cur.insertAdjacentText('beforebegin',text[i++]); if(i%6===0) playBlip(); }
+      else { clearInterval(typingTimer); cur.remove(); if(wav) wav.classList.add('done'); if(cb) setTimeout(cb,400); }
+    },26);
   }
 
-  /* ══ SPOTLIGHT ══════════════════════════════════════════════ */
+  /* ══ SPOTLIGHT ════════════════════════════════════════════════ */
   function spotlight(step) {
-    const spl = document.getElementById('bt-spl');
-    if (!spl) return;
-    const el = step.target
-      ? (document.getElementById(step.target) || document.querySelector(step.target))
-      : null;
-    if (!el) { spl.classList.remove('on'); return; }
-    el.scrollIntoView({ behavior:'smooth', block:'center' });
-    setTimeout(() => {
-      const r = el.getBoundingClientRect(), p = 12;
-      spl.style.left          = (r.left - p) + 'px';
-      spl.style.top           = (r.top  - p) + 'px';
-      spl.style.width         = (r.width  + p*2) + 'px';
-      spl.style.height        = (r.height + p*2) + 'px';
-      spl.style.borderRadius  = '12px';
-      spl.classList.remove('on');
-      void spl.offsetHeight;
-      spl.classList.add('on');
-    }, 340);
+    const spl=document.getElementById('bt-spl'); if(!spl) return;
+    const el = step.target ? (document.getElementById(step.target.replace('#','')) || document.querySelector(step.target)) : null;
+    if(!el){ spl.classList.remove('on'); return; }
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>{
+      const r=el.getBoundingClientRect(),p=12;
+      spl.style.left=(r.left-p)+'px'; spl.style.top=(r.top-p)+'px';
+      spl.style.width=(r.width+p*2)+'px'; spl.style.height=(r.height+p*2)+'px';
+      spl.style.borderRadius='12px';
+      spl.classList.remove('on'); void spl.offsetHeight; spl.classList.add('on');
+    },340);
   }
 
-  /* ══ POSITION GUIDE + BUBBLE ════════════════════════════════ */
+  /* ══ POSITION GUIDE ═══════════════════════════════════════════ */
   function positionGuide(step) {
-    const guide = document.getElementById('bt-guide');
-    const bub   = document.getElementById('bt-bub');
-    if (!guide || !bub) return;
-    const VW = window.innerWidth, VH = window.innerHeight;
-    const GW = 76, GH = 100;
+    const guide=document.getElementById('bt-guide'), bub=document.getElementById('bt-bub');
+    if(!guide||!bub) return;
+    const VW=window.innerWidth, VH=window.innerHeight, GW=76, GH=100;
     let gx, gy;
-    if (step.side === 'left')       { gx = 22;            gy = VH * (step.yFrac||.5) - GH/2; }
-    else if (step.side === 'right') { gx = VW - GW - 22;  gy = VH * (step.yFrac||.5) - GH/2; }
-    else                            { gx = VW/2 - GW/2;   gy = VH * .42 - GH/2; }
-    gy = Math.max(90, Math.min(VH - GH - 80, gy));
-    guide.style.left = gx + 'px';
-    guide.style.top  = gy + 'px';
-    /* bubble — arrow points toward Beacon */
-    const beaconOnLeft = (step.side === 'left');
-    /* btr = bubble has left-facing arrow (Beacon is on the LEFT of bubble) */
-    /* btl = bubble has right-facing arrow (Beacon is on the RIGHT of bubble) */
-    bub.className = beaconOnLeft ? 'btr' : 'btl';
-    const bw = 310;
-    let bx = beaconOnLeft ? gx + GW + 20 : gx - bw - 20;
-    let by = gy - 12;
-    bx = Math.max(10, Math.min(VW - bw - 10, bx));
-    by = Math.max(70, Math.min(VH - 230, by));
-    bub.style.left = bx + 'px';
-    bub.style.top  = by + 'px';
+    if(step.side==='left')       { gx=22;           gy=VH*(step.yFrac||.5)-GH/2; }
+    else if(step.side==='right') { gx=VW-GW-22;     gy=VH*(step.yFrac||.5)-GH/2; }
+    else                         { gx=VW/2-GW/2;    gy=VH*.42-GH/2; }
+    gy=Math.max(90,Math.min(VH-GH-80,gy));
+    guide.style.left=gx+'px'; guide.style.top=gy+'px';
+    const beaconOnLeft=(step.side==='left');
+    bub.className=beaconOnLeft?'btr':'btl';
+    const bw=310;
+    let bx=beaconOnLeft?gx+GW+20:gx-bw-20;
+    let by=gy-12;
+    bx=Math.max(10,Math.min(VW-bw-10,bx)); by=Math.max(70,Math.min(VH-230,by));
+    bub.style.left=bx+'px'; bub.style.top=by+'px';
   }
 
-  /* ══ SCAN SWIPE ═════════════════════════════════════════════ */
+  /* ══ SCAN SWIPE ═══════════════════════════════════════════════ */
   function scanSwipe(cb) {
-    const sw = document.getElementById('bt-scanswipe');
-    if (!sw) { cb && cb(); return; }
-    sw.style.transition = 'none';
-    sw.style.transform  = 'translateY(-110%)';
-    void sw.offsetHeight;
-    sw.classList.add('swipe');
-    setTimeout(() => {
-      cb && cb();
-      setTimeout(() => {
-        sw.classList.remove('swipe');
-        sw.style.transition = 'none';
-        sw.style.transform  = 'translateY(-110%)';
-      }, 50);
-    }, 430);
+    const sw=document.getElementById('bt-scanswipe'); if(!sw){cb&&cb();return;}
+    sw.style.transition='none'; sw.style.transform='translateY(-110%)';
+    void sw.offsetHeight; sw.classList.add('swipe');
+    setTimeout(()=>{ cb&&cb(); setTimeout(()=>{ sw.classList.remove('swipe'); sw.style.transition='none'; sw.style.transform='translateY(-110%)'; },50); },430);
   }
 
-  /* ══ RUN STEP ═══════════════════════════════════════════════ */
+  /* ══ INJECT FAKE DEMO POST ════════════════════════════════════ */
+  function injectSimFeed() {
+    if (document.getElementById('bt-sim-feed')) return;
+    const feed = document.getElementById('requestFeed');
+    if (!feed) return;
+    const div = document.createElement('div');
+    div.id = 'bt-sim-feed';
+    div.innerHTML = `
+      <div class="bt-sim-card" id="bt-sim-post" style="border-left:4px solid #ef4444;">
+        <span class="bt-sim-badge" style="background:#ffedd5;color:#9a3412;">TRANSPORT</span>
+        <span style="float:right;font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:20px;font-weight:600;">🔴 Urgent</span>
+        <div class="bt-sim-title">Need a ride to Al Corniche Hospital</div>
+        <div class="bt-sim-meta">👤 Ahmed Al Rashid &nbsp;·&nbsp; 📍 Al Majaz 2 &nbsp;·&nbsp; 🕐 2 min ago</div>
+        <div class="bt-sim-desc">I have a medical appointment tomorrow at 9am. No transport available. Would really appreciate a lift!</div>
+        <button class="bt-sim-help-btn pulse" id="bt-sim-help-btn" onclick="BeaconTutorial._simICanHelp()">I can help →</button>
+      </div>`;
+    feed.prepend(div);
+  }
+
+  function removeSimFeed() {
+    const el = document.getElementById('bt-sim-feed');
+    if (el) el.remove();
+  }
+
+  /* ══ INJECT FAKE POST TO FEED ═════════════════════════════════ */
+  function injectPostedCard() {
+    const feed = document.getElementById('requestFeed');
+    if (!feed || document.getElementById('bt-sim-mypost')) return;
+    const div = document.createElement('div');
+    div.id = 'bt-sim-mypost';
+    div.innerHTML = `
+      <div class="bt-sim-card" style="border-left:4px solid #0ea5e9;margin-bottom:12px;">
+        <span class="bt-sim-badge" style="background:#e0f2fe;color:#0369a1;">TOOLS</span>
+        <span style="float:right;font-size:11px;background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:20px;font-weight:600;">Your Post</span>
+        <div class="bt-sim-title">Need a ladder for ceiling repair</div>
+        <div class="bt-sim-meta">👤 ${uName} &nbsp;·&nbsp; 📍 Al Majaz 2 &nbsp;·&nbsp; 🕐 Just now</div>
+        <div class="bt-sim-desc">Need a 3m+ ladder for a weekend repair. Happy to return same day!</div>
+      </div>`;
+    feed.prepend(div);
+  }
+
+  /* ══ SIM CHAT LOGIC ═══════════════════════════════════════════ */
+  let simMsgQueue = [], simMsgStep = 0, simUserReplied = false, simChatReady = false;
+
+  function addMsg(from, text) {
+    const area = document.getElementById('bt-sim-msgs');
+    if (!area) return;
+    const row = document.createElement('div');
+    row.className = 'bt-msg-row ' + (from==='mine' ? 'mine' : 'theirs');
+    const bub = document.createElement('div');
+    bub.className = 'bt-msg-bubble';
+    bub.textContent = text;
+    row.appendChild(bub);
+    area.appendChild(row);
+    area.scrollTop = area.scrollHeight;
+  }
+
+  function openSimChat() {
+    const chat = document.getElementById('bt-sim-chat');
+    if (!chat) return;
+    document.getElementById('bt-sim-msgs').innerHTML = '';
+    simMsgStep = 0; simUserReplied = false; simChatReady = false;
+    chat.classList.add('on');
+    // First bot message after a moment
+    setTimeout(() => {
+      addMsg('bot', 'Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?');
+      playPop();
+      simChatReady = true;
+      // Update bubble to tell user to reply
+      typeText('Ahmed sent you a message! 💬 Type a reply in the chat box and press Send to respond to him.');
+    }, 1000);
+  }
+
+  /* ══ STEP RUNNER ══════════════════════════════════════════════ */
   function runStep(i) {
     idx = i;
     const step = STEPS[i];
     updateDots(i);
+
+    // Show/hide Continue based on type
+    const nxt = document.getElementById('bt-nxt');
+    const hint = document.getElementById('bt-hint');
+
+    // Close sim-chat if open unless we're in it
+    if (step.type !== 'sim-chat' && step.type !== 'sim-rate' && step.type !== 'points') {
+      const sc = document.getElementById('bt-sim-chat');
+      if (sc) sc.classList.remove('on');
+      const sr = document.getElementById('bt-sim-rating');
+      if (sr) sr.classList.remove('on');
+      const pts = document.getElementById('bt-pts');
+      if (pts) pts.classList.remove('on');
+    }
+
+    // Inject sim feed for step 2 (interact with "I can help")
+    if (i >= 2 && i <= 6) injectSimFeed();
+    else if (i > 6) removeSimFeed();
+
+    if (step.tab && typeof window.switchTab === 'function') window.switchTab(step.tab);
+
     scanSwipe(() => {
-      if (step.tab && typeof window.switchTab === 'function') window.switchTab(step.tab);
       spotlight(step);
-      positionGuide(step);
-      const bub = document.getElementById('bt-bub');
-      if (bub) bub.classList.add('on');
-      playChime();
-      typeText(typeof step.say === 'function' ? step.say(uName) : step.say);
-      const nxt = document.getElementById('bt-nxt');
-      if (nxt) {
-        nxt.textContent = (i === STEPS.length-1) ? 'Finish 🎉' : 'Continue →';
-        nxt.classList.add('on');
+
+      // handle different step types
+      if (step.type === 'interact') {
+        // Beacon speaks, no Continue — user must click the target
+        if (nxt) { nxt.classList.remove('on'); }
+        if (hint) { hint.textContent = step.hint || 'Click the highlighted element'; hint.classList.add('on'); }
+        positionGuide(step);
+        const bub = document.getElementById('bt-bub');
+        if (bub) bub.classList.add('on');
+        playChime();
+        typeText(typeof step.say==='function' ? step.say(uName) : step.say);
+        // Enable pointer events on target
+        enableTarget(step.target);
+      } else if (step.type === 'sim-chat') {
+        if (hint) hint.classList.remove('on');
+        if (nxt) nxt.classList.remove('on');
+        positionGuide({ side:'left', yFrac:.35 });
+        const bub = document.getElementById('bt-bub');
+        if (bub) bub.classList.add('on');
+        playChime();
+        typeText(typeof step.say==='function' ? step.say(uName) : step.say);
+        setTimeout(openSimChat, 1400);
+      } else if (step.type === 'sim-post') {
+        if (hint) hint.classList.remove('on');
+        if (nxt) nxt.classList.remove('on');
+        positionGuide({ side:'left', yFrac:.35 });
+        const bub = document.getElementById('bt-bub');
+        if (bub) bub.classList.add('on');
+        playChime();
+        typeText(typeof step.say==='function' ? step.say(uName) : step.say);
+        openSimPost();
+      } else if (step.type === 'sim-rate') {
+        if (hint) hint.classList.remove('on');
+        if (nxt) nxt.classList.remove('on');
+        positionGuide({ side:'left', yFrac:.35 });
+        const bub = document.getElementById('bt-bub');
+        if (bub) bub.classList.add('on');
+        playChime();
+        typeText(typeof step.say==='function' ? step.say(uName) : step.say);
+        setTimeout(() => document.getElementById('bt-sim-rating').classList.add('on'), 1200);
+      } else if (step.type === 'points') {
+        if (hint) hint.classList.remove('on');
+        positionGuide(step);
+        const bub = document.getElementById('bt-bub');
+        if (bub) bub.classList.add('on');
+        playChime();
+        typeText(typeof step.say==='function' ? step.say(uName) : step.say);
+        if (nxt) { nxt.textContent = 'Continue →'; nxt.classList.add('on'); }
+      } else {
+        // Guide step
+        if (hint) hint.classList.remove('on');
+        positionGuide(step);
+        const bub = document.getElementById('bt-bub');
+        if (bub) bub.classList.add('on');
+        playChime();
+        typeText(typeof step.say==='function' ? step.say(uName) : step.say);
+        if (nxt) {
+          nxt.textContent = (i===STEPS.length-1) ? 'Finish 🎉' : 'Continue →';
+          nxt.classList.add('on');
+        }
       }
     });
   }
 
-  /* ══ INTRO ══════════════════════════════════════════════════ */
-  function runIntro() {
-    const ov   = document.getElementById('bt-ov');
-    const beam = document.getElementById('bt-beam');
-    const big  = document.getElementById('bt-big-wrap');
-    const gl   = document.getElementById('bt-gl');
-    const gsub = document.getElementById('bt-gsub');
-    const btn  = document.getElementById('bt-go-btn');
-
-    const greets = [
-      n => `Hey ${n}! I'm Beacon — your guide! ✨`,
-      n => `${n}! You made it. I'm Beacon. Let's explore! 🚀`,
-      n => `Welcome, ${n}! Beacon here — ready to show you around! 🌟`,
-      n => `Oh hey, ${n}! The name's Beacon. This is going to be fun! 🎉`,
-      n => `${n}! I'm Beacon — your beacon of unity. Let's go! 💡`,
-    ];
-    const subs = [
-      "I'll walk you through every feature of this community dashboard.",
-      "Stick with me — you'll be up and running in just a few minutes.",
-      "Together we'll discover everything this platform has to offer.",
-      "Your community journey starts right here. I've got you covered.",
-    ];
-    if (gl)   gl.textContent   = greets[Math.floor(Math.random()*greets.length)](uName);
-    if (gsub) gsub.textContent = subs[Math.floor(Math.random()*subs.length)];
-
-    setTimeout(() => ov && ov.classList.add('bo'), 200);
-    setTimeout(() => {
-      playEntrance();
-      if (beam) { beam.style.transition='height .6s ease-out,opacity .28s'; beam.style.opacity='1'; beam.style.height='58vh'; }
-    }, 650);
-    setTimeout(() => big && big.classList.add('vis'), 1150);
-    setTimeout(() => { if (beam) { beam.style.transition='opacity .55s'; beam.style.opacity='0'; } }, 1800);
-    setTimeout(() => {
-      if (gl) {
-        gl.classList.add('vis');
-        setTimeout(() => { gl.classList.add('btg'); setTimeout(() => gl.classList.remove('btg'), 400); }, 200);
-      }
-    }, 1450);
-    setTimeout(() => gsub && gsub.classList.add('vis'), 1860);
-    setTimeout(() => btn  && btn.classList.add('vis'),  2230);
+  function enableTarget(sel) {
+    if (!sel) return;
+    const el = document.getElementById(sel.replace('#','')) || document.querySelector(sel);
+    if (el) {
+      // raise z-index so it's clickable above the dark overlay
+      el.style.position = 'relative';
+      el.style.zIndex = '18200';
+    }
+  }
+  function disableTarget(sel) {
+    if (!sel) return;
+    const el = document.getElementById(sel.replace('#','')) || document.querySelector(sel);
+    if (el) { el.style.zIndex = ''; }
   }
 
-  /* ══ PUBLIC API ═════════════════════════════════════════════ */
+  /* ══ SIM ACTIONS ══════════════════════════════════════════════ */
   window.BeaconTutorial = {
+    _simICanHelp() {
+      // Called when user clicks "I can help" on the demo post
+      if (idx !== 2) return;
+      disableTarget('#bt-sim-post');
+      playPop();
+      // move to chat step
+      runStep(3);
+    },
+
+    _simSend() {
+      const field = document.getElementById('bt-sim-msg-field');
+      if (!field || !simChatReady) return;
+      const text = field.value.trim();
+      if (!text) return;
+      field.value = '';
+      addMsg('mine', text);
+      playPop();
+
+      if (!simUserReplied) {
+        simUserReplied = true;
+        // Bot replies
+        setTimeout(() => {
+          addMsg('bot', "That's perfect, thank you so much! I really appreciate your help. 🙏");
+          playPop();
+        }, 1000);
+        setTimeout(() => {
+          addMsg('bot', "I'll be ready at 8:50am outside Block 3, Al Majaz 2.");
+          playPop();
+          // Now tell user to end chat
+          setTimeout(() => {
+            const nxt = document.getElementById('bt-nxt');
+            if (nxt) { nxt.textContent = 'Continue →'; nxt.classList.add('on'); }
+            typeText('Ahmed has all the info he needs! Now click "End Chat" in the chat header to wrap up and trigger the rating.');
+          }, 600);
+        }, 2400);
+      }
+    },
+
+    _simEndChat() {
+      // called when user clicks End Chat in sim chat
+      document.getElementById('bt-sim-chat')?.classList.remove('on');
+      document.getElementById('bt-nxt')?.classList.remove('on');
+      runStep(5);
+    },
+
+    _simRatingDone() {
+      document.getElementById('bt-sim-rating')?.classList.remove('on');
+      // Show points burst
+      const pts = document.getElementById('bt-pts');
+      if (pts) pts.classList.add('on');
+      playPoints();
+      spawnConfetti();
+      setTimeout(() => {
+        pts.classList.remove('on');
+        runStep(6);
+      }, 2200);
+    },
+
     start() {
       uName = (window.currentUserFirstName) ||
               (window.currentUserName ? window.currentUserName.split(' ')[0] : '') ||
               localStorage.getItem('bou_user_first') || 'friend';
-      idx = 0;
-      const old = document.getElementById('bt-root');
-      if (old) old.remove();
-      const oldcss = document.getElementById('bt-css');
-      if (oldcss) oldcss.remove();
+      idx = 0; simUserReplied = false; simChatReady = false;
+      const old = document.getElementById('bt-root'); if (old) old.remove();
+      const oldcss = document.getElementById('bt-css'); if (oldcss) oldcss.remove();
       buildCSS(); buildDOM(); buildStars(); runIntro();
     },
+
     _begin() {
       playWhoosh();
       const ov = document.getElementById('bt-ov');
@@ -6393,28 +6626,32 @@
       document.getElementById('bt-dots')?.classList.add('on');
       document.getElementById('bt-skp')?.classList.add('on');
       buildDots();
-      setTimeout(() => { if (ov) ov.style.display='none'; runStep(0); }, 700);
+      setTimeout(() => { if(ov) ov.style.display='none'; runStep(0); }, 700);
     },
+
     _next() {
       document.getElementById('bt-spl')?.classList.remove('on');
       document.getElementById('bt-nxt')?.classList.remove('on');
+      // Special: after step 4 (guide about ending chat) — just continue
       if (idx >= STEPS.length-1) { this._finish(); return; }
       runStep(idx+1);
     },
+
     _finish() {
-      ['bt-dk','bt-spl','bt-guide','bt-bub','bt-dots','bt-nxt','bt-skp'].forEach(id => {
+      ['bt-dk','bt-spl','bt-guide','bt-bub','bt-dots','bt-nxt','bt-skp','bt-hint'].forEach(id => {
         document.getElementById(id)?.classList.remove('on');
       });
+      removeSimFeed();
       const ft = document.getElementById('bt-ft');
       if (ft) ft.textContent = `You're all set, ${uName}! 🎉`;
       playFinish();
       const fin = document.getElementById('bt-fin');
-      if (fin) { fin.classList.add('on'); setTimeout(() => fin.classList.add('vis'), 30); }
+      if (fin) { fin.classList.add('on'); setTimeout(()=>fin.classList.add('vis'),30); }
       try { localStorage.setItem('bou_tutorial_done','1'); } catch(e) {}
     },
+
     _enterDash() {
-      const fin = document.getElementById('bt-fin');
-      if (!fin) return;
+      const fin = document.getElementById('bt-fin'); if (!fin) return;
       fin.classList.remove('vis');
       setTimeout(() => {
         fin.classList.remove('on');
@@ -6422,30 +6659,105 @@
         setTimeout(() => document.getElementById('bt-root')?.remove(), 400);
       }, 540);
     },
+
     _warnSkip()    { document.getElementById('bt-wrn')?.classList.add('on'); },
     _cancelSkip()  { document.getElementById('bt-wrn')?.classList.remove('on'); },
     _confirmSkip() { document.getElementById('bt-wrn')?.classList.remove('on'); this._finish(); },
   };
 
-  /* ══ AUTO-START ═════════════════════════════════════════════ */
-  function autoStart() {
-    if (localStorage.getItem('bou_tutorial_done')) return;
-    let tries = 0;
-    const poll = setInterval(() => {
-      tries++;
-      const hasName = window.currentUserFirstName || window.currentUserName;
-      if (hasName || tries > 60) {
-        clearInterval(poll);
-        if (hasName) window.BeaconTutorial.start();
+  /* ══ SIM POST ═════════════════════════════════════════════════ */
+  function openSimPost() {
+    // Pre-fill the existing request modal and open it
+    const modal = document.getElementById('requestModal');
+    if (!modal) return;
+    setTimeout(() => {
+      const title = document.getElementById('reqTitle');
+      const cat   = document.getElementById('reqCat');
+      const desc  = document.getElementById('reqDesc');
+      const loc   = document.getElementById('reqLoc');
+      if (title) title.value = 'Need a ladder for ceiling repair';
+      if (cat)   cat.value   = 'Tools';
+      if (desc)  desc.value  = 'Need a 3m+ ladder for a weekend repair. Happy to return same day!';
+      if (loc)   loc.value   = 'Al Majaz 2';
+      modal.style.display = 'flex';
+      modal.style.zIndex = '19300';
+
+      // Override submit button to trigger tutorial advance
+      const submitBtn = document.getElementById('submitReqBtn');
+      if (submitBtn && !submitBtn._tutorialHooked) {
+        submitBtn._tutorialHooked = true;
+        submitBtn._origClick = submitBtn.onclick;
+        submitBtn.addEventListener('click', function onTutPost(e) {
+          e.preventDefault(); e.stopImmediatePropagation();
+          modal.style.display = 'none';
+          modal.style.zIndex = '';
+          injectPostedCard();
+          submitBtn.removeEventListener('click', onTutPost);
+          submitBtn._tutorialHooked = false;
+          setTimeout(() => {
+            if (typeof window.switchTab === 'function') window.switchTab('community');
+            runStep(10);
+          }, 400);
+        }, true);
       }
-    }, 150);
+    }, 600);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', autoStart);
-  } else {
-    autoStart();
+  /* ══ CONFETTI ═════════════════════════════════════════════════ */
+  function spawnConfetti() {
+    const container = document.getElementById('bt-pts'); if (!container) return;
+    const colors = ['#38bdf8','#fbbf24','#34d399','#f472b6','#a78bfa'];
+    for (let i = 0; i < 40; i++) {
+      const c = document.createElement('div');
+      c.className = 'bt-pts-confetti';
+      const size = 6+Math.random()*8;
+      c.style.cssText = `width:${size}px;height:${size}px;background:${colors[i%colors.length]};left:${20+Math.random()*60}%;top:${30+Math.random()*20}%;animation-delay:${(Math.random()*0.5).toFixed(2)}s;animation-duration:${(1+Math.random()*0.6).toFixed(2)}s`;
+      container.appendChild(c);
+      setTimeout(() => c.remove(), 2000);
+    }
   }
+
+  /* ══ INTRO SEQUENCE ═══════════════════════════════════════════ */
+  function runIntro() {
+    const ov=document.getElementById('bt-ov'), beam=document.getElementById('bt-beam');
+    const big=document.getElementById('bt-big-wrap'), gl=document.getElementById('bt-gl');
+    const gsub=document.getElementById('bt-gsub'), btn=document.getElementById('bt-go-btn');
+    const greets=[
+      n=>`Hey ${n}! I'm Beacon — your guide! ✨`,
+      n=>`${n}! You made it. I'm Beacon. Let's explore! 🚀`,
+      n=>`Welcome, ${n}! Beacon here — ready to show you around! 🌟`,
+      n=>`Oh hey, ${n}! The name's Beacon. This is going to be fun! 🎉`,
+      n=>`${n}! I'm Beacon — your beacon of unity. Let's go! 💡`,
+    ];
+    const subs=[
+      "I'll walk you through every feature — you'll actually try things yourself.",
+      "Stick with me — this is an interactive tour, not just a slideshow.",
+      "Together we'll try every feature hands-on. Ready?",
+      "Your community journey starts here — let's explore it together.",
+    ];
+    if(gl)   gl.textContent  = greets[Math.floor(Math.random()*greets.length)](uName);
+    if(gsub) gsub.textContent= subs[Math.floor(Math.random()*subs.length)];
+    setTimeout(()=>ov&&ov.classList.add('bo'),200);
+    setTimeout(()=>{ playEntrance(); if(beam){beam.style.transition='height .6s ease-out,opacity .28s';beam.style.opacity='1';beam.style.height='58vh';} },650);
+    setTimeout(()=>big&&big.classList.add('vis'),1150);
+    setTimeout(()=>{ if(beam){beam.style.transition='opacity .55s';beam.style.opacity='0';} },1800);
+    setTimeout(()=>{ if(gl){ gl.classList.add('vis'); setTimeout(()=>{ gl.classList.add('btg'); setTimeout(()=>gl.classList.remove('btg'),400); },200); } },1450);
+    setTimeout(()=>gsub&&gsub.classList.add('vis'),1860);
+    setTimeout(()=>btn&&btn.classList.add('vis'),2230);
+  }
+
+  /* ══ AUTO-START ═══════════════════════════════════════════════ */
+  function autoStart() {
+    if (localStorage.getItem('bou_tutorial_done')) return;
+    let tries=0;
+    const poll=setInterval(()=>{
+      tries++;
+      const hasName=window.currentUserFirstName||window.currentUserName;
+      if(hasName||tries>60){ clearInterval(poll); if(hasName) window.BeaconTutorial.start(); }
+    },150);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',autoStart);
+  else autoStart();
 
 })();
 </script>
