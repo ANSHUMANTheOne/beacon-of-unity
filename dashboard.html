@@ -1353,7 +1353,7 @@
                     <div style="font-weight:600;">🚀 View Tutorial</div>
                     <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Replay the Beacon onboarding tour</div>
                 </div>
-                <button onclick="document.getElementById('settingsModal').style.display='none'; BeaconTutorial.start();" style="padding:9px 20px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;border-radius:50px;color:#0f172a;font-family:'Syne','Segoe UI',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(56,189,248,.35);transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 22px rgba(56,189,248,.55)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(56,189,248,.35)'">▶ Replay</button>
+                <button onclick="document.getElementById('settingsModal').style.display='none'; try{localStorage.removeItem('bou_tutorial_done');}catch(e){} setTimeout(function(){ if(window.BeaconTutorial) window.BeaconTutorial.start(); }, 120);" style="padding:9px 20px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;border-radius:50px;color:#0f172a;font-family:'Syne','Segoe UI',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(56,189,248,.35);transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 22px rgba(56,189,248,.55)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(56,189,248,.35)'">▶ Replay</button>
             </div>
         </div>
     </div>
@@ -6612,6 +6612,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
               (window.currentUserName ? window.currentUserName.split(' ')[0] : '') ||
               localStorage.getItem('bou_user_first') || 'friend';
       idx = 0; simUserReplied = false; simChatReady = false;
+      try { localStorage.removeItem('bou_tutorial_done'); } catch(e) {}
       const old = document.getElementById('bt-root'); if (old) old.remove();
       const oldcss = document.getElementById('bt-css'); if (oldcss) oldcss.remove();
       buildCSS(); buildDOM(); buildStars(); runIntro();
