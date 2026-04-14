@@ -461,13 +461,10 @@ function clearOutput(){terminal.innerHTML='';toast('Terminal cleared');}
 
 /* ═══ SIX SEVEN EASTER EGG ════════════════════════════════ */
 function triggerSixSeven(){
-  // Say "six seven" via Web Speech API
-  if('speechSynthesis' in window){
-    window.speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance('six seven');
-    u.rate=0.8;u.pitch=1.05;u.volume=1;
-    window.speechSynthesis.speak(u);
-  }
+  // Play sixseven.mp3 from repo
+  const audio = new Audio('sixseven.mp3');
+  audio.volume = 1;
+  audio.play().catch(()=>{});
   // Inject keyframes once
   if(!document.getElementById('sz-style')){
     const st=document.createElement('style');st.id='sz-style';
@@ -555,31 +552,22 @@ function buildFallbackCanvas(){
   return c;
 }
 
-/* ═══ INPUT SYSTEM (Thonny-style inline) ═══════════════════ */
+/* ═══ INPUT SYSTEM ══════════════════════════════════════════ */
 const inputRow=document.getElementById('input-row');
 const termInput=document.getElementById('term-input');
 const ipl=document.getElementById('ipl');
-let currentInput=null,inputQueue=[];
 
 function requestInput(promptMsg){
-  return new Promise(resolve=>{
-    const label = promptMsg||'';
-    ipl.textContent = label + ' ›';
-    inputRow.classList.add('visible');
-    termInput.value='';
-    termInput.focus();
-    if(currentInput) inputQueue.push(resolve);
-    else currentInput=resolve;
-  });
+  // kept for compatibility — now handled via window.__beaconRequestInput
 }
 function submitInput(){
   const val=termInput.value;
   const label=ipl.textContent.replace(/ ›$/,'');
   writeLine(label+val,'echo');
   termInput.value='';
-  const resolve=currentInput;currentInput=null;
-  if(inputQueue.length>0) currentInput=inputQueue.shift();
-  else inputRow.classList.remove('visible');
+  inputRow.classList.remove('visible');
+  const resolve=window.__beaconInputResolve;
+  window.__beaconInputResolve=null;
   if(resolve) resolve(val);
 }
 termInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitInput();}});
@@ -603,26 +591,42 @@ async function runCode(){
   const userCode = document.getElementById('code').value;
   isRunning=true;
   setStatus('Running…');
-  inputQueue=[];currentInput=null;
+  window.__beaconInputResolve=null;
   inputRow.classList.remove('visible');
   clearOutput();
   writeLine('Execution started','info');
 
+  // Store input resolver globally so Python can reach it
+  window.__beaconInputResolve = null;
+  window.__beaconRequestInput = function(prompt) {
+    return new Promise(function(resolve) {
+      window.__beaconInputResolve = resolve;
+      const label = prompt || '';
+      ipl.textContent = label + ' ›';
+      inputRow.classList.add('visible');
+      termInput.value = '';
+      termInput.focus();
+    });
+  };
+
   pyodide.globals.set('__user_code__', userCode);
-  pyodide.globals.set('__js_input__', (msg) => requestInput(String(msg || '')));
+
+  // Set up input() using pyodide's own async bridge
+  // We use runPythonAsync with a proper coroutine that calls back to JS
+  await pyodide.runPythonAsync(`
+import builtins, js
+
+async def _beacon_input(prompt=""):
+    p = str(prompt) if prompt else ""
+    result = await js.window.__beaconRequestInput(p)
+    return str(result)
+
+builtins.input = _beacon_input
+`);
 
   try {
     await pyodide.runPythonAsync(`
-import builtins, textwrap
-
-_js_input_fn = __js_input__
-
-class _AsyncInput:
-    async def __call__(self, prompt=""):
-        result = await _js_input_fn(str(prompt))
-        return str(result)
-
-builtins.input = _AsyncInput()
+import textwrap
 
 _indented = textwrap.indent(__user_code__, '    ')
 _src = 'async def __user_main__():\\n' + (_indented if _indented.strip() else '    pass')
