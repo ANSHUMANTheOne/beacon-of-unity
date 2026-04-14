@@ -461,10 +461,7 @@ function clearOutput(){terminal.innerHTML='';toast('Terminal cleared');}
 
 /* ═══ SIX SEVEN EASTER EGG ════════════════════════════════ */
 function triggerSixSeven(){
-  // Play sixseven.mp3
-  const audio = new Audio('sixseven.mp3');
-  audio.volume = 1;
-  audio.play().catch(()=>{});
+  new Audio('sixseven.mp3').play().catch(()=>{});
   // Inject keyframes once
   if(!document.getElementById('sz-style')){
     const st=document.createElement('style');st.id='sz-style';
@@ -557,83 +554,76 @@ const inputRow=document.getElementById('input-row');
 const termInput=document.getElementById('term-input');
 const ipl=document.getElementById('ipl');
 
-// Single pending resolve — only one input() at a time (like real Python)
-window.__inputResolve = null;
+window.__inputResolve=null;
 
 function submitInput(){
-  const val = termInput.value;
-  const label = ipl.textContent.replace(/ ›$/, '');
-  writeLine(label + val, 'echo');
-  termInput.value = '';
+  const val=termInput.value;
+  const label=ipl.textContent.replace(/ ›$/,'');
+  writeLine(label+val,'echo');
+  termInput.value='';
   inputRow.classList.remove('visible');
-  const res = window.__inputResolve;
-  window.__inputResolve = null;
+  const res=window.__inputResolve;
+  window.__inputResolve=null;
   if(res) res(val);
 }
-termInput.addEventListener('keydown', e => {
-  if(e.key === 'Enter'){ e.preventDefault(); submitInput(); }
-});
+termInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitInput();}});
 
 /* ═══ RUN CODE ══════════════════════════════════════════════ */
-let isRunning = false;
+let isRunning=false;
 
 async function runCode(){
-  if(isRunning){ toast('Already running…'); return; }
+  if(isRunning){toast('Already running…');return;}
   await pyodideReady;
-  if(!pyodide){ toast('Engine not ready yet…'); return; }
+  if(!pyodide){toast('Engine not ready yet…');return;}
 
-  const userCode = document.getElementById('code').value;
-  isRunning = true;
+  const userCode=document.getElementById('code').value;
+  isRunning=true;
   setStatus('Running…');
-  window.__inputResolve = null;
+  window.__inputResolve=null;
   inputRow.classList.remove('visible');
   clearOutput();
-  writeLine('Execution started', 'info');
+  writeLine('Execution started','info');
 
-  // Expose an input function to Python via js module.
-  // from js import document, window  — then await window.__requestInput(p)
-  // This is the ONLY pattern that correctly bridges JS Promises to Python await in Pyodide.
-  window.__requestInput = function(prompt) {
-    return new Promise(function(resolve) {
-      window.__inputResolve = resolve;
-      const label = (prompt || '');
-      ipl.textContent = label + ' ›';
+  window.__requestInput=function(prompt){
+    return new Promise(function(resolve){
+      window.__inputResolve=resolve;
+      ipl.textContent=(prompt||'')+' ›';
       inputRow.classList.add('visible');
-      termInput.value = '';
+      termInput.value='';
       termInput.focus();
     });
   };
 
-  pyodide.globals.set('__user_code__', userCode);
+  pyodide.globals.set('__user_code__',userCode);
 
-  try {
+  try{
     await pyodide.runPythonAsync(`
 import builtins, textwrap, js as _js
 
-async def __beacon_input__(prompt=""):
+async def __input__(prompt=""):
     val = await _js.window.__requestInput(str(prompt) if prompt else "")
     return str(val)
 
-builtins.input = __beacon_input__
+builtins.input = __input__
 
 _ind = textwrap.indent(__user_code__, '    ')
-_src = 'async def __main__():\n' + (_ind if _ind.strip() else '    pass')
+_src = 'async def __run__():\n' + (_ind if _ind.strip() else '    pass')
 _ns = {'__name__': '__main__'}
 exec(compile(_src, '<beacon>', 'exec'), _ns)
 try:
-    await _ns['__main__']()
+    await _ns['__run__']()
 except SystemExit:
     pass
 `);
-    writeLine('Done', 'success');
+    writeLine('Done','success');
     setStatus('Ready');
-  } catch(err) {
-    writeLine(String(err), 'stderr');
+  }catch(err){
+    writeLine(String(err),'stderr');
     setStatus('Error');
   }
 
-  isRunning = false;
-  window.__inputResolve = null;
+  isRunning=false;
+  window.__inputResolve=null;
   inputRow.classList.remove('visible');
 }
 
