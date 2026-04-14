@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Beacon of Unity · Code</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
 <style>
 /* ── TOKENS ── */
 :root { --ease:cubic-bezier(.16,1,.3,1); --blue:#0ea5e9; --cyan:#06b6d4; }
@@ -329,7 +329,7 @@ print("Built by Anshuman Tripathy")</textarea>
   </main>
 
   <div id="statusbar">
-    <div class="sbi"><svg width="8" height="8" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="4"/></svg>Python 3.11</div>
+    <div class="sbi"><svg width="8" height="8" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="4"/></svg>Python 3.12</div>
     <span class="sb-sep">|</span>
     <div class="sbi" id="sb-ln">Ln 1, Col 1</div>
     <span class="sb-sep">|</span>
@@ -425,15 +425,14 @@ let pyodide=null,pyodideReady=null;
 const loMsg=document.getElementById('lo-msg'),overlay=document.getElementById('lo');
 
 async function initPyodide(){
-  loMsg.textContent='Loading Pyodide runtime…';
+  loMsg.textContent='Loading Python runtime…';
   pyodide = await loadPyodide({
-    stdout: (text) => { if(text !== undefined) writeLine(text, 'stdout'); },
-    stderr: (text) => { if(text !== undefined) writeLine(text, 'stderr'); }
+    indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/',
+    stdout: (text) => { if(text!==undefined&&text!=='') writeLine(text,'stdout'); },
+    stderr: (text) => { if(text!==undefined&&text!=='') writeLine(text,'stderr'); }
   });
-  loMsg.textContent='Setting up environment…';
-  await pyodide.runPythonAsync('import sys, io, builtins');
   loMsg.textContent='Ready!';
-  setTimeout(()=>overlay.classList.add('gone'),700);
+  setTimeout(()=>overlay.classList.add('gone'),400);
   setStatus('Ready');
 }
 pyodideReady=initPyodide().catch(err=>{loMsg.textContent='Failed: '+err;setStatus('Engine Error');});
@@ -549,22 +548,85 @@ function buildFallbackCanvas(){
   return c;
 }
 
-/* ═══ INPUT SYSTEM ══════════════════════════════════════════ */
+/* ═══ INLINE INPUT SYSTEM (Thonny-style) ════════════════════ */
+// The input-row div is kept for fallback but we primarily use inline terminal input
 const inputRow=document.getElementById('input-row');
 const termInput=document.getElementById('term-input');
 const ipl=document.getElementById('ipl');
 
-window.__inputResolve=null;
+// Active inline input line DOM elements
+let _inlineInputEl=null;
+let _inlineResolve=null;
 
+function createInlineInput(promptText){
+  return new Promise(function(resolve){
+    _inlineResolve=resolve;
+
+    // Build an inline input line in the terminal
+    const line=document.createElement('div');
+    line.className='term-line';
+    line.style.alignItems='center';
+
+    // The prompt text (cyan, like Thonny)
+    const promptSpan=document.createElement('span');
+    promptSpan.className='term-txt echo';
+    promptSpan.style.cssText='flex:0 0 auto;white-space:pre;margin-right:0;color:var(--cyan)';
+    promptSpan.textContent=promptText||'';
+
+    // The editable input field — looks like plain terminal text
+    const inputEl=document.createElement('input');
+    inputEl.type='text';
+    inputEl.autocomplete='off';
+    inputEl.spellcheck=false;
+    inputEl.style.cssText=[
+      'flex:1','background:transparent','border:none','outline:none',
+      'color:var(--text)','font-family:\'JetBrains Mono\',monospace',
+      'font-size:12.5px','caret-color:var(--cyan)','padding:0','margin:0',
+      'min-width:60px','cursor:text'
+    ].join(';');
+
+    _inlineInputEl=inputEl;
+
+    inputEl.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){
+        e.preventDefault();
+        const val=inputEl.value;
+        // Freeze the input: replace with plain text
+        line.innerHTML='';
+        const frozenPre=document.createElement('span');frozenPre.className='term-pre';frozenPre.textContent=' ';
+        const frozenTxt=document.createElement('span');
+        frozenTxt.className='term-txt stdout';
+        frozenTxt.textContent=(promptText||'')+val;
+        line.appendChild(frozenPre);line.appendChild(frozenTxt);
+        _inlineInputEl=null;
+        // Hide the fallback row just in case
+        inputRow.classList.remove('visible');
+        const res=_inlineResolve;_inlineResolve=null;
+        if(res) res(val);
+      }
+      // Block Ctrl+C to avoid confusing the running state
+      if(e.ctrlKey&&e.key==='c'){e.preventDefault();}
+    });
+
+    // Blank pre-icon column
+    const pre=document.createElement('span');
+    pre.className='term-pre';pre.textContent=' ';
+
+    line.appendChild(pre);
+    line.appendChild(promptSpan);
+    line.appendChild(inputEl);
+    terminal.appendChild(line);
+    terminal.scrollTop=terminal.scrollHeight;
+    inputEl.focus();
+  });
+}
+
+// Fallback submit (for the bottom bar, mostly unused now)
 function submitInput(){
   const val=termInput.value;
-  const label=ipl.textContent.replace(/ ›$/,'');
-  writeLine(label+val,'echo');
   termInput.value='';
   inputRow.classList.remove('visible');
-  const res=window.__inputResolve;
-  window.__inputResolve=null;
-  if(res) res(val);
+  if(_inlineResolve){const res=_inlineResolve;_inlineResolve=null;if(res)res(val);}
 }
 termInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitInput();}});
 
@@ -579,61 +641,65 @@ async function runCode(){
   const userCode=document.getElementById('code').value;
   isRunning=true;
   setStatus('Running…');
-  window.__inputResolve=null;
+  _inlineResolve=null;
+  _inlineInputEl=null;
   inputRow.classList.remove('visible');
   clearOutput();
   writeLine('Execution started','info');
 
-  window.__requestInput=function(prompt){
-    return new Promise(function(resolve){
-      window.__inputResolve=resolve;
-      ipl.textContent=(prompt||'')+' ›';
-      inputRow.classList.add('visible');
-      termInput.value='';
-      termInput.focus();
-    });
+  // Expose async input function to Python via a JS callback
+  // We use pyodide.globals to pass a Python-callable that internally
+  // awaits our JS Promise via the to_js / from_js bridge properly
+  window.__beaconInput=function(promptStr){
+    // Returns a JS Promise — Pyodide's runPythonAsync will await it correctly
+    return createInlineInput(promptStr);
   };
 
-  pyodide.globals.set('__user_code__',userCode);
+  pyodide.globals.set('__user_code__', userCode);
 
   try{
     await pyodide.runPythonAsync(`
-import builtins, textwrap, js as _js
+import builtins
+import js as _js
+from pyodide.ffi import to_js
 
-async def __input__(prompt=""):
-    val = await _js.window.__requestInput(str(prompt) if prompt else "")
-    return str(val)
+async def __beacon_input__(prompt=""):
+    p = str(prompt) if prompt is not None else ""
+    # Call the JS function — it returns a JS Promise which Python can await
+    result = await _js.window.__beaconInput(p)
+    return str(result) if result is not None else ""
 
-builtins.input = __input__
+builtins.input = __beacon_input__
 
-# Build the async wrapper safely using the globals variable (not string interpolation)
+# Safely build async wrapper — no string interpolation of user code
 _code = __user_code__
-_lines = _code.split('\\n')
-_indented = '\\n'.join('    ' + line for line in _lines)
-_src = 'async def __run__():\\n' + (_indented if _code.strip() else '    pass')
+_lines = _code.split("\\n")
+_indented = "\\n".join("    " + ln for ln in _lines)
+_src = "async def __run__():\\n" + (_indented if _code.strip() else "    pass")
 
-_ns = {'__name__': '__main__'}
+_ns = {"__name__": "__main__"}
+exec(compile(_src, "<beacon>", "exec"), _ns)
 try:
-    _compiled = compile(_src, '<beacon>', 'exec')
-except SyntaxError as _se:
-    # Try running as-is for syntax error reporting
-    raise _se
-
-exec(_compiled, _ns)
-try:
-    await _ns['__run__']()
+    await _ns["__run__"]()
 except SystemExit:
     pass
 `);
-    writeLine('Done','success');
+    writeLine('Done ✔','success');
     setStatus('Ready');
   }catch(err){
+    // Clean up any hanging inline input
+    if(_inlineInputEl){
+      try{_inlineInputEl.closest('.term-line').remove();}catch(_){}
+      _inlineInputEl=null;
+    }
+    if(_inlineResolve){_inlineResolve('');_inlineResolve=null;}
     writeLine(String(err),'stderr');
     setStatus('Error');
   }
 
   isRunning=false;
-  window.__inputResolve=null;
+  _inlineResolve=null;
+  _inlineInputEl=null;
   inputRow.classList.remove('visible');
 }
 
