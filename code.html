@@ -78,8 +78,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 /* ── SIDEBAR ── */
 #sidebar{grid-area:sidebar;background:rgba(7,18,26,.6);border-right:1px solid var(--edge);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px;z-index:5;transition:background .5s}
 [data-theme="light"] #sidebar{background:rgba(240,249,255,.7)}
-
-  
+.sb-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--muted);cursor:none;transition:all .2s;position:relative}
+.sb-icon:hover,.sb-icon.active{background:rgba(14,165,233,.1);color:var(--blue)}
+.sb-icon.active::before{content:'';position:absolute;left:-1px;top:50%;transform:translateY(-50%);width:2px;height:18px;background:var(--blue);border-radius:0 2px 2px 0}
 
 /* ── MAIN ── */
 #main{grid-area:main;display:grid;grid-template-rows:34px 1fr auto;overflow:hidden}
@@ -480,7 +481,15 @@ function submitInput(){
 }
 termInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitInput();}});
 
-/* ═══ RUN CODE — correct stdout capture via globals ════════ */
+/* ═══ RUN CODE ══════════════════════════════════════════════
+   FIX: wrap user code in an async def so that input() calls
+   can properly await the JS promise. Using exec() directly
+   breaks async because exec() is synchronous — it creates
+   the coroutine but never awaits it, returning a coroutine
+   object instead of a string. Indenting into an async def
+   and awaiting it at the top level solves this exactly like
+   Thonny/Replit handle sequential input() calls.
+═══════════════════════════════════════════════════════════ */
 let isRunning=false;
 
 async function runCode(){
@@ -496,13 +505,12 @@ async function runCode(){
   clearOutput();
   writeLine('Execution started','info');
 
-  // Pass code and input function safely via globals
   pyodide.globals.set('__user_code__', userCode);
   pyodide.globals.set('__js_input__', (msg) => requestInput(String(msg || '')));
 
   try {
     await pyodide.runPythonAsync(`
-import sys, builtins
+import builtins, textwrap
 
 _js_input_fn = __js_input__
 
@@ -513,15 +521,22 @@ class _AsyncInput:
 
 builtins.input = _AsyncInput()
 
+# Wrap user code in an async def so every input() call can
+# properly await the JS promise. exec() is synchronous and
+# cannot await coroutines, which is why the old approach broke.
+_indented = textwrap.indent(__user_code__, '    ')
+_wrapped = 'async def __user_main__():\\n' + _indented + '\\nawait __user_main__()'
+
 try:
-    exec(compile(__user_code__, "<beacon>", "exec"), {"__name__": "__main__"})
+    await eval(compile(_wrapped, '<beacon>', 'exec'))
 except SystemExit:
     pass
+except IndentationError as e:
+    raise IndentationError(str(e)) from None
 `);
     writeLine('Done','success');
     setStatus('Ready');
   } catch(err) {
-    // traceback already streamed to terminal via stderr callback
     setStatus('Error');
   }
 
@@ -566,9 +581,7 @@ print("Press Ctrl + Enter to run your code.")
 let curTab='main';
 
 function switchTab(name){
-  // save current
   TAB_CONTENTS[curTab]=document.getElementById('code').value;
-  // update tab styling
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id==='tab-'+name));
   curTab=name;
   document.getElementById('code').value=TAB_CONTENTS[name]||'';
