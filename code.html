@@ -606,10 +606,20 @@ async def __input__(prompt=""):
 
 builtins.input = __input__
 
-_ind = textwrap.indent(__user_code__, '    ')
-_src = 'async def __run__():\n' + (_ind if _ind.strip() else '    pass')
+# Build the async wrapper safely using the globals variable (not string interpolation)
+_code = __user_code__
+_lines = _code.split('\\n')
+_indented = '\\n'.join('    ' + line for line in _lines)
+_src = 'async def __run__():\\n' + (_indented if _code.strip() else '    pass')
+
 _ns = {'__name__': '__main__'}
-exec(compile(_src, '<beacon>', 'exec'), _ns)
+try:
+    _compiled = compile(_src, '<beacon>', 'exec')
+except SyntaxError as _se:
+    # Try running as-is for syntax error reporting
+    raise _se
+
+exec(_compiled, _ns)
 try:
     await _ns['__run__']()
 except SystemExit:
@@ -692,8 +702,100 @@ codeEl.addEventListener('keyup',updateAL);
 codeEl.addEventListener('click',updateAL);
 codeEl.addEventListener('scroll',()=>{LN.style.marginTop=(-codeEl.scrollTop)+'px';});
 codeEl.addEventListener('keydown',e=>{
-  if(e.key==='Tab'){e.preventDefault();const s=codeEl.selectionStart;codeEl.value=codeEl.value.substring(0,s)+'    '+codeEl.value.substring(codeEl.selectionEnd);codeEl.selectionStart=codeEl.selectionEnd=s+4;updateLN();}
+  /* ── TAB: insert 4 spaces ── */
+  if(e.key==='Tab'){
+    e.preventDefault();
+    const s=codeEl.selectionStart,end=codeEl.selectionEnd;
+    if(s===end){
+      // No selection: insert 4 spaces
+      codeEl.value=codeEl.value.substring(0,s)+'    '+codeEl.value.substring(end);
+      codeEl.selectionStart=codeEl.selectionEnd=s+4;
+    } else {
+      // Selection: indent each selected line
+      const before=codeEl.value.substring(0,s),sel=codeEl.value.substring(s,end),after=codeEl.value.substring(end);
+      const indented=sel.replace(/^/gm,'    ');
+      codeEl.value=before+indented+after;
+      codeEl.selectionStart=s;codeEl.selectionEnd=s+indented.length;
+    }
+    updateLN();
+    return;
+  }
+
+  /* ── ENTER: smart auto-indent ── */
+  if(e.key==='Enter'){
+    e.preventDefault();
+    const s=codeEl.selectionStart;
+    const val=codeEl.value;
+    // Get current line
+    const lineStart=val.lastIndexOf('\n',s-1)+1;
+    const curLine=val.substring(lineStart,s);
+    // Match leading whitespace
+    const leadMatch=curLine.match(/^(\s*)/);
+    let indent=leadMatch?leadMatch[1]:'';
+    // If line ends with ':', add one level of indent
+    const trimmed=curLine.trimEnd();
+    if(trimmed.endsWith(':')){
+      indent+=('    ');
+    }
+    // If current line is only whitespace (blank indent line), reduce indent (like Thonny/Replit)
+    // Insert newline + indent
+    const ins='\n'+indent;
+    codeEl.value=val.substring(0,s)+ins+val.substring(codeEl.selectionEnd);
+    codeEl.selectionStart=codeEl.selectionEnd=s+ins.length;
+    updateLN();
+    updateAL();
+    return;
+  }
+
+  /* ── BACKSPACE: dedent if cursor is on indent whitespace ── */
+  if(e.key==='Backspace'){
+    const s=codeEl.selectionStart,end=codeEl.selectionEnd;
+    if(s===end && s>0){
+      const val=codeEl.value;
+      const lineStart=val.lastIndexOf('\n',s-1)+1;
+      const beforeCursor=val.substring(lineStart,s);
+      // If everything before cursor on this line is spaces, delete a full indent (up to 4)
+      if(/^ +$/.test(beforeCursor)){
+        e.preventDefault();
+        const del=Math.min(4, beforeCursor.length % 4 === 0 ? 4 : beforeCursor.length % 4);
+        codeEl.value=val.substring(0,s-del)+val.substring(s);
+        codeEl.selectionStart=codeEl.selectionEnd=s-del;
+        updateLN();
+        updateAL();
+        return;
+      }
+    }
+  }
+
+  /* ── Ctrl/Cmd+Enter: run ── */
   if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runCode();}
+
+  /* ── Auto-close brackets/quotes ── */
+  const pairs={'(':')','{':'}','[':']','"':'"',"'":"'"};
+  if(pairs[e.key]){
+    const s=codeEl.selectionStart,end=codeEl.selectionEnd;
+    if(s===end){
+      // Only auto-close if next char is not the same closing char
+      const nextChar=codeEl.value[s];
+      const close=pairs[e.key];
+      if(nextChar!==close){
+        e.preventDefault();
+        const val=codeEl.value;
+        codeEl.value=val.substring(0,s)+e.key+close+val.substring(end);
+        codeEl.selectionStart=codeEl.selectionEnd=s+1;
+        updateLN();
+      }
+    }
+  }
+
+  /* ── Skip over closing bracket/quote if already there ── */
+  if([')','}',']','"',"'"].includes(e.key)){
+    const s=codeEl.selectionStart;
+    if(codeEl.value[s]===e.key){
+      e.preventDefault();
+      codeEl.selectionStart=codeEl.selectionEnd=s+1;
+    }
+  }
 });
 updateLN();
 
