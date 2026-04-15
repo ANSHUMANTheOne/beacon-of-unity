@@ -295,14 +295,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div id="editor-section">
       <div id="editor-wrap">
         <div id="line-numbers"><span class="ln active">1</span></div>
-        <textarea id="code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">print("Hello, Beacon of Unity!")
-
-name = input("What is your name? ")
-city = input("Which emirate are you from? ")
-
-print("Hello " + name + " from " + city + "!")
-print("Welcome to Beacon of Unity Code.")
-print("Built by Anshuman Tripathy")</textarea>
+        <textarea id="code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
       </div>
       <div id="resizer"></div>
       <div id="output-panel" style="height:220px;">
@@ -713,7 +706,7 @@ function downloadCode(){
 
 /* ═══ TABS — fixed, no rename, no close ════════════════════ */
 const TAB_CONTENTS = {
-  main: document.getElementById('code').value,
+  main: '',
   intro: `# introduction.py
 # --------------------------------------------------------
 #   Beacon of Unity Code
@@ -728,13 +721,16 @@ print("This IDE runs Python entirely in your browser.")
 print("No server. No backend. Just Pyodide.")
 print("")
 print("Features:")
-print("  - Full Python 3.11 via Pyodide")
-print("  - Inline terminal input()")
+print("  - Full Python 3.12 via Pyodide")
+print("  - Inline terminal input() - just like Thonny!")
+print("  - Smart auto-indent and bracket pairing")
 print("  - Copy and Download your code")
 print("  - Light / Dark mode")
 print("  - Beacon mascot")
 print("")
-print("Press Ctrl + Enter to run your code.")
+
+name = input("What is your name? ")
+print("Welcome, " + name + "! Press Ctrl+Enter to run code anytime.")
 `
 };
 let curTab='main';
@@ -834,33 +830,95 @@ codeEl.addEventListener('keydown',e=>{
   }
 
   /* ── Ctrl/Cmd+Enter: run ── */
-  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runCode();}
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runCode();return;}
 
-  /* ── Auto-close brackets/quotes ── */
-  const pairs={'(':')','{':'}','[':']','"':'"',"'":"'"};
-  if(pairs[e.key]){
-    const s=codeEl.selectionStart,end=codeEl.selectionEnd;
-    if(s===end){
-      // Only auto-close if next char is not the same closing char
-      const nextChar=codeEl.value[s];
-      const close=pairs[e.key];
-      if(nextChar!==close){
-        e.preventDefault();
-        const val=codeEl.value;
-        codeEl.value=val.substring(0,s)+e.key+close+val.substring(end);
-        codeEl.selectionStart=codeEl.selectionEnd=s+1;
-        updateLN();
-      }
-    }
-  }
+  /* ── Auto-close brackets and smart quotes ── */
+  const OPENERS={'(':')','{':'}','[':']'};
+  const CLOSERS=new Set([')','}',']']);
+  const QUOTES=new Set(['"',"'"]);
 
-  /* ── Skip over closing bracket/quote if already there ── */
-  if([')','}',']','"',"'"].includes(e.key)){
-    const s=codeEl.selectionStart;
-    if(codeEl.value[s]===e.key){
-      e.preventDefault();
+  const val=codeEl.value;
+  const s=codeEl.selectionStart, end=codeEl.selectionEnd;
+  const nextCh=val[s]||'';
+  const prevCh=val[s-1]||'';
+
+  // ── Brackets: auto-close ──
+  if(OPENERS[e.key]){
+    e.preventDefault();
+    const close=OPENERS[e.key];
+    if(s!==end){
+      // Wrap selection in brackets
+      const sel=val.substring(s,end);
+      codeEl.value=val.substring(0,s)+e.key+sel+close+val.substring(end);
+      codeEl.selectionStart=s+1; codeEl.selectionEnd=end+1;
+    } else {
+      codeEl.value=val.substring(0,s)+e.key+close+val.substring(s);
       codeEl.selectionStart=codeEl.selectionEnd=s+1;
     }
+    updateLN(); return;
+  }
+
+  // ── Closing bracket: skip over if it's already there ──
+  if(CLOSERS.has(e.key)){
+    if(nextCh===e.key){
+      e.preventDefault();
+      codeEl.selectionStart=codeEl.selectionEnd=s+1;
+      return;
+    }
+    // Otherwise let browser insert normally
+    return;
+  }
+
+  // ── Smart quotes ──
+  if(QUOTES.has(e.key)){
+    const q=e.key;
+
+    // 1. Skip over existing closing quote
+    if(nextCh===q && prevCh!==q){
+      e.preventDefault();
+      codeEl.selectionStart=codeEl.selectionEnd=s+1;
+      return;
+    }
+
+    // 2. If there's a selection, wrap it
+    if(s!==end){
+      e.preventDefault();
+      const sel=val.substring(s,end);
+      codeEl.value=val.substring(0,s)+q+sel+q+val.substring(end);
+      codeEl.selectionStart=s+1; codeEl.selectionEnd=end+1;
+      updateLN(); return;
+    }
+
+    // 3. Don't auto-close if prev char is alphanumeric or closing (e.g. it's a real apostrophe in a word)
+    if(/[\w\)]/.test(prevCh)){
+      // Just let the browser type the single quote normally
+      return;
+    }
+
+    // 4. Don't auto-close if next char is alphanumeric (cursor is inside a word)
+    if(/\w/.test(nextCh)){
+      return;
+    }
+
+    // 5. Don't auto-close if we're already inside this quote type
+    // Count unescaped occurrences of this quote before cursor
+    const before=val.substring(0,s);
+    let qCount=0;
+    for(let i=0;i<before.length;i++){
+      if(before[i]===q && (i===0||before[i-1]!=='\\')){qCount++;}
+    }
+    // Odd count = inside a string, just insert the quote to close it
+    // Even count = not inside, auto-close
+    if(qCount%2===1){
+      // Inside string — just type it, don't double
+      return;
+    }
+
+    // 6. Auto-close: insert quote pair
+    e.preventDefault();
+    codeEl.value=val.substring(0,s)+q+q+val.substring(s);
+    codeEl.selectionStart=codeEl.selectionEnd=s+1;
+    updateLN(); return;
   }
 });
 updateLN();
