@@ -610,9 +610,15 @@ function createInlineInput(promptText){
     line.appendChild(inputEl);
     terminal.appendChild(line);
     terminal.scrollTop=terminal.scrollHeight;
-    inputEl.focus();
+    // Use setTimeout so Pyodide yields the event loop before we grab focus
+    setTimeout(()=>{ inputEl.focus(); }, 50);
   });
 }
+
+// Clicking anywhere in the terminal re-focuses the active inline input
+terminal.addEventListener('click',()=>{
+  if(_inlineInputEl){ _inlineInputEl.focus(); }
+});
 
 // Fallback submit (for the bottom bar, mostly unused now)
 function submitInput(){
@@ -640,11 +646,7 @@ async function runCode(){
   clearOutput();
   writeLine('Execution started','info');
 
-  // Expose async input function to Python via a JS callback
-  // We use pyodide.globals to pass a Python-callable that internally
-  // awaits our JS Promise via the to_js / from_js bridge properly
-  window.__beaconInput=function(promptStr){
-    // Returns a JS Promise — Pyodide's runPythonAsync will await it correctly
+  window.__beaconInput = function(promptStr){
     return createInlineInput(promptStr);
   };
 
@@ -652,24 +654,19 @@ async function runCode(){
 
   try{
     await pyodide.runPythonAsync(`
-import builtins
-import js as _js
-from pyodide.ffi import to_js
+import builtins, js
 
 async def __beacon_input__(prompt=""):
     p = str(prompt) if prompt is not None else ""
-    # Call the JS function — it returns a JS Promise which Python can await
-    result = await _js.window.__beaconInput(p)
+    result = await js.window.__beaconInput(p)
     return str(result) if result is not None else ""
 
 builtins.input = __beacon_input__
 
-# Safely build async wrapper — no string interpolation of user code
 _code = __user_code__
 _lines = _code.split("\\n")
 _indented = "\\n".join("    " + ln for ln in _lines)
 _src = "async def __run__():\\n" + (_indented if _code.strip() else "    pass")
-
 _ns = {"__name__": "__main__"}
 exec(compile(_src, "<beacon>", "exec"), _ns)
 try:
