@@ -5,47 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Beacon of Unity · Code</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<!-- Skulpt: JS Python interpreter — loads instantly, input() works perfectly -->
 <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
 <style>
-/* ── TOKENS ── */
-:root { --ease:cubic-bezier(.16,1,.3,1); --blue:#0ea5e9; --cyan:#06b6d4; }
-[data-theme="dark"]{
-  --navy:#0c2d48; --sky:#e0f2fe; --sky2:#bae6fd; --sky3:#7dd3fc;
-  --muted:#4a7c9e; --panel:#061522; --surface:#071828;
-  --edge:rgba(14,165,233,.14); --text:#e0f2fe;
-  --body-bg:#071e30; --card-bg:rgba(14,165,233,.07);
-  --grid-color:rgba(255,255,255,.03); --orb1:rgba(14,165,233,.16);
-}
-[data-theme="light"]{
-  --navy:#0c2d48; --sky:#e0f2fe; --sky2:#bae6fd; --sky3:#38bdf8;
-  --muted:#4a7c9e; --panel:#f0f9ff; --surface:#e8f5fd;
-  --edge:rgba(14,165,233,.18); --text:#0c2d48;
-  --body-bg:#d6edfa; --card-bg:#fff;
-  --grid-color:rgba(14,165,233,.06); --orb1:rgba(14,165,233,.22);
-}
+:root{--ease:cubic-bezier(.16,1,.3,1);--blue:#0ea5e9;--cyan:#06b6d4}
+[data-theme="dark"]{--navy:#0c2d48;--sky:#e0f2fe;--sky2:#bae6fd;--sky3:#7dd3fc;--muted:#4a7c9e;--panel:#061522;--surface:#071828;--edge:rgba(14,165,233,.14);--text:#e0f2fe;--body-bg:#071e30;--card-bg:rgba(14,165,233,.07);--grid-color:rgba(255,255,255,.03);--orb1:rgba(14,165,233,.16)}
+[data-theme="light"]{--navy:#0c2d48;--sky:#e0f2fe;--sky2:#bae6fd;--sky3:#38bdf8;--muted:#4a7c9e;--panel:#f0f9ff;--surface:#e8f5fd;--edge:rgba(14,165,233,.18);--text:#0c2d48;--body-bg:#d6edfa;--card-bg:#fff;--grid-color:rgba(14,165,233,.06);--orb1:rgba(14,165,233,.22)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--body-bg);color:var(--text);cursor:none;transition:background .5s,color .5s}
-
-/* ── CURSOR (exact from index.html) ── */
 #cd{position:fixed;top:0;left:0;width:10px;height:10px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .2s}
 #cr{position:fixed;top:0;left:0;width:36px;height:36px;border:1.5px solid rgba(14,165,233,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease)}
 body.hov #cd{width:18px;height:18px;background:var(--cyan)}
 body.hov #cr{width:54px;height:54px;border-color:rgba(6,182,212,.7)}
-
-/* ── GRID + ORBS ── */
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--grid-color) 1px,transparent 1px),linear-gradient(90deg,var(--grid-color) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0;transition:background-image .5s}
 .orb{position:fixed;border-radius:50%;filter:blur(72px);pointer-events:none;animation:od ease-in-out infinite;z-index:0}
 .ob1{width:500px;height:500px;background:var(--orb1);top:-120px;right:-80px;animation-duration:12s}
 .ob2{width:280px;height:280px;background:rgba(6,182,212,.1);bottom:-60px;left:3%;animation-duration:9s;animation-delay:-4s}
 @keyframes od{0%,100%{transform:translate(0,0)scale(1)}50%{transform:translate(20px,-20px)scale(1.04)}}
-
-/* ── LAYOUT ── */
 #app{display:grid;grid-template-rows:52px 1fr 24px;grid-template-columns:46px 1fr;grid-template-areas:"header header" "sidebar main" "status status";height:100vh;position:relative;z-index:1}
-
-/* ── HEADER ── */
 #header{grid-area:header;display:flex;align-items:center;gap:12px;padding:0 20px;background:rgba(7,18,26,.88);border-bottom:1px solid var(--edge);backdrop-filter:blur(20px);z-index:50;transition:background .5s}
 [data-theme="light"] #header{background:rgba(240,249,255,.92)}
 .logo-wrap{display:flex;align-items:center;gap:9px;cursor:none}
@@ -54,13 +33,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--blue);letter-spacing:-.2px;white-space:nowrap}
 .brand-sub{font-family:'Syne',sans-serif;font-weight:700;font-size:.68rem;color:var(--cyan);letter-spacing:3px;opacity:.8;white-space:nowrap}
 .hsep{width:1px;height:22px;background:var(--edge);flex-shrink:0}
-
-/* author chip */
 .author-chip{display:flex;align-items:center;gap:7px;padding:4px 12px 4px 8px;background:rgba(14,165,233,.07);border:1px solid rgba(14,165,233,.18);border-radius:50px;font-size:.72rem;color:var(--muted);white-space:nowrap;cursor:none;flex-shrink:0}
 .author-avatar{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:800;color:#001828;flex-shrink:0}
 .author-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;color:var(--blue)}
-
-/* engine badge */
 .eng-badge{display:flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(34,211,164,.07);border:1px solid rgba(34,211,164,.22);border-radius:50px;font-family:'Syne',sans-serif;font-size:.64rem;font-weight:700;letter-spacing:1.5px;color:#22d3a4;white-space:nowrap;flex-shrink:0}
 .eng-dot{width:6px;height:6px;border-radius:50%;background:#22d3a4;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
@@ -68,26 +43,14 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .hbtn{display:flex;align-items:center;gap:6px;padding:5px 13px;background:transparent;border:1px solid transparent;border-radius:50px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.76rem;font-weight:500;cursor:none;transition:all .22s;white-space:nowrap;position:relative;overflow:hidden}
 .hbtn:hover{background:rgba(14,165,233,.09);border-color:rgba(14,165,233,.25);color:var(--text)}
 .hbtn svg{flex-shrink:0}
-.hbtn.run{background:#fff;color:var(--navy);border-color:transparent;font-family:'Syne',sans-serif;font-weight:700;padding:5px 18px}
-[data-theme="light"] .hbtn.run{background:var(--navy);color:#fff}
-.hbtn.run::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--blue),var(--cyan));opacity:0;transition:opacity .3s;z-index:0}
-.hbtn.run:hover::before{opacity:1}
-.hbtn.run:hover{color:#fff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(14,165,233,.4)}
-.hbtn.run span,.hbtn.run svg{position:relative;z-index:1}
 .dial-mini{display:flex;align-items:center;gap:5px;padding:5px 10px;background:rgba(14,165,233,.07);border:1px solid var(--edge);border-radius:50px;cursor:none;transition:all .22s}
 .dial-mini:hover{border-color:rgba(14,165,233,.4);background:rgba(14,165,233,.12)}
-
-/* ── SIDEBAR ── */
 #sidebar{grid-area:sidebar;background:rgba(7,18,26,.6);border-right:1px solid var(--edge);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px;z-index:5;transition:background .5s}
 [data-theme="light"] #sidebar{background:rgba(240,249,255,.7)}
 .sb-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--muted);cursor:none;transition:all .2s;position:relative}
 .sb-icon:hover,.sb-icon.active{background:rgba(14,165,233,.1);color:var(--blue)}
 .sb-icon.active::before{content:'';position:absolute;left:-1px;top:50%;transform:translateY(-50%);width:2px;height:18px;background:var(--blue);border-radius:0 2px 2px 0}
-
-/* ── MAIN ── */
 #main{grid-area:main;display:grid;grid-template-rows:34px 1fr auto;overflow:hidden}
-
-/* ── TABBAR ── */
 #tabbar{display:flex;align-items:stretch;background:rgba(6,21,36,.8);border-bottom:1px solid var(--edge);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;transition:background .5s}
 [data-theme="light"] #tabbar{background:rgba(224,242,254,.7)}
 #tabbar::-webkit-scrollbar{display:none}
@@ -97,24 +60,16 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 [data-theme="light"] .tab.active{background:var(--surface)}
 .lang-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0}
 .tab-name{flex:1;overflow:hidden;text-overflow:ellipsis}
-.tab-add{width:34px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:none;flex-shrink:0;transition:color .2s}
-.tab-add:hover{color:var(--blue)}
-
-/* ── EDITOR ── */
 #editor-section{display:flex;flex-direction:column;overflow:hidden}
 #editor-wrap{flex:1;display:grid;grid-template-columns:44px 1fr;overflow:auto;background:var(--panel);transition:background .5s}
 #line-numbers{padding:14px 8px 14px 0;text-align:right;background:var(--panel);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:21px;user-select:none;border-right:1px solid var(--edge);position:sticky;left:0;z-index:2;transition:background .5s}
 .ln{height:21px;display:block;padding-right:8px;transition:color .1s}
 .ln.active{color:var(--blue)}
-#code{background:transparent;color:var(--text);border:none;outline:none;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:21px;resize:none;min-height:100%;tab-size:4;white-space:pre;overflow-wrap:normal;overflow-x:auto;cursor:none;caret-color:var(--blue);width:100%;user-select:text}
+#code{background:transparent;color:var(--text);border:none;outline:none;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:21px;resize:none;min-height:100%;tab-size:4;white-space:pre;overflow-wrap:normal;overflow-x:auto;cursor:text;caret-color:var(--blue);width:100%;user-select:text}
 #code::selection{background:rgba(14,165,233,.22)}
-
-/* ── RESIZER ── */
 #resizer{height:5px;background:var(--edge);cursor:ns-resize;flex-shrink:0;transition:background .2s;position:relative}
 #resizer:hover,#resizer.dragging{background:var(--blue)}
 #resizer::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:28px;height:2px;background:var(--blue);border-radius:2px;opacity:.3}
-
-/* ── OUTPUT ── */
 #output-panel{display:flex;flex-direction:column;background:#030e18;overflow:hidden;flex-shrink:0;transition:background .5s}
 [data-theme="light"] #output-panel{background:#f0f9ff}
 #output-header{display:flex;align-items:center;gap:8px;padding:0 14px;height:30px;background:rgba(7,18,26,.8);border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);flex-shrink:0;transition:background .5s}
@@ -136,24 +91,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .term-txt.info{color:var(--blue)}
 .term-txt.success{color:#22d3a4}
 .term-txt.echo{color:var(--cyan)}
-
-/* ── INPUT ROW ── */
-#input-row{display:none;align-items:center;padding:6px 16px 8px;gap:10px;border-top:1px solid var(--edge);background:rgba(6,182,212,.05);flex-shrink:0}
-#input-row.visible{display:flex}
-.input-prompt{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--cyan);flex-shrink:0;white-space:nowrap}
-#term-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12.5px;caret-color:var(--cyan);cursor:none;user-select:text}
-#term-input::placeholder{color:var(--muted);opacity:.5}
-#input-submit{padding:5px 14px;background:transparent;border:1px solid rgba(14,165,233,.35);border-radius:50px;color:var(--blue);font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;cursor:none;transition:all .2s;flex-shrink:0}
-#input-submit:hover{background:rgba(14,165,233,.12);border-color:rgba(14,165,233,.7);box-shadow:0 4px 18px rgba(14,165,233,.25)}
-
-/* ── STATUS BAR ── */
 #statusbar{grid-area:status;display:flex;align-items:center;padding:0 14px;gap:12px;background:var(--blue);font-family:'DM Sans',sans-serif;font-size:.68rem;color:#001828;z-index:50}
 .sbi{display:flex;align-items:center;gap:4px}
 .sb-sep{opacity:.35}
 #sb-status{margin-left:auto;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.5px}
 #sb-author{font-family:'Syne',sans-serif;font-weight:700;font-size:.68rem;opacity:.85}
-
-/* ── LOADING ── */
 #lo{position:fixed;inset:0;background:#071e30;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;gap:28px;transition:opacity .5s ease}
 #lo.gone{opacity:0;pointer-events:none}
 .lo-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;letter-spacing:-.5px;color:var(--sky)}
@@ -162,19 +104,16 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .lo-author{font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--muted)}
 .lo-author strong{font-weight:600;color:var(--sky3)}
 .lo-bar-wrap{width:220px;height:2px;background:rgba(14,165,233,.15);border-radius:2px;overflow:hidden}
-.lo-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;animation:lo-go 3.5s ease-in-out forwards}
-@keyframes lo-go{0%{width:0}60%{width:75%}100%{width:100%}}
+.lo-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;animation:lo-go 1.2s ease-in-out forwards}
+@keyframes lo-go{0%{width:0}100%{width:100%}}
 .lo-msg{font-size:.76rem;color:var(--muted);font-family:'DM Sans',sans-serif}
-
-/* ── TOAST ── */
 #toast{position:fixed;bottom:36px;right:22px;padding:8px 18px;background:rgba(7,18,26,.92);border:1px solid rgba(14,165,233,.35);border-radius:50px;color:var(--sky);font-family:'DM Sans',sans-serif;font-size:.76rem;z-index:9990;opacity:0;transform:translateY(6px);transition:opacity .22s,transform .22s;pointer-events:none;backdrop-filter:blur(14px)}
 #toast.show{opacity:1;transform:translateY(0)}
 ::-webkit-scrollbar{width:7px;height:7px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--edge);border-radius:4px}
 @media(max-width:768px){#sidebar{display:none}#app{grid-template-columns:0 1fr}.brand-sub{display:none}}
-
-/* ══ MASCOT CSS ══════════════════════════════════════════════════ */
+ ══════════════════════════════════════════════════ */
 #bav-root{position:fixed;inset:0;pointer-events:none;z-index:9998}
 #bav-wrap{position:absolute;width:64px;pointer-events:auto;user-select:none;cursor:none;will-change:left,top}
 .bav-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(14,165,233,.22);pointer-events:none;animation:bav-ring 3s ease-in-out infinite}
@@ -216,6 +155,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 [data-theme="light"] #bav-bubble::before{border-top-color:rgba(240,249,255,.95)}
 #bav-ant-tip{animation:bav-ant 1.9s ease-in-out infinite}
 @keyframes bav-ant{0%,100%{opacity:1;r:3.5}50%{opacity:.3;r:5}}
+
 </style>
 </head>
 <body>
@@ -223,16 +163,15 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <div class="orb ob1"></div><div class="orb ob2"></div>
 <div id="toast"></div>
 
-<!-- LOADING -->
 <div id="lo">
   <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
     <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
       <circle cx="28" cy="28" r="26" stroke="#0ea5e9" stroke-width="1.2" opacity=".3"/>
       <circle cx="28" cy="28" r="17" stroke="#06b6d4" stroke-width="1.2" opacity=".5"/>
       <circle cx="28" cy="28" r="6" fill="#0ea5e9"/>
-      <line x1="28" y1="2"  x2="28" y2="11" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="28" y1="2" x2="28" y2="11" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
       <line x1="28" y1="45" x2="28" y2="54" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="2"  y1="28" x2="11" y2="28" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="2" y1="28" x2="11" y2="28" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
       <line x1="45" y1="28" x2="54" y2="28" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
     </svg>
     <div class="lo-brand">Beacon of <span class="hl">Unity</span></div>
@@ -245,17 +184,16 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <header id="header">
     <div class="logo-wrap">
       <svg class="logo-mark" viewBox="0 0 30 30" fill="none">
         <circle cx="15" cy="15" r="13" stroke="#0ea5e9" stroke-width="1.2" opacity=".4"/>
-        <circle cx="15" cy="15" r="8"  stroke="#06b6d4" stroke-width="1.2" opacity=".6"/>
-        <circle cx="15" cy="15" r="3"  fill="#0ea5e9"/>
-        <line x1="15" y1="2"  x2="15" y2="7"  stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="15" cy="15" r="8" stroke="#06b6d4" stroke-width="1.2" opacity=".6"/>
+        <circle cx="15" cy="15" r="3" fill="#0ea5e9"/>
+        <line x1="15" y1="2" x2="15" y2="7" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round"/>
         <line x1="15" y1="23" x2="15" y2="28" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round"/>
-        <line x1="2"  y1="15" x2="7"  y2="15" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="2" y1="15" x2="7" y2="15" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round"/>
         <line x1="23" y1="15" x2="28" y2="15" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round"/>
       </svg>
       <span class="brand-name">Beacon of Unity</span>
@@ -266,17 +204,13 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="author-avatar">AT</div>
       <span class="author-name">Anshuman Tripathy</span>
     </div>
-    <div class="eng-badge" id="eng-badge"><div class="eng-dot"></div><span id="eng-label">SKULPT</span></div>
+    <div class="eng-badge"><div class="eng-dot"></div>SKULPT</div>
     <div class="hactions">
       <button class="hbtn" onclick="copyCode()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
       </button>
       <button class="hbtn" onclick="downloadCode()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download
-      </button>
-      <div class="hsep" style="margin:0 2px"></div>
-      <button class="hbtn" id="eng-toggle-btn" onclick="toggleEngine()" title="Switch engine">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg><span id="eng-btn-label">Advanced ▸</span>
       </button>
       <div class="hsep" style="margin:0 2px"></div>
       <div class="dial-mini" onclick="toggleTheme()"><span id="ti">☀️</span></div>
@@ -309,7 +243,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
           <span class="output-title">Terminal</span>
           <div class="out-actions">
-            <button class="out-btn run-btn" onclick="runCode()" id="run-btn">
+            <button class="out-btn run-btn" onclick="runCode()">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run
             </button>
             <button class="out-btn" onclick="clearOutput()">
@@ -318,13 +252,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           </div>
         </div>
         <div id="terminal"></div>
-
       </div>
     </div>
   </main>
 
   <div id="statusbar">
-    <div class="sbi"><svg width="8" height="8" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="4"/></svg><span id="sb-py-label">Python · Skulpt</span></div>
+    <div class="sbi"><svg width="8" height="8" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="4"/></svg>Python · Skulpt</div>
     <span class="sb-sep">|</span>
     <div class="sbi" id="sb-ln">Ln 1, Col 1</div>
     <span class="sb-sep">|</span>
@@ -414,268 +347,116 @@ function toast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);
 }
+function setStatus(msg){document.getElementById('sb-status').textContent=msg;}
 
-/* ═══ ENGINE STATE ══════════════════════════════════════════ */
-// 'skulpt' = Basic Mode (default), 'pyodide' = Advanced Mode
-let engineMode = 'skulpt';
-let pyodide = null;
-let pyodideReady = null;
-let pyodideLoading = false;
+/* ═══ TERMINAL ═════════════════════════════════════════════ */
+const terminal=document.getElementById('terminal');
 
-const overlay   = document.getElementById('lo');
-const loMsg     = document.getElementById('lo-msg');
-
-function setStatus(msg){ document.getElementById('sb-status').textContent = msg; }
-
-function updateEngineUI(){
-  const isSkulpt = engineMode === 'skulpt';
-  document.getElementById('eng-label').textContent     = isSkulpt ? 'SKULPT' : 'PYODIDE';
-  document.getElementById('eng-btn-label').textContent = isSkulpt ? 'Advanced ▸' : '◂ Basic';
-  document.getElementById('sb-py-label').textContent   = isSkulpt ? 'Python · Skulpt' : 'Python · Pyodide 3.12';
-  setStatus('Ready');
+function writeLine(txt,cls){
+  if(txt===null||txt===undefined||txt==='')return;
+  const icons={stderr:'✕',info:'›',success:'✔',echo:'←',stdout:' ',warn:'!'};
+  const d=document.createElement('div');d.className='term-line';
+  const p=document.createElement('span');p.className='term-pre';p.textContent=icons[cls]||' ';
+  const s=document.createElement('span');s.className='term-txt '+(cls||'stdout');s.textContent=txt;
+  d.appendChild(p);d.appendChild(s);terminal.appendChild(d);
+  terminal.scrollTop=terminal.scrollHeight;
+  if(cls==='stdout') checkEasterEggs(txt);
 }
 
-function toggleEngine(){
-  if(engineMode === 'skulpt'){
-    engineMode = 'pyodide';
-    updateEngineUI();
-    if(!pyodide && !pyodideLoading){ loadPyodideEngine(); }
-    else { toast('Advanced Mode active'); }
-  } else {
-    engineMode = 'skulpt';
-    updateEngineUI();
-    toast('Basic Mode active (Skulpt)');
-  }
-}
-
-/* ═══ TERMINAL ══════════════════════════════════════════════ */
-const terminal = document.getElementById('terminal');
-
-function writeLine(txt, cls){
-  if(txt === null || txt === undefined) return;
-  const icons = {stderr:'✕', info:'›', success:'✔', echo:'←', stdout:' ', warn:'!'};
-  const d = document.createElement('div'); d.className = 'term-line';
-  const p = document.createElement('span'); p.className = 'term-pre'; p.textContent = icons[cls]||' ';
-  const s = document.createElement('span'); s.className = 'term-txt '+(cls||'stdout'); s.textContent = txt;
-  d.appendChild(p); d.appendChild(s); terminal.appendChild(d);
-  terminal.scrollTop = terminal.scrollHeight;
-  // Six Seven easter egg
-  if(cls==='stdout'){
-    const norm=txt.trim().toLowerCase().replace(/\s+/g,'');
-    if(norm==='sixseven'||norm==='67') triggerSixSeven();
-  }
-}
-function clearOutput(){ terminal.innerHTML=''; toast('Terminal cleared'); }
+function clearOutput(){terminal.innerHTML='';toast('Terminal cleared');}
 
 /* ═══ INLINE INPUT (Thonny-style) ══════════════════════════ */
-let _inlineInputEl  = null;
-let _inlineResolve  = null;
+let _inlineInputEl=null,_inlineResolve=null;
 
 function createInlineInput(promptText){
   return new Promise(function(resolve){
-    _inlineResolve = resolve;
-
-    const line = document.createElement('div');
-    line.className = 'term-line';
-
-    const pre = document.createElement('span');
-    pre.className = 'term-pre'; pre.textContent = ' ';
-
-    const promptSpan = document.createElement('span');
-    promptSpan.className = 'term-txt echo';
-    promptSpan.style.cssText = 'flex:0 0 auto;white-space:pre;color:var(--cyan)';
-    promptSpan.textContent = promptText || '';
-
-    const inputEl = document.createElement('input');
-    inputEl.type = 'text';
-    inputEl.autocomplete = 'off';
-    inputEl.spellcheck = false;
-    inputEl.style.cssText = [
-      'flex:1','background:transparent','border:none','outline:none',
-      'color:var(--text)','font-family:\'JetBrains Mono\',monospace',
-      'font-size:12.5px','caret-color:var(--cyan)','padding:0','margin:0',
-      'min-width:60px','cursor:text'
-    ].join(';');
-
-    _inlineInputEl = inputEl;
-
-    inputEl.addEventListener('keydown', function(e){
-      if(e.key === 'Enter'){
+    _inlineResolve=resolve;
+    const line=document.createElement('div');line.className='term-line';
+    const pre=document.createElement('span');pre.className='term-pre';pre.textContent=' ';
+    const ps=document.createElement('span');ps.className='term-txt echo';
+    ps.style.cssText='flex:0 0 auto;white-space:pre;color:var(--cyan)';
+    ps.textContent=promptText||'';
+    const inp=document.createElement('input');
+    inp.type='text';inp.autocomplete='off';inp.spellcheck=false;
+    inp.style.cssText='flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:\'JetBrains Mono\',monospace;font-size:12.5px;caret-color:var(--cyan);padding:0;margin:0;min-width:60px;cursor:text';
+    _inlineInputEl=inp;
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){
         e.preventDefault();
-        const val = inputEl.value;
-        // Freeze: replace with plain text
-        line.innerHTML = '';
-        const fp = document.createElement('span'); fp.className='term-pre'; fp.textContent=' ';
-        const ft = document.createElement('span'); ft.className='term-txt stdout';
-        ft.textContent = (promptText||'') + val;
-        line.appendChild(fp); line.appendChild(ft);
-        _inlineInputEl = null;
-        const res = _inlineResolve; _inlineResolve = null;
-        if(res) res(val);
+        const val=inp.value;
+        line.innerHTML='';
+        const fp=document.createElement('span');fp.className='term-pre';fp.textContent=' ';
+        const ft=document.createElement('span');ft.className='term-txt stdout';ft.textContent=(promptText||'')+val;
+        line.appendChild(fp);line.appendChild(ft);
+        _inlineInputEl=null;
+        const res=_inlineResolve;_inlineResolve=null;
+        if(res)res(val);
       }
     });
-
-    line.appendChild(pre);
-    line.appendChild(promptSpan);
-    line.appendChild(inputEl);
+    line.appendChild(pre);line.appendChild(ps);line.appendChild(inp);
     terminal.appendChild(line);
-    terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(() => inputEl.focus(), 20);
+    terminal.scrollTop=terminal.scrollHeight;
+    setTimeout(()=>inp.focus(),20);
   });
 }
-
-// Click terminal to re-focus active input
-terminal.addEventListener('click', () => {
-  if(_inlineInputEl) _inlineInputEl.focus();
-});
+terminal.addEventListener('click',()=>{if(_inlineInputEl)_inlineInputEl.focus();});
 
 /* ═══ SKULPT ENGINE ═════════════════════════════════════════ */
-// Skulpt uses a synchronous-style input queue.
-// We intercept builtinRead and handle input via a Promise chain.
-
-let _skulptInputQueue = [];    // resolved input values waiting to be consumed
-let _skulptInputRequest = null; // {resolve} for the pending createInlineInput
-
-function skulptOutf(text){ writeLine(text, 'stdout'); }
-function skulptErrfn(text){ writeLine(text, 'stderr'); }
-
-function skulptBuiltinRead(x){
-  if(Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined)
-    throw "File not found: '" + x + "'";
-  return Sk.builtinFiles['files'][x];
-}
-
-async function runSkulpt(code){
+// Skulpt is a JS Python interpreter — loads instantly, input() works natively via Promise
+function skulptRun(code){
   Sk.configure({
-    output: skulptOutf,
-    read:   skulptBuiltinRead,
-    __future__: Sk.python3,
-    execLimit: 30000,
-    inputfun: function(prompt){
-      // inputfun must return a Promise in Skulpt 1.x
-      return createInlineInput(typeof prompt === 'string' ? prompt : String(prompt||''));
+    output:function(txt){
+      // Skulpt calls output for each print — may include trailing newline
+      if(txt===null||txt===undefined)return;
+      // Strip ONE trailing newline (Skulpt adds it) then split for multi-line prints
+      const clean=txt.endsWith('\n')?txt.slice(0,-1):txt;
+      clean.split('\n').forEach(line=>writeLine(line,'stdout'));
     },
-    inputfunTakesPrompt: true,
+    read:function(x){
+      if(Sk.builtinFiles===undefined||Sk.builtinFiles['files'][x]===undefined)
+        throw "File not found: '"+x+"'";
+      return Sk.builtinFiles['files'][x];
+    },
+    __future__:Sk.python3,
+    execLimit:30000,
+    inputfun:function(prompt){
+      return createInlineInput(typeof prompt==='string'?prompt:String(prompt||''));
+    },
+    inputfunTakesPrompt:true,
   });
-
-  try{
-    await Sk.misceval.asyncToPromise(function(){
-      return Sk.importMainWithBody('<stdin>', false, code, true);
-    });
-    writeLine('Done ✔', 'success');
-    setStatus('Ready');
-  } catch(err){
-    const msg = err.toString();
-    // Skulpt errors come as objects with .toString()
-    if(err.tp$str) writeLine(err.tp$str().v, 'stderr');
-    else writeLine(msg, 'stderr');
-    setStatus('Error');
-  }
+  return Sk.misceval.asyncToPromise(function(){
+    return Sk.importMainWithBody('<stdin>',false,code,true);
+  });
 }
 
-/* ═══ PYODIDE ENGINE ════════════════════════════════════════ */
-async function loadPyodideEngine(){
-  if(pyodide || pyodideLoading) return;
-  pyodideLoading = true;
-  toast('Loading Advanced engine… (first time only)');
-  setStatus('Loading Pyodide…');
-  try{
-    pyodide = await loadPyodide({
-      indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/',
-      stdout: (text) => { if(text) writeLine(text, 'stdout'); },
-      stderr: (text) => { if(text) writeLine(text, 'stderr'); },
-    });
-    toast('Advanced Mode ready ✔');
-    setStatus('Ready');
-  } catch(e){
-    toast('Failed to load Pyodide: ' + e);
-    setStatus('Engine Error');
-    engineMode = 'skulpt';
-    updateEngineUI();
-  }
-  pyodideLoading = false;
-}
-
-async function runPyodideCode(code){
-  if(!pyodide){
-    writeLine('Pyodide not loaded yet — loading now…', 'info');
-    await loadPyodideEngine();
-    if(!pyodide){ writeLine('Failed to load Pyodide.', 'stderr'); return; }
-  }
-
-  window.__beaconInput = function(promptStr){
-    return createInlineInput(promptStr);
-  };
-
-  pyodide.globals.set('__user_code__', code);
-
-  try{
-    await pyodide.runPythonAsync(`
-import builtins, js
-
-async def __beacon_input__(prompt=""):
-    p = str(prompt) if prompt is not None else ""
-    result = await js.window.__beaconInput(p)
-    return str(result) if result is not None else ""
-
-builtins.input = __beacon_input__
-
-_code = __user_code__
-_lines = _code.split("\\n")
-_indented = "\\n".join("    " + ln for ln in _lines)
-_src = "async def __run__():\\n" + (_indented if _code.strip() else "    pass")
-_ns = {"__name__": "__main__"}
-exec(compile(_src, "<beacon>", "exec"), _ns)
-try:
-    await _ns["__run__"]()
-except SystemExit:
-    pass
-`);
-    writeLine('Done ✔', 'success');
-    setStatus('Ready');
-  } catch(err){
-    if(_inlineInputEl){
-      try{ _inlineInputEl.closest('.term-line').remove(); } catch(_){}
-      _inlineInputEl = null;
-    }
-    if(_inlineResolve){ _inlineResolve(''); _inlineResolve = null; }
-    writeLine(String(err), 'stderr');
-    setStatus('Error');
-  }
-}
-
-/* ═══ RUN CODE (dispatcher) ════════════════════════════════ */
-let isRunning = false;
+/* ═══ RUN CODE ══════════════════════════════════════════════ */
+let isRunning=false;
 
 async function runCode(){
-  if(isRunning){ toast('Already running…'); return; }
-  const code = document.getElementById('code').value.trim();
-  if(!code){ toast('Nothing to run'); return; }
-
-  isRunning = true;
-  _inlineResolve = null;
-  _inlineInputEl = null;
+  if(isRunning){toast('Already running…');return;}
+  const code=document.getElementById('code').value;
+  if(!code.trim()){toast('Nothing to run');return;}
+  isRunning=true;
+  _inlineResolve=null;_inlineInputEl=null;
   clearOutput();
-  writeLine('Execution started', 'info');
-
-  if(engineMode === 'skulpt'){
-    await runSkulpt(code);
-  } else {
-    await runPyodideCode(code);
+  writeLine('Execution started','info');
+  setStatus('Running…');
+  try{
+    await skulptRun(code);
+    writeLine('Done ✔','success');
+    setStatus('Ready');
+  }catch(err){
+    if(_inlineInputEl){try{_inlineInputEl.closest('.term-line').remove();}catch(_){}_inlineInputEl=null;}
+    if(_inlineResolve){_inlineResolve('');_inlineResolve=null;}
+    let msg;
+    if(err&&err.tp$str)msg=err.tp$str().v;
+    else if(err&&err.args&&err.args.v&&err.args.v[0]&&err.args.v[0].v)msg=err.args.v[0].v;
+    else msg=String(err);
+    writeLine(msg,'stderr');
+    setStatus('Error');
   }
-
-  isRunning = false;
-  _inlineResolve = null;
-  _inlineInputEl = null;
+  isRunning=false;
 }
-
-/* ═══ INIT: dismiss overlay immediately (Skulpt needs no preload) ═ */
-(function initEngine(){
-  updateEngineUI();
-  // Skulpt is synchronous and already loaded — no async init needed
-  setTimeout(() => overlay.classList.add('gone'), 600);
-  setStatus('Ready');
-})();
 
 /* ═══ FILE ACTIONS ═════════════════════════════════════════ */
 function copyCode(){navigator.clipboard.writeText(document.getElementById('code').value);toast('Code copied! ✓');}
@@ -685,13 +466,12 @@ function downloadCode(){
   a.download=(curTab||'main')+'.py';a.click();toast('Downloaded!');
 }
 
-/* ═══ TABS — fixed, no rename, no close ════════════════════ */
-const TAB_CONTENTS = {
-  main: '',
-  intro: `# introduction.py
+/* ═══ TABS ══════════════════════════════════════════════════ */
+const TAB_CONTENTS={
+  main:'',
+  intro:`# introduction.py
 # --------------------------------------------------------
-#   Beacon of Unity Code
-#   A browser-based Python IDE powered by Pyodide.
+#   Beacon of Unity Code — powered by Skulpt
 #   Created by Anshuman Tripathy
 # --------------------------------------------------------
 
@@ -699,21 +479,19 @@ print("Beacon of Unity Code")
 print("Created by Anshuman Tripathy")
 print("")
 print("This IDE runs Python entirely in your browser.")
-print("No server. No backend. Just Pyodide.")
+print("No server. No backend. Just Skulpt.")
 print("")
 print("Features:")
-print("  - Full Python 3.12 via Pyodide")
-print("  - Inline terminal input() - just like Thonny!")
+print("  - Full Python 3 via Skulpt")
+print("  - Real inline input() — just like Thonny")
 print("  - Smart auto-indent and bracket pairing")
 print("  - Copy and Download your code")
-print("  - Light / Dark mode")
-print("  - Beacon mascot")
+print("  - Light / Dark mode + Beacon mascot")
 print("")
-
 name = input("What is your name? ")
-print("Welcome, " + name + "! Press Ctrl+Enter to run code anytime.")
-`
-};
+print("Welcome, " + name + "!")
+print("Press Ctrl+Enter to run code anytime.")
+`};
 let curTab='main';
 
 function switchTab(name){
@@ -729,7 +507,7 @@ const codeEl=document.getElementById('code');
 const LN=document.getElementById('line-numbers');
 function updateLN(){
   const n=codeEl.value.split('\n').length;let h='';
-  for(let i=1;i<=n;i++) h+=`<span class="ln" id="ln${i}">${i}</span>`;
+  for(let i=1;i<=n;i++)h+=`<span class="ln" id="ln${i}">${i}</span>`;
   LN.innerHTML=h;updateAL();
 }
 function updateAL(){
@@ -745,161 +523,56 @@ codeEl.addEventListener('keyup',updateAL);
 codeEl.addEventListener('click',updateAL);
 codeEl.addEventListener('scroll',()=>{LN.style.marginTop=(-codeEl.scrollTop)+'px';});
 codeEl.addEventListener('keydown',e=>{
-  /* ── TAB: insert 4 spaces ── */
+  /* TAB */
   if(e.key==='Tab'){
     e.preventDefault();
     const s=codeEl.selectionStart,end=codeEl.selectionEnd;
-    if(s===end){
-      // No selection: insert 4 spaces
-      codeEl.value=codeEl.value.substring(0,s)+'    '+codeEl.value.substring(end);
-      codeEl.selectionStart=codeEl.selectionEnd=s+4;
-    } else {
-      // Selection: indent each selected line
-      const before=codeEl.value.substring(0,s),sel=codeEl.value.substring(s,end),after=codeEl.value.substring(end);
-      const indented=sel.replace(/^/gm,'    ');
-      codeEl.value=before+indented+after;
-      codeEl.selectionStart=s;codeEl.selectionEnd=s+indented.length;
-    }
-    updateLN();
-    return;
+    if(s===end){codeEl.value=codeEl.value.substring(0,s)+'    '+codeEl.value.substring(end);codeEl.selectionStart=codeEl.selectionEnd=s+4;}
+    else{const b=codeEl.value.substring(0,s),sel=codeEl.value.substring(s,end),af=codeEl.value.substring(end),ind=sel.replace(/^/gm,'    ');codeEl.value=b+ind+af;codeEl.selectionStart=s;codeEl.selectionEnd=s+ind.length;}
+    updateLN();return;
   }
-
-  /* ── ENTER: smart auto-indent ── */
+  /* ENTER — smart indent */
   if(e.key==='Enter'){
     e.preventDefault();
-    const s=codeEl.selectionStart;
-    const val=codeEl.value;
-    // Get current line
-    const lineStart=val.lastIndexOf('\n',s-1)+1;
-    const curLine=val.substring(lineStart,s);
-    // Match leading whitespace
-    const leadMatch=curLine.match(/^(\s*)/);
-    let indent=leadMatch?leadMatch[1]:'';
-    // If line ends with ':', add one level of indent
-    const trimmed=curLine.trimEnd();
-    if(trimmed.endsWith(':')){
-      indent+=('    ');
-    }
-    // If current line is only whitespace (blank indent line), reduce indent (like Thonny/Replit)
-    // Insert newline + indent
-    const ins='\n'+indent;
+    const s=codeEl.selectionStart,val=codeEl.value;
+    const ls=val.lastIndexOf('\n',s-1)+1,cur=val.substring(ls,s);
+    let ind=(cur.match(/^(\s*)/)||['',''])[1];
+    if(cur.trimEnd().endsWith(':'))ind+='    ';
+    const ins='\n'+ind;
     codeEl.value=val.substring(0,s)+ins+val.substring(codeEl.selectionEnd);
     codeEl.selectionStart=codeEl.selectionEnd=s+ins.length;
-    updateLN();
-    updateAL();
-    return;
+    updateLN();updateAL();return;
   }
-
-  /* ── BACKSPACE: dedent if cursor is on indent whitespace ── */
+  /* BACKSPACE — dedent */
   if(e.key==='Backspace'){
     const s=codeEl.selectionStart,end=codeEl.selectionEnd;
-    if(s===end && s>0){
-      const val=codeEl.value;
-      const lineStart=val.lastIndexOf('\n',s-1)+1;
-      const beforeCursor=val.substring(lineStart,s);
-      // If everything before cursor on this line is spaces, delete a full indent (up to 4)
-      if(/^ +$/.test(beforeCursor)){
-        e.preventDefault();
-        const del=Math.min(4, beforeCursor.length % 4 === 0 ? 4 : beforeCursor.length % 4);
-        codeEl.value=val.substring(0,s-del)+val.substring(s);
-        codeEl.selectionStart=codeEl.selectionEnd=s-del;
-        updateLN();
-        updateAL();
-        return;
-      }
+    if(s===end&&s>0){
+      const val=codeEl.value,ls=val.lastIndexOf('\n',s-1)+1,bc=val.substring(ls,s);
+      if(/^ +$/.test(bc)){e.preventDefault();const del=Math.min(4,bc.length%4===0?4:bc.length%4);codeEl.value=val.substring(0,s-del)+val.substring(s);codeEl.selectionStart=codeEl.selectionEnd=s-del;updateLN();updateAL();return;}
     }
   }
-
-  /* ── Ctrl/Cmd+Enter: run ── */
+  /* CTRL+ENTER — run */
   if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runCode();return;}
-
-  /* ── Auto-close brackets and smart quotes ── */
-  const OPENERS={'(':')','{':'}','[':']'};
-  const CLOSERS=new Set([')','}',']']);
+  /* AUTO-CLOSE brackets */
+  const OPEN={'(':')','{':'}','['  :']'};
+  const CLOSE=new Set([')','}',']']);
   const QUOTES=new Set(['"',"'"]);
-
-  const val=codeEl.value;
-  const s=codeEl.selectionStart, end=codeEl.selectionEnd;
-  const nextCh=val[s]||'';
-  const prevCh=val[s-1]||'';
-
-  // ── Brackets: auto-close ──
-  if(OPENERS[e.key]){
-    e.preventDefault();
-    const close=OPENERS[e.key];
-    if(s!==end){
-      // Wrap selection in brackets
-      const sel=val.substring(s,end);
-      codeEl.value=val.substring(0,s)+e.key+sel+close+val.substring(end);
-      codeEl.selectionStart=s+1; codeEl.selectionEnd=end+1;
-    } else {
-      codeEl.value=val.substring(0,s)+e.key+close+val.substring(s);
-      codeEl.selectionStart=codeEl.selectionEnd=s+1;
-    }
-    updateLN(); return;
+  const val=codeEl.value,s=codeEl.selectionStart,end=codeEl.selectionEnd,nx=val[s]||'',pv=val[s-1]||'';
+  if(OPEN[e.key]){
+    e.preventDefault();const cl=OPEN[e.key];
+    if(s!==end){const sel=val.substring(s,end);codeEl.value=val.substring(0,s)+e.key+sel+cl+val.substring(end);codeEl.selectionStart=s+1;codeEl.selectionEnd=end+1;}
+    else{codeEl.value=val.substring(0,s)+e.key+cl+val.substring(s);codeEl.selectionStart=codeEl.selectionEnd=s+1;}
+    updateLN();return;
   }
-
-  // ── Closing bracket: skip over if it's already there ──
-  if(CLOSERS.has(e.key)){
-    if(nextCh===e.key){
-      e.preventDefault();
-      codeEl.selectionStart=codeEl.selectionEnd=s+1;
-      return;
-    }
-    // Otherwise let browser insert normally
-    return;
-  }
-
-  // ── Smart quotes ──
+  if(CLOSE.has(e.key)){if(nx===e.key){e.preventDefault();codeEl.selectionStart=codeEl.selectionEnd=s+1;}return;}
   if(QUOTES.has(e.key)){
     const q=e.key;
-
-    // 1. Skip over existing closing quote
-    if(nextCh===q && prevCh!==q){
-      e.preventDefault();
-      codeEl.selectionStart=codeEl.selectionEnd=s+1;
-      return;
-    }
-
-    // 2. If there's a selection, wrap it
-    if(s!==end){
-      e.preventDefault();
-      const sel=val.substring(s,end);
-      codeEl.value=val.substring(0,s)+q+sel+q+val.substring(end);
-      codeEl.selectionStart=s+1; codeEl.selectionEnd=end+1;
-      updateLN(); return;
-    }
-
-    // 3. Don't auto-close if prev char is alphanumeric or closing (e.g. it's a real apostrophe in a word)
-    if(/[\w\)]/.test(prevCh)){
-      // Just let the browser type the single quote normally
-      return;
-    }
-
-    // 4. Don't auto-close if next char is alphanumeric (cursor is inside a word)
-    if(/\w/.test(nextCh)){
-      return;
-    }
-
-    // 5. Don't auto-close if we're already inside this quote type
-    // Count unescaped occurrences of this quote before cursor
-    const before=val.substring(0,s);
-    let qCount=0;
-    for(let i=0;i<before.length;i++){
-      if(before[i]===q && (i===0||before[i-1]!=='\\')){qCount++;}
-    }
-    // Odd count = inside a string, just insert the quote to close it
-    // Even count = not inside, auto-close
-    if(qCount%2===1){
-      // Inside string — just type it, don't double
-      return;
-    }
-
-    // 6. Auto-close: insert quote pair
-    e.preventDefault();
-    codeEl.value=val.substring(0,s)+q+q+val.substring(s);
-    codeEl.selectionStart=codeEl.selectionEnd=s+1;
-    updateLN(); return;
+    if(nx===q&&pv!==q){e.preventDefault();codeEl.selectionStart=codeEl.selectionEnd=s+1;return;}
+    if(s!==end){e.preventDefault();const sel=val.substring(s,end);codeEl.value=val.substring(0,s)+q+sel+q+val.substring(end);codeEl.selectionStart=s+1;codeEl.selectionEnd=end+1;updateLN();return;}
+    if(/[\w)]/.test(pv)||/\w/.test(nx))return;
+    let qc=0;for(let i=0;i<s;i++)if(val[i]===q&&(i===0||val[i-1]!=='\\'))qc++;
+    if(qc%2===1)return;
+    e.preventDefault();codeEl.value=val.substring(0,s)+q+q+val.substring(s);codeEl.selectionStart=codeEl.selectionEnd=s+1;updateLN();return;
   }
 });
 updateLN();
@@ -910,7 +583,210 @@ let resizing=false,startY=0,startH=0;
 resizer.addEventListener('mousedown',e=>{resizing=true;startY=e.clientY;startH=outputPanel.offsetHeight;resizer.classList.add('dragging');document.body.style.userSelect='none';});
 document.addEventListener('mousemove',e=>{if(!resizing)return;const h=Math.max(80,Math.min(600,startH+(startY-e.clientY)));outputPanel.style.height=h+'px';});
 document.addEventListener('mouseup',()=>{if(resizing){resizing=false;resizer.classList.remove('dragging');document.body.style.userSelect='';}});
+
+/* ═══ LOADING — instant since Skulpt needs no preload ═══════ */
+setTimeout(()=>document.getElementById('lo').classList.add('gone'),500);
+
+/* ═══════════════════════════════════════════════════════════
+   EASTER EGGS — triggered from writeLine on stdout
+   ═══════════════════════════════════════════════════════════ */
+function playAudio(src){try{new Audio(src).play().catch(()=>{});}catch(e){}}
+
+function checkEasterEggs(txt){
+  const n=txt.trim().toLowerCase().replace(/\s+/g,'');
+  // 67 / six seven
+  if(n==='67'||n==='sixseven'||/^(six.?seven|67)$/.test(n)){triggerSixSeven();return;}
+  const raw=txt.trim().toLowerCase();
+  if(/\b(67|six.?seven)\b/.test(raw)){triggerSixSeven();return;}
+  // job / job application
+  if(/\bjob\b/.test(raw)||/\bjobapplication\b/.test(n)){triggerJob();return;}
+  // bazooka
+  if(/\bbazooka\b/.test(raw)){triggerBazooka();return;}
+  // kirk or charlie (data.gif)
+  if(/\b(kirk|charlie)\b/.test(raw)){triggerData();return;}
+  // epstein
+  if(/\bepstein\b/.test(raw)){triggerEpstein();return;}
+  // rickroll
+  if(/\brickroll\b/.test(raw)){triggerRickroll();return;}
+}
+
+/* ── helper: base meme overlay ── */
+function makeMemeOverlay(){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(3px)';
+  function close(){ov.remove();}
+  ov.addEventListener('click',close);
+  document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);}});
+  const hint=document.createElement('div');
+  hint.style.cssText='position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-family:DM Sans,sans-serif;font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:1px;pointer-events:none';
+  hint.textContent='click anywhere or Esc to close';
+  ov.appendChild(hint);
+  return ov;
+}
+
+/* ── inject shared keyframes once ── */
+(function(){
+  const st=document.createElement('style');
+  st.textContent=`
+    @keyframes meme-fade{from{opacity:0}to{opacity:1}}
+    @keyframes meme-pop{from{transform:scale(.25) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+    @keyframes meme-txt-in{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes meme-txt-bot{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes bounce-x{0%,100%{transform:translateX(0) translateY(0)}25%{transform:translateX(60vw) translateY(-20vh)}50%{transform:translateX(30vw) translateY(60vh)}75%{transform:translateX(-10vw) translateY(10vh)}}
+    @keyframes epstein-zoom{from{transform:scale(0.1);opacity:0}to{transform:scale(1);opacity:1}}
+    @keyframes epstein-multiply{from{opacity:0;transform:scale(.5) rotate(calc(var(--r)*1deg))}to{opacity:1;transform:scale(1) rotate(calc(var(--r)*1deg))}}
+    @keyframes flashbang{0%{opacity:0}15%{opacity:1}85%{opacity:1}100%{opacity:0}}
+    .meme-top{font-family:Impact,Arial Black,sans-serif;font-size:clamp(1.2rem,3.5vw,2rem);color:#fff;text-align:center;letter-spacing:3px;text-transform:uppercase;text-shadow:-2px -2px 0 #000,2px -2px 0 #000,-2px 2px 0 #000,2px 2px 0 #000;animation:meme-txt-in .35s cubic-bezier(.34,1.56,.64,1) .1s both}
+    .meme-bot{font-family:Impact,Arial Black,sans-serif;font-size:clamp(1.8rem,5vw,3.2rem);color:#fff;text-align:center;letter-spacing:4px;text-transform:uppercase;text-shadow:-3px -3px 0 #000,3px -3px 0 #000,-3px 3px 0 #000,3px 3px 0 #000;animation:meme-txt-bot .35s cubic-bezier(.34,1.56,.64,1) .22s both}
+    .meme-img{width:100%;max-width:min(480px,90vw);max-height:55vh;object-fit:contain;border-radius:10px;box-shadow:0 0 50px rgba(0,0,0,.8);display:block;animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1) .06s both}
+  `;
+  document.head.appendChild(st);
+})();
+
+/* ─── SIX SEVEN ─── */
+function triggerSixSeven(){
+  playAudio('sixseven.mp3');
+  const ov=makeMemeOverlay();
+  ov.style.background='rgba(0,0,0,.85)';
+  const box=document.createElement('div');
+  box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:min(500px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
+  const top=document.createElement('div');top.className='meme-top';top.textContent='WHEN SOMEONE SAYS';
+  const img=document.createElement('img');img.className='meme-img';img.src='67.gif';
+  img.onerror=()=>{img.src='https://media.tenor.com/QvNc4gEjUj4AAAAM/sixty-seven-67.gif';img.onerror=()=>{img.style.display='none'};};
+  const bot=document.createElement('div');bot.className='meme-bot';bot.textContent='SIX SEVEN ⁶🤷⁷';
+  box.appendChild(top);box.appendChild(img);box.appendChild(bot);
+  ov.appendChild(box);document.body.appendChild(ov);
+}
+
+/* ─── JOB APPLICATION ─── */
+function triggerJob(){
+  // Flashbang effect first, then overlay
+  playAudio('job.mp3');
+  const fb=document.createElement('div');
+  fb.style.cssText='position:fixed;inset:0;background:#fff;z-index:9999998;pointer-events:none;animation:flashbang 0.9s ease forwards';
+  document.body.appendChild(fb);
+  setTimeout(()=>fb.remove(),900);
+  setTimeout(()=>{
+    const ov=makeMemeOverlay();
+    ov.style.background='rgba(0,0,0,.88)';
+    const box=document.createElement('div');
+    box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(520px,92vw);animation:meme-pop .4s cubic-bezier(.34,1.56,.64,1)';
+    const top=document.createElement('div');top.className='meme-top';top.style.color='#fbbf24';top.textContent='🚨 JOB APPLICATION DETECTED 🚨';
+    const img=document.createElement('img');img.className='meme-img';img.src='job.png';
+    img.onerror=()=>img.style.display='none';
+    const bot=document.createElement('div');bot.className='meme-bot';bot.style.cssText='font-size:clamp(1.2rem,3vw,1.8rem);color:#fbbf24';bot.textContent='HIRE ME PLS 👔📄';
+    box.appendChild(top);box.appendChild(img);box.appendChild(bot);
+    ov.appendChild(box);document.body.appendChild(ov);
+  },400);
+}
+
+/* ─── BAZOOKA ─── */
+function triggerBazooka(){
+  playAudio('bazooka.mp3');
+  const ov=makeMemeOverlay();
+  ov.style.background='rgba(0,0,0,.88)';
+  const box=document.createElement('div');
+  box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:min(520px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
+  const top=document.createElement('div');top.className='meme-top';top.textContent='🚀 BAZOOKA TIME 🚀';
+  const img=document.createElement('img');img.className='meme-img';img.src='bazooka.gif';
+  img.onerror=()=>img.style.display='none';
+  const bot=document.createElement('div');bot.className='meme-bot';bot.textContent='BOOM 💥';
+  box.appendChild(top);box.appendChild(img);box.appendChild(bot);
+  ov.appendChild(box);document.body.appendChild(ov);
+}
+
+/* ─── KIRK / CHARLIE (data.gif bouncing around) ─── */
+function triggerData(){
+  playAudio('data.mp3');
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:999999;overflow:hidden;background:rgba(0,0,0,.7);cursor:pointer';
+  const label=document.createElement('div');
+  label.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Impact,Arial Black,sans-serif;font-size:clamp(2rem,6vw,4rem);color:#fff;text-shadow:-3px -3px 0 #000,3px 3px 0 #000;pointer-events:none;opacity:.18;letter-spacing:4px;text-transform:uppercase';
+  label.textContent='HE\'S HERE';
+  ov.appendChild(label);
+  const hint=document.createElement('div');
+  hint.style.cssText='position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:DM Sans,sans-serif;font-size:.75rem;color:rgba(255,255,255,.35);letter-spacing:1px';
+  hint.textContent='click or Esc to close';
+  ov.appendChild(hint);
+  // Create bouncing GIF
+  const img=document.createElement('img');
+  img.src='data.gif';img.onerror=()=>{};
+  img.style.cssText='position:absolute;width:160px;height:auto;pointer-events:none';
+  ov.appendChild(img);
+  let bx=100,by=100,vx=4.5,vy=3.2;
+  let rafId;
+  function bounce(){
+    const W=window.innerWidth-160,H=window.innerHeight-160;
+    bx+=vx;by+=vy;
+    if(bx<=0){bx=0;vx=Math.abs(vx);}
+    if(bx>=W){bx=W;vx=-Math.abs(vx);}
+    if(by<=0){by=0;vy=Math.abs(vy);}
+    if(by>=H){by=H;vy=-Math.abs(vy);}
+    img.style.left=bx+'px';img.style.top=by+'px';
+    rafId=requestAnimationFrame(bounce);
+  }
+  rafId=requestAnimationFrame(bounce);
+  function close(){cancelAnimationFrame(rafId);ov.remove();}
+  ov.addEventListener('click',close);
+  document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);}});
+  document.body.appendChild(ov);
+}
+
+/* ─── EPSTEIN (user.gif multiplying) ─── */
+function triggerEpstein(){
+  playAudio('user.mp3');
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:999999;overflow:hidden;background:#000;cursor:pointer';
+  const hint=document.createElement('div');
+  hint.style.cssText='position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:DM Sans,sans-serif;font-size:.75rem;color:rgba(255,255,255,.3);letter-spacing:1px;z-index:2';
+  hint.textContent='click or Esc to close';
+  ov.appendChild(hint);
+  // Start with 1 image zooming in, then multiply
+  let count=0;
+  const MAX=40;
+  function spawnImg(){
+    if(count>=MAX)return;
+    const img=document.createElement('img');
+    img.src='user.gif';img.onerror=()=>{};
+    const sz=80+Math.random()*80;
+    const x=Math.random()*(window.innerWidth-sz);
+    const y=Math.random()*(window.innerHeight-sz);
+    const rot=(Math.random()-0.5)*30;
+    img.style.cssText=`position:absolute;width:${sz}px;height:auto;left:${x}px;top:${y}px;--r:${rot};animation:epstein-multiply ${0.3+Math.random()*.4}s cubic-bezier(.34,1.56,.64,1) both;border-radius:6px`;
+    ov.appendChild(img);count++;
+    if(count<MAX)setTimeout(spawnImg,80+Math.random()*120);
+  }
+  // First one zooms in center
+  const first=document.createElement('img');first.src='user.gif';first.onerror=()=>{};
+  first.style.cssText='position:absolute;width:220px;height:auto;left:50%;top:50%;transform:translate(-50%,-50%);animation:epstein-zoom .5s cubic-bezier(.34,1.56,.64,1) both;border-radius:8px;z-index:1';
+  ov.appendChild(first);
+  setTimeout(spawnImg,400);
+  function close(){ov.remove();}
+  ov.addEventListener('click',close);
+  document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);}});
+  document.body.appendChild(ov);
+}
+
+/* ─── RICKROLL ─── */
+function triggerRickroll(){
+  playAudio('rick.mp3');
+  const ov=makeMemeOverlay();
+  ov.style.background='rgba(0,0,0,.92)';
+  const box=document.createElement('div');
+  box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(520px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
+  const top=document.createElement('div');top.className='meme-top';top.textContent='NEVER GONNA GIVE YOU UP';
+  const img=document.createElement('img');img.className='meme-img';img.style.borderRadius='12px';img.src='rick.gif';
+  img.onerror=()=>{img.src='https://media.tenor.com/x8v1oNUOmg4AAAAM/rickroll-roll.gif';img.onerror=()=>img.style.display='none';};
+  const bot=document.createElement('div');bot.className='meme-bot';bot.style.fontSize='clamp(1rem,2.5vw,1.5rem)';bot.textContent='🎵 YOU GOT ROLLED 🎵';
+  box.appendChild(top);box.appendChild(img);box.appendChild(bot);
+  ov.appendChild(box);document.body.appendChild(ov);
+}
+
+/* ═══ INIT ══════════════════════════════════════════════════ */
+setTimeout(()=>document.getElementById('lo').classList.add('gone'),500);
+
 </script>
+
 
 <!-- ═══ MASCOT SCRIPT ════════════════════════════════════════ -->
 <script>
