@@ -42,6 +42,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .hactions{display:flex;align-items:center;gap:5px;margin-left:auto}
 .hbtn{display:flex;align-items:center;gap:6px;padding:5px 13px;background:transparent;border:1px solid transparent;border-radius:50px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.76rem;font-weight:500;cursor:none;transition:all .22s;white-space:nowrap;position:relative;overflow:hidden}
 .hbtn:hover{background:rgba(14,165,233,.09);border-color:rgba(14,165,233,.25);color:var(--text)}
+.hbtn.import-btn:hover{background:rgba(34,211,164,.09);border-color:rgba(34,211,164,.35);color:#22d3a4}
 .hbtn svg{flex-shrink:0}
 .dial-mini{display:flex;align-items:center;gap:5px;padding:5px 10px;background:rgba(14,165,233,.07);border:1px solid var(--edge);border-radius:50px;cursor:none;transition:all .22s}
 .dial-mini:hover{border-color:rgba(14,165,233,.4);background:rgba(14,165,233,.12)}
@@ -54,13 +55,13 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #tabbar{display:flex;align-items:stretch;background:rgba(6,21,36,.8);border-bottom:1px solid var(--edge);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;transition:background .5s}
 [data-theme="light"] #tabbar{background:rgba(224,242,254,.7)}
 #tabbar::-webkit-scrollbar{display:none}
-.tab{display:flex;align-items:center;gap:7px;padding:0 14px;min-width:110px;max-width:170px;white-space:nowrap;font-size:.76rem;font-weight:500;color:var(--muted);cursor:none;border-right:1px solid var(--edge);transition:all .2s;position:relative;flex-shrink:0}
+.tab{display:flex;align-items:center;gap:7px;padding:0 14px;min-width:110px;max-width:200px;white-space:nowrap;font-size:.76rem;font-weight:500;color:var(--muted);cursor:none;border-right:1px solid var(--edge);transition:all .2s;position:relative;flex-shrink:0}
 .tab:hover{color:var(--text);background:rgba(14,165,233,.05)}
 .tab.active{color:var(--text);background:var(--panel);border-bottom:2px solid var(--blue)}
 [data-theme="light"] .tab.active{background:var(--surface)}
 .lang-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0}
 .tab-name{flex:1;overflow:hidden;text-overflow:ellipsis}
-#editor-section{display:flex;flex-direction:column;overflow:hidden}
+#editor-section{display:flex;flex-direction:column;overflow:hidden;position:relative}
 #editor-wrap{flex:1;display:grid;grid-template-columns:44px 1fr;overflow:auto;background:var(--panel);transition:background .5s}
 #line-numbers{padding:14px 8px 14px 0;text-align:right;background:var(--panel);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:21px;user-select:none;border-right:1px solid var(--edge);position:sticky;left:0;z-index:2;transition:background .5s}
 .ln{height:21px;display:block;padding-right:8px;transition:color .1s}
@@ -113,6 +114,28 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--edge);border-radius:4px}
 @media(max-width:768px){#sidebar{display:none}#app{grid-template-columns:0 1fr}.brand-sub{display:none}}
+
+/* ══ FILE IMPORT & DRAG DROP ════════════════════════════════ */
+#import-file-input{display:none}
+#drag-overlay{
+  position:absolute;inset:0;z-index:100;
+  background:rgba(14,165,233,.06);
+  border:2.5px dashed rgba(14,165,233,.6);
+  border-radius:6px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  opacity:0;pointer-events:none;
+  transition:opacity .16s ease;
+  backdrop-filter:blur(4px);
+}
+#drag-overlay.active{opacity:1;pointer-events:auto}
+.drag-icon{font-size:2.4rem;animation:drag-pulse 1.1s ease-in-out infinite}
+@keyframes drag-pulse{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.1)}}
+.drag-label{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:var(--blue);letter-spacing:2px;text-transform:uppercase}
+.drag-sub{font-size:.72rem;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:.5px}
+.drag-exts{display:flex;gap:6px;margin-top:4px}
+.drag-ext-pill{padding:2px 9px;border-radius:50px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.25);font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--blue)}
+/* ═══════════════════════════════════════════════════════════ */
+
  ══════════════════════════════════════════════════ */
 #bav-root{position:fixed;inset:0;pointer-events:none;z-index:9998}
 #bav-wrap{position:absolute;width:64px;pointer-events:auto;user-select:none;cursor:none;will-change:left,top}
@@ -212,6 +235,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <button class="hbtn" onclick="downloadCode()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download
       </button>
+      <!-- ── IMPORT BUTTON ── -->
+      <button class="hbtn import-btn" onclick="triggerImport()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import
+      </button>
+      <!-- hidden file input -->
+      <input type="file" id="import-file-input" accept=".py,.html,.htm,.js,.txt" multiple onchange="handleImportChange(event)">
       <div class="hsep" style="margin:0 2px"></div>
       <div class="dial-mini" onclick="toggleTheme()"><span id="ti">☀️</span></div>
     </div>
@@ -233,6 +262,18 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       </div>
     </div>
     <div id="editor-section">
+      <!-- ── DRAG & DROP OVERLAY ── -->
+      <div id="drag-overlay">
+        <div class="drag-icon">📂</div>
+        <div class="drag-label">Drop to Import</div>
+        <div class="drag-sub">Load file into active tab</div>
+        <div class="drag-exts">
+          <span class="drag-ext-pill">.py</span>
+          <span class="drag-ext-pill">.html</span>
+          <span class="drag-ext-pill">.js</span>
+          <span class="drag-ext-pill">.txt</span>
+        </div>
+      </div>
       <div id="editor-wrap">
         <div id="line-numbers"><span class="ln active">1</span></div>
         <textarea id="code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
@@ -402,13 +443,10 @@ function createInlineInput(promptText){
 terminal.addEventListener('click',()=>{if(_inlineInputEl)_inlineInputEl.focus();});
 
 /* ═══ SKULPT ENGINE ═════════════════════════════════════════ */
-// Skulpt is a JS Python interpreter — loads instantly, input() works natively via Promise
 function skulptRun(code){
   Sk.configure({
     output:function(txt){
-      // Skulpt calls output for each print — may include trailing newline
       if(txt===null||txt===undefined)return;
-      // Strip ONE trailing newline (Skulpt adds it) then split for multi-line prints
       const clean=txt.endsWith('\n')?txt.slice(0,-1):txt;
       clean.split('\n').forEach(line=>writeLine(line,'stdout'));
     },
@@ -466,6 +504,112 @@ function downloadCode(){
   a.download=(curTab||'main')+'.py';a.click();toast('Downloaded!');
 }
 
+/* ═══ FILE IMPORT ════════════════════════════════════════════
+   Supports: .py .html .htm .js .txt
+   — Click "Import" button → file picker
+   — Drag & drop onto editor area
+   ══════════════════════════════════════════════════════════ */
+const ALLOWED_EXT = /\.(py|html|htm|js|txt)$/i;
+
+function triggerImport(){
+  document.getElementById('import-file-input').click();
+}
+
+function handleImportChange(e){
+  const files = Array.from(e.target.files);
+  if(files.length) processImportedFiles(files);
+  e.target.value = ''; // reset so same file can be re-imported
+}
+
+function processImportedFiles(files){
+  const valid = files.filter(f => ALLOWED_EXT.test(f.name));
+  if(!valid.length){
+    toast('Unsupported file. Use .py, .html, .js, or .txt');
+    return;
+  }
+  // Load each file into its own tab (up to the 2 built-in tabs first, then main)
+  // Simple approach: load first file into current tab; if more, inform user
+  const file = valid[0];
+  readFileIntoTab(file, curTab, () => {
+    if(valid.length > 1){
+      // Try to load second file into the other tab
+      const otherTab = curTab === 'main' ? 'intro' : 'main';
+      readFileIntoTab(valid[1], otherTab, () => {
+        if(valid.length > 2) toast('Only 2 files loaded (one per tab). Import one at a time for more.');
+      });
+    }
+  });
+}
+
+function readFileIntoTab(file, tabName, onDone){
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const content = ev.target.result;
+    // If this is the currently active tab, update the textarea live
+    if(tabName === curTab){
+      document.getElementById('code').value = content;
+      updateLN();
+    }
+    // Always store in the tab contents map
+    TAB_CONTENTS[tabName] = content;
+    // Rename the tab label to match the filename
+    const tabEl = document.getElementById('tab-' + tabName);
+    if(tabEl){
+      const nameEl = tabEl.querySelector('.tab-name');
+      if(nameEl) nameEl.textContent = file.name;
+      // Update dot color: .py = blue, .html = orange, .js = yellow, .txt = muted
+      const dot = tabEl.querySelector('.lang-dot');
+      if(dot){
+        const ext = (file.name.match(/\.(\w+)$/) || ['',''])[1].toLowerCase();
+        const dotColors = {py:'var(--blue)',html:'#fb923c',htm:'#fb923c',js:'#fbbf24',txt:'var(--muted)'};
+        dot.style.background = dotColors[ext] || 'var(--blue)';
+      }
+    }
+    toast('Imported: ' + file.name + ' ✓');
+    if(typeof showBubble === 'function') showBubble('File loaded! 📂', 2400);
+    if(typeof onDone === 'function') onDone();
+  };
+  reader.onerror = () => toast('Could not read: ' + file.name);
+  reader.readAsText(file);
+}
+
+/* ═══ DRAG & DROP ════════════════════════════════════════════ */
+(function(){
+  const section = document.getElementById('editor-section');
+  const overlay = document.getElementById('drag-overlay');
+  let depth = 0;
+
+  // Show overlay on dragenter into the editor section
+  section.addEventListener('dragenter', e => {
+    e.preventDefault();
+    depth++;
+    if(depth === 1) overlay.classList.add('active');
+  });
+  section.addEventListener('dragleave', () => {
+    depth--;
+    if(depth <= 0){ depth = 0; overlay.classList.remove('active'); }
+  });
+  section.addEventListener('dragover', e => { e.preventDefault(); });
+  section.addEventListener('drop', e => {
+    e.preventDefault();
+    depth = 0;
+    overlay.classList.remove('active');
+    const files = Array.from(e.dataTransfer.files);
+    if(files.length) processImportedFiles(files);
+    else toast('No file detected in drop');
+  });
+
+  // Fallback: catch drops anywhere on the page
+  document.addEventListener('dragover', e => e.preventDefault());
+  document.addEventListener('drop', e => {
+    // Only handle if not already handled by section
+    if(section.contains(e.target)) return;
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    if(files.length) processImportedFiles(files);
+  });
+})();
+
 /* ═══ TABS ══════════════════════════════════════════════════ */
 const TAB_CONTENTS={
   main:'',
@@ -486,6 +630,7 @@ print("  - Full Python 3 via Skulpt")
 print("  - Real inline input() — just like Thonny")
 print("  - Smart auto-indent and bracket pairing")
 print("  - Copy and Download your code")
+print("  - Import .py / .html files via button or drag & drop")
 print("  - Light / Dark mode + Beacon mascot")
 print("")
 name = input("What is your name? ")
@@ -584,33 +729,26 @@ resizer.addEventListener('mousedown',e=>{resizing=true;startY=e.clientY;startH=o
 document.addEventListener('mousemove',e=>{if(!resizing)return;const h=Math.max(80,Math.min(600,startH+(startY-e.clientY)));outputPanel.style.height=h+'px';});
 document.addEventListener('mouseup',()=>{if(resizing){resizing=false;resizer.classList.remove('dragging');document.body.style.userSelect='';}});
 
-/* ═══ LOADING — instant since Skulpt needs no preload ═══════ */
+/* ═══ LOADING ═══════════════════════════════════════════════ */
 setTimeout(()=>document.getElementById('lo').classList.add('gone'),500);
 
 /* ═══════════════════════════════════════════════════════════
-   EASTER EGGS — triggered from writeLine on stdout
+   EASTER EGGS
    ═══════════════════════════════════════════════════════════ */
 function playAudio(src){try{new Audio(src).play().catch(()=>{});}catch(e){}}
 
 function checkEasterEggs(txt){
   const n=txt.trim().toLowerCase().replace(/\s+/g,'');
-  // 67 / six seven
   if(n==='67'||n==='sixseven'||/^(six.?seven|67)$/.test(n)){triggerSixSeven();return;}
   const raw=txt.trim().toLowerCase();
   if(/\b(67|six.?seven)\b/.test(raw)){triggerSixSeven();return;}
-  // job / job application
   if(/\bjob\b/.test(raw)||/\bjobapplication\b/.test(n)){triggerJob();return;}
-  // bazooka
   if(/\bbazooka\b/.test(raw)){triggerBazooka();return;}
-  // kirk or charlie (data.gif)
   if(/\b(kirk|charlie)\b/.test(raw)){triggerData();return;}
-  // epstein
   if(/\bepstein\b/.test(raw)){triggerEpstein();return;}
-  // rickroll
   if(/\brickroll\b/.test(raw)){triggerRickroll();return;}
 }
 
-/* ── helper: base meme overlay ── */
 function makeMemeOverlay(){
   const ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(3px)';
@@ -624,7 +762,6 @@ function makeMemeOverlay(){
   return ov;
 }
 
-/* ── inject shared keyframes once ── */
 (function(){
   const st=document.createElement('style');
   st.textContent=`
@@ -643,148 +780,78 @@ function makeMemeOverlay(){
   document.head.appendChild(st);
 })();
 
-/* ─── SIX SEVEN ─── */
 function triggerSixSeven(){
   playAudio('sixseven.mp3');
-  const ov=makeMemeOverlay();
-  ov.style.background='rgba(0,0,0,.85)';
-  const box=document.createElement('div');
-  box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:min(500px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
+  const ov=makeMemeOverlay();ov.style.background='rgba(0,0,0,.85)';
+  const box=document.createElement('div');box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:min(500px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
   const top=document.createElement('div');top.className='meme-top';top.textContent='WHEN SOMEONE SAYS';
-  const img=document.createElement('img');img.className='meme-img';img.src='67.gif';
-  img.onerror=()=>{img.src='https://media.tenor.com/QvNc4gEjUj4AAAAM/sixty-seven-67.gif';img.onerror=()=>{img.style.display='none'};};
+  const img=document.createElement('img');img.className='meme-img';img.src='67.gif';img.onerror=()=>{img.src='https://media.tenor.com/QvNc4gEjUj4AAAAM/sixty-seven-67.gif';img.onerror=()=>{img.style.display='none'};};
   const bot=document.createElement('div');bot.className='meme-bot';bot.textContent='SIX SEVEN ⁶🤷⁷';
-  box.appendChild(top);box.appendChild(img);box.appendChild(bot);
-  ov.appendChild(box);document.body.appendChild(ov);
+  box.appendChild(top);box.appendChild(img);box.appendChild(bot);ov.appendChild(box);document.body.appendChild(ov);
 }
 
-/* ─── JOB APPLICATION ─── */
 function triggerJob(){
-  // Flashbang effect first, then overlay
   playAudio('job.mp3');
-  const fb=document.createElement('div');
-  fb.style.cssText='position:fixed;inset:0;background:#fff;z-index:9999998;pointer-events:none;animation:flashbang 0.9s ease forwards';
-  document.body.appendChild(fb);
-  setTimeout(()=>fb.remove(),900);
+  const fb=document.createElement('div');fb.style.cssText='position:fixed;inset:0;background:#fff;z-index:9999998;pointer-events:none;animation:flashbang 0.9s ease forwards';
+  document.body.appendChild(fb);setTimeout(()=>fb.remove(),900);
   setTimeout(()=>{
-    const ov=makeMemeOverlay();
-    ov.style.background='rgba(0,0,0,.88)';
-    const box=document.createElement('div');
-    box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(520px,92vw);animation:meme-pop .4s cubic-bezier(.34,1.56,.64,1)';
+    const ov=makeMemeOverlay();ov.style.background='rgba(0,0,0,.88)';
+    const box=document.createElement('div');box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(520px,92vw);animation:meme-pop .4s cubic-bezier(.34,1.56,.64,1)';
     const top=document.createElement('div');top.className='meme-top';top.style.color='#fbbf24';top.textContent='🚨 JOB APPLICATION DETECTED 🚨';
-    const img=document.createElement('img');img.className='meme-img';img.src='job.png';
-    img.onerror=()=>img.style.display='none';
+    const img=document.createElement('img');img.className='meme-img';img.src='job.png';img.onerror=()=>img.style.display='none';
     const bot=document.createElement('div');bot.className='meme-bot';bot.style.cssText='font-size:clamp(1.2rem,3vw,1.8rem);color:#fbbf24';bot.textContent='HIRE ME PLS 👔📄';
-    box.appendChild(top);box.appendChild(img);box.appendChild(bot);
-    ov.appendChild(box);document.body.appendChild(ov);
+    box.appendChild(top);box.appendChild(img);box.appendChild(bot);ov.appendChild(box);document.body.appendChild(ov);
   },400);
 }
 
-/* ─── BAZOOKA ─── */
 function triggerBazooka(){
   playAudio('bazooka.mp3');
-  const ov=makeMemeOverlay();
-  ov.style.background='rgba(0,0,0,.88)';
-  const box=document.createElement('div');
-  box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:min(520px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
+  const ov=makeMemeOverlay();ov.style.background='rgba(0,0,0,.88)';
+  const box=document.createElement('div');box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:min(520px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
   const top=document.createElement('div');top.className='meme-top';top.textContent='🚀 BAZOOKA TIME 🚀';
-  const img=document.createElement('img');img.className='meme-img';img.src='bazooka.gif';
-  img.onerror=()=>img.style.display='none';
+  const img=document.createElement('img');img.className='meme-img';img.src='bazooka.gif';img.onerror=()=>img.style.display='none';
   const bot=document.createElement('div');bot.className='meme-bot';bot.textContent='BOOM 💥';
-  box.appendChild(top);box.appendChild(img);box.appendChild(bot);
-  ov.appendChild(box);document.body.appendChild(ov);
+  box.appendChild(top);box.appendChild(img);box.appendChild(bot);ov.appendChild(box);document.body.appendChild(ov);
 }
 
-/* ─── KIRK / CHARLIE (data.gif bouncing around) ─── */
 function triggerData(){
   playAudio('data.mp3');
-  const ov=document.createElement('div');
-  ov.style.cssText='position:fixed;inset:0;z-index:999999;overflow:hidden;background:rgba(0,0,0,.7);cursor:pointer';
-  const label=document.createElement('div');
-  label.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Impact,Arial Black,sans-serif;font-size:clamp(2rem,6vw,4rem);color:#fff;text-shadow:-3px -3px 0 #000,3px 3px 0 #000;pointer-events:none;opacity:.18;letter-spacing:4px;text-transform:uppercase';
-  label.textContent='HE\'S HERE';
-  ov.appendChild(label);
-  const hint=document.createElement('div');
-  hint.style.cssText='position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:DM Sans,sans-serif;font-size:.75rem;color:rgba(255,255,255,.35);letter-spacing:1px';
-  hint.textContent='click or Esc to close';
-  ov.appendChild(hint);
-  // Create bouncing GIF
-  const img=document.createElement('img');
-  img.src='data.gif';img.onerror=()=>{};
-  img.style.cssText='position:absolute;width:160px;height:auto;pointer-events:none';
-  ov.appendChild(img);
-  let bx=100,by=100,vx=4.5,vy=3.2;
-  let rafId;
-  function bounce(){
-    const W=window.innerWidth-160,H=window.innerHeight-160;
-    bx+=vx;by+=vy;
-    if(bx<=0){bx=0;vx=Math.abs(vx);}
-    if(bx>=W){bx=W;vx=-Math.abs(vx);}
-    if(by<=0){by=0;vy=Math.abs(vy);}
-    if(by>=H){by=H;vy=-Math.abs(vy);}
-    img.style.left=bx+'px';img.style.top=by+'px';
-    rafId=requestAnimationFrame(bounce);
-  }
+  const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:999999;overflow:hidden;background:rgba(0,0,0,.7);cursor:pointer';
+  const label=document.createElement('div');label.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Impact,Arial Black,sans-serif;font-size:clamp(2rem,6vw,4rem);color:#fff;text-shadow:-3px -3px 0 #000,3px 3px 0 #000;pointer-events:none;opacity:.18;letter-spacing:4px;text-transform:uppercase';label.textContent='HE\'S HERE';ov.appendChild(label);
+  const hint=document.createElement('div');hint.style.cssText='position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:DM Sans,sans-serif;font-size:.75rem;color:rgba(255,255,255,.35);letter-spacing:1px';hint.textContent='click or Esc to close';ov.appendChild(hint);
+  const img=document.createElement('img');img.src='data.gif';img.onerror=()=>{};img.style.cssText='position:absolute;width:160px;height:auto;pointer-events:none';ov.appendChild(img);
+  let bx=100,by=100,vx=4.5,vy=3.2,rafId;
+  function bounce(){const W=window.innerWidth-160,H=window.innerHeight-160;bx+=vx;by+=vy;if(bx<=0){bx=0;vx=Math.abs(vx);}if(bx>=W){bx=W;vx=-Math.abs(vx);}if(by<=0){by=0;vy=Math.abs(vy);}if(by>=H){by=H;vy=-Math.abs(vy);}img.style.left=bx+'px';img.style.top=by+'px';rafId=requestAnimationFrame(bounce);}
   rafId=requestAnimationFrame(bounce);
   function close(){cancelAnimationFrame(rafId);ov.remove();}
-  ov.addEventListener('click',close);
-  document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);}});
+  ov.addEventListener('click',close);document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);}});
   document.body.appendChild(ov);
 }
 
-/* ─── EPSTEIN (user.gif multiplying) ─── */
 function triggerEpstein(){
   playAudio('user.mp3');
-  const ov=document.createElement('div');
-  ov.style.cssText='position:fixed;inset:0;z-index:999999;overflow:hidden;background:#000;cursor:pointer';
-  const hint=document.createElement('div');
-  hint.style.cssText='position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:DM Sans,sans-serif;font-size:.75rem;color:rgba(255,255,255,.3);letter-spacing:1px;z-index:2';
-  hint.textContent='click or Esc to close';
-  ov.appendChild(hint);
-  // Start with 1 image zooming in, then multiply
-  let count=0;
-  const MAX=40;
-  function spawnImg(){
-    if(count>=MAX)return;
-    const img=document.createElement('img');
-    img.src='user.gif';img.onerror=()=>{};
-    const sz=80+Math.random()*80;
-    const x=Math.random()*(window.innerWidth-sz);
-    const y=Math.random()*(window.innerHeight-sz);
-    const rot=(Math.random()-0.5)*30;
-    img.style.cssText=`position:absolute;width:${sz}px;height:auto;left:${x}px;top:${y}px;--r:${rot};animation:epstein-multiply ${0.3+Math.random()*.4}s cubic-bezier(.34,1.56,.64,1) both;border-radius:6px`;
-    ov.appendChild(img);count++;
-    if(count<MAX)setTimeout(spawnImg,80+Math.random()*120);
-  }
-  // First one zooms in center
-  const first=document.createElement('img');first.src='user.gif';first.onerror=()=>{};
-  first.style.cssText='position:absolute;width:220px;height:auto;left:50%;top:50%;transform:translate(-50%,-50%);animation:epstein-zoom .5s cubic-bezier(.34,1.56,.64,1) both;border-radius:8px;z-index:1';
-  ov.appendChild(first);
+  const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:999999;overflow:hidden;background:#000;cursor:pointer';
+  const hint=document.createElement('div');hint.style.cssText='position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:DM Sans,sans-serif;font-size:.75rem;color:rgba(255,255,255,.3);letter-spacing:1px;z-index:2';hint.textContent='click or Esc to close';ov.appendChild(hint);
+  let count=0;const MAX=40;
+  function spawnImg(){if(count>=MAX)return;const img=document.createElement('img');img.src='user.gif';img.onerror=()=>{};const sz=80+Math.random()*80,x=Math.random()*(window.innerWidth-sz),y=Math.random()*(window.innerHeight-sz),rot=(Math.random()-.5)*30;img.style.cssText=`position:absolute;width:${sz}px;height:auto;left:${x}px;top:${y}px;--r:${rot};animation:epstein-multiply ${0.3+Math.random()*.4}s cubic-bezier(.34,1.56,.64,1) both;border-radius:6px`;ov.appendChild(img);count++;if(count<MAX)setTimeout(spawnImg,80+Math.random()*120);}
+  const first=document.createElement('img');first.src='user.gif';first.onerror=()=>{};first.style.cssText='position:absolute;width:220px;height:auto;left:50%;top:50%;transform:translate(-50%,-50%);animation:epstein-zoom .5s cubic-bezier(.34,1.56,.64,1) both;border-radius:8px;z-index:1';ov.appendChild(first);
   setTimeout(spawnImg,400);
-  function close(){ov.remove();}
-  ov.addEventListener('click',close);
-  document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);}});
+  function close(){ov.remove();}ov.addEventListener('click',close);document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);}});
   document.body.appendChild(ov);
 }
 
-/* ─── RICKROLL ─── */
 function triggerRickroll(){
   playAudio('rick.mp3');
-  const ov=makeMemeOverlay();
-  ov.style.background='rgba(0,0,0,.92)';
-  const box=document.createElement('div');
-  box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(520px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
+  const ov=makeMemeOverlay();ov.style.background='rgba(0,0,0,.92)';
+  const box=document.createElement('div');box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(520px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
   const top=document.createElement('div');top.className='meme-top';top.textContent='NEVER GONNA GIVE YOU UP';
-  const img=document.createElement('img');img.className='meme-img';img.style.borderRadius='12px';img.src='rick.gif';
-  img.onerror=()=>{img.src='https://media.tenor.com/x8v1oNUOmg4AAAAM/rickroll-roll.gif';img.onerror=()=>img.style.display='none';};
+  const img=document.createElement('img');img.className='meme-img';img.style.borderRadius='12px';img.src='rick.gif';img.onerror=()=>{img.src='https://media.tenor.com/x8v1oNUOmg4AAAAM/rickroll-roll.gif';img.onerror=()=>img.style.display='none';};
   const bot=document.createElement('div');bot.className='meme-bot';bot.style.fontSize='clamp(1rem,2.5vw,1.5rem)';bot.textContent='🎵 YOU GOT ROLLED 🎵';
-  box.appendChild(top);box.appendChild(img);box.appendChild(bot);
-  ov.appendChild(box);document.body.appendChild(ov);
+  box.appendChild(top);box.appendChild(img);box.appendChild(bot);ov.appendChild(box);document.body.appendChild(ov);
 }
 
 /* ═══ INIT ══════════════════════════════════════════════════ */
 setTimeout(()=>document.getElementById('lo').classList.add('gone'),500);
-
 </script>
 
 
@@ -814,9 +881,10 @@ setTimeout(()=>document.getElementById('lo').classList.add('gone'),500);
   function setLS(on){legL.classList.toggle('swinging',on);legR.classList.toggle('swinging',on);}
   function applyPos(){if(window._bavPaused)return;wrap.style.left=px+'px';wrap.style.top=py+'px';}
   function showBubble(t,ms){clearTimeout(bubT);msgEl.textContent=t;bubble.classList.add('on');bubT=setTimeout(()=>bubble.classList.remove('on'),ms||3000);}
+  window.showBubble=showBubble; // expose for import feature
 
   setTimeout(()=>{showBubble("Hi! I'm Beacon! 👋",4000);setTimeout(()=>showBubble("Made by Anshuman! 🚀",3200),4700);},1400);
-  const thoughts=["🛡️ Keeping UAE safe!","🤝 Community first!","🇦🇪 Proud to serve!","✨ Beacon of Unity","Made by Anshuman! 🙌","Coded with ❤️ by Anshuman","Try Ctrl+Enter to run! 💻","Python in the browser! ✨","🌟 Verified & trusted"];
+  const thoughts=["🛡️ Keeping UAE safe!","🤝 Community first!","🇦🇪 Proud to serve!","✨ Beacon of Unity","Made by Anshuman! 🙌","Coded with ❤️ by Anshuman","Try Ctrl+Enter to run! 💻","Python in the browser! ✨","🌟 Verified & trusted","📂 Drag & drop files!"];
   setInterval(()=>{if((mode==='idle'||mode==='sitting')&&Math.random()<.28)showBubble(thoughts[Math.floor(Math.random()*thoughts.length)],2800);},11000);
 
   const MOUTH={happy:'M22 52 Q32 59 42 52',surprised:'M24 53 Q32 58 40 53',sitting:'M23 52 Q32 57 41 52',flying:'M24 54 Q32 50 40 54'};
@@ -877,7 +945,6 @@ setTimeout(()=>document.getElementById('lo').classList.add('gone'),500);
   document.addEventListener('mouseup',()=>{if(!dragging)return;dragging=false;dSwayT=0;setExpr('happy');const now=performance.now(),rec=mHist.filter(p=>now-p.t<130);if(rec.length>=2){const a=rec[0],b=rec[rec.length-1],dT=Math.max(b.t-a.t,5)/16.67;vx=Math.max(-MAX,Math.min(MAX,((b.x-a.x)/dT)*.62));vy=Math.max(-MAX,Math.min(MAX,((b.y-a.y)/dT)*.62));}mode='flying';prev='';});
   wrap.addEventListener('dblclick',()=>{const msgs=["I'm Beacon! 🛡️","UAE's guardian! 🇦🇪","Anshuman coded me! 💻","Hello friend! 👋","Building unity! 🤝"];showBubble(msgs[Math.floor(Math.random()*msgs.length)],3000);if(!dragging){vy=-12-Math.random()*3;vx=(Math.random()-.5)*9;mode='flying';prev='';squish();}});
 
-  // Eye tracking
   if(!('ontouchstart' in window)&&window.innerWidth>768){
     let cX=window.innerWidth/2,cY=window.innerHeight/2;
     document.addEventListener('mousemove',e=>{cX=e.clientX;cY=e.clientY;});
@@ -888,7 +955,6 @@ setTimeout(()=>document.getElementById('lo').classList.add('gone'),500);
     trackEyes();
   }
 
-  // Delete / Spawn
   function doDelete(){actionBtn.disabled=true;const cx=px+32,cy=py+42,SIZE=220;bhCanvas.width=SIZE;bhCanvas.height=SIZE;bhCanvas.style.left=(cx-SIZE/2)+'px';bhCanvas.style.top=(cy-SIZE/2)+'px';bhCanvas.style.opacity='1';const ctx=bhCanvas.getContext('2d');const msL=px,msT=py;const GROW=600,HOLD=400,SHRINK=500,TOTAL=GROW+HOLD+SHRINK,start=performance.now();function eO(t){return 1-Math.pow(1-t,3)}function eI(t){return t*t*t}function dBH(r,a){ctx.clearRect(0,0,SIZE,SIZE);if(r<=0)return;const c=SIZE/2,g=ctx.createRadialGradient(c,c,0,c,c,r);g.addColorStop(0,'rgba(0,0,0,'+a+')');g.addColorStop(.5,'rgba(5,24,40,'+(a*.8)+')');g.addColorStop(.8,'rgba(14,165,233,'+(a*.35)+')');g.addColorStop(1,'rgba(14,165,233,0)');ctx.beginPath();ctx.arc(c,c,r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();}
     function tick(now){const el=now-start;if(el<GROW){const p=eO(el/GROW),pu=eI(el/GROW);dBH(p*105,p);wrap.style.left=(msL+(cx-32-msL)*pu)+'px';wrap.style.top=(msT+(cy-42-msT)*pu)+'px';wrap.style.transform=`scale(${1-pu*.45}) rotate(${pu*700}deg)`;wrap.style.opacity=String(1-pu*.35);}else if(el<GROW+HOLD){const p=(el-GROW)/HOLD;dBH(105,1);wrap.style.left=(cx-32)+'px';wrap.style.top=(cy-42)+'px';wrap.style.transform=`scale(${Math.max(0,.55-p*.55)}) rotate(${700+p*380}deg)`;wrap.style.opacity=String(Math.max(0,1-p*1.4));}else if(el<TOTAL){wrap.style.visibility='hidden';const p=eI((el-GROW-HOLD)/SHRINK);dBH(105*(1-p),1-p);}else{ctx.clearRect(0,0,SIZE,SIZE);bhCanvas.style.opacity='0';wrap.style.visibility='hidden';window._bavPaused=false;setMode('spawn');return;}requestAnimationFrame(tick);}
     requestAnimationFrame(tick);
