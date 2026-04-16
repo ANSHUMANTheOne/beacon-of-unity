@@ -797,9 +797,9 @@ function triggerJob(){
   setTimeout(()=>{
     const ov=makeMemeOverlay();ov.style.background='rgba(0,0,0,.88)';
     const box=document.createElement('div');box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(520px,92vw);animation:meme-pop .4s cubic-bezier(.34,1.56,.64,1)';
-    const top=document.createElement('div');top.className='meme-top';top.style.color='#fbbf24';top.textContent='🚨 JOB APPLICATION DETECTED 🚨';
+    const top=document.createElement('div');top.className='meme-top';top.style.color='#fbbf24';top.textContent='get a job bro';
     const img=document.createElement('img');img.className='meme-img';img.src='job.png';img.onerror=()=>img.style.display='none';
-    const bot=document.createElement('div');bot.className='meme-bot';bot.style.cssText='font-size:clamp(1.2rem,3vw,1.8rem);color:#fbbf24';bot.textContent='HIRE ME PLS 👔📄';
+    const bot=document.createElement('div');bot.className='meme-bot';bot.style.cssText='font-size:clamp(1.2rem,3vw,1.8rem);color:#fbbf24';bot.textContent=' 👔seeyuh📄';
     box.appendChild(top);box.appendChild(img);box.appendChild(bot);ov.appendChild(box);document.body.appendChild(ov);
   },400);
 }
@@ -808,9 +808,9 @@ function triggerBazooka(){
   playAudio('bazooka.mp3');
   const ov=makeMemeOverlay();ov.style.background='rgba(0,0,0,.88)';
   const box=document.createElement('div');box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:min(520px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
-  const top=document.createElement('div');top.className='meme-top';top.textContent='🚀 BAZOOKA TIME 🚀';
+  const top=document.createElement('div');top.className='meme-top';top.textContent='🚀 RIP 🚀';
   const img=document.createElement('img');img.className='meme-img';img.src='bazooka.gif';img.onerror=()=>img.style.display='none';
-  const bot=document.createElement('div');bot.className='meme-bot';bot.textContent='BOOM 💥';
+  const bot=document.createElement('div');bot.className='meme-bot';bot.textContent='KABOOM... KABLOW 💥';
   box.appendChild(top);box.appendChild(img);box.appendChild(bot);ov.appendChild(box);document.body.appendChild(ov);
 }
 
@@ -846,7 +846,7 @@ function triggerRickroll(){
   const box=document.createElement('div');box.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(520px,92vw);animation:meme-pop .36s cubic-bezier(.34,1.56,.64,1)';
   const top=document.createElement('div');top.className='meme-top';top.textContent='NEVER GONNA GIVE YOU UP';
   const img=document.createElement('img');img.className='meme-img';img.style.borderRadius='12px';img.src='rick.gif';img.onerror=()=>{img.src='https://media.tenor.com/x8v1oNUOmg4AAAAM/rickroll-roll.gif';img.onerror=()=>img.style.display='none';};
-  const bot=document.createElement('div');bot.className='meme-bot';bot.style.fontSize='clamp(1rem,2.5vw,1.5rem)';bot.textContent='🎵 YOU GOT ROLLED 🎵';
+  const bot=document.createElement('div');bot.className='meme-bot';bot.style.fontSize='clamp(1rem,2.5vw,1.5rem)';bot.textContent='🎵 GET RICK ROLLED LMAO 🎵';
   box.appendChild(top);box.appendChild(img);box.appendChild(bot);ov.appendChild(box);document.body.appendChild(ov);
 }
 
