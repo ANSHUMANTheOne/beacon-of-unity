@@ -2317,11 +2317,31 @@ window.showTab=(tab,btn)=>{
   var iframe  = document.getElementById('sim-iframe');
   var loaded  = false;
 
+  var demoUrl = 'dashboard_updated.html?demo=1';
+
   window.openSimDemo = function(){
-    if (!loaded) { iframe.src = 'dashboard_updated.html'; loaded = true; }
+    if (!loaded) { iframe.src = demoUrl; loaded = true; }
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   };
+
+  // Preload the demo the moment someone shows intent to click (hover/touch),
+  // so by the time they actually click it's likely already cached.
+  var preloadLink = document.createElement('link');
+  preloadLink.rel = 'preload';
+  preloadLink.as = 'document';
+  preloadLink.href = demoUrl;
+  var preloaded = false;
+  var demoBtn = document.getElementById('bav-try-demo-btn');
+  function preloadDemo(){
+    if (preloaded) return;
+    preloaded = true;
+    document.head.appendChild(preloadLink);
+  }
+  if (demoBtn) {
+    demoBtn.addEventListener('mouseenter', preloadDemo);
+    demoBtn.addEventListener('touchstart', preloadDemo, {passive:true});
+  }
 
   window.closeSimDemo = function(){
     overlay.classList.remove('active');
