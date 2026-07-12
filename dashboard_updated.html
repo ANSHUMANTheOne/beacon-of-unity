@@ -1353,7 +1353,7 @@
                     <div style="font-weight:600;">🚀 View Tutorial</div>
                     <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Replay the Beacon onboarding tour</div>
                 </div>
-                <button onclick="document.getElementById('settingsModal').style.display='none'; try{localStorage.removeItem('bou_tutorial_done');}catch(e){} setTimeout(function(){ if(window.BeaconTutorial) window.BeaconTutorial.start(); }, 120);" style="padding:9px 20px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;border-radius:50px;color:#0f172a;font-family:'Syne','Segoe UI',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(56,189,248,.35);transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 22px rgba(56,189,248,.55)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(56,189,248,.35)'">▶ Replay</button>
+                <button onclick="if(window.IS_DEMO_MODE){document.getElementById('settingsModal').style.display='none';return;} document.getElementById('settingsModal').style.display='none'; try{localStorage.removeItem('bou_tutorial_done');}catch(e){} setTimeout(function(){ if(window.BeaconTutorial) window.BeaconTutorial.start(); }, 120);" style="padding:9px 20px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);border:none;border-radius:50px;color:#0f172a;font-family:'Syne','Segoe UI',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(56,189,248,.35);transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 22px rgba(56,189,248,.55)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(56,189,248,.35)'">▶ Replay</button>
             </div>
         </div>
     </div>
@@ -2142,6 +2142,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Demo mode: loaded inside the homepage's "Try a Demo" simulation overlay.
+        // Never touch real auth/session data or hit Firestore — always show the
+        // self-contained fake-data demo, regardless of any cached login.
+        window.IS_DEMO_MODE = new URLSearchParams(location.search).get('demo') === '1';
+
         let currentChatId = null;
         let currentChatOtherUserId = null;
         let currentChatOtherName = null;
@@ -2274,7 +2279,7 @@
             return REWARD_SKINS.find(s => s.id === skinId) || REWARD_SKINS[0];
         }
         const ADMIN_EMAILS = ['luckyansh.t@gmail.com','beaconofunityofficial@gmail.com'];
-        function isAdmin(email) { return ADMIN_EMAILS.includes(email); }
+        function isAdmin(email) { return !window.IS_DEMO_MODE && ADMIN_EMAILS.includes(email); }
 
         const ACHIEVEMENTS = [
             // ── Helping / resolving chats ──
@@ -2456,6 +2461,11 @@
         });
 
         onAuthStateChanged(auth, async (user) => {
+            if (window.IS_DEMO_MODE) {
+                // Demo mode never uses real auth/session state or live Firestore data —
+                // the standalone demo engine (bottom of file) populates the UI instead.
+                return;
+            }
             if (user) {
                 const userDocRef = doc(db, "users", user.uid);
                 const userSnap = await getDoc(userDocRef);
@@ -2749,6 +2759,7 @@
         };
 
         function loadRequests() {
+            if (window.IS_DEMO_MODE) return;
             const feed = document.getElementById('requestFeed');
             const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
 
@@ -2800,7 +2811,7 @@
                                 <div style="font-size:11px;color:#ea580c;line-height:1.55;">Expires in <b>${daysStr}</b>.${finalNote}</div>
                                 ${canExtend ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
                                     <button onclick="keepPost('${docSnap.id}',${info.extensions},${info.MAX_EXT});sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-${docSnap.id}').remove();" style="background:#f97316;color:white;border:none;padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✅ Keep — Extend 2 Days</button>
-                                    <button onclick="deletePost('${docSnap.id}');sessionStorage.setItem('${warnKey}','1');" style="background:#fee2e2;color:#991b1b;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑 Delete Now</button>
+                                    <button onclick="deletePost('${docSnap.id}', this);sessionStorage.setItem('${warnKey}','1');" style="background:#fee2e2;color:#991b1b;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑 Delete Now</button>
                                     <button onclick="sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-${docSnap.id}').remove();" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;line-height:1;padding:0;">✕</button>
                                 </div>` : `<div style="font-size:11px;font-weight:700;color:#ef4444;margin-top:6px;">⚠️ No more extensions available — this post will be auto-deleted when it expires.</div>`}
                             </div>
@@ -2831,7 +2842,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:start;">
                             <span class="badge badge-${data.category.toLowerCase()}">${data.category}</span>
                             <div style="text-align:right;"><small>📍 ${data.location}</small>${distHtml}${daysLeftHtml}${extBadge}
-                            ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
+                            ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}', this)">Delete</button>` : ''}</div>
                         </div>
                         <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.title}</h4>
                         <p style="font-size:11px; color:#64748b;">Posted by: <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${getEquippedSkin(data.equippedSkin||'ocean').gradient};margin-right:3px;vertical-align:middle;"></span>${data.userName}</p>
@@ -2860,6 +2871,7 @@
             });
         }
         function loadLF() {
+            if (window.IS_DEMO_MODE) return;
             const feed = document.getElementById('lfFeed');
             const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -2908,7 +2920,7 @@
                                 <div style="font-size:11px;color:#ea580c;line-height:1.55;">Expires in <b>${daysStr}</b>.${finalNote}</div>
                                 ${canExtend ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
                                     <button onclick="keepLFPost('${docSnap.id}',${info.extensions},${info.MAX_EXT});sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-lf-${docSnap.id}').remove();" style="background:#f97316;color:white;border:none;padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✅ Keep — Extend 2 Days</button>
-                                    <button onclick="deleteLF('${docSnap.id}');sessionStorage.setItem('${warnKey}','1');" style="background:#fee2e2;color:#991b1b;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑 Delete Now</button>
+                                    <button onclick="deleteLF('${docSnap.id}', this);sessionStorage.setItem('${warnKey}','1');" style="background:#fee2e2;color:#991b1b;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑 Delete Now</button>
                                     <button onclick="sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-lf-${docSnap.id}').remove();" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;line-height:1;padding:0;">✕</button>
                                 </div>` : `<div style="font-size:11px;font-weight:700;color:#ef4444;margin-top:6px;">⚠️ No more extensions available — this post will be auto-deleted when it expires.</div>`}
                             </div>
@@ -2927,7 +2939,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:start;">
                             <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
                             <div style="text-align:right;"><small>📍 ${data.location}</small>${lfDistHtml}${daysLeftHtml}${extBadge}
-                            ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}</div>
+                            ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}', this)">Delete</button>` : ''}</div>
                         </div>
                         ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
                         <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.item}</h4>
@@ -2941,8 +2953,28 @@
                 if (!hasItems) feed.innerHTML = `<p style="text-align:center; padding:20px; color:#94a3b8;">No items in ${userRegion} yet.</p>`;
             });
         }
-        window.deletePost = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "requests", id)); };
-        window.deleteLF   = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "lostfound", id)); };
+        window.deletePost = async (id, btnEl) => {
+            if (!confirm("Delete this?")) return;
+            try {
+                await deleteDoc(doc(db, "requests", id));
+                const card = btnEl && (btnEl.closest('.card') || btnEl.closest('.request-card'));
+                if (card) card.remove();
+            } catch (err) {
+                console.error('deletePost failed:', err);
+                alert('Could not delete this post — please check your connection and try again.');
+            }
+        };
+        window.deleteLF = async (id, btnEl) => {
+            if (!confirm("Delete this?")) return;
+            try {
+                await deleteDoc(doc(db, "lostfound", id));
+                const card = btnEl && (btnEl.closest('.card') || btnEl.closest('.request-card'));
+                if (card) card.remove();
+            } catch (err) {
+                console.error('deleteLF failed:', err);
+                alert('Could not delete this post — please check your connection and try again.');
+            }
+        };
         window.toggleVols = (id) => { const el = document.getElementById(`vols-${id}`); el.style.display = el.style.display === 'none' ? 'block' : 'none'; };
         window.offerHelp  = async (requestId) => {
             const user = auth.currentUser;
@@ -3460,6 +3492,7 @@
         }
 
         function loadActiveChats() {
+            if (window.IS_DEMO_MODE) return;
             onSnapshot(query(collection(db, "chats"), where("participants", "array-contains", auth.currentUser.uid)), (snapshot) => {
                 const list = document.getElementById('activeChatsList');
 
@@ -3572,6 +3605,7 @@
         };
 
         function loadLeaderboard() {
+            if (window.IS_DEMO_MODE) return;
             const feed = document.getElementById('leaderboardFeed');
             feed.innerHTML = '<p style="color:#94a3b8;">Loading...</p>';
             if (lbUnsubscribe) { lbUnsubscribe(); lbUnsubscribe = null; }
@@ -3682,6 +3716,7 @@
         }
 
         function loadRewards() {
+            if (window.IS_DEMO_MODE) return;
             const uid = auth.currentUser?.uid;
             if (!uid) return;
             const feed = document.getElementById('rewardsFeed');
@@ -3846,6 +3881,7 @@
         //  BADGES
         // ═══════════════════════════════════════════════
         function loadBadges() {
+            if (window.IS_DEMO_MODE) return;
             const uid = auth.currentUser?.uid;
             if (!uid) return;
             const feed = document.getElementById('badgesFeed');
@@ -4035,6 +4071,7 @@
         //  THANK YOU WALL
         // ═══════════════════════════════════════════════
         function loadThankYouWall() {
+            if (window.IS_DEMO_MODE) return;
             const feed = document.getElementById('thankYouFeed');
             const q = query(collection(db,'thankyou'), orderBy('createdAt','desc'));
             onSnapshot(q, snap => {
@@ -4109,6 +4146,7 @@
         //  VOLUNTEER OPPORTUNITIES (admin-only post)
         // ═══════════════════════════════════════════════
         function loadVolOpps() {
+            if (window.IS_DEMO_MODE) return;
             const feed = document.getElementById('volOppFeed');
             if (!feed) return;
             const addBtn = document.getElementById('addVolOppBtn');
@@ -5738,6 +5776,7 @@
     };
 
     async function loadAdminChats() {
+        if (window.IS_DEMO_MODE) return;
         if (!isAdmin(auth.currentUser?.email)) return;
         const feed = document.getElementById('adminChatsFeed');
         feed.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;font-size:13px;">Loading...</p>';
@@ -5781,6 +5820,7 @@
     }
 
     async function loadAdminUsers() {
+        if (window.IS_DEMO_MODE) return;
         if (!isAdmin(auth.currentUser?.email)) return;
         const feed = document.getElementById('adminUsersFeed');
         if (!feed) return;
@@ -6770,6 +6810,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
   /* ══ AUTO-START ═══════════════════════════════════════════════ */
   function autoStart() {
+    if (window.IS_DEMO_MODE) return; // mascot tutorial is disabled inside the demo overlay
     if (localStorage.getItem('bou_tutorial_done')) return;
     let tries=0;
     const poll=setInterval(()=>{
