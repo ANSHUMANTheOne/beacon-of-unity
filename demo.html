@@ -74,7 +74,7 @@
   }
   .eyebrow{
     font-size:12.5px; letter-spacing:0.18em; text-transform:uppercase;
-    color:var(--gold-deep); font-weight:600; margin-bottom:6px;
+    color:var(--gold-deep); font-weight:600; margin-bottom:22px;
     opacity:0; animation:rise 1s 0.1s forwards ease-out;
   }
 
@@ -140,6 +140,50 @@
   .quad-divider span:nth-child(4){background:var(--purple); animation-delay:0.35s;}
   @keyframes grow{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
 
+  /* ---------- Tooltip for "vulnerable neighbors" ---------- */
+  .tooltip-term{
+    position:relative;
+    border-bottom:2px dotted var(--gold-deep);
+    cursor:help;
+    color:var(--ink);
+    font-weight:600;
+  }
+  .tooltip-term .tooltip-box{
+    position:absolute;
+    bottom:calc(100% + 14px);
+    left:50%;
+    transform:translateX(-50%) translateY(6px);
+    width:280px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px 20px;
+    box-shadow:0 24px 60px -18px rgba(28,58,99,0.3);
+    text-align:left;
+    font-size:14px;
+    line-height:1.6;
+    font-weight:400;
+    color:var(--ink-dim);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.25s ease, transform 0.25s ease;
+    z-index:10;
+  }
+  .tooltip-term .tooltip-box strong{ display:block; color:var(--navy); font-weight:600; margin-bottom:8px; font-size:12.5px; letter-spacing:0.05em; text-transform:uppercase; }
+  .tooltip-term .tooltip-box ul{ list-style:none; padding:0; margin:0; }
+  .tooltip-term .tooltip-box li{ padding:3px 0; position:relative; padding-left:16px; }
+  .tooltip-term .tooltip-box li::before{ content:'•'; position:absolute; left:0; color:var(--gold-deep); }
+  .tooltip-term .tooltip-box::after{
+    content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:7px solid transparent; border-top-color:var(--paper);
+  }
+  .tooltip-term:hover .tooltip-box, .tooltip-term:focus .tooltip-box{
+    opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);
+  }
+  @media (max-width:520px){
+    .tooltip-term .tooltip-box{ width:230px; font-size:13px; }
+  }
+
   /* ---------- Feature rows: card style, professional ---------- */
   .feature-row{
     display:grid; grid-template-columns:0.8fr 1.2fr; gap:6vw; align-items:center;
@@ -204,7 +248,7 @@
 </nav>
 
 <section class="hero">
-  <span class="eyebrow">Product Demo · UAE's Verified Community Hub</span>
+  <span class="eyebrow">Product Demo</span>
 
   <div class="logo-stage">
     <div class="logo-ring"></div>
@@ -228,6 +272,22 @@
 <section class="statement reveal" style="padding-top:2vh;">
   <span class="tag">The Shift</span>
   <h2>So we built something with <strong>no reels, no likes, no popularity contest</strong> — only people helping people.</h2>
+</section>
+
+<section class="statement reveal" style="padding-top:2vh;">
+  <span class="tag">Who Needs It</span>
+  <h2>Help is usually invisible. We only notice it during a flood, a heatwave, a crisis on the news, when in truth
+    <span class="tooltip-term" tabindex="0">vulnerable neighbors<span class="tooltip-box">
+      <strong>Who this includes</strong>
+      <ul>
+        <li>Elderly individuals living alone</li>
+        <li>People with limited mobility</li>
+        <li>Those recovering from illness or surgery</li>
+        <li>New parents managing alone</li>
+        <li>Anyone temporarily unable to get by without support</li>
+      </ul>
+    </span></span>
+    need it quietly, every single day. Beacon of Unity is built so anyone, not just during emergencies, can be seen and helped.</h2>
 </section>
 
 <section>
