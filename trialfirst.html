@@ -307,8 +307,23 @@ html.hero-lock,body.hero-lock{overflow:hidden;height:100vh;height:100dvh;overscr
 .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--eyebrow-bg);border:1px solid var(--eyebrow-border);padding:7px 18px;border-radius:50px;font-size:.72rem;font-weight:600;color:var(--eyebrow-text);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:24px;animation:fin .8s var(--ease) both}
 .ebdot{width:6px;height:6px;background:var(--sky3);border-radius:50%;animation:blk 1.6s ease-in-out infinite}
 @keyframes blk{0%,100%{box-shadow:0 0 0 0 rgba(125,211,252,.5)}50%{box-shadow:0 0 0 8px rgba(125,211,252,0)}}
-.hh1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3rem,7.5vw,5.8rem);line-height:1;letter-spacing:-3px;color:var(--hero-text);text-align:center;margin-bottom:20px;animation:fin .9s .1s var(--ease) both;transition:color .5s}
+.hh1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3rem,7.5vw,5.8rem);line-height:1;letter-spacing:-3px;color:var(--hero-text);text-align:center;transition:color .5s,opacity .5s,transform .5s;will-change:opacity,transform}
 .hh1 .hl{background:linear-gradient(130deg,var(--sky3),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+/* Two headlines occupying the same grid cell (so the layout doesn't jump
+   between their different lengths/line-counts) -- crossfades between
+   them are driven entirely by renderTextPhase(p) in JS, in sync with the
+   camera's opening tilt-down. #hh1-tag starts at opacity:0 here so
+   there's no flash of the wrong headline before the first JS frame runs. */
+.hh1-stack{position:relative;display:grid;align-items:center;margin-bottom:20px}
+/* "Beacon of Unity" is short (2 lines vs. the tagline's 3), so at the
+   same size it sat with a visible gap of empty space below it inside
+   the shared grid cell (sized to the taller tagline) before hitting the
+   subtext -- reads as sparse/unfinished. Bigger and centred within the
+   cell so it actually fills the space with real visual weight instead
+   of floating in the top of a box that's too tall for it. */
+#hh1-brand{font-size:clamp(3.6rem,9vw,7rem)}
+.hh1-stack .hh1{grid-area:1/1}
+#hh1-tag{opacity:0}
 .hsub{font-size:1.05rem;color:var(--hero-text);opacity:.65;line-height:1.72;font-weight:300;text-align:center;max-width:520px;margin-bottom:38px;animation:fin .9s .2s var(--ease) both;transition:color .5s}
 .hbtns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fin .9s .3s var(--ease) both}
 @keyframes fin{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
@@ -939,7 +954,10 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 
     <div id="p1">
       <div class="eyebrow"><div class="ebdot"></div>UAE's Emirates ID-Verified Hub</div>
-      <h1 class="hh1">Building Bridges,<br><span class="hl">One Neighbor</span><br>at a Time</h1>
+      <div class="hh1-stack">
+        <h1 class="hh1" id="hh1-brand">Beacon<br>of <span class="hl">Unity</span></h1>
+        <h1 class="hh1" id="hh1-tag" aria-hidden="true">Building Bridges,<br><span class="hl">One Neighbor</span><br>at a Time</h1>
+      </div>
       <p class="hsub">A trust-first platform for reliable news, community help requests, volunteer opportunities, and lost & found — where every neighbour matters.</p>
       <div class="hbtns">
         <button class="btn bw" onclick="window.location.href='login.html'"><span>Join the Movement →</span></button>
@@ -1284,11 +1302,25 @@ if(!isNarrowScreen){
 const p1=document.getElementById('p1'),p2=document.getElementById('p2'),scue=document.getElementById('scue'),hbg=document.getElementById('hbg');
 const heroEl=document.getElementById('hero');
 const hero3dWrap=document.getElementById('hero3d-wrap');
+const hh1Brand=document.getElementById('hh1-brand'),hh1Tag=document.getElementById('hh1-tag');
 function cl(v,a,b){return Math.max(a,Math.min(b,v))}
 function ez(t){return t<.5?2*t*t:-1+(4-2*t)*t}
 function map01(p,a,b){return cl((p-a)/(b-a),0,1)}
 
 function renderTextPhase(p){
+  // Opening headline crossfade: "Beacon of Unity" is the clean first
+  // frame (matches the camera's opening sky-look), then crossfades to
+  // the "Building Bridges..." tagline as the camera tilts down into the
+  // street — finishes at p=.055, just before the whole #p1 block starts
+  // its own fade-out at p=.06, so there's a clean beat where the tagline
+  // is fully shown before everything fades together.
+  if(hh1Brand && hh1Tag){
+    const swap = ez(map01(p,.015,.055));
+    hh1Brand.style.opacity = 1-swap;
+    hh1Brand.style.transform = `translateY(${swap*-14}px)`;
+    hh1Tag.style.opacity = swap;
+    hh1Tag.style.transform = `translateY(${(1-swap)*14}px)`;
+  }
   // Headline is visible at the very start, then fades out as the journey
   // begins and STAYS gone — it does not compete for the same screen space
   // again. The payoff at the end belongs entirely to #p2 (the revealed
@@ -2133,7 +2165,14 @@ window.showTab=(tab,btn)=>{
   // beat's buildings (alternating sides down the street), travel between
   // them, then rise and pull back for the full-street reveal.
   const camKeys = [
-    { p:.00, pos:[0,13,10],    look:[0,3,-10]  },
+    // Clean opening: camera at street level looking straight up at open
+    // sky -- nothing built yet, a genuine blank-slate first frame -- then
+    // tilts down into what was previously the very first keyframe (kept
+    // byte-for-byte, just moved from p:.00 to p:.05). Everything from
+    // p:.08 onward is completely untouched, so beat ranges/captions/
+    // minis (all keyed to p>=.16) can't be affected by this.
+    { p:.00, pos:[0,4,6],      look:[0,26,2]   },
+    { p:.05, pos:[0,13,10],    look:[0,3,-10]  },
     { p:.08, pos:[0,6,3],      look:[0,2,-8]   },
     { p:.20, pos:[-2.2,4,-3],  look:[-6,1.8,-9]   },  // approach beat 1 — pulled back to a proper medium shot, not against the wall
     { p:.30, pos:[-2.8,3.6,-6],look:[-6,1.5,-10.5] },
