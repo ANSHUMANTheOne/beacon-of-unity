@@ -347,7 +347,15 @@ html.hero-lock,body.hero-lock{overflow:hidden;height:100vh;height:100dvh;overscr
 .rpd{font-size:.81rem;color:var(--rpd-color);line-height:1.58;font-weight:300;transition:color .5s}
 
 /* Scroll cue */
-#scue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;z-index:20;animation:fin 1s .9s var(--ease) both}
+/* animation:fin removed -- it's the same on-load animation pattern
+   already fixed elsewhere in this file (founder.html's heading, this
+   hero's own headline), but here it did real, permanent damage: fin's
+   final keyframe is transform:none, and with fill-mode "both" that
+   overwrites this element's own required transform:translateX(-50%)
+   for good once the animation finishes on load -- silently breaking the
+   centering on every device, just more visible on narrow screens where
+   the leftover fixed-pixel offset is a bigger fraction of the viewport. */
+#scue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;z-index:20}
 .scm{width:22px;height:36px;border-radius:11px;display:flex;justify-content:center;padding-top:5px}
 [data-theme="dark"] .scm{border:2px solid rgba(255,255,255,.3)}
 [data-theme="light"] .scm{border:2px solid rgba(12,45,72,.2)}
@@ -2461,9 +2469,15 @@ body.hero-lock #bav-root {
   left: 50%;
   transform: translateX(-50%) scale(.65);
   transform-origin: 50% 100%;
-  background: rgba(5, 24, 40, .92);
-  backdrop-filter: blur(18px) saturate(1.6);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  background: rgba(5, 24, 40, .96);
+  /* backdrop-filter: blur() removed — this bubble is a child of the
+     mascot wrapper, which repositions constantly (physics/drag/idle
+     bob), and backdrop-filter forces the browser to re-blur whatever's
+     behind it on every reposition, even while the bubble's opacity is 0
+     (it's still composited, just invisible). That's genuinely expensive,
+     especially on Android Chrome's compositor. The background here is
+     already near-opaque (.92→.96), so the blur was barely visible
+     anyway — dropping it removes a real cost for almost no visual loss. */
   border: 1px solid rgba(14,165,233,.55);
   border-radius: 14px;
   padding: 7px 14px;
@@ -2920,7 +2934,23 @@ body.hero-lock #bav-root {
   'use strict';
 
   // ── constants ────────────────────────────────────────
-  const W = 64, H = 84;          // avatar container size
+  // Android-only, per request ("only on androids, don't do anything on
+  // PCs") -- a real Android check (not a screen-width/touch-capability
+  // guess, which would also catch iPhones/iPads/touchscreen laptops).
+  // Scaling W/H themselves (not a CSS transform:scale on top of the
+  // unchanged constants) keeps the physics collision box and the visual
+  // size exactly in sync -- a scale-only approach would shrink what's
+  // drawn but leave the invisible bounce/floor box at the old size.
+  // Phones only (iPhone AND Android), not desktop -- reusing the file's
+  // own established width-based phone check (isNarrowScreen, declared
+  // earlier and shared here since classic scripts share top-level
+  // lexical scope) rather than UA-sniffing for "iPhone" specifically,
+  // which is unreliable (iPadOS, for one, reports as "Macintosh" by
+  // default). This is the same signal already used elsewhere in this
+  // file for the same kind of decision (cursor, scroll speed).
+  const isPhone = typeof isNarrowScreen !== 'undefined' && isNarrowScreen;
+  const MASC_SCALE = isPhone ? 0.88 : 1;
+  const W = Math.round(64 * MASC_SCALE), H = Math.round(84 * MASC_SCALE);          // avatar container size
   const GRAVITY    = 0.36;
   const AIR_FRIC   = 0.967;      // per-frame multiplier
   const GND_FRIC   = 0.76;
@@ -2959,6 +2989,29 @@ body.hero-lock #bav-root {
   const mouth  = document.getElementById('bav-mth');
   const legL   = document.getElementById('bav-leg-l');
   const legR   = document.getElementById('bav-leg-r');
+
+  // Android-only size reduction (see MASC_SCALE above). #bav-anim has a
+  // fixed 64x84 CSS size (not a % of its parent), and both its own and
+  // #bav-wrap's `transform` are already actively used elsewhere for
+  // squish/flip/black-hole effects -- setting a static transform:scale()
+  // here would just get overwritten the next time any of those run.
+  // width/height aren't touched anywhere else, so setting them directly
+  // (matching the already-scaled W/H physics constants) is the durable
+  // way to actually shrink what's drawn, not just the invisible
+  // collision box.
+  if(isPhone){
+    wrap.style.width = W + 'px';
+    animEl.style.width = W + 'px';
+    animEl.style.height = H + 'px';
+    // The <svg> itself has fixed width="64" height="84" ATTRIBUTES
+    // matching its viewBox 1:1 -- just shrinking its container wouldn't
+    // scale the artwork, it'd clip it. width/height:100% here lets the
+    // svg fill whatever size #bav-anim now is, and the existing
+    // viewBox="0 0 64 84" does the actual proportional scaling of
+    // everything drawn inside it.
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+  }
 
   function setLegsSwinging(on) {
     legL.classList.toggle('swinging', on);
@@ -3070,21 +3123,38 @@ body.hero-lock #bav-root {
 
   // ── cached text elements (refreshed on scroll/resize) ─
   let textEls = [];
+  // The main perf cost here (especially painful on Android Chrome) was
+  // findSurface() below calling getBoundingClientRect() on every visible
+  // text element EVERY SINGLE PHYSICS FRAME (60/sec) whenever the mascot
+  // is flying/falling -- each call is a forced synchronous layout read,
+  // so this was doing dozens of forced reflows per second just for
+  // surface detection. Fixed by caching {el, rect} pairs HERE (only on
+  // the existing 700ms interval / scroll / resize triggers, which is
+  // already how often positions actually need rechecking) and having
+  // findSurface() read from that cache instead of re-measuring anything
+  // itself -- eliminates the per-frame layout reads entirely rather than
+  // just throttling them.
   function refreshText() {
     textEls = Array.from(document.querySelectorAll(
       'h1,h2,h3,h4,h5,h6,p,.ftitle,.stitle,.ctat,.nname,.pct,.ft,.tname,.rpt,figcaption,dt,dd'
-    )).filter(el => {
-      const r = el.getBoundingClientRect();
-      return r.width > 120
+    )).map(el => ({ el, r: el.getBoundingClientRect() }))
+      .filter(({r, el}) => r.width > 120
           && r.height > 20
           && r.bottom > 0
           && r.top < window.innerHeight
-          && el.textContent.trim().length > 8;
-    });
+          && el.textContent.trim().length > 8);
   }
   refreshText();
   setInterval(refreshText, 700);
-  window.addEventListener('scroll', refreshText, { passive: true });
+  // Raw 'scroll' events can fire many times within a single frame during
+  // an active touch-scroll -- rAF-throttled here so a scroll gesture
+  // triggers at most one refreshText() per frame instead of stacking up.
+  let scrollQueued = false;
+  window.addEventListener('scroll', () => {
+    if (scrollQueued) return;
+    scrollQueued = true;
+    requestAnimationFrame(() => { scrollQueued = false; refreshText(); });
+  }, { passive: true });
   window.addEventListener('resize', refreshText, { passive: true });
 
   // ── text surface detection ────────────────────────────
@@ -3092,8 +3162,7 @@ body.hero-lock #bav-root {
     if (dragging) return null;
     const feet  = py + H;
     const ctr   = px + W * 0.5;
-    for (const el of textEls) {
-      const r = el.getBoundingClientRect();
+    for (const { el, r } of textEls) {
       if (Math.abs(feet - r.top) < 28
           && ctr > r.left + 10
           && ctr < r.right - 10
