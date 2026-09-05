@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Focus Switch Detector</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 700px; margin: 60px auto; padding: 20px; text-align: center; }
+  .card { border: 1px solid #ccc; border-radius: 16px; padding: 30px; }
+  #count { font-size: 64px; font-weight: 700; margin: 15px; }
+  #status { font-size: 20px; }
+  .small { color: #666; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Focus Switch Detector</h1>
+  <div id="count">0</div>
+  <div id="status">Page is active</div>
+  <p class="small">
+    Switch to another tab, window, or application and come back.
+    The counter increments when this page detects that it became hidden
+    or lost window focus.
+  </p>
+  <p class="small" id="last">No switch detected yet.</p>
+</div>
+
+<script>
+let switches = 0;
+let away = false;
+let lastEvent = "None";
+
+const count = document.getElementById("count");
+const status = document.getElementById("status");
+const last = document.getElementById("last");
+
+function update() {
+  count.textContent = switches;
+  status.textContent = away ? "Page is NOT active" : "Page is active";
+  last.textContent = "Last event: " + lastEvent;
+}
+
+function wentAway(reason) {
+  if (!away) {
+    away = true;
+    switches++;
+    lastEvent = reason + " — " + new Date().toLocaleTimeString();
+    update();
+  }
+}
+
+function cameBack(reason) {
+  away = false;
+  lastEvent = reason + " — " + new Date().toLocaleTimeString();
+  update();
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) wentAway("visibilitychange: hidden");
+  else cameBack("visibilitychange: visible");
+});
+
+window.addEventListener("blur", () => {
+  wentAway("window blur");
+});
+
+window.addEventListener("focus", () => {
+  cameBack("window focus");
+});
+
+update();
+</script>
+</body>
+</html>
