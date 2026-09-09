@@ -14,6 +14,7 @@
 
   let renderer, scene, camera;
   let buildings = [], streetlights = [], beams = [], people = [], bubbles = [];
+  let trashBags = [];   // { mesh, appearAt, pickedBy(person), phase }
   let interiorRoom = null;
   let running = true;
 
@@ -86,7 +87,39 @@
   // hollow-geometry occlusion that's hard to get right without live
   // testing.
   function makeInteriorBuilding(x, z, w, h, d, colorHex, threshold, side){
-    return makeBuilding(x, z, w, h, d, colorHex, threshold, side);
+    const b = makeBuilding(x, z, w, h, d, colorHex, threshold, side);
+    // Real interior: a small warm room inside the building, visible
+    // through the street-facing window as the wall fades at beat 2 --
+    // the "camera sees inside the neighbour's home" moment. Warm lamp,
+    // the responder person, and a coffee table, so the reveal shows an
+    // actual lived-in space, not a hollow box.
+    const room = new THREE.Group();
+    const innerMat = new THREE.MeshStandardMaterial({ color:0x3a2e22, roughness:.95, side:THREE.BackSide });
+    const box = new THREE.Mesh(new THREE.BoxGeometry(w*0.86, h*0.5, d*0.82), innerMat);
+    box.position.y = -h*0.1;
+    room.add(box);
+    // warm floor
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(w*0.84, d*0.8), new THREE.MeshStandardMaterial({ color:0x6b4a2e, roughness:.9 }));
+    floor.rotation.x = -Math.PI/2;
+    floor.position.y = -h*0.34;
+    room.add(floor);
+    // warm point light (the "lamp switches on" beat cue)
+    const lamp = new THREE.PointLight(0xffd9a0, 0, 6, 2);
+    lamp.position.set(0, 0, 0);
+    room.add(lamp);
+    // small coffee table
+    const table = new THREE.Mesh(new THREE.BoxGeometry(0.7,0.06,0.45), new THREE.MeshStandardMaterial({ color:0x5a3d24, roughness:.85 }));
+    table.position.set(-0.3, -h*0.26, 0.2);
+    room.add(table);
+    // the responder INSIDE: positioned at the window, scaled to room
+    const responder = makePerson(x, z, 2, .46);
+    responder.position.set(x, -h*0.34, z);
+    responder.scale.setScalar(0.0001); // will scale in via beat logic (appearAt .46)
+    room.add(responder);
+    room.position.set(x, h*0.35, z);
+    b.add(room);
+    interiorRoom = { group: room, frontMat: null, lamp: lamp, openStart:.46, openFull:.52, closeStart:.60, closeFull:.66, responder: responder };
+    return b;
   }
 
   function makeStreetlight(x, z, threshold){
@@ -252,6 +285,28 @@
   // A small glowing speech-bubble billboard (always faces the camera, so
   // no orientation issues) — drawn once onto a canvas texture, then reused
   // as a Sprite. Sized to real scene proportions (roughly the size of a
+  // Litter/trash bags scattered in the park for the clean-up beat: small
+  // crumpled dark blobs with a tied top. Each bag belongs to the nearest
+  // volunteer (personIdx); when that person's beat arrives, the bag lifts
+  // up and shrinks into the person's side -- actually showing the pickup,
+  // not just people standing near bags.
+  function makeTrashBag(x, z, personIdx, appearAt){
+    const g = new THREE.Group();
+    const bagMat = new THREE.MeshStandardMaterial({ color:0x2f3b4a, roughness:.95 });
+    const body = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), bagMat);
+    body.scale.set(1.15, 0.85, 1.05);
+    body.castShadow = true;
+    const knot = new THREE.Mesh(new THREE.SphereGeometry(0.055, 6, 5), bagMat);
+    knot.position.y = 0.16;
+    g.add(body); g.add(knot);
+    g.position.set(x, 0.14, z);
+    g.rotation.y = Math.random()*Math.PI;
+    g.userData = { appearAt, personIdx, phase: Math.random()*Math.PI*2, baseY: 0.14, picked:false };
+    scene.add(g);
+    trashBags.push(g);
+    return g;
+  }
+
   // person's head, not a screen-filling billboard) and depth-tested like
   // a normal object, so it sits IN the scene near what it's illustrating
   // instead of floating detached on top of everything.
@@ -280,6 +335,28 @@
       ctx.beginPath(); ctx.moveTo(58,50); ctx.lineTo(90,50); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(80,50); ctx.lineTo(80,62); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(88,50); ctx.lineTo(88,60); ctx.stroke();
+    } else if(kind === 'phone'){
+      ctx.fillStyle = 'rgba(255,255,255,0.97)';
+      ctx.beginPath(); ctx.arc(64,52,44,0,Math.PI*2); ctx.fill();
+      // phone handset shape
+      ctx.fillStyle = '#10b981';
+      ctx.save(); ctx.translate(64,52); ctx.rotate(-0.7);
+      ctx.fillRect(-7,-22,14,44);
+      ctx.fillRect(-22,-7,44,14);
+      ctx.restore();
+      // two ring arcs
+      ctx.strokeStyle = '#10b981'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(64,52,26,-0.5,0.9); ctx.stroke();
+    } else if(kind === 'trash'){
+      ctx.fillStyle = 'rgba(255,255,255,0.97)';
+      ctx.beginPath(); ctx.arc(64,52,44,0,Math.PI*2); ctx.fill();
+      // trash bag: dark blob with tied top
+      ctx.fillStyle = '#334155';
+      ctx.beginPath(); ctx.ellipse(64,62,22,18,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(64,42,7,0,Math.PI*2); ctx.fill();
+      ctx.fillRect(60,42,8,10);
+      ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(64,42,7,0,Math.PI*2); ctx.stroke();
     } else if(kind === 'check'){
       ctx.fillStyle = 'rgba(255,255,255,0.97)';
       ctx.beginPath(); ctx.arc(64,56,44,0,Math.PI*2); ctx.fill();
@@ -307,59 +384,23 @@
     const isSmall = innerWidth <= 768;
     renderer.setPixelRatio(Math.min(devicePixelRatio||1, isSmall?1.6:2));
     renderer.setSize(canvas.clientWidth||innerWidth, canvas.clientHeight||innerHeight, false);
-    // ── CINEMATIC RENDER PIPELINE ──
-    // ACES Filmic tone mapping maps the lighting range into a filmic
-    // curve instead of raw clipping -- highlights roll off softly, low
-    // end keeps detail, and the whole frame gets the saturated-but-
-    // controlled "graded" look. sRGBEncoding makes colors match what
-    // the CSS theme intends instead of rendering dark/dull. shadowMap
-    // with PCFSoftShadowMap gives contact shadows that ground objects.
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-    if(THREE.sRGBEncoding !== undefined) renderer.outputEncoding = THREE.sRGBEncoding;
+    // ── RENDER PIPELINE ──
+    // No tone mapping (ACES washed the whole scene into a hazy "filter"
+    // look -- reverted on feedback). Keep PCFSoftShadowMap only: contact
+    // shadows ground objects without altering color.
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     scene = new THREE.Scene();
-    // Depth fog matching the page's hero gradient: distant buildings melt
-    // into the sky color instead of ending abruptly against it -- this is
-    // the single biggest "rendered scene looks flat/CGI" fix there is.
-    scene.fog = new THREE.Fog(0x0e3d5e, 34, 130);
-    // Sky dome: a big inverted sphere with a vertical gradient shader --
-    // horizon glow -> deep night zenith. Real depth behind the skyline
-    // instead of a flat CSS color showing through the alpha canvas.
-    const skyGeo = new THREE.SphereGeometry(150, 24, 16);
-    const skyMat = new THREE.ShaderMaterial({
-      side: THREE.BackSide,
-      depthWrite: false,
-      uniforms: {
-        topColor:    { value: new THREE.Color(0x061a2c) },
-        midColor:    { value: new THREE.Color(0x0e3d5e) },
-        bottomColor: { value: new THREE.Color(0x1a5a8a) }
-      },
-      vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-      fragmentShader: [
-        'varying vec3 vP;',
-        'uniform vec3 topColor; uniform vec3 midColor; uniform vec3 bottomColor;',
-        'void main(){',
-        '  float h = normalize(vP).y;',
-        '  vec3 c = h > 0.0',
-        '    ? mix(midColor, topColor, pow(min(h*1.4,1.0), 0.7))',
-        '    : mix(midColor, bottomColor, pow(min(-h*2.0,1.0), 0.8));',
-        '  gl_FragColor = vec4(c, 1.0);',
-        '}'
-      ].join('\n')
-    });
-    scene.add(new THREE.Mesh(skyGeo, skyMat));
     camera = new THREE.PerspectiveCamera(46, (canvas.clientWidth||innerWidth)/(canvas.clientHeight||innerHeight), 0.4, 220);
 
     const ambient = new THREE.AmbientLight(0x5a7d99, 0.62);
     scene.add(ambient);
-    const sun = new THREE.DirectionalLight(0xbfe3ff, 0.85);
+    const sun = new THREE.DirectionalLight(0xbfe3ff, 0.7);
     sun.position.set(-20, 30, 10);
-    // Shadow-casting key light: tuned shadow camera frustum tight around
-    // the street corridor (x ±14, z +12..-58) so 2048px of shadow map
-    // covers a small area = crisp shadows instead of blurry mush.
+    // Soft contact shadows (NOT the reverted tone-mapping "filter" --
+    // shadows only darken, they don't shift color). Tight frustum around
+    // the street so the 2048 map stays crisp.
     sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
     sun.shadow.camera.left = -14; sun.shadow.camera.right = 14;
@@ -556,15 +597,30 @@
     // verified neighbour answers" — reads as something happening at that
     // person, not a giant detached graphic floating in the sky.
     makeIconSprite(5.2, 1.65, -21.8, .50, 'chat', 0.6);
+    // Phone above the responder inside the window -- the "call accepted"
+    // cue for the help-request beat (matches the h3d-mini beat-2 toast
+    // "Sara accepted the request").
+    makeIconSprite(6.5, 2.6, -23, .52, 'phone', 0.5);
 
-    // beat 3: a real clean-up crew in the park, not just three people
-    // standing around — several carrying bags, spread across the green
-    makePerson(-1.8, -40.6, 4, .63, true);
-    makePerson(1.6,  -41.4, 0, .66, true);
-    makePerson(0.4,  -36.8, 2, .69);
-    makePerson(-2.6, -37.8, 1, .72, true);
-    makePerson(2.5,  -39.8, 3, .75);
-    makePerson(0.7,  -42.6, 5, .78, true);
+    // beat 3: a real clean-up crew in the park — volunteers with satchels
+    // spread across the green
+    const parkCrew = [
+      makePerson(-1.8, -40.6, 4, .63, true),
+      makePerson(1.6,  -41.4, 0, .66, true),
+      makePerson(0.4,  -36.8, 2, .69),
+      makePerson(-2.6, -37.8, 1, .72, true),
+      makePerson(2.5,  -39.8, 3, .75),
+      makePerson(0.7,  -42.6, 5, .78, true)
+    ];
+    // Litter scattered between them; each bag "picked up" by its nearest
+    // volunteer slightly after that volunteer appears -- the beat's toast
+    // says "Park cleaned up", and now the scene actually shows the pickup.
+    const bagSpecs = [
+      [-1.2, -40.2, 0, .65], [1.0, -41.0, 1, .68], [-0.4, -37.4, 2, .71],
+      [-2.2, -38.2, 3, .74], [2.0, -39.4, 4, .77], [0.2, -42.2, 5, .80],
+      [-0.9, -39.0, 1, .76], [1.4, -38.4, 0, .79]
+    ];
+    bagSpecs.forEach(sp=>{ makeTrashBag(sp[0], sp[1], sp[2], sp[3]); });
 
     // Finale: as the camera rises for the full-street reveal, a lively
     // scattering of neighbours appears up and down the whole block — the
@@ -603,14 +659,13 @@
   // beat's buildings (alternating sides down the street), travel between
   // them, then rise and pull back for the full-street reveal.
   const camKeys = [
-    // Clean opening: camera at street level looking straight up at open
-    // sky -- nothing built yet, a genuine blank-slate first frame -- then
-    // tilts down into what was previously the very first keyframe (kept
-    // byte-for-byte, just moved from p:.00 to p:.05). Everything from
-    // p:.08 onward is completely untouched, so beat ranges/captions/
-    // minis (all keyed to p>=.16) can't be affected by this.
-    { p:.00, pos:[0,4,6],      look:[0,26,2]   },
-    { p:.05, pos:[0,13,10],    look:[0,3,-10]  },
+    // Opening = the actual homepage rest frame: a proper street-level
+    // establishing shot showing the neighborhood. The journey ENDS back
+    // here (unlock rests at p=0), so the "blank sky" look that used to
+    // sit at p=0 would leave the homepage background empty/dark -- the
+    // city IS the homepage background now.
+    { p:.00, pos:[0,6,3],      look:[0,2,-8]   },
+    { p:.05, pos:[0,9,7],      look:[0,2.5,-9] },
     { p:.08, pos:[0,6,3],      look:[0,2,-8]   },
     { p:.20, pos:[-2.2,4,-3],  look:[-6,1.8,-9]   },  // approach beat 1 — pulled back to a proper medium shot, not against the wall
     { p:.30, pos:[-2.8,3.6,-6],look:[-6,1.5,-10.5] },
@@ -655,6 +710,11 @@
   let camPosS=[0,4,6], camLookS=[0,26,2], camInit=false;
   function update(p){
     if(!camera) return;
+    // Lighting/world progress: once the journey finishes and the hero
+    // rests as the homepage, the WORLD stays warm and alive (buildings
+    // lit, people out) even though the camera returns to the opening
+    // framing -- the homepage should never sit cold/dark at p=0.
+    const lp = window.__heroResting ? 1 : p;
     const cam = camAt(p);
     if(!camInit){ camPosS=cam.pos.slice(); camLookS=cam.look.slice(); camInit=true; }
     // 0.14 ≈ critically-damped feel at 60fps; frames that arrive late
@@ -664,13 +724,13 @@
     camera.position.set(camPosS[0], camPosS[1], camPosS[2]);
     camera.lookAt(camLookS[0], camLookS[1], camLookS[2]);
 
-    const warmth = Math.min(1, p/.9);
+    const warmth = Math.min(1, lp/.9);
     if(window.__bavAmbient) window.__bavAmbient.intensity = 0.42 + warmth*0.45;
     if(window.__bavSun){ window.__bavSun.intensity = 0.5 + warmth*0.5; window.__bavSun.color.setHex(warmth>.5?0xffe3b8:0xbfe3ff); }
     if(window.__bavFill) window.__bavFill.intensity = 0.24 + warmth*0.22;
 
     buildings.forEach(b=>{
-      const lit = Math.max(0, Math.min(1, (p - b.userData.threshold)/0.16));
+      const lit = Math.max(0, Math.min(1, (lp - b.userData.threshold)/0.16));
       // Always keep a baseline self-glow tinted to the building's own
       // colour, scaled up as it "warms up" — never let it drop to fully
       // black/emissive-off, which is what made buildings blend invisibly
@@ -689,13 +749,13 @@
       });
     });
     streetlights.forEach(s=>{
-      const lit = p > s.userData.threshold;
+      const lit = lp > s.userData.threshold;
       s.userData.light.intensity = lit ? 1.1 : 0;
       s.userData.bulbMat.color.setHex(lit ? 0xfde68a : 0x1a2432);
       if(s.userData.glowMat) s.userData.glowMat.opacity += ((lit?0.22:0) - s.userData.glowMat.opacity) * 0.06;
     });
     beams.forEach(bm=>{
-      const target = p >= bm.userData.threshold ? 0.85 : 0;
+      const target = lp >= bm.userData.threshold ? 0.85 : 0;
       bm.material.opacity += (target - bm.material.opacity) * 0.08;
     });
 
@@ -705,14 +765,27 @@
     // fades back to a solid wall as the camera moves on.
     if(interiorRoom){
       const r = interiorRoom;
+      // Interior reveal is a journey-only beat: the street-facing window
+      // plane fades out, exposing the warm room (lamp + responder) inside
+      // the building; at rest the window stays solid and the world is
+      // already warm via lp.
       let wallOpacity;
       if(p < r.openStart) wallOpacity = 1;
       else if(p < r.openFull) wallOpacity = 1 - (p-r.openStart)/(r.openFull-r.openStart);
       else if(p < r.closeStart) wallOpacity = 0;
       else if(p < r.closeFull) wallOpacity = (p-r.closeStart)/(r.closeFull-r.closeStart);
       else wallOpacity = 1;
-      r.frontMat.opacity = wallOpacity;
-      r.lamp.intensity = (1-wallOpacity) * 1.3;
+      // Fade the street-facing window plane of this building (found by
+      // side sign in userData.windows -- the first z-face window row).
+      const wins = r.group.parent && r.group.parent.userData.windows;
+      if(wins && wins.length){
+        // Only the two street-facing (positive-z on side=1) windows
+        wins.slice(0,2).forEach(w=>{ w.material.opacity = 0.9 * wallOpacity; });
+      }
+      r.lamp.intensity = (1-wallOpacity) * 1.4;
+      // Responder inside scales in with the reveal
+      const rs = Math.max(0.0001, (1-wallOpacity)) * 0.55;
+      r.responder.scale.setScalar(rs);
     }
 
     // Chat bubble: fades in right on cue, holds visible for a stretch,
@@ -720,8 +793,8 @@
     // and pulse so it reads as an active, live moment.
     const tNow = performance.now() * 0.001;
     bubbles.forEach(bub=>{
-      const since = p - bub.userData.appearAt;
-      const target = (since > 0 && since < 0.16) ? 1 : 0;
+      const since = lp - bub.userData.appearAt;
+      const target = (since > 0 && (since < 0.16 || window.__heroResting)) ? 1 : 0;
       bub.material.opacity += (target - bub.material.opacity) * 0.1;
       bub.position.y = bub.userData.baseY + Math.sin(tNow*1.8)*0.06;
       const pulse = 1 + Math.sin(tNow*3)*0.05;
@@ -733,13 +806,41 @@
     // props, when the camera arrives at each interaction.
     const t = performance.now() * 0.001;
     people.forEach(person=>{
-      const since = p - person.userData.appearAt;
+      const since = lp - person.userData.appearAt;
       const appear = Math.max(0, Math.min(1, since/0.05));
       const bounce = 1 - Math.pow(1-appear,3);
       person.scale.setScalar(Math.max(0, bounce));
       if(appear>=1){
         person.position.y = Math.sin(t*1.6 + person.userData.phase) * 0.04;
       }
+    });
+
+    // Trash pickup: once a bag's volunteer is on screen (bag.appearAt
+    // reached), the bag arcs up toward the volunteer and shrinks away --
+    // a visible "picked up" action instead of litter just disappearing.
+    trashBags.forEach(bag=>{
+      const since = lp - bag.userData.appearAt;
+      if(since < 0 || window.__heroResting){
+        bag.visible = false;
+        return;
+      }
+      bag.visible = true;
+      const volunteer = people[bag.userData.personIdx];
+      if(!volunteer){ return; }
+      const pick = Math.max(0, Math.min(1, since/0.35));
+      if(pick >= 1){
+        bag.visible = false;
+        return;
+      }
+      // arc from ground position to volunteer's hand height
+      const e = pick*pick*(3-2*pick); // smoothstep
+      const startX = bag.position.x, startZ = bag.position.z;
+      const tgtX = volunteer.position.x, tgtZ = volunteer.position.z;
+      bag.position.x = startX + (tgtX-startX)*e;
+      bag.position.z = startZ + (tgtZ-startZ)*e;
+      bag.position.y = bag.userData.baseY + Math.sin(e*Math.PI)*0.55 + e*0.25;
+      bag.scale.setScalar(Math.max(0.01, 1-e));
+      bag.rotation.y += 0.12;
     });
 
     const beat = currentBeat(p);

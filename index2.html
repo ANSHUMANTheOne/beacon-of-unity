@@ -512,9 +512,9 @@ body:not(.hero-lock) #replay-intro-btn{display:block}
    unpredictably. A single-line toast anchored to a top corner (clear of
    the centered content column entirely) has a fixed, predictable height
    regardless of viewport width, so it can't drift into anything below it. */
-#return-story{position:fixed;top:66px;right:20px;z-index:4000;max-width:min(360px,88vw);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .9s ease-out,transform .9s ease-out;background:rgba(5,24,40,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(14,165,233,.28);border-radius:12px;padding:10px 16px;font-size:.72rem;font-weight:600;color:#e0f2fe;box-shadow:0 10px 26px rgba(0,0,0,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#return-story{position:fixed;top:66px;right:20px;z-index:4000;max-width:min(360px,88vw);opacity:0;pointer-events:none;transform:translateY(-10px) scale(.97);transition:opacity .9s ease-out,transform .9s var(--ease);background:rgba(6,20,36,.92);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(125,211,252,.3);border-radius:14px;padding:11px 18px;font-size:.72rem;font-weight:600;color:#e0f2fe;box-shadow:0 14px 34px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 [data-theme="light"] #return-story{background:rgba(255,255,255,.96);color:var(--navy);border-color:rgba(14,165,233,.18)}
-#return-story.show{opacity:1;transform:translateY(0);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+#return-story.show{opacity:1;transform:translateY(0) scale(1);transition:opacity .3s var(--ease),transform .45s cubic-bezier(.34,1.56,.64,1)}
 /* Entry (.show, above) is quick/responsive; the base rule's own
    transition (.9s ease-out) only takes effect on the way back OUT, once
    .show is removed -- giving it a slow, graceful dissolve back into the
@@ -532,7 +532,8 @@ body:not(.hero-lock) #replay-intro-btn{display:block}
 @media (min-width:641px){#sim-topbar .sim-label .sim-short{display:none}}
 .bnavy{background:var(--navy);color:#fff}.bnavy::before{background:linear-gradient(135deg,var(--blue),var(--cyan))}.bnavy:hover::before{opacity:1}
 .boutline{background:transparent;color:var(--navy);border:2px solid rgba(12,45,72,.2)}.boutline:hover{border-color:var(--blue);color:var(--blue)}
-.btn:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(14,165,233,.35)}
+.btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 16px 40px rgba(14,165,233,.4)}
+.btn:active{transform:translateY(-1px) scale(.98);transition-duration:.08s}
 .rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);transform:scale(0);animation:rgo .55s ease-out forwards;pointer-events:none;z-index:2}
 @keyframes rgo{to{transform:scale(4);opacity:0}}
 
@@ -583,7 +584,7 @@ section{padding:100px 48px}
 .fc{background:var(--card-bg);border:1px solid var(--border);border-radius:22px;padding:30px 24px;cursor:none;position:relative;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s,border-color .3s,background .5s}
 .fc::after{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;background:linear-gradient(90deg,var(--blue),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
 .fshine{position:absolute;top:-60%;left:-70%;width:55%;height:220%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);transform:skewX(-14deg);transition:left .65s ease;pointer-events:none}
-.fc:hover{transform:translateY(-8px);box-shadow:0 22px 58px rgba(14,165,233,.14);border-color:rgba(14,165,233,.3)}
+.fc:hover{transform:translateY(-10px) scale(1.015);box-shadow:0 26px 64px rgba(14,165,233,.18),0 4px 18px rgba(6,182,212,.1);border-color:rgba(14,165,233,.38)}
 .fc:hover::after{transform:scaleX(1)}
 .fc:hover .fshine{left:135%}
 .fc:hover .fico{transform:scale(1.12) rotate(-4deg)}
@@ -723,19 +724,16 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 .flinks a{font-size:.77rem;color:rgba(255,255,255,.42);text-decoration:none;transition:color .2s;cursor:none}
 .flinks a:hover{color:var(--sky3)}
 
-/* Scroll reveal */
-.rv{opacity:0;transform:translateY(28px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
-.rv.vis{opacity:1;transform:none}
-/* landonorris.com's signature reveal isn't a plain fade-up -- panels slide
-   in horizontally from off to the side as they enter view. These two
-   variants do the same, swap .rv for .rv-l/.rv-r on an element to use them
-   (same .vis trigger, same IntersectionObserver below -- no JS changes
-   needed). Distance is modest (56px) so it reads as a slide, not a swoop. */
-.rv-l{opacity:0;transform:translateX(-56px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.rv-l.vis{opacity:1;transform:none}
-.rv-r{opacity:0;transform:translateX(56px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.rv-r.vis{opacity:1;transform:none}
-.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+/* Scroll reveal — zero.university-style: mask-lift (clip-path) + rise,
+   spring easing, with subtle scale settle. Feels engineered, not faded. */
+.rv{opacity:0;transform:translateY(34px) scale(.985);clip-path:inset(10% 0 10% 0);transition:opacity .8s var(--ease),transform .8s var(--ease),clip-path .8s var(--ease)}
+.rv.vis{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
+/* Horizontal variants keep the slide language with the same clip-wipe */
+.rv-l{opacity:0;transform:translateX(-64px);clip-path:inset(0 12% 0 0);transition:opacity .75s var(--ease),transform .75s var(--ease),clip-path .75s var(--ease)}
+.rv-l.vis{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
+.rv-r{opacity:0;transform:translateX(64px);clip-path:inset(0 0 0 12%);transition:opacity .75s var(--ease),transform .75s var(--ease),clip-path .75s var(--ease)}
+.rv-r.vis{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}
 
 /* ── LIGHT MODE HERO SPLIT ── */
 .bubble{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
@@ -863,6 +861,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
   #hh1-tag .tline>span, #payoff-title .bword>span { animation: none !important; }
   #hh1-brand .bword>span, #hh1-tag .tline>span, #payoff-title .bword>span { transform: none !important; filter: none !important; opacity: 1 !important; }
   #hh1-brand { letter-spacing: -.02em !important; }
+  .rv, .rv-l, .rv-r { clip-path: none !important; }
 }
 
 /* ── SEO ABOUT SECTION ── */
@@ -1639,6 +1638,18 @@ function setHeroLock(isLocked){
   heroEl.classList.toggle('locked', isLocked);
   heroEl.classList.toggle('unlocked', !isLocked);
 }
+// Guarantee the mascot is visible once the intro is over: the CSS hides
+// it via body.hero-lock, but its own physics/beam animations also write
+// inline opacity/transform on #bav-wrap -- if one was interrupted, those
+// inline styles can leave it invisible or paused even after unlock.
+// Called on every unlock path (natural completion, Skip Intro, nav links).
+function restoreMascot(){
+  const root = document.getElementById('bav-root');
+  const wrap = document.getElementById('bav-wrap');
+  if(root){ root.style.opacity=''; root.style.visibility=''; }
+  if(wrap){ wrap.style.opacity=''; wrap.style.transform=''; wrap.style.visibility=''; }
+  window._bavPaused = false;
+}
 
 if(!introEnabled){
   // Reduced-motion OR mobile: no locked journey, immediately scrollable.
@@ -1646,6 +1657,7 @@ if(!introEnabled){
   // primary calls-to-action are never hidden behind the journey's end
   // state; reduced-motion desktop keeps landing on the finished payoff.
   setHeroLock(false);
+  window.__heroResting = true;
   const initP = skipIntroDevice ? 0 : 1;
   renderHero(initP);
   // Publish for hero-scene.js (deferred, runs after this inline script):
@@ -1703,17 +1715,16 @@ if(!introEnabled){
     // on. That's what "stuck on the faded end screen" actually was.
     if(targetProgress>=1 && heroProgress>0.99){
       setHeroLock(false);
-      // Award-site finish: the journey holds its FINAL frame -- the
-      // zoomed-out overhead city with the payoff headline standing over
-      // it -- instead of resetting to the opening look. The exit is a
-      // separate, scroll-driven parallax zoom-out + fade (see the
-      // scroll handler + renderExitFade below) that reveals the page
-      // content underneath as the user continues scrolling. The hero
-      // never re-locks from scrolling back up; only the explicit
-      // "Replay Intro" button re-arms the journey.
-      targetProgress = 1;
-      heroProgress = 1;
-      renderHero(1);
+      restoreMascot();
+      // Once finished, the hero rests on its OPENING look (p=0): the
+      // street-level city with the "Beacon of Unity" headline -- the
+      // actual homepage. The journey was the intro TO the homepage, not
+      // a separate end-state to live on. __heroResting tells the 3D
+      // scene to keep the world warm/lit at rest (never cold/dark).
+      window.__heroResting = true;
+      targetProgress = 0;
+      heroProgress = 0;
+      renderHero(0);
     }
     if(heroLocked || Math.abs(targetProgress-heroProgress) > 0.0005){
       // .1 → .16: closes the gap noticeably faster, especially the last
@@ -1923,12 +1934,13 @@ window.showTab=(tab,btn)=>{
   window.__forceFinishHero = function(){
     if(typeof heroLocked === 'undefined') return;
     // Matches the natural-completion behavior: unlocked permanently,
-    // resting on the FINAL frame (zoomed-out payoff) -- the scroll-driven
-    // exit fade then reveals the page as the user continues down.
+    // resting on the OPENING homepage look (p=0).
     if(typeof setHeroLock === 'function') setHeroLock(false);
-    targetProgress = 1;
-    heroProgress = 1;
-    if(typeof renderHero === 'function') renderHero(1);
+    if(typeof restoreMascot === 'function') restoreMascot();
+    window.__heroResting = true;
+    targetProgress = 0;
+    heroProgress = 0;
+    if(typeof renderHero === 'function') renderHero(0);
   };
   document.querySelectorAll('a[href^="#"]').forEach(function(link){
     link.addEventListener('click', function(e){
@@ -1965,6 +1977,7 @@ window.showTab=(tab,btn)=>{
     // replay -- Home just scrolls back to the static hero.
     if(typeof introEnabled !== 'undefined' && introEnabled
        && typeof heroLocked !== 'undefined' && !heroLocked){
+      window.__heroResting = false;
       targetProgress = 0;
       heroProgress = 0;
       if(typeof renderHero === 'function') renderHero(0);
