@@ -475,19 +475,19 @@ body:not(.hero-lock) #replay-intro-btn{display:block}
 [data-theme="light"] .bw{background:var(--navy);color:#fff}
 .bgw{background:transparent;color:rgba(255,255,255,.8);border:1.5px solid rgba(255,255,255,.3)}.bgw:hover{border-color:rgba(255,255,255,.65);color:#fff;background:rgba(255,255,255,.09)}
 [data-theme="light"] .bgw{color:var(--navy);border-color:rgba(12,45,72,.25)}.bgw:hover{color:var(--blue);border-color:var(--blue)}
-.bsim{background:linear-gradient(135deg,#f2a33e,#e2842a);color:#1a1200}.bsim:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(242,163,62,.45)}
+.bsim{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;box-shadow:0 10px 30px rgba(14,165,233,.35)}.bsim:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(14,165,233,.5)}
 
 /* ═══ SIMULATION DEMO OVERLAY ═══ */
 #sim-overlay{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;padding:28px;background:rgba(4,10,20,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease);cursor:default}
 #sim-overlay.active{opacity:1;pointer-events:all}
-#sim-frame{width:100%;height:100%;max-width:1400px;background:#0c1626;border:3px solid #f2a33e;border-radius:18px;box-shadow:0 0 0 6px rgba(242,163,62,.14),0 30px 70px rgba(0,0,0,.55);display:flex;flex-direction:column;overflow:hidden;transform:scale(.93);transition:transform .4s var(--ease)}
+#sim-frame{width:100%;height:100%;max-width:1400px;background:#0c1626;border:3px solid #38bdf8;border-radius:18px;box-shadow:0 0 0 6px rgba(56,189,248,.14),0 30px 70px rgba(0,0,0,.55);display:flex;flex-direction:column;overflow:hidden;transform:scale(.93);transition:transform .4s var(--ease)}
 #sim-overlay.active #sim-frame{transform:scale(1)}
-#sim-topbar{flex:0 0 auto;background:linear-gradient(90deg,#f2a33e,#e2842a);color:#1a1200;display:flex;align-items:center;justify-content:space-between;padding:11px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem}
+#sim-topbar{flex:0 0 auto;background:linear-gradient(90deg,#0ea5e9,#0369a1);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:11px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem}
 #sim-topbar .sim-label{display:flex;align-items:center;gap:9px}
 .sim-dot{width:9px;height:9px;border-radius:50%;background:#c62828;animation:sim-pulse 1.4s infinite}
 @keyframes sim-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-#sim-exit-btn{background:rgba(0,0,0,.16);border:1px solid rgba(0,0,0,.32);color:#1a1200;padding:8px 16px;border-radius:8px;font-weight:700;cursor:none;font-size:.82rem;font-family:'DM Sans',sans-serif;transition:background .2s}
-#sim-exit-btn:hover{background:rgba(0,0,0,.28)}
+#sim-exit-btn{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.35);color:#fff;padding:8px 16px;border-radius:8px;font-weight:700;cursor:none;font-size:.82rem;font-family:'DM Sans',sans-serif;transition:background .2s}
+#sim-exit-btn:hover{background:rgba(0,0,0,.4)}
 #sim-body{flex:1;min-height:0;background:#fff}
 
 /* Walkthrough video modal -- same overlay mechanics as #sim-overlay
@@ -583,8 +583,8 @@ body:not(.hero-lock) #replay-intro-btn{display:block}
 /* Ghost outline words with scroll parallax */
 .ghost{position:absolute;left:50%;top:30px;transform:translateX(-50%);font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(5rem,15vw,12.5rem);letter-spacing:-4px;line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(14,165,233,.14);pointer-events:none;user-select:none;white-space:nowrap;z-index:0}
 [data-theme="dark"] .ghost{-webkit-text-stroke-color:rgba(125,211,252,.16)}
-.fbg .ghost{-webkit-text-stroke-color:rgba(194,112,30,.15)}
-[data-theme="dark"] .fbg .ghost{-webkit-text-stroke-color:rgba(242,163,62,.14)}
+.fbg .ghost{-webkit-text-stroke-color:rgba(14,165,233,.10)}
+[data-theme="dark"] .fbg .ghost{-webkit-text-stroke-color:rgba(125,211,252,.12)}
 .si{position:relative;z-index:2}
 .tbar,.statband,.marq,.ctaw{position:relative;z-index:2}
 
@@ -664,19 +664,19 @@ section{padding:96px 48px;margin:0;position:relative;overflow:hidden}
 .fc{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:32px 26px;cursor:none;position:relative;overflow:hidden;transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .3s,background .5s}
 .fc::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#0ea5e9,#22d3ee);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
 .fshine{position:absolute;top:-60%;left:-70%;width:55%;height:220%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);transform:skewX(-14deg);transition:left .65s ease;pointer-events:none}
-.fc:hover{transform:translateY(-10px) rotate(-1.2deg) scale(1.02);box-shadow:0 30px 70px rgba(40,30,10,.22),0 6px 22px rgba(242,163,62,.16);border-color:rgba(242,163,62,.4)}
+.fc:hover{transform:translateY(-10px) rotate(-1.2deg) scale(1.02);box-shadow:0 30px 70px rgba(3,25,45,.18),0 6px 22px rgba(14,165,233,.18);border-color:rgba(14,165,233,.45)}
 .fc:hover::after{transform:scaleX(1)}
 .fc:hover .fshine{left:135%}
 .fc:hover .fico{transform:scale(1.12) rotate(-4deg)}
 .fc-key{border-color:rgba(14,165,233,.22);position:relative}
-[data-theme="dark"] .fc{background:#2b241c;box-shadow:0 6px 26px rgba(0,0,0,.4);border-color:rgba(242,163,62,.16)}
-[data-theme="dark"] .fc-key{background:#2b241c}
+[data-theme="dark"] .fc{background:#0a1e30;box-shadow:0 6px 26px rgba(0,0,0,.4);border-color:rgba(14,165,233,.18)}
+[data-theme="dark"] .fc-key{background:#0a1e30}
 .fc-keytag{position:absolute;top:16px;right:16px;font-size:.58rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#0369a1;background:rgba(14,165,233,.12);border:1px solid rgba(14,165,233,.32);padding:3px 9px;border-radius:50px;opacity:.9}
 .fico{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,rgba(14,165,233,.14),rgba(6,182,212,.07));border:1px solid rgba(14,165,233,.18);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:18px;transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
 .fc:hover .fico{transform:scale(1.12) rotate(-5deg);box-shadow:0 10px 26px rgba(14,165,233,.25)}
 .ftitle{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:#0c2d48;margin-bottom:8px;letter-spacing:-.2px;transition:color .5s}
 [data-theme="dark"] .ftitle{color:#eaf6ff}
-.fdesc{font-size:.85rem;color:#5a4632;line-height:1.7;font-weight:400}
+.fdesc{font-size:.85rem;color:#44607a;line-height:1.7;font-weight:400}
 [data-theme="dark"] .fdesc{color:rgba(186,230,253,.72)}
 /* A small extra line, collapsed until hover -- gives the card somewhere
    to go on interaction instead of just a shine sweep, without cluttering
@@ -735,10 +735,10 @@ section{padding:96px 48px;margin:0;position:relative;overflow:hidden}
    A vertical aerial street fixed to the viewport, dashes glued to the
    document so the road reads as part of the page while you scroll.
    The mascot walks down it as you scroll (see roadwalk mode). */
-#roadLayer{position:fixed;top:0;bottom:0;left:50%;width:112px;transform:translateX(-50%);z-index:1;pointer-events:none;opacity:0;transition:opacity .6s var(--ease)}
-body:not(.hero-lock) #roadLayer{opacity:1}
-#roadLayer .rd-asphalt{position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,8,20,0),rgba(9,20,34,.92) 10%,rgba(12,26,43,.97) 50%,rgba(9,20,34,.92) 90%,rgba(2,8,20,0));box-shadow:inset 3px 0 0 rgba(125,211,252,.5),inset -3px 0 0 rgba(125,211,252,.5),inset 7px 0 14px rgba(56,189,248,.1),inset -7px 0 14px rgba(56,189,248,.1)}
-#roadLayer .rd-dash{position:absolute;top:-160px;bottom:-160px;left:50%;width:4px;transform:translateX(-50%);background:repeating-linear-gradient(180deg,rgba(186,230,253,.85) 0 34px,transparent 34px 78px);will-change:transform}
+#roadLayer{position:fixed;top:0;bottom:0;left:38%;width:104px;transform:translateX(-50%);z-index:0;pointer-events:none;opacity:0;transition:opacity .6s var(--ease)}
+body:not(.hero-lock) #roadLayer{opacity:.9}
+#roadLayer .rd-asphalt{position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,8,20,0),rgba(9,20,34,.72) 10%,rgba(12,26,43,.78) 50%,rgba(9,20,34,.72) 90%,rgba(2,8,20,0));box-shadow:inset 3px 0 0 rgba(125,211,252,.42),inset -3px 0 0 rgba(125,211,252,.42),inset 7px 0 14px rgba(56,189,248,.08),inset -7px 0 14px rgba(56,189,248,.08)}
+#roadLayer .rd-dash{position:absolute;top:-160px;bottom:-160px;left:50%;width:4px;transform:translateX(-50%);background:repeating-linear-gradient(180deg,rgba(186,230,253,.75) 0 34px,transparent 34px 78px);will-change:transform}
 @media(max-width:900px){#roadLayer{display:none}}
 @media (prefers-reduced-motion: reduce){#roadLayer{display:none}}
 
@@ -2732,9 +2732,9 @@ body.hero-lock #bav-root {
 /* ── CHAT BADGE (persistent discoverability affordance) ── */
 #bav-chat-badge{
   position:absolute; top:-4px; right:-4px; width:22px; height:22px;
-  border-radius:50%; background:linear-gradient(135deg,#f2a33e,#e2842a);
-  color:#1a1200; font-size:11px; display:flex; align-items:center; justify-content:center;
-  box-shadow:0 2px 10px rgba(242,163,62,.55), 0 0 0 2px rgba(5,24,40,.85);
+  border-radius:50%; background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+  color:#04202e; font-size:11px; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 10px rgba(14,165,233,.55), 0 0 0 2px rgba(5,24,40,.85);
   pointer-events:auto; cursor:pointer; z-index:5; animation:bav-badge-pulse 2.4s ease-in-out infinite;
 }
 @keyframes bav-badge-pulse{
@@ -3042,16 +3042,22 @@ body.hero-lock #bav-root {
   let roadY = 0;               // current document-space position along the road
   let roadFace = 1;            // 1 = walking down (screen-down), -1 = up
   let roadLane = 0;            // small lateral offset within the road
+  let idleSince = 0;           // timestamp when the mascot last settled (auto-return delay)
   const ROAD_WALK_SPEED = 1.15; // px walked per px scrolled
-  function roadCenterX(){ return window.innerWidth / 2 + roadLane; }
+  const AUTO_RETURN_DELAY = 2600; // ms of being settled before it strolls back - no instant snap-back
+  // The road is drawn at 38% of the viewport (see #roadLayer in CSS) --
+  // the walk target must match, or the mascot strolls along an invisible
+  // line in the middle while the actual road sits off to the left.
+  function roadCenterX(){ return window.innerWidth * 0.38 + roadLane; }
   function enterRoad(keepLane){
     roadMode = true;
-    if(!keepLane) roadLane = cl((px + W/2) - window.innerWidth/2, -60, 60);
+    if(!keepLane) roadLane = cl((px + W/2) - roadCenterX(), -60, 60);
     // Start the walk from where the mascot currently is (no teleport):
     // roadY is derived so the first road frame renders at the current py,
     // then the walk loop eases roadY toward the scroll-linked target.
     roadY = py + window.scrollY - window.innerHeight*0.62;
     mode = 'idle'; prevMode = '';
+    idleSince = 0;
     setLegsSwinging(false);
     setExpr('happy');
     roadFace = 1;
@@ -3282,7 +3288,13 @@ body.hero-lock #bav-root {
       }
       // Walk toward the road centerline laterally, then hold the lane.
       roadLane += ((Math.sin(roadY*0.004)*46) - roadLane) * Math.min(1, 0.06*dt);
-      px = roadCenterX() - W/2;
+      // Ease horizontally onto the road instead of snapping: px glides to
+      // the centerline so re-entering from a drag reads as a stroll, not a
+      // teleport. Vertical never jumps because roadY was derived from the
+      // current py at the moment roadMode was entered.
+      const targetPx = roadCenterX() - W/2;
+      px += (targetPx - px) * Math.min(1, 0.14*dt);
+      if (Math.abs(targetPx - px) < 0.4) px = targetPx;
       py = roadY - window.scrollY + window.innerHeight*0.62;
 
       // Face down the page while walking down.
@@ -3383,11 +3395,14 @@ body.hero-lock #bav-root {
           } else if (Math.abs(vx) > 1.0 && py + H >= VH - 2) {
             mode = 'walking';
           } else if (spd < 0.7) {
-            mode = 'idle';
+            if (mode !== 'idle') { mode = 'idle'; idleSince = now; }
           }
         }
-        // Idle for a moment on the ground, off the road? Stroll home.
-        if (mode === 'idle' && !roadMode) {
+        // Settled off the road for a moment? Stroll home - but only after
+        // a short pause, so it visibly rests where it landed first instead
+        // of snapping back the instant it settles.
+        if (mode === 'idle' && !roadMode && idleSince && (now - idleSince) > AUTO_RETURN_DELAY) {
+          idleSince = 0;
           enterRoad();
           showBubble('Back to my walk! \ud83d\udeb6', 1800);
         }
@@ -3485,11 +3500,11 @@ body.hero-lock #bav-root {
       vx = Math.max(-MAX_V, Math.min(MAX_V, ((b.x - a.x) / dT) * 0.62));
       vy = Math.max(-MAX_V, Math.min(MAX_V, ((b.y - a.y) / dT) * 0.62));
     }
-    // Dropped right over the road? Snap back onto the walk.
+    // Dropped right over the road? Glide back onto the walk.
     if (!roadMode) {
       const dropCx = px + W/2;
-      if (Math.abs(dropCx - window.innerWidth/2) < 120) {
-        roadLane = cl(dropCx - window.innerWidth/2, -34, 34);
+      if (Math.abs(dropCx - roadCenterX()) < 120) {
+        roadLane = cl(dropCx - roadCenterX(), -34, 34);
         enterRoad(true);
         showBubble('Right back on track! \u2705', 1600);
       }
@@ -3563,11 +3578,11 @@ body.hero-lock #bav-root {
       vx = Math.max(-MAX_V, Math.min(MAX_V, ((b.x - a.x) / dT) * 0.62));
       vy = Math.max(-MAX_V, Math.min(MAX_V, ((b.y - a.y) / dT) * 0.62));
     }
-    // Touch release over the road: snap back onto the walk too.
+    // Touch release over the road: glide back onto the walk too.
     if (!roadMode) {
       const dropCx = px + W/2;
-      if (Math.abs(dropCx - window.innerWidth/2) < 120) {
-        roadLane = cl(dropCx - window.innerWidth/2, -34, 34);
+      if (Math.abs(dropCx - roadCenterX()) < 120) {
+        roadLane = cl(dropCx - roadCenterX(), -34, 34);
         enterRoad(true);
         showBubble('Right back on track! \u2705', 1600);
       }
