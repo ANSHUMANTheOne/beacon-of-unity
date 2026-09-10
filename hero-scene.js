@@ -174,7 +174,10 @@
     const skinMat  = new THREE.MeshStandardMaterial({ color: skin, roughness:.6 });
 
     // LEGS: two separate legs with hip joint + shoe
-    const legGeo = new THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.055, 0.28, 4, 8) : new THREE.CylinderGeometry(0.055, 0.06, 0.38, 8);
+    // Guard MUST test the constructor itself — `new THREE.CapsuleGeometry ?` evaluates
+    // `new undefined` first in three r128 (no CapsuleGeometry), which THROWS and kills
+    // the whole scene init (that was the "intro didn't load at all" bug).
+    const legGeo = THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.055, 0.28, 4, 8) : new THREE.CylinderGeometry(0.055, 0.06, 0.38, 8);
     const legL = new THREE.Mesh(legGeo, pantsMat);
     legL.position.set(-0.075, 0.19, 0);
     const legR = legL.clone(); legR.position.x = 0.075;
@@ -192,7 +195,7 @@
     g.add(torso); g.add(hips);
 
     // ARMS: shoulder pivot groups so a pickup pose can swing them forward
-    const armGeo = new THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.042, 0.24, 4, 8) : new THREE.CylinderGeometry(0.042, 0.05, 0.32, 8);
+    const armGeo = THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.042, 0.24, 4, 8) : new THREE.CylinderGeometry(0.042, 0.05, 0.32, 8);
     function makeArm(side){
       const shoulder = new THREE.Group();
       shoulder.position.set(side*0.185, 0.68, 0);
