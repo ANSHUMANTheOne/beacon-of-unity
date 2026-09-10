@@ -14,8 +14,7 @@
 
   let renderer, scene, camera;
   let buildings = [], streetlights = [], beams = [], people = [], bubbles = [];
-  let trashBags = [];   // { mesh, appearAt, pickedBy(person), phase }
-  let interiorRoom = null;
+  let trashBags = [];   // { mesh, appearAt, volunteer, sx, sz, baseRot, baseY }
   let running = true;
 
   function makeBuilding(x, z, w, h, d, colorHex, threshold, side){
@@ -87,39 +86,8 @@
   // hollow-geometry occlusion that's hard to get right without live
   // testing.
   function makeInteriorBuilding(x, z, w, h, d, colorHex, threshold, side){
-    const b = makeBuilding(x, z, w, h, d, colorHex, threshold, side);
-    // Real interior: a small warm room inside the building, visible
-    // through the street-facing window as the wall fades at beat 2 --
-    // the "camera sees inside the neighbour's home" moment. Warm lamp,
-    // the responder person, and a coffee table, so the reveal shows an
-    // actual lived-in space, not a hollow box.
-    const room = new THREE.Group();
-    const innerMat = new THREE.MeshStandardMaterial({ color:0x3a2e22, roughness:.95, side:THREE.BackSide });
-    const box = new THREE.Mesh(new THREE.BoxGeometry(w*0.86, h*0.5, d*0.82), innerMat);
-    box.position.y = -h*0.1;
-    room.add(box);
-    // warm floor
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(w*0.84, d*0.8), new THREE.MeshStandardMaterial({ color:0x6b4a2e, roughness:.9 }));
-    floor.rotation.x = -Math.PI/2;
-    floor.position.y = -h*0.34;
-    room.add(floor);
-    // warm point light (the "lamp switches on" beat cue)
-    const lamp = new THREE.PointLight(0xffd9a0, 0, 6, 2);
-    lamp.position.set(0, 0, 0);
-    room.add(lamp);
-    // small coffee table
-    const table = new THREE.Mesh(new THREE.BoxGeometry(0.7,0.06,0.45), new THREE.MeshStandardMaterial({ color:0x5a3d24, roughness:.85 }));
-    table.position.set(-0.3, -h*0.26, 0.2);
-    room.add(table);
-    // the responder INSIDE: positioned at the window, scaled to room
-    const responder = makePerson(x, z, 2, .46);
-    responder.position.set(x, -h*0.34, z);
-    responder.scale.setScalar(0.0001); // will scale in via beat logic (appearAt .46)
-    room.add(responder);
-    room.position.set(x, h*0.35, z);
-    b.add(room);
-    interiorRoom = { group: room, frontMat: null, lamp: lamp, openStart:.46, openFull:.52, closeStart:.60, closeFull:.66, responder: responder };
-    return b;
+    // Plain solid building (interior-room experiment removed).
+    return makeBuilding(x, z, w, h, d, colorHex, threshold, side);
   }
 
   function makeStreetlight(x, z, threshold){
@@ -194,73 +162,93 @@
   const skinTones   = [0xf0c39e, 0xd9a273, 0xc98a5e, 0xe0a17a, 0xb87a52];
   const hairTones   = [0x2a1b12, 0x4a2f1c, 0x1a1a1a, 0x6b4226, 0x3a2418];
   function makePerson(x, z, colorIdx, appearAt, holdingBag){
+    // Articulated mini-figure: real arms (upper+forearm with elbow bend),
+    // legs with hips, tapered torso, neck, and a proper head. Built from
+    // capsules/spheres so it reads as a small person from any distance,
+    // not a stack of blobs. Reference points: low-poly stylized figures
+    // (Crossy Road / Monument Valley vibe) that still look human.
     const g = new THREE.Group();
     const skin = skinTones[colorIdx % skinTones.length];
-    const shirtMat = new THREE.MeshStandardMaterial({ color: shirtColors[colorIdx % shirtColors.length], roughness:.8 });
-    const trimMat  = new THREE.MeshStandardMaterial({ color: trimColors[colorIdx % trimColors.length], roughness:.7 });
+    const pantsMat = new THREE.MeshStandardMaterial({ color: 0x2a3b4d, roughness:.85 });
+    const shirtMat = new THREE.MeshStandardMaterial({ color: shirtColors[colorIdx % shirtColors.length], roughness:.75 });
+    const skinMat  = new THREE.MeshStandardMaterial({ color: skin, roughness:.6 });
 
-    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.155, 0.2, 0.5, 12), shirtMat);
-    torso.position.y = 0.36;
-    // collar trim — a slim ring at the neckline for a bit of colour detail
-    const collar = new THREE.Mesh(new THREE.TorusGeometry(0.155, 0.028, 6, 14), trimMat);
-    collar.rotation.x = Math.PI/2;
-    collar.position.y = 0.6;
-    // belt — a slim ring at the waist
-    const belt = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 6, 14), trimMat);
-    belt.rotation.x = Math.PI/2;
-    belt.position.y = 0.24;
-    const shoulders = new THREE.Mesh(new THREE.SphereGeometry(0.165, 12, 8), shirtMat);
-    shoulders.scale.set(1, 0.62, 1);
-    shoulders.position.y = 0.6;
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.165, 14, 14), new THREE.MeshStandardMaterial({ color: skin, roughness:.7 }));
-    head.position.y = 0.85;
-    // hair — a full small sphere nestled into the top of the head (no
-    // partial/open geometry, so there's no risk of an odd hollow-looking
-    // cut edge from any viewing angle)
-    const hair = new THREE.Mesh(new THREE.SphereGeometry(0.15, 12, 10), new THREE.MeshStandardMaterial({ color: hairTones[colorIdx % hairTones.length], roughness:.9 }));
-    hair.scale.set(1, 0.85, 1);
-    hair.position.y = 0.93;
-    // feet — two small separate ellipsoids rather than one leg stump
-    const footMat = new THREE.MeshStandardMaterial({ color: 0x233d52, roughness:.85 });
-    const footL = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), footMat);
-    footL.scale.set(1, 0.7, 1.35);
-    footL.position.set(-0.08, 0.06, 0.02);
-    const footR = footL.clone();
-    footR.position.x = 0.08;
-    const shins = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.1, 0.24, 10), footMat);
-    shins.position.y = 0.16;
-    g.add(shins); g.add(footL); g.add(footR); g.add(torso); g.add(collar); g.add(belt); g.add(shoulders); g.add(head); g.add(hair);
+    // LEGS: two separate legs with hip joint + shoe
+    const legGeo = new THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.055, 0.28, 4, 8) : new THREE.CylinderGeometry(0.055, 0.06, 0.38, 8);
+    const legL = new THREE.Mesh(legGeo, pantsMat);
+    legL.position.set(-0.075, 0.19, 0);
+    const legR = legL.clone(); legR.position.x = 0.075;
+    const shoeGeo = new THREE.SphereGeometry(0.07, 8, 6);
+    const shoeL = new THREE.Mesh(shoeGeo, new THREE.MeshStandardMaterial({ color:0x1a2531, roughness:.9 }));
+    shoeL.scale.set(1, 0.6, 1.5); shoeL.position.set(-0.075, 0.045, 0.03);
+    const shoeR = shoeL.clone(); shoeR.position.x = 0.075;
+    g.add(legL); g.add(legR); g.add(shoeL); g.add(shoeR);
+
+    // TORSO: tapered chest + hips, soft jacket look
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.135, 0.42, 12), shirtMat);
+    torso.position.y = 0.52;
+    const hips = new THREE.Mesh(new THREE.SphereGeometry(0.14, 10, 8), pantsMat);
+    hips.scale.set(1.05, 0.6, 0.9); hips.position.y = 0.36;
+    g.add(torso); g.add(hips);
+
+    // ARMS: shoulder pivot groups so a pickup pose can swing them forward
+    const armGeo = new THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.042, 0.24, 4, 8) : new THREE.CylinderGeometry(0.042, 0.05, 0.32, 8);
+    function makeArm(side){
+      const shoulder = new THREE.Group();
+      shoulder.position.set(side*0.185, 0.68, 0);
+      const upper = new THREE.Mesh(armGeo, shirtMat);
+      upper.position.y = -0.14;
+      shoulder.add(upper);
+      const elbow = new THREE.Group();
+      elbow.position.y = -0.28;
+      const fore = new THREE.Mesh(armGeo, skinMat);
+      fore.scale.set(0.9, 0.8, 0.9);
+      fore.position.y = -0.11;
+      elbow.add(fore);
+      const hand = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 6), skinMat);
+      hand.position.y = -0.24;
+      elbow.add(hand);
+      shoulder.add(elbow);
+      return shoulder;
+    }
+    const armL = makeArm(-1), armR = makeArm(1);
+    g.add(armL); g.add(armR);
+
+    // NECK + HEAD: rounded head with hair cap, subtle nose
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.07, 8), skinMat);
+    neck.position.y = 0.755;
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.135, 16, 14), skinMat);
+    head.position.y = 0.855;
+    const hair = new THREE.Mesh(new THREE.SphereGeometry(0.142, 14, 12, 0, Math.PI*2, 0, Math.PI*0.55), new THREE.MeshStandardMaterial({ color: hairTones[colorIdx % hairTones.length], roughness:.95 }));
+    hair.position.y = 0.87;
+    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.022, 6, 5), skinMat);
+    nose.position.set(0, 0.845, 0.125);
+    g.add(neck); g.add(head); g.add(hair); g.add(nose);
 
     if(holdingBag){
-      // A real trash-sack silhouette: tall and tapered, gathered/twisted
-      // off to one side at the top. The PREVIOUS version used a near-round
-      // sphere body with a bright yellow sphere centered on top -- that's
-      // precisely a round-bomb-with-a-fuse-knob silhouette, which is what
-      // read as a bomb rather than a bag. Fixed by stretching the body
-      // tall/narrow (a sack, not a ball), tapering and tilting the gathered
-      // neck off-center (real bags are twisted shut to one side, not
-      // capped dead-center), and using the SAME dark bag material for the
-      // twist-knot instead of a bright contrasting color.
+      // Carried sack: tall tapered garbage-bag silhouette held at the
+      // right hand, slightly away from the body. Attached INSIDE the
+      // right-arm elbow group so it follows arm poses automatically.
       const bagGroup = new THREE.Group();
       const bagMat = new THREE.MeshStandardMaterial({ color: 0x1c2e40, roughness:.85 });
       const body = new THREE.Mesh(new THREE.SphereGeometry(0.1, 10, 8), bagMat);
       body.scale.set(0.8, 1.55, 0.75);
       body.position.y = 0.09;
-      const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.015,0.05,0.09,8), bagMat);
-      neck.position.set(0.02, 0.22, 0);
-      neck.rotation.z = 0.4;
+      const neckM = new THREE.Mesh(new THREE.CylinderGeometry(0.015,0.05,0.09,8), bagMat);
+      neckM.position.set(0.02, 0.22, 0);
+      neckM.rotation.z = 0.4;
       const knot = new THREE.Mesh(new THREE.SphereGeometry(0.022, 6, 5), bagMat);
       knot.position.set(0.045, 0.265, 0);
-      bagGroup.add(body); bagGroup.add(neck); bagGroup.add(knot);
-      bagGroup.position.set(0.27, 0.16, 0.05);
+      bagGroup.add(body); bagGroup.add(neckM); bagGroup.add(knot);
+      bagGroup.position.set(0, -0.28, 0.06);
       bagGroup.rotation.z = -0.15;
-      g.add(bagGroup);
+      armR.add(bagGroup);
     }
 
     g.position.set(x, 0, z);
     g.traverse(o=>{ if(o.isMesh){ o.castShadow = true; } });
-    g.scale.setScalar(0); // scales in once its beat is reached, appearing rather than existing awkwardly beforehand
-    g.userData = { appearAt, phase: Math.random()*Math.PI*2 };
+    g.scale.setScalar(0); // scales in once its beat is reached
+    g.userData = { appearAt, phase: Math.random()*Math.PI*2, armR: armR, armL: armL, head: head };
     scene.add(g);
     people.push(g);
     return g;
@@ -282,26 +270,24 @@
     beams.push(line);
   }
 
-  // A small glowing speech-bubble billboard (always faces the camera, so
-  // no orientation issues) — drawn once onto a canvas texture, then reused
-  // as a Sprite. Sized to real scene proportions (roughly the size of a
-  // Litter/trash bags scattered in the park for the clean-up beat: small
-  // crumpled dark blobs with a tied top. Each bag belongs to the nearest
-  // volunteer (personIdx); when that person's beat arrives, the bag lifts
-  // up and shrinks into the person's side -- actually showing the pickup,
-  // not just people standing near bags.
-  function makeTrashBag(x, z, personIdx, appearAt){
+  // Litter bags for the clean-up beat: small crumpled dark blobs with a
+  // tied top, scattered on the park lawn. Each holds a direct reference
+  // to its volunteer; on the pickup cue the bag hops up and vanishes --
+  // a visible "collected" beat without any flying-across-the-park nonsense.
+  function makeTrashBag(x, z, volunteer, appearAt){
     const g = new THREE.Group();
     const bagMat = new THREE.MeshStandardMaterial({ color:0x2f3b4a, roughness:.95 });
     const body = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), bagMat);
     body.scale.set(1.15, 0.85, 1.05);
-    body.castShadow = true;
     const knot = new THREE.Mesh(new THREE.SphereGeometry(0.055, 6, 5), bagMat);
     knot.position.y = 0.16;
     g.add(body); g.add(knot);
     g.position.set(x, 0.14, z);
     g.rotation.y = Math.random()*Math.PI;
-    g.userData = { appearAt, personIdx, phase: Math.random()*Math.PI*2, baseY: 0.14, picked:false };
+    // Direct object reference to the volunteer who picks it up -- no
+    // index arithmetic that can silently point at the wrong person.
+    // sx/sz/baseRot freeze the spawn state so the arc math is stable.
+    g.userData = { appearAt, volunteer, baseY: 0.14, sx:x, sz:z, baseRot:g.rotation.y };
     scene.add(g);
     trashBags.push(g);
     return g;
@@ -392,34 +378,78 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     scene = new THREE.Scene();
+    // ── GOLDEN HOUR SKY ── a shader dome: warm amber horizon blending
+    // through dusty rose into deep dusk blue at the zenith, with a soft
+    // sun glow low on the horizon behind the street. This is the single
+    // biggest "looks nice" upgrade -- everything silhouettes against a
+    // real sunset instead of a flat navy background.
+    const skyGeo = new THREE.SphereGeometry(160, 32, 24);
+    const skyMat = new THREE.ShaderMaterial({
+      side: THREE.BackSide,
+      depthWrite: false,
+      fog: false,
+      uniforms: {
+        cTop:    { value: new THREE.Color(0x1b2f55) },   // dusk blue zenith
+        cMid:    { value: new THREE.Color(0xc46a6a) },   // dusty rose band
+        cHorizon:{ value: new THREE.Color(0xffb36b) },   // golden horizon
+        cSun:    { value: new THREE.Color(0xffd9a8) },   // sun glow
+        sunDir:  { value: new THREE.Vector3(-0.35, 0.12, -1).normalize() }
+      },
+      vertexShader: [
+        'varying vec3 vDir;',
+        'void main(){',
+        '  vDir = normalize(position);',
+        '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
+        '}'
+      ].join('\n'),
+      fragmentShader: [
+        'varying vec3 vDir;',
+        'uniform vec3 cTop; uniform vec3 cMid; uniform vec3 cHorizon; uniform vec3 cSun;',
+        'uniform vec3 sunDir;',
+        'void main(){',
+        '  float h = clamp(vDir.y, -0.1, 1.0);',
+        '  vec3 col = mix(cHorizon, cMid, smoothstep(0.0, 0.24, h));',
+        '  col = mix(col, cTop, smoothstep(0.2, 0.75, h));',
+        '  float sunAmt = pow(max(dot(vDir, sunDir), 0.0), 14.0);',
+        '  col += cSun * sunAmt * 0.85;',
+        '  float sunHaze = pow(max(dot(vDir, sunDir), 0.0), 3.0);',
+        '  col += cSun * sunHaze * 0.22;',
+        '  gl_FragColor = vec4(col, 1.0);',
+        '}'
+      ].join('\n')
+    });
+    const skyDome = new THREE.Mesh(skyGeo, skyMat);
+    scene.add(skyDome);
+    // Golden-hour key light: warm orange sun low from the west end of the
+    // street, cool blue fill from the sky's opposite side. Long soft
+    // shadows across the road sell the time of day.
+    const ghSun = new THREE.DirectionalLight(0xffb36b, 1.05);
+    ghSun.position.set(-30, 14, -55);
+    ghSun.castShadow = true;
+    ghSun.shadow.mapSize.set(2048, 2048);
+    ghSun.shadow.camera.left = -16; ghSun.shadow.camera.right = 16;
+    ghSun.shadow.camera.top = 26;   ghSun.shadow.camera.bottom = -14;
+    ghSun.shadow.camera.near = 2;   ghSun.shadow.camera.far = 130;
+    ghSun.shadow.bias = -0.0005;
+    ghSun.shadow.normalBias = 0.02;
+    scene.add(ghSun);
+    const ghFill = new THREE.DirectionalLight(0x6a86c8, 0.5);
+    ghFill.position.set(24, 30, 20);
+    scene.add(ghFill);
+    const ghAmb = new THREE.AmbientLight(0x8a7490, 0.55);
+    scene.add(ghAmb);
+    const ghHemi = new THREE.HemisphereLight(0xd4899a, 0x27354d, 0.5);
+    scene.add(ghHemi);
+    window.__bavSun = ghSun; window.__bavAmbient = ghAmb; window.__bavFill = ghFill;
     camera = new THREE.PerspectiveCamera(46, (canvas.clientWidth||innerWidth)/(canvas.clientHeight||innerHeight), 0.4, 220);
 
-    const ambient = new THREE.AmbientLight(0x5a7d99, 0.62);
-    scene.add(ambient);
-    const sun = new THREE.DirectionalLight(0xbfe3ff, 0.7);
-    sun.position.set(-20, 30, 10);
-    // Soft contact shadows (NOT the reverted tone-mapping "filter" --
-    // shadows only darken, they don't shift color). Tight frustum around
-    // the street so the 2048 map stays crisp.
-    sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
-    sun.shadow.camera.left = -14; sun.shadow.camera.right = 14;
-    sun.shadow.camera.top = 24;   sun.shadow.camera.bottom = -12;
-    sun.shadow.camera.near = 4;   sun.shadow.camera.far = 90;
-    sun.shadow.bias = -0.0006;
-    sun.shadow.normalBias = 0.02;
-    scene.add(sun);
+    // (lighting rig moved to the golden-hour setup above)
     // Fill light from the opposite side, plus a hemisphere light — without
     // these, only the sun-facing side of each building ever picks up real
     // light and the far side reads as flat/dark, which is what read as
     // "lighting isn't all around the building." This gives even, believable
     // illumination on every face instead of just one.
-    const fill = new THREE.DirectionalLight(0x4a7ca8, 0.32);
-    fill.position.set(18, 14, -22);
-    scene.add(fill);
-    const hemi = new THREE.HemisphereLight(0x8fc5e8, 0x0a1f33, 0.45);
-    scene.add(hemi);
-    window.__bavSun = sun; window.__bavAmbient = ambient; window.__bavFill = fill;
+    
 
     // ground + road — the road gets a real dashed-lane-line texture and
     // lighter sidewalk strips either side, instead of a single flat colour
@@ -597,10 +627,6 @@
     // verified neighbour answers" — reads as something happening at that
     // person, not a giant detached graphic floating in the sky.
     makeIconSprite(5.2, 1.65, -21.8, .50, 'chat', 0.6);
-    // Phone above the responder inside the window -- the "call accepted"
-    // cue for the help-request beat (matches the h3d-mini beat-2 toast
-    // "Sara accepted the request").
-    makeIconSprite(6.5, 2.6, -23, .52, 'phone', 0.5);
 
     // beat 3: a real clean-up crew in the park — volunteers with satchels
     // spread across the green
@@ -620,7 +646,7 @@
       [-2.2, -38.2, 3, .74], [2.0, -39.4, 4, .77], [0.2, -42.2, 5, .80],
       [-0.9, -39.0, 1, .76], [1.4, -38.4, 0, .79]
     ];
-    bagSpecs.forEach(sp=>{ makeTrashBag(sp[0], sp[1], sp[2], sp[3]); });
+    bagSpecs.forEach(sp=>{ makeTrashBag(sp[0], sp[1], parkCrew[sp[2]], sp[3]); });
 
     // Finale: as the camera rises for the full-street reveal, a lively
     // scattering of neighbours appears up and down the whole block — the
@@ -659,13 +685,13 @@
   // beat's buildings (alternating sides down the street), travel between
   // them, then rise and pull back for the full-street reveal.
   const camKeys = [
-    // Opening = the actual homepage rest frame: a proper street-level
-    // establishing shot showing the neighborhood. The journey ENDS back
-    // here (unlock rests at p=0), so the "blank sky" look that used to
-    // sit at p=0 would leave the homepage background empty/dark -- the
-    // city IS the homepage background now.
-    { p:.00, pos:[0,6,3],      look:[0,2,-8]   },
-    { p:.05, pos:[0,9,7],      look:[0,2.5,-9] },
+    // Opening = the ORIGINAL homepage look: camera looking up at the sky
+    // so the CSS gradient + particles read clean (their screenshot-9
+    // homepage). Journey tilts down into the street; on unlock the hero
+    // rests back here AND the 3D layer fades out entirely, so the resting
+    // homepage is the pure gradient + headline + mascot they expect.
+    { p:.00, pos:[0,4,6],      look:[0,26,2]   },
+    { p:.05, pos:[0,13,10],    look:[0,3,-10]  },
     { p:.08, pos:[0,6,3],      look:[0,2,-8]   },
     { p:.20, pos:[-2.2,4,-3],  look:[-6,1.8,-9]   },  // approach beat 1 — pulled back to a proper medium shot, not against the wall
     { p:.30, pos:[-2.8,3.6,-6],look:[-6,1.5,-10.5] },
@@ -724,10 +750,13 @@
     camera.position.set(camPosS[0], camPosS[1], camPosS[2]);
     camera.lookAt(camLookS[0], camLookS[1], camLookS[2]);
 
+    // Golden hour is the constant base look. The journey only lifts
+    // intensity slightly as the street lights up (no color swaps -- that
+    // was the old day-blue-to-warm system, now gone).
     const warmth = Math.min(1, lp/.9);
-    if(window.__bavAmbient) window.__bavAmbient.intensity = 0.42 + warmth*0.45;
-    if(window.__bavSun){ window.__bavSun.intensity = 0.5 + warmth*0.5; window.__bavSun.color.setHex(warmth>.5?0xffe3b8:0xbfe3ff); }
-    if(window.__bavFill) window.__bavFill.intensity = 0.24 + warmth*0.22;
+    if(window.__bavAmbient) window.__bavAmbient.intensity = 0.55 + warmth*0.15;
+    if(window.__bavSun)     window.__bavSun.intensity = 1.05 + warmth*0.2;
+    if(window.__bavFill)    window.__bavFill.intensity = 0.5 + warmth*0.1;
 
     buildings.forEach(b=>{
       const lit = Math.max(0, Math.min(1, (lp - b.userData.threshold)/0.16));
@@ -750,8 +779,8 @@
     });
     streetlights.forEach(s=>{
       const lit = lp > s.userData.threshold;
-      s.userData.light.intensity = lit ? 1.1 : 0;
-      s.userData.bulbMat.color.setHex(lit ? 0xfde68a : 0x1a2432);
+      s.userData.light.intensity = lit ? 1.3 : 0;
+      s.userData.bulbMat.color.setHex(lit ? 0xffd9a0 : 0x2a2432);
       if(s.userData.glowMat) s.userData.glowMat.opacity += ((lit?0.22:0) - s.userData.glowMat.opacity) * 0.06;
     });
     beams.forEach(bm=>{
@@ -759,34 +788,6 @@
       bm.material.opacity += (target - bm.material.opacity) * 0.08;
     });
 
-    // The window reveal: the response building's street-facing wall fades
-    // to transparent as the camera arrives (revealing the interior + the
-    // person + the lamp switching on), holds open through the beat, then
-    // fades back to a solid wall as the camera moves on.
-    if(interiorRoom){
-      const r = interiorRoom;
-      // Interior reveal is a journey-only beat: the street-facing window
-      // plane fades out, exposing the warm room (lamp + responder) inside
-      // the building; at rest the window stays solid and the world is
-      // already warm via lp.
-      let wallOpacity;
-      if(p < r.openStart) wallOpacity = 1;
-      else if(p < r.openFull) wallOpacity = 1 - (p-r.openStart)/(r.openFull-r.openStart);
-      else if(p < r.closeStart) wallOpacity = 0;
-      else if(p < r.closeFull) wallOpacity = (p-r.closeStart)/(r.closeFull-r.closeStart);
-      else wallOpacity = 1;
-      // Fade the street-facing window plane of this building (found by
-      // side sign in userData.windows -- the first z-face window row).
-      const wins = r.group.parent && r.group.parent.userData.windows;
-      if(wins && wins.length){
-        // Only the two street-facing (positive-z on side=1) windows
-        wins.slice(0,2).forEach(w=>{ w.material.opacity = 0.9 * wallOpacity; });
-      }
-      r.lamp.intensity = (1-wallOpacity) * 1.4;
-      // Responder inside scales in with the reveal
-      const rs = Math.max(0.0001, (1-wallOpacity)) * 0.55;
-      r.responder.scale.setScalar(rs);
-    }
 
     // Chat bubble: fades in right on cue, holds visible for a stretch,
     // then fades back out as the camera moves on — with a gentle float
@@ -801,9 +802,10 @@
       bub.scale.set(1.3*pulse, 1.0*pulse, 1);
     });
 
-    // People scale in with a little bounce once their beat is reached, then
-    // gently bob in place — so they read as present and alive, not static
-    // props, when the camera arrives at each interaction.
+    // People scale in with a little bounce once their beat is reached,
+    // then gently bob. Volunteers (with armR exposed) do a repeating
+    // reach-down pickup gesture -- the readable "collecting litter"
+    // action instead of static standing.
     const t = performance.now() * 0.001;
     people.forEach(person=>{
       const since = lp - person.userData.appearAt;
@@ -812,6 +814,14 @@
       person.scale.setScalar(Math.max(0, bounce));
       if(appear>=1){
         person.position.y = Math.sin(t*1.6 + person.userData.phase) * 0.04;
+        const armR = person.userData.armR;
+        if(armR){
+          // slow reach-down-and-up cycle: arm swings forward/down then back
+          const cyc = (Math.sin(t*1.1 + person.userData.phase) + 1) / 2; // 0..1
+          const bend = cyc * 1.5; // radians of forward swing
+          armR.rotation.x = -bend * 0.55;
+          armR.rotation.z = -bend * 0.18;
+        }
       }
     });
 
@@ -825,22 +835,19 @@
         return;
       }
       bag.visible = true;
-      const volunteer = people[bag.userData.personIdx];
-      if(!volunteer){ return; }
-      const pick = Math.max(0, Math.min(1, since/0.35));
+      const pick = Math.max(0, Math.min(1, since/0.45));
       if(pick >= 1){
         bag.visible = false;
         return;
       }
-      // arc from ground position to volunteer's hand height
-      const e = pick*pick*(3-2*pick); // smoothstep
-      const startX = bag.position.x, startZ = bag.position.z;
-      const tgtX = volunteer.position.x, tgtZ = volunteer.position.z;
-      bag.position.x = startX + (tgtX-startX)*e;
-      bag.position.z = startZ + (tgtZ-startZ)*e;
-      bag.position.y = bag.userData.baseY + Math.sin(e*Math.PI)*0.55 + e*0.25;
+      // "Collected" beat: the bag does a little hop at its own spot and
+      // scales away -- no flying across the park (the fly-to-volunteer
+      // version read as bags zooming off into the sky). The volunteer is
+      // standing right next to it, so the pickup reads without movement.
+      const e = pick*pick*(3-2*pick);
+      bag.position.y = bag.userData.baseY + Math.sin(e*Math.PI)*0.22;
       bag.scale.setScalar(Math.max(0.01, 1-e));
-      bag.rotation.y += 0.12;
+      bag.rotation.y = bag.userData.baseRot + e*1.2;
     });
 
     const beat = currentBeat(p);
@@ -850,6 +857,21 @@
     if(scrimEl){
       const lift = Math.max(0, (p-.88)/.12)*0.22;
       scrimEl.style.opacity = String(1-lift);
+    }
+
+    // AT REST = the ORIGINAL homepage: when the journey finishes, the
+    // camera returns to the sky-up opening AND the whole 3D layer eases
+    // to transparent, leaving the clean CSS gradient + starfield + the
+    // headline/mascot (exactly the screenshot-9 homepage look). The
+    // canvas stays mounted (zero cost while transparent) so Replay Intro
+    // can fade it straight back in.
+    if(canvas){
+      const restFade = window.__heroResting ? 1 : 0;
+      const cur = parseFloat(canvas.style.opacity || '1');
+      const target = 1 - restFade;
+      const next = cur + (target - cur) * 0.08;
+      canvas.style.opacity = String(next);
+      canvas.style.pointerEvents = 'none';
     }
   }
 
