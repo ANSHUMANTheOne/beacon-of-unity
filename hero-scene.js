@@ -112,12 +112,12 @@
     const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.1,8,8), bulbMat);
     bulb.position.set(dir*0.32, 2.44, 0);
     // a soft glow disc on the ground beneath, fades in with the light
-    const glowMat = new THREE.MeshBasicMaterial({ color:0xfde68a, transparent:true, opacity:0 });
+    const glowMat = new THREE.MeshBasicMaterial({ color:0x9ddcff, transparent:true, opacity:0 });
     const glow = new THREE.Mesh(new THREE.CircleGeometry(0.9, 16), glowMat);
     glow.rotation.x = -Math.PI/2;
     glow.position.set(dir*0.32, 0.02, 0);
     g.add(pole); g.add(arm); g.add(shade); g.add(bulb); g.add(glow);
-    const pl = new THREE.PointLight(0xfde68a, 0, 7, 2);
+    const pl = new THREE.PointLight(0x9ddcff, 0, 7, 2);
     pl.position.set(dir*0.32, 2.44, 0);
     g.add(pl);
     g.position.set(x, 0, z);
@@ -158,7 +158,7 @@
   // a distance or from certain angles). Skin, shirt, trim and hair all
   // vary per person so a crowd doesn't look like identical pawns.
   const shirtColors = [0x2c6e8f, 0x9c4a4a, 0x3d7a5c, 0x6b4a8f, 0xb8834a, 0x4a5a8f, 0xc2703e, 0x3f6b4a];
-  const trimColors  = [0xbae6fd, 0xfbcfe8, 0xd1fae5, 0xe9d5ff, 0xfde68a, 0xbae6fd, 0xfed7aa, 0xd1fae5];
+  const trimColors  = [0xbae6fd, 0xfbcfe8, 0xd1fae5, 0xe9d5ff, 0xa5f3fc, 0xbae6fd, 0xc7d2fe, 0xd1fae5];
   const skinTones   = [0xf0c39e, 0xd9a273, 0xc98a5e, 0xe0a17a, 0xb87a52];
   const hairTones   = [0x2a1b12, 0x4a2f1c, 0x1a1a1a, 0x6b4226, 0x3a2418];
   function makePerson(x, z, colorIdx, appearAt, holdingBag){
@@ -381,21 +381,21 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     scene = new THREE.Scene();
-    // ── GOLDEN HOUR SKY ── a shader dome: warm amber horizon blending
-    // through dusty rose into deep dusk blue at the zenith, with a soft
-    // sun glow low on the horizon behind the street. This is the single
+    // ── BLUE HOUR SKY ── a shader dome: luminous blue horizon blending
+    // through steel blue into deep night at the zenith, with a cool
+    // moon glow low on the horizon behind the street. This is the single
     // biggest "looks nice" upgrade -- everything silhouettes against a
-    // real sunset instead of a flat navy background.
+    // real evening sky instead of a flat navy background.
     const skyGeo = new THREE.SphereGeometry(160, 32, 24);
     const skyMat = new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
       fog: false,
       uniforms: {
-        cTop:    { value: new THREE.Color(0x1b2f55) },   // dusk blue zenith
-        cMid:    { value: new THREE.Color(0xc46a6a) },   // dusty rose band
-        cHorizon:{ value: new THREE.Color(0xffb36b) },   // golden horizon
-        cSun:    { value: new THREE.Color(0xffd9a8) },   // sun glow
+        cTop:    { value: new THREE.Color(0x071a30) },   // deep night zenith
+        cMid:    { value: new THREE.Color(0x0e3a5c) },   // steel blue band
+        cHorizon:{ value: new THREE.Color(0x1d6fa3) },   // blue-hour horizon
+        cSun:    { value: new THREE.Color(0x7dd3fc) },   // cool moon glow
         sunDir:  { value: new THREE.Vector3(-0.35, 0.12, -1).normalize() }
       },
       vertexShader: [
@@ -423,10 +423,10 @@
     });
     const skyDome = new THREE.Mesh(skyGeo, skyMat);
     scene.add(skyDome);
-    // Golden-hour key light: warm orange sun low from the west end of the
-    // street, cool blue fill from the sky's opposite side. Long soft
-    // shadows across the road sell the time of day.
-    const ghSun = new THREE.DirectionalLight(0xffb36b, 1.05);
+    // Blue-hour key light: cool moonlight from high on the west end of the
+    // street, soft cyan fill from the sky's opposite side. Long gentle
+    // shadows across the road still sell the time of day.
+    const ghSun = new THREE.DirectionalLight(0x9cc9e8, 1.0);
     ghSun.position.set(-30, 14, -55);
     ghSun.castShadow = true;
     ghSun.shadow.mapSize.set(2048, 2048);
@@ -436,12 +436,12 @@
     ghSun.shadow.bias = -0.0005;
     ghSun.shadow.normalBias = 0.02;
     scene.add(ghSun);
-    const ghFill = new THREE.DirectionalLight(0x6a86c8, 0.5);
+    const ghFill = new THREE.DirectionalLight(0x5aa7d6, 0.55);
     ghFill.position.set(24, 30, 20);
     scene.add(ghFill);
-    const ghAmb = new THREE.AmbientLight(0x8a7490, 0.55);
+    const ghAmb = new THREE.AmbientLight(0x3a5f82, 0.6);
     scene.add(ghAmb);
-    const ghHemi = new THREE.HemisphereLight(0xd4899a, 0x27354d, 0.5);
+    const ghHemi = new THREE.HemisphereLight(0x7db8dd, 0x0e2436, 0.55);
     scene.add(ghHemi);
     window.__bavSun = ghSun; window.__bavAmbient = ghAmb; window.__bavFill = ghFill;
     camera = new THREE.PerspectiveCamera(46, (canvas.clientWidth||innerWidth)/(canvas.clientHeight||innerHeight), 0.4, 220);
@@ -753,13 +753,12 @@
     camera.position.set(camPosS[0], camPosS[1], camPosS[2]);
     camera.lookAt(camLookS[0], camLookS[1], camLookS[2]);
 
-    // Golden hour is the constant base look. The journey only lifts
-    // intensity slightly as the street lights up (no color swaps -- that
-    // was the old day-blue-to-warm system, now gone).
-    const warmth = Math.min(1, lp/.9);
-    if(window.__bavAmbient) window.__bavAmbient.intensity = 0.55 + warmth*0.15;
-    if(window.__bavSun)     window.__bavSun.intensity = 1.05 + warmth*0.2;
-    if(window.__bavFill)    window.__bavFill.intensity = 0.5 + warmth*0.1;
+    // Blue hour is the constant base look. The journey only lifts
+    // intensity slightly as the street lights up (no color swaps).
+    const glow = Math.min(1, lp/.9);
+    if(window.__bavAmbient) window.__bavAmbient.intensity = 0.6 + glow*0.15;
+    if(window.__bavSun)     window.__bavSun.intensity = 1.0 + glow*0.2;
+    if(window.__bavFill)    window.__bavFill.intensity = 0.55 + glow*0.1;
 
     buildings.forEach(b=>{
       const lit = Math.max(0, Math.min(1, (lp - b.userData.threshold)/0.16));
@@ -776,14 +775,14 @@
         b.material.emissive.copy(b.material.color).multiplyScalar(glowAmt);
       }
       if(b.userData.windows) b.userData.windows.forEach(w=>{
-        w.material.color.setHex(lit>0.5 ? 0xfde68a : 0x0a1f33);
+        w.material.color.setHex(lit>0.5 ? 0xbfe4ff : 0x0a1f33);
         w.material.opacity = lit>0.5 ? 1 : 0.85;
       });
     });
     streetlights.forEach(s=>{
       const lit = lp > s.userData.threshold;
       s.userData.light.intensity = lit ? 1.3 : 0;
-      s.userData.bulbMat.color.setHex(lit ? 0xffd9a0 : 0x2a2432);
+      s.userData.bulbMat.color.setHex(lit ? 0x9ddcff : 0x1a2430);
       if(s.userData.glowMat) s.userData.glowMat.opacity += ((lit?0.22:0) - s.userData.glowMat.opacity) * 0.06;
     });
     beams.forEach(bm=>{
