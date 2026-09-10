@@ -631,8 +631,8 @@ body:not(.hero-lock) #replay-intro-btn{display:block}
    BLOCK with big rounded corners inset from the viewport edge -- stacked
    colored slabs separated by the page background, not endless flat bands. */
 section{padding:96px 48px;margin:0;position:relative;overflow:hidden}
-section#how{background:linear-gradient(180deg,rgba(186,230,253,.28) 0%,rgba(224,242,254,.55) 50%,rgba(186,230,253,.28) 100%)}
-[data-theme="dark"] section#how{background:linear-gradient(180deg,rgba(14,61,94,.35) 0%,rgba(10,31,51,.65) 50%,rgba(14,61,94,.35) 100%)}
+section#how{background:linear-gradient(180deg,rgba(224,242,254,.9) 0%,#e3f3fd 50%,rgba(224,242,254,.9) 100%)}
+[data-theme="dark"] section#how{background:linear-gradient(180deg,rgba(224,242,254,.94) 0%,#dcedf9 50%,rgba(224,242,254,.94) 100%)}
 @media(max-width:768px){section{padding:64px 22px}}
 .si{max-width:1200px;margin:0 auto}
 .stag{font-size:.68rem;font-weight:700;letter-spacing:2.8px;text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
@@ -741,25 +741,38 @@ section#how{background:linear-gradient(180deg,rgba(186,230,253,.28) 0%,rgba(224,
   .wpill:nth-child(even){transform:rotate(-3deg)}
 }
 
-/* ═══ THE PATH — a soft winding walking trail that lives across the
-   whole page. Rendered as a tall fixed SVG with gentle S-curves (no
-   hard asphalt stripe), tinted with theme tokens so it reads as part
-   of the page instead of an overlay. z-index 0 keeps it strictly
-   BEHIND every content section -- it can never obstruct or overlap
-   text/cards. The mascot strolls along it (see roadwalk mode). */
-#roadLayer{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .6s var(--ease)}
-body:not(.hero-lock) #roadLayer{opacity:.85}
-#roadLayer svg{width:100%;height:100%;display:block}
-#roadLayer .rd-asphalt{fill:none;stroke:rgba(14,165,233,.14);stroke-width:46;stroke-linecap:round}
-#roadLayer .rd-edge{fill:none;stroke:rgba(125,211,252,.22);stroke-width:52;stroke-linecap:round;stroke-dasharray:0.1 26;stroke-linejoin:round}
-#roadLayer .rd-dash{fill:none;stroke:rgba(125,211,252,.4);stroke-width:3;stroke-dasharray:22 30;stroke-linecap:round;animation:rdflow 2.6s linear infinite}
-@keyframes rdflow{to{stroke-dashoffset:-52}}
-@media(max-width:900px){#roadLayer{display:none}}
-@media (prefers-reduced-motion: reduce){#roadLayer .rd-dash{animation:none}}
+/* ═══ THE SCISSOR LIFT — the mascot's home dock, pinned to the right
+   edge of the viewport like a piece of site furniture. A CSS-drawn
+   scissor lift: wheeled base, X-arm scissor stack, and a deck the
+   mascot stands on. Scroll progress drives the deck height (scroll
+   down → the lift descends, scroll up → it rises), so the mascot
+   reads as riding the page. JS drives --lf-h (deck height) and
+   --lf-s (scissor arm extension). It never overlaps content: it hugs
+   the right margin, hidden on narrow screens and during the intro. */
+#bav-lift{position:fixed;right:20px;bottom:88px;width:104px;height:352px;pointer-events:none;z-index:6;opacity:0;transition:opacity .6s var(--ease)}
+body:not(.hero-lock) #bav-lift{opacity:1}
+body.hero-lock #bav-lift{visibility:hidden}
+#bav-lift .lf-base{position:absolute;bottom:0;left:4px;width:96px;height:18px;border-radius:6px 6px 4px 4px;background:linear-gradient(180deg,#5c7a92,#33506a);box-shadow:0 4px 14px rgba(10,25,40,.28),inset 0 1px 0 rgba(255,255,255,.22)}
+#bav-lift .lf-wheel{position:absolute;bottom:-7px;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#9fb6c8,#3d566d 62%,#1e3346);box-shadow:0 2px 5px rgba(10,25,40,.35)}
+#bav-lift .lf-wheel.w1{left:12px}
+#bav-lift .lf-wheel.w2{right:12px}
+#bav-lift .lf-cab{position:absolute;bottom:16px;left:22px;width:60px;height:14px;border-radius:5px;background:linear-gradient(180deg,#7dd3fc,#38bdf8);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 8px rgba(14,165,233,.35)}
+#bav-lift .lf-scissor{position:absolute;bottom:14px;left:16px;width:72px;height:120px;transform-origin:50% 100%;transform:scaleY(var(--lf-s,.2))}
+#bav-lift .lf-scissor svg{width:100%;height:100%;display:block;overflow:visible}
+#bav-lift .lf-arm{fill:none;stroke:#64809a;stroke-width:5;stroke-linecap:round}
+#bav-lift .lf-arm.a2{stroke:#46647e}
+#bav-lift .lf-pin{fill:#cfe4f2}
+#bav-lift .lf-deck{position:absolute;bottom:calc(18px + var(--lf-h,0px));left:4px;width:96px;height:10px;border-radius:4px;background:linear-gradient(180deg,#8fd0f4,#38bdf8 55%,#0e7cb3);box-shadow:0 3px 10px rgba(14,165,233,.3),inset 0 1px 0 rgba(255,255,255,.5)}
+#bav-lift .lf-deck::after{content:'';position:absolute;inset:2px 6px auto;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.65) 0 8px,transparent 8px 16px)}
+[data-theme="dark"] #bav-lift .lf-arm{stroke:rgba(148,193,231,.85)}
+[data-theme="dark"] #bav-lift .lf-arm.a2{stroke:rgba(100,150,190,.9)}
+[data-theme="dark"] #bav-lift .lf-base{background:linear-gradient(180deg,#3d5a74,#22394f)}
+@media(max-width:900px){#bav-lift{display:none}}
+@media (prefers-reduced-motion: reduce){#bav-lift{transition:none}}
 
 /* Aardvark-style handwritten annotations */
-.scripnote{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(1.3rem,2vw,1.65rem);line-height:1.12;transform:rotate(-3.5deg);color:#0ea5e9;display:inline-block;max-width:240px}
-[data-theme="dark"] .scripnote{color:#7dd3fc}
+.scripnote{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(1.5rem,2.2vw,1.85rem);line-height:1.1;transform:rotate(-3.5deg);color:#0369a1;display:inline-block;max-width:320px;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+[data-theme="dark"] .scripnote{color:#075985;text-shadow:0 1px 0 rgba(255,255,255,.5)}
 .htitlewrap{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
 @media(max-width:768px){.scripnote{max-width:none;transform:rotate(-2deg)}}
 
@@ -1120,12 +1133,19 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 <div id="cd"></div>
 <div id="cr"></div>
 <div id="cclick"></div>
-<div id="roadLayer" aria-hidden="true">
-  <svg viewBox="0 0 1440 4000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <path class="rd-edge"  id="rd-edge"  d="M 700 -100 C 520 500, 980 900, 760 1500 C 560 2050, 950 2500, 720 3100 C 560 3600, 820 3900, 760 4200"/>
-    <path class="rd-asphalt" id="rd-path" d="M 700 -100 C 520 500, 980 900, 760 1500 C 560 2050, 950 2500, 720 3100 C 560 3600, 820 3900, 760 4200"/>
-    <path class="rd-dash"   id="rd-dash" d="M 700 -100 C 520 500, 980 900, 760 1500 C 560 2050, 950 2500, 720 3100 C 560 3600, 820 3900, 760 4200"/>
-  </svg>
+<div id="bav-lift" aria-hidden="true">
+  <div class="lf-deck"></div>
+  <div class="lf-scissor">
+    <svg viewBox="0 0 72 120" aria-hidden="true">
+      <path class="lf-arm"    d="M6 116 L66 6"/>
+      <path class="lf-arm a2" d="M66 116 L6 6"/>
+      <circle class="lf-pin" cx="36" cy="61" r="4"/>
+    </svg>
+  </div>
+  <div class="lf-base"></div>
+  <div class="lf-cab"></div>
+  <div class="lf-wheel w1"></div>
+  <div class="lf-wheel w2"></div>
 </div>
 
 <!-- ═══ PRELOADER — United-Carriers-style open: counter ticks up while the
@@ -3080,47 +3100,33 @@ body.hero-lock #bav-root {
   let flyRot = 0;
   let dragSway = 0, dragSwayTarget = 0, lastDragX = 0;
 
-  /* ── ROAD-WALK state ──
-     The mascot stands on the page's vertical center road, top-down view.
-     Scrolling the page walks it along the road; dragging lifts it off
-     (physics resumes); if left off the road it strolls back on its own. */
-  let roadMode = true;         // on the road, scroll-linked
-  let roadY = 0;               // current document-space position along the road
-  let roadFace = 1;            // 1 = walking down (screen-down), -1 = up
-  let roadLane = 0;            // small lateral offset within the road
-  let rdTotalLen = 0;          // total length of the winding SVG path
-  let idleSince = 0;           // timestamp when the mascot last settled (auto-return delay)
-  const ROAD_WALK_SPEED = 1.15; // px walked per px scrolled
-  const AUTO_RETURN_DELAY = 2600; // ms of being settled before it strolls back - no instant snap-back
-  // The path is a fixed winding SVG (see #roadLayer). The walk target
-  // samples that actual curve so the mascot strolls along the visible
-  // path, not an invisible straight line. getPointAtLength does the
-  // heavy lifting; the doc-to-viewport scroll offset is subtracted
-  // because the SVG is viewport-fixed while the walk is document-space.
-  let rdPathEl = document.getElementById('rd-path');
-  if(rdPathEl){ try{ rdTotalLen = rdPathEl.getTotalLength(); }catch(e){ rdPathEl = null; } }
-  function roadCenterX(){
-    if(rdPathEl && rdTotalLen > 0){
-      const docY = roadY + window.innerHeight*0.62;          // document-space feet position
-      const svgY = ((docY % 4000) + 4000) % 4000;            // SVG viewbox height
-      const frac = svgY / 4000;
-      const pt = rdPathEl.getPointAtLength(frac * rdTotalLen);
-      return (pt.x / 1440) * window.innerWidth + roadLane;   // 1440 = viewbox width
-    }
-    return window.innerWidth * 0.5 + roadLane;
+  /* ── SCISSOR-LIFT state ──
+     The mascot's home is the scissor lift docked at the right edge of
+     the viewport. While riding it, the deck height follows scroll with
+     easing (scroll down → the lift lowers you, scroll up → it raises).
+     Drag the mascot off and it plays freely with full physics — it
+     only returns to the lift once the section it was dropped on has
+     scrolled completely out of view. */
+  let liftMode = true;         // riding the lift (scroll-linked)
+  let liftH = 120;             // current deck height in px (smoothed)
+  let homeSection = null;      // section the mascot was dropped on
+  let liftEl = document.getElementById('bav-lift');
+  const LIFT_TRAVEL = 230;     // max deck travel in px
+
+  function liftTargetH(){
+    const doc = document.documentElement;
+    const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+    const prog = cl(window.scrollY / max, 0, 1);           // 0 = top, 1 = bottom
+    return (1 - prog) * LIFT_TRAVEL;                       // scroll down → descend
   }
-  function enterRoad(keepLane){
-    roadMode = true;
-    if(!keepLane) roadLane = cl((px + W/2) - roadCenterX(), -60, 60);
-    // Start the walk from where the mascot currently is (no teleport):
-    // roadY is derived so the first road frame renders at the current py,
-    // then the walk loop eases roadY toward the scroll-linked target.
-    roadY = py + window.scrollY - window.innerHeight*0.62;
+  function enterLift(){
+    liftMode = true;
+    homeSection = null;
     mode = 'idle'; prevMode = '';
-    idleSince = 0;
     setLegsSwinging(false);
     setExpr('happy');
-    roadFace = 1;
+    flipped = true;                                        // face the page
+    showBubble('Back to my post! \ud83d\ude97', 1800);
   }
 
   // ── element refs ──────────────────────────────────────
@@ -3334,41 +3340,25 @@ body.hero-lock #bav-root {
     const VW = window.innerWidth;
     const VH = window.innerHeight;
 
-    if (roadMode && !dragging) {
-      /* Scroll-linked walk: document-space walk position tracks scroll,
-         so the mascot reads as standing ON the page and walking down it. */
-      const target = cl(window.scrollY * ROAD_WALK_SPEED, 0, 100000);
-      const dy = target - roadY;
-      if (Math.abs(dy) > 0.05) {
-        roadFace = dy > 0 ? 1 : -1;
-        roadY += Math.max(-6*dt, Math.min(6*dt, dy));
-        if (mode !== 'walking') { mode = 'walking'; applyModeAnim(); setExpr('happy'); }
-      } else if (mode !== 'idle') {
-        mode = 'idle'; applyModeAnim();
+    if (liftMode && !dragging) {
+      /* Scroll-linked lift ride: the deck tracks scroll progress with
+         easing so it feels hydraulic rather than snappy. */
+      const targetH = liftTargetH();
+      liftH += (targetH - liftH) * Math.min(1, 0.09 * dt);
+      const VW = window.innerWidth, VH = window.innerHeight;
+      px = VW - 20 - 48 - W / 2;                 // centred on the deck
+      py = VH - 88 - 18 - liftH - H;             // standing on the deck
+      if (mode !== 'idle') { mode = 'idle'; applyModeAnim(); setExpr('happy'); }
+      flipped = true;                            // face into the page
+      svg.style.transform = 'scaleX(-1)';
+      setLegsSwinging(false);
+      // Sync the lift's own visuals (deck height + arm extension).
+      if (liftEl) {
+        liftEl.style.setProperty('--lf-h', liftH.toFixed(1) + 'px');
+        liftEl.style.setProperty('--lf-s', (0.18 + (liftH / LIFT_TRAVEL) * 0.82).toFixed(3));
       }
-      // Walk toward the road centerline laterally, then hold the lane.
-      roadLane += ((Math.sin(roadY*0.004)*46) - roadLane) * Math.min(1, 0.06*dt);
-      // Ease horizontally onto the road instead of snapping: px glides to
-      // the centerline so re-entering from a drag reads as a stroll, not a
-      // teleport. Vertical never jumps because roadY was derived from the
-      // current py at the moment roadMode was entered.
-      const targetPx = roadCenterX() - W/2;
-      px += (targetPx - px) * Math.min(1, 0.14*dt);
-      if (Math.abs(targetPx - px) < 0.4) px = targetPx;
-      py = roadY - window.scrollY + window.innerHeight*0.62;
-      // Clamp to the viewport: the walk target tracks the document, so at
-      // the very top/bottom of a page the document-space target can sit
-      // offscreen -- which is why the mascot used to vanish for whole
-      // stretches of scrolling. Clamping keeps it pinned at the edge
-      // (still visibly walking) until the path scrolls back into range.
-      py = Math.max(10, Math.min(window.innerHeight - H - 10, py));
-      px = Math.max(6, Math.min(window.innerWidth - W - 6, px));
-
-      // Face down the page while walking down.
-      svg.style.transform = 'scaleX(' + roadFace + ')';
-      setLegsSwinging(mode === 'walking');
       shadowEl.style.width = '40px';
-      shadowEl.style.opacity = '0.6';
+      shadowEl.style.opacity = '0.55';
 
       applyPos();
       requestAnimationFrame(loop);
@@ -3465,17 +3455,14 @@ body.hero-lock #bav-root {
             if (mode !== 'idle') { mode = 'idle'; idleSince = now; }
           }
         }
-        // Settled off the road for a moment? Stroll home - but only after
-        // a short pause, so it visibly rests where it landed first instead
-        // of snapping back the instant it settles.
-        if (mode === 'idle' && !roadMode && idleSince && (now - idleSince) > AUTO_RETURN_DELAY) {
-          idleSince = 0;
-          // Re-seed roadY so the first road frame renders where the mascot
-          // currently is (viewport-consistent) instead of at a stale
-          // document position that may be far offscreen.
-          roadY = py + window.scrollY - window.innerHeight*0.62;
-          enterRoad();
-          showBubble('Back to my walk! \ud83d\udeb6', 1800);
+        // Dropped somewhere earlier? It goes back to the lift only once
+        // the section it landed on has scrolled completely out of view.
+        if (!liftMode && homeSection && !dragging) {
+          const r = homeSection.getBoundingClientRect();
+          const gone = homeSection === document.body
+            ? (py > VH + 120 || py + H < -120)
+            : (r.bottom < -40 || r.top > VH + 40);
+          if (gone) enterLift();
         }
       }
       }
@@ -3537,8 +3524,9 @@ body.hero-lock #bav-root {
     animEl.style.transform  = '';
     setExpr('surprised');
     showBubble(pickupQ[Math.floor(Math.random() * pickupQ.length)], 1000);
-    if (roadMode) {
-      roadMode = false;
+    if (liftMode) {
+      liftMode = false;
+      homeSection = null;
       showBubble('Wheee! \u2728', 1200);
     }
   });
@@ -3571,15 +3559,10 @@ body.hero-lock #bav-root {
       vx = Math.max(-MAX_V, Math.min(MAX_V, ((b.x - a.x) / dT) * 0.62));
       vy = Math.max(-MAX_V, Math.min(MAX_V, ((b.y - a.y) / dT) * 0.62));
     }
-    // Dropped right over the road? Glide back onto the walk.
-    if (!roadMode) {
-      const dropCx = px + W/2;
-      if (Math.abs(dropCx - roadCenterX()) < 120) {
-        roadLane = cl(dropCx - roadCenterX(), -34, 34);
-        enterRoad(true);
-        showBubble('Right back on track! \u2705', 1600);
-      }
-    }
+    // Remember where it landed; it heads back to the lift only after
+    // this section has scrolled fully out of view.
+    const dropEl = document.elementFromPoint(px + W/2, py + H/2);
+    homeSection = (dropEl && dropEl.closest && dropEl.closest('section, footer, header')) || document.body;
     mode = 'flying'; prevMode = '';
   });
 
@@ -3618,7 +3601,7 @@ body.hero-lock #bav-root {
     animEl.style.animation = '';
     setExpr('surprised');
     showBubble(pickupQ[Math.floor(Math.random() * pickupQ.length)], 1000);
-    if (roadMode) roadMode = false;
+    if (liftMode) { liftMode = false; homeSection = null; }
   }, { passive: false });
 
   document.addEventListener('touchmove', e => {
@@ -3649,15 +3632,8 @@ body.hero-lock #bav-root {
       vx = Math.max(-MAX_V, Math.min(MAX_V, ((b.x - a.x) / dT) * 0.62));
       vy = Math.max(-MAX_V, Math.min(MAX_V, ((b.y - a.y) / dT) * 0.62));
     }
-    // Touch release over the road: glide back onto the walk too.
-    if (!roadMode) {
-      const dropCx = px + W/2;
-      if (Math.abs(dropCx - roadCenterX()) < 120) {
-        roadLane = cl(dropCx - roadCenterX(), -34, 34);
-        enterRoad(true);
-        showBubble('Right back on track! \u2705', 1600);
-      }
-    }
+    const dropEl = document.elementFromPoint(px + W/2, py + H/2);
+    homeSection = (dropEl && dropEl.closest && dropEl.closest('section, footer, header')) || document.body;
     mode = 'flying'; prevMode = '';
   });
 
