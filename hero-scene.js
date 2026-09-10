@@ -529,6 +529,29 @@
       scene.add(walk);
     });
 
+    // ── DISTANT SKYLINE BACKDROP ── cheap silhouette blocks far off both
+    // sides of the street and across the far end, so the world doesn't
+    // visibly "end" a few metres from the road. One shared material, no
+    // windows/shadows/animations — they're never approached by the camera,
+    // just depth behind the lit street.
+    const bldMat = new THREE.MeshStandardMaterial({ color:0x0d2c44, roughness:1 });
+    const backdrop = [];
+    function addSilhouette(x, z, w, h, d){
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), bldMat);
+      m.position.set(x, h/2, z);
+      backdrop.push(m); scene.add(m);
+    }
+    // sides (two depth rings each side)
+    [[-13,-4],[-17,-14],[-14,-26],[-19,-38],[-15,-50],[-13,-12],[-16,-32],[-18,-46],
+     [13,-6],[16,-16],[14,-28],[18,-40],[15,-52],[14,-10],[17,-34],[19,-48]]
+      .forEach(function(b){ addSilhouette(b[0], b[1], 5+Math.random()*4, 6+Math.random()*9, 5+Math.random()*4); });
+    // far end wall of skyline
+    for(let i=0;i<9;i++){
+      addSilhouette(-24 + i*6 + Math.random()*2, -62 - Math.random()*8, 5+Math.random()*3, 7+Math.random()*12, 5);
+    }
+    // a few behind the opening camera too, so the first shot has a skyline
+    [[-14,4],[16,2],[-18,10],[15,9],[0,14]].forEach(function(b){ addSilhouette(b[0], b[1], 6, 8+Math.random()*6, 5); });
+
     const colors = [0x1a4a6b, 0x123a57, 0x1f5678, 0x164363, 0x1c4f74];
     // Left/right building rows down the street, thresholds spread across
     // the journey so they light up roughly as the camera reaches them.
@@ -669,11 +692,11 @@
     // moment, the requester and responder, two of the volunteers.
     makeBeam(new THREE.Vector3(-5.6,1.0,-11.4), new THREE.Vector3(-4.9,1.0,-10.2), .26);
     makeBeam(new THREE.Vector3(6.2,1.0,-24.6),  new THREE.Vector3(7.0,1.0,-23.2),  .50);
-    makeBeam(new THREE.Vector3(-1.4,1.0,-39.8), new THREE.Vector3(1.2,1.0,-40.6),  .70);
 
     onResize();
     window.addEventListener('resize', onResize);
     canvas.classList.add('ready');
+    canvas.style.opacity = '0';   // journey fades it in (see update()); start hidden so the CSS backdrop shows at p=0
   }
 
   function onResize(){
@@ -868,9 +891,14 @@
     // canvas stays mounted (zero cost while transparent) so Replay Intro
     // can fade it straight back in.
     if(canvas){
+      // Canvas visibility follows the journey: fully transparent at the
+      // very start (p=0) so the CSS gradient + grid + orbs + particles
+      // show as the homepage backdrop, fading in as the camera tilts down
+      // into the street — and fully transparent again at rest.
       const restFade = window.__heroResting ? 1 : 0;
-      const cur = parseFloat(canvas.style.opacity || '1');
-      const target = 1 - restFade;
+      const journeyIn = Math.max(0, Math.min(1, (p - 0.015) / 0.05));
+      const cur = parseFloat(canvas.style.opacity || '0');
+      const target = (1 - restFade) * journeyIn;
       const next = cur + (target - cur) * 0.08;
       canvas.style.opacity = String(next);
       canvas.style.pointerEvents = 'none';
