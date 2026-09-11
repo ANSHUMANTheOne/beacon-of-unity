@@ -534,7 +534,9 @@
     // visibly "end" a few metres from the road. One shared material, no
     // windows/shadows/animations — they're never approached by the camera,
     // just depth behind the lit street.
-    const bldMat = new THREE.MeshStandardMaterial({ color:0x0d2c44, roughness:1 });
+    // Slightly darker + cooler than the street rows so lit buildings
+    // silhouette cleanly against them instead of blending together.
+    const bldMat = new THREE.MeshStandardMaterial({ color:0x081e30, roughness:1 });
     const backdrop = [];
     function addSilhouette(x, z, w, h, d){
       const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), bldMat);
@@ -542,15 +544,15 @@
       backdrop.push(m); scene.add(m);
     }
     // sides (two depth rings each side)
-    [[-13,-4],[-17,-14],[-14,-26],[-19,-38],[-15,-50],[-13,-12],[-16,-32],[-18,-46],
-     [13,-6],[16,-16],[14,-28],[18,-40],[15,-52],[14,-10],[17,-34],[19,-48]]
-      .forEach(function(b){ addSilhouette(b[0], b[1], 5+Math.random()*4, 6+Math.random()*9, 5+Math.random()*4); });
+    [[-20,-4],[-26,-14],[-22,-26],[-28,-38],[-24,-50],[-19,-12],[-25,-32],[-27,-46],
+     [20,-6],[25,-16],[21,-28],[27,-40],[23,-52],[20,-10],[26,-34],[28,-48]]
+      .forEach(function(b){ addSilhouette(b[0], b[1], 6+Math.random()*5, 8+Math.random()*14, 6+Math.random()*4); });
     // far end wall of skyline
     for(let i=0;i<9;i++){
-      addSilhouette(-24 + i*6 + Math.random()*2, -62 - Math.random()*8, 5+Math.random()*3, 7+Math.random()*12, 5);
+      addSilhouette(-28 + i*7 + Math.random()*3, -74 - Math.random()*10, 6+Math.random()*4, 9+Math.random()*16, 6);
     }
     // a few behind the opening camera too, so the first shot has a skyline
-    [[-14,4],[16,2],[-18,10],[15,9],[0,14]].forEach(function(b){ addSilhouette(b[0], b[1], 6, 8+Math.random()*6, 5); });
+    [[-20,6],[24,4],[-26,14],[22,12],[0,20]].forEach(function(b){ addSilhouette(b[0], b[1], 7, 10+Math.random()*8, 6); });
 
     const colors = [0x1a4a6b, 0x123a57, 0x1f5678, 0x164363, 0x1c4f74];
     // Left/right building rows down the street, thresholds spread across
