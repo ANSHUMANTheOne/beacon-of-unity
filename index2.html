@@ -479,18 +479,29 @@ body:not(.hero-lock) #replay-intro-btn{display:block}
 [data-theme="light"] .bgw{color:var(--navy);border-color:rgba(12,45,72,.25)}.bgw:hover{color:var(--blue);border-color:var(--blue)}
 .bsim{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;box-shadow:0 10px 30px rgba(14,165,233,.35)}.bsim:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(14,165,233,.5)}
 
-/* ═══ SIMULATION DEMO OVERLAY ═══ */
-#sim-overlay{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;padding:28px;background:rgba(4,10,20,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease);cursor:default}
-#sim-overlay.active{opacity:1;pointer-events:all}
-#sim-frame{width:100%;height:100%;max-width:1400px;background:#0c1626;border:3px solid #38bdf8;border-radius:18px;box-shadow:0 0 0 6px rgba(56,189,248,.14),0 30px 70px rgba(0,0,0,.55);display:flex;flex-direction:column;overflow:hidden;transform:scale(.93);transition:transform .4s var(--ease)}
-#sim-overlay.active #sim-frame{transform:scale(1)}
-#sim-topbar{flex:0 0 auto;background:linear-gradient(90deg,#0ea5e9,#0369a1);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:11px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem}
-#sim-topbar .sim-label{display:flex;align-items:center;gap:9px}
-.sim-dot{width:9px;height:9px;border-radius:50%;background:#c62828;animation:sim-pulse 1.4s infinite}
-@keyframes sim-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-#sim-exit-btn{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.35);color:#fff;padding:8px 16px;border-radius:8px;font-weight:700;cursor:none;font-size:.82rem;font-family:'DM Sans',sans-serif;transition:background .2s}
-#sim-exit-btn:hover{background:rgba(0,0,0,.4)}
-#sim-body{flex:1;min-height:0;background:#fff}
+/* ═══ INLINE LIVE DEMO (in the #live section) ═══
+   Replaces the old full-screen modal: "Try a Demo" now scrolls to the
+   #live section and swaps the static sample mock for a real embedded
+   iframe of the dashboard, inline in the page flow -- no backdrop, no
+   scroll-lock, just a section that changes what it's showing. */
+#live-demo-open-wrap{margin:-6px 0 30px}
+#live-demo-wrap{display:none;margin-top:8px}
+#live-demo-wrap.open{display:block}
+#live-demo-frame{width:100%;height:640px;max-height:78vh;border:1px solid var(--border);border-radius:22px;overflow:hidden;box-shadow:0 18px 60px rgba(14,165,233,.12),0 4px 14px rgba(0,0,0,.05);display:flex;flex-direction:column;background:var(--card-bg)}
+#live-demo-topbar{flex:0 0 auto;background:linear-gradient(90deg,#0ea5e9,#0369a1);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem}
+#live-demo-topbar .ldt-label{display:flex;align-items:center;gap:9px}
+.ldt-dot{width:9px;height:9px;border-radius:50%;background:#fff;opacity:.85;animation:sim-pulse-dot 1.4s infinite}
+@keyframes sim-pulse-dot{0%,100%{opacity:.85}50%{opacity:.3}}
+#live-demo-exit{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.35);color:#fff;padding:8px 16px;border-radius:8px;font-weight:700;cursor:none;font-size:.8rem;font-family:'DM Sans',sans-serif;transition:background .2s;white-space:nowrap}
+#live-demo-exit:hover{background:rgba(0,0,0,.4)}
+#live-demo-body{flex:1;min-height:0}
+#live-demo-body iframe{width:100%;height:100%;border:0;display:block}
+@media(max-width:768px){
+  #live-demo-frame{height:72vh;border-radius:16px}
+  #live-demo-topbar .ldt-full{display:none}
+  #live-demo-topbar .ldt-short{display:inline}
+}
+@media(min-width:769px){#live-demo-topbar .ldt-short{display:none}}
 
 /* Walkthrough video modal -- same overlay mechanics as #sim-overlay
    above, sized for a 16:9 video instead of a full app frame. */
@@ -523,15 +534,6 @@ body:not(.hero-lock) #replay-intro-btn{display:block}
    hero rather than a quick pop-out, per feedback that it should "smooth
    cut" away instead of abruptly vanish. */
 @media(max-width:640px){#return-story{top:60px;right:12px;font-size:.68rem;padding:8px 13px;max-width:78vw}}
-#sim-body iframe{width:100%;height:100%;border:0;display:block}
-@media (max-width:640px){
-  #sim-overlay{padding:0}
-  #sim-frame{border-radius:0;border-width:3px 0 0 0}
-  #sim-topbar{padding:12px 14px}
-  #sim-topbar .sim-label .sim-full{display:none}
-  #sim-topbar .sim-label .sim-short{display:inline}
-}
-@media (min-width:641px){#sim-topbar .sim-label .sim-short{display:none}}
 .bnavy{background:var(--navy);color:#fff}.bnavy::before{background:linear-gradient(135deg,var(--blue),var(--cyan))}.bnavy:hover::before{opacity:1}
 .boutline{background:transparent;color:var(--navy);border:2px solid rgba(12,45,72,.2)}.boutline:hover{border-color:var(--blue);color:var(--blue)}
 .btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 16px 40px rgba(14,165,233,.4)}
@@ -555,14 +557,10 @@ body:not(.hero-lock) #replay-intro-btn{display:block}
 /* ═══ UNITED-CARRIERS MOTION SYSTEM ═══ */
 
 
-/* Live Unity-Points meter */
-#upmeter{position:fixed;right:20px;bottom:20px;z-index:9600;display:flex;align-items:center;gap:7px;background:rgba(7,26,44,.72);border:1px solid rgba(125,211,252,.22);border-radius:50px;padding:8px 16px 8px 12px;backdrop-filter:blur(12px) saturate(1.4);-webkit-backdrop-filter:blur(12px) saturate(1.4);color:#bae6fd;font-weight:600;font-size:.8rem;opacity:0;transform:translateY(14px);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none}
-#upmeter.show{opacity:1;transform:none}
-#upmeter .upm-ico{color:#38bdf8;font-size:.62rem;transition:transform .3s}
-#upmeter.hot .upm-ico{transform:translateY(-2px)}
-#upmeter .upm-val{font-variant-numeric:tabular-nums}
-#upmeter .upm-lab{font-size:.6rem;letter-spacing:2px;color:rgba(186,230,253,.55)}
-@media (prefers-reduced-motion: reduce){#upmeter{display:none}}
+/* Unity-Points readout removed entirely -- it was just a scroll-position
+   number dressed up as "points" with no real system behind it, and
+   didn't mean anything to a visitor. The popover now only shows the
+   Beacon controls it actually has (Delete/Spawn). */
 
 /* Dark→bright cross-blend slab after the hero */
 
@@ -738,26 +736,31 @@ section#how{background:linear-gradient(180deg,rgba(224,242,254,.9) 0%,#e3f3fd 50
 
 /* ═══ THE SCISSOR LIFT — the mascot's home dock, pinned to the right
    edge of the viewport like a piece of site furniture. A CSS-drawn
-   scissor lift: wheeled base, X-arm scissor stack, and a deck the
-   mascot stands on. Scroll progress drives the deck height (scroll
-   down → the lift descends, scroll up → it rises), so the mascot
-   reads as riding the page. JS drives --lf-h (deck height) and
-   --lf-s (scissor arm extension). It never overlaps content: it hugs
-   the right margin, hidden on narrow screens and during the intro. */
-#bav-lift{position:fixed;right:20px;bottom:88px;width:104px;height:352px;pointer-events:none;z-index:6;opacity:0;transition:opacity .6s var(--ease)}
-body:not(.hero-lock) #bav-lift{opacity:1}
+   scissor lift: wheeled base, a real two-segment scissor mechanism, and
+   a deck the mascot stands on. Scroll progress drives the deck height
+   (scroll down → the lift descends, scroll up → it rises), so the
+   mascot reads as riding the page. JS drives --lf-h (deck height); the
+   scissor's own CSS height reads that SAME var, so the mechanism always
+   physically reaches the deck instead of stopping short. It never
+   overlaps content: it hugs the right margin, hidden on narrow screens
+   and during the intro. */
+#bav-lift{position:fixed;right:20px;bottom:88px;width:104px;height:352px;pointer-events:none;z-index:6;opacity:0;transform:scale(.74);transform-origin:100% 100%;transition:opacity .6s var(--ease)}
+body:not(.hero-lock) #bav-lift{opacity:.62}
 body.hero-lock #bav-lift{visibility:hidden}
 #bav-lift .lf-base{position:absolute;bottom:0;left:4px;width:96px;height:18px;border-radius:6px 6px 4px 4px;background:linear-gradient(180deg,#5c7a92,#33506a);box-shadow:0 4px 14px rgba(10,25,40,.28),inset 0 1px 0 rgba(255,255,255,.22)}
 #bav-lift .lf-wheel{position:absolute;bottom:-7px;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#9fb6c8,#3d566d 62%,#1e3346);box-shadow:0 2px 5px rgba(10,25,40,.35)}
 #bav-lift .lf-wheel.w1{left:12px}
 #bav-lift .lf-wheel.w2{right:12px}
 #bav-lift .lf-cab{position:absolute;bottom:16px;left:22px;width:60px;height:14px;border-radius:5px;background:linear-gradient(180deg,#7dd3fc,#38bdf8);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 8px rgba(14,165,233,.35)}
-#bav-lift .lf-scissor{position:absolute;bottom:14px;left:16px;width:72px;height:120px;transform-origin:50% 100%;transform:scaleY(var(--lf-s,.2))}
+#bav-lift .lf-scissor{position:absolute;bottom:14px;left:16px;width:72px;height:calc(4px + var(--lf-h,0px));min-height:12px;max-height:238px}
 #bav-lift .lf-scissor svg{width:100%;height:100%;display:block;overflow:visible}
-#bav-lift .lf-arm{fill:none;stroke:#64809a;stroke-width:5;stroke-linecap:round}
+#bav-lift .lf-arm{fill:none;stroke:#64809a;stroke-width:6.5;stroke-linecap:round}
 #bav-lift .lf-arm.a2{stroke:#46647e}
 #bav-lift .lf-pin{fill:#cfe4f2}
-#bav-lift .lf-deck{position:absolute;bottom:calc(18px + var(--lf-h,0px));left:4px;width:96px;height:10px;border-radius:4px;background:linear-gradient(180deg,#8fd0f4,#38bdf8 55%,#0e7cb3);box-shadow:0 3px 10px rgba(14,165,233,.3),inset 0 1px 0 rgba(255,255,255,.5)}
+#bav-lift .lf-deck{position:absolute;bottom:calc(18px + var(--lf-h,0px));left:4px;width:96px;height:10px;border-radius:4px;background:linear-gradient(180deg,#8fd0f4,#38bdf8 55%,#0e7cb3);box-shadow:0 3px 10px rgba(14,165,233,.3),inset 0 1px 0 rgba(255,255,255,.5);transform-origin:50% 100%}
+#bav-lift .lf-deck.settle{animation:lf-deck-settle .32s ease}
+@keyframes lf-deck-settle{0%{transform:scaleY(1)}28%{transform:scaleY(.68)}62%{transform:scaleY(1.08)}100%{transform:scaleY(1)}}
+@media (prefers-reduced-motion: reduce){#bav-lift .lf-deck.settle{animation:none}}
 #bav-lift .lf-deck::after{content:'';position:absolute;inset:2px 6px auto;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.65) 0 8px,transparent 8px 16px)}
 [data-theme="dark"] #bav-lift .lf-arm{stroke:rgba(148,193,231,.85)}
 [data-theme="dark"] #bav-lift .lf-arm.a2{stroke:rgba(100,150,190,.9)}
@@ -1131,10 +1134,23 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 <div id="bav-lift" aria-hidden="true">
   <div class="lf-deck"></div>
   <div class="lf-scissor">
-    <svg viewBox="0 0 72 120" aria-hidden="true">
-      <path class="lf-arm"    d="M6 116 L66 6"/>
-      <path class="lf-arm a2" d="M66 116 L6 6"/>
-      <circle class="lf-pin" cx="36" cy="61" r="4"/>
+    <svg viewBox="0 0 72 240" preserveAspectRatio="none" aria-hidden="true">
+      <!-- Real telescoping mechanism: two stacked scissor units sharing a
+           middle joint level, instead of one X stretched via scaleY.
+           .lf-scissor's own height is bound directly to --lf-h (the same
+           value the deck's `bottom` offset uses), so the top of this
+           mechanism always physically reaches the deck -- no more gap
+           between where the scissor stops and where the deck floats. -->
+      <path class="lf-arm"    d="M6 240 L66 120"/>
+      <path class="lf-arm a2" d="M66 240 L6 120"/>
+      <path class="lf-arm"    d="M6 120 L66 0"/>
+      <path class="lf-arm a2" d="M66 120 L6 0"/>
+      <circle class="lf-pin" cx="6"  cy="240" r="5"/>
+      <circle class="lf-pin" cx="66" cy="240" r="5"/>
+      <circle class="lf-pin" cx="6"  cy="120" r="5"/>
+      <circle class="lf-pin" cx="66" cy="120" r="5"/>
+      <circle class="lf-pin" cx="6"  cy="0"   r="5"/>
+      <circle class="lf-pin" cx="66" cy="0"   r="5"/>
     </svg>
   </div>
   <div class="lf-base"></div>
@@ -1149,32 +1165,14 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
      prefers-reduced-motion users, and a hard timeout guarantees it can
      never trap the page. ═══ -->
 
-<!-- Live Unity-Points meter (bottom-right) — the "00 KM/H" live ornament
-     equivalent: ticks up with scroll depth once the intro is done. -->
-<div id="upmeter" aria-hidden="true"><span class="upm-ico">▲</span><span class="upm-val" id="upm-val">+0</span><span class="upm-lab">UP</span></div>
-
-<!-- ═══ TRY-A-DEMO SIMULATION OVERLAY ═══ -->
-<div id="sim-overlay" role="dialog" aria-modal="true" aria-label="Interactive demo simulation">
-  <div id="sim-frame">
-    <div id="sim-topbar">
-      <div class="sim-label">
-        <span class="sim-dot"></span>
-        <span class="sim-full">Simulation Mode — this is a live interactive demo, not your real account</span>
-        <span class="sim-short">Simulation Mode</span>
-      </div>
-      <button id="sim-exit-btn" onclick="closeSimDemo()">Exit Demo ✕</button>
-    </div>
-    <div id="sim-body">
-      <iframe id="sim-iframe" src="" title="Beacon of Unity — Interactive Demo" loading="lazy"></iframe>
-    </div>
-  </div>
-</div>
+<!-- Try-a-Demo now opens inline in the #live section instead of a modal
+     overlay (see .live-demo-* markup further down + its script near the
+     end of the file) -- retired the #sim-overlay markup that used to
+     live here. -->
 
 <!-- ── Walkthrough video modal ──
-     Mirrors #sim-overlay's exact pattern (same overlay/frame/close
-     approach) rather than inventing a new one, for visual and behavioral
-     consistency. The iframe's src is only ever set when this actually
-     opens and cleared again on close -- an always-present src would load
+     A simple overlay/frame/close pattern, sized for a 16:9 video. The
+     iframe's src is only ever set when this actually opens and cleared again on close -- an always-present src would load
      YouTube's player (and start counting a view / establishing a
      connection) on every single page visit whether anyone watches or
      not, and clearing it on close is also what actually stops playback
@@ -1337,7 +1335,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
       <div class="hbtns">
         <button class="btn bw" onclick="window.location.href='login.html'"><span>Join the Movement →</span></button>
         <button class="btn bgw" onclick="document.getElementById('body').scrollIntoView({behavior:'smooth'})"><span>Explore Platform</span></button>
-        <button class="btn bsim" id="bav-try-demo-btn" onclick="openSimDemo()"><span>▶ Try a Demo</span></button>
+        <button class="btn bsim" id="bav-try-demo-btn" data-demo-trigger onclick="window.openLiveDemo && window.openLiveDemo()"><span>▶ Try a Demo</span></button>
       </div>
       <a href="#beyond" class="hero-beyond-link">🏢 Looking for something beyond neighbourhoods? For schools &amp; businesses →</a>
     </div>
@@ -1394,7 +1392,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
       <div class="fc fc-key rv-l d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🆘</div><div class="ftitle">Community Help Requests</div><p class="fdesc">Post requests by category — groceries, tech, transport, and more. Each card shows exact distance from your location, time remaining, and volunteer count. Every responder is Emirates ID-verified.</p><div class="fmeta">→ Sorted by real-time distance & availability</div></div>
       <div class="fc fc-key rv-r d2"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🔍</div><div class="ftitle">Lost & Found</div><p class="fdesc">Report and recover lost items with photo uploads, FOUND/LOST status tags, and exact Emirate location. A single "Contact User" button connects owner and finder directly — no middlemen.</p><div class="fmeta">→ Direct contact — no public comments</div></div>
       <div class="fc fc-key rv-l d3"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🤝</div><div class="ftitle">Volunteer Opportunities</div><p class="fdesc">Browse curated community service events — beach cleanups, food drives, and more — sourced from Volunteers.ae. Includes event dates, locations, and direct registration links.</p><div class="fmeta">→ One-tap registration via Volunteers.ae</div></div>
-      <div class="fc fc-key rv-r d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">📰</div><div class="ftitle">Reliable News</div><p class="fdesc">Trusted stories aggregated from Khaleej Times, Gulf News, Al Jazeera, and BBC. Filter by source or topic — War & Conflict, Tech, Environment. No misinformation, no bots.</p><div class="fmeta">→ Filter by source, topic, or Emirate</div></div>
+      <div class="fc fc-key rv-r d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">📰</div><div class="ftitle">Reliable News</div><p class="fdesc">Trusted stories aggregated from Al Jazeera, BBC News, NPR News, and Times of India. Filter by source or topic — War & Conflict, Tech, Environment. No misinformation, no bots.</p><div class="fmeta">→ Filter by source, topic, or Emirate</div></div>
       <div class="fc rv-l d2"><div class="fshine"></div><div class="fico">🏆</div><div class="ftitle">Badges & Rewards</div><p class="fdesc">Earn Unity Points for every helpful act. Unlock 37 achievement badges across Helping and Requests milestones. Redeem points for profile gradient skins and rise on the public leaderboard.</p><div class="fmeta">→ 37 badges across Helping & Requests</div></div>
       <div class="fc rv-r d3"><div class="fshine"></div><div class="fico">💬</div><div class="ftitle">Thank You Wall & Chats</div><p class="fdesc">Post public appreciation notes for neighbours who helped you. Track resolved chats, your average rating, and engage with the community through in-app messaging and notifications.</p><div class="fmeta">→ Public appreciation, private chat</div></div>
     </div>
@@ -1429,8 +1427,8 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 <!-- Auto-scrolling sources marquee — pauses on hover -->
 <div class="marq" aria-label="News sources and partners">
   <div class="marq-track">
-    <div class="marq-set"><span>Khaleej Times</span><i>◆</i><span>Gulf News</span><i>◆</i><span>Al Jazeera</span><i>◆</i><span>BBC</span><i>◆</i><span>Volunteers.ae</span><i>◆</i><span>🇦🇪 7 Emirates</span><i>◆</i><span>English · Arabic · Hindi</span><i>◆</i></div>
-    <div class="marq-set" aria-hidden="true"><span>Khaleej Times</span><i>◆</i><span>Gulf News</span><i>◆</i><span>Al Jazeera</span><i>◆</i><span>BBC</span><i>◆</i><span>Volunteers.ae</span><i>◆</i><span>🇦🇪 7 Emirates</span><i>◆</i><span>English · Arabic · Hindi</span><i>◆</i></div>
+    <div class="marq-set"><span>Al Jazeera</span><i>◆</i><span>BBC News</span><i>◆</i><span>NPR News</span><i>◆</i><span>Times of India</span><i>◆</i><span>Volunteers.ae</span><i>◆</i><span>🇦🇪 7 Emirates</span><i>◆</i><span>English · Arabic · Hindi</span><i>◆</i></div>
+    <div class="marq-set" aria-hidden="true"><span>Al Jazeera</span><i>◆</i><span>BBC News</span><i>◆</i><span>NPR News</span><i>◆</i><span>Times of India</span><i>◆</i><span>Volunteers.ae</span><i>◆</i><span>🇦🇪 7 Emirates</span><i>◆</i><span>English · Arabic · Hindi</span><i>◆</i></div>
   </div>
 </div>
 
@@ -1439,7 +1437,10 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <div class="rv"><span class="stag">SAMPLE Live Preview</span></div>
     <div class="rv d1"><h2 class="stitle">Your Community, Right Now</h2></div>
     <div class="rv d2"><p class="ssub">A sample of a demo snapshot of how the platform could serve UAE residents every day.</p></div>
-    <div class="llayout">
+    <div class="rv d2" id="live-demo-open-wrap">
+      <button class="btn bsim" id="live-demo-open-btn" data-demo-trigger onclick="window.openLiveDemo && window.openLiveDemo()"><span>▶ Open Full Demo</span></button>
+    </div>
+    <div class="llayout" id="live-static-preview">
       <div>
         <div class="rv-l d1">
           <div class="wtabs">
@@ -1468,6 +1469,24 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
             <div class="pcs"><div class="pcsn">—</div><div class="pcsl">Tasks Done</div></div>
             <div class="pcs"><div class="pcsn">—</div><div class="pcsl">Verified Users</div></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real embedded demo -- hidden until "Try a Demo" / "Open Full
+         Demo" is clicked, then swaps in for the static mock above. -->
+    <div id="live-demo-wrap">
+      <div id="live-demo-frame">
+        <div id="live-demo-topbar">
+          <span class="ldt-label">
+            <span class="ldt-dot"></span>
+            <span class="ldt-full">Live Interactive Demo — this is a sample, not your real account</span>
+            <span class="ldt-short">Live Demo</span>
+          </span>
+          <button id="live-demo-exit" onclick="window.closeLiveDemo && window.closeLiveDemo()">Exit Demo ✕</button>
+        </div>
+        <div id="live-demo-body">
+          <iframe id="live-demo-iframe" src="" title="Beacon of Unity — Interactive Demo" loading="lazy"></iframe>
         </div>
       </div>
     </div>
@@ -1582,7 +1601,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <div class="ctabtns rv d2">
       <button class="btn bnavy" onclick="window.location.href='login.html'"><span>Join the Movement →</span></button>
       <button class="btn boutline" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})"><span>Learn More</span></button>
-      <button class="btn bsim" onclick="window.openSimDemo && window.openSimDemo()"><span>▶ Try a Demo</span></button>
+      <button class="btn bsim" data-demo-trigger onclick="window.openLiveDemo && window.openLiveDemo()"><span>▶ Try a Demo</span></button>
     </div>
   </div>
 </div>
@@ -1597,7 +1616,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
       <div class="seo-block rv d1"><h2>Community Help Requests</h2><p>Residents post help requests categorised by type — groceries, tech, transport, and more. Every card shows the requester's distance from you, time remaining, and how many volunteers have responded. All interactions are between Emirates ID-verified members.</p></div>
       <div class="seo-block rv d2"><h2>Lost & Found Board</h2><p>A dedicated space for reporting and recovering lost items. Posts include photos, FOUND or LOST status tags, and exact Emirate locations like Mega Mall or Abu Shagara. A direct "Contact User" button connects owners and finders — no middlemen, no delays.</p></div>
       <div class="seo-block rv d1"><h2>Volunteer Opportunities</h2><p>A curated list of community service events sourced from Volunteers.ae — beach cleanups, food drives, tree planting, and tutoring sessions. Each listing shows the event date, location, and a direct registration link so you can act immediately.</p></div>
-      <div class="seo-block rv d2"><h2>Reliable News</h2><p>A news aggregator pulling trusted stories from Khaleej Times, Gulf News, Al Jazeera, and BBC. Filter by source or topic — War & Conflict, Tech, Environment — so you stay informed on what matters most to your community, without misinformation.</p></div>
+      <div class="seo-block rv d2"><h2>Reliable News</h2><p>A news aggregator pulling trusted stories from Al Jazeera, BBC News, NPR News, and Times of India. Filter by source or topic — War & Conflict, Tech, Environment — so you stay informed on what matters most to your community, without misinformation.</p></div>
       <div class="seo-block rv d1"><h2>Gamification & Rewards</h2><p>Every helpful act earns Unity Points. Unlock 37 achievement badges across Helping and Requests milestones — from "First Step" to "10x Helper." Redeem points for profile gradient skins like Ocean, Mint, and Sunset on the public leaderboard.</p></div>
       <div class="seo-block rv d2"><h2>Profile, Thank You Wall & More</h2><p>Your verified name is permanent. Track your volunteer rank, resolved chats, average rating, and badge count on your profile. Post public appreciation notes on the Thank You Wall. Change your Emirate or update your live GPS location anytime from the dashboard.</p></div>
     </div>
@@ -2165,17 +2184,14 @@ if(srow && !REDUCE){
   fanRO.observe(srow);
 }
 
-/* ── 4. GHOST WORD PARALLAX + 5. PAGESLIDE FADE + 6. UNITY METER ── */
+/* ── 4. GHOST WORD PARALLAX + 5. PAGESLIDE FADE ── */
 var ghosts = Array.prototype.slice.call(document.querySelectorAll('.ghost'));
-var meter = document.getElementById('upmeter'),
-    meterVal = document.getElementById('upm-val');
 var pending = false;
 function onScroll(){
   if(pending) return;
   pending = true;
   requestAnimationFrame(function(){
     pending = false;
-    var y = window.scrollY || window.pageYOffset;
     var vh = window.innerHeight;
     ghosts.forEach(function(g){
       var r = g.getBoundingClientRect();
@@ -2183,13 +2199,6 @@ function onScroll(){
       g.style.transform = 'translateX(-50%) translateY(' + (ratio*70 - 30).toFixed(1) + 'px)';
       g.style.opacity = (0.55 + ratio*0.45).toFixed(2);
     });
-    if(meter && document.body.classList.contains('hero-lock') === false){
-      var max = Math.max(1, document.documentElement.scrollHeight - vh);
-      var pts = Math.round((y/max) * 240);
-      meterVal.textContent = '+' + pts;
-      meter.classList.add('show');
-      meter.classList.toggle('hot', pts > 180);
-    }
     if(window.__boundTitles){
       var vh2 = window.innerHeight;
       window.__boundTitles.forEach(function(t){
@@ -2250,10 +2259,10 @@ const volunteers=[
   {e:'📚',n:'Free Tutoring — Community Centre',d:'Mon & Wed · 4:00 PM',src:'Beacon HQ',b:'bn',bl:'Open'},
 ];
 const newsItems=[
-  {src:'Khaleej Times',topic:'UAE',n:'UAE Launches New Community Volunteering Initiative Across All Emirates',t:'15 mins ago'},
-  {src:'Gulf News',topic:'Local',n:'Sharjah Announces Expansion of Neighbourhood Support Programmes',t:'1 hr ago'},
-  {src:'Al Jazeera',topic:'Environment',n:'UAE\'s Coastal Cleanup Drives See Record Volunteer Turnout This Season',t:'2 hrs ago'},
-  {src:'BBC',topic:'Tech',n:'How UAE Residents Are Using Verified Platforms to Help Neighbours',t:'3 hrs ago'},
+  {src:'Al Jazeera',topic:'UAE',n:'UAE Launches New Community Volunteering Initiative Across All Emirates',t:'15 mins ago'},
+  {src:'BBC News',topic:'Local',n:'Sharjah Announces Expansion of Neighbourhood Support Programmes',t:'1 hr ago'},
+  {src:'NPR News',topic:'Environment',n:'UAE\'s Coastal Cleanup Drives See Record Volunteer Turnout This Season',t:'2 hrs ago'},
+  {src:'Times of India',topic:'Tech',n:'How UAE Residents Are Using Verified Platforms to Help Neighbours',t:'3 hrs ago'},
 ];
 function rHelp(){const c=document.getElementById('th');c.innerHTML='';tasks.forEach((t,i)=>{const d=document.createElement('div');d.className='tcard';d.style.animationDelay=(i*.07)+'s';d.innerHTML=`<div class="temo">${t.e}</div><div class="tinfo"><div class="tname">${t.n}</div><div class="tloc">📍 ${t.l}</div></div><span class="tbadge ${t.b}">${t.bl}</span>`;c.appendChild(d);d.addEventListener('mouseenter',()=>document.body.classList.add('hov'));d.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))})}
 function rLF(){const c=document.getElementById('tl');c.innerHTML='';lf.forEach(x=>{const d=document.createElement('div');d.className='lfc';d.innerHTML=`<div class="lfemo">${x.e}</div><div class="lfname">${x.n}</div><div class="lfwhere">📍 ${x.w}</div><span class="lfst ${x.s}">${x.sl}</span>`;c.appendChild(d);d.addEventListener('mouseenter',()=>document.body.classList.add('hov'));d.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))})}
@@ -3104,11 +3113,27 @@ body.hero-lock #bav-root {
      scrolled completely out of view. */
   let liftMode = true;         // riding the lift (scroll-linked)
   let liftH = 120;             // current deck height in px (smoothed)
+  let deckEl = document.querySelector('#bav-lift .lf-deck'); // read its REAL position each frame instead of duplicating its CSS math -- guarantees the mascot's feet land exactly on the deck, no drift
+  let liftPrevH = liftH, liftStableMs = 0, liftSettled = true; // settle-squash bookkeeping
   let homeSection = null;      // section the mascot was dropped on
   let droppedAt = 0;           // timestamp of the last drop (safety-return timer)
   let homing = false;          // gliding back to the deck after a drop
   let lastScrollY = window.scrollY;  // for content-follow while dropped
   let liftEl = document.getElementById('bav-lift');
+
+  // Drop-onto-the-lift docking: without this, the mascot could only
+  // ever get back onto the lift automatically (once the section it fell
+  // on scrolls fully out of view, or after a 45s safety timeout) -- there
+  // was no way to just drag it back and have it dock on release, which
+  // is the obviously expected interaction. Generous hit padding since
+  // the lift is a thin vertical strip and the mascot's drop point is its
+  // centre, not its edges.
+  function droppedNearLift(cx, cy){
+    if (!liftEl) return false;
+    const r = liftEl.getBoundingClientRect();
+    const pad = 46;
+    return cx > r.left - pad && cx < r.right + pad && cy > r.top - pad && cy < r.bottom + pad;
+  }
   const LIFT_TRAVEL = 230;     // max deck travel in px
 
   function liftTargetH(){
@@ -3191,7 +3216,14 @@ body.hero-lock #bav-root {
   setTimeout(() => {
     showBubble("Hi! I'm Beacon! 👋", 4000);
     setTimeout(() => showBubble("Your community guardian ✨", 3200), 4700);
-    setTimeout(() => showBubble("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
+    // Skip the "double-click to chat" nudge if the chat's already been
+    // opened by the time this fires (e.g. someone double-clicks within
+    // the first 8s) -- otherwise it'll tell you to do the thing you
+    // just did. window.__bavChatOpened is set by the chat script the
+    // moment the panel first opens.
+    setTimeout(() => {
+      if (!window.__bavChatOpened) showBubble("Double-click (or double-tap) me to chat! 💬", 3600);
+    }, 8200);
   }, 1400);
 
   // idle thoughts
@@ -3291,7 +3323,23 @@ body.hero-lock #bav-root {
   function refreshText() {
     textEls = Array.from(document.querySelectorAll(
       'h1,h2,h3,h4,h5,h6,p,.ftitle,.stitle,.ctat,.nname,.pct,.ft,.tname,.rpt,figcaption,dt,dd'
-    )).map(el => ({ el, r: el.getBoundingClientRect() }))
+    ))
+      // Elements that are hidden (opacity:0/visibility:hidden, like the
+      // hero's own payoff title, which stays laid out in the DOM even
+      // while invisible) still return a real, on-screen bounding box
+      // from getBoundingClientRect() -- so without this check the mascot
+      // could "land" on a headline nobody can actually see and just
+      // hang there motionless, which is exactly the frozen-mid-air bug.
+      // offsetParent===null catches display:none ancestors; the
+      // computed-style check catches the opacity/visibility case that
+      // offsetParent alone misses.
+      .filter(el => {
+        if (el.offsetParent === null && getComputedStyle(el).position !== 'fixed') return false;
+        const cs = getComputedStyle(el);
+        if (cs.visibility === 'hidden' || parseFloat(cs.opacity) < 0.4) return false;
+        return true;
+      })
+      .map(el => ({ el, r: el.getBoundingClientRect() }))
       .filter(({r, el}) => r.width > 120
           && r.height > 20
           && r.bottom > 0
@@ -3321,7 +3369,14 @@ body.hero-lock #bav-root {
           && ctr > r.left + 10
           && ctr < r.right - 10
           && r.top > 55) {
-        return { el, snapY: r.top - H };
+        // Re-measure fresh right before committing -- the cached `r` can
+        // be up to 700ms (or one scroll gesture) stale, and this is the
+        // moment that staleness actually matters. Cheap here since it
+        // only runs on the rare frame where a landing is about to
+        // happen, not on every physics tick.
+        const fresh = el.getBoundingClientRect();
+        if (Math.abs(feet - fresh.top) > 34) continue; // it's moved since the cache -- not a real landing
+        return { el, snapY: fresh.top - H };
       }
     }
     return null;
@@ -3350,13 +3405,32 @@ body.hero-lock #bav-root {
       lastScrollY = window.scrollY || window.pageYOffset || 0;  // stay fresh: no stale delta on drop
       const targetH = liftTargetH();
       liftH += (targetH - liftH) * Math.min(1, 0.09 * dt);
-      // Ease px/py toward the deck seat every frame. This replaces the old
-      // hard snap: after a drop it glides home; while riding, any residual
-      // offset (resize, return from drag) eases away instead of sticking.
-      // (The redeclared VW/VH here previously shadowed the outer consts —
-      // that shadowing silently broke the deck math and froze the ride.)
-      const tx = VW - 20 - 48 - W / 2;           // deck-centre x
-      const ty = VH - 88 - 18 - liftH - H;       // standing on the deck
+
+      // Sync the lift's own visuals -- the deck's `bottom` offset AND the
+      // scissor's own `height` (see CSS) both read this single --lf-h var,
+      // so the scissor mechanism always physically reaches the deck no
+      // matter how tall it gets. (--lf-s removed: the old scaleY hack it
+      // drove is gone now that the scissor's real height tracks --lf-h.)
+      if (liftEl) {
+        liftEl.style.setProperty('--lf-h', liftH.toFixed(1) + 'px');
+      }
+
+      // Anchor to the deck's REAL rendered position instead of a
+      // duplicated set of constants (right:20px, width:96px, etc. baked
+      // into a formula) -- any mismatch between that formula and the
+      // lift's actual CSS was exactly why the mascot looked like it was
+      // floating near the platform rather than standing on it. Re-query
+      // in case the element wasn't in the DOM yet on first run.
+      if (!deckEl) deckEl = document.querySelector('#bav-lift .lf-deck');
+      let tx, ty;
+      if (deckEl) {
+        const dr = deckEl.getBoundingClientRect();
+        tx = dr.left + dr.width / 2 - W / 2;     // deck-centre x, from the real element
+        ty = dr.top - H + 3;                     // feet resting just on the deck's top surface
+      } else {
+        tx = VW - 20 - 48 - W / 2;               // fallback if the deck isn't found for some reason
+        ty = VH - 88 - 18 - liftH - H;
+      }
       px += (tx - px) * Math.min(1, 0.13 * dt);
       py += (ty - py) * Math.min(1, 0.13 * dt);
       if (Math.abs(tx - px) < 0.5) px = tx;
@@ -3367,11 +3441,26 @@ body.hero-lock #bav-root {
       flipped = true;                            // face into the page
       svg.style.transform = 'scaleX(-1)';
       setLegsSwinging(false);
-      // Sync the lift's own visuals (deck height + arm extension).
-      if (liftEl) {
-        liftEl.style.setProperty('--lf-h', liftH.toFixed(1) + 'px');
-        liftEl.style.setProperty('--lf-s', (0.18 + (liftH / LIFT_TRAVEL) * 0.82).toFixed(3));
+
+      // Settle-squash: a brief mechanical "thunk" on the deck itself
+      // whenever it stops moving for a beat, so stopping reads as real
+      // hydraulic weight rather than a value just freezing in place.
+      // Lives on the deck graphic (not the mascot) so it can't collide
+      // with the mascot's own idle/squish animation state.
+      if (Math.abs(liftH - liftPrevH) < 0.06) {
+        liftStableMs += raw;
+        if (liftStableMs > 150 && !liftSettled && deckEl) {
+          liftSettled = true;
+          deckEl.classList.remove('settle');
+          void deckEl.offsetWidth; // restart the animation if it just fired
+          deckEl.classList.add('settle');
+        }
+      } else {
+        liftStableMs = 0;
+        liftSettled = false;
       }
+      liftPrevH = liftH;
+
       shadowEl.style.width = '40px';
       shadowEl.style.opacity = '0.55';
 
@@ -3400,12 +3489,13 @@ body.hero-lock #bav-root {
 
       if (mode === 'sitting' && sitEl) {
         const r = sitEl.getBoundingClientRect();
-        const stillVisible = r.top > 55 && r.top < VH + 20;
+        const csHidden = sitEl.offsetParent === null || getComputedStyle(sitEl).visibility === 'hidden';
+        const stillVisible = !csHidden && r.top > 55 && r.top < VH + 20;
         const ctr = px + W * 0.5;
         const overElement = ctr > r.left - 10 && ctr < r.right + 10;
 
         if (stillVisible && overElement) {
-          py = r.top - 68;
+          py = r.top - H;
           vy = 0;
           vx *= GND_FRIC;
         } else {
@@ -3483,7 +3573,7 @@ body.hero-lock #bav-root {
           } else if (Math.abs(vx) > 1.0 && py + H >= VH - 2) {
             mode = 'walking';
           } else if (spd < 0.7) {
-            if (mode !== 'idle') { mode = 'idle'; idleSince = now; }
+            if (mode !== 'idle') { mode = 'idle'; }
           }
         }
         // Dropped somewhere earlier? It goes back to the lift only once
@@ -3596,9 +3686,15 @@ body.hero-lock #bav-root {
       vx = Math.max(-MAX_V, Math.min(MAX_V, ((b.x - a.x) / dT) * 0.62));
       vy = Math.max(-MAX_V, Math.min(MAX_V, ((b.y - a.y) / dT) * 0.62));
     }
-    // Remember where it landed; it heads back to the lift only after
-    // this section has scrolled fully out of view.
-    const dropEl = document.elementFromPoint(px + W/2, py + H/2);
+    // Drop it near/on the lift and it docks immediately; otherwise it
+    // remembers where it landed and heads home once that section has
+    // scrolled fully out of view (or after the safety timeout).
+    const cx = px + W/2, cy = py + H/2;
+    if (droppedNearLift(cx, cy)) {
+      enterLift();
+      return;
+    }
+    const dropEl = document.elementFromPoint(cx, cy);
     homeSection = (dropEl && dropEl.closest && dropEl.closest('section, footer, header, #body')) || document.body;
     droppedAt = performance.now();
     mode = 'flying'; prevMode = '';
@@ -3670,7 +3766,12 @@ body.hero-lock #bav-root {
       vx = Math.max(-MAX_V, Math.min(MAX_V, ((b.x - a.x) / dT) * 0.62));
       vy = Math.max(-MAX_V, Math.min(MAX_V, ((b.y - a.y) / dT) * 0.62));
     }
-    const dropEl = document.elementFromPoint(px + W/2, py + H/2);
+    const cx2 = px + W/2, cy2 = py + H/2;
+    if (droppedNearLift(cx2, cy2)) {
+      enterLift();
+      return;
+    }
+    const dropEl = document.elementFromPoint(cx2, cy2);
     homeSection = (dropEl && dropEl.closest && dropEl.closest('section, footer, header')) || document.body;
     mode = 'flying'; prevMode = '';
   });
@@ -4126,7 +4227,7 @@ body.hero-lock #bav-root {
     { k:['help request','need help','ask for help','groceries'], a:"You can post a Help Request by category (groceries, tech, transport, etc). It shows up to nearby verified neighbours, sorted by distance." },
     { k:['lost','found','keys','wallet','phone'], a:"Head to Lost & Found — report an item with a photo and status tag (LOST/FOUND), and a direct 'Contact User' button connects you straight to the other person." },
     { k:['volunteer','event','cleanup','clean up'], a:"The Volunteer tab lists curated community events — cleanups, food drives, tutoring — sourced from Volunteers.ae, each with a direct registration link." },
-    { k:['news','article','khaleej','gulf news'], a:"Reliable News aggregates trusted stories from Khaleej Times, Gulf News, Al Jazeera and BBC, filterable by source or topic." },
+    { k:['news','article','al jazeera','bbc','npr','times of india'], a:"Reliable News aggregates trusted stories from Al Jazeera, BBC News, NPR News, and Times of India, filterable by source or topic." },
     { k:['badge','points','unity points','reward','leaderboard'], a:"Every helpful act earns Unity Points. There are 37 badges to unlock, and points can be redeemed for profile skins on the public leaderboard." },
     { k:['sign up','join','create account','get started','register'], a:"You can create your account right from the hero — the 'Join the Movement' button takes you straight to sign-up." },
     { k:['sign in','log in','login'], a:"Use 'Sign In' in the top-right of the navigation bar." },
@@ -4174,6 +4275,7 @@ body.hero-lock #bav-root {
     panel.setAttribute('aria-hidden','false');
     if(badge) badge.classList.add('hide');
     if(hint) hint.classList.add('hide');
+    window.__bavChatOpened = true; // shared flag: lets the onboarding bubble sequence (a separate script) know not to suggest "double-click to chat" after the fact
     if(!opened){
       opened = true;
       botTyping(()=>{
@@ -4199,47 +4301,54 @@ body.hero-lock #bav-root {
 </script>
 
 <script>
-/* ═══ TRY-A-DEMO SIMULATION OVERLAY LOGIC ═══ */
+/* ═══ INLINE LIVE DEMO LOGIC ═══
+   Retired the old full-screen #sim-overlay modal. "Try a Demo" now
+   scrolls to the #live section, swaps its static sample mock for a real
+   embedded iframe of the dashboard, and stays inline in the page flow --
+   no backdrop, no scroll-lock. Both hero and bottom-CTA "Try a Demo"
+   buttons, plus the section's own "Open Full Demo" button, all funnel
+   into this one entry point instead of two different demo experiences. */
 (function(){
-  var overlay = document.getElementById('sim-overlay');
-  var iframe  = document.getElementById('sim-iframe');
-  var loaded  = false;
+  var wrap    = document.getElementById('live-demo-wrap');
+  var preview = document.getElementById('live-static-preview');
+  var openWrap= document.getElementById('live-demo-open-wrap');
+  var iframe  = document.getElementById('live-demo-iframe');
+  if (!wrap || !iframe) return;
 
+  var loaded = false;
   var demoUrl = 'dashboard_updated.html?demo=1';
 
-  window.openSimDemo = function(){
+  window.openLiveDemo = function(){
     if (!loaded) { iframe.src = demoUrl; loaded = true; }
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    if (preview) preview.style.display = 'none';
+    if (openWrap) openWrap.style.display = 'none';
+    wrap.classList.add('open');
+    var liveSection = document.getElementById('live');
+    if (liveSection) liveSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  window.closeLiveDemo = function(){
+    wrap.classList.remove('open');
+    if (preview) preview.style.display = '';
+    if (openWrap) openWrap.style.display = '';
+  };
+
+  // Preload the demo page on hover/touch of any entry-point button, same
+  // idea as before -- just triggered from every button that opens it,
+  // not just one.
   var preloadLink = document.createElement('link');
   preloadLink.rel = 'preload';
   preloadLink.as = 'document';
   preloadLink.href = demoUrl;
   var preloaded = false;
-  var demoBtn = document.getElementById('bav-try-demo-btn');
   function preloadDemo(){
     if (preloaded) return;
     preloaded = true;
     document.head.appendChild(preloadLink);
   }
-  if (demoBtn) {
-    demoBtn.addEventListener('mouseenter', preloadDemo);
-    demoBtn.addEventListener('touchstart', preloadDemo, {passive:true});
-  }
-
-  window.closeSimDemo = function(){
-    overlay.classList.remove('active');
-    document.body.style.overflow = '';
-  };
-
-  overlay.addEventListener('click', function(e){
-    if (e.target === overlay) window.closeSimDemo();
-  });
-
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && overlay.classList.contains('active')) window.closeSimDemo();
+  document.querySelectorAll('[data-demo-trigger]').forEach(function(btn){
+    btn.addEventListener('mouseenter', preloadDemo);
+    btn.addEventListener('touchstart', preloadDemo, {passive:true});
   });
 })();
 </script>
