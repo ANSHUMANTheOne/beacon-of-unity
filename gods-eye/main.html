@@ -37,7 +37,7 @@
   .live-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
 
   /* Control panel */
-  .control-panel { position: absolute; left: 24px; top: 96px; width: 258px; max-height: 62vh; overflow-y: auto; overflow-x: hidden;
+  .control-panel { position: absolute; left: 24px; top: 96px; width: 258px; max-height: calc(100vh - 96px - 210px); min-height: 120px; overflow-y: auto; overflow-x: hidden;
     border: 1px solid var(--border); border-radius: 6px; background: var(--panel);
     backdrop-filter: blur(10px); pointer-events: auto; }
   .control-panel .head { border-bottom: 1px solid var(--border); padding: 12px 16px; position: sticky; top: 0; background: var(--panel); backdrop-filter: blur(10px); }
@@ -52,16 +52,11 @@
   .dot.on { border-color: rgba(111,216,232,0.6); background: rgba(111,216,232,0.7); }
 
   /* Rocket button */
-  .rocket-btn { all: unset; position: absolute; left: 24px; bottom: 96px; pointer-events: auto; cursor: pointer;
-    display: flex; align-items: center; gap: 8px; border: 1px solid rgba(111,216,232,0.3); border-radius: 6px;
-    background: rgba(10,15,26,0.75); backdrop-filter: blur(10px); padding: 10px 14px; color: #a5e8f2;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; transition: background 0.15s; }
-  .rocket-btn:hover { background: rgba(111,216,232,0.12); }
 
   /* Object inspector */
-  .inspector { position: absolute; right: 24px; top: 96px; width: 300px; max-height: 76vh; overflow-y: auto;
+  .inspector { position: relative; width: 100%; flex: 0 1 auto; min-height: 0; overflow-y: auto;
     border: 1px solid var(--border); border-radius: 6px; background: rgba(10,15,26,0.82);
-    backdrop-filter: blur(10px); pointer-events: auto; opacity: 0; transform: translateX(24px);
+    backdrop-filter: blur(10px); pointer-events: none; opacity: 0; transform: translateX(24px);
     transition: all 0.3s ease; }
   .inspector.open { opacity: 1; transform: translateX(0); pointer-events: auto; }
   .inspector-head { display: flex; align-items: flex-start; justify-content: space-between;
@@ -73,13 +68,13 @@
   .inspector-body { padding: 12px 16px; }
   .inspector-body .desc { font-size: 12.5px; line-height: 1.5; color: #94a3b8; margin: 0 0 12px; }
   .section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin: 16px 0 4px; }
-  .field { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 10px 0; gap: 12px; }
+  .field { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 7px 0; gap: 12px; }
   .field .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: #64748b; }
   .field .v { font-size: 13px; color: #f1f5f9; text-align: right; }
   .hazard-flag { margin-top: 8px; border: 1px solid rgba(217,143,90,0.3); background: rgba(217,143,90,0.1);
     padding: 6px 10px; border-radius: 4px; font-size: 11px; color: #e3ab7c; }
   .source-note { margin-top: 10px; font-size: 10.5px; line-height: 1.5; color: #536176; }
-  .actions { display: flex; gap: 8px; margin-top: 20px; }
+  .actions { display: flex; gap: 8px; margin-top: 16px; }
   .actions button { all: unset; flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.15);
     border-radius: 4px; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
     color: #cbd5e1; cursor: pointer; transition: all 0.15s; }
@@ -147,23 +142,18 @@
   #pilotPrompt p { margin: 0; font-size: 12px; color: #94a3b8; }
 
   /* Live alert ticker */
-  #ticker { position: absolute; right: 24px; bottom: 96px; width: 280px;
+  #ticker { position: relative; width: 100%; margin-top: auto; flex: none;
     border: 1px solid var(--border); border-radius: 6px; background: var(--panel);
     backdrop-filter: blur(10px); pointer-events: auto; }
   #ticker .head { display: flex; align-items: center; gap: 6px; padding: 9px 14px; border-bottom: 1px solid var(--border); }
   #ticker .head .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px 1px rgba(111,216,232,0.6); flex: none; }
   #ticker .head span { font-size: 10px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
-  #ticker .log { max-height: 130px; overflow-y: auto; padding: 8px 14px 10px; display: flex; flex-direction: column; gap: 7px; }
+  #ticker .log { max-height: 132px; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18px); mask-image: linear-gradient(to bottom, transparent 0, #000 18px); overflow-y: auto; padding: 8px 14px 10px; display: flex; flex-direction: column; gap: 7px; }
   #ticker .entry { font-size: 10.5px; line-height: 1.5; color: #9fb0c3; }
   #ticker .entry .t { color: #566277; margin-right: 6px; }
   #ticker .entry.alert { color: #e3ab7c; }
 
   /* EYE / JARVIS console */
-  #eyeToggle { position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%); pointer-events: auto;
-    all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px;
-    border: 1px solid var(--border); border-radius: 6px; background: var(--panel); backdrop-filter: blur(10px);
-    padding: 10px 14px; color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; box-sizing: border-box; }
-  #eyeToggle:hover { color: #cbd5e1; background: rgba(255,255,255,0.06); }
   #eyeConsole { position: fixed; inset: 0; z-index: 40; display: none; align-items: flex-start; justify-content: center;
     padding-top: 14vh; background: rgba(3,4,10,0.55); backdrop-filter: blur(4px); }
   #eyeConsole.open { display: flex; }
@@ -181,7 +171,7 @@
   #eyeLog .line.reply { color: #9fb0c3; white-space: pre-line; }
   #eyeConsole .input-row { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); padding: 10px 16px; }
   #eyeConsole .input-row span { color: var(--cyan); font-size: 13px; }
-  #eyeInput { all: unset; flex: 1; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: #f1f5f9; }
+  #eyeInput { flex: 1; background: none; border: 0; outline: none; padding: 0; margin: 0; -webkit-user-select: text; user-select: text; caret-color: var(--cyan); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: #f1f5f9; }
   #eyeConsole .hint { padding: 0 16px 12px; font-size: 10.5px; color: #536176; }
 
   /* Launch event HUD */
@@ -248,10 +238,117 @@
     border-radius: 4px; padding: 6px 8px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: #cbd5e1; box-sizing: border-box; }
   #pilotTarget .btns button:hover { background: rgba(255,255,255,0.06); }
   #pilotTarget .btns button.primary { border-color: rgba(111,216,232,0.5); background: rgba(111,216,232,0.12); color: #a5e8f2; }
+
+  /* Layout columns */
+  .col-right { position: absolute; right: 24px; top: 96px; bottom: 100px; width: 300px; display: flex;
+    flex-direction: column; gap: 12px; pointer-events: none; }
+  .left-actions { position: absolute; left: 24px; bottom: 100px; display: flex; flex-direction: column; gap: 8px;
+    align-items: flex-start; pointer-events: none; }
+  .action-btn { all: unset; box-sizing: border-box; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); border-radius: 6px; background: var(--panel); backdrop-filter: blur(10px);
+    padding: 10px 14px; color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; transition: background 0.15s, color 0.15s; }
+  .action-btn:hover { background: rgba(255,255,255,0.07); color: #e2e8f0; }
+  .action-btn.accent { border-color: rgba(111,216,232,0.3); color: #a5e8f2; }
+  .action-btn.accent:hover { background: rgba(111,216,232,0.12); }
+  .action-btn kbd { margin-left: 4px; border: 1px solid rgba(255,255,255,0.18); border-radius: 3px; padding: 0 5px; font-size: 10px; color: #7c8a9e; }
+
+  /* Launch UI must sit above the canvas (it precedes #app in the DOM) */
+  #launchAlert, #launchPrompt, #launchCaption { z-index: 30; }
+
+  /* EYE quick-command chips */
+  #eyeChips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  #eyeChips button { all: unset; box-sizing: border-box; cursor: pointer; border: 1px solid rgba(255,255,255,0.14); border-radius: 999px;
+    padding: 4px 10px; font-size: 10.5px; color: #94a3b8; }
+  #eyeChips button:hover { border-color: rgba(111,216,232,0.5); color: #a5e8f2; background: rgba(111,216,232,0.08); }
+  .col-right:has(.inspector.open) #ticker .log { max-height: 72px; }
+  .control-panel, .left-actions, .timeline { transition: opacity 0.5s ease; }
+  .overlay.cinematic .control-panel, .overlay.cinematic .left-actions { opacity: 0; }
+  .overlay.cinematic .control-panel, .overlay.cinematic .left-actions, .overlay.cinematic .left-actions * { pointer-events: none !important; }
+  .overlay.cinematic .timeline { opacity: 0.35; }
+
+  /* Access gate */
+  #gate { position: fixed; inset: 0; z-index: 90; background: #03040a; display: flex; align-items: center; justify-content: center;
+    overflow: hidden; transition: opacity 0.5s ease; }
+  #gate.hidden { opacity: 0; pointer-events: none; }
+  #gate .stars { position: absolute; inset: 0; background-image: radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 70% 65%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.25), transparent); background-size: 100% 100%; opacity: 0.6; }
+  .gate-panel { position: absolute; top: 0; bottom: 0; width: 51%; background:
+    linear-gradient(180deg, #10151f 0%, #0a0e16 45%, #0a0e16 55%, #10151f 100%);
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.6); transition: transform 1.1s cubic-bezier(0.76, 0, 0.24, 1); }
+  .gate-panel::before { content: ''; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 64px); }
+  .gate-panel .rivets { position: absolute; top: 18px; bottom: 18px; width: 2px; background:
+    repeating-linear-gradient(180deg, rgba(148,163,184,0.35) 0 2px, transparent 2px 46px); }
+  .gate-panel.left { left: 0; transform-origin: left center; border-right: 1px solid rgba(111,216,232,0.18); }
+  .gate-panel.left .rivets { right: 22px; }
+  .gate-panel.right { right: 0; transform-origin: right center; border-left: 1px solid rgba(111,216,232,0.18); }
+  .gate-panel.right .rivets { left: 22px; }
+  .gate-panel .hazard { position: absolute; top: 0; bottom: 0; width: 5px;
+    background: repeating-linear-gradient(45deg, #c9a24a 0 8px, #12151b 8px 16px); opacity: 0.4; }
+  .gate-panel.left .hazard { right: 0; }
+  .gate-panel.right .hazard { left: 0; }
+  #gate.open .gate-panel.left { transform: translateX(-100%); }
+  #gate.open .gate-panel.right { transform: translateX(100%); }
+  #gate.shake .gate-seam { animation: gateShake 0.4s; }
+  @keyframes gateShake { 0%,100% { transform: translateX(-50%); } 20% { transform: translateX(calc(-50% - 6px)); } 40% { transform: translateX(calc(-50% + 6px)); } 60% { transform: translateX(calc(-50% - 4px)); } 80% { transform: translateX(calc(-50% + 4px)); } }
+
+  .gate-seam { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2;
+    display: flex; flex-direction: column; align-items: center; width: min(340px, 84vw); text-align: center; }
+  .gate-card { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center;
+    border: 1px solid rgba(111,216,232,0.22); border-radius: 10px; background: rgba(8,12,20,0.88);
+    backdrop-filter: blur(14px); box-shadow: 0 24px 70px rgba(0,0,0,0.55); padding: 30px 26px 26px; }
+  .gate-seam .ring { position: relative; width: 76px; height: 76px; margin-bottom: 22px; }
+  .gate-seam .ring svg { width: 100%; height: 100%; }
+  .gate-seam .ring .spin { animation: gateSpin 8s linear infinite; transform-origin: 38px 38px; }
+  @keyframes gateSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .gate-seam h1 { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: 0.34em; color: #f1f5f9; }
+  .gate-seam .sub { margin: 6px 0 22px; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.2em; color: #536176; }
+  .gate-field { position: relative; width: 100%; }
+  #gateInput { width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid rgba(111,216,232,0.28);
+    border-radius: 4px; padding: 11px 14px; color: #e7ecf3; font-size: 13px; letter-spacing: 0.24em; text-align: center;
+    text-transform: uppercase; outline: none; transition: border-color 0.2s, background 0.2s; }
+  #gateInput:focus { border-color: rgba(111,216,232,0.6); background: rgba(111,216,232,0.05); }
+  #gate.denied #gateInput { border-color: rgba(217,90,90,0.55); animation: gateShake 0.4s; }
+  .gate-seam .msg { margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; color: #536176; min-height: 14px; transition: color 0.2s; }
+  #gate.denied .gate-seam .msg { color: #e08a8a; }
+  #gate.granted .gate-seam .msg { color: #a5e8f2; }
+  .gate-seam .hint { margin-top: 18px; font-size: 9px; letter-spacing: 0.08em; color: #3c4658; }
+  #gateSubmit { margin-top: 14px; all: unset; box-sizing: border-box; cursor: pointer; width: 100%; text-align: center;
+    border: 1px solid rgba(111,216,232,0.3); border-radius: 4px; padding: 9px; font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: 0.18em; color: #a5e8f2; transition: background 0.15s; }
+  #gateSubmit:hover { background: rgba(111,216,232,0.1); }
 </style>
 
 </head>
 <body>
+<div id="gate">
+  <div class="stars"></div>
+  <div class="gate-panel left"><div class="hazard"></div><div class="rivets"></div></div>
+  <div class="gate-panel right"><div class="hazard"></div><div class="rivets"></div></div>
+  <div class="gate-seam">
+   <div class="gate-card">
+    <div class="ring">
+      <svg viewBox="0 0 76 76">
+        <circle cx="38" cy="38" r="34" fill="none" stroke="#6fd8e8" stroke-opacity="0.18" stroke-width="1"/>
+        <g class="spin"><circle cx="38" cy="38" r="29" fill="none" stroke="#6fd8e8" stroke-opacity="0.45" stroke-width="1" stroke-dasharray="3 7"/></g>
+        <circle cx="38" cy="38" r="15" fill="#081018" stroke="#6fd8e8" stroke-opacity="0.55" stroke-width="0.8"/>
+        <circle cx="38" cy="38" r="5.5" fill="#020407"/>
+      </svg>
+    </div>
+    <h1>GOD'S EYE</h1>
+    <p class="sub">Restricted Access</p>
+    <div class="gate-field">
+      <input id="gateInput" type="password" autocomplete="off" spellcheck="false" placeholder="ENTER ACCESS CODE" />
+    </div>
+    <button id="gateSubmit">Authenticate</button>
+    <p class="msg" id="gateMsg">&nbsp;</p>
+   </div>
+  </div>
+</div>
 <div id="launchAlert">
   <div class="box">
     <div class="row"><p class="tag mono">Launch Sequence</p><span class="clock mono" id="launchClock">T-00:00</span></div>
@@ -285,6 +382,7 @@
       <button id="eyeClose"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.3"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg></button>
     </div>
     <div id="eyeLog"></div>
+    <div id="eyeChips"></div>
     <div class="input-row">
       <span class="mono">&gt;</span>
       <input id="eyeInput" class="mono" type="text" placeholder="ask eye — try 'show apophis' or 'help'" autocomplete="off" />
@@ -371,6 +469,75 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 /* ---------------------------------------------------------------------- */
+/*  Access gate                                                            */
+/*  Client-side only — this deters casual poking around, not a real        */
+/*  security boundary (anyone with devtools can always bypass it).         */
+/*  The code is checked as a SHA-256 digest, reassembled at runtime from   */
+/*  reordered fragments, so it isn't sitting in the file as plain text.    */
+/* ---------------------------------------------------------------------- */
+(function gateInit() {
+  const _f = ['c1f69204092801bd', '74ebdf9ac1f6e702', 'c5a6985b4b349b8c', '09c620e26a150be4'];
+  const _order = [2, 3, 0, 1];
+  const _digest = _order.map((i) => _f[i]).join('');
+  const _cookieName = 'sig';
+
+  const gateEl = document.getElementById('gate');
+  const gateInput = document.getElementById('gateInput');
+  const gateSubmit = document.getElementById('gateSubmit');
+  const gateMsg = document.getElementById('gateMsg');
+
+  // Cookies don't persist on file:// (how this page is usually opened), so
+  // localStorage is the actual storage used — falls back to sessionStorage
+  // if that's blocked too (e.g. private browsing), so it still works for
+  // the current tab even then.
+  function readMark() {
+    try { return localStorage.getItem(_cookieName); } catch (e) { return sessionStorage.getItem(_cookieName); }
+  }
+  function writeMark() {
+    try { localStorage.setItem(_cookieName, '1'); } catch (e) { try { sessionStorage.setItem(_cookieName, '1'); } catch (e2) {} }
+  }
+
+  function grantAccess(persist) {
+    if (persist) writeMark();
+    gateEl.classList.add('open');
+    gateMsg.textContent = 'ACCESS GRANTED';
+    gateEl.classList.add('granted');
+    setTimeout(() => { gateEl.classList.add('hidden'); bootSequence(); }, 950);
+  }
+
+  async function sha256Hex(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function attempt() {
+    const val = gateInput.value.trim();
+    if (!val) return;
+    gateSubmit.disabled = true;
+    const hex = await sha256Hex(val.toUpperCase());
+    if (hex === _digest) {
+      grantAccess(true);
+    } else {
+      gateEl.classList.remove('denied'); void gateEl.offsetWidth; gateEl.classList.add('denied');
+      gateMsg.textContent = 'ACCESS DENIED';
+      gateInput.value = '';
+      gateSubmit.disabled = false;
+    }
+  }
+
+  gateSubmit.addEventListener('click', attempt);
+  gateInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') attempt(); });
+  gateInput.addEventListener('input', () => { gateEl.classList.remove('denied'); gateMsg.textContent = '\u00A0'; });
+
+  if (readMark() === '1') {
+    gateEl.classList.add('open', 'hidden');
+    setTimeout(bootSequence, 0); // defer: runs after STATUS_LINES etc. below have initialized
+  } else {
+    setTimeout(() => gateInput.focus(), 400);
+  }
+})();
+
+/* ---------------------------------------------------------------------- */
 /*  Loading sequence                                                       */
 /* ---------------------------------------------------------------------- */
 const STATUS_LINES = ['ESTABLISHING UPLINK', 'SCANNING ORBITAL NETWORK', 'DECRYPTING TELEMETRY', 'AUTHENTICATING', 'ACCESS GRANTED'];
@@ -397,15 +564,17 @@ const loadingEl = document.getElementById('loading');
 
 let statusIndex = 0;
 const stepMs = 220;
-STATUS_LINES.forEach((_, i) => {
-  setTimeout(() => {
-    statusIndex = i;
-    statusLine.textContent = STATUS_LINES[i];
-    loadBarFill.style.width = `${((i + 1) / STATUS_LINES.length) * 100}%`;
-  }, i * stepMs);
-});
-setTimeout(() => { eyeWrap.classList.add('granted'); loadText.classList.add('granted'); }, STATUS_LINES.length * stepMs + 60);
-setTimeout(() => { loadingEl.classList.add('hidden'); }, STATUS_LINES.length * stepMs + 420);
+function bootSequence() {
+  STATUS_LINES.forEach((_, i) => {
+    setTimeout(() => {
+      statusIndex = i;
+      statusLine.textContent = STATUS_LINES[i];
+      loadBarFill.style.width = `${((i + 1) / STATUS_LINES.length) * 100}%`;
+    }, i * stepMs);
+  });
+  setTimeout(() => { eyeWrap.classList.add('granted'); loadText.classList.add('granted'); }, STATUS_LINES.length * stepMs + 60);
+  setTimeout(() => { loadingEl.classList.add('hidden'); }, STATUS_LINES.length * stepMs + 420);
+}
 
 /* ---------------------------------------------------------------------- */
 /*  Data model                                                             */
@@ -692,6 +861,16 @@ camera.lookAt(0, 0, 0);
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.18));
 
+/* Soft round sprite so points render as dots, not squares, when the camera gets close */
+const dotTexture = (() => {
+  const c = document.createElement('canvas'); c.width = 32; c.height = 32;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+  g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.55, 'rgba(255,255,255,0.9)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 32, 32);
+  return new THREE.CanvasTexture(c);
+})();
+
 /* Star field */
 function buildStars(count, minR, maxR, brightness) {
   const positions = new Float32Array(count * 3);
@@ -713,8 +892,8 @@ function buildStars(count, minR, maxR, brightness) {
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   return geo;
 }
-const dimStars = new THREE.Points(buildStars(2600, 300, 1400, 0.42), new THREE.PointsMaterial({ size: 0.5, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0.5, depthWrite: false }));
-const brightStars = new THREE.Points(buildStars(260, 300, 1400, 0.9), new THREE.PointsMaterial({ size: 1.1, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0.8, depthWrite: false }));
+const dimStars = new THREE.Points(buildStars(2600, 300, 1400, 0.42), new THREE.PointsMaterial({ size: 0.5, sizeAttenuation: true, map: dotTexture, alphaTest: 0.02, vertexColors: true, transparent: true, opacity: 0.5, depthWrite: false }));
+const brightStars = new THREE.Points(buildStars(260, 300, 1400, 0.9), new THREE.PointsMaterial({ size: 1.1, sizeAttenuation: true, map: dotTexture, alphaTest: 0.02, vertexColors: true, transparent: true, opacity: 0.8, depthWrite: false }));
 scene.add(dimStars, brightStars);
 
 /* Sun */
@@ -723,15 +902,19 @@ const sunGroup = new THREE.Group();
 const sunTex = createSunTexture();
 const sunMesh = new THREE.Mesh(new THREE.SphereGeometry(SUN_RADIUS, 64, 64), new THREE.MeshBasicMaterial({ map: sunTex, color: '#fff3d6' }));
 sunGroup.add(sunMesh);
-const coronaMesh = new THREE.Mesh(new THREE.SphereGeometry(SUN_RADIUS, 32, 32), new THREE.MeshBasicMaterial({ color: '#fff3d6', transparent: true, opacity: 0.14, depthWrite: false }));
-coronaMesh.scale.setScalar(1.12);
+const SUN_GLOW = SUN_RADIUS * 6.5;
+const glowTexture = (() => {
+  const c = document.createElement('canvas'); c.width = 128; c.height = 128;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0, 'rgba(255,244,214,0.55)'); g.addColorStop(0.2, 'rgba(255,226,170,0.22)');
+  g.addColorStop(0.5, 'rgba(255,200,120,0.07)'); g.addColorStop(1, 'rgba(255,190,110,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+})();
+const coronaMesh = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, fog: false }));
+coronaMesh.scale.setScalar(SUN_GLOW);
 sunGroup.add(coronaMesh);
-const corona2 = new THREE.Mesh(new THREE.SphereGeometry(SUN_RADIUS, 32, 32), new THREE.MeshBasicMaterial({ color: '#fff3d6', transparent: true, opacity: 0.06, depthWrite: false }));
-corona2.scale.setScalar(1.32);
-sunGroup.add(corona2);
-const corona3 = new THREE.Mesh(new THREE.SphereGeometry(SUN_RADIUS, 24, 24), new THREE.MeshBasicMaterial({ color: '#ffcf7a', transparent: true, opacity: 0.025, depthWrite: false }));
-corona3.scale.setScalar(1.6);
-sunGroup.add(corona3);
 const sunLight = new THREE.PointLight('#fff3d6', 2.6, 0, 0.35);
 sunGroup.add(sunLight);
 scene.add(sunGroup);
@@ -761,7 +944,7 @@ function buildAsteroidBelt() {
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  const mat = new THREE.PointsMaterial({ size: 0.35, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0.75, depthWrite: false });
+  const mat = new THREE.PointsMaterial({ size: 0.35, sizeAttenuation: true, map: dotTexture, alphaTest: 0.02, vertexColors: true, transparent: true, opacity: 0.75, depthWrite: false });
   return new THREE.Points(geo, mat);
 }
 const asteroidBelt = buildAsteroidBelt();
@@ -1019,19 +1202,23 @@ overlay.innerHTML = `
     <button class="section-btn" id="launchToggle"><span class="label">Launch Calendar</span><span class="count mono" id="launchCount"></span></button>
     <div id="launchList" style="display:none"></div>
   </div>
-  <button class="rocket-btn" id="rocketBtn">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2c2 2 3 6 3 10 0 2-1 4-3 6-2-2-3-4-3-6 0-4 1-8 3-10Z"/><path d="M9 15l-3 3 1 3 3-1"/><path d="M15 15l3 3-1 3-3-1"/></svg>
-    <span>Pilot Rocket</span>
-  </button>
-  <button id="eyeToggle">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>
-    <span>Ask Eye</span>
-  </button>
-  <div id="ticker">
-    <div class="head"><span class="dot"></span><span>System Log</span></div>
-    <div class="log" id="tickerLog"></div>
+  <div class="left-actions">
+    <button class="action-btn" id="eyeToggle">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>
+      <span>Ask Eye</span><kbd class="mono">/</kbd>
+    </button>
+    <button class="action-btn accent" id="rocketBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2c2 2 3 6 3 10 0 2-1 4-3 6-2-2-3-4-3-6 0-4 1-8 3-10Z"/><path d="M9 15l-3 3 1 3 3-1"/><path d="M15 15l3 3-1 3-3-1"/></svg>
+      <span>Pilot Rocket</span>
+    </button>
   </div>
-  <div class="inspector" id="inspector"></div>
+  <div class="col-right">
+    <div class="inspector" id="inspector"></div>
+    <div id="ticker">
+      <div class="head"><span class="dot"></span><span>System Log</span></div>
+      <div class="log" id="tickerLog"></div>
+    </div>
+  </div>
   <div class="timeline">
     <button class="play-btn" id="playBtn"></button>
     <div class="timeline-body">
@@ -1050,6 +1237,7 @@ CATEGORIES.forEach(({ id, label }) => {
   const li = document.createElement('li');
   const btn = document.createElement('button');
   btn.innerHTML = `<span class="label">${label}</span><span class="dot on"></span>`;
+  btn.dataset.cat = id;
   btn.addEventListener('click', () => {
     state.visibility[id] = !state.visibility[id];
     btn.querySelector('.dot').classList.toggle('on', state.visibility[id]);
@@ -1720,6 +1908,7 @@ const LIFTOFF_T = 2.2;
 const FLY_IN = 1.6;
 const FLY_OUT = 2.2;
 const SLOW_FACTOR = 0.03;
+const _flameW = new THREE.Vector3();
 let activeLaunch = null;
 
 function easeInOut(p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
@@ -1753,6 +1942,7 @@ function startLaunchSequence(event) {
   hideLaunchPrompt();
   selectBody(null, false);
   controls.enabled = false;
+  overlay.classList.add('cinematic');
 
   const padDir = new THREE.Vector3(...event.padDir).normalize();
   const side = new THREE.Vector3().crossVectors(padDir, new THREE.Vector3(0, 0, 1));
@@ -1811,6 +2001,7 @@ function endLaunchSequence() {
   controls.enabled = true;
   controls.update();
   state.timeScale = 1;
+  overlay.classList.remove('cinematic');
   launchAlertEl.classList.remove('visible');
   launchCaptionEl.classList.remove('visible');
   launchCaptionEl.textContent = '';
@@ -1876,6 +2067,8 @@ function updateLaunchSequence(delta) {
     b.scale.setScalar(al.rocket.group.scale.x);
     b.material.transparent = true;
     scene.add(b);
+    al.rocket.flame.position.y = 0.07;
+    al.rocket.core.position.y = 0.085;
     al.boosterFree = {
       mesh: b, born: t,
       vel: al.rocketVel.clone().multiplyScalar(0.55).addScaledVector(al.side, -0.09),
@@ -1900,7 +2093,8 @@ function updateLaunchSequence(delta) {
       if (!p) break;
       p.life = p.max = 1.3;
       p.mesh.visible = true;
-      p.mesh.position.copy(rocketPos).addScaledVector(dir, -0.2 * style.scale)
+      al.rocket.flame.getWorldPosition(_flameW);
+      p.mesh.position.copy(_flameW).addScaledVector(dir, -0.03)
         .add(new THREE.Vector3((Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02));
     }
   }
@@ -1914,7 +2108,7 @@ function updateLaunchSequence(delta) {
   });
 
   // Camera: fly in, hold on the pad, chase the rocket, fly back out.
-  const camStart = padPos.clone().addScaledVector(al.padDir, 0.9).addScaledVector(al.side, 2.4);
+  const camStart = padPos.clone().addScaledVector(al.padDir, 1.1).addScaledVector(al.side, 3.0);
   if (t < FLY_IN) {
     const p = easeInOut(t / FLY_IN);
     camera.position.lerpVectors(al.savedCamPos, camStart, p);
@@ -1924,9 +2118,12 @@ function updateLaunchSequence(delta) {
       camera.position.copy(camStart);
       al.lookAt.copy(rocketPos);
     } else {
-      const desired = rocketPos.clone().addScaledVector(al.side, 2.0).addScaledVector(al.padDir, 0.35);
-      camera.position.lerp(desired, 1 - Math.exp(-delta * 1.7));
-      al.lookAt.lerp(rocketPos.clone().addScaledVector(dir, 0.25), 1 - Math.exp(-delta * 4));
+      const desired = rocketPos.clone().addScaledVector(al.side, 3.2).addScaledVector(al.padDir, 0.5);
+      camera.position.lerp(desired, 1 - Math.exp(-delta * 1.6));
+      // Look between the pad and the rocket at first (so Earth stays in frame), then lock onto the rocket.
+      const focus = padPos.clone().addScaledVector(al.padDir, 0.4)
+        .lerp(rocketPos.clone().addScaledVector(dir, 0.3), easeInOut(Math.min(1, rt / 7)));
+      al.lookAt.lerp(focus, 1 - Math.exp(-delta * 4));
     }
   } else {
     if (!al.flyOutFrom) { al.flyOutFrom = camera.position.clone(); al.lookFrom = al.lookAt.clone(); }
@@ -2007,10 +2204,17 @@ function openEye() {
   eyeInput.value = '';
   setTimeout(() => eyeInput.focus(), 30);
   if (!eyeLog.children.length) {
-    eyePrint("EYE online. Try: show apophis / follow iss / hide asteroid belt / list hazardous / status halley / help", 'reply');
+    eyePrint("EYE online. Type a command, or tap one below.", 'reply');
   }
 }
 function closeEye() { eyeConsole.classList.remove('open'); }
+const eyeChips = document.getElementById('eyeChips');
+['show apophis', 'follow iss', 'list hazardous', 'watch artemis', 'show missions only', 'show all', 'reset', 'help'].forEach((cmd) => {
+  const b = document.createElement('button');
+  b.textContent = cmd;
+  b.addEventListener('click', () => { runEyeCommand(cmd); eyeInput.focus(); });
+  eyeChips.appendChild(b);
+});
 
 eyeToggleBtn.addEventListener('click', openEye);
 eyeCloseBtn.addEventListener('click', closeEye);
@@ -2042,14 +2246,34 @@ function findNamed(query) {
 }
 
 const CATEGORY_ALIASES = {
-  planet: 'planet', planets: 'planet',
-  moon: 'moon', moons: 'moon',
-  asteroid: 'near-earth-asteroid', asteroids: 'near-earth-asteroid', 'near-earth': 'near-earth-asteroid',
-  comet: 'near-earth-comet', comets: 'near-earth-comet',
-  hazardous: 'potentially-hazardous-asteroid', pha: 'potentially-hazardous-asteroid',
-  belt: 'asteroid-belt', 'asteroid-belt': 'asteroid-belt',
-  mission: 'mission', missions: 'mission', spacecraft: 'mission',
+  'planet': 'planet', 'planets': 'planet',
+  'moon': 'moon', 'moons': 'moon',
+  'asteroid': 'near-earth-asteroid', 'asteroids': 'near-earth-asteroid', 'near earth': 'near-earth-asteroid',
+  'near earth asteroid': 'near-earth-asteroid', 'near earth asteroids': 'near-earth-asteroid',
+  'comet': 'near-earth-comet', 'comets': 'near-earth-comet', 'near earth comet': 'near-earth-comet', 'near earth comets': 'near-earth-comet',
+  'hazardous': 'potentially-hazardous-asteroid', 'hazardous asteroids': 'potentially-hazardous-asteroid',
+  'potentially hazardous asteroids': 'potentially-hazardous-asteroid', 'pha': 'potentially-hazardous-asteroid', 'phas': 'potentially-hazardous-asteroid',
+  'belt': 'asteroid-belt', 'asteroid belt': 'asteroid-belt', 'main belt': 'asteroid-belt',
+  'mission': 'mission', 'missions': 'mission', 'spacecraft': 'mission', 'satellites': 'mission', 'missions & spacecraft': 'mission',
 };
+function resolveCategory(str) {
+  const s = str.toLowerCase().replace(/-/g, ' ').replace(/^(the|all)\s+/, '').replace(/\s+only$/, '').trim();
+  return CATEGORY_ALIASES[s] || null;
+}
+function syncCategoryButtons() {
+  [...categoryList.querySelectorAll('button')].forEach((b) => {
+    const on = state.visibility[b.dataset.cat];
+    b.querySelector('.dot').classList.toggle('on', on);
+    b.classList.toggle('off', !on);
+  });
+}
+function flyToObject(found) {
+  selectBody(found.ref.id, found.isMission);
+  state.followId = found.ref.id;
+  const r = found.ref.displayRadius || 0.08;
+  camGoal = { mode: 'approach', dist: Math.max(3.4, r * 7 + 1.5) };
+  renderInspector();
+}
 
 function runEyeCommand(raw) {
   const text = raw.trim();
@@ -2062,7 +2286,7 @@ function runEyeCommand(raw) {
 
   if (['help', '?'].includes(verb)) {
     eyePrint(
-      'Commands:\n  show / find / goto <name>\n  follow <name>\n  show|hide <category>\n  status|info <name>\n  list hazardous|missions|launches\n  watch <launch>  (e.g. watch artemis)\n  alerts on|off\n  speed <1|4|20|100|500>\n  play / pause\n  time',
+      'Commands:\n  show / find / goto <name>  (flies the camera there)\n  reset  (back to the overview)\n  show|hide <category>  (also: show all, show missions only)\n  follow <name>\n  status|info <name>\n  list hazardous|missions|launches\n  watch <launch>  (e.g. watch artemis)\n  alerts on|off\n  speed <1|4|20|100|500>\n  play / pause\n  time',
       'reply'
     );
     return;
@@ -2116,30 +2340,55 @@ function runEyeCommand(raw) {
     eyePrint('Try: list hazardous / list missions / list launches', 'reply');
     return;
   }
-  if (['show', 'hide'].includes(verb) && CATEGORY_ALIASES[rest]) {
-    const cat = CATEGORY_ALIASES[rest];
-    state.visibility[cat] = verb === 'show';
-    applyVisibility();
-    eyePrint(`${verb === 'show' ? 'Showing' : 'Hiding'} ${rest}.`, 'reply');
+  if (['show', 'hide'].includes(verb)) {
+    const bare = rest.replace(/^the\s+/, '').trim();
+    if (/^(all|everything)$/.test(bare)) {
+      Object.keys(state.visibility).forEach((k) => { state.visibility[k] = verb === 'show'; });
+      applyVisibility(); syncCategoryButtons();
+      eyePrint(verb === 'show' ? 'Showing everything.' : 'Hiding everything.', 'reply');
+      setTimeout(closeEye, 900);
+      return;
+    }
+    const cat = resolveCategory(rest);
+    if (cat) {
+      const label = CATEGORIES.find((c) => c.id === cat).label;
+      if (verb === 'show' && /\bonly\b/.test(rest)) {
+        Object.keys(state.visibility).forEach((k) => { state.visibility[k] = (k === cat); });
+        eyePrint(`Showing only ${label}.`, 'reply');
+      } else {
+        state.visibility[cat] = verb === 'show';
+        eyePrint(`${verb === 'show' ? 'Showing' : 'Hiding'} ${label}.`, 'reply');
+      }
+      applyVisibility(); syncCategoryButtons();
+      setTimeout(closeEye, 900);
+      return;
+    }
+    if (verb === 'hide') { eyePrint(`Can't hide "${rest}". Try: hide asteroid belt / hide missions`, 'reply'); return; }
+  }
+  if (['reset', 'home', 'overview'].includes(verb)) {
+    selectBody(null, false);
+    camGoal = { mode: 'pos', pos: new THREE.Vector3(0, 62, 78) };
+    eyePrint('Returning to the overview.', 'reply');
+    setTimeout(closeEye, 700);
     return;
   }
   if (['show', 'find', 'goto', 'select'].includes(verb)) {
     const found = findNamed(rest);
     if (found) {
-      selectBody(found.ref.id, found.isMission);
+      flyToObject(found);
       eyePrint(`Locked on ${found.ref.name}.`, 'reply');
+      setTimeout(closeEye, 700);
     } else {
-      eyePrint(`No catalogued object matching "${rest}".`, 'reply');
+      eyePrint(`No catalogued object matching "${rest}". Try: list missions`, 'reply');
     }
     return;
   }
   if (verb === 'follow') {
     const found = findNamed(rest);
     if (found) {
-      selectBody(found.ref.id, found.isMission);
-      state.followId = found.ref.id;
-      renderInspector();
+      flyToObject(found);
       eyePrint(`Following ${found.ref.name}.`, 'reply');
+      setTimeout(closeEye, 700);
     } else {
       eyePrint(`No catalogued object matching "${rest}".`, 'reply');
     }
@@ -2160,8 +2409,9 @@ function runEyeCommand(raw) {
   // Fallback: try treating the whole line as an object name.
   const found = findNamed(lower);
   if (found) {
-    selectBody(found.ref.id, found.isMission);
+    flyToObject(found);
     eyePrint(`Locked on ${found.ref.name}.`, 'reply');
+    setTimeout(closeEye, 700);
     return;
   }
   eyePrint("Unrecognized command. Type 'help' for available commands.", 'reply');
@@ -2177,6 +2427,10 @@ eyeInput.addEventListener('keydown', (e) => {
 const desiredTarget = new THREE.Vector3();
 const clock = new THREE.Clock();
 const sunDir = new THREE.Vector3();
+let camGoal = null; // { mode: 'approach', dist } | { mode: 'pos', pos }
+const _goalOff = new THREE.Vector3(), _goalWant = new THREE.Vector3();
+renderer.domElement.addEventListener('pointerdown', () => { camGoal = null; });
+renderer.domElement.addEventListener('wheel', () => { camGoal = null; }, { passive: true });
 
 function animate() {
   requestAnimationFrame(animate);
@@ -2207,7 +2461,7 @@ function animate() {
 
   // Sun
   sunMesh.rotation.y += delta * 0.025;
-  coronaMesh.scale.setScalar(1.12 * (1 + Math.sin(elapsed * 0.6) * 0.015));
+  coronaMesh.scale.setScalar(SUN_GLOW * (1 + Math.sin(elapsed * 0.6) * 0.02));
 
   // Asteroid belt — slow collective revolution (approximation)
   const beltAngle = ((state.simDate.getTime() / 86400000) / BELT_PERIOD_DAYS) * Math.PI * 2;
@@ -2261,6 +2515,22 @@ function animate() {
       desiredTarget.set(0, 0, 0);
     }
     controls.target.lerp(desiredTarget, 0.06);
+    if (camGoal) {
+      if (camGoal.mode === 'approach' && state.followId) {
+        _goalOff.copy(camera.position).sub(desiredTarget);
+        const len = _goalOff.length();
+        if (Math.abs(len - camGoal.dist) < 0.2) camGoal = null;
+        else {
+          _goalWant.copy(desiredTarget).addScaledVector(_goalOff.normalize(), camGoal.dist);
+          camera.position.lerp(_goalWant, 0.05);
+        }
+      } else if (camGoal.mode === 'pos') {
+        camera.position.lerp(camGoal.pos, 0.05);
+        if (camera.position.distanceTo(camGoal.pos) < 0.4) camGoal = null;
+      } else {
+        camGoal = null;
+      }
+    }
     controls.update();
   }
 
@@ -2273,21 +2543,70 @@ function animate() {
   const scrubVal = Math.min(1, Math.max(0, (state.simDate.getTime() - (nowMs - rangeMs)) / (rangeMs * 2)));
   if (document.activeElement !== scrub) scrub.value = scrubVal;
 
+  flushLabels();
   renderer.render(scene, camera);
 }
 
+/* Labels are queued during the frame, then laid out once the camera has moved:
+   distance-based detail (small things only label up close) + no overlapping text. */
+const labelQueue = [];
+const _lp = new THREE.Vector3();
 function updateLabel(entry, id, pos, isMission) {
-  const screenPos = pos.clone().project(camera);
-  const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
-  const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
-  const behind = screenPos.z > 1;
-  const isVisible = isMission ? missionMeshes[id].group.visible : entry.group.visible;
-  entry.labelDiv.style.transform = `translate(${x + 10}px, ${y - 6}px)`;
-  entry.labelDiv.style.display = behind || !isVisible ? 'none' : 'block';
+  labelQueue.push({ entry, id, isMission: Boolean(isMission), pos: pos.clone() });
+}
+function flushLabels() {
+  if (activeLaunch) {
+    labelQueue.forEach((q) => { q.entry.labelDiv.style.display = 'none'; });
+    labelQueue.length = 0;
+    return;
+  }
   const piloting = state.mode === 'pilot';
-  const isSel = piloting ? Boolean(pilotTarget && pilotTarget.ref.id === id) : state.selectedId === id;
-  entry.labelDiv.style.opacity = isSel ? '1' : (hoveredId === id ? '0.9' : (piloting ? '0.6' : '0.4'));
-  entry.labelDiv.style.color = isSel ? '#a5f3fc' : (hoveredId === id ? '#e2e8f0' : '#94a3b8');
+  const W = window.innerWidth, H = window.innerHeight;
+  const items = [];
+  labelQueue.forEach((q) => {
+    const { entry, id, isMission } = q;
+    const div = entry.labelDiv;
+    const visible = isMission ? missionMeshes[id].group.visible : entry.group.visible;
+    if (!visible) { div.style.display = 'none'; return; }
+    _lp.copy(q.pos).project(camera);
+    const x = (_lp.x * 0.5 + 0.5) * W, y = (-_lp.y * 0.5 + 0.5) * H;
+    if (_lp.z > 1 || x < -60 || x > W + 60 || y < -20 || y > H + 20) { div.style.display = 'none'; return; }
+    const forced = piloting
+      ? Boolean(pilotTarget && pilotTarget.ref.id === id)
+      : (state.selectedId === id || hoveredId === id || state.followId === id);
+    const dist = camera.position.distanceTo(q.pos);
+    let maxDist, priority;
+    if (isMission) {
+      const m = entry.mission;
+      if (m.baseDistanceAu !== undefined) { maxDist = Infinity; priority = 45; }
+      else if (m.el) { maxDist = 45; priority = 42; }
+      else { maxDist = 16; priority = 30; }
+    } else if (id === 'moon') { maxDist = 16; priority = 35; }
+    else {
+      const c = entry.body.category;
+      if (c === 'planet') { maxDist = Infinity; priority = 80; }
+      else if (c === 'asteroid-belt') { maxDist = 150; priority = 40; }
+      else { maxDist = 55; priority = c === 'potentially-hazardous-asteroid' ? 52 : 48; }
+    }
+    if (piloting) maxDist *= 2.5;
+    if (!forced && dist > maxDist) { div.style.display = 'none'; return; }
+    items.push({ div, x, y, forced, priority: forced ? 1000 : priority, w: div.textContent.length * 7.2 + 10 });
+  });
+  items.sort((a, b) => b.priority - a.priority);
+  const placed = [];
+  items.forEach((it) => {
+    const r = { x: it.x + 8, y: it.y - 13, w: it.w, h: 15 };
+    if (!it.forced && placed.some((p) => r.x < p.x + p.w + 3 && r.x + r.w + 3 > p.x && r.y < p.y + p.h + 2 && r.y + r.h + 2 > p.y)) {
+      it.div.style.display = 'none';
+      return;
+    }
+    placed.push(r);
+    it.div.style.display = 'block';
+    it.div.style.transform = `translate(${it.x + 10}px, ${it.y - 6}px)`;
+    it.div.style.opacity = it.forced ? '1' : (piloting ? '0.6' : '0.5');
+    it.div.style.color = it.forced ? '#a5f3fc' : '#94a3b8';
+  });
+  labelQueue.length = 0;
 }
 
 animate();
