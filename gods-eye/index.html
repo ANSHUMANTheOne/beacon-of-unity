@@ -766,6 +766,87 @@ function createRockyTexture(hex, seed) {
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
 }
 
+function createEarthTexture(seed) {
+  const w = 512, h = 256; const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const ctx = c.getContext('2d'); const rand = seededRandom(seed * 7919 + 13);
+
+  // Ocean base with gentle depth variation.
+  const ocean = new THREE.Color('#1c5480'); const oceanLight = new THREE.Color('#2f7aa8');
+  ctx.fillStyle = `#${ocean.getHexString()}`; ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 90; i++) {
+    const x = rand() * w, y = h * 0.1 + rand() * h * 0.8, r = 14 + rand() * 40;
+    ctx.globalAlpha = 0.06 + rand() * 0.1; ctx.fillStyle = `#${oceanLight.getHexString()}`;
+    ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.6, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // Continents: several organic clusters of overlapping blobs, spread across both hemispheres.
+  const landGreen = new THREE.Color('#3e6b3a'), landOlive = new THREE.Color('#6b7a3f'), landTan = new THREE.Color('#a68a5c');
+  const clusters = [
+    { x: 0.16, y: 0.38, n: 11, r: 26 }, { x: 0.13, y: 0.66, n: 8, r: 20 },
+    { x: 0.30, y: 0.28, n: 7, r: 16 }, { x: 0.32, y: 0.55, n: 9, r: 22 },
+    { x: 0.52, y: 0.24, n: 10, r: 24 }, { x: 0.58, y: 0.42, n: 8, r: 18 },
+    { x: 0.74, y: 0.30, n: 9, r: 20 }, { x: 0.80, y: 0.62, n: 7, r: 17 },
+    { x: 0.92, y: 0.58, n: 6, r: 14 },
+  ];
+  clusters.forEach((cl, ci) => {
+    const cx = cl.x * w, cy = cl.y * h;
+    const tone = [landGreen, landOlive, landTan][ci % 3];
+    ctx.fillStyle = `#${tone.getHexString()}`;
+    for (let i = 0; i < cl.n; i++) {
+      const ang = rand() * Math.PI * 2, dist = rand() * cl.r * 1.4;
+      const x = cx + Math.cos(ang) * dist, y = cy + Math.sin(ang) * dist * 0.7;
+      const r = cl.r * (0.35 + rand() * 0.55);
+      ctx.globalAlpha = 0.85;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+  ctx.globalAlpha = 1;
+
+  // Terrain mottling on land (darker/lighter patches) for texture at closer zoom.
+  clusters.forEach((cl) => {
+    const cx = cl.x * w, cy = cl.y * h;
+    for (let i = 0; i < 10; i++) {
+      const ang = rand() * Math.PI * 2, dist = rand() * cl.r;
+      const x = cx + Math.cos(ang) * dist, y = cy + Math.sin(ang) * dist * 0.7;
+      const shade = rand() > 0.5 ? landGreen.clone().multiplyScalar(0.7) : landTan.clone().multiplyScalar(1.15);
+      ctx.globalAlpha = 0.18 + rand() * 0.15; ctx.fillStyle = `#${shade.getHexString()}`;
+      ctx.beginPath(); ctx.arc(x, y, cl.r * 0.3, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+  ctx.globalAlpha = 1;
+
+  // Polar ice caps.
+  const capGrad = (y0, y1, dir) => {
+    const g = ctx.createLinearGradient(0, y0, 0, y1);
+    g.addColorStop(dir, 'rgba(240,248,255,0.95)'); g.addColorStop(1 - dir, 'rgba(240,248,255,0)');
+    return g;
+  };
+  ctx.fillStyle = capGrad(0, h * 0.13, 0); ctx.fillRect(0, 0, w, h * 0.13);
+  ctx.fillStyle = capGrad(h * 0.87, h, 1); ctx.fillRect(0, h * 0.87, w, h * 0.13);
+
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+}
+
+function createCloudsTexture(seed) {
+  const w = 512, h = 256; const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const ctx = c.getContext('2d'); const rand = seededRandom(seed * 5303 + 21);
+  ctx.clearRect(0, 0, w, h);
+  for (let i = 0; i < 26; i++) {
+    const cx = rand() * w, cy = h * 0.12 + rand() * h * 0.76;
+    const puffs = 3 + Math.floor(rand() * 4);
+    for (let j = 0; j < puffs; j++) {
+      const x = cx + (rand() - 0.5) * 30, y = cy + (rand() - 0.5) * 12;
+      const r = 5 + rand() * 11;
+      ctx.globalAlpha = 0.06 + rand() * 0.11;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+}
+
 function createGasGiantTexture(hex, seed) {
   const w = 512, h = 256; const c = document.createElement('canvas'); c.width = w; c.height = h;
   const ctx = c.getContext('2d'); const rand = seededRandom(seed * 6151 + 3);
@@ -997,7 +1078,7 @@ function buildBody(body) {
   } else if (isAsteroidLike) {
     material = new THREE.MeshStandardMaterial({ color: body.color, roughness: 1, metalness: 0.15, flatShading: true });
   } else {
-    const tex = isGas ? createGasGiantTexture(body.color, seed) : createRockyTexture(body.color, seed);
+    const tex = body.id === 'earth' ? createEarthTexture(seed) : (isGas ? createGasGiantTexture(body.color, seed) : createRockyTexture(body.color, seed));
     material = new THREE.MeshStandardMaterial({ map: tex, roughness: isGas ? 0.85 : 0.92, metalness: 0.02 });
   }
   const geo = new THREE.SphereGeometry(body.displayRadius, isAsteroidLike ? 10 : 48, isAsteroidLike ? 10 : 48);
@@ -1006,6 +1087,12 @@ function buildBody(body) {
   group.add(mesh);
 
   if (body.id === 'earth') {
+    const clouds = new THREE.Mesh(
+      new THREE.SphereGeometry(body.displayRadius, 32, 32),
+      new THREE.MeshStandardMaterial({ map: createCloudsTexture(seed), transparent: true, opacity: 0.65, depthWrite: false, roughness: 1 })
+    );
+    clouds.scale.setScalar(1.012);
+    group.add(clouds);
     const atm = new THREE.Mesh(new THREE.SphereGeometry(body.displayRadius, 32, 32), new THREE.MeshBasicMaterial({ color: '#6fc7e8', transparent: true, opacity: 0.16, side: THREE.BackSide, depthWrite: false }));
     atm.scale.setScalar(1.06);
     group.add(atm);
@@ -1776,47 +1863,47 @@ function scanCloseApproaches() {
 const launchEvents = [
   { id: 'crew12', name: 'Crew-12', vehicle: 'Falcon 9 / Crew Dragon Freedom', site: 'Cape Canaveral, SLC-40',
     date: new Date('2026-02-13T10:15:56Z'), padDir: [0.55, 1, 0.35],
-    style: { booster: '#e9edf1', ship: '#f4f6f8', scale: 1.0 }, sepDt: 3.2,
+    style: { booster: '#e9edf1', ship: '#f4f6f8', scale: 1.0 }, sepDt: 3.2, dest: 'iss', landing: 'rtls',
     ms: [[0, 'LIFTOFF'], [1.8, 'MAX-Q'], [3.2, 'MECO \u00B7 STAGE SEPARATION'], [5.0, 'BOOSTER RETURN BURN'], [6.8, 'DRAGON FREEDOM IN ORBIT'], [8.6, 'RENDEZVOUS WITH ISS']],
     summary: 'Meir, Hathaway, Adenot and Fedyaev to the International Space Station.' },
   { id: 'artemis2', name: 'Artemis II', vehicle: 'SLS / Orion', site: 'Kennedy Space Center, LC-39B',
     date: new Date('2026-04-01T22:35:00Z'), padDir: [0.6, 1, 0.3],
-    style: { booster: '#e08a4a', ship: '#f1efe9', scale: 1.25 }, sepDt: 3.6,
+    style: { booster: '#e08a4a', ship: '#f1efe9', scale: 1.25 }, sepDt: 3.6, dest: 'moon', landing: 'expend', tliT: 8.6,
     ms: [[0, 'LIFTOFF'], [1.9, 'MAX-Q'], [3.6, 'SOLID BOOSTER SEPARATION'], [5.2, 'CORE STAGE SEPARATION'], [6.8, 'ORION IN EARTH ORBIT'], [8.6, 'TRANS-LUNAR INJECTION'], [10.2, 'CREW EN ROUTE TO THE MOON']],
     summary: 'First crewed Artemis flight \u2014 Wiseman, Glover, Koch and Hansen around the Moon and back.' },
   { id: 'newglenn7', name: 'New Glenn \u00B7 BlueBird 7', vehicle: 'New Glenn 7\u00D72', site: 'Cape Canaveral, LC-36',
     date: new Date('2026-04-19T12:00:00Z'), approx: true, padDir: [0.5, 1, 0.5],
-    style: { booster: '#7f97c9', ship: '#dfe6f4', scale: 1.2 }, sepDt: 3.4,
+    style: { booster: '#7f97c9', ship: '#dfe6f4', scale: 1.2 }, sepDt: 3.4, dest: 'deploy', landing: 'droneship',
     ms: [[0, 'LIFTOFF'], [1.9, 'MAX-Q'], [3.4, 'BOOSTER SEPARATION'], [5.0, 'SECOND STAGE IGNITION'], [7.2, 'FAIRING SEPARATION'], [9.0, 'BLUEBIRD BLOCK 2 DEPLOYMENT']],
     summary: 'AST SpaceMobile BlueBird satellite \u2014 the last flight from LC-36A before its reconstruction.' },
   { id: 'starship12', name: 'Starship Flight 12', vehicle: 'Starship / Super Heavy', site: 'Starbase, Boca Chica, Texas',
     date: new Date('2026-05-21T13:00:00Z'), approx: true, padDir: [0.25, 1, -0.55],
-    style: { booster: '#c3ccd4', ship: '#d8dee3', scale: 1.35 }, sepDt: 3.6,
+    style: { booster: '#c3ccd4', ship: '#d8dee3', scale: 1.35 }, sepDt: 3.6, dest: 'suborbital', landing: 'catch',
     ms: [[0, 'LIFTOFF'], [2.0, 'MAX-Q'], [3.6, 'HOT STAGING'], [5.4, 'BOOSTER RETURN TO TOWER'], [7.4, 'SHIP COAST'], [9.2, 'ATMOSPHERIC REENTRY']],
     summary: 'A Starship flight test from Starbase.' },
   { id: 'starship13', name: 'Starship Flight 13', vehicle: 'Starship / Super Heavy', site: 'Starbase, Boca Chica, Texas',
     date: new Date('2026-07-23T13:00:00Z'), approx: true, padDir: [0.3, 1, -0.5],
-    style: { booster: '#c3ccd4', ship: '#d8dee3', scale: 1.35 }, sepDt: 3.6,
+    style: { booster: '#c3ccd4', ship: '#d8dee3', scale: 1.35 }, sepDt: 3.6, dest: 'suborbital', landing: 'catch',
     ms: [[0, 'LIFTOFF'], [2.0, 'MAX-Q'], [3.6, 'HOT STAGING'], [5.4, 'BOOSTER RETURN TO TOWER'], [7.4, 'SHIP COAST'], [9.2, 'ATMOSPHERIC REENTRY']],
     summary: 'The next Starship flight test from Starbase.' },
   { id: 'ariane62-mtgi2', name: 'Ariane 62 \u00B7 MTG-I2', vehicle: 'Ariane 62', site: 'Guiana Space Centre, ELA-4',
     date: new Date('2026-08-27T21:00:00Z'), approx: true, padDir: [-0.45, 1, 0.7],
-    style: { booster: '#e8ded2', ship: '#f2efe9', scale: 1.15 }, sepDt: 2.8,
+    style: { booster: '#e8ded2', ship: '#f2efe9', scale: 1.15 }, sepDt: 2.8, dest: 'deploy', landing: 'expend',
     ms: [[0, 'LIFTOFF'], [1.7, 'MAX-Q'], [2.8, 'P120C BOOSTER SEPARATION'], [4.4, 'FAIRING JETTISON'], [5.8, 'CORE STAGE SEPARATION'], [7.0, 'VINCI UPPER STAGE BURN'], [9.2, 'MTG-I2 WEATHER SATELLITE RELEASED']],
     summary: 'A EUMETSAT Meteosat Third Generation imager satellite, lifted from French Guiana.' },
   { id: 'starship14', name: 'Starship Flight 14', vehicle: 'Starship / Super Heavy V3', site: 'Starbase, Boca Chica, Texas',
     date: new Date('2026-09-28T13:15:00Z'), planned: true, padDir: [0.28, 1, -0.5],
-    style: { booster: '#c3ccd4', ship: '#d8dee3', scale: 1.35 }, sepDt: 3.6,
+    style: { booster: '#c3ccd4', ship: '#d8dee3', scale: 1.35 }, sepDt: 3.6, dest: 'leo', landing: 'catch',
     ms: [[0, 'LIFTOFF'], [2.0, 'MAX-Q'], [3.6, 'BOOSTER SEPARATION'], [5.5, 'BOOSTER CATCH AT TOWER'], [8.0, 'STARLINK V3 DEPLOYMENT'], [10.0, 'FIRST FULL ORBIT']],
     summary: "Starship's attempt to reach full orbit and deploy Starlink V3 satellites." },
   { id: 'crew13', name: 'Crew-13', vehicle: 'Falcon 9 / Crew Dragon Grace', site: 'Cape Canaveral, SLC-40',
     date: new Date('2026-10-01T15:10:06Z'), planned: true, padDir: [0.55, 1, 0.35],
-    style: { booster: '#e9edf1', ship: '#f4f6f8', scale: 1.0 }, sepDt: 3.2,
+    style: { booster: '#e9edf1', ship: '#f4f6f8', scale: 1.0 }, sepDt: 3.2, dest: 'iss', landing: 'rtls',
     ms: [[0, 'LIFTOFF'], [1.8, 'MAX-Q'], [3.2, 'MECO \u00B7 STAGE SEPARATION'], [5.0, 'BOOSTER LANDING AT LZ-40 (PLANNED)'], [6.8, 'DRAGON GRACE IN ORBIT'], [8.6, 'RENDEZVOUS WITH ISS']],
     summary: 'Watkins, Delaney, Kutryk and Teteryatnikov \u2014 a six-month stay on the ISS.' },
   { id: 'gaganyaan1', name: 'Gaganyaan-1', vehicle: 'HLVM3', site: 'Satish Dhawan Space Centre',
     date: new Date('2026-11-15T04:30:00Z'), approx: true, planned: true, padDir: [-0.2, 1, -0.7],
-    style: { booster: '#e6dccb', ship: '#f2efe9', scale: 1.15 }, sepDt: 3.0,
+    style: { booster: '#e6dccb', ship: '#f2efe9', scale: 1.15 }, sepDt: 3.0, dest: 'leo', landing: 'expend',
     ms: [[0, 'LIFTOFF'], [1.8, 'MAX-Q'], [3.0, 'S200 BOOSTER SEPARATION'], [4.8, 'CORE STAGE SEPARATION'], [6.8, 'CREW MODULE IN ORBIT'], [8.6, 'VYOMMITRA ABOARD \u2014 UNCREWED TEST']],
     summary: "India's first uncrewed orbital test of the Gaganyaan crew capsule. Planned for Q4 2026; the date may slip." },
 ];
@@ -1890,7 +1977,8 @@ launchEvents.forEach((ev) => {
 });
 
 function replayLaunch(ev) {
-  if (state.mode === 'pilot' || activeLaunch) return;
+  if (state.mode === 'pilot') return;
+  if (activeLaunch) { pushTicker('A launch sequence is already playing — let it finish or skip it first.'); return; }
   hideLaunchPrompt();
   state.simDate = new Date(ev.date.getTime() - 45 * 60 * 1000);
   resyncLaunchClock();
@@ -1912,6 +2000,16 @@ const _flameW = new THREE.Vector3();
 let activeLaunch = null;
 
 function easeInOut(p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
+
+// Distance traveled after `tp` seconds of straight-line coasting: ramps up to a constant
+// cruise speed over ACCEL_TIME seconds, then holds steady — never accelerates forever, unlike
+// a raw quadratic, so a long coast phase can't quietly build up to an absurd closing speed.
+const COAST_CRUISE_SPEED = 0.85;
+const COAST_ACCEL_TIME = 3;
+function coastDistance(tp) {
+  if (tp <= COAST_ACCEL_TIME) return (COAST_CRUISE_SPEED * tp * tp) / (2 * COAST_ACCEL_TIME);
+  return (COAST_CRUISE_SPEED * COAST_ACCEL_TIME) / 2 + COAST_CRUISE_SPEED * (tp - COAST_ACCEL_TIME);
+}
 function clockLabel(rel) {
   const a = Math.abs(rel);
   const mm = String(Math.floor(a / 60)).padStart(2, '0');
@@ -1973,6 +2071,7 @@ function startLaunchSequence(event) {
     lookAt: controls.target.clone(),
     prevRocketPos: null, rocketVel: new THREE.Vector3(),
     boosterFree: null, flyOutFrom: null, lookFrom: null,
+    sepPos: null, sepDir: null, orbitAxis: null,
   };
 
   launchAlertTitle.textContent = event.name;
@@ -1996,6 +2095,10 @@ function endLaunchSequence() {
   al.rocket.group.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
   al.trail.forEach((p) => { scene.remove(p.mesh); p.mesh.geometry.dispose(); p.mesh.material.dispose(); });
   if (al.boosterFree) { scene.remove(al.boosterFree.mesh); al.boosterFree.mesh.geometry.dispose(); al.boosterFree.mesh.material.dispose(); }
+  if (al.boosterLand) {
+    scene.remove(al.boosterLand.mesh);
+    al.boosterLand.mesh.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+  }
   camera.position.copy(al.savedCamPos);
   controls.target.copy(al.savedTarget);
   controls.enabled = true;
@@ -2029,14 +2132,69 @@ function updateLaunchSequence(delta) {
   const restOffset = 0.19 * style.scale * 1.15;
   const padPos = earthPos.clone().addScaledVector(al.padDir, R * 1.005);
 
-  const posAt = (r) => {
+  const sepDt = al.event.sepDt;
+  const ascentAt = (r) => {
     if (r <= 0) return padPos.clone().addScaledVector(al.padDir, restOffset);
     const h = 0.02 * r * r + 0.0006 * r * r * r;
     const l = 0.0025 * Math.pow(r, 2.4);
     return padPos.clone().addScaledVector(al.padDir, restOffset + h).addScaledVector(al.side, l);
   };
-  const rocketPos = posAt(rt);
-  const nextPos = posAt(rt + 0.05);
+  // After separation the ship's path branches by destination: a straight coast for simple
+  // payload deploys, a curving arc around Earth for orbital/suborbital flights, or a path that
+  // bends toward the Moon's actual current position for lunar missions.
+  const shipAt = (r) => {
+    if (r <= sepDt || !al.sepPos) return ascentAt(r);
+    const tp = r - sepDt;
+    const dest = al.event.dest;
+    if (dest === 'moon') {
+      // A real destination, not an ever-accelerating straight line: curve out from the
+      // separation point (control point continues the initial heading) and arrive at — then
+      // hold near — the Moon's actual current position, instead of blowing straight through it.
+      const moonPos = bodyMeshes.moon.group.position;
+      const arriveDur = 7.5;
+      const p = easeInOut(Math.min(1, tp / arriveDur));
+      const control = al.sepPos.clone().addScaledVector(al.sepDir, 3.6);
+      const outward = moonPos.clone().sub(earthPos).normalize();
+      const target = moonPos.clone().addScaledVector(outward, moon.displayRadius * 2.2);
+      const a = (1 - p) * (1 - p), b = 2 * (1 - p) * p, c = p * p;
+      return al.sepPos.clone().multiplyScalar(a).addScaledVector(control, b).addScaledVector(target, c);
+    }
+    if (dest === 'iss') {
+      // Curve out and actually rendezvous with the ISS marker's live position, then match its
+      // motion (a simple stand-in for "docked") for the rest of the sequence.
+      const issEntry = missionMeshes.iss;
+      if (issEntry) {
+        const arriveDur = 5.2;
+        const p = Math.min(1, tp / arriveDur);
+        if (p >= 1) return issEntry.group.position.clone().addScaledVector(al.side, 0.1);
+        const eased = easeInOut(p);
+        const control = al.sepPos.clone().addScaledVector(al.sepDir, 2.4);
+        const target = issEntry.group.position;
+        const a = (1 - eased) * (1 - eased), b = 2 * (1 - eased) * eased, c = eased * eased;
+        return al.sepPos.clone().multiplyScalar(a).addScaledVector(control, b).addScaledVector(target, c);
+      }
+      // Fall through to a generic orbit if the ISS marker is hidden/unavailable.
+    }
+    if (dest === 'leo' || dest === 'suborbital' || dest === 'iss') {
+      const radial0 = al.sepPos.clone().sub(earthPos);
+      const R0 = radial0.length();
+      let radius = R0;
+      if (dest === 'suborbital' && tp > 4) {
+        const dtp = tp - 4;
+        radius = Math.max(R0 - dtp * dtp * 0.09 * R0, R * 1.02);
+      }
+      const angle = tp * 0.16;
+      const rotated = radial0.clone().applyAxisAngle(al.orbitAxis, angle).setLength(radius);
+      return earthPos.clone().add(rotated);
+    }
+    // 'deploy' and any unrecognized destination: continue outward in a straight line, ramping
+    // up to a constant cruise speed rather than accelerating forever — an unbounded quadratic
+    // here is exactly what made longer coasts (e.g. New Glenn) look like they suddenly hit
+    // warp speed near the end, and also made the camera's lag-behind chase grow without limit.
+    return al.sepPos.clone().addScaledVector(al.sepDir, coastDistance(tp));
+  };
+  const rocketPos = shipAt(rt);
+  const nextPos = shipAt(rt + 0.05);
   const dir = nextPos.clone().sub(rocketPos);
   if (dir.lengthSq() < 1e-10) dir.copy(al.padDir); else dir.normalize();
 
@@ -2056,8 +2214,13 @@ function updateLaunchSequence(delta) {
     al.rocket.core.scale.set(1, flick * (rt > 0 ? 1.1 : 0.6), 1);
   }
 
-  // Booster separation: it detaches, tumbles away and fades.
-  if (!al.boosterFree && rt >= al.event.sepDt) {
+  // Booster separation: capture the moment for the ship's post-separation path, then the
+  // booster either tumbles away and fades (expendable) or flies itself back to a landing spot.
+  if (!al.boosterFree && rt >= sepDt) {
+    al.sepPos = rocketPos.clone();
+    al.sepDir = dir.clone();
+    al.orbitAxis = new THREE.Vector3().crossVectors(al.padDir, al.side).normalize();
+
     const b = al.rocket.booster;
     const wp = new THREE.Vector3();
     b.getWorldPosition(wp);
@@ -2069,10 +2232,20 @@ function updateLaunchSequence(delta) {
     scene.add(b);
     al.rocket.flame.position.y = 0.07;
     al.rocket.core.position.y = 0.085;
-    al.boosterFree = {
-      mesh: b, born: t,
-      vel: al.rocketVel.clone().multiplyScalar(0.55).addScaledVector(al.side, -0.09),
-    };
+
+    const landing = al.event.landing;
+    if (landing === 'expend') {
+      al.boosterFree = { mesh: b, born: t, vel: al.rocketVel.clone().multiplyScalar(0.55).addScaledVector(al.side, -0.09) };
+    } else {
+      const landTarget =
+        landing === 'catch' ? padPos.clone() :
+        landing === 'rtls' ? padPos.clone().addScaledVector(al.side, -0.55) :
+        padPos.clone().addScaledVector(al.side, 1.6).addScaledVector(al.padDir, 0.1); // droneship, out to sea
+      const flame = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.075, 8), new THREE.MeshBasicMaterial({ color: '#8fd0ff', transparent: true, opacity: 0, depthWrite: false }));
+      flame.position.y = -0.14; flame.rotation.x = Math.PI;
+      b.add(flame);
+      al.boosterLand = { mesh: b, flame, from: wp.clone(), target: landTarget, started: t, duration: 4.4, landed: false, flashed: false };
+    }
   }
   if (al.boosterFree) {
     const bf = al.boosterFree;
@@ -2082,6 +2255,29 @@ function updateLaunchSequence(delta) {
     bf.mesh.rotateZ(0.5 * delta);
     bf.mesh.material.opacity = Math.max(0, 1 - (t - bf.born) / 3.4);
     if (bf.mesh.material.opacity <= 0) bf.mesh.visible = false;
+  }
+  if (al.boosterLand && !al.boosterLand.landed) {
+    const bl = al.boosterLand;
+    const p = Math.min(1, (t - bl.started) / bl.duration);
+    const eased = easeInOut(p);
+    const lift = Math.sin(p * Math.PI) * 0.7;
+    const pos = bl.from.clone().lerp(bl.target, eased).addScaledVector(al.padDir, lift);
+    bl.mesh.position.copy(pos);
+    const descending = p > 0.55;
+    bl.flame.material.opacity = descending ? 0.55 + Math.sin(t * 50) * 0.2 : 0;
+    if (descending) {
+      bl.mesh.quaternion.slerp(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), al.padDir), Math.min(1, delta * 2));
+    }
+    if (p >= 1) {
+      bl.landed = true;
+      bl.flame.material.opacity = 0;
+      bl.flashPulse = 0.4;
+    }
+  }
+  if (al.boosterLand && al.boosterLand.landed && al.boosterLand.flashPulse > 0) {
+    al.boosterLand.flashPulse -= delta;
+    const k = Math.max(0, al.boosterLand.flashPulse) / 0.4;
+    al.boosterLand.mesh.children.forEach((m) => { if (m.material && m.material.emissive) m.material.emissiveIntensity = 0.32 + k * 1.4; });
   }
 
   // Exhaust trail
@@ -2117,13 +2313,41 @@ function updateLaunchSequence(delta) {
     if (rt <= 0) {
       camera.position.copy(camStart);
       al.lookAt.copy(rocketPos);
-    } else {
+    } else if (rt <= sepDt) {
+      // Still ascending in a straight line from the pad: a fixed offset in the launch frame
+      // reads well here since the direction of travel barely changes.
       const desired = rocketPos.clone().addScaledVector(al.side, 3.2).addScaledVector(al.padDir, 0.5);
       camera.position.lerp(desired, 1 - Math.exp(-delta * 1.6));
-      // Look between the pad and the rocket at first (so Earth stays in frame), then lock onto the rocket.
       const focus = padPos.clone().addScaledVector(al.padDir, 0.4)
         .lerp(rocketPos.clone().addScaledVector(dir, 0.3), easeInOut(Math.min(1, rt / 7)));
       al.lookAt.lerp(focus, 1 - Math.exp(-delta * 4));
+    } else {
+      // Past separation the path can curve hard (orbit insertion, lunar bend), so a fixed
+      // launch-frame offset would swing wildly as the ship changes heading. Chase from behind
+      // the actual (smoothed) direction of travel instead, like a normal chase camera.
+      if (!al.chaseDir) al.chaseDir = dir.clone();
+      al.chaseDir.lerp(dir, Math.min(1, delta * 1.2));
+      if (al.chaseDir.lengthSq() < 1e-8) al.chaseDir.copy(dir);
+      al.chaseDir.normalize();
+      // Stable "up" via Gram-Schmidt against a vector carried frame-to-frame, rather than
+      // recomputed from scratch each frame — a fresh cross-product-based up can momentarily
+      // collapse to near-zero whenever chaseDir swings close to whatever fixed axis it's
+      // crossed against (this is exactly what caused the camera to snap onto/inside the ship
+      // mid-orbit). Carrying it forward means it just keeps rotating smoothly through that
+      // moment instead of re-deriving an unstable direction.
+      if (!al.chaseUp) al.chaseUp = Math.abs(al.chaseDir.dot(WORLD_UP)) < 0.9 ? WORLD_UP.clone() : al.padDir.clone();
+      al.chaseUp.addScaledVector(al.chaseDir, -al.chaseUp.dot(al.chaseDir));
+      if (al.chaseUp.lengthSq() < 0.02) {
+        // Guaranteed-safe perpendicular fallback: chaseDir can't be aligned with both world axes at once.
+        const alt = Math.abs(al.chaseDir.x) < 0.9 ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 0, 1);
+        al.chaseUp.crossVectors(al.chaseDir, alt);
+      }
+      al.chaseUp.normalize();
+      const camUp = al.chaseUp;
+      const desired = rocketPos.clone().addScaledVector(al.chaseDir, -3.4).addScaledVector(camUp, 1.1);
+      camera.position.lerp(desired, 1 - Math.exp(-delta * 1.1));
+      const focus = rocketPos.clone().addScaledVector(al.chaseDir, 0.6);
+      al.lookAt.lerp(focus, 1 - Math.exp(-delta * 3));
     }
   } else {
     if (!al.flyOutFrom) { al.flyOutFrom = camera.position.clone(); al.lookFrom = al.lookAt.clone(); }
@@ -2368,6 +2592,8 @@ function runEyeCommand(raw) {
   if (['reset', 'home', 'overview'].includes(verb)) {
     selectBody(null, false);
     camGoal = { mode: 'pos', pos: new THREE.Vector3(0, 62, 78) };
+    state.followId = null;
+    controls.target.set(0, 0, 0);
     eyePrint('Returning to the overview.', 'reply');
     setTimeout(closeEye, 700);
     return;
@@ -2507,14 +2733,15 @@ function animate() {
   } else if (state.mode === 'pilot') {
     updatePilot(delta);
   } else {
+    // Only steer the orbit target when something is actively followed — otherwise leave
+    // controls.target exactly where the user last set it (dragging/zooming), so scroll-to-zoom
+    // doesn't fight a target that's silently drifting back toward the Sun every frame.
     if (state.followId) {
       const isMission = missions.some((mm) => mm.id === state.followId);
       const followPos = isMission ? missionMeshes[state.followId].group.position : (state.followId === 'moon' ? bodyMeshes.moon.group.position : bodyMeshes[state.followId].group.position);
       desiredTarget.copy(followPos);
-    } else {
-      desiredTarget.set(0, 0, 0);
+      controls.target.lerp(desiredTarget, 0.06);
     }
-    controls.target.lerp(desiredTarget, 0.06);
     if (camGoal) {
       if (camGoal.mode === 'approach' && state.followId) {
         _goalOff.copy(camera.position).sub(desiredTarget);
