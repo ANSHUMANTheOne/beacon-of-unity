@@ -1,4 +1,5 @@
 import {UUID} from './protocol.js';
+const PROPS=['broadcast','read','writeWithoutResponse','write','notify','indicate','authenticatedSignedWrites'];
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const tmo=(p,ms,m)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error(m)),ms))]);
 export class BLE extends EventTarget{
@@ -26,7 +27,7 @@ export class BLE extends EventTarget{
       this.chars.clear();const out=[];let sv=[];
       try{sv=await s.getPrimaryServices()}catch(e){if(e.name!=='NotFoundError')throw e}
       for(const v of sv){const cs=await v.getCharacteristics();cs.forEach(c=>this.chars.set(c.uuid,c));
-        out.push({uuid:v.uuid,chars:cs.map(c=>({uuid:c.uuid,props:Object.keys(c.properties).filter(k=>c.properties[k])}))})}
+        out.push({uuid:v.uuid,chars:cs.map(c=>({uuid:c.uuid,props:PROPS.filter(k=>c.properties[k])}))})}
       this.connected=true;this.emit('state','connected');this.emit('services',out);this.log(`Connected, ${out.length} accessible service(s)`);
     }catch(e){this.connected=false;this.emit('state','disconnected');throw e}
   }
