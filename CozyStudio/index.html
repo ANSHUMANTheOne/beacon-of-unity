@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CozyStudio</title><link rel="stylesheet" href="styles.css"></head><body>
+<nav><h1>CozyStudio</h1>
+<button data-t="dash" class="on">Dashboard</button><button data-t="fx">Effects</button><button data-t="studio">Animation Studio</button>
+<button data-t="pre">Presets</button><button data-t="diag">Device Diagnostics</button><button data-t="set">Settings</button></nav>
+<main>
+<div id="toast" hidden role="alert"></div><noscript>JavaScript is required.</noscript>
+<section id="t-dash"><div class="card"><div class="row"><button id="conn" class="big">Connect Lights</button><button id="reco">Reconnect</button><button id="disc">Disconnect</button></div>
+<p>Device: <b id="dev">none</b></p>
+<p><span id="sConn" class="b">Disconnected</span> <span id="sProto" class="b">Protocol: unknown</span> <span id="sMode" class="b">Preview only</span></p>
+<p class="m" id="last">Nothing sent yet.</p></div>
+<div class="card"><h2>Preview (browser only)</h2><canvas id="bars"></canvas>
+<p class="m">This is a simulation. The controller reportedly drives both bars as one zone, so the bars always match. Confirmed on hardware: nothing until you run the test in Diagnostics.</p></div>
+<div class="card grid"><label>Colour <input type="color" id="col" value="#8a5cff"></label>
+<label>Brightness <input type="range" id="bri" min="0" max="100" value="100"></label>
+<label>Speed <input type="range" id="spd" min="0" max="100" value="50"></label>
+<div id="quick" class="row"></div></div></section>
+<section id="t-fx" hidden><div class="card"><h2>Built-in controller effects</h2>
+<p class="m">Mode numbers are from MELK-OA10 reports and may differ on CozyLady. Names beyond category ranges are not confirmed. Speed only affects effects, not solid colour.</p>
+<label>Mode <input type="number" id="mn" min="0" max="212" value="0"></label> <button id="mgo">Send mode</button>
+<div id="cats"></div></div></section>
+<section id="t-studio" hidden><div class="card"><canvas id="prev"></canvas>
+<div class="row"><button id="play">Play</button><button id="pause">Pause</button><button id="stop">Stop</button></div></div>
+<div class="card grid"><label>Type <select id="type"></select></label>
+<label>Direction <select id="dir"><option value="1">Forward</option><option value="-1">Reverse</option></select></label>
+<div><div id="pal" class="row"></div><button id="padd">+ Colour</button> <button id="prem">- Last colour</button></div>
+<p class="m" id="hwnote"></p>
+<div class="row"><button id="apply" class="big">Apply to Lights</button><button id="unapply">Stop streaming</button></div>
+<div class="row"><input id="pname" placeholder="Preset name"><button id="psave">Save preset</button></div></div></section>
+<section id="t-pre" hidden><div class="card"><div id="plist"></div><div class="row"><button id="pexp">Export JSON</button><label class="btn">Import JSON<input type="file" id="pimp" accept=".json" hidden></label></div></div></section>
+<section id="t-diag" hidden><div class="card"><h2>Protocol test</h2><p id="pst" class="m">Connect first.</p>
+<button id="test" disabled>Send test colour (blue)</button>
+<div id="ask" hidden><p>Did the lights turn blue?</p><button id="yes">Yes</button> <button id="no">No</button></div></div>
+<div class="card"><h2>GATT services</h2><div id="svc" class="m">Not connected.</div></div>
+<div class="card"><h2>Log</h2><pre id="log"></pre></div></section>
+<section id="t-set" hidden><div class="card grid"><label>Discovery <select id="scan"><option value="all">All advertising devices</option><option value="f">Filtered (FFF0 / MELK / ELK)</option></select></label>
+<label>Extra service UUIDs (comma separated, for inspection only) <input id="extra" placeholder="0000ffe0-0000-1000-8000-00805f9b34fb"></label>
+<label>Min. ms between commands <input type="number" id="gap" min="50" max="2000" step="10"></label>
+<p class="m">Sources report about 10 commands/s as the maximum; the default is conservative.</p></div></section>
+</main><script type="module" src="js/app.js"></script></body></html>
