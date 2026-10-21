@@ -1,1 +1,104 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8faf8">
+  <title>VoltWay — EYSC</title>
+  <style>
+    :root {
+      --ink: #15221b;
+      --soft: #66766d;
+      --green: #247f56;
+      --red: #e84b45;
+      --border: #e3ebe5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 95% 4%, #e1f2e5 0, transparent 35%),
+        radial-gradient(circle at 0 90%, #fff0ed 0, transparent 33%),
+        #f8faf8;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 40px 0 54px; }
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; gap: 12px; }
+    .identity { display: flex; align-items: center; gap: 12px; }
+    .symbol {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid #202c25;
+      background: linear-gradient(#ec5249 0 48%, #202c25 48% 55%, #ffffff 55% 100%);
+      box-shadow: 0 2px 4px #17251b14;
+      position: relative; flex: none;
+    }
+    .symbol:after {
+      content: ""; width: 9px; height: 9px; border-radius: 50%;
+      position: absolute; left: 50%; top: 51%; transform: translate(-50%,-50%);
+      background: white; border: 2px solid #202c25;
+    }
+    h1 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.15rem); font-weight: 780; letter-spacing: -.045em; }
+    .way { color: var(--green); }
+    .eysc {
+      border: 1px solid #d5e7d9; background: #edf7ee; color: #3d7751;
+      padding: 7px 12px; border-radius: 999px; font-size: .79rem;
+      font-weight: 700; letter-spacing: .09em;
+    }
+    .player-shell {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 22px; padding: 12px;
+      box-shadow: 0 25px 70px rgba(20, 55, 32, .075);
+    }
+    video {
+      display: block; width: 100%; aspect-ratio: 16 / 9;
+      object-fit: contain; background: #0d1210; border-radius: 13px;
+    }
+    .bottom {
+      display: flex; justify-content: flex-end; align-items: center;
+      padding: 16px 5px 4px;
+    }
+    .download {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 13px 20px; border-radius: 12px; background: var(--green);
+      color: #fff; text-decoration: none; font-size: .93rem; font-weight: 680;
+      transition: background .18s ease, transform .18s ease;
+    }
+    .download:hover { background: #176640; transform: translateY(-1px); }
+    .download:focus-visible { outline: 3px solid #a4d9ae; outline-offset: 4px; }
+    @media (max-width: 600px) {
+      main { width: calc(100% - 22px); padding-top: 24px; }
+      .player-shell { padding: 7px; border-radius: 15px; }
+      video { border-radius: 9px; }
+      .bottom { padding: 12px 2px 3px; }
+      .download { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="identity">
+      <div class="symbol" aria-hidden="true"></div>
+      <h1>Volt<span class="way">Way</span></h1>
+    </div>
+    <span class="eysc">EYSC</span>
+  </header>
+  <section class="player-shell" aria-label="VoltWay project video">
+    <video controls playsinline preload="metadata" aria-label="VoltWay EYSC submission video">
+      <source src="voltwayvideo.mp4" type="video/mp4">
+      Your browser does not support this video.
+    </video>
+    <div class="bottom">
+      <a class="download" href="voltwayvideo.mp4" download="VoltWay_EYSC_Video.mp4" aria-label="Download VoltWay video">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3"/>
+        </svg>
+        Download Video
+      </a>
+    </div>
+  </section>
+</main>
+</body>
+</html>
