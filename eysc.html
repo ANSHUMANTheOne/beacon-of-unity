@@ -204,7 +204,8 @@ video {
         id="downloadBtn"
         class="download"
         href="https://raw.githubusercontent.com/ANSHUMANTheOne/beacon-of-unity/main/voltwayvideo.mp4"
-        download="VoltWay_EYSC_Video.mp4"
+        target="_blank"
+        rel="noopener noreferrer"
       >
         ↓ Download Video
       </a>
@@ -222,8 +223,7 @@ const openVideo = document.getElementById("openVideo");
 
 const videoSources = [
   "https://raw.githubusercontent.com/ANSHUMANTheOne/beacon-of-unity/main/voltwayvideo.mp4",
-  "https://anshumantheone.github.io/beacon-of-unity/voltwayvideo.mp4",
-  new URL("voltwayvideo.mp4", document.baseURI).href
+  "https://anshumantheone.github.io/beacon-of-unity/voltwayvideo.mp4"
 ];
 
 let currentSource = 0;
@@ -264,9 +264,7 @@ video.addEventListener("loadedmetadata", () => {
 
 video.addEventListener("error", () => {
   clearTimeout(loadTimer);
-  if (currentSource < videoSources.length) {
-    loadVideo(currentSource + 1);
-  }
+  loadVideo(currentSource + 1);
 });
 
 loadVideo(0);
