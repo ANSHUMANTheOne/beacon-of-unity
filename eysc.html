@@ -7,6 +7,12 @@
 <title>VoltWay | EYSC</title>
 
 <style>
+:root {
+  --green: #238354;
+  --dark: #18291f;
+  --red: #ec5048;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -19,7 +25,7 @@ body {
     radial-gradient(circle at 95% 5%, #e1f3e5, transparent 38%),
     radial-gradient(circle at 5% 95%, #fff0ed, transparent 35%),
     #f8faf8;
-  color: #17291e;
+  color: var(--dark);
 }
 
 .container {
@@ -48,8 +54,8 @@ header {
   border-radius: 50%;
   background: linear-gradient(
     to bottom,
-    #ed514a 0%,
-    #ed514a 47%,
+    var(--red) 0%,
+    var(--red) 47%,
     #222 47%,
     #222 54%,
     white 54%
@@ -77,12 +83,12 @@ h1 {
 }
 
 h1 span {
-  color: #248553;
+  color: var(--green);
 }
 
 .eysc {
   background: #eaf6ed;
-  color: #248553;
+  color: var(--green);
   border: 1px solid #d5e9d9;
   padding: 8px 14px;
   border-radius: 30px;
@@ -115,7 +121,7 @@ video {
 .download {
   display: inline-block;
   padding: 13px 20px;
-  background: #248553;
+  background: var(--green);
   color: white;
   border-radius: 10px;
   text-decoration: none;
@@ -186,8 +192,9 @@ video {
     ></video>
 
     <div id="fallback" class="fallback">
-      The video could not load here.
-      <a id="openVideo" href="#" target="_blank" rel="noopener">
+      Video playback is unavailable.
+      <a id="openVideo" href="#" target="_blank"
+         rel="noopener noreferrer">
         Open video directly
       </a>
     </div>
@@ -196,7 +203,7 @@ video {
       <a
         id="downloadBtn"
         class="download"
-        href="#"
+        href="https://raw.githubusercontent.com/ANSHUMANTheOne/beacon-of-unity/main/voltwayvideo.mp4"
         download="VoltWay_EYSC_Video.mp4"
       >
         ↓ Download Video
@@ -214,35 +221,38 @@ const downloadBtn = document.getElementById("downloadBtn");
 const openVideo = document.getElementById("openVideo");
 
 const videoSources = [
-  new URL("voltwayvideo.mp4", document.baseURI).href,
+  "https://raw.githubusercontent.com/ANSHUMANTheOne/beacon-of-unity/main/voltwayvideo.mp4",
   "https://anshumantheone.github.io/beacon-of-unity/voltwayvideo.mp4",
-  "https://raw.githubusercontent.com/ANSHUMANTheOne/beacon-of-unity/main/voltwayvideo.mp4"
+  new URL("voltwayvideo.mp4", document.baseURI).href
 ];
 
 let currentSource = 0;
 let loadTimer;
+let attempt = 0;
 
 function loadVideo(index) {
   clearTimeout(loadTimer);
 
   if (index >= videoSources.length) {
     fallback.style.display = "block";
+    video.removeAttribute("src");
+    video.load();
     return;
   }
 
   currentSource = index;
-
+  const thisAttempt = ++attempt;
   const url = videoSources[index];
 
   video.src = url;
   video.load();
 
-  downloadBtn.href = url;
+  downloadBtn.href = videoSources[0];
   openVideo.href = url;
 
   loadTimer = setTimeout(() => {
-    if (video.readyState < 1) {
-      loadVideo(currentSource + 1);
+    if (thisAttempt === attempt && video.readyState < 1) {
+      loadVideo(index + 1);
     }
   }, 12000);
 }
@@ -254,7 +264,9 @@ video.addEventListener("loadedmetadata", () => {
 
 video.addEventListener("error", () => {
   clearTimeout(loadTimer);
-  loadVideo(currentSource + 1);
+  if (currentSource < videoSources.length) {
+    loadVideo(currentSource + 1);
+  }
 });
 
 loadVideo(0);
