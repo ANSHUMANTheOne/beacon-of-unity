@@ -1147,8 +1147,10 @@
         body.dark .adm-msg-bubble { background:#334155; color:#e2e8f0; }
         body.dark .adm-msg.right .adm-msg-bubble { background:#1e3a5f; }
     </style>
+<link rel="stylesheet" href="assets/platform.css">
+<script src="assets/platform.js" defer></script>
 </head>
-<body>
+<body class="platform">
 
     <!-- ── MINIMAP WIDGET ── -->
     <div id="minimap-widget" title="Click to expand map">
@@ -4819,7 +4821,7 @@
 
         function applySettings() {
             const dark  = localStorage.getItem('bou_dark')  === 'true';
-            const quote = localStorage.getItem('bou_quote') !== 'false';
+            const quote = localStorage.getItem('bou_quote') === 'true';
             document.body.classList.toggle('dark', dark);
             document.getElementById('darkToggle').classList.toggle('on', dark);
             document.getElementById('quoteToggle').classList.toggle('on', quote);
@@ -4830,7 +4832,7 @@
                 const now = localStorage.getItem('bou_dark') === 'true';
                 localStorage.setItem('bou_dark', !now);
             } else {
-                const now = localStorage.getItem('bou_quote') !== 'false';
+                const now = localStorage.getItem('bou_quote') === 'true';
                 localStorage.setItem('bou_quote', !now);
             }
             applySettings();
@@ -4856,7 +4858,7 @@
         ];
 
         function runQuote() {
-            if (localStorage.getItem('bou_quote') === 'false') return;
+            if (localStorage.getItem('bou_quote') !== 'true') return;
             let seen = JSON.parse(localStorage.getItem('bou_seen_quotes') || '[]');
             const remaining = QUOTES.filter((_, i) => !seen.includes(i));
             if (!remaining.length) { seen = []; localStorage.setItem('bou_seen_quotes', '[]'); }
@@ -5935,10 +5937,10 @@
       say: ()=>`Great! A chat opened with Ahmed (the demo person). He'll send you a message — respond to him and experience how the chat works!`,
       botName:'Ahmed Al Rashid', botInitial:'A',
       messages:[
-        { from:'bot', text:'Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?', delay:1200 },
-        { from:'user-prompt', text:'Type a reply and press Send…', delay:0 },
-        { from:'bot', text:'That's perfect, thank you so much! I really appreciate your help. 🙏', delay:1000 },
-        { from:'bot', text:'I'll be ready at 8:50am outside Block 3, Al Majaz 2.', delay:2200 },
+        { from:'bot', text:`Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?`, delay:1200 },
+        { from:'user-prompt', text:`Type a reply and press Send…`, delay:0 },
+        { from:'bot', text:`That's perfect, thank you so much! I really appreciate your help. 🙏`, delay:1000 },
+        { from:'bot', text:`I'll be ready at 8:50am outside Block 3, Al Majaz 2.`, delay:2200 },
       ]},
 
     /* 4 */ { type:'guide', tab:'community', target:'#chatPopup', side:null, yFrac:.5,
@@ -6749,6 +6751,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
   /* ══ AUTO-START ═══════════════════════════════════════════════ */
   function autoStart() {
+    return; // Onboarding is available from Settings, never mandatory on sign-in.
     if (localStorage.getItem('bou_tutorial_done')) return;
     let tries=0;
     const poll=setInterval(()=>{
