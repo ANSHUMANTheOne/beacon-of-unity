@@ -1147,8 +1147,10 @@
         body.dark .adm-msg-bubble { background:#334155; color:#e2e8f0; }
         body.dark .adm-msg.right .adm-msg-bubble { background:#1e3a5f; }
     </style>
+<link rel="stylesheet" href="assets/platform.css">
+<script src="assets/platform.js" defer></script>
 </head>
-<body>
+<body class="platform">
 
     <!-- ── MINIMAP WIDGET ── -->
     <div id="minimap-widget" title="Click to expand map">
@@ -4850,7 +4852,7 @@
 
         function applySettings() {
             const dark  = localStorage.getItem('bou_dark')  === 'true';
-            const quote = localStorage.getItem('bou_quote') !== 'false';
+            const quote = localStorage.getItem('bou_quote') === 'true';
             document.body.classList.toggle('dark', dark);
             document.getElementById('darkToggle').classList.toggle('on', dark);
             document.getElementById('quoteToggle').classList.toggle('on', quote);
@@ -4861,7 +4863,7 @@
                 const now = localStorage.getItem('bou_dark') === 'true';
                 localStorage.setItem('bou_dark', !now);
             } else {
-                const now = localStorage.getItem('bou_quote') !== 'false';
+                const now = localStorage.getItem('bou_quote') === 'true';
                 localStorage.setItem('bou_quote', !now);
             }
             applySettings();
@@ -4887,7 +4889,7 @@
         ];
 
         function runQuote() {
-            if (localStorage.getItem('bou_quote') === 'false') return;
+            if (localStorage.getItem('bou_quote') !== 'true') return;
             let seen = JSON.parse(localStorage.getItem('bou_seen_quotes') || '[]');
             const remaining = QUOTES.filter((_, i) => !seen.includes(i));
             if (!remaining.length) { seen = []; localStorage.setItem('bou_seen_quotes', '[]'); }
@@ -5996,10 +5998,10 @@
       say: ()=>`Great! A chat opened with Ahmed (the demo person). He'll send you a message — respond to him and experience how the chat works!`,
       botName:'Ahmed Al Rashid', botInitial:'A',
       messages:[
-        { from:'bot', text:'Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?', delay:1200 },
-        { from:'user-prompt', text:'Type a reply and press Send…', delay:0 },
-        { from:'bot', text:'That's perfect, thank you so much! I really appreciate your help. 🙏', delay:1000 },
-        { from:'bot', text:'I'll be ready at 8:50am outside Block 3, Al Majaz 2.', delay:2200 },
+        { from:'bot', text:`Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?`, delay:1200 },
+        { from:'user-prompt', text:`Type a reply and press Send…`, delay:0 },
+        { from:'bot', text:`That's perfect, thank you so much! I really appreciate your help. 🙏`, delay:1000 },
+        { from:'bot', text:`I'll be ready at 8:50am outside Block 3, Al Majaz 2.`, delay:2200 },
       ]},
 
     /* 4 */ { type:'guide', tab:'community', target:'#chatPopup', side:null, yFrac:.5,
@@ -6810,6 +6812,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
   /* ══ AUTO-START ═══════════════════════════════════════════════ */
   function autoStart() {
+    return; // Onboarding is available from Settings, never mandatory on sign-in.
     if (window.IS_DEMO_MODE) return; // mascot tutorial is disabled inside the demo overlay
     if (localStorage.getItem('bou_tutorial_done')) return;
     let tries=0;
@@ -6849,12 +6852,28 @@ var PERSONAS={u1:{o:"Hi Anshuman! That's so kind \uD83D\uDE0A Are you nearby to 
 function getRep(uid,text){var p=PERSONAS[uid];if(!p)return"Thanks for reaching out!";var t=text.toLowerCase();if(/where|location|address|building|block|area/.test(t))return p.where||p.fb[0];if(/when|time|morning|evening|tonight|today|tomorrow|\bam\b|\bpm\b/.test(t))return p.when||p.fb[1];if(/meet|come|drop|pick.?up|visit/.test(t))return p.meet||p.fb[0];if(/thank|thanks|appreciate|grateful|\bty\b/.test(t))return p.thanks||p.fb[2];if(/\bok\b|okay|sure|great|perfect|sounds good|alright|done|see you/.test(t))return p.ok||p.fb[0];if(/help|assist|available|can you/.test(t))return p.help||p.fb[1];if(!p._i)p._i=0;var r=p.fb[p._i%p.fb.length];p._i++;return r;}
 function uG(uid){var u=DEMO_USERS.find(function(x){return x.id===uid;});return u?'linear-gradient(135deg,'+u.bg+')':'linear-gradient(135deg,#38bdf8,#0ea5e9)';}
 var _cUid='',_cName='',_cGrad='';
-window.openDemoChat=function(uid,name){_cUid=uid;_cName=name;_cGrad=uG(uid);var av=document.getElementById('chatAvatarCircle');if(av){av.textContent=name.charAt(0);av.style.background=_cGrad;}var cw=document.getElementById('chatWith');if(cw)cw.textContent=name;var cs=document.getElementById('chatSubline');if(cs)cs.textContent='Community Member \u00B7 Sharjah';var ma=document.getElementById('messageArea');if(ma)ma.innerHTML='';var popup=document.getElementById('chatPopup');if(popup)popup.style.display='flex';var bar=document.getElementById('chatFooterBar');if(bar)bar.innerHTML='<div class="ibar endchat"><span class="ibar-label">Chatting with <b>'+name+'</b></span><button class="ibar-btn endchat" onclick="window.demoChatEnd()">End Chat</button></div>';var sb=document.getElementById('sendMsgBtn');var mi=document.getElementById('msgInput');if(sb){var nb=sb.cloneNode(true);sb.parentNode.replaceChild(nb,sb);nb.onclick=function(){_dS();};}if(mi){mi.value='';mi.onkeydown=function(e){if(e.key==='Enter')_dS();};setTimeout(function(){mi.focus();},200);}var p=PERSONAS[uid];_showT();setTimeout(function(){_remT();_addM('them',p?p.o:'Hello! How can I help?');},1100);};
-window.demoChatEnd=function(){var popup=document.getElementById('chatPopup');if(popup)popup.style.display='none';var bar=document.getElementById('chatFooterBar');if(bar)bar.innerHTML='';var ma=document.getElementById('messageArea');if(ma)ma.innerHTML='';var mi=document.getElementById('msgInput');if(mi)mi.value='';_cUid='';_cName='';_cGrad='';};
-function _dS(){var mi=document.getElementById('msgInput');if(!mi||!_cUid)return;var t=mi.value.trim();if(!t)return;mi.value='';_addM('me',t);_showT();setTimeout(function(){_remT();_addM('them',getRep(_cUid,t));},800+Math.random()*600);}
-function _addM(side,text){var a=document.getElementById('messageArea');if(!a)return;var r=document.createElement('div');r.className='imsg-row '+side;r.innerHTML=side==='them'?'<div style="width:28px;height:28px;border-radius:50%;background:'+_cGrad+';display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:11px;flex-shrink:0;">'+(_cName||'?').charAt(0)+'</div><div class="imsg-bubble them">'+text+'</div>':'<div class="imsg-bubble me">'+text+'</div>';a.appendChild(r);a.scrollTop=a.scrollHeight;}
-function _showT(){var a=document.getElementById('messageArea');if(!a||document.getElementById('demo-typing'))return;var el=document.createElement('div');el.id='demo-typing';el.className='imsg-row them';el.innerHTML='<div class="imsg-bubble them" style="padding:10px 14px;"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';a.appendChild(el);a.scrollTop=a.scrollHeight;}
-function _remT(){var el=document.getElementById('demo-typing');if(el)el.remove();}
+var demoHistory = Object.create(null);
+function renderDemoMessage(message){
+ var area=document.getElementById('messageArea');if(!area)return;
+ var row=document.createElement('div');row.className='imsg-row '+message.side;
+ if(message.side==='them'){var avatar=document.createElement('div');avatar.className='demo-chat-avatar';avatar.style.background=_cGrad;avatar.textContent=(_cName||'?').charAt(0);row.appendChild(avatar);}
+ var column=document.createElement('div');column.className='demo-message-column';var bubble=document.createElement('div');bubble.className='imsg-bubble '+message.side;bubble.textContent=message.text;var time=document.createElement('time');time.className='demo-message-time';time.dateTime=new Date(message.at).toISOString();time.textContent=new Date(message.at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});column.appendChild(bubble);column.appendChild(time);row.appendChild(column);area.appendChild(row);area.scrollTop=area.scrollHeight;
+}
+window.openDemoChat=function(uid,name){
+ _cUid=uid;_cName=name;_cGrad=uG(uid);
+ var avatar=document.getElementById('chatAvatarCircle');if(avatar){avatar.textContent=name.charAt(0);avatar.style.background=_cGrad;}
+ document.getElementById('chatWith').textContent=name;document.getElementById('chatSubline').textContent='Demo conversation · Sharjah';document.getElementById('messageArea').replaceChildren();document.getElementById('chatPopup').style.display='flex';
+ var bar=document.getElementById('chatFooterBar');bar.replaceChildren();var line=document.createElement('div');line.className='ibar endchat';var label=document.createElement('span');label.className='ibar-label';label.textContent='Chatting with '+name;var end=document.createElement('button');end.className='ibar-btn endchat';end.textContent='End chat';end.onclick=window.demoChatEnd;line.append(label,end);bar.append(line);
+ var send=document.getElementById('sendMsgBtn'),input=document.getElementById('msgInput');var button=send.cloneNode(true);send.replaceWith(button);button.onclick=_dS;input.value='';input.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();_dS();}};
+ var messages=demoHistory[uid];if(messages&&messages.length){messages.forEach(renderDemoMessage);}else{demoHistory[uid]=[];_showT();setTimeout(function(){if(_cUid===uid)_remT();var persona=PERSONAS[uid];_addM('them',persona?persona.o:'Hello! How can I help?',uid);},1100);}
+ setTimeout(function(){input.focus();},200);
+};
+window.demoChatEnd=function(){document.getElementById('chatPopup').style.display='none';document.getElementById('chatFooterBar').replaceChildren();document.getElementById('messageArea').replaceChildren();document.getElementById('msgInput').value='';_cUid='';_cName='';_cGrad='';};
+function _dS(){var input=document.getElementById('msgInput');if(!input||!_cUid)return;var text=input.value.trim();if(!text)return;var uid=_cUid;input.value='';_addM('me',text,uid);_showT();setTimeout(function(){if(_cUid===uid)_remT();_addM('them',getRep(uid,text),uid);},900);}
+function _addM(side,text,uid){uid=uid||_cUid;if(!uid)return;var message={side:side,text:text,at:Date.now()};(demoHistory[uid]||(demoHistory[uid]=[])).push(message);if(uid===_cUid)renderDemoMessage(message);}
+function _showT(){var area=document.getElementById('messageArea');if(!area||document.getElementById('demo-typing'))return;var el=document.createElement('div');el.id='demo-typing';el.className='imsg-row them';el.setAttribute('aria-label','Neighbour is typing');el.innerHTML='<div class="imsg-bubble them"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';area.appendChild(el);area.scrollTop=area.scrollHeight;}
+function _remT(){document.getElementById('demo-typing')?.remove();}
+
 function toast(h){var t=document.createElement('div');t.style.cssText='position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#0f172a;color:#38bdf8;padding:12px 22px;border-radius:12px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 6px 24px rgba(0,0,0,.3);pointer-events:none;font-size:13px;font-weight:600;max-width:90vw;';t.innerHTML=h;document.body.appendChild(t);setTimeout(function(){t.style.transition='opacity .5s';t.style.opacity='0';setTimeout(function(){t.remove();},500);},3000);}
 function addNotif(icon,title,body){var list=document.getElementById('notifList')||document.getElementById('notifDrawer');if(!list)return;var el=document.createElement('div');el.className='notif-item unread';el.innerHTML='<span style="font-size:22px;">'+icon+'</span><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:#0f172a;">'+title+'</div><div style="font-size:11px;color:#64748b;">'+body+'</div><div style="font-size:10px;color:#94a3b8;margin-top:2px;">Just now</div></div>';list.insertBefore(el,list.firstChild);var badge=document.getElementById('bellBadge');if(badge){badge.textContent=(parseInt(badge.textContent)||0)+1;badge.style.display='block';}}
 function addToChatPanel(reqId,uid,name,label){var list=document.getElementById('activeChatsList');if(!list)return;var nm=document.getElementById('noChatsMsg');if(nm)nm.remove();if(list.querySelector('#item-demo-'+reqId))return;var g=uG(uid);var div=document.createElement('div');div.id='item-demo-'+reqId;div.className='chat-list-item chat-unread';div.innerHTML='<div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;background:#e0f2fe;color:#0369a1;">\u2728 Community</span><span class="chat-new-badge" style="background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;">NEW</span></div><span style="font-weight:700;font-size:13px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+g+';margin-right:4px;vertical-align:middle;"></span>'+name+'</span><br><small style="color:#94a3b8;font-size:11px;">'+label+'</small></div><button onclick="openDemoChat(\''+uid+'\',\''+name.replace(/'/g,"\\'")+'\')" style="background:#0f172a;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:12px;flex-shrink:0;margin-left:8px;">Open</button>';list.prepend(div);var mi=document.getElementById('mobChatsIcon');if(mi)mi.innerText='\uD83D\uDD34';}
