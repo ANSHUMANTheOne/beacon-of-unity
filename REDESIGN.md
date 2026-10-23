@@ -58,3 +58,17 @@ The listed references were opened in rendered Chrome at desktop and mobile sizes
 | Apple | Prioritize legibility, coherent spacing and straightforward forms. |
 
 The custom reference experiences can be open-ended; these observations do not claim exhaustive access to every hidden route or state. No award outcome is promised.
+
+
+## October 23 revision: reference-led motion and content parity
+
+The owner rejected the first pass as repetitive and too static. Fresh Chrome captures covered Lusion (primary reference), Active Theory, Lando Norris, the live Beacon introduction and the previous local build, at desktop and mobile sizes. Lusion's large material-driven scene, Active Theory's depth, and Lando's changing scale informed this revision. This is an original Beacon scene, not a replica of any reference.
+
+- Added `src/cinematic.css` and switched homepage display typography to Syne, keeping DM Sans for body text and leaving dashboard typography independent.
+- Replaced the repeated distant views with a wide neighbourhood, individual-building close-ups, an overhead composition and a final connected view. Added pointer parallax, damped horizontal drag, arrow-key controls and Escape-to-reset. Touch vertical scrolling remains native.
+- Added optional desktop bloom above a luminance threshold; phones use the simpler render path. Direct scene interaction and its camera changes remain available without postprocessing.
+- Added masked heading reveals, varied text placement and explicitly labelled example request/lost-item/volunteering moments. Content remains readable without low-opacity reveal states; reduced motion disables decorative animation.
+- Restored dedicated How It Works, Why Beacon comparison, schools/businesses/organisations, Badges & Rewards and Thank You Wall & Chats content. Retained the existing `#features`, `#how`, `#live`, `#trust`, `#compare` and `#beyond` anchors.
+- Kept all application handlers and the previously refined dashboard intact. Production authenticated operations remain untested without an authorized test account.
+
+Chrome tests covered all requested widths and landscape, scene drag/keyboard input, feature tabs, demo interactions, mobile navigation, reduced motion and WebGL fallback. Build and diff checks passed. Automated accessibility scans are limited to the scanned pages and states; screenshots do not establish full compliance or physical-device performance.
