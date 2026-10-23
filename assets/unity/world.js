@@ -1,30 +1,30 @@
 (function() {
-  const e = document.getElementById("bav-chat"), t = document.getElementById("bav-chat-body"), n = document.getElementById("bav-chat-form"), o = document.getElementById("bav-chat-input"), i = document.getElementById("bav-chat-close"), h = document.getElementById("bav-chat-badge"), u = document.getElementById("bav-chat-hint");
+  const e = document.getElementById("bav-chat"), t = document.getElementById("bav-chat-body"), n = document.getElementById("bav-chat-form"), a = document.getElementById("bav-chat-input"), i = document.getElementById("bav-chat-close"), h = document.getElementById("bav-chat-badge"), u = document.getElementById("bav-chat-hint");
   if (u && window.innerWidth <= 768 && (u.textContent = "Double-tap to chat"), !e) return;
   e.inert = !0, [h, u].forEach((r) => {
     if (!r) return;
-    ["mousedown", "touchstart"].forEach((c) => r.addEventListener(c, (g) => g.stopPropagation())), r.addEventListener("dblclick", (c) => {
+    ["mousedown", "touchstart"].forEach((c) => r.addEventListener(c, (v) => v.stopPropagation())), r.addEventListener("dblclick", (c) => {
       c.stopPropagation(), window.__bavOpenChat && window.__bavOpenChat();
     });
     let d = 0;
     r.addEventListener("touchend", (c) => {
       c.stopPropagation();
-      const g = performance.now();
-      g - d < 320 && window.__bavOpenChat && window.__bavOpenChat(), d = g;
+      const v = performance.now();
+      v - d < 320 && window.__bavOpenChat && window.__bavOpenChat(), d = v;
     });
   });
-  let m = !1, p = !1;
+  let p = !1, f = !1;
   function b(r, d) {
     const c = document.createElement("div");
     return c.className = "bav-msg " + d, d === "user" ? c.textContent = r : c.innerHTML = r, t.appendChild(c), t.scrollTop = t.scrollHeight, c;
   }
-  function f(r) {
+  function g(r) {
     const d = document.createElement("div");
     d.className = "bav-quick", r.forEach((c) => {
-      const g = document.createElement("button");
-      g.type = "button", g.textContent = c, g.addEventListener("click", () => {
-        o.value = c, T();
-      }), d.appendChild(g);
+      const v = document.createElement("button");
+      v.type = "button", v.textContent = c, v.addEventListener("click", () => {
+        a.value = c, T();
+      }), d.appendChild(v);
     }), t.appendChild(d), t.scrollTop = t.scrollHeight;
   }
   function w(r) {
@@ -64,39 +64,39 @@
     { k: ["who are you", "what are you", "your name"], a: "I'm Beacon — the little guardian who hangs out on this page! Drag me around, throw me, or tap the 'Tap to chat' label any time 😊" }
   ];
   function N(r) {
-    const d = r.toLowerCase(), c = E.find((g) => g.k.some((O) => d.includes(O)));
+    const d = r.toLowerCase(), c = E.find((v) => v.k.some((R) => d.includes(R)));
     return c ? c.a : "I'm not totally sure about that one — but I can tell you about Help Requests, Lost & Found, Volunteering, News, Verification, or how to join. What sounds useful?";
   }
   function T() {
-    const r = o.value.trim();
-    r && (b(r, "user"), o.value = "", w(() => b(N(r), "bot")));
+    const r = a.value.trim();
+    r && (b(r, "user"), a.value = "", w(() => b(N(r), "bot")));
   }
   n.addEventListener("submit", (r) => {
     r.preventDefault(), T();
-  }), o.addEventListener("keydown", (r) => {
+  }), a.addEventListener("keydown", (r) => {
     r.key === "Enter" && (r.preventDefault(), T());
   });
-  function R() {
-    p = !0, e.classList.add("open"), e.setAttribute("aria-hidden", "false"), e.inert = !1, h && h.classList.add("hide"), u && u.classList.add("hide"), m || (m = !0, w(() => {
-      b("Hey! I'm Beacon 👋 Ask me anything about the platform, or tap a topic below.", "bot"), f(["How do I verify?", "Post a help request", "Lost & Found", "Volunteer events"]);
-    })), setTimeout(() => o.focus(), 250);
+  function O() {
+    f = !0, e.classList.add("open"), e.setAttribute("aria-hidden", "false"), e.inert = !1, h && h.classList.add("hide"), u && u.classList.add("hide"), p || (p = !0, w(() => {
+      b("Hey! I'm Beacon 👋 Ask me anything about the platform, or tap a topic below.", "bot"), g(["How do I verify?", "Post a help request", "Lost & Found", "Volunteer events"]);
+    })), setTimeout(() => a.focus(), 250);
   }
   function S() {
-    p = !1, e.classList.remove("open"), e.setAttribute("aria-hidden", "true"), e.inert = !0, document.getElementById("beacon-chat-button")?.focus();
+    f = !1, e.classList.remove("open"), e.setAttribute("aria-hidden", "true"), e.inert = !0, document.getElementById("beacon-chat-button")?.focus();
   }
   window.__bavOpenChat = function() {
-    p ? S() : R();
+    f ? S() : O();
   }, i.addEventListener("click", S), document.addEventListener("keydown", (r) => {
-    r.key === "Escape" && p && S();
+    r.key === "Escape" && f && S();
   });
 })();
-const a = (e) => document.querySelector(e), v = (e) => [...document.querySelectorAll(e)], A = matchMedia("(prefers-reduced-motion: reduce)");
-let k, y = A.matches;
+const o = (e) => document.querySelector(e), m = (e) => [...document.querySelectorAll(e)], L = matchMedia("(prefers-reduced-motion: reduce)");
+let k, y = L.matches;
 const Y = setTimeout(() => document.documentElement.classList.add("world-unavailable"), 12e3);
 async function U() {
   try {
     const { UnityWorld: e } = await import("./world2.js");
-    k = new e(a("#unity-canvas"), () => {
+    k = new e(o("#unity-canvas"), () => {
       clearTimeout(Y), document.documentElement.classList.remove("world-unavailable"), document.documentElement.classList.add("world-ready");
     });
   } catch (e) {
@@ -110,141 +110,141 @@ const H = {
   volunteer: [["✳", "A cleaner coast, together", "Community beach cleanup · Example event", "Environment"], ["✳", "Give a little time. Share a meal.", "Community food drive · Example event", "Community care"], ["✳", "Help someone take their next step", "Neighbourhood skills exchange · Example event", "Share a skill"]],
   news: [["↗", "Keep up with your neighbourhood", "Discover community updates in one place", "Local updates"], ["↗", "Find stories with their sources attached", "Explore the platform’s local news space", "Stay informed"], ["↗", "Know what is happening nearby", "Open the demo to explore news categories", "Community news"]]
 };
-function L(e, t = !1) {
+function x(e, t = !1) {
   if (!H[e]) return;
-  v("[data-preview]").forEach((o) => {
-    const i = o.dataset.preview === e;
-    o.setAttribute("aria-selected", String(i)), o.tabIndex = i ? 0 : -1, i && t && o.focus();
-  }), a("#feature-panel").setAttribute("aria-labelledby", "tab-" + e);
-  const n = a("#preview-content");
-  n.replaceChildren(), H[e].forEach(([o, i, h, u]) => {
-    const m = document.createElement("article");
-    m.className = "preview-item";
-    const p = document.createElement("span");
-    p.className = "preview-symbol", p.textContent = o;
-    const b = document.createElement("div"), f = document.createElement("h3");
-    f.textContent = i;
+  m("[data-preview]").forEach((a) => {
+    const i = a.dataset.preview === e;
+    a.setAttribute("aria-selected", String(i)), a.tabIndex = i ? 0 : -1, i && t && a.focus();
+  }), o("#feature-panel").setAttribute("aria-labelledby", "tab-" + e);
+  const n = o("#preview-content");
+  n.replaceChildren(), H[e].forEach(([a, i, h, u]) => {
+    const p = document.createElement("article");
+    p.className = "preview-item";
+    const f = document.createElement("span");
+    f.className = "preview-symbol", f.textContent = a;
+    const b = document.createElement("div"), g = document.createElement("h3");
+    g.textContent = i;
     const w = document.createElement("p");
     w.textContent = h;
     const E = document.createElement("span");
-    E.className = "tag", E.textContent = u, b.append(f, w, E), m.append(p, b), n.append(m);
+    E.className = "tag", E.textContent = u, b.append(g, w, E), p.append(f, b), n.append(p);
   });
 }
-v("[data-preview]").forEach((e, t) => {
-  e.addEventListener("click", () => L(e.dataset.preview)), e.addEventListener("keydown", (n) => {
-    const o = v("[data-preview]");
+m("[data-preview]").forEach((e, t) => {
+  e.addEventListener("click", () => x(e.dataset.preview)), e.addEventListener("keydown", (n) => {
+    const a = m("[data-preview]");
     let i;
-    (n.key === "ArrowRight" || n.key === "ArrowDown") && (i = (t + 1) % o.length), (n.key === "ArrowLeft" || n.key === "ArrowUp") && (i = (t + o.length - 1) % o.length), n.key === "Home" && (i = 0), n.key === "End" && (i = o.length - 1), i !== void 0 && (n.preventDefault(), L(o[i].dataset.preview, !0));
+    (n.key === "ArrowRight" || n.key === "ArrowDown") && (i = (t + 1) % a.length), (n.key === "ArrowLeft" || n.key === "ArrowUp") && (i = (t + a.length - 1) % a.length), n.key === "Home" && (i = 0), n.key === "End" && (i = a.length - 1), i !== void 0 && (n.preventDefault(), x(a[i].dataset.preview, !0));
   });
 });
-v("[data-select]").forEach((e) => e.addEventListener("click", () => L(e.dataset.select)));
-L("help");
+m("[data-select]").forEach((e) => e.addEventListener("click", () => x(e.dataset.select)));
+x("help");
 let F;
 function D(e) {
   F = document.activeElement, e.showModal(), k?.setPaused(!0);
 }
-function x(e) {
+function C(e) {
   e.close(), k?.setPaused(y), F?.focus();
 }
-v("dialog").forEach((e) => {
-  e.querySelector("[data-close]").addEventListener("click", () => x(e)), e.addEventListener("click", (t) => {
+m("dialog").forEach((e) => {
+  e.querySelector("[data-close]").addEventListener("click", () => C(e)), e.addEventListener("click", (t) => {
     if (t.target === e) {
       const n = e.getBoundingClientRect();
-      (t.clientX < n.left || t.clientX > n.right || t.clientY < n.top || t.clientY > n.bottom) && x(e);
+      (t.clientX < n.left || t.clientX > n.right || t.clientY < n.top || t.clientY > n.bottom) && C(e);
     }
   }), e.addEventListener("close", () => {
-    k?.setPaused(y), a("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && a("#video-frame").removeAttribute("src");
+    k?.setPaused(y), o("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && o("#video-frame").removeAttribute("src");
   });
 });
-a("#menu-toggle").addEventListener("click", () => {
-  D(a("#navigation")), a("#menu-toggle").setAttribute("aria-expanded", "true");
+o("#menu-toggle").addEventListener("click", () => {
+  D(o("#navigation")), o("#menu-toggle").setAttribute("aria-expanded", "true");
 });
-v("#navigation a").forEach((e) => e.addEventListener("click", () => x(a("#navigation"))));
-v("[data-demo]").forEach((e) => e.addEventListener("click", () => {
-  const t = a("#demo-frame");
-  t.getAttribute("src") || (t.src = t.dataset.src), D(a("#demo-dialog"));
+m("#navigation a").forEach((e) => e.addEventListener("click", () => C(o("#navigation"))));
+m("[data-demo]").forEach((e) => e.addEventListener("click", () => {
+  const t = o("#demo-frame");
+  t.getAttribute("src") || (t.src = t.dataset.src), D(o("#demo-dialog"));
 }));
-a("#demo-frame").addEventListener("load", () => {
+o("#demo-frame").addEventListener("load", () => {
   try {
-    const e = a("#demo-frame").contentDocument, t = e.createElement("style");
-    t.textContent = "#bav-root,#bav-toggle,#bav-popover,#bav-chat{display:none!important}", e.head.append(t), [...e.querySelectorAll("button")].find((o) => o.textContent.trim().startsWith("Skip"))?.click();
+    const e = o("#demo-frame").contentDocument, t = e.createElement("style");
+    t.textContent = "#bav-root,#bav-toggle,#bav-popover,#bav-chat{display:none!important}", e.head.append(t), [...e.querySelectorAll("button")].find((a) => a.textContent.trim().startsWith("Skip"))?.click();
   } catch {
   }
 });
-v("[data-video]").forEach((e) => e.addEventListener("click", () => {
-  a("#video-frame").src = "https://www.youtube-nocookie.com/embed/md8suH2LcHs?autoplay=1&rel=0", D(a("#video-dialog"));
+m("[data-video]").forEach((e) => e.addEventListener("click", () => {
+  o("#video-frame").src = "https://www.youtube-nocookie.com/embed/md8suH2LcHs?autoplay=1&rel=0", D(o("#video-dialog"));
 }));
-window.openSimDemo = () => v("[data-demo]")[0].click();
-window.closeSimDemo = () => x(a("#demo-dialog"));
-function _() {
-  y = !y, k?.setPaused(y), a("#motion-toggle").textContent = y ? "Resume the world" : "Pause the world", a("#motion-toggle").setAttribute("aria-pressed", String(y)), a("#footer-motion").textContent = y ? "Resume motion" : "Pause motion";
+window.openSimDemo = () => m("[data-demo]")[0].click();
+window.closeSimDemo = () => C(o("#demo-dialog"));
+function P() {
+  y = !y, k?.setPaused(y), o("#motion-toggle").textContent = y ? "Resume the world" : "Pause the world", o("#motion-toggle").setAttribute("aria-pressed", String(y)), o("#footer-motion").textContent = y ? "Resume motion" : "Pause motion";
 }
-a("#motion-toggle").addEventListener("click", _);
-a("#footer-motion").addEventListener("click", _);
-A.addEventListener("change", (e) => {
-  k && (k.reduced = e.matches, k.lastFrame = 0), y = e.matches, a("#motion-toggle").setAttribute("aria-pressed", String(y));
+o("#motion-toggle").addEventListener("click", P);
+o("#footer-motion").addEventListener("click", P);
+L.addEventListener("change", (e) => {
+  k && (k.reduced = e.matches, k.lastFrame = 0), y = e.matches, o("#motion-toggle").setAttribute("aria-pressed", String(y));
 });
-a("#theme-toggle").addEventListener("click", () => {
+o("#theme-toggle").addEventListener("click", () => {
   const e = document.documentElement.dataset.theme !== "dark";
-  document.documentElement.dataset.theme = e ? "dark" : "light", a("#theme-toggle").textContent = e ? "Switch to day" : "Switch to night";
+  document.documentElement.dataset.theme = e ? "dark" : "light", o("#theme-toggle").textContent = e ? "Switch to day" : "Switch to night";
   try {
     localStorage.setItem("beacon-theme", e ? "dark" : "light");
   } catch {
   }
 });
 try {
-  localStorage.getItem("beacon-theme") === "dark" && a("#theme-toggle").click();
+  localStorage.getItem("beacon-theme") === "dark" && o("#theme-toggle").click();
 } catch {
 }
-a("#year").textContent = (/* @__PURE__ */ new Date()).getFullYear();
-const j = v(".chapter");
-let B = !1;
-function q() {
-  B = !1;
+o("#year").textContent = (/* @__PURE__ */ new Date()).getFullYear();
+const j = m(".chapter");
+let I = !1;
+function _() {
+  I = !1;
   const e = scrollY;
-  a(".site-header").classList.toggle("scrolled", e > 60);
-  const t = e > a("#story-end").offsetTop - innerHeight * 0.6;
+  o(".site-header").classList.toggle("scrolled", e > 60);
+  const t = e > o("#story-end").offsetTop - innerHeight * 0.6;
   document.body.classList.toggle("past-story", t);
   let n = 0;
-  j.forEach((o, i) => {
-    const h = o.getBoundingClientRect();
+  j.forEach((a, i) => {
+    const h = a.getBoundingClientRect();
     h.top < innerHeight * 0.4 && (n = i);
-    const u = o.querySelector(".chapter-copy");
-    if (!A.matches && innerWidth > 700) {
-      const m = Math.max(-30, Math.min(30, -h.top * 0.06));
-      u.style.transform = `translateY(${m}px)`;
+    const u = a.querySelector(".chapter-copy");
+    if (!L.matches && innerWidth > 700) {
+      const p = Math.max(-30, Math.min(30, -h.top * 0.06));
+      u.style.transform = `translateY(${p}px)`;
     }
-  }), v("#chapter-progress a").forEach((o, i) => {
-    o.classList.toggle("active", i === n), i === n ? o.setAttribute("aria-current", "step") : o.removeAttribute("aria-current");
-  }), a("#chapter-number").textContent = `0${n + 1} / 05`, document.body.classList.toggle("footer-visible", a(".site-footer").getBoundingClientRect().top < innerHeight - 100);
+  }), m("#chapter-progress a").forEach((a, i) => {
+    a.classList.toggle("active", i === n), i === n ? a.setAttribute("aria-current", "step") : a.removeAttribute("aria-current");
+  }), o("#chapter-number").textContent = `0${n + 1} / 05`, document.body.classList.toggle("footer-visible", o(".site-footer").getBoundingClientRect().top < innerHeight - 100);
 }
 addEventListener("scroll", () => {
-  B || (B = !0, requestAnimationFrame(q));
+  I || (I = !0, requestAnimationFrame(_));
 }, { passive: !0 });
-q();
-const s = a("#bav-wrap");
+_();
+const s = o("#bav-wrap");
 s.setAttribute("role", "button");
 s.setAttribute("tabindex", "0");
 s.setAttribute("aria-label", "Beacon mascot. Double-click to chat, or drag to play.");
 s.title = "Double-click to chat. Drag to play.";
-a("#bav-chat-input").setAttribute("aria-label", "Message Beacon");
-a("#bav-chat-body").setAttribute("aria-live", "polite");
-let P = "mouse";
-a("#beacon-chat-button").addEventListener("click", () => window.__bavOpenChat?.());
+o("#bav-chat-input").setAttribute("aria-label", "Message Beacon");
+o("#bav-chat-body").setAttribute("aria-live", "polite");
+let q = "mouse";
+o("#beacon-chat-button").addEventListener("click", () => window.__bavOpenChat?.());
 s.addEventListener("dblclick", () => {
-  P !== "touch" && window.__bavOpenChat?.();
+  q !== "touch" && window.__bavOpenChat?.();
 });
 s.addEventListener("keydown", (e) => {
   (e.key === "Enter" || e.key === " ") && (e.preventDefault(), window.__bavOpenChat?.());
 });
-a("#beacon-hide").addEventListener("click", () => {
+o("#beacon-hide").addEventListener("click", () => {
   const e = document.body.classList.toggle("beacon-hidden");
-  a("#beacon-hide").textContent = e ? "+" : "−", a("#beacon-hide").setAttribute("aria-label", e ? "Show Beacon mascot" : "Hide Beacon mascot");
+  o("#beacon-hide").textContent = e ? "+" : "−", o("#beacon-hide").setAttribute("aria-label", e ? "Show Beacon mascot" : "Hide Beacon mascot");
 });
-let l = null, M = 0, I = 0;
+let l = null, M = 0, B = 0;
 s.addEventListener("pointerdown", (e) => {
-  if (P = e.pointerType, e.button && e.button !== 0) return;
-  cancelAnimationFrame(I);
+  if (q = e.pointerType, e.button && e.button !== 0) return;
+  cancelAnimationFrame(B);
   const t = s.getBoundingClientRect();
   l = { x: e.clientX, y: e.clientY, left: t.left, top: t.top, lastX: e.clientX, lastY: e.clientY, vx: 0, vy: 0, moved: !1 }, s.setPointerCapture(e.pointerId);
 });
@@ -253,30 +253,41 @@ s.addEventListener("pointermove", (e) => {
   const t = e.clientX - l.x, n = e.clientY - l.y;
   l.moved || (l.moved = Math.hypot(t, n) > 6), l.vx = e.clientX - l.lastX, l.vy = e.clientY - l.lastY, l.lastX = e.clientX, l.lastY = e.clientY, l.moved && (s.style.right = "auto", s.style.bottom = "auto", s.style.left = Math.max(8, Math.min(innerWidth - 60, l.left + t)) + "px", s.style.top = Math.max(85, Math.min(innerHeight - 105, l.top + n)) + "px");
 });
-function C() {
+function A() {
   s.style.left = "", s.style.top = "", s.style.right = "", s.style.bottom = "";
 }
 function W(e) {
   if (!l) return;
   const t = l;
   if (l = null, !t.moved) {
-    const f = performance.now();
-    e.pointerType === "touch" && f - M < 330 && window.__bavOpenChat?.(), M = f;
+    const g = performance.now();
+    e.pointerType === "touch" && g - M < 330 && window.__bavOpenChat?.(), M = g;
     return;
   }
-  if (A.matches) {
-    C();
+  if (L.matches) {
+    A();
     return;
   }
-  let n = s.getBoundingClientRect(), o = n.left, i = n.top, h = t.vx * 0.5, u = t.vy * 0.5, m = performance.now(), p = m;
-  function b(f) {
-    const w = Math.min(2, (f - p) / 16.67);
-    p = f, u += 0.5 * w, o += h * w, i += u * w, (o < 8 || o > innerWidth - 60) && (h *= -0.55, o = Math.max(8, Math.min(innerWidth - 60, o))), i > innerHeight - 105 && (u *= -0.5, i = innerHeight - 105, h *= 0.9), i = Math.max(85, i), s.style.left = o + "px", s.style.top = i + "px", f - m < 1800 ? I = requestAnimationFrame(b) : C();
+  let n = s.getBoundingClientRect(), a = n.left, i = n.top, h = t.vx * 0.5, u = t.vy * 0.5, p = performance.now(), f = p;
+  function b(g) {
+    const w = Math.min(2, (g - f) / 16.67);
+    f = g, u += 0.5 * w, a += h * w, i += u * w, (a < 8 || a > innerWidth - 60) && (h *= -0.55, a = Math.max(8, Math.min(innerWidth - 60, a))), i > innerHeight - 105 && (u *= -0.5, i = innerHeight - 105, h *= 0.9), i = Math.max(85, i), s.style.left = a + "px", s.style.top = i + "px", g - p < 1800 ? B = requestAnimationFrame(b) : A();
   }
-  I = requestAnimationFrame(b);
+  B = requestAnimationFrame(b);
 }
 s.addEventListener("pointerup", W);
 s.addEventListener("pointercancel", () => {
-  l = null, C();
+  l = null, A();
 });
-addEventListener("resize", C);
+addEventListener("resize", A);
+const X = new IntersectionObserver((e) => {
+  e.forEach((t) => {
+    t.target.classList.toggle("in-view", t.isIntersecting);
+  });
+}, { threshold: 0.13 });
+m(".chapter-copy,.story-signal,.section-heading,.how-steps article,.platform-explained article,.organisation-types article,.compare-row,.beyond-layout,.trust-layout").forEach((e) => {
+  e.classList.add("motion-reveal"), X.observe(e);
+});
+addEventListener("pointermove", (e) => {
+  e.pointerType === "touch" || L.matches || (document.documentElement.style.setProperty("--pointer-x", `${e.clientX / innerWidth * 100}%`), document.documentElement.style.setProperty("--pointer-y", `${e.clientY / innerHeight * 100}%`));
+}, { passive: !0 });
