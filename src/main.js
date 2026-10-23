@@ -28,7 +28,15 @@ function closeDialog(dialog){dialog.close();world?.setPaused(paused);previousFoc
 $$('dialog').forEach(d=>{d.querySelector('[data-close]').addEventListener('click',()=>closeDialog(d));d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeDialog(d);}});d.addEventListener('close',()=>{world?.setPaused(paused);$('#menu-toggle').setAttribute('aria-expanded','false');if(d.id==='video-dialog')$('#video-frame').removeAttribute('src');});});
 $('#menu-toggle').addEventListener('click',()=>{openDialog($('#navigation'));$('#menu-toggle').setAttribute('aria-expanded','true');});
 $$('#navigation a').forEach(a=>a.addEventListener('click',()=>closeDialog($('#navigation'))));
-$$('[data-demo]').forEach(b=>b.addEventListener('click',()=>{const f=$('#demo-frame');if(!f.getAttribute('src'))f.src=f.dataset.src;openDialog($('#demo-dialog'));}));
+let demoNavigationTimer;
+$$('[data-demo]').forEach(b=>b.addEventListener('click',()=>{
+ const f=$('#demo-frame');const tab=b.dataset.demo||'community';
+ if(!f.getAttribute('src'))f.src=f.dataset.src;
+ openDialog($('#demo-dialog'));clearTimeout(demoNavigationTimer);
+ let attempts=0;function navigate(){if(!$('#demo-dialog').open)return;try{if(f.contentWindow?.__beaconDemoReady){f.contentWindow.switchTab(tab);return;}}catch{}
+ if(++attempts<100)demoNavigationTimer=setTimeout(navigate,100);}
+ navigate();
+}));
 // Existing same-origin demo remains intact, with its introductory overlay dismissed
 // and its duplicate roaming mascot suppressed only inside the homepage dialog.
 $('#demo-frame').addEventListener('load',()=>{try{const doc=$('#demo-frame').contentDocument;const style=doc.createElement('style');style.textContent='#bav-root,#bav-toggle,#bav-popover,#bav-chat{display:none!important}';doc.head.append(style);const skip=[...doc.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith('Skip'));skip?.click();}catch{/* The demo also supports opening as a standalone page. */}});
