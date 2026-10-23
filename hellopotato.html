@@ -114,6 +114,7 @@
         .id-thumb:hover { opacity:0.82; transform:scale(1.05); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
     </style>
 <link rel="stylesheet" href="assets/secondary.css">
+<link rel="stylesheet" href="assets/brand-surfaces.css">
 <script src="assets/secondary.js" defer></script>
 </head>
 <body class="unity-page unity-admin">
@@ -146,7 +147,7 @@
     <div class="page-header">
         <div style="font-size:36px;">🛡️</div>
         <div style="flex:1;">
-            <h1 style="margin:0 0 2px;">Beacon of Unity — Admin Panel</h1>
+            <h1 style="margin:0 0 2px;">Beacon of Unity - Admin Panel</h1>
             <span style="font-size:13px;color:#64748b;" id="adminEmailDisplay"></span>
         </div>
         <button class="signout-btn" onclick="adminSignOut()">Sign Out</button>
@@ -166,15 +167,15 @@
         <div class="verify-legend">
             <div class="legend-item">
                 <div class="legend-dot approve"></div>
-                <span><strong>Approve</strong> — Verifies the user and sends a welcome email via EmailJS</span>
+                <span><strong>Approve</strong> - Verifies the user and sends a welcome email via EmailJS</span>
             </div>
             <div class="legend-item">
                 <div class="legend-dot volunteer"></div>
-                <span><strong>Volunteer</strong> — Verifies &amp; marks as volunteer, <em>no email sent</em></span>
+                <span><strong>Volunteer</strong> - Verifies &amp; marks as volunteer, <em>no email sent</em></span>
             </div>
             <div class="legend-item">
                 <div class="legend-dot deny"></div>
-                <span><strong>Deny</strong> — Rejects the submission</span>
+                <span><strong>Deny</strong> - Rejects the submission</span>
             </div>
         </div>
 
@@ -292,7 +293,7 @@
         }).catch(function(e){alert("Reset Error: "+e.message);});
     }
 
-    // Standard approve — sends EmailJS welcome email
+    // Standard approve - sends EmailJS welcome email
     function processUser(docId,userEmail,action,userId,fullName){
         var userRef=db.collection("users").doc(userId);
         if(action==='approve'){
@@ -312,7 +313,7 @@
         }
     }
 
-    // Volunteer approve — NO email sent
+    // Volunteer approve - NO email sent
     function markAsVolunteer(docId,userId,fullName){
         if(!confirm('Mark '+fullName+' as a Volunteer?\n\nThis verifies them with NO email sent.')) return;
         db.collection("users").doc(userId).update({
@@ -388,7 +389,7 @@
         document.getElementById('reportsSubtitle').innerText=uids.length===0?'No reports on file.':uids.length+' user'+(uids.length!==1?'s':'')+' reported · '+totalPending+' pending review';
         var feed=document.getElementById('reportsFeed');
         feed.innerHTML='';
-        if(uids.length===0){feed.innerHTML='<div class="empty-state"><div class="es-icon">✅</div><p>No reports yet — all clear!</p></div>';return;}
+        if(uids.length===0){feed.innerHTML='<div class="empty-state"><div class="es-icon">✅</div><p>No reports yet - all clear!</p></div>';return;}
         uids.sort(function(a,b){return grouped[b].reports.length-grouped[a].reports.length;});
         uids.forEach(function(uid){
             var g=grouped[uid],count=g.reports.length,pendingCount=g.reports.filter(function(r){return!r.status||r.status==='pending';}).length;

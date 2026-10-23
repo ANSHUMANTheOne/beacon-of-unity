@@ -1,4 +1,4 @@
-# GOD'S EYE — Near-Earth Object Observatory
+# GOD'S EYE - Near-Earth Object Observatory
 
 An interactive 3D orrery: the Sun, all 8 planets, and a sample set of
 near-Earth asteroids, comets, and potentially hazardous asteroids, rendered
@@ -29,7 +29,7 @@ npm run preview
 - Planet orbital elements (semi-major axis, eccentricity, inclination,
   period) are real, stable astronomical constants.
 - Planet *positions* use a simplified circular-orbit approximation
-  (`src/data/orbitalMechanics.ts`), not full Keplerian propagation — enough
+  (`src/data/orbitalMechanics.ts`), not full Keplerian propagation - enough
   to look correct while the interface is the focus.
 - The near-Earth asteroid / comet / PHA objects (`src/data/celestialBodies.ts`
   → `neoSampleObjects`) are illustrative placeholders standing in for NASA
@@ -37,7 +37,7 @@ npm run preview
 
 ## Where to plug in real NASA data later
 
-- Swap `neoSampleObjects` for a live NeoWs/SBDB fetch — the `CelestialBody`
+- Swap `neoSampleObjects` for a live NeoWs/SBDB fetch - the `CelestialBody`
   and `OrbitalElements` types already match standard Keplerian fields, so no
   other component needs to change.
 - Replace `getPositionAtDate` / `getOrbitPathPoints` in
