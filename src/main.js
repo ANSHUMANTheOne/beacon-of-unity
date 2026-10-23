@@ -1,4 +1,5 @@
 import './style.css';
+import './cinematic.css';
 import './beacon-chat.js';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const reduce=matchMedia('(prefers-reduced-motion: reduce)');
@@ -54,3 +55,9 @@ mascot.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-dra
 function dock(){mascot.style.left='';mascot.style.top='';mascot.style.right='';mascot.style.bottom='';}
 function release(e){if(!drag)return;const d=drag;drag=null;if(!d.moved){const now=performance.now();if(e.pointerType==='touch'&&now-lastTap<330)window.__bavOpenChat?.();lastTap=now;return;}if(reduce.matches){dock();return;}let r=mascot.getBoundingClientRect(),x=r.left,y=r.top,vx=d.vx*.5,vy=d.vy*.5,start=performance.now(),last=start;function bounce(t){const dt=Math.min(2,(t-last)/16.67);last=t;vy+=.5*dt;x+=vx*dt;y+=vy*dt;if(x<8||x>innerWidth-60){vx*=-.55;x=Math.max(8,Math.min(innerWidth-60,x));}if(y>innerHeight-105){vy*=-.5;y=innerHeight-105;vx*=.9;}y=Math.max(85,y);mascot.style.left=x+'px';mascot.style.top=y+'px';if(t-start<1800)animation=requestAnimationFrame(bounce);else dock();}animation=requestAnimationFrame(bounce);}
 mascot.addEventListener('pointerup',release);mascot.addEventListener('pointercancel',()=>{drag=null;dock();});addEventListener('resize',dock);
+
+// Reveal by line, with native scrolling and readable content when scripting is unavailable.
+const revealObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{e.target.classList.toggle('in-view',e.isIntersecting);});},{threshold:.13});
+$$('.chapter-copy,.story-signal,.section-heading,.how-steps article,.platform-explained article,.organisation-types article,.compare-row,.beyond-layout,.trust-layout').forEach(el=>{el.classList.add('motion-reveal');revealObserver.observe(el);});
+// Pointer light follows the visitor; touch devices retain their authored composition.
+addEventListener('pointermove',e=>{if(e.pointerType==='touch'||reduce.matches)return;document.documentElement.style.setProperty('--pointer-x',`${e.clientX/innerWidth*100}%`);document.documentElement.style.setProperty('--pointer-y',`${e.clientY/innerHeight*100}%`);},{passive:true});
