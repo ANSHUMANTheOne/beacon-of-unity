@@ -362,7 +362,7 @@
     <div class="row"><p class="tag mono">Launch Sequence</p><span class="clock mono" id="launchClock">T-00:00</span></div>
     <h3 id="launchAlertTitle"></h3>
     <p class="sub mono" id="launchAlertSub"></p>
-    <p class="note mono">Illustrative sequence &mdash; not live telemetry</p>
+    <p class="note mono">Illustrative sequence - not live telemetry</p>
     <button id="launchSkip">Skip &middot; Esc</button>
   </div>
 </div>
@@ -386,16 +386,16 @@
 <div id="eyeConsole">
   <div class="panel">
     <div class="panel-head">
-      <div class="title"><span class="dot"></span><span>EYE — System Console</span></div>
+      <div class="title"><span class="dot"></span><span>EYE - System Console</span></div>
       <button id="eyeClose"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.3"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg></button>
     </div>
     <div id="eyeLog"></div>
     <div id="eyeChips"></div>
     <div class="input-row">
       <span class="mono">&gt;</span>
-      <input id="eyeInput" class="mono" type="text" placeholder="ask eye — try 'show apophis' or 'help'" autocomplete="off" />
+      <input id="eyeInput" class="mono" type="text" placeholder="ask eye - try 'show apophis' or 'help'" autocomplete="off" />
     </div>
-    <p class="hint mono">Simulated command interface — matches against known objects and commands, not a live AI.</p>
+    <p class="hint mono">Simulated command interface - matches against known objects and commands, not a live AI.</p>
   </div>
 </div>
 
@@ -478,7 +478,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 /* ---------------------------------------------------------------------- */
 /*  Access gate                                                            */
-/*  Client-side only — this deters casual poking around, not a real        */
+/*  Client-side only - this deters casual poking around, not a real        */
 /*  security boundary (anyone with devtools can always bypass it).         */
 /*  The code is checked as a SHA-256 digest, reassembled at runtime from   */
 /*  reordered fragments, so it isn't sitting in the file as plain text.    */
@@ -495,7 +495,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   const gateMsg = document.getElementById('gateMsg');
 
   // Cookies don't persist on file:// (how this page is usually opened), so
-  // localStorage is the actual storage used — falls back to sessionStorage
+  // localStorage is the actual storage used - falls back to sessionStorage
   // if that's blocked too (e.g. private browsing), so it still works for
   // the current tab even then.
   function readMark() {
@@ -631,26 +631,26 @@ const neos = [
     diameterMin: 490, diameterMax: 565, closeApproach: 0.00322, source: 'JPL Small-Body Database, epoch 2011' },
   { id: 'eros', name: '433 Eros', category: 'near-earth-asteroid', kind: 'asteroid', displayRadius: 0.1, color: '#8fb3c7',
     el: { a: 1.4581, e: 0.2226, incl: 10.828, m0: 110.78, period: 643.12 },
-    description: 'The first near-Earth asteroid ever discovered (1898) and the first ever orbited and landed on \u2014 by NASA\u2019s NEAR Shoemaker in 2000\u20132001.',
+    description: 'The first near-Earth asteroid ever discovered (1898) and the first ever orbited and landed on - by NASA\u2019s NEAR Shoemaker in 2000\u20132001.',
     diameterMin: 11200, diameterMax: 34400, closeApproach: 0.1505, source: 'JPL Small-Body Database, epoch 2023' },
   { id: 'halley', name: '1P/Halley', category: 'near-earth-comet', kind: 'comet', displayRadius: 0.12, color: '#bfe8ec',
     el: { a: 17.8, e: 0.9673, incl: 162.3, m0: 66.5, period: 27505.0 },
-    description: 'The most famous periodic comet, visible to the naked eye roughly every 76 years. Last at perihelion in 1986; next return is 2061. Its orbit runs retrograde \u2014 backwards relative to the planets.',
+    description: 'The most famous periodic comet, visible to the naked eye roughly every 76 years. Last at perihelion in 1986; next return is 2061. Its orbit runs retrograde - backwards relative to the planets.',
     diameterMin: 7400, diameterMax: 15300, closeApproach: 0.075, source: 'JPL Small-Body Database, epoch 2061 (extrapolated)' },
 ];
 
-/* Ceres — largest main-belt object, classified as a dwarf planet */
+/* Ceres - largest main-belt object, classified as a dwarf planet */
 const ceres = { id: 'ceres', name: '1 Ceres', category: 'asteroid-belt', kind: 'asteroid', displayRadius: 0.22, color: '#b9ad9c',
   el: { a: 2.768, e: 0.0758, incl: 10.59, m0: 130.0, period: 1680.5 },
   description: 'The largest object in the asteroid belt and the only dwarf planet in the inner solar system. Visited and orbited by NASA\u2019s Dawn spacecraft, 2015\u20132018.',
   diameterMin: 939000, diameterMax: 965000, source: 'NASA Asteroid Fact Sheet, epoch 2016' };
 
-/* The Moon — orbits Earth, not the Sun. Real e/i/period; artistic distance for visibility. */
+/* The Moon - orbits Earth, not the Sun. Real e/i/period; artistic distance for visibility. */
 const MOON_SCENE_DISTANCE = 1.55;
 const moon = { id: 'moon', name: 'The Moon', category: 'moon', kind: 'moon', displayRadius: 0.16, color: '#c7c3bb',
   parentId: 'earth',
   el: { a: MOON_SCENE_DISTANCE, e: 0.0549, incl: 5.145, m0: 180.0, period: 27.3217 },
-  description: 'Earth\u2019s only natural satellite. Real eccentricity, inclination and 27.32-day period \u2014 shown at an enlarged distance from Earth so it reads clearly at this scale.',
+  description: 'Earth\u2019s only natural satellite. Real eccentricity, inclination and 27.32-day period - shown at an enlarged distance from Earth so it reads clearly at this scale.',
   source: 'IMCCE / real orbital elements, artistic distance' };
 
 const allBodies = [...planets, ...neos, ceres];
@@ -662,7 +662,7 @@ const REAL_NOW = Date.now();
 const missions = [
   { id: 'iss', name: 'International Space Station', category: 'mission', kind: 'satellite', color: '#e8e8e8',
     parentId: 'earth', sceneDistance: 0.78, periodRealSeconds: 7, inclDeg: 51.6,
-    description: 'Crewed low Earth orbit outpost, roughly 400 km up, circling Earth about every 92 minutes \u2014 sped up here for visibility.',
+    description: 'Crewed low Earth orbit outpost, roughly 400 km up, circling Earth about every 92 minutes - sped up here for visibility.',
     fields: [['Altitude', '~400 km'], ['Orbital period', '~92 min'], ['Inclination', '51.6\u00B0'], ['Crew', 'Continuously since Nov 2000']],
     source: 'NASA' },
   { id: 'jwst', name: 'James Webb Space Telescope', category: 'mission', kind: 'telescope', color: '#f0d99a',
@@ -672,7 +672,7 @@ const missions = [
     source: 'NASA / ESA / CSA' },
   { id: 'parker', name: 'Parker Solar Probe', category: 'mission', kind: 'probe', color: '#ffcf7a',
     el: { a: 0.388, e: 0.88, incl: 3.4, m0: 0, period: 88 },
-    description: 'The fastest human-made object ever built, diving to within ~6.9 million km of the Sun\u2019s surface \u2014 closer than any spacecraft in history.',
+    description: 'The fastest human-made object ever built, diving to within ~6.9 million km of the Sun\u2019s surface - closer than any spacecraft in history.',
     fields: [['Perihelion', '~6.9 million km'], ['Aphelion', '~0.73 AU (near Venus)'], ['Orbital period', '~88 days'], ['Launched', 'Aug 2018']],
     source: 'NASA / JHU APL' },
   { id: 'voyager1', name: 'Voyager 1', category: 'mission', kind: 'probe', color: '#9fd6ff',
@@ -1038,7 +1038,7 @@ function buildAsteroidBelt() {
 }
 const asteroidBelt = buildAsteroidBelt();
 scene.add(asteroidBelt);
-/* Approximate collective revolution — not per-particle Keplerian, but gives the belt visible motion over time */
+/* Approximate collective revolution - not per-particle Keplerian, but gives the belt visible motion over time */
 const BELT_PERIOD_DAYS = 1600;
 
 /* Planets, real NEOs/PHAs/comet, and Ceres */
@@ -1152,7 +1152,7 @@ allBodies.forEach(buildBody);
 buildBody(moon);
 
 /* ---------------------------------------------------------------------- */
-/*  Missions & spacecraft — small distinct markers, own category           */
+/*  Missions & spacecraft - small distinct markers, own category           */
 /* ---------------------------------------------------------------------- */
 const missionMeshes = {};
 function buildMission(m) {
@@ -1548,7 +1548,7 @@ renderer.domElement.addEventListener('pointerleave', () => { hoveredId = null; r
 /* ---------------------------------------------------------------------- */
 /*  Pilot / first-person rocket mode                                       */
 /*  Uses plain click-and-drag mouselook rather than the browser Pointer    */
-/*  Lock API, which many browsers silently refuse on file:// pages — this  */
+/*  Lock API, which many browsers silently refuse on file:// pages - this  */
 /*  version works identically whether the page is opened as a local file   */
 /*  or served over http(s).                                                */
 /* ---------------------------------------------------------------------- */
@@ -1568,7 +1568,7 @@ const ptClear = document.getElementById('ptClear');
 CATEGORY_LABEL.star = 'Star';
 const sunTarget = {
   id: 'sun', name: 'The Sun', category: 'star', displayRadius: SUN_RADIUS,
-  description: 'Our star \u2014 about 99.8% of the solar system\u2019s mass. Everything here orbits it.',
+  description: 'Our star - about 99.8% of the solar system\u2019s mass. Everything here orbits it.',
 };
 
 const pilotKeys = { forward: false, back: false, left: false, right: false, up: false, down: false };
@@ -1909,7 +1909,7 @@ function scanCloseApproaches() {
       const now = performance.now();
       if (!closeApproachCooldown[b.id] || now - closeApproachCooldown[b.id] > 25000) {
         closeApproachCooldown[b.id] = now;
-        pushTicker(`Close approach: ${b.name} at ${auDist.toFixed(4)} AU${b.hazardous ? ' — hazard-class object' : ''}`, Boolean(b.hazardous));
+        pushTicker(`Close approach: ${b.name} at ${auDist.toFixed(4)} AU${b.hazardous ? ' - hazard-class object' : ''}`, Boolean(b.hazardous));
       }
     }
   });
@@ -1931,12 +1931,12 @@ const launchEvents = [
     date: new Date('2026-04-01T22:35:00Z'), padDir: [0.6, 1, 0.3],
     style: { booster: '#e08a4a', ship: '#f1efe9', scale: 1.25 }, sepDt: 3.6, dest: 'moon', landing: 'expend', tliT: 8.6,
     ms: [[0, 'LIFTOFF'], [1.9, 'MAX-Q'], [3.6, 'SOLID BOOSTER SEPARATION'], [5.2, 'CORE STAGE SEPARATION'], [6.8, 'ORION IN EARTH ORBIT'], [8.6, 'TRANS-LUNAR INJECTION'], [10.2, 'CREW EN ROUTE TO THE MOON']],
-    summary: 'First crewed Artemis flight \u2014 Wiseman, Glover, Koch and Hansen around the Moon and back.' },
+    summary: 'First crewed Artemis flight - Wiseman, Glover, Koch and Hansen around the Moon and back.' },
   { id: 'newglenn7', name: 'New Glenn \u00B7 BlueBird 7', vehicle: 'New Glenn 7\u00D72', site: 'Cape Canaveral, LC-36',
     date: new Date('2026-04-19T12:00:00Z'), approx: true, padDir: [0.5, 1, 0.5],
     style: { booster: '#7f97c9', ship: '#dfe6f4', scale: 1.2 }, sepDt: 3.4, dest: 'deploy', landing: 'droneship',
     ms: [[0, 'LIFTOFF'], [1.9, 'MAX-Q'], [3.4, 'BOOSTER SEPARATION'], [5.0, 'SECOND STAGE IGNITION'], [7.2, 'FAIRING SEPARATION'], [9.0, 'BLUEBIRD BLOCK 2 DEPLOYMENT']],
-    summary: 'AST SpaceMobile BlueBird satellite \u2014 the last flight from LC-36A before its reconstruction.' },
+    summary: 'AST SpaceMobile BlueBird satellite - the last flight from LC-36A before its reconstruction.' },
   { id: 'starship12', name: 'Starship Flight 12', vehicle: 'Starship / Super Heavy', site: 'Starbase, Boca Chica, Texas',
     date: new Date('2026-05-21T13:00:00Z'), approx: true, padDir: [0.25, 1, -0.55],
     style: { booster: '#c3ccd4', ship: '#d8dee3', scale: 1.35 }, sepDt: 3.6, dest: 'suborbital', landing: 'catch',
@@ -1961,11 +1961,11 @@ const launchEvents = [
     date: new Date('2026-10-01T15:10:06Z'), planned: true, padDir: [0.55, 1, 0.35],
     style: { booster: '#e9edf1', ship: '#f4f6f8', scale: 1.0 }, sepDt: 3.2, dest: 'iss', landing: 'rtls',
     ms: [[0, 'LIFTOFF'], [1.8, 'MAX-Q'], [3.2, 'MECO \u00B7 STAGE SEPARATION'], [5.0, 'BOOSTER LANDING AT LZ-40 (PLANNED)'], [6.8, 'DRAGON GRACE IN ORBIT'], [8.6, 'RENDEZVOUS WITH ISS']],
-    summary: 'Watkins, Delaney, Kutryk and Teteryatnikov \u2014 a six-month stay on the ISS.' },
+    summary: 'Watkins, Delaney, Kutryk and Teteryatnikov - a six-month stay on the ISS.' },
   { id: 'gaganyaan1', name: 'Gaganyaan-1', vehicle: 'HLVM3', site: 'Satish Dhawan Space Centre',
     date: new Date('2026-11-15T04:30:00Z'), approx: true, planned: true, padDir: [-0.2, 1, -0.7],
     style: { booster: '#e6dccb', ship: '#f2efe9', scale: 1.15 }, sepDt: 3.0, dest: 'leo', landing: 'expend',
-    ms: [[0, 'LIFTOFF'], [1.8, 'MAX-Q'], [3.0, 'S200 BOOSTER SEPARATION'], [4.8, 'CORE STAGE SEPARATION'], [6.8, 'CREW MODULE IN ORBIT'], [8.6, 'VYOMMITRA ABOARD \u2014 UNCREWED TEST']],
+    ms: [[0, 'LIFTOFF'], [1.8, 'MAX-Q'], [3.0, 'S200 BOOSTER SEPARATION'], [4.8, 'CORE STAGE SEPARATION'], [6.8, 'CREW MODULE IN ORBIT'], [8.6, 'VYOMMITRA ABOARD - UNCREWED TEST']],
     summary: "India's first uncrewed orbital test of the Gaganyaan crew capsule. Planned for Q4 2026; the date may slip." },
 ];
 launchEvents.forEach((ev) => { ev.upcoming = ev.date.getTime() > REAL_NOW; });
@@ -2039,7 +2039,7 @@ launchEvents.forEach((ev) => {
 
 function replayLaunch(ev) {
   if (state.mode === 'pilot') return;
-  if (activeLaunch) { pushTicker('A launch sequence is already playing — let it finish or skip it first.'); return; }
+  if (activeLaunch) { pushTicker('A launch sequence is already playing - let it finish or skip it first.'); return; }
   hideLaunchPrompt();
   state.simDate = new Date(ev.date.getTime() - 45 * 60 * 1000);
   resyncLaunchClock();
@@ -2066,7 +2066,7 @@ let activeLaunch = null;
 function easeInOut(p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
 
 // Distance traveled after `tp` seconds of straight-line coasting: ramps up to a constant
-// cruise speed over ACCEL_TIME seconds, then holds steady — never accelerates forever, unlike
+// cruise speed over ACCEL_TIME seconds, then holds steady - never accelerates forever, unlike
 // a raw quadratic, so a long coast phase can't quietly build up to an absurd closing speed.
 // If a sphere (Earth, Moon) sits between the camera and the rocket, slide the camera sideways
 // just far enough to clear it. Continuous (no change when nothing is in the way), so no pops.
@@ -2161,7 +2161,7 @@ function startLaunchSequence(event) {
   launchAlertSub.textContent = `${event.vehicle} \u00B7 ${event.site}`;
   launchClockEl.textContent = clockLabel(-LIFTOFF_T);
   launchAlertEl.classList.add('visible');
-  pushTicker(`Watching launch: ${event.name} \u2014 ${event.vehicle}, ${event.site}`, true);
+  pushTicker(`Watching launch: ${event.name} - ${event.vehicle}, ${event.site}`, true);
 }
 
 function skipLaunch() {
@@ -2227,8 +2227,8 @@ function updateLaunchSequence(delta) {
     const dest = al.event.dest;
     if (dest === 'moon') {
       // A real destination, not an ever-accelerating straight line: curve out from the
-      // separation point (control point continues the initial heading) and arrive at — then
-      // hold near — the Moon's actual current position, instead of blowing straight through it.
+      // separation point (control point continues the initial heading) and arrive at - then
+      // hold near - the Moon's actual current position, instead of blowing straight through it.
       const moonPos = bodyMeshes.moon.group.position;
       const arriveDur = 7.5;
       const p = easeInOut(Math.min(1, tp / arriveDur));
@@ -2267,7 +2267,7 @@ function updateLaunchSequence(delta) {
       return earthPos.clone().add(rotated);
     }
     // 'deploy' and any unrecognized destination: continue outward in a straight line, ramping
-    // up to a constant cruise speed rather than accelerating forever — an unbounded quadratic
+    // up to a constant cruise speed rather than accelerating forever - an unbounded quadratic
     // here is exactly what made longer coasts (e.g. New Glenn) look like they suddenly hit
     // warp speed near the end, and also made the camera's lag-behind chase grow without limit.
     return al.sepPos.clone().addScaledVector(al.sepDir, coastDistance(tp));
@@ -2488,7 +2488,7 @@ function checkLaunchTriggers() {
     });
     if (et >= lo && et <= hi && (!launchCooldown[ev.id] || now - launchCooldown[ev.id] > 8000)) {
       launchCooldown[ev.id] = now;
-      pushTicker(`Launch: ${ev.name} \u2014 ${ev.vehicle}, ${ev.site}`, true);
+      pushTicker(`Launch: ${ev.name} - ${ev.vehicle}, ${ev.site}`, true);
       // Only offer the cinematic when it makes sense: alerts on, not busy, not fast-forwarding.
       if (state.launchAlerts && !activeLaunch && state.mode !== 'pilot' && state.speed <= 20) showLaunchPrompt(ev);
     }
@@ -2496,7 +2496,7 @@ function checkLaunchTriggers() {
 }
 
 /* ---------------------------------------------------------------------- */
-/*  EYE — simulated command console (local parser, not a live AI)          */
+/*  EYE - simulated command console (local parser, not a live AI)          */
 /* ---------------------------------------------------------------------- */
 const eyeConsole = document.getElementById('eyeConsole');
 const eyeToggleBtn = overlay.querySelector('#eyeToggle');
@@ -2648,7 +2648,7 @@ function runEyeCommand(raw) {
       return;
     }
     if (rest.includes('launch')) {
-      eyePrint(launchEvents.map((e) => `${e.name} — ${e.approx ? '~' : ''}${formatDateShort(e.date)} ${e.upcoming ? '(upcoming)' : '(flown)'}`).join('\n') + '\nType: watch <name> to replay one.', 'reply');
+      eyePrint(launchEvents.map((e) => `${e.name} - ${e.approx ? '~' : ''}${formatDateShort(e.date)} ${e.upcoming ? '(upcoming)' : '(flown)'}`).join('\n') + '\nType: watch <name> to replay one.', 'reply');
       return;
     }
     eyePrint('Try: list hazardous / list missions / list launches', 'reply');
@@ -2898,7 +2898,7 @@ function animate() {
     updateLabel(entry, b.id, pos);
   });
 
-  // Moon — orbits Earth
+  // Moon - orbits Earth
   const earthPos = bodyMeshes.earth.group.position;
   const moonLocalPos = getLocalPosition(moon.el, state.simDate);
   const moonWorldPos = earthPos.clone().add(moonLocalPos);
@@ -2911,7 +2911,7 @@ function animate() {
   sunMesh.rotation.y += delta * 0.025;
   coronaMesh.scale.setScalar(SUN_GLOW * (1 + Math.sin(elapsed * 0.6) * 0.02));
 
-  // Asteroid belt — slow collective revolution (approximation)
+  // Asteroid belt - slow collective revolution (approximation)
   const beltAngle = ((state.simDate.getTime() / 86400000) / BELT_PERIOD_DAYS) * Math.PI * 2;
   asteroidBelt.rotation.y = beltAngle;
 
@@ -2955,7 +2955,7 @@ function animate() {
   } else if (state.mode === 'pilot') {
     updatePilot(delta);
   } else {
-    // Only steer the orbit target when something is actively followed — otherwise leave
+    // Only steer the orbit target when something is actively followed - otherwise leave
     // controls.target exactly where the user last set it, so zooming never fights it.
     const follow = followObjectOf(state.followId);
     if (follow) {
