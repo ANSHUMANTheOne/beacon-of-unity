@@ -82,3 +82,12 @@ Chrome tests covered all requested widths and landscape, scene drag/keyboard inp
 - Removed em dashes from first-party HTML, JavaScript, CSS and supporting copy, including legacy pages. No backend or authentication logic intentionally changed.
 - Chrome checks: nine widths from 320 to 1920 without horizontal overflow; card and scene controls; normal/reduced-motion modes; mascot gaze, throw and double gestures; demo request, messaging/history and lost-and-found workflows at 320, 390 and 1440. Public page screenshots captured in outputs/refinement.
 - Live sign-in, identity uploads, real messages and contact submission were not performed. No deployment or push.
+
+## Connected classrooms and scenario follow-up
+
+- School concept now transforms four furnished classrooms into nodes connected to a central Beacon hub, with a sample all-class announcement action.
+- Neighbourhood and workplace actions demonstrate help and a coordinated food drive. Two neighbours approach an older resident and a wheelchair user; mobile actions bring the scene into view.
+- Rewards, Conversations and Thank You Wall homepage buttons open the matching embedded demo tab after demo initialization.
+- Reliable News implementation compared with base 9b5c2c6: the news block matches after normalizing em-dash punctuation. Fetching, parsing, filtering and rendering logic were not changed.
+- Compact organisation links, mascot/dock collision clearance, clearer final CTA and corrected mobile headline overflow.
+- Chrome scenario controls passed at 320, 390 and 1440 with no overflow or page errors. Demo workflow retest passed all six checks at those widths. Nothing deployed.

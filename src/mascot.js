@@ -93,6 +93,8 @@
   // ── position helper ───────────────────────────────────
   function applyPos() {
     if (window._bavPaused && !dragging) return;
+    const dock=document.querySelector('.beacon-dock')?.getBoundingClientRect();
+    if(dock && px+W>dock.left-12 && px<dock.right+12 && py+H>dock.top-14)py=dock.top-H-14;
     wrap.style.left = px + 'px';
     wrap.style.top  = py + 'px';
   }

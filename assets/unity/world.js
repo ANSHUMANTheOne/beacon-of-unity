@@ -1,23 +1,25 @@
 (function() {
   const e = matchMedia("(max-width: 700px)").matches, n = matchMedia("(prefers-reduced-motion: reduce)");
   window._bavPaused = n.matches;
-  const s = e ? 0.88 : 1, r = Math.round(64 * s), c = Math.round(84 * s), E = 0.36, k = 0.967, Y = 0.76, q = 0.52, _ = 0.68, F = 1.8, x = 28;
-  let g = window.innerWidth - 148, h = window.innerHeight * 0.32, a = -1.2, p = 0, u = "idle", l = "", d = !1, y = 0, w = 0, C = [], H = null, xe = 0, P = !1, X = !1, Me = null, se = performance.now(), W = 0, A = 0, D = 0, U = 0;
-  const M = document.getElementById("bav-wrap"), v = document.getElementById("bav-anim"), re = document.getElementById("bav-svg"), Le = document.getElementById("bav-bubble"), Ge = document.getElementById("bav-msg"), Ae = document.getElementById("bav-shadow"), le = document.getElementById("bav-el"), ce = document.getElementById("bav-er"), Ke = document.getElementById("bav-mth"), Je = document.getElementById("bav-leg-l"), Ze = document.getElementById("bav-leg-r");
-  M.style.width = r + "px", v.style.width = r + "px", v.style.height = c + "px", re.style.width = "100%", re.style.height = "100%";
+  const i = e ? 0.88 : 1, a = Math.round(64 * i), s = Math.round(84 * i), E = 0.36, k = 0.967, _ = 0.76, Y = 0.52, q = 0.68, F = 1.8, x = 28;
+  let p = window.innerWidth - 148, h = window.innerHeight * 0.32, r = -1.2, f = 0, u = "idle", l = "", d = !1, y = 0, w = 0, T = [], H = null, xe = 0, N = !1, X = !1, Me = null, se = performance.now(), W = 0, A = 0, D = 0, U = 0;
+  const M = document.getElementById("bav-wrap"), v = document.getElementById("bav-anim"), re = document.getElementById("bav-svg"), Le = document.getElementById("bav-bubble"), Ke = document.getElementById("bav-msg"), Ae = document.getElementById("bav-shadow"), ce = document.getElementById("bav-el"), le = document.getElementById("bav-er"), Je = document.getElementById("bav-mth"), Ze = document.getElementById("bav-leg-l"), et = document.getElementById("bav-leg-r");
+  M.style.width = a + "px", v.style.width = a + "px", v.style.height = s + "px", re.style.width = "100%", re.style.height = "100%";
   function de(t) {
-    Je.classList.toggle("swinging", t), Ze.classList.toggle("swinging", t);
+    Ze.classList.toggle("swinging", t), et.classList.toggle("swinging", t);
   }
   function ue() {
-    window._bavPaused && !d || (M.style.left = g + "px", M.style.top = h + "px");
+    if (window._bavPaused && !d) return;
+    const t = document.querySelector(".beacon-dock")?.getBoundingClientRect();
+    t && p + a > t.left - 12 && p < t.right + 12 && h + s > t.top - 14 && (h = t.top - s - 14), M.style.left = p + "px", M.style.top = h + "px";
   }
-  function T(t, i) {
-    clearTimeout(Me), Ge.textContent = t, Le.classList.add("on"), Me = setTimeout(() => Le.classList.remove("on"), i || 3e3);
+  function C(t, c) {
+    clearTimeout(Me), Ke.textContent = t, Le.classList.add("on"), Me = setTimeout(() => Le.classList.remove("on"), c || 3e3);
   }
   setTimeout(() => {
-    T("Hi! I'm Beacon! 👋", 4e3), setTimeout(() => T("Your community guardian ✨", 3200), 4700), setTimeout(() => T("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
+    C("Hi! I'm Beacon! 👋", 4e3), setTimeout(() => C("Your community guardian ✨", 3200), 4700), setTimeout(() => C("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
   }, 1400);
-  const Ce = [
+  const Te = [
     "🛡️ Keeping UAE safe!",
     "🤝 Community first!",
     "🇦🇪 Proud to serve!",
@@ -26,21 +28,21 @@
     "🌟 Verified & trusted"
   ];
   setInterval(() => {
-    (u === "idle" || u === "sitting") && Math.random() < 0.28 && T(Ce[Math.floor(Math.random() * Ce.length)], 2800);
+    (u === "idle" || u === "sitting") && Math.random() < 0.28 && C(Te[Math.floor(Math.random() * Te.length)], 2800);
   }, 11e3);
-  const Te = {
+  const Ce = {
     happy: "M22 52 Q32 59 42 52",
     surprised: "M24 53 Q32 58 40 53",
     sitting: "M23 52 Q32 57 41 52",
     flying: "M24 54 Q32 50 40 54"
   };
   function I(t) {
-    Ke.setAttribute("d", Te[t] || Te.happy), t === "surprised" && [le, ce].forEach((i) => {
-      i.style.transform = "scale(1.3)", setTimeout(() => i.style.transform = "scale(1)", 550);
+    Je.setAttribute("d", Ce[t] || Ce.happy), t === "surprised" && [ce, le].forEach((c) => {
+      c.style.transform = "scale(1.3)", setTimeout(() => c.style.transform = "scale(1)", 550);
     });
   }
   function he() {
-    X || n.matches || [le, ce].forEach((t) => {
+    X || n.matches || [ce, le].forEach((t) => {
       t.style.transform = "scaleY(0.06)", setTimeout(() => t.style.transform = "scaleY(1)", 110);
     });
   }
@@ -77,11 +79,11 @@
           break;
       }
   }
-  let Ye = [];
+  let _e = [];
   function K() {
-    Ye = Array.from(document.querySelectorAll(
+    _e = Array.from(document.querySelectorAll(
       "h1,h2,h3,h4,h5,h6,p,.ftitle,.stitle,.ctat,.nname,.pct,.ft,.tname,.rpt,figcaption,dt,dd"
-    )).map((t) => ({ el: t, r: t.getBoundingClientRect() })).filter(({ r: t, el: i }) => t.width > 120 && t.height > 20 && t.bottom > 0 && t.top < window.innerHeight && !i.closest("#bav-chat,dialog,.beacon-dock,#bav-root") && i.textContent.trim().length > 8);
+    )).map((t) => ({ el: t, r: t.getBoundingClientRect() })).filter(({ r: t, el: c }) => t.width > 120 && t.height > 20 && t.bottom > 0 && t.top < window.innerHeight && !c.closest("#bav-chat,dialog,.beacon-dock,#bav-root") && c.textContent.trim().length > 8);
   }
   K(), setInterval(K, 700);
   let me = !1;
@@ -90,140 +92,140 @@
       me = !1, K();
     }));
   }, { passive: !0 }), window.addEventListener("resize", K, { passive: !0 });
-  function et() {
+  function tt() {
     if (d) return null;
-    const t = h + c, i = g + r * 0.5;
-    for (const { el: m, r: f } of Ye)
-      if (Math.abs(t - f.top) < 28 && i > f.left + 10 && i < f.right - 10 && f.top > 55)
-        return { el: m, snapY: f.top - c };
+    const t = h + s, c = p + a * 0.5;
+    for (const { el: m, r: g } of _e)
+      if (Math.abs(t - g.top) < 28 && c > g.left + 10 && c < g.right - 10 && g.top > 55)
+        return { el: m, snapY: g.top - s };
     return null;
   }
-  const $ = ["Oof! 😅", "Wheee! 🌀", "Boing! 🎯", "Hey! 😄", "Woo! 💫"], J = ["Whoa! 😲", "Wee! 🚀", "Flying! 🌟", "Catch me! 😄"], _e = ["Nice read! 📖", "Interesting! 🤔", "Love this! ✨", "Reading... 👀"];
+  const $ = ["Oof! 😅", "Wheee! 🌀", "Boing! 🎯", "Hey! 😄", "Woo! 💫"], J = ["Whoa! 😲", "Wee! 🚀", "Flying! 🌟", "Catch me! 😄"], qe = ["Nice read! 📖", "Interesting! 🤔", "Love this! ✨", "Reading... 👀"];
   function pe(t) {
     if (window._bavPaused || document.hidden || document.body.classList.contains("beacon-hidden") || document.body.classList.contains("beacon-chat-open") || document.querySelector("dialog[open]")) {
       se = t, requestAnimationFrame(pe);
       return;
     }
-    const i = t - se;
+    const c = t - se;
     se = t;
-    const m = Math.min(i / 16.67, 3), f = window.innerWidth, L = window.innerHeight - 12;
-    if (g = Math.max(0, Math.min(f - r, g)), h = Math.max(75, Math.min(L - c, h)), !d) {
+    const m = Math.min(c / 16.67, 3), g = window.innerWidth, L = window.innerHeight - 12;
+    if (p = Math.max(0, Math.min(g - a, p)), h = Math.max(75, Math.min(L - s, h)), !d) {
       if (u === "sitting" && H) {
-        const b = H.getBoundingClientRect(), j = b.top > 55 && b.top < L + 20, N = g + r * 0.5, ee = N > b.left - 10 && N < b.right + 10;
+        const b = H.getBoundingClientRect(), j = b.top > 55 && b.top < L + 20, P = p + a * 0.5, ee = P > b.left - 10 && P < b.right + 10;
         if (j && ee)
-          h = b.top - c + 12, p = 0, a *= Y;
+          h = b.top - s + 12, f = 0, r *= _;
         else {
-          H = null, u = "flying", de(!1), p = -1.5;
+          H = null, u = "flying", de(!1), f = -1.5;
           const Q = ["Whoa! 😱", "Aaaaah! 😵", "Not again! 😤", "Slipping! 🫨", "Noooo! 😩", "Help! 🙈", "Gravity wins 😔", "See ya! 👋", "Wheee... 😬", "Oh no no no! 😰"];
-          T(Q[Math.floor(Math.random() * Q.length)], 1500);
+          C(Q[Math.floor(Math.random() * Q.length)], 1500);
         }
       } else {
-        const b = et();
-        if (b && Math.abs(p) < 7)
-          (u !== "sitting" || H !== b.el) && (H = b.el, xe = b.snapY, u = "sitting", p = 0, a *= 0.35, h = xe, V(), I("sitting"), de(!0), (Math.abs(a) > 1.2 || Math.abs(p) > 2) && T(_e[Math.floor(Math.random() * _e.length)], 2400));
+        const b = tt();
+        if (b && Math.abs(f) < 7)
+          (u !== "sitting" || H !== b.el) && (H = b.el, xe = b.snapY, u = "sitting", f = 0, r *= 0.35, h = xe, V(), I("sitting"), de(!0), (Math.abs(r) > 1.2 || Math.abs(f) > 2) && C(qe[Math.floor(Math.random() * qe.length)], 2400));
         else {
-          p = Math.min(p + E * m, x), a *= Math.pow(k, m), g += a * m, h += p * m, g < 0 && (g = 0, Math.abs(a) > F ? (a = Math.abs(a) * _, V(), Math.random() < 0.4 && T($[Math.floor(Math.random() * $.length)], 1500)) : a = 0, P = !1), g + r > f && (g = f - r, Math.abs(a) > F ? (a = -Math.abs(a) * _, V(), Math.random() < 0.4 && T($[Math.floor(Math.random() * $.length)], 1500)) : a = 0, P = !0), h + c > L && (h = L - c, Math.abs(p) > F ? (p = -Math.abs(p) * q, a *= Y, V(), Math.random() < 0.28 && T($[Math.floor(Math.random() * $.length)], 1500)) : (p = 0, a *= Y, u !== "sitting" && (u = Math.abs(a) > 1.1 ? "walking" : "idle"))), h < 0 && (h = 0, p = Math.abs(p) * q);
-          const j = Math.sqrt(a * a + p * p);
-          u !== "sitting" && (j > 3.5 ? u = "flying" : Math.abs(a) > 1 && h + c >= L - 2 ? u = "walking" : j < 0.7 && (u = "idle"));
+          f = Math.min(f + E * m, x), r *= Math.pow(k, m), p += r * m, h += f * m, p < 0 && (p = 0, Math.abs(r) > F ? (r = Math.abs(r) * q, V(), Math.random() < 0.4 && C($[Math.floor(Math.random() * $.length)], 1500)) : r = 0, N = !1), p + a > g && (p = g - a, Math.abs(r) > F ? (r = -Math.abs(r) * q, V(), Math.random() < 0.4 && C($[Math.floor(Math.random() * $.length)], 1500)) : r = 0, N = !0), h + s > L && (h = L - s, Math.abs(f) > F ? (f = -Math.abs(f) * Y, r *= _, V(), Math.random() < 0.28 && C($[Math.floor(Math.random() * $.length)], 1500)) : (f = 0, r *= _, u !== "sitting" && (u = Math.abs(r) > 1.1 ? "walking" : "idle"))), h < 0 && (h = 0, f = Math.abs(f) * Y);
+          const j = Math.sqrt(r * r + f * f);
+          u !== "sitting" && (j > 3.5 ? u = "flying" : Math.abs(r) > 1 && h + s >= L - 2 ? u = "walking" : j < 0.7 && (u = "idle"));
         }
       }
-      if (a < -0.3 && (P = !0), a > 0.3 && (P = !1), u === "flying") {
-        const b = Math.max(-30, Math.min(30, a * 2.8));
+      if (r < -0.3 && (N = !0), r > 0.3 && (N = !1), u === "flying") {
+        const b = Math.max(-30, Math.min(30, r * 2.8));
         W += (b - W) * 0.18 * m, A += (0 - A) * 0.12 * m, v.style.transform = `rotate(${(W + A).toFixed(2)}deg)`;
       } else {
         W *= 0.8, A += (0 - A) * 0.14 * m;
         const b = W + A;
         Math.abs(b) < 0.2 ? (W = 0, A = 0, v.style.transform = "") : v.style.transform = `rotate(${b.toFixed(2)}deg)`;
       }
-      re.style.transform = `scaleX(${P ? -1 : 1})`;
-      const fe = Math.max(0, L - (h + c)), Z = Math.max(0.15, 1 - fe / L);
+      re.style.transform = `scaleX(${N ? -1 : 1})`;
+      const fe = Math.max(0, L - (h + s)), Z = Math.max(0.15, 1 - fe / L);
       Ae.style.width = 38 * Z + "px", Ae.style.opacity = (0.72 * Z).toString(), u !== l && !X && (Ie(), I(u === "sitting" ? "sitting" : u === "flying" ? "flying" : "happy"), l = u);
     }
     ue(), requestAnimationFrame(pe);
   }
-  M.style.left = g + "px", M.style.top = h + "px", requestAnimationFrame(pe), M.addEventListener("mouseenter", () => document.body.classList.add("hov")), M.addEventListener("mouseleave", () => document.body.classList.remove("hov")), M.addEventListener("mousedown", (t) => {
-    t.button === 0 && (t.preventDefault(), d = !0, y = t.clientX - g, w = t.clientY - h, U = t.clientX, C = [{ x: t.clientX, y: t.clientY, t: performance.now() }], a = 0, p = 0, H = null, u = l = "flying", v.style.animation = "", v.style.transform = "", I("surprised"), T(J[Math.floor(Math.random() * J.length)], 1e3));
+  M.style.left = p + "px", M.style.top = h + "px", requestAnimationFrame(pe), M.addEventListener("mouseenter", () => document.body.classList.add("hov")), M.addEventListener("mouseleave", () => document.body.classList.remove("hov")), M.addEventListener("mousedown", (t) => {
+    t.button === 0 && (t.preventDefault(), d = !0, y = t.clientX - p, w = t.clientY - h, U = t.clientX, T = [{ x: t.clientX, y: t.clientY, t: performance.now() }], r = 0, f = 0, H = null, u = l = "flying", v.style.animation = "", v.style.transform = "", I("surprised"), C(J[Math.floor(Math.random() * J.length)], 1e3));
   }), document.addEventListener("mousemove", (t) => {
     if (!d) return;
-    const i = t.clientX - U;
-    U = t.clientX, D = Math.max(-38, Math.min(38, -i * 3.2)), g = t.clientX - y, h = t.clientY - w, C.push({ x: t.clientX, y: t.clientY, t: performance.now() }), C.length > 10 && C.shift(), A += (D - A) * 0.28, D *= 0.82, v.style.transform = `rotate(${A.toFixed(1)}deg)`, ue();
+    const c = t.clientX - U;
+    U = t.clientX, D = Math.max(-38, Math.min(38, -c * 3.2)), p = t.clientX - y, h = t.clientY - w, T.push({ x: t.clientX, y: t.clientY, t: performance.now() }), T.length > 10 && T.shift(), A += (D - A) * 0.28, D *= 0.82, v.style.transform = `rotate(${A.toFixed(1)}deg)`, ue();
   }), document.addEventListener("mouseup", () => {
     if (!d) return;
     d = !1, D = 0, I("happy");
-    const t = performance.now(), i = C.filter((m) => t - m.t < 130);
-    if (i.length >= 2) {
-      const m = i[0], f = i[i.length - 1], L = Math.max(f.t - m.t, 5) / 16.67;
-      a = Math.max(-x, Math.min(x, (f.x - m.x) / L * 0.62)), p = Math.max(-x, Math.min(x, (f.y - m.y) / L * 0.62));
+    const t = performance.now(), c = T.filter((m) => t - m.t < 130);
+    if (c.length >= 2) {
+      const m = c[0], g = c[c.length - 1], L = Math.max(g.t - m.t, 5) / 16.67;
+      r = Math.max(-x, Math.min(x, (g.x - m.x) / L * 0.62)), f = Math.max(-x, Math.min(x, (g.y - m.y) / L * 0.62));
     }
     u = "flying", l = "";
   }), M.addEventListener("dblclick", () => {
-    d || (p = -8 - Math.random() * 2, a = (Math.random() - 0.5) * 5, u = "flying", l = "", V()), window.__bavOpenChat && window.__bavOpenChat();
+    d || (f = -8 - Math.random() * 2, r = (Math.random() - 0.5) * 5, u = "flying", l = "", V()), window.__bavOpenChat && window.__bavOpenChat();
   });
-  let qe = 0;
+  let Ye = 0;
   if (M.addEventListener("touchstart", (t) => {
     t.preventDefault();
-    const i = performance.now(), m = i - qe < 320;
-    if (qe = i, m) {
+    const c = performance.now(), m = c - Ye < 320;
+    if (Ye = c, m) {
       window.__bavOpenChat && window.__bavOpenChat(), V();
       return;
     }
-    const f = t.touches[0];
-    d = !0, y = f.clientX - g, w = f.clientY - h, U = f.clientX, C = [{ x: f.clientX, y: f.clientY, t: performance.now() }], a = 0, p = 0, H = null, de(!1), u = l = "flying", v.style.animation = "", I("surprised"), T(J[Math.floor(Math.random() * J.length)], 1e3);
+    const g = t.touches[0];
+    d = !0, y = g.clientX - p, w = g.clientY - h, U = g.clientX, T = [{ x: g.clientX, y: g.clientY, t: performance.now() }], r = 0, f = 0, H = null, de(!1), u = l = "flying", v.style.animation = "", I("surprised"), C(J[Math.floor(Math.random() * J.length)], 1e3);
   }, { passive: !1 }), document.addEventListener("touchmove", (t) => {
     if (!d) return;
     t.preventDefault();
-    const i = t.touches[0], m = i.clientX - U;
-    U = i.clientX, D = Math.max(-38, Math.min(38, -m * 3.2)), g = i.clientX - y, h = i.clientY - w, C.push({ x: i.clientX, y: i.clientY, t: performance.now() }), C.length > 10 && C.shift(), A += (D - A) * 0.28, D *= 0.82, v.style.transform = `rotate(${A.toFixed(1)}deg)`, ue();
+    const c = t.touches[0], m = c.clientX - U;
+    U = c.clientX, D = Math.max(-38, Math.min(38, -m * 3.2)), p = c.clientX - y, h = c.clientY - w, T.push({ x: c.clientX, y: c.clientY, t: performance.now() }), T.length > 10 && T.shift(), A += (D - A) * 0.28, D *= 0.82, v.style.transform = `rotate(${A.toFixed(1)}deg)`, ue();
   }, { passive: !1 }), document.addEventListener("touchend", () => {
     if (!d) return;
     d = !1, I("happy"), D = 0;
-    const t = performance.now(), i = C.filter((m) => t - m.t < 130);
-    if (i.length >= 2) {
-      const m = i[0], f = i[i.length - 1], L = Math.max(f.t - m.t, 5) / 16.67;
-      a = Math.max(-x, Math.min(x, (f.x - m.x) / L * 0.62)), p = Math.max(-x, Math.min(x, (f.y - m.y) / L * 0.62));
+    const t = performance.now(), c = T.filter((m) => t - m.t < 130);
+    if (c.length >= 2) {
+      const m = c[0], g = c[c.length - 1], L = Math.max(g.t - m.t, 5) / 16.67;
+      r = Math.max(-x, Math.min(x, (g.x - m.x) / L * 0.62)), f = Math.max(-x, Math.min(x, (g.y - m.y) / L * 0.62));
     }
     u = "flying", l = "";
   }), !matchMedia("(hover: none)").matches) {
-    let N = function() {
+    let P = function() {
       if (d || document.hidden) {
-        requestAnimationFrame(N);
+        requestAnimationFrame(P);
         return;
       }
-      const ge = document.getElementById("bav-svg").getBoundingClientRect(), Fe = ge.width / 64, tt = P ? -1 : 1;
+      const ge = document.getElementById("bav-svg").getBoundingClientRect(), Fe = ge.width / 64, nt = N ? -1 : 1;
       [
-        { base: Z, pupil: m, iris: f },
+        { base: Z, pupil: m, iris: g },
         { base: b, pupil: L, iris: fe }
       ].forEach(({ base: O, pupil: He, iris: De }) => {
-        const nt = ge.left + (P ? 64 - O.x : O.x) * Fe, ot = ge.top + O.y * Fe, ye = t - nt, ve = i - ot, be = Math.sqrt(ye * ye + ve * ve) || 1, Re = Math.min(be / 55, 1) * j, Pe = ye / be * Re * tt, Ne = ve / be * Re;
-        He.setAttribute("cx", (O.x + Pe).toFixed(2)), He.setAttribute("cy", (O.y + Ne).toFixed(2)), De.setAttribute("cx", (O.x + Pe * 0.55).toFixed(2)), De.setAttribute("cy", (O.y + Ne * 0.55).toFixed(2));
-      }), requestAnimationFrame(N);
+        const ot = ge.left + (N ? 64 - O.x : O.x) * Fe, at = ge.top + O.y * Fe, ye = t - ot, ve = c - at, be = Math.sqrt(ye * ye + ve * ve) || 1, Re = Math.min(be / 55, 1) * j, Ne = ye / be * Re * nt, Pe = ve / be * Re;
+        He.setAttribute("cx", (O.x + Ne).toFixed(2)), He.setAttribute("cy", (O.y + Pe).toFixed(2)), De.setAttribute("cx", (O.x + Ne * 0.55).toFixed(2)), De.setAttribute("cy", (O.y + Pe * 0.55).toFixed(2));
+      }), requestAnimationFrame(P);
     };
-    var ct = N;
-    let t = window.innerWidth / 2, i = window.innerHeight / 2;
+    var dt = P;
+    let t = window.innerWidth / 2, c = window.innerHeight / 2;
     document.addEventListener("mousemove", (z) => {
-      t = z.clientX, i = z.clientY;
+      t = z.clientX, c = z.clientY;
     });
-    const m = document.getElementById("bav-pupil-l"), f = document.getElementById("bav-iris-l"), L = document.getElementById("bav-pupil-r"), fe = document.getElementById("bav-iris-r"), Z = { x: 23, y: 38 }, b = { x: 41, y: 38 }, j = 2.6;
-    N();
+    const m = document.getElementById("bav-pupil-l"), g = document.getElementById("bav-iris-l"), L = document.getElementById("bav-pupil-r"), fe = document.getElementById("bav-iris-r"), Z = { x: 23, y: 38 }, b = { x: 41, y: 38 }, j = 2.6;
+    P();
     let ee = null, Q = !1;
     M.addEventListener("mousedown", () => {
       Q = !1, ee = setTimeout(() => {
-        d && !Q && (Q = !0, T("🥰 Squeezing me!", 1800), [le, ce].forEach((z) => {
+        d && !Q && (Q = !0, C("🥰 Squeezing me!", 1800), [ce, le].forEach((z) => {
           z.style.transform = "scale(1.22)", setTimeout(() => z.style.transform = "scale(1)", 700);
         }));
       }, 1200);
     }), document.addEventListener("mouseup", () => clearTimeout(ee));
   }
   window.addEventListener("resize", () => {
-    g = Math.max(0, Math.min(innerWidth - r, g)), h = Math.max(75, Math.min(innerHeight - c - 12, h)), M.style.left = g + "px", M.style.top = h + "px";
+    p = Math.max(0, Math.min(innerWidth - a, p)), h = Math.max(75, Math.min(innerHeight - s - 12, h)), M.style.left = p + "px", M.style.top = h + "px";
   }), M.addEventListener("bav-teleport", (t) => {
-    g = t.detail.x, h = t.detail.y, a = 0, p = 0, u = "idle", l = "", H = null;
+    p = t.detail.x, h = t.detail.y, r = 0, f = 0, u = "idle", l = "", H = null;
   }), M.addEventListener("bav-restore", () => {
-    a = (Math.random() - 0.5) * 4, p = -3, u = "flying", l = "", H = null, v.style.transform = "", I("happy");
+    r = (Math.random() - 0.5) * 4, f = -3, u = "flying", l = "", H = null, v.style.transform = "", I("happy");
   });
 })();
 (function() {
-  const e = document.getElementById("bav-chat"), n = document.getElementById("bav-chat-body"), s = document.getElementById("bav-chat-form"), r = document.getElementById("bav-chat-input"), c = document.getElementById("bav-chat-close"), E = document.getElementById("bav-chat-badge"), k = document.getElementById("bav-chat-hint");
+  const e = document.getElementById("bav-chat"), n = document.getElementById("bav-chat-body"), i = document.getElementById("bav-chat-form"), a = document.getElementById("bav-chat-input"), s = document.getElementById("bav-chat-close"), E = document.getElementById("bav-chat-badge"), k = document.getElementById("bav-chat-hint");
   if (k && window.innerWidth <= 768 && (k.textContent = "Double-tap to chat"), !e) return;
   e.inert = !0, [E, k].forEach((l) => {
     if (!l) return;
@@ -237,8 +239,8 @@
       w - d < 320 && window.__bavOpenChat && window.__bavOpenChat(), d = w;
     });
   });
-  let Y = !1, q = !1;
-  function _(l, d) {
+  let _ = !1, Y = !1;
+  function q(l, d) {
     const y = document.createElement("div");
     return y.className = "bav-msg " + d, d === "user" ? y.textContent = l : y.innerHTML = l, n.appendChild(y), n.scrollTop = n.scrollHeight, y;
   }
@@ -247,7 +249,7 @@
     d.className = "bav-quick", l.forEach((y) => {
       const w = document.createElement("button");
       w.type = "button", w.textContent = y, w.addEventListener("click", () => {
-        r.value = y, a();
+        a.value = y, r();
       }), d.appendChild(w);
     }), n.appendChild(d), n.scrollTop = n.scrollHeight;
   }
@@ -257,7 +259,7 @@
       d.remove(), l();
     }, 500 + Math.random() * 450);
   }
-  const g = [
+  const p = [
     // Placed BEFORE the Lost & Found entry deliberately: "founder" contains
     // the substring "found", so if the Lost & Found entry (keyed on
     // 'found') were checked first, a question like "who is the founder"
@@ -288,49 +290,49 @@
     { k: ["who are you", "what are you", "your name"], a: "I'm Beacon - the little guardian who hangs out on this page! Drag me around, throw me, or tap the 'Tap to chat' label any time 😊" }
   ];
   function h(l) {
-    const d = l.toLowerCase(), y = g.find((w) => w.k.some((C) => d.includes(C)));
+    const d = l.toLowerCase(), y = p.find((w) => w.k.some((T) => d.includes(T)));
     return y ? y.a : "I'm not totally sure about that one - but I can tell you about Help Requests, Lost & Found, Volunteering, News, Verification, or how to join. What sounds useful?";
   }
-  function a() {
-    const l = r.value.trim();
-    l && (_(l, "user"), r.value = "", x(() => _(h(l), "bot")));
+  function r() {
+    const l = a.value.trim();
+    l && (q(l, "user"), a.value = "", x(() => q(h(l), "bot")));
   }
-  s.addEventListener("submit", (l) => {
-    l.preventDefault(), a();
-  }), r.addEventListener("keydown", (l) => {
-    l.key === "Enter" && (l.preventDefault(), a());
+  i.addEventListener("submit", (l) => {
+    l.preventDefault(), r();
+  }), a.addEventListener("keydown", (l) => {
+    l.key === "Enter" && (l.preventDefault(), r());
   });
-  function p() {
-    q = !0, document.body.classList.add("beacon-chat-open"), e.classList.add("open"), e.setAttribute("aria-hidden", "false"), e.inert = !1, E && E.classList.add("hide"), k && k.classList.add("hide"), Y || (Y = !0, x(() => {
-      _("Hey! I'm Beacon 👋 Ask me anything about the platform, or tap a topic below.", "bot"), F(["How do I verify?", "Post a help request", "Lost & Found", "Volunteer events"]);
-    })), setTimeout(() => r.focus(), 250);
+  function f() {
+    Y = !0, document.body.classList.add("beacon-chat-open"), e.classList.add("open"), e.setAttribute("aria-hidden", "false"), e.inert = !1, E && E.classList.add("hide"), k && k.classList.add("hide"), _ || (_ = !0, x(() => {
+      q("Hey! I'm Beacon 👋 Ask me anything about the platform, or tap a topic below.", "bot"), F(["How do I verify?", "Post a help request", "Lost & Found", "Volunteer events"]);
+    })), setTimeout(() => a.focus(), 250);
   }
   function u() {
-    q = !1, document.body.classList.remove("beacon-chat-open"), e.classList.remove("open"), e.setAttribute("aria-hidden", "true"), e.inert = !0, document.getElementById("beacon-chat-button")?.focus();
+    Y = !1, document.body.classList.remove("beacon-chat-open"), e.classList.remove("open"), e.setAttribute("aria-hidden", "true"), e.inert = !0, document.getElementById("beacon-chat-button")?.focus();
   }
   window.__bavOpenChat = function() {
-    q ? u() : p();
-  }, c.addEventListener("click", u), document.addEventListener("keydown", (l) => {
-    l.key === "Escape" && q && u();
+    Y ? u() : f();
+  }, s.addEventListener("click", u), document.addEventListener("keydown", (l) => {
+    l.key === "Escape" && Y && u();
   });
 })();
-const We = document.querySelector(".pillar-gallery"), at = [...We.querySelectorAll(".pillar-card")], Ue = matchMedia("(prefers-reduced-motion: reduce)");
+const Ue = document.querySelector(".pillar-gallery"), it = [...Ue.querySelectorAll(".pillar-card")], Ve = matchMedia("(prefers-reduced-motion: reduce)");
 let we = !1;
 function oe() {
   we = !1;
-  const e = We.getBoundingClientRect(), n = !Ue.matches && !document.body.classList.contains("motion-paused") && innerWidth > 550, s = Math.max(-1, Math.min(1, (innerHeight / 2 - e.top - e.height / 2) / innerHeight));
-  at.forEach((r, c) => r.style.setProperty("--offset", n ? `${s * (c % 2 ? -58 : 58)}px` : "0px"));
+  const e = Ue.getBoundingClientRect(), n = !Ve.matches && !document.body.classList.contains("motion-paused") && innerWidth > 550, i = Math.max(-1, Math.min(1, (innerHeight / 2 - e.top - e.height / 2) / innerHeight));
+  it.forEach((a, s) => a.style.setProperty("--offset", n ? `${i * (s % 2 ? -58 : 58)}px` : "0px"));
 }
 addEventListener("scroll", () => {
   we || (we = !0, requestAnimationFrame(oe));
 }, { passive: !0 });
 addEventListener("resize", oe);
-Ue.addEventListener("change", oe);
+Ve.addEventListener("change", oe);
 oe();
 const o = (e) => document.querySelector(e), B = (e) => [...document.querySelectorAll(e)], ae = matchMedia("(prefers-reduced-motion: reduce)");
 let R, S = ae.matches;
 const Oe = setTimeout(() => document.documentElement.classList.add("world-unavailable"), 12e3);
-async function it() {
+async function st() {
   try {
     const { UnityWorld: e } = await import("./world2.js");
     R = new e(o("#unity-canvas"), () => {
@@ -340,7 +342,7 @@ async function it() {
     clearTimeout(Oe), document.documentElement.classList.add("world-unavailable"), console.warn("The lightweight world illustration is active.", e.message);
   }
 }
-it();
+st();
 const Xe = {
   help: [["↗", "A ladder for a little home improvement", "Al Nahda, Sharjah · Nearby", "Tools & everyday help"], ["↗", "An extra pair of hands with groceries", "Al Majaz, Sharjah · Nearby", "Community support"], ["↗", "A friendly hand setting up a laptop", "Abu Shagara, Sharjah · Nearby", "Tech help"]],
   found: [["⌕", "A set of keys, waiting to come home", "Al Majaz waterfront · Example listing", "Found"], ["⌕", "Looking for a much-loved backpack", "Al Nahda park · Example listing", "Lost"], ["⌕", "A wallet found on an evening walk", "Abu Shagara · Example listing", "Found"]],
@@ -353,43 +355,43 @@ function te(e, n = !1) {
     const k = E.dataset.preview === e;
     E.setAttribute("aria-selected", String(k)), E.tabIndex = k ? 0 : -1, k && n && E.focus();
   }), o("#feature-panel").setAttribute("aria-labelledby", "tab-" + e);
-  const s = o("#preview-content");
-  s.replaceChildren();
-  const r = { help: "Ask for groceries, transport, tools or tech support. See distance, time remaining and volunteer counts, then message a neighbour directly.", found: "Photo listings, clear Lost and Found labels, and Emirate locations. Contact the person who posted an item directly.", volunteer: "Community events sourced from Volunteers.ae, with dates, locations and direct registration links.", news: "Stories from Khaleej Times, Gulf News, Al Jazeera and BBC. Filter by source or topic in the dashboard." }, c = document.createElement("p");
-  c.className = "preview-description", c.textContent = r[e], s.append(c), Xe[e].forEach(([E, k, Y, q]) => {
-    const _ = document.createElement("article");
-    _.className = "preview-item";
+  const i = o("#preview-content");
+  i.replaceChildren();
+  const a = { help: "Ask for groceries, transport, tools or tech support. See distance, time remaining and volunteer counts, then message a neighbour directly.", found: "Photo listings, clear Lost and Found labels, and Emirate locations. Contact the person who posted an item directly.", volunteer: "Community events sourced from Volunteers.ae, with dates, locations and direct registration links.", news: "Stories from Khaleej Times, Gulf News, Al Jazeera and BBC. Filter by source or topic in the dashboard." }, s = document.createElement("p");
+  s.className = "preview-description", s.textContent = a[e], i.append(s), Xe[e].forEach(([E, k, _, Y]) => {
+    const q = document.createElement("article");
+    q.className = "preview-item";
     const F = document.createElement("span");
     F.className = "preview-symbol", F.textContent = E;
-    const x = document.createElement("div"), g = document.createElement("h3");
-    g.textContent = k;
+    const x = document.createElement("div"), p = document.createElement("h3");
+    p.textContent = k;
     const h = document.createElement("p");
-    h.textContent = Y;
-    const a = document.createElement("span");
-    a.className = "tag", a.textContent = q, x.append(g, h, a), _.append(F, x), s.append(_);
+    h.textContent = _;
+    const r = document.createElement("span");
+    r.className = "tag", r.textContent = Y, x.append(p, h, r), q.append(F, x), i.append(q);
   });
 }
 B("[data-preview]").forEach((e, n) => {
-  e.addEventListener("click", () => te(e.dataset.preview)), e.addEventListener("keydown", (s) => {
-    const r = B("[data-preview]");
-    let c;
-    (s.key === "ArrowRight" || s.key === "ArrowDown") && (c = (n + 1) % r.length), (s.key === "ArrowLeft" || s.key === "ArrowUp") && (c = (n + r.length - 1) % r.length), s.key === "Home" && (c = 0), s.key === "End" && (c = r.length - 1), c !== void 0 && (s.preventDefault(), te(r[c].dataset.preview, !0));
+  e.addEventListener("click", () => te(e.dataset.preview)), e.addEventListener("keydown", (i) => {
+    const a = B("[data-preview]");
+    let s;
+    (i.key === "ArrowRight" || i.key === "ArrowDown") && (s = (n + 1) % a.length), (i.key === "ArrowLeft" || i.key === "ArrowUp") && (s = (n + a.length - 1) % a.length), i.key === "Home" && (s = 0), i.key === "End" && (s = a.length - 1), s !== void 0 && (i.preventDefault(), te(a[s].dataset.preview, !0));
   });
 });
 B("[data-select]").forEach((e) => e.addEventListener("click", () => te(e.dataset.select)));
 te("help");
-let Ve;
+let $e;
 function ke(e) {
-  Ve = document.activeElement, e.showModal(), R?.setPaused(!0);
+  $e = document.activeElement, e.showModal(), R?.setPaused(!0);
 }
 function ne(e) {
-  e.close(), R?.setPaused(S), Ve?.focus();
+  e.close(), R?.setPaused(S), $e?.focus();
 }
 B("dialog").forEach((e) => {
   e.querySelector("[data-close]").addEventListener("click", () => ne(e)), e.addEventListener("click", (n) => {
     if (n.target === e) {
-      const s = e.getBoundingClientRect();
-      (n.clientX < s.left || n.clientX > s.right || n.clientY < s.top || n.clientY > s.bottom) && ne(e);
+      const i = e.getBoundingClientRect();
+      (n.clientX < i.left || n.clientX > i.right || n.clientY < i.top || n.clientY > i.bottom) && ne(e);
     }
   }), e.addEventListener("close", () => {
     R?.setPaused(S), o("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && o("#video-frame").removeAttribute("src");
@@ -399,14 +401,29 @@ o("#menu-toggle").addEventListener("click", () => {
   ke(o("#navigation")), o("#menu-toggle").setAttribute("aria-expanded", "true");
 });
 B("#navigation a").forEach((e) => e.addEventListener("click", () => ne(o("#navigation"))));
+let We;
 B("[data-demo]").forEach((e) => e.addEventListener("click", () => {
-  const n = o("#demo-frame");
-  n.getAttribute("src") || (n.src = n.dataset.src), ke(o("#demo-dialog"));
+  const n = o("#demo-frame"), i = e.dataset.demo || "community";
+  n.getAttribute("src") || (n.src = n.dataset.src), ke(o("#demo-dialog")), clearTimeout(We);
+  let a = 0;
+  function s() {
+    if (o("#demo-dialog").open) {
+      try {
+        if (n.contentWindow?.__beaconDemoReady) {
+          n.contentWindow.switchTab(i);
+          return;
+        }
+      } catch {
+      }
+      ++a < 100 && (We = setTimeout(s, 100));
+    }
+  }
+  s();
 }));
 o("#demo-frame").addEventListener("load", () => {
   try {
     const e = o("#demo-frame").contentDocument, n = e.createElement("style");
-    n.textContent = "#bav-root,#bav-toggle,#bav-popover,#bav-chat{display:none!important}", e.head.append(n), [...e.querySelectorAll("button")].find((r) => r.textContent.trim().startsWith("Skip"))?.click();
+    n.textContent = "#bav-root,#bav-toggle,#bav-popover,#bav-chat{display:none!important}", e.head.append(n), [...e.querySelectorAll("button")].find((a) => a.textContent.trim().startsWith("Skip"))?.click();
   } catch {
   }
 });
@@ -415,11 +432,11 @@ B("[data-video]").forEach((e) => e.addEventListener("click", () => {
 }));
 window.openSimDemo = () => B("[data-demo]")[0].click();
 window.closeSimDemo = () => ne(o("#demo-dialog"));
-function $e() {
+function je() {
   S = !S, window._bavPaused = S, document.body.classList.toggle("motion-paused", S), R?.setPaused(S), o("#motion-toggle").textContent = S ? "Resume the world" : "Pause the world", o("#motion-toggle").setAttribute("aria-pressed", String(S)), o("#footer-motion").textContent = S ? "Resume motion" : "Pause motion";
 }
-o("#motion-toggle").addEventListener("click", $e);
-o("#footer-motion").addEventListener("click", $e);
+o("#motion-toggle").addEventListener("click", je);
+o("#footer-motion").addEventListener("click", je);
 ae.addEventListener("change", (e) => {
   R && (R.reduced = e.matches, R.lastFrame = 0), S = e.matches, window._bavPaused = e.matches, document.body.classList.toggle("motion-paused", e.matches), o("#motion-toggle").setAttribute("aria-pressed", String(S));
 });
@@ -436,31 +453,31 @@ try {
 } catch {
 }
 o("#year").textContent = (/* @__PURE__ */ new Date()).getFullYear();
-const st = B(".chapter");
+const rt = B(".chapter");
 let Ee = !1;
-function je() {
+function Qe() {
   Ee = !1;
   const e = scrollY;
   o(".site-header").classList.toggle("scrolled", e > 60);
   const n = e > o("#story-end").offsetTop - innerHeight * 0.6;
   document.body.classList.toggle("past-story", n);
-  let s = 0;
-  st.forEach((r, c) => {
-    const E = r.getBoundingClientRect();
-    E.top < innerHeight * 0.4 && (s = c);
-    const k = r.querySelector(".chapter-copy");
+  let i = 0;
+  rt.forEach((a, s) => {
+    const E = a.getBoundingClientRect();
+    E.top < innerHeight * 0.4 && (i = s);
+    const k = a.querySelector(".chapter-copy");
     if (!ae.matches && innerWidth > 700) {
-      const Y = Math.max(-30, Math.min(30, -E.top * 0.06));
-      k.style.transform = `translateY(${Y}px)`;
+      const _ = Math.max(-30, Math.min(30, -E.top * 0.06));
+      k.style.transform = `translateY(${_}px)`;
     }
-  }), B("#chapter-progress a").forEach((r, c) => {
-    r.classList.toggle("active", c === s), c === s ? r.setAttribute("aria-current", "step") : r.removeAttribute("aria-current");
-  }), o("#chapter-number").textContent = `0${s + 1} / 05`, document.body.classList.toggle("footer-visible", o(".site-footer").getBoundingClientRect().top < innerHeight - 100);
+  }), B("#chapter-progress a").forEach((a, s) => {
+    a.classList.toggle("active", s === i), s === i ? a.setAttribute("aria-current", "step") : a.removeAttribute("aria-current");
+  }), o("#chapter-number").textContent = `0${i + 1} / 05`, document.body.classList.toggle("footer-visible", o(".site-footer").getBoundingClientRect().top < innerHeight - 100);
 }
 addEventListener("scroll", () => {
-  Ee || (Ee = !0, requestAnimationFrame(je));
+  Ee || (Ee = !0, requestAnimationFrame(Qe));
 }, { passive: !0 });
-je();
+Qe();
 const ie = o("#bav-wrap");
 ie.setAttribute("role", "button");
 ie.tabIndex = 0;
@@ -475,32 +492,32 @@ o("#beacon-hide").addEventListener("click", () => {
   const e = document.body.classList.toggle("beacon-hidden");
   o("#beacon-hide").textContent = e ? "+" : "−", o("#beacon-hide").setAttribute("aria-label", e ? "Show Beacon mascot" : "Hide Beacon mascot");
 });
-const G = o("#bav-svg").cloneNode(!0), Qe = /* @__PURE__ */ new Map();
+const G = o("#bav-svg").cloneNode(!0), ze = /* @__PURE__ */ new Map();
 [G, ...G.querySelectorAll("[id]")].forEach((e) => {
-  e.id && (Qe.set(e.id, "chat-" + e.id), e.id = "chat-" + e.id);
+  e.id && (ze.set(e.id, "chat-" + e.id), e.id = "chat-" + e.id);
 });
 [G, ...G.querySelectorAll("*")].forEach((e) => {
   for (const n of [...e.attributes]) {
-    let s = n.value;
-    Qe.forEach((r, c) => {
-      s = s.replaceAll("url(#" + c + ")", "url(#" + r + ")"), s === "#" + c && (s = "#" + r);
-    }), s !== n.value && e.setAttribute(n.name, s);
+    let i = n.value;
+    ze.forEach((a, s) => {
+      i = i.replaceAll("url(#" + s + ")", "url(#" + a + ")"), i === "#" + s && (i = "#" + a);
+    }), i !== n.value && e.setAttribute(n.name, i);
   }
 });
 G.setAttribute("aria-hidden", "true");
 o("#bav-chat-avatar").replaceChildren(G);
-const rt = new IntersectionObserver((e) => {
+const ct = new IntersectionObserver((e) => {
   e.forEach((n) => {
     n.target.classList.toggle("in-view", n.isIntersecting);
   });
 }, { threshold: 0.13 });
 B(".chapter-copy,.story-signal,.section-heading,.how-steps article,.platform-explained article,.organisation-types article,.compare-row,.beyond-layout,.trust-layout").forEach((e) => {
-  e.classList.add("motion-reveal"), rt.observe(e);
+  e.classList.add("motion-reveal"), ct.observe(e);
 });
 addEventListener("pointermove", (e) => {
   e.pointerType === "touch" || ae.matches || (document.documentElement.style.setProperty("--pointer-x", `${e.clientX / innerWidth * 100}%`), document.documentElement.style.setProperty("--pointer-y", `${e.clientY / innerHeight * 100}%`));
 }, { passive: !0 });
-const ze = new IntersectionObserver((e) => {
-  e.some((n) => n.isIntersecting) && (import("./spaces.js").catch(() => document.querySelector(".space-stage").classList.add("space-fallback")), ze.disconnect());
+const Ge = new IntersectionObserver((e) => {
+  e.some((n) => n.isIntersecting) && (import("./spaces.js").catch(() => document.querySelector(".space-stage").classList.add("space-fallback")), Ge.disconnect());
 }, { rootMargin: "400px" });
-ze.observe(document.querySelector(".community-spaces"));
+Ge.observe(document.querySelector(".community-spaces"));
