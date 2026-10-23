@@ -1,5 +1,9 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const clamp = THREE.MathUtils.clamp;
@@ -11,15 +15,15 @@ const ease = t => t*t*(3-2*t);
 export class UnityWorld {
   constructor(canvas, onReady) {
     this.canvas=canvas; this.mobile=innerWidth<700; this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.low=this.mobile || (navigator.hardwareConcurrency||8)<5; this.paused=false; this.hidden=false;
-    this.progress=0;this.targetProgress=0;this.pointer=new THREE.Vector2();this.smoothed=new THREE.Vector2();
+    this.low=this.mobile || matchMedia("(pointer:coarse)").matches || (navigator.hardwareConcurrency||8)<5; this.paused=false; this.hidden=false;
+    this.yaw=0;this.targetYaw=0;this.dragStart=null;this.lastDrag=0;this.progress=0;this.targetProgress=0;this.pointer=new THREE.Vector2();this.smoothed=new THREE.Vector2();
     this.renderer=new THREE.WebGLRenderer({canvas,antialias:!this.low,alpha:true,powerPreference:'low-power'});
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,this.low?1.35:1.75));
     this.renderer.setSize(innerWidth,innerHeight); this.renderer.outputColorSpace=THREE.SRGBColorSpace;
-    this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.15;
+    this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.3;
     this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-    this.scene=new THREE.Scene(); this.scene.fog=new THREE.FogExp2(0x0b2036,.022);
-    const pmrem=new THREE.PMREMGenerator(this.renderer);const studio=new RoomEnvironment();this.environment=pmrem.fromScene(studio,.06).texture;this.scene.environment=this.environment;this.scene.environmentIntensity=.3;studio.dispose();pmrem.dispose();
+    this.scene=new THREE.Scene();this.scene.background=new THREE.Color(0x081827); this.scene.fog=new THREE.FogExp2(0x081827,.035);
+    const pmrem=new THREE.PMREMGenerator(this.renderer);const studio=new RoomEnvironment();this.environment=pmrem.fromScene(studio,.06).texture;this.scene.environment=this.environment;this.scene.environmentIntensity=.75;studio.dispose();pmrem.dispose();
     this.camera=new THREE.PerspectiveCamera(this.mobile?43:36,innerWidth/innerHeight,.1,160);
     this.root=new THREE.Group();this.scene.add(this.root);
     this.scene.add(new THREE.HemisphereLight(0xb9ddff,0x38465e,2));
@@ -28,12 +32,12 @@ export class UnityWorld {
     const rim=new THREE.DirectionalLight(0x98e0df,2);rim.position.set(6,5,-10);this.scene.add(rim);
     this.materials={
       stone:new THREE.MeshStandardMaterial({color:0xd1d7c8,roughness:.92}),
-      cream:new THREE.MeshStandardMaterial({color:0xf5ecd9,roughness:.72}),
-      white:new THREE.MeshStandardMaterial({color:0xf5f4e6,roughness:.62}),
+      cream:new THREE.MeshStandardMaterial({color:0x809bb3,roughness:.45,metalness:.24}),
+      white:new THREE.MeshStandardMaterial({color:0xc4d6e5,roughness:.38,metalness:.3}),
       sand:new THREE.MeshStandardMaterial({color:0xd1b08a,roughness:.84}),
       teal:new THREE.MeshStandardMaterial({color:0x197a9a,roughness:.5,metalness:.18}),
       copper:new THREE.MeshStandardMaterial({color:0xb06d45,roughness:.35,metalness:.65}),
-      glass:new THREE.MeshStandardMaterial({color:0x163e59,roughness:.18,metalness:.6}),
+      glass:new THREE.MeshStandardMaterial({color:0x193d5b,roughness:.12,metalness:.85}),
       leaves:new THREE.MeshStandardMaterial({color:0x527b60,roughness:.85,side:THREE.DoubleSide}),
       light:new THREE.MeshStandardMaterial({color:0xc7fff0,emissive:0x7ed5ee,emissiveIntensity:1.1,roughness:.35}),
     };
@@ -41,12 +45,18 @@ export class UnityWorld {
     this.islands=[];this.pickables=[];this.people=[];this.bridges=[];this.rings=[];
     const defs=[[-4.1,1.1,2.2,'help'],[2.7,2.1,1.9,'found'],[.4,-3.5,2.35,'volunteer']];
     defs.forEach((d,i)=>this.createIsland(d,i));this.batchArchitecture();this.createBridges();this.createWater();
+    if(!this.low){this.composer=new EffectComposer(this.renderer);this.composer.addPass(new RenderPass(this.scene,this.camera));this.bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.28,.45,1.35);this.composer.addPass(this.bloom);this.composer.addPass(new OutputPass());}
     this.raycaster=new THREE.Raycaster();this.hit=new THREE.Vector2();this.clock=new THREE.Clock();this.lastFrame=0;
     this.look=new THREE.Vector3(); this.camGoal=new THREE.Vector3();this.lookGoal=new THREE.Vector3();
-    this.resize=()=>{this.mobile=innerWidth<700;this.camera.aspect=innerWidth/innerHeight;this.camera.fov=this.mobile?43:36;this.camera.updateProjectionMatrix();this.renderer.setSize(innerWidth,innerHeight);this.updateScroll();};
+    this.resize=()=>{this.mobile=innerWidth<700;this.camera.aspect=innerWidth/innerHeight;this.camera.fov=this.mobile?43:36;this.camera.updateProjectionMatrix();this.renderer.setSize(innerWidth,innerHeight);this.composer?.setSize(innerWidth,innerHeight);this.updateScroll();};
     this.updateScroll=()=>{const end=document.getElementById('story-end');this.targetProgress=clamp(scrollY/Math.max(1,end.offsetTop-innerHeight*.2),0,1);};
-    this.onPointer=e=>{this.pointer.set(e.clientX/innerWidth*2-1,e.clientY/innerHeight*2-1);if(e.target===canvas&&e.pointerType!=='touch'){this.hit.set(this.pointer.x,-this.pointer.y);this.raycaster.setFromCamera(this.hit,this.camera);this.hovered=this.raycaster.intersectObjects(this.pickables)[0]?.object;canvas.style.cursor=this.hovered?'pointer':'';}else this.hovered=null;};
-    this.onClick=e=>{if(e.target!==canvas)return;this.hit.set(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1);this.raycaster.setFromCamera(this.hit,this.camera);const hits=this.raycaster.intersectObjects(this.pickables);if(hits.length){const name=hits[0].object.userData.action;document.querySelector(`[data-preview="${name}"]`)?.click();document.getElementById('community').scrollIntoView({behavior:this.reduced?'instant':'smooth'});}};
+    this.onPointer=e=>{if(this.dragStart){const dx=e.clientX-this.dragStart.x;if(Math.abs(dx)>5){this.targetYaw=clamp(this.dragStart.yaw+dx*.004,-.5,.5);this.lastDrag=performance.now();}}this.pointer.set(e.clientX/innerWidth*2-1,e.clientY/innerHeight*2-1);if(e.target===canvas&&e.pointerType!=='touch'){this.hit.set(this.pointer.x,-this.pointer.y);this.raycaster.setFromCamera(this.hit,this.camera);this.hovered=this.raycaster.intersectObjects(this.pickables)[0]?.object;canvas.style.cursor=this.hovered?'pointer':'';}else this.hovered=null;};
+    this.onClick=e=>{if(e.target!==canvas||performance.now()-this.lastDrag<350)return;this.hit.set(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1);this.raycaster.setFromCamera(this.hit,this.camera);const hits=this.raycaster.intersectObjects(this.pickables);if(hits.length){const name=hits[0].object.userData.action;document.querySelector(`[data-preview="${name}"]`)?.click();document.getElementById('community').scrollIntoView({behavior:this.reduced?'instant':'smooth'});}};
+    canvas.tabIndex=0;canvas.style.touchAction='pan-y';
+    this.onDown=e=>{if(e.target===canvas){this.dragStart={x:e.clientX,yaw:this.targetYaw};canvas.setPointerCapture(e.pointerId);}};
+    this.onUp=()=>{this.dragStart=null;};
+    canvas.addEventListener('pointerdown',this.onDown);canvas.addEventListener('pointerup',this.onUp);canvas.addEventListener('pointercancel',this.onUp);
+    canvas.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();this.targetYaw=clamp(this.targetYaw+(e.key==='ArrowLeft'?-.12:.12),-.5,.5);}if(e.key==='Escape')this.targetYaw=0;});
     addEventListener('resize',this.resize);addEventListener('scroll',this.updateScroll,{passive:true});addEventListener('pointermove',this.onPointer,{passive:true});canvas.addEventListener('click',this.onClick);
     document.addEventListener('visibilitychange',()=>{this.hidden=document.hidden;});
     canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();this.paused=true;document.documentElement.classList.add('world-unavailable');});
@@ -110,15 +120,15 @@ export class UnityWorld {
   }
   createBridges(){
     const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,uniforms:{uTime:{value:0},uProgress:{value:0},uColor:{value:new THREE.Color(0x36a7cb)}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec2 vUv;uniform float uTime;uniform float uProgress;uniform vec3 uColor;void main(){float edge=1.-smoothstep(uProgress-.035,uProgress,vUv.x);float pulse=pow(max(0.,sin(vUv.x*22.-uTime*1.5)),18.);float a=(.36+pulse*.5)*edge;gl_FragColor=vec4(uColor+vec3(pulse*.3),a);}`});
-    for(const [i,j] of [[0,1],[1,2],[2,0]]){const a=this.islands[i].position.clone(),b=this.islands[j].position.clone();a.y=.2;b.y=.2;const dir=b.clone().sub(a).normalize();a.addScaledVector(dir,1.8);b.addScaledVector(dir,-1.65);const mid=a.clone().lerp(b,.5);mid.y=.7;const curve=new THREE.QuadraticBezierCurve3(a,mid,b);const geometry=new THREE.TubeGeometry(curve,48,.085,6,false);const material=mat.clone();const bridge=this.mesh(geometry,material,this.root);bridge.castShadow=false;
-      const railMat=this.materials.copper;const rails=[];for(const side of [-1,1]){const sideDir=new THREE.Vector3(-dir.z,0,dir.x).multiplyScalar(.15*side);const pts=[a.clone().add(sideDir),mid.clone().add(sideDir),b.clone().add(sideDir)];pts.forEach(v=>v.y+=.13);const rail=this.mesh(new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(...pts),36,.014,5,false),railMat,this.root);rails.push(rail);}
+    for(const [i,j] of [[0,1],[1,2],[2,0]]){const a=this.islands[i].position.clone(),b=this.islands[j].position.clone();a.y=2.4;b.y=3.2;const dir=b.clone().sub(a).normalize();a.addScaledVector(dir,1.8);b.addScaledVector(dir,-1.65);const mid=a.clone().lerp(b,.5);mid.y=5.2;const curve=new THREE.QuadraticBezierCurve3(a,mid,b);const geometry=new THREE.TubeGeometry(curve,64,.028,6,false);const material=mat.clone();const bridge=this.mesh(geometry,material,this.root);bridge.castShadow=false;
+      const rails=[];
       this.bridges.push({bridge,rails});
     }
   }
   createWater(){
     // A continuous street plane grounds all three blocks in the same neighbourhood.
     const road=new THREE.MeshStandardMaterial({color:0x283b50,roughness:.96});
-    this.block(this.root,road,[0,-.22,0],[15,.14,13]);
+    this.block(this.root,road,[0,-.22,0],[90,.14,90]);
     const marking=new THREE.MeshStandardMaterial({color:0x8da3b5,roughness:1});
     for(let j=-6;j<=6;j++)this.block(this.root,marking,[j,-.14,-.25],[.42,.012,.035]);
     for(let j=0;j<6;j++)this.block(this.root,marking,[-1.5+j*.16,-.14,2.5],[.075,.012,1.1]);
@@ -138,25 +148,26 @@ export class UnityWorld {
     this.smoothed.lerp(this.pointer,this.reduced?0:.035);
     const mobile=this.mobile;
     const paths=mobile?[
-      {p:0,pos:[20,18,32],look:[0,2,0]}, {p:.24,pos:[18,16,29],look:[-1,2,.8]},
-      {p:.48,pos:[21,16,28],look:[1,2,1]}, {p:.72,pos:[18,17,29],look:[.2,2,-1]}, {p:1,pos:[20,19,32],look:[0,2,0]}
+      {p:0,pos:[12,7,21],look:[0,3,0]}, {p:.23,pos:[-1,4,9],look:[-4.7,3.1,1]},
+      {p:.46,pos:[8,4.8,10],look:[2.5,3.2,2]}, {p:.69,pos:[8,20,12],look:[0,1,0]}, {p:1,pos:[-10,8,20],look:[0,2,0]}
     ]:[
-      {p:0,pos:[17,13,23],look:[-4,2.2,1.8]}, {p:.24,pos:[10,10,20],look:[-5.2,2,1.8]},
-      {p:.48,pos:[18,11,18],look:[-2.7,2.5,2.6]}, {p:.72,pos:[13,12,19],look:[-4,2.5,-1.1]}, {p:1,pos:[17,17,24],look:[-4,2,1]}
+      {p:0,pos:[11,6.5,17],look:[0,2.8,0]}, {p:.23,pos:[-.5,3.5,8],look:[-4.7,2.8,1]},
+      {p:.46,pos:[9,4,9],look:[1.7,2.5,1]}, {p:.69,pos:[2,21,10],look:[0,1,0]}, {p:1,pos:[-10,7,15],look:[0,2.5,0]}
     ];
     let k=0;while(k<paths.length-2&&p>paths[k+1].p)k++;const a=paths[k],b=paths[k+1],t=ease(clamp((p-a.p)/(b.p-a.p),0,1));
     this.camGoal.fromArray(a.pos).lerp(new THREE.Vector3(...b.pos),t);this.lookGoal.fromArray(a.look).lerp(new THREE.Vector3(...b.look),t);
-    if(!this.reduced){this.camGoal.x+=this.smoothed.x*.35;this.camGoal.y-=this.smoothed.y*.2;}
-    this.camera.setViewOffset(innerWidth,innerHeight,mobile?0:-innerWidth*.09*ease(clamp(p*4,0,1)),mobile?-innerHeight*.23:0,innerWidth,innerHeight);
+    if(!this.reduced){this.camGoal.x+=this.smoothed.x*1.05;this.camGoal.y-=this.smoothed.y*.45;}
+    this.camera.clearViewOffset();
     this.camera.position.copy(this.camGoal);this.camera.lookAt(this.lookGoal);
-    this.root.rotation.y=this.reduced?-.1:mix(-.1,.14,p);
+    this.yaw=mix(this.yaw,this.targetYaw,this.reduced?1:.07);this.root.rotation.y=this.yaw;
+    if(!this.reduced){this.camera.position.x+=Math.sin(time*.18)*.16;this.camera.position.y+=Math.sin(time*.23)*.08;}
     // Buildings remain grounded; only the camera and connection lines move.
     this.bridges.forEach(({bridge,rails},i)=>{const amount=clamp((p-.08-i*.17)*3,0,1);bridge.material.uniforms.uProgress.value=this.reduced?1:amount;bridge.material.uniforms.uTime.value=time;rails.forEach(r=>{r.visible=amount>.95||this.reduced;});});
     this.rings.forEach(r=>r.rotation.y=.3+(this.reduced?0:Math.sin(time*.25)*.16));
     this.pickables.forEach(m=>{m.material.emissive.setHex(0x2b87ac);m.material.emissiveIntensity=mix(m.material.emissiveIntensity||0,m===this.hovered ? .18 : 0,.12);});
     this.materials.light.emissiveIntensity=this.reduced?1.7:.5+p*2.1;
     this.waterMaterial.uniforms.uTime.value=this.reduced?0:time;
-    this.renderer.render(this.scene,this.camera);
+    if(this.composer)this.composer.render();else this.renderer.render(this.scene,this.camera);
   }
   tick(ms){this.raf=requestAnimationFrame(this.tick);if(this.hidden||this.paused)return;const interval=this.low?33:16;if(ms-this.lastFrame<interval)return;
     const inStory=scrollY<document.getElementById('story-end').offsetTop;const atClose=document.getElementById('join').getBoundingClientRect().top<innerHeight;
@@ -165,5 +176,5 @@ export class UnityWorld {
     this.lastFrame=ms;this.render(this.clock.getElapsedTime());
   }
   setPaused(value){this.paused=value;}
-  dispose(){cancelAnimationFrame(this.raf);removeEventListener('resize',this.resize);removeEventListener('scroll',this.updateScroll);removeEventListener('pointermove',this.onPointer);this.scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of [].concat(o.material))m.dispose();}});this.renderer.dispose();}
+  dispose(){cancelAnimationFrame(this.raf);removeEventListener('resize',this.resize);removeEventListener('scroll',this.updateScroll);removeEventListener('pointermove',this.onPointer);this.scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of [].concat(o.material))m.dispose();}});this.composer?.dispose();this.renderer.dispose();}
 }
