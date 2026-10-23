@@ -72,3 +72,13 @@ The owner rejected the first pass as repetitive and too static. Fresh Chrome cap
 - Kept all application handlers and the previously refined dashboard intact. Production authenticated operations remain untested without an authorized test account.
 
 Chrome tests covered all requested widths and landscape, scene drag/keyboard input, feature tabs, demo interactions, mobile navigation, reduced motion and WebGL fallback. Build and diff checks passed. Automated accessibility scans are limited to the scanned pages and states; screenshots do not establish full compliance or physical-device performance.
+
+## October 23 refinement pass
+
+- Restored the original mascot gravity, throwing, perching, cursor-following eyes and double gesture chat. Restyled chat and reused Beacon artwork instead of an emoji avatar.
+- Studied Aardvark in rendered Chrome. Added original illustrated pillar cards with alternating scroll offsets, hover responses and mobile scroll snapping. Detailed descriptions remain in the feature preview instead of repeated plain cards.
+- Added lazy-loaded Three.js neighbourhood, school and workplace scenes, including helping conversations, an older neighbour and a wheelchair user. Scenes are illustrative and share the existing Three dependency. Reduced motion and offscreen rendering controls are supported.
+- Restored atmospheric blue and a restrained translucent login panel. Refined contact hierarchy and founder portrait/layout, corrected header contrast, and added a linked founder credit to the homepage footer.
+- Removed em dashes from first-party HTML, JavaScript, CSS and supporting copy, including legacy pages. No backend or authentication logic intentionally changed.
+- Chrome checks: nine widths from 320 to 1920 without horizontal overflow; card and scene controls; normal/reduced-motion modes; mascot gaze, throw and double gestures; demo request, messaging/history and lost-and-found workflows at 320, 390 and 1440. Public page screenshots captured in outputs/refinement.
+- Live sign-in, identity uploads, real messages and contact submission were not performed. No deployment or push.

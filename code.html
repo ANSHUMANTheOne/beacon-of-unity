@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Beacon of Unity · Code</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<!-- Skulpt: JS Python interpreter — loads instantly, input() works perfectly -->
+<!-- Skulpt: JS Python interpreter - loads instantly, input() works perfectly -->
 <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 <style>
@@ -505,9 +505,7 @@ function downloadCode(){
 }
 
 /* ═══ FILE IMPORT ════════════════════════════════════════════
-   Supports: .py .html .htm .js .txt
-   — Click "Import" button → file picker
-   — Drag & drop onto editor area
+   Supports: .py .html .htm .js .txt - Click "Import" button → file picker - Drag & drop onto editor area
    ══════════════════════════════════════════════════════════ */
 const ALLOWED_EXT = /\.(py|html|htm|js|txt)$/i;
 
@@ -615,7 +613,7 @@ const TAB_CONTENTS={
   main:'',
   intro:`# introduction.py
 # --------------------------------------------------------
-#   Beacon of Unity Code — powered by Skulpt
+#   Beacon of Unity Code - powered by Skulpt
 #   Created by Anshuman Tripathy
 # --------------------------------------------------------
 
@@ -627,7 +625,7 @@ print("No server. No backend. Just Skulpt.")
 print("")
 print("Features:")
 print("  - Full Python 3 via Skulpt")
-print("  - Real inline input() — just like Thonny")
+print("  - Real inline input() - just like Thonny")
 print("  - Smart auto-indent and bracket pairing")
 print("  - Copy and Download your code")
 print("  - Import .py / .html files via button or drag & drop")
@@ -676,7 +674,7 @@ codeEl.addEventListener('keydown',e=>{
     else{const b=codeEl.value.substring(0,s),sel=codeEl.value.substring(s,end),af=codeEl.value.substring(end),ind=sel.replace(/^/gm,'    ');codeEl.value=b+ind+af;codeEl.selectionStart=s;codeEl.selectionEnd=s+ind.length;}
     updateLN();return;
   }
-  /* ENTER — smart indent */
+  /* ENTER - smart indent */
   if(e.key==='Enter'){
     e.preventDefault();
     const s=codeEl.selectionStart,val=codeEl.value;
@@ -688,7 +686,7 @@ codeEl.addEventListener('keydown',e=>{
     codeEl.selectionStart=codeEl.selectionEnd=s+ins.length;
     updateLN();updateAL();return;
   }
-  /* BACKSPACE — dedent */
+  /* BACKSPACE - dedent */
   if(e.key==='Backspace'){
     const s=codeEl.selectionStart,end=codeEl.selectionEnd;
     if(s===end&&s>0){
@@ -696,7 +694,7 @@ codeEl.addEventListener('keydown',e=>{
       if(/^ +$/.test(bc)){e.preventDefault();const del=Math.min(4,bc.length%4===0?4:bc.length%4);codeEl.value=val.substring(0,s-del)+val.substring(s);codeEl.selectionStart=codeEl.selectionEnd=s-del;updateLN();updateAL();return;}
     }
   }
-  /* CTRL+ENTER — run */
+  /* CTRL+ENTER - run */
   if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runCode();return;}
   /* AUTO-CLOSE brackets */
   const OPEN={'(':')','{':'}','['  :']'};

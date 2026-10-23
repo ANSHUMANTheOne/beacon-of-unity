@@ -125,14 +125,14 @@ body.hero-lock #bav-root {
   transform: translateX(-50%) scale(.65);
   transform-origin: 50% 100%;
   background: rgba(5, 24, 40, .96);
-  /* backdrop-filter: blur() removed — this bubble is a child of the
+  /* backdrop-filter: blur() removed - this bubble is a child of the
      mascot wrapper, which repositions constantly (physics/drag/idle
      bob), and backdrop-filter forces the browser to re-blur whatever's
      behind it on every reposition, even while the bubble's opacity is 0
      (it's still composited, just invisible). That's genuinely expensive,
      especially on Android Chrome's compositor. The background here is
      already near-opaque (.92→.96), so the blur was barely visible
-     anyway — dropping it removes a real cost for almost no visual loss. */
+     anyway - dropping it removes a real cost for almost no visual loss. */
   border: 1px solid rgba(14,165,233,.55);
   border-radius: 14px;
   padding: 7px 14px;
@@ -345,7 +345,7 @@ body.hero-lock #bav-root {
 #bav-chat-badge.hide{ display:none; }
 /* The old discoverability story was a hover-only title tooltip (invisible
    on mobile) plus a bubble that showed once for 3.6s and was gone for
-   good — nothing told a first-time visitor the mascot opens a chat at
+   good - nothing told a first-time visitor the mascot opens a chat at
    all. This is a persistent, actually clickable label (not just a
    decorative badge) that stays up until the chat's been opened once. */
 #bav-chat-hint{
