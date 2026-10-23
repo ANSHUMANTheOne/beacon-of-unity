@@ -1,5 +1,5 @@
 /**
- * BEACON TUTORIAL v2 — Cinematic Onboarding for Beacon of Unity
+ * BEACON TUTORIAL v2 - Cinematic Onboarding for Beacon of Unity
  * ══════════════════════════════════════════════════════════════
  * Auto-starts once for new users (localStorage: bou_tutorial_done).
  * Reads window.currentUserFirstName set by Firebase auth.
@@ -9,7 +9,7 @@
   'use strict';
 
   /* ══════════════════════════════════════════════════════════
-     WEB AUDIO  — pure synthesis, no files needed
+     WEB AUDIO - pure synthesis, no files needed
   ══════════════════════════════════════════════════════════ */
   let _ctx = null;
   function actx() {
@@ -93,24 +93,24 @@
   }
 
   /* ══════════════════════════════════════════════════════════
-     STEPS  — 14 fully guided steps
+     STEPS - 14 fully guided steps
   ══════════════════════════════════════════════════════════ */
   const STEPS = [
     {
       tab: 'community', target: 'communityTab', side: 'right', yFrac: 0.40,
-      say: n => `Hey ${n}! I'm Beacon — your guide on Beacon of Unity! 🌟 I'll walk you through every single feature here so you feel completely at home. Ready to explore? Let's go!`
+      say: n => `Hey ${n}! I'm Beacon - your guide on Beacon of Unity! 🌟 I'll walk you through every single feature here so you feel completely at home. Ready to explore? Let's go!`
     },
     {
       tab: 'community', target: 'requestFeed', side: 'right', yFrac: 0.45,
-      say: () => `This is your Community Hub — your main feed! 🏠 You'll see help requests from neighbours nearby. Posts that are urgent will pulse in red so you never miss someone who needs you. Scroll down to explore them!`
+      say: () => `This is your Community Hub - your main feed! 🏠 You'll see help requests from neighbours nearby. Posts that are urgent will pulse in red so you never miss someone who needs you. Scroll down to explore them!`
     },
     {
       tab: 'community', target: '.fab', side: 'left', yFrac: 0.80,
-      say: () => `See that glowing ＋ button? That's how you create a post! ✍️ Tap it to ask for help — food, transport, medical, tools, general help, or to post a lost & found item. Your neighbours are here for you!`
+      say: () => `See that glowing ＋ button? That's how you create a post! ✍️ Tap it to ask for help - food, transport, medical, tools, general help, or to post a lost & found item. Your neighbours are here for you!`
     },
     {
       tab: 'community', target: 'requestFeed', side: 'right', yFrac: 0.50,
-      say: () => `Each post shows the type, distance, and urgency. 💬 Click "I can help" on any post to open a private chat with that person. Helping others earns you points — more on that later!`
+      say: () => `Each post shows the type, distance, and urgency. 💬 Click "I can help" on any post to open a private chat with that person. Helping others earns you points - more on that later!`
     },
     {
       tab: 'lostfound', target: 'lostFoundTab', side: 'right', yFrac: 0.40,
@@ -118,11 +118,11 @@
     },
     {
       tab: 'volunteer-opps', target: 'volunteer-oppsTab', side: 'right', yFrac: 0.40,
-      say: () => `Volunteer Opportunities! 🤝 Beach cleanups, food drives, education events — browse and sign up here. Admins can manually award you up to 10 points if your volunteer work is verified and deemed credible!`
+      say: () => `Volunteer Opportunities! 🤝 Beach cleanups, food drives, education events - browse and sign up here. Admins can manually award you up to 10 points if your volunteer work is verified and deemed credible!`
     },
     {
       tab: 'community', target: null, side: 'center', yFrac: 0.50,
-      say: () => `Here's how points work! ⭐ Resolving a chat = 2 pts. A 4-star rating = 3 pts total. A 5-star rating = 4 pts total. The rating includes the base 2 pts — no double-counting. Posting on the Thank You Wall = +1 pt. Points = ranking!`
+      say: () => `Here's how points work! ⭐ Resolving a chat = 2 pts. A 4-star rating = 3 pts total. A 5-star rating = 4 pts total. The rating includes the base 2 pts - no double-counting. Posting on the Thank You Wall = +1 pt. Points = ranking!`
     },
     {
       tab: 'thankyou', target: 'thankyouTab', side: 'right', yFrac: 0.40,
@@ -134,7 +134,7 @@
     },
     {
       tab: 'reliable-news', target: 'reliable-newsTab', side: 'right', yFrac: 0.40,
-      say: () => `Reliable News! 📰 Curated, verified news for your UAE community. No misinformation here — only trusted sources. Stay informed about everything that matters to your neighbourhood and beyond.`
+      say: () => `Reliable News! 📰 Curated, verified news for your UAE community. No misinformation here - only trusted sources. Stay informed about everything that matters to your neighbourhood and beyond.`
     },
     {
       tab: 'rewards', target: 'rewardsTab', side: 'right', yFrac: 0.40,
@@ -142,7 +142,7 @@
     },
     {
       tab: 'badges', target: 'badgesTab', side: 'right', yFrac: 0.40,
-      say: () => `Badges! 🏅 Earn these by hitting milestones — first help, streaks, top helper of the month, and many more. They live on your profile and show the community your story. Can you collect them all?`
+      say: () => `Badges! 🏅 Earn these by hitting milestones - first help, streaks, top helper of the month, and many more. They live on your profile and show the community your story. Can you collect them all?`
     },
     {
       tab: null, target: 'minimap-widget', side: 'right', yFrac: 0.75,
@@ -590,15 +590,15 @@
     const btn  = document.getElementById('bt-go-btn');
 
     const greets = [
-      n => `Hey ${n}! I'm Beacon — your guide! ✨`,
+      n => `Hey ${n}! I'm Beacon - your guide! ✨`,
       n => `${n}! You made it. I'm Beacon. Let's explore! 🚀`,
-      n => `Welcome, ${n}! Beacon here — ready to show you around! 🌟`,
+      n => `Welcome, ${n}! Beacon here - ready to show you around! 🌟`,
       n => `Oh hey, ${n}! The name's Beacon. This is going to be fun! 🎉`,
-      n => `${n}! I'm Beacon — your beacon of unity. Let's go! 💡`,
+      n => `${n}! I'm Beacon - your beacon of unity. Let's go! 💡`,
     ];
     const subs = [
       "I'll walk you through every feature of this community dashboard.",
-      "Stick with me — you'll be up and running in just a few minutes.",
+      "Stick with me - you'll be up and running in just a few minutes.",
       "Together we'll discover everything this platform has to offer.",
       "Your community journey starts right here. I've got you covered.",
     ];

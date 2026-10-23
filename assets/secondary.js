@@ -4,7 +4,7 @@
  document.querySelectorAll('input,select,textarea').forEach(el=>{if(!el.id)return;const label=el.previousElementSibling;if(label?.tagName==='LABEL')label.htmlFor=el.id;else if(!el.getAttribute('aria-label'))el.setAttribute('aria-label',el.placeholder||el.id.replace(/([A-Z])/g,' $1'));});
  if(document.body.classList.contains('unity-login')){
   $('#email')?.setAttribute('autocomplete','email');$('#pass')?.setAttribute('autocomplete','current-password');$('#fullName')?.setAttribute('autocomplete','name');$('#statusMsg')?.setAttribute('role','status');
-  const title=$('#loginForm .card-title');if(title)title.textContent='Your community awaits.';
+  const title=$('#loginForm .card-title');if(title)title.textContent='Welcome to your community.';
   const sub=$('#loginForm .card-sub');if(sub)sub.textContent='Sign in or create your Beacon of Unity account.';
   const action=$('#emailLoginBtn span');if(action)action.textContent='Continue with email →';
   const note=document.createElement('p');note.className='account-footnote';note.innerHTML='New here? Continuing with a new email creates an account. You will complete verification before joining. <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>';$('#loginForm').append(note);

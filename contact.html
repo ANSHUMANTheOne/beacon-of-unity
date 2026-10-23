@@ -46,7 +46,7 @@ h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.4rem,5vw,3.8r
 .response-note{margin-top:24px;background:rgba(14,165,233,.07);border:1px solid rgba(14,165,233,.18);border-radius:14px;padding:14px 18px;font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.6}
 .response-note strong{color:#7dd3fc}
 
-/* RIGHT — FORM */
+/* RIGHT - FORM */
 .form-card{background:rgba(14,165,233,.05);border:1px solid rgba(14,165,233,.16);border-radius:24px;padding:36px 32px}
 @media(max-width:768px){.form-card{padding:24px 20px}}
 .form-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;color:#fff;margin-bottom:6px}
@@ -84,9 +84,10 @@ footer{position:relative;z-index:1;background:rgba(7,20,35,.9);padding:28px 48px
 .form-card{animation-delay:.1s}
 </style>
 <link rel="stylesheet" href="assets/secondary.css">
+<link rel="stylesheet" href="assets/brand-surfaces.css">
 <script src="assets/secondary.js" defer></script>
 </head>
-<body class="unity-page">
+<body class="unity-page unity-contact">
 <div id="cd"></div><div id="cr"></div>
 <div class="bg"><div class="bg-grad"></div><div class="bg-grid"></div></div>
 
@@ -103,7 +104,7 @@ footer{position:relative;z-index:1;background:rgba(7,20,35,.9);padding:28px 48px
   <div class="left-col">
     <div class="badge">📬 Get in Touch</div>
     <h1>Contact Us</h1>
-    <p class="sub">Have a question, feedback, or need help with your account? We're here for you — reach out and we'll get back to you as soon as possible.</p>
+    <p class="sub">Have a question, feedback, or need help with your account? We're here for you - reach out and we'll get back to you as soon as possible.</p>
 
     <div class="contact-cards">
       <a href="mailto:anshuman@beaconofunity.com" class="cc">
@@ -134,7 +135,7 @@ footer{position:relative;z-index:1;background:rgba(7,20,35,.9);padding:28px 48px
     </div>
   </div>
 
-  <!-- RIGHT — FORM -->
+  <!-- RIGHT - FORM -->
   <div class="form-card">
     <div class="form-title">Send a Message</div>
     <div class="form-sub">Fill in the form below and we'll get back to you via email.</div>
@@ -234,14 +235,14 @@ function sendMsg(){
     return;
   }
 
-  const subject = (topic||'General Enquiry') + ' \u2014 Beacon of Unity';
+  const subject = (topic||'General Enquiry') + ' - Beacon of Unity';
   const body = 'Name: ' + firstName + ' ' + lastName + '\nEmail: ' + email + '\nTopic: ' + (topic||'General') + '\n\n' + message;
   
   // Copy message to clipboard
   const fullText = 'To: anshuman@beaconofunity.com\nSubject: ' + subject + '\n\n' + body;
   navigator.clipboard.writeText(fullText).catch(()=>{});
 
-  // Use hidden anchor click — works across all browsers
+  // Use hidden anchor click - works across all browsers
   const mailtoLink = 'mailto:anshuman@beaconofunity.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   const a = document.createElement('a');
   a.href = mailtoLink;

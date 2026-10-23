@@ -36,7 +36,7 @@ h1,h2,.footer-brand,.feature-tabs button,.platform-explained h3,.community-detai
 .scene-instruction{position:absolute;right:6%;top:125px;display:flex;gap:12px;align-items:center;font-size:10px;letter-spacing:.02em;color:#b6cddd;pointer-events:none}.scene-instruction span{font-size:22px}.chapter-copy .button,.chapter-copy a,.chapter-copy button{pointer-events:auto}
 @media(max-width:700px){.scene-instruction{top:110px;right:24px;font-size:9px}.scene-instruction span{font-size:18px}}
 
-@media(max-width:700px){.hero-copy h1>span{font-size:.58em!important;white-space:nowrap}.past-story #bav-wrap{visibility:hidden}.beacon-dock button{min-height:40px}}
+@media(max-width:700px){.hero-copy h1>span{font-size:.58em!important;white-space:nowrap}.beacon-dock button{min-height:40px}}
 .chapter-copy{position:relative;z-index:2}.chapter-copy:before{content:'';position:absolute;inset:-50px -35px;z-index:-1;background:radial-gradient(ellipse at center,#061424de 10%,#061424a6 48%,transparent 74%);pointer-events:none}.hero-copy:before{background:none}.chapter-copy>p:not(.eyebrow){color:#d2e3ef}.chapter-copy .intro{color:#e8f3fa}.anchor-target{display:block;scroll-margin-top:90px}
 @media(max-width:700px){.chapter-copy:before{inset:-30px -24px;background:linear-gradient(180deg,#061424b3,transparent)}.hero-copy:before{background:none}}
 .world-unavailable .scene-instruction{display:none}
