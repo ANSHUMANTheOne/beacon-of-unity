@@ -1,25 +1,25 @@
 (function() {
   const e = matchMedia("(max-width: 700px)").matches, n = matchMedia("(prefers-reduced-motion: reduce)");
   window._bavPaused = n.matches;
-  const i = e ? 0.88 : 1, o = Math.round(64 * i), s = Math.round(84 * i), E = 0.36, k = 0.967, _ = 0.76, F = 0.52, q = 0.68, Y = 1.8, x = 28;
-  let h = window.innerWidth - 148, m = window.innerHeight * 0.32, r = -1.2, f = 0, u = "idle", l = "", d = !1, y = 0, w = 0, A = [], H = null, xe = 0, X = !1, U = !1, Me = null, se = performance.now(), V = 0, L = 0, O = 0, $ = 0;
-  const M = document.getElementById("bav-wrap"), v = document.getElementById("bav-anim"), re = document.getElementById("bav-svg"), Le = document.getElementById("bav-bubble"), Ke = document.getElementById("bav-msg"), Ae = document.getElementById("bav-shadow"), ce = document.getElementById("bav-el"), le = document.getElementById("bav-er"), Je = document.getElementById("bav-mth"), Ze = document.getElementById("bav-leg-l"), et = document.getElementById("bav-leg-r");
-  M.style.width = o + "px", v.style.width = o + "px", v.style.height = s + "px", re.style.width = "100%", re.style.height = "100%";
+  const i = e ? 0.88 : 1, o = Math.round(64 * i), s = Math.round(84 * i), k = 0.36, x = 0.967, _ = 0.76, F = 0.52, q = 0.68, Y = 1.8, M = 28;
+  let m = window.innerWidth - 148, h = window.innerHeight * 0.32, r = -1.2, f = 0, u = "idle", l = "", d = !1, y = 0, w = 0, C = [], H = null, Me = 0, X = !1, U = !1, Le = null, se = performance.now(), V = 0, L = 0, O = 0, $ = 0;
+  const E = document.getElementById("bav-wrap"), v = document.getElementById("bav-anim"), re = document.getElementById("bav-svg"), Ae = document.getElementById("bav-bubble"), Ke = document.getElementById("bav-msg"), Ce = document.getElementById("bav-shadow"), ce = document.getElementById("bav-el"), le = document.getElementById("bav-er"), Je = document.getElementById("bav-mth"), Ze = document.getElementById("bav-leg-l"), et = document.getElementById("bav-leg-r");
+  E.style.width = o + "px", v.style.width = o + "px", v.style.height = s + "px", re.style.width = "100%", re.style.height = "100%";
   function de(t) {
     Ze.classList.toggle("swinging", t), et.classList.toggle("swinging", t);
   }
   function ue() {
     if (window._bavPaused && !d) return;
     const t = document.querySelector(".beacon-dock")?.getBoundingClientRect();
-    t && h + o > t.left - 12 && h < t.right + 12 && m + s > t.top - 14 && (m = t.top - s - 14), M.style.left = h + "px", M.style.top = m + "px";
+    t && m + o > t.left - 12 && m < t.right + 12 && h + s > t.top - 14 && (h = t.top - s - 14), E.style.left = m + "px", E.style.top = h + "px";
   }
-  function C(t, c) {
-    clearTimeout(Me), Ke.textContent = t, Le.classList.add("on"), Me = setTimeout(() => Le.classList.remove("on"), c || 3e3);
+  function T(t, c) {
+    clearTimeout(Le), Ke.textContent = t, Ae.classList.add("on"), Le = setTimeout(() => Ae.classList.remove("on"), c || 3e3);
   }
   setTimeout(() => {
-    C("Hi! I'm Beacon! 👋", 4e3), setTimeout(() => C("Your community guardian ✨", 3200), 4700), setTimeout(() => C("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
+    T("Hi! I'm Beacon! 👋", 4e3), setTimeout(() => T("Your community guardian ✨", 3200), 4700), setTimeout(() => T("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
   }, 1400);
-  const Ce = [
+  const Te = [
     "🛡️ Keeping UAE safe!",
     "🤝 Community first!",
     "🇦🇪 Proud to serve!",
@@ -28,19 +28,20 @@
     "🌟 Verified & trusted"
   ];
   setInterval(() => {
-    (u === "idle" || u === "sitting") && Math.random() < 0.28 && C(Ce[Math.floor(Math.random() * Ce.length)], 2800);
+    (u === "idle" || u === "sitting") && Math.random() < 0.28 && T(Te[Math.floor(Math.random() * Te.length)], 2800);
   }, 11e3);
-  const Te = {
+  const he = {
     happy: "M22 52 Q32 59 42 52",
     surprised: "M24 53 Q32 58 40 53",
     sitting: "M23 52 Q32 57 41 52",
     flying: "M24 52 Q32 58 40 52"
   };
-  function S(t) {
-    Je.setAttribute("d", Te[t] || Te.happy), t === "surprised" && [ce, le].forEach((c) => {
+  function A(t) {
+    Je.setAttribute("d", he[t] || he.happy), E.dataset.expression = t in he ? t : "happy", t === "surprised" && [ce, le].forEach((c) => {
       c.style.transform = "scale(1.3)", setTimeout(() => c.style.transform = "scale(1)", 550);
     });
   }
+  A("happy");
   function me() {
     U || n.matches || [ce, le].forEach((t) => {
       t.style.transform = "scaleY(0.06)", setTimeout(() => t.style.transform = "scaleY(1)", 110);
@@ -58,8 +59,8 @@
     me(), Be();
   }, 1800 + Math.random() * 1200);
   function j() {
-    U || n.matches || (U = !0, v.style.animation = "none", v.offsetHeight, v.style.animation = "bav-squish .46s cubic-bezier(.36,.07,.19,.97) forwards", S("surprised"), setTimeout(() => {
-      U = !1, v.style.animation = "", Se(), S(u === "sitting" ? "sitting" : "happy");
+    U || n.matches || (U = !0, v.style.animation = "none", v.offsetHeight, v.style.animation = "bav-squish .46s cubic-bezier(.36,.07,.19,.97) forwards", A("surprised"), setTimeout(() => {
+      U = !1, v.style.animation = "", Se(), A(u === "sitting" ? "sitting" : "happy");
     }, 460));
   }
   function Se() {
@@ -86,47 +87,47 @@
     )).map((t) => ({ el: t, r: t.getBoundingClientRect() })).filter(({ r: t, el: c }) => t.width > 120 && t.height > 20 && t.bottom > 0 && t.top < window.innerHeight && !c.closest("#bav-chat,dialog,.beacon-dock,#bav-root") && c.textContent.trim().length > 8);
   }
   J(), setInterval(J, 700);
-  let he = !1;
+  let pe = !1;
   window.addEventListener("scroll", () => {
-    he || (he = !0, requestAnimationFrame(() => {
-      he = !1, J();
+    pe || (pe = !0, requestAnimationFrame(() => {
+      pe = !1, J();
     }));
   }, { passive: !0 }), window.addEventListener("resize", J, { passive: !0 });
   function tt() {
     if (d) return null;
-    const t = m + s, c = h + o * 0.5;
+    const t = h + s, c = m + o * 0.5;
     for (const { el: p, r: g } of _e)
       if (Math.abs(t - g.top) < 28 && c > g.left + 10 && c < g.right - 10 && g.top > 55)
         return { el: p, snapY: g.top - s };
     return null;
   }
   const Q = ["Oof! 😅", "Wheee! 🌀", "Boing! 🎯", "Hey! 😄", "Woo! 💫"], Z = ["Whoa! 😲", "Wee! 🚀", "Flying! 🌟", "Catch me! 😄"], qe = ["Nice read! 📖", "Interesting! 🤔", "Love this! ✨", "Reading... 👀"];
-  function pe(t) {
+  function fe(t) {
     if (window._bavPaused || document.hidden || document.body.classList.contains("beacon-hidden") || document.body.classList.contains("beacon-chat-open") || document.querySelector("dialog[open]")) {
-      se = t, requestAnimationFrame(pe);
+      se = t, requestAnimationFrame(fe);
       return;
     }
     const c = t - se;
     se = t;
-    const p = Math.min(c / 16.67, 3), g = window.innerWidth, T = document.querySelector(".beacon-dock")?.getBoundingClientRect(), D = T && h + o > T.left - 12 && h < T.right + 12 ? T.top - 14 : window.innerHeight - 12;
-    if (h = Math.max(0, Math.min(g - o, h)), m = Math.max(75, Math.min(D - s, m)), !d) {
+    const p = Math.min(c / 16.67, 3), g = window.innerWidth, B = document.querySelector(".beacon-dock")?.getBoundingClientRect(), D = B && m + o > B.left - 12 && m < B.right + 12 ? B.top - 14 : window.innerHeight - 12;
+    if (m = Math.max(0, Math.min(g - o, m)), h = Math.max(75, Math.min(D - s, h)), !d) {
       if (u === "sitting" && H) {
-        const b = H.getBoundingClientRect(), R = b.top > 55 && b.top < D + 20, G = h + o * 0.5, K = G > b.left - 10 && G < b.right + 10;
+        const b = H.getBoundingClientRect(), R = b.top > 55 && b.top < D + 20, G = m + o * 0.5, K = G > b.left - 10 && G < b.right + 10;
         if (R && K)
-          m = b.top - s + 12, f = 0, r *= _;
+          h = b.top - s + 12, f = 0, r *= _;
         else {
           H = null, u = "flying", de(!1), f = -1.5;
           const P = ["Here I come!", "A little hop!", "Off we go!", "Wheee!"];
-          C(P[Math.floor(Math.random() * P.length)], 1500);
+          T(P[Math.floor(Math.random() * P.length)], 1500);
         }
       } else {
         const b = tt();
         if (b && Math.abs(f) < 7)
-          (u !== "sitting" || H !== b.el) && (H = b.el, xe = b.snapY, u = "sitting", f = 0, r *= 0.35, m = xe, j(), S("sitting"), de(!0), (Math.abs(r) > 1.2 || Math.abs(f) > 2) && C(qe[Math.floor(Math.random() * qe.length)], 2400));
+          (u !== "sitting" || H !== b.el) && (H = b.el, Me = b.snapY, u = "sitting", f = 0, r *= 0.35, h = Me, j(), A("sitting"), de(!0), (Math.abs(r) > 1.2 || Math.abs(f) > 2) && T(qe[Math.floor(Math.random() * qe.length)], 2400));
         else {
-          f = Math.min(f + E * p, x), r *= Math.pow(k, p), h += r * p, m += f * p, h < 0 && (h = 0, Math.abs(r) > Y ? (r = Math.abs(r) * q, j(), Math.random() < 0.4 && C(Q[Math.floor(Math.random() * Q.length)], 1500)) : r = 0, X = !1), h + o > g && (h = g - o, Math.abs(r) > Y ? (r = -Math.abs(r) * q, j(), Math.random() < 0.4 && C(Q[Math.floor(Math.random() * Q.length)], 1500)) : r = 0, X = !0), m + s > D && (m = D - s, Math.abs(f) > Y ? (f = -Math.abs(f) * F, r *= _, j(), Math.random() < 0.28 && C(Q[Math.floor(Math.random() * Q.length)], 1500)) : (f = 0, r *= _, u !== "sitting" && (u = Math.abs(r) > 1.1 ? "walking" : "idle"))), m < 0 && (m = 0, f = Math.abs(f) * F);
+          f = Math.min(f + k * p, M), r *= Math.pow(x, p), m += r * p, h += f * p, m < 0 && (m = 0, Math.abs(r) > Y ? (r = Math.abs(r) * q, j(), Math.random() < 0.4 && T(Q[Math.floor(Math.random() * Q.length)], 1500)) : r = 0, X = !1), m + o > g && (m = g - o, Math.abs(r) > Y ? (r = -Math.abs(r) * q, j(), Math.random() < 0.4 && T(Q[Math.floor(Math.random() * Q.length)], 1500)) : r = 0, X = !0), h + s > D && (h = D - s, Math.abs(f) > Y ? (f = -Math.abs(f) * F, r *= _, j(), Math.random() < 0.28 && T(Q[Math.floor(Math.random() * Q.length)], 1500)) : (f = 0, r *= _, u !== "sitting" && (u = Math.abs(r) > 1.1 ? "walking" : "idle"))), h < 0 && (h = 0, f = Math.abs(f) * F);
           const R = Math.sqrt(r * r + f * f);
-          u !== "sitting" && (R > 3.5 ? u = "flying" : Math.abs(r) > 1 && m + s >= D - 2 ? u = "walking" : R < 0.7 && (u = "idle"));
+          u !== "sitting" && (R > 3.5 ? u = "flying" : Math.abs(r) > 1 && h + s >= D - 2 ? u = "walking" : R < 0.7 && (u = "idle"));
         }
       }
       if (r < -0.3 && (X = !0), r > 0.3 && (X = !1), u === "flying") {
@@ -138,31 +139,31 @@
         Math.abs(b) < 0.2 ? (V = 0, L = 0, v.style.transform = "") : v.style.transform = `rotate(${b.toFixed(2)}deg)`;
       }
       re.style.transform = `scaleX(${X ? -1 : 1})`;
-      const fe = Math.max(0, D - (m + s)), ee = Math.max(0.15, 1 - fe / D);
-      Ae.style.width = 38 * ee + "px", Ae.style.opacity = (0.72 * ee).toString(), u !== l && !U && (Se(), S(u === "sitting" ? "sitting" : u === "flying" ? "flying" : "happy"), l = u);
+      const ge = Math.max(0, D - (h + s)), ee = Math.max(0.15, 1 - ge / D);
+      Ce.style.width = 38 * ee + "px", Ce.style.opacity = (0.72 * ee).toString(), u !== l && !U && (Se(), A(u === "sitting" ? "sitting" : u === "flying" ? "flying" : "happy"), l = u);
     }
-    ue(), requestAnimationFrame(pe);
+    ue(), requestAnimationFrame(fe);
   }
-  M.style.left = h + "px", M.style.top = m + "px", requestAnimationFrame(pe), M.addEventListener("mouseenter", () => document.body.classList.add("hov")), M.addEventListener("mouseleave", () => document.body.classList.remove("hov")), M.addEventListener("mousedown", (t) => {
-    t.button === 0 && (t.preventDefault(), d = !0, y = t.clientX - h, w = t.clientY - m, $ = t.clientX, A = [{ x: t.clientX, y: t.clientY, t: performance.now() }], r = 0, f = 0, H = null, u = l = "flying", v.style.animation = "", v.style.transform = "", S("surprised"), C(Z[Math.floor(Math.random() * Z.length)], 1e3));
+  E.style.left = m + "px", E.style.top = h + "px", requestAnimationFrame(fe), E.addEventListener("mouseenter", () => document.body.classList.add("hov")), E.addEventListener("mouseleave", () => document.body.classList.remove("hov")), E.addEventListener("mousedown", (t) => {
+    t.button === 0 && (t.preventDefault(), d = !0, y = t.clientX - m, w = t.clientY - h, $ = t.clientX, C = [{ x: t.clientX, y: t.clientY, t: performance.now() }], r = 0, f = 0, H = null, u = l = "flying", v.style.animation = "", v.style.transform = "", A("surprised"), T(Z[Math.floor(Math.random() * Z.length)], 1e3));
   }), document.addEventListener("mousemove", (t) => {
     if (!d) return;
     const c = t.clientX - $;
-    $ = t.clientX, O = Math.max(-38, Math.min(38, -c * 3.2)), h = t.clientX - y, m = t.clientY - w, A.push({ x: t.clientX, y: t.clientY, t: performance.now() }), A.length > 10 && A.shift(), L += (O - L) * 0.28, O *= 0.82, v.style.transform = `rotate(${L.toFixed(1)}deg)`, ue();
+    $ = t.clientX, O = Math.max(-38, Math.min(38, -c * 3.2)), m = t.clientX - y, h = t.clientY - w, C.push({ x: t.clientX, y: t.clientY, t: performance.now() }), C.length > 10 && C.shift(), L += (O - L) * 0.28, O *= 0.82, v.style.transform = `rotate(${L.toFixed(1)}deg)`, ue();
   }), document.addEventListener("mouseup", () => {
     if (!d) return;
-    d = !1, O = 0, S("happy");
-    const t = performance.now(), c = A.filter((p) => t - p.t < 130);
+    d = !1, O = 0, A("happy");
+    const t = performance.now(), c = C.filter((p) => t - p.t < 130);
     if (c.length >= 2) {
-      const p = c[0], g = c[c.length - 1], T = Math.max(g.t - p.t, 5) / 16.67;
-      r = Math.max(-x, Math.min(x, (g.x - p.x) / T * 0.62)), f = Math.max(-x, Math.min(x, (g.y - p.y) / T * 0.62));
+      const p = c[0], g = c[c.length - 1], B = Math.max(g.t - p.t, 5) / 16.67;
+      r = Math.max(-M, Math.min(M, (g.x - p.x) / B * 0.62)), f = Math.max(-M, Math.min(M, (g.y - p.y) / B * 0.62));
     }
     u = "flying", l = "";
-  }), M.addEventListener("dblclick", () => {
+  }), E.addEventListener("dblclick", () => {
     d || (f = -8 - Math.random() * 2, r = (Math.random() - 0.5) * 5, u = "flying", l = "", j()), window.__bavOpenChat && window.__bavOpenChat();
   });
   let Fe = 0;
-  if (M.addEventListener("touchstart", (t) => {
+  if (E.addEventListener("touchstart", (t) => {
     t.preventDefault();
     const c = performance.now(), p = c - Fe < 320;
     if (Fe = c, p) {
@@ -170,19 +171,19 @@
       return;
     }
     const g = t.touches[0];
-    d = !0, y = g.clientX - h, w = g.clientY - m, $ = g.clientX, A = [{ x: g.clientX, y: g.clientY, t: performance.now() }], r = 0, f = 0, H = null, de(!1), u = l = "flying", v.style.animation = "", S("surprised"), C(Z[Math.floor(Math.random() * Z.length)], 1e3);
+    d = !0, y = g.clientX - m, w = g.clientY - h, $ = g.clientX, C = [{ x: g.clientX, y: g.clientY, t: performance.now() }], r = 0, f = 0, H = null, de(!1), u = l = "flying", v.style.animation = "", A("surprised"), T(Z[Math.floor(Math.random() * Z.length)], 1e3);
   }, { passive: !1 }), document.addEventListener("touchmove", (t) => {
     if (!d) return;
     t.preventDefault();
     const c = t.touches[0], p = c.clientX - $;
-    $ = c.clientX, O = Math.max(-38, Math.min(38, -p * 3.2)), h = c.clientX - y, m = c.clientY - w, A.push({ x: c.clientX, y: c.clientY, t: performance.now() }), A.length > 10 && A.shift(), L += (O - L) * 0.28, O *= 0.82, v.style.transform = `rotate(${L.toFixed(1)}deg)`, ue();
+    $ = c.clientX, O = Math.max(-38, Math.min(38, -p * 3.2)), m = c.clientX - y, h = c.clientY - w, C.push({ x: c.clientX, y: c.clientY, t: performance.now() }), C.length > 10 && C.shift(), L += (O - L) * 0.28, O *= 0.82, v.style.transform = `rotate(${L.toFixed(1)}deg)`, ue();
   }, { passive: !1 }), document.addEventListener("touchend", () => {
     if (!d) return;
-    d = !1, S("happy"), O = 0;
-    const t = performance.now(), c = A.filter((p) => t - p.t < 130);
+    d = !1, A("happy"), O = 0;
+    const t = performance.now(), c = C.filter((p) => t - p.t < 130);
     if (c.length >= 2) {
-      const p = c[0], g = c[c.length - 1], T = Math.max(g.t - p.t, 5) / 16.67;
-      r = Math.max(-x, Math.min(x, (g.x - p.x) / T * 0.62)), f = Math.max(-x, Math.min(x, (g.y - p.y) / T * 0.62));
+      const p = c[0], g = c[c.length - 1], B = Math.max(g.t - p.t, 5) / 16.67;
+      r = Math.max(-M, Math.min(M, (g.x - p.x) / B * 0.62)), f = Math.max(-M, Math.min(M, (g.y - p.y) / B * 0.62));
     }
     u = "flying", l = "";
   }), !matchMedia("(hover: none)").matches) {
@@ -191,12 +192,12 @@
         requestAnimationFrame(R);
         return;
       }
-      const ge = document.getElementById("bav-svg").getBoundingClientRect(), Ye = ge.width / 64, nt = X ? -1 : 1;
+      const ye = document.getElementById("bav-svg").getBoundingClientRect(), Ye = ye.width / 64, nt = X ? -1 : 1;
       [
-        { base: fe, pupil: p, iris: g },
-        { base: ee, pupil: T, iris: D }
+        { base: ge, pupil: p, iris: g },
+        { base: ee, pupil: B, iris: D }
       ].forEach(({ base: W, pupil: He, iris: De }) => {
-        const ot = ge.left + (X ? 64 - W.x : W.x) * Ye, at = ge.top + W.y * Ye, ye = t - ot, ve = c - at, be = Math.sqrt(ye * ye + ve * ve) || 1, Re = Math.min(be / 55, 1) * b, Pe = ye / be * Re * nt, Oe = ve / be * Re;
+        const ot = ye.left + (X ? 64 - W.x : W.x) * Ye, at = ye.top + W.y * Ye, ve = t - ot, be = c - at, we = Math.sqrt(ve * ve + be * be) || 1, Re = Math.min(we / 55, 1) * b, Pe = ve / we * Re * nt, Oe = be / we * Re;
         He.setAttribute("cx", (W.x + Pe).toFixed(2)), He.setAttribute("cy", (W.y + Oe).toFixed(2)), De.setAttribute("cx", (W.x + Pe * 0.55).toFixed(2)), De.setAttribute("cy", (W.y + Oe * 0.55).toFixed(2));
       }), requestAnimationFrame(R);
     };
@@ -205,29 +206,29 @@
     document.addEventListener("mousemove", (P) => {
       t = P.clientX, c = P.clientY;
     });
-    const p = document.getElementById("bav-pupil-l"), g = document.getElementById("bav-iris-l"), T = document.getElementById("bav-pupil-r"), D = document.getElementById("bav-iris-r"), fe = { x: 23, y: 38 }, ee = { x: 41, y: 38 }, b = 2.6;
+    const p = document.getElementById("bav-pupil-l"), g = document.getElementById("bav-iris-l"), B = document.getElementById("bav-pupil-r"), D = document.getElementById("bav-iris-r"), ge = { x: 23, y: 38 }, ee = { x: 41, y: 38 }, b = 2.6;
     R();
     let G = null, K = !1;
-    M.addEventListener("mousedown", () => {
+    E.addEventListener("mousedown", () => {
       K = !1, G = setTimeout(() => {
-        d && !K && (K = !0, C("🥰 Squeezing me!", 1800), [ce, le].forEach((P) => {
+        d && !K && (K = !0, T("🥰 Squeezing me!", 1800), [ce, le].forEach((P) => {
           P.style.transform = "scale(1.22)", setTimeout(() => P.style.transform = "scale(1)", 700);
         }));
       }, 1200);
     }), document.addEventListener("mouseup", () => clearTimeout(G));
   }
   window.addEventListener("resize", () => {
-    h = Math.max(0, Math.min(innerWidth - o, h)), m = Math.max(75, Math.min(innerHeight - s - 12, m)), M.style.left = h + "px", M.style.top = m + "px";
-  }), M.addEventListener("bav-teleport", (t) => {
-    h = t.detail.x, m = t.detail.y, r = 0, f = 0, u = "idle", l = "", H = null;
-  }), M.addEventListener("bav-restore", () => {
-    r = (Math.random() - 0.5) * 4, f = -3, u = "flying", l = "", H = null, v.style.transform = "", S("happy");
+    m = Math.max(0, Math.min(innerWidth - o, m)), h = Math.max(75, Math.min(innerHeight - s - 12, h)), E.style.left = m + "px", E.style.top = h + "px";
+  }), E.addEventListener("bav-teleport", (t) => {
+    m = t.detail.x, h = t.detail.y, r = 0, f = 0, u = "idle", l = "", A("happy"), H = null;
+  }), E.addEventListener("bav-restore", () => {
+    r = (Math.random() - 0.5) * 4, f = -3, u = "flying", l = "", H = null, v.style.transform = "", A("happy");
   });
 })();
 (function() {
-  const e = document.getElementById("bav-chat"), n = document.getElementById("bav-chat-body"), i = document.getElementById("bav-chat-form"), o = document.getElementById("bav-chat-input"), s = document.getElementById("bav-chat-close"), E = document.getElementById("bav-chat-badge"), k = document.getElementById("bav-chat-hint");
-  if (k && window.innerWidth <= 768 && (k.textContent = "Double-tap to chat"), !e) return;
-  e.inert = !0, [E, k].forEach((l) => {
+  const e = document.getElementById("bav-chat"), n = document.getElementById("bav-chat-body"), i = document.getElementById("bav-chat-form"), o = document.getElementById("bav-chat-input"), s = document.getElementById("bav-chat-close"), k = document.getElementById("bav-chat-badge"), x = document.getElementById("bav-chat-hint");
+  if (x && window.innerWidth <= 768 && (x.textContent = "Double-tap to chat"), !e) return;
+  e.inert = !0, [k, x].forEach((l) => {
     if (!l) return;
     ["mousedown", "touchstart"].forEach((y) => l.addEventListener(y, (w) => w.stopPropagation())), l.addEventListener("dblclick", (y) => {
       y.stopPropagation(), window.__bavOpenChat && window.__bavOpenChat();
@@ -253,13 +254,13 @@
       }), d.appendChild(w);
     }), n.appendChild(d), n.scrollTop = n.scrollHeight;
   }
-  function x(l) {
+  function M(l) {
     const d = document.createElement("div");
     d.className = "bav-typing", d.innerHTML = "<span></span><span></span><span></span>", n.appendChild(d), n.scrollTop = n.scrollHeight, setTimeout(() => {
       d.remove(), l();
     }, 500 + Math.random() * 450);
   }
-  const h = [
+  const m = [
     // Placed BEFORE the Lost & Found entry deliberately: "founder" contains
     // the substring "found", so if the Lost & Found entry (keyed on
     // 'found') were checked first, a question like "who is the founder"
@@ -289,13 +290,13 @@
     { k: ["mobile app", "ios app", "android app", "app store"], a: "Right now Beacon of Unity is a web platform - everything you see here (help requests, lost & found, volunteering, news) runs in the browser, no separate app download needed." },
     { k: ["who are you", "what are you", "your name"], a: "I'm Beacon - the little guardian who hangs out on this page! Drag me around, throw me, or tap the 'Tap to chat' label any time 😊" }
   ];
-  function m(l) {
-    const d = l.toLowerCase(), y = h.find((w) => w.k.some((A) => d.includes(A)));
+  function h(l) {
+    const d = l.toLowerCase(), y = m.find((w) => w.k.some((C) => d.includes(C)));
     return y ? y.a : "I'm not totally sure about that one - but I can tell you about Help Requests, Lost & Found, Volunteering, News, Verification, or how to join. What sounds useful?";
   }
   function r() {
     const l = o.value.trim();
-    l && (q(l, "user"), o.value = "", x(() => q(m(l), "bot")));
+    l && (q(l, "user"), o.value = "", M(() => q(h(l), "bot")));
   }
   i.addEventListener("submit", (l) => {
     l.preventDefault(), r();
@@ -303,7 +304,7 @@
     l.key === "Enter" && (l.preventDefault(), r());
   });
   function f() {
-    F = !0, document.body.classList.add("beacon-chat-open"), e.classList.add("open"), e.setAttribute("aria-hidden", "false"), e.inert = !1, E && E.classList.add("hide"), k && k.classList.add("hide"), _ || (_ = !0, x(() => {
+    F = !0, document.body.classList.add("beacon-chat-open"), e.classList.add("open"), e.setAttribute("aria-hidden", "false"), e.inert = !1, k && k.classList.add("hide"), x && x.classList.add("hide"), _ || (_ = !0, M(() => {
       q("Hey! I'm Beacon 👋 Ask me anything about the platform, or tap a topic below.", "bot"), Y(["How do I verify?", "Post a help request", "Lost & Found", "Volunteer events"]);
     })), setTimeout(() => o.focus(), 250);
   }
@@ -317,20 +318,20 @@
   });
 })();
 const Ue = document.querySelector(".pillar-gallery"), it = [...Ue.querySelectorAll(".pillar-card")], Ve = matchMedia("(prefers-reduced-motion: reduce)");
-let we = !1;
+let Ee = !1;
 function oe() {
-  we = !1;
+  Ee = !1;
   const e = Ue.getBoundingClientRect(), n = !Ve.matches && !document.body.classList.contains("motion-paused") && innerWidth > 550, i = Math.max(-1, Math.min(1, (innerHeight / 2 - e.top - e.height / 2) / innerHeight));
   it.forEach((o, s) => o.style.setProperty("--offset", n ? `${i * (s % 2 ? -58 : 58)}px` : "0px"));
 }
 addEventListener("scroll", () => {
-  we || (we = !0, requestAnimationFrame(oe));
+  Ee || (Ee = !0, requestAnimationFrame(oe));
 }, { passive: !0 });
 addEventListener("resize", oe);
 Ve.addEventListener("change", oe);
 oe();
-const a = (e) => document.querySelector(e), I = (e) => [...document.querySelectorAll(e)], ae = matchMedia("(prefers-reduced-motion: reduce)");
-let N, B = ae.matches;
+const a = (e) => document.querySelector(e), S = (e) => [...document.querySelectorAll(e)], ae = matchMedia("(prefers-reduced-motion: reduce)");
+let N, I = ae.matches;
 const Ne = setTimeout(() => document.documentElement.classList.add("world-unavailable"), 12e3);
 async function st() {
   try {
@@ -351,60 +352,60 @@ const Xe = {
 };
 function te(e, n = !1) {
   if (!Xe[e]) return;
-  I("[data-preview]").forEach((E) => {
-    const k = E.dataset.preview === e;
-    E.setAttribute("aria-selected", String(k)), E.tabIndex = k ? 0 : -1, k && n && E.focus();
+  S("[data-preview]").forEach((k) => {
+    const x = k.dataset.preview === e;
+    k.setAttribute("aria-selected", String(x)), k.tabIndex = x ? 0 : -1, x && n && k.focus();
   }), a("#feature-panel").setAttribute("aria-labelledby", "tab-" + e);
   const i = a("#preview-content");
   i.replaceChildren();
   const o = { help: "Ask for groceries, transport, tools or tech support. See distance, time remaining and volunteer counts, then message a neighbour directly.", found: "Photo listings, clear Lost and Found labels, and Emirate locations. Contact the person who posted an item directly.", volunteer: "Community events sourced from Volunteers.ae, with dates, locations and direct registration links.", news: "Stories from Khaleej Times, Gulf News, Al Jazeera and BBC. Filter by source or topic in the dashboard." }, s = document.createElement("p");
-  s.className = "preview-description", s.textContent = o[e], i.append(s), Xe[e].forEach(([E, k, _, F]) => {
+  s.className = "preview-description", s.textContent = o[e], i.append(s), Xe[e].forEach(([k, x, _, F]) => {
     const q = document.createElement("article");
     q.className = "preview-item";
     const Y = document.createElement("span");
-    Y.className = "preview-symbol", Y.textContent = E;
-    const x = document.createElement("div"), h = document.createElement("h3");
-    h.textContent = k;
-    const m = document.createElement("p");
-    m.textContent = _;
+    Y.className = "preview-symbol", Y.textContent = k;
+    const M = document.createElement("div"), m = document.createElement("h3");
+    m.textContent = x;
+    const h = document.createElement("p");
+    h.textContent = _;
     const r = document.createElement("span");
-    r.className = "tag", r.textContent = F, x.append(h, m, r), q.append(Y, x), i.append(q);
+    r.className = "tag", r.textContent = F, M.append(m, h, r), q.append(Y, M), i.append(q);
   });
 }
-I("[data-preview]").forEach((e, n) => {
+S("[data-preview]").forEach((e, n) => {
   e.addEventListener("click", () => te(e.dataset.preview)), e.addEventListener("keydown", (i) => {
-    const o = I("[data-preview]");
+    const o = S("[data-preview]");
     let s;
     (i.key === "ArrowRight" || i.key === "ArrowDown") && (s = (n + 1) % o.length), (i.key === "ArrowLeft" || i.key === "ArrowUp") && (s = (n + o.length - 1) % o.length), i.key === "Home" && (s = 0), i.key === "End" && (s = o.length - 1), s !== void 0 && (i.preventDefault(), te(o[s].dataset.preview, !0));
   });
 });
-I("[data-select]").forEach((e) => e.addEventListener("click", () => te(e.dataset.select)));
+S("[data-select]").forEach((e) => e.addEventListener("click", () => te(e.dataset.select)));
 te("help");
 let $e;
-function ke(e) {
+function xe(e) {
   $e = document.activeElement, e.showModal(), N?.setPaused(!0);
 }
 function ne(e) {
-  e.close(), N?.setPaused(B), $e?.focus();
+  e.close(), N?.setPaused(I), $e?.focus();
 }
-I("dialog").forEach((e) => {
+S("dialog").forEach((e) => {
   e.querySelector("[data-close]").addEventListener("click", () => ne(e)), e.addEventListener("click", (n) => {
     if (n.target === e) {
       const i = e.getBoundingClientRect();
       (n.clientX < i.left || n.clientX > i.right || n.clientY < i.top || n.clientY > i.bottom) && ne(e);
     }
   }), e.addEventListener("close", () => {
-    N?.setPaused(B), a("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && a("#video-frame").removeAttribute("src");
+    N?.setPaused(I), a("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && a("#video-frame").removeAttribute("src");
   });
 });
 a("#menu-toggle").addEventListener("click", () => {
-  ke(a("#navigation")), a("#menu-toggle").setAttribute("aria-expanded", "true");
+  xe(a("#navigation")), a("#menu-toggle").setAttribute("aria-expanded", "true");
 });
-I("#navigation a").forEach((e) => e.addEventListener("click", () => ne(a("#navigation"))));
+S("#navigation a").forEach((e) => e.addEventListener("click", () => ne(a("#navigation"))));
 let We;
-I("[data-demo]").forEach((e) => e.addEventListener("click", () => {
+S("[data-demo]").forEach((e) => e.addEventListener("click", () => {
   const n = a("#demo-frame"), i = e.dataset.demo || "community";
-  n.getAttribute("src") || (n.src = n.dataset.src), ke(a("#demo-dialog")), clearTimeout(We);
+  n.getAttribute("src") || (n.src = n.dataset.src), xe(a("#demo-dialog")), clearTimeout(We);
   let o = 0;
   function s() {
     if (a("#demo-dialog").open) {
@@ -427,18 +428,18 @@ a("#demo-frame").addEventListener("load", () => {
   } catch {
   }
 });
-I("[data-video]").forEach((e) => e.addEventListener("click", () => {
-  a("#video-frame").src = "https://www.youtube-nocookie.com/embed/md8suH2LcHs?autoplay=1&rel=0", ke(a("#video-dialog"));
+S("[data-video]").forEach((e) => e.addEventListener("click", () => {
+  a("#video-frame").src = "https://www.youtube-nocookie.com/embed/md8suH2LcHs?autoplay=1&rel=0", xe(a("#video-dialog"));
 }));
-window.openSimDemo = () => I("[data-demo]")[0].click();
+window.openSimDemo = () => S("[data-demo]")[0].click();
 window.closeSimDemo = () => ne(a("#demo-dialog"));
 function je() {
-  B = !B, window._bavPaused = B, document.body.classList.toggle("motion-paused", B), N?.setPaused(B), a("#motion-toggle").textContent = B ? "Resume the world" : "Pause the world", a("#motion-toggle").setAttribute("aria-pressed", String(B)), a("#footer-motion").textContent = B ? "Resume motion" : "Pause motion";
+  I = !I, window._bavPaused = I, document.body.classList.toggle("motion-paused", I), N?.setPaused(I), a("#motion-toggle").textContent = I ? "Resume the world" : "Pause the world", a("#motion-toggle").setAttribute("aria-pressed", String(I)), a("#footer-motion").textContent = I ? "Resume motion" : "Pause motion";
 }
 a("#motion-toggle").addEventListener("click", je);
 a("#footer-motion").addEventListener("click", je);
 ae.addEventListener("change", (e) => {
-  N && (N.reduced = e.matches, N.lastFrame = 0), B = e.matches, window._bavPaused = e.matches, document.body.classList.toggle("motion-paused", e.matches), a("#motion-toggle").setAttribute("aria-pressed", String(B));
+  N && (N.reduced = e.matches, N.lastFrame = 0), I = e.matches, window._bavPaused = e.matches, document.body.classList.toggle("motion-paused", e.matches), a("#motion-toggle").setAttribute("aria-pressed", String(I));
 });
 a("#theme-toggle").addEventListener("click", () => {
   const e = document.documentElement.dataset.theme !== "dark";
@@ -453,29 +454,29 @@ try {
 } catch {
 }
 a("#year").textContent = (/* @__PURE__ */ new Date()).getFullYear();
-const rt = I(".chapter");
-let Ee = !1;
+const rt = S(".chapter");
+let ke = !1;
 function Qe() {
-  Ee = !1;
+  ke = !1;
   const e = scrollY;
   a(".site-header").classList.toggle("scrolled", e > 60);
   const n = e > a("#story-end").offsetTop - innerHeight * 0.6;
   document.body.classList.toggle("past-story", n);
   let i = 0;
   rt.forEach((o, s) => {
-    const E = o.getBoundingClientRect();
-    E.top < innerHeight * 0.4 && (i = s);
-    const k = o.querySelector(".chapter-copy");
+    const k = o.getBoundingClientRect();
+    k.top < innerHeight * 0.4 && (i = s);
+    const x = o.querySelector(".chapter-copy");
     if (!ae.matches && innerWidth > 700) {
-      const _ = Math.max(-30, Math.min(30, -E.top * 0.06));
-      k.style.transform = `translateY(${_}px)`;
+      const _ = Math.max(-30, Math.min(30, -k.top * 0.06));
+      x.style.transform = `translateY(${_}px)`;
     }
-  }), I("#chapter-progress a").forEach((o, s) => {
+  }), S("#chapter-progress a").forEach((o, s) => {
     o.classList.toggle("active", s === i), s === i ? o.setAttribute("aria-current", "step") : o.removeAttribute("aria-current");
   }), a("#chapter-number").textContent = `0${i + 1} / 05`, document.body.classList.toggle("footer-visible", a(".site-footer").getBoundingClientRect().top < innerHeight - 100);
 }
 addEventListener("scroll", () => {
-  Ee || (Ee = !0, requestAnimationFrame(Qe));
+  ke || (ke = !0, requestAnimationFrame(Qe));
 }, { passive: !0 });
 Qe();
 const ie = a("#bav-wrap");
@@ -511,7 +512,7 @@ const ct = new IntersectionObserver((e) => {
     n.target.classList.toggle("in-view", n.isIntersecting);
   });
 }, { threshold: 0.13 });
-I(".chapter-copy,.story-signal,.section-heading,.how-steps article,.platform-explained article,.organisation-types article,.compare-row,.beyond-layout,.trust-layout").forEach((e) => {
+S(".chapter-copy,.story-signal,.section-heading,.how-steps article,.platform-explained article,.organisation-types article,.compare-row,.beyond-layout,.trust-layout").forEach((e) => {
   e.classList.add("motion-reveal"), ct.observe(e);
 });
 addEventListener("pointermove", (e) => {

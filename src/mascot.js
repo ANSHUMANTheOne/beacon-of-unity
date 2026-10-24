@@ -138,6 +138,7 @@
   };
   function setExpr(e) {
     mouth.setAttribute('d', MOUTH[e] || MOUTH.happy);
+    wrap.dataset.expression = e in MOUTH ? e : 'happy';
     if (e === 'surprised') {
       [eyeL, eyeR].forEach(g => {
         g.style.transform = 'scale(1.3)';
@@ -147,6 +148,9 @@
   }
 
   // ── eye blink ─────────────────────────────────────────
+  // Establish the resting expression even when motion starts paused.
+  setExpr('happy');
+
   function doWink() {
     if (squishing || reduced.matches) return;
     [eyeL, eyeR].forEach(g => {
@@ -584,6 +588,7 @@
     py = e.detail.y;
     vx = 0; vy = 0;
     mode = 'idle'; prevMode = '';
+    setExpr('happy');
     sitEl = null;
   });
 
