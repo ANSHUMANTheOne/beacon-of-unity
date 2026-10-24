@@ -91,3 +91,12 @@ Chrome tests covered all requested widths and landscape, scene drag/keyboard inp
 - Reliable News implementation compared with base 9b5c2c6: the news block matches after normalizing em-dash punctuation. Fetching, parsing, filtering and rendering logic were not changed.
 - Compact organisation links, mascot/dock collision clearance, clearer final CTA and corrected mobile headline overflow.
 - Chrome scenario controls passed at 320, 390 and 1440 with no overflow or page errors. Demo workflow retest passed all six checks at those widths. Nothing deployed.
+
+## October 24 story and mascot corrections
+
+- Replaced rigid sliding characters with jointed arms/legs and timed walking, stopping and contribution placement.
+- Neighbour story now shows a hospital appointment request, a reply, meeting at the entrance and walking together toward pickup. A separate helper supports the wheelchair user with groceries.
+- Office characters stop clear of the donation box and desks before transferring a contribution.
+- Added readable four-step story panels and manual Next moment controls for reduced-motion users.
+- Fixed Beacon's inverted flying mouth and made its physics floor respect the chat dock, allowing it to settle naturally instead of remaining in flight.
+- Verified all four stages in rendered Chrome. Final 320/390/1440 checks reported no horizontal overflow and no axe WCAG A/AA violations. Reliable News code was not modified in this pass.
