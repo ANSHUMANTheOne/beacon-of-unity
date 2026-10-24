@@ -100,3 +100,11 @@ Chrome tests covered all requested widths and landscape, scene drag/keyboard inp
 - Added readable four-step story panels and manual Next moment controls for reduced-motion users.
 - Fixed Beacon's inverted flying mouth and made its physics floor respect the chat dock, allowing it to settle naturally instead of remaining in flight.
 - Verified all four stages in rendered Chrome. Final 320/390/1440 checks reported no horizontal overflow and no axe WCAG A/AA violations. Reliable News code was not modified in this pass.
+
+## Playback, comparison and mobile follow-up
+
+- Explicit Play animation now runs independently of the ambient motion pause, with an individual pause/resume control. Reduced-motion visitors can still step manually; intentional Play opts into the scene animation.
+- Added immediate request/phone movement, shortened the lead-in and exposed continuous playback progress. Browser checks confirmed advancing time, pause and restart in normal, ambient-paused and reduced-motion contexts.
+- Added YouTube marks and labels to walkthrough and YouTube links; checked the player still opens.
+- Highlighted Beacon's comparison column with its brand mark, blue surface and checkmarks. Navigation labels the comparison The Beacon difference. No new prominent Reliable News links; help and lost-and-found remain the primary features.
+- Reduced mobile mascot dimensions from 56x74 to 44x57 pixels, maintaining a 44px pointer target. Four viewport checks passed without overflow or axe A/AA violations.

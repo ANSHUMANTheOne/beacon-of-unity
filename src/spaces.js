@@ -51,6 +51,8 @@ for(const name of ['neighbours','office']){scenarioActors[name]=actors.filter(a=
 const requestPhone=box(scenarioActors.neighbours[1].userData.arms[1],0,-.34,.08,.1,.17,.025,'#2a6883');
 const donationBox=box(scenes.office,0,.3,1.95,.65,.6,.5,'#c6a77a');donationBox.visible=true;
 const donatedBag=box(scenes.office,0,.8,1.95,.23,.27,.18,'#d0ac76');donatedBag.visible=false;
+const requestSignal=bubble(scenes.neighbours,.7,2.1,1,'Can someone come with me?');requestSignal.visible=false;
+const officeSignal=bubble(scenes.office,0,2.1,1,'Join the food drive');officeSignal.visible=false;
 const helpReply=bubble(scenes.neighbours,.7,2.1,1,'Thank you, neighbour!');helpReply.visible=false;
 const teamReply=bubble(scenes.office,.3,2.4,.7,'Together for the food drive');teamReply.visible=false;
 const copy={neighbours:['AT HOME','An appointment. Someone by your side.','An older neighbour needs a lift and company for a hospital appointment. A request on Beacon connects them with someone nearby, while another neighbour helps a wheelchair user with groceries.'],school:['SCHOOL CONCEPT','Every classroom. One connected school.','Imagine each classroom as a node in Beacon: coordinate announcements, classroom requests and shared resources from one school hub. Lost and found and parent support stay part of the same community.'],office:['AT WORK','Colleagues become a community.','Coordinate a donation drive, find shared support and bring people together beyond their desks.']};
@@ -69,33 +71,35 @@ const storyPanel=document.createElement('div');storyPanel.className='scene-story
 function showStep(name,step){if(storyStep[name]===step&&storyPanel.dataset.storySpace===name)return;storyStep[name]=step;storyPanel.dataset.storySpace=name;storyPanel.querySelector('strong').textContent=storySteps[name][step][0];storyPanel.querySelector('p').textContent=storySteps[name][step][1];storyPanel.querySelectorAll('i').forEach((el,i)=>el.classList.toggle('active',i<=step));}
 for(const name of ['neighbours','office']){
  const controls=document.createElement('div');controls.className='school-controls scenario-controls';controls.dataset.scenarioControls=name;controls.hidden=name!=='neighbours';
- controls.innerHTML='<button data-scenario-action="'+name+'">Play the story</button><button data-scenario-preview="'+name+'">Next moment</button><p>Four moments: request, reply, meet and help.</p>';
+ controls.innerHTML='<button data-scenario-action="'+name+'">Play animation</button><button data-scenario-preview="'+name+'">Next moment</button><button data-story-pause="'+name+'" hidden>Pause animation</button><p>Request, reply, meet and help. Play to watch the full sequence.</p>';
  const primary=controls.querySelector('[data-scenario-action]');primary.setAttribute('aria-pressed','false');
  function reveal(){if(innerWidth<700)stage.scrollIntoView({block:'start',behavior:reduced.matches?'instant':'smooth'});}
- primary.addEventListener('click',()=>{storyClock[name]=0;scenarioOn[name]=true;primary.setAttribute('aria-pressed','true');primary.textContent='Replay the story';showStep(name,0);reveal();});
- controls.querySelector('[data-scenario-preview]').addEventListener('click',()=>{scenarioOn[name]=false;const next=(Math.max(0,storyStep[name])+1)%4;storyClock[name]=[0,3,9,14][next];showStep(name,next);reveal();});
+ primary.addEventListener('click',()=>{storyClock[name]=0;scenarioOn[name]=true;primary.setAttribute('aria-pressed','true');primary.textContent='Restart animation';controls.querySelector('[data-story-pause]').hidden=false;controls.querySelector('[data-story-pause]').textContent='Pause animation';showStep(name,0);reveal();});
+ controls.querySelector('[data-scenario-preview]').addEventListener('click',()=>{scenarioOn[name]=!reduced.matches;const next=(Math.max(0,storyStep[name])+1)%4;storyClock[name]=(reduced.matches?[0,1.5,7,14]:[0,1.5,3,8])[next];showStep(name,next);const pause=controls.querySelector('[data-story-pause]');pause.hidden=!scenarioOn[name];pause.textContent='Pause animation';reveal();});
+ controls.querySelector('[data-story-pause]').addEventListener('click',e=>{scenarioOn[name]=!scenarioOn[name];e.currentTarget.textContent=scenarioOn[name]?'Pause animation':'Resume animation';});
  schoolControls.after(controls);
 }
 function walk(actor,x,z,phase,amount=1){actor.position.set(x,Math.sin(phase*2)*.018*amount,z);if(actor.userData.seated)return;actor.userData.legs.forEach((leg,i)=>leg.rotation.x=Math.sin(phase+i*Math.PI)*.38*amount);actor.userData.arms.forEach((arm,i)=>arm.rotation.x=-Math.sin(phase+i*Math.PI)*.25*amount);}
 function smooth(v){v=T.MathUtils.clamp(v,0,1);return v*v*(3-2*v);}
 function updateStory(name,dt,moving){
- if(scenarioOn[name]&&name===activeSpace&&moving)storyClock[name]=Math.min(14,storyClock[name]+dt);
- const time=storyClock[name];const step=time<3?0:time<6?1:time<11?2:3;
- if(name===activeSpace){storyPanel.hidden=false;showStep(name,step);}
- const meet=smooth((time-6)/3),escort=smooth((time-11)/3),walking=time>6&&time<9||name==='neighbours'&&time>11&&time<14;
+ if(scenarioOn[name]&&name===activeSpace)storyClock[name]=Math.min(14,storyClock[name]+dt);
+ const time=storyClock[name];const step=time<1.5?0:time<3?1:time<8?2:3;
+ if(name===activeSpace){storyPanel.hidden=false;showStep(name,step);storyPanel.dataset.playbackTime=time.toFixed(2);storyPanel.style.setProperty('--playback',time/14);}
+ if(time>=14&&scenarioOn[name]){scenarioOn[name]=false;document.querySelector('[data-scenario-action='+name+']').textContent='Replay animation';document.querySelector('[data-story-pause='+name+']').hidden=true;}
+ const meet=smooth((time-3)/4),escort=smooth((time-8)/6),walking=time>3&&time<7||name==='neighbours'&&time>8&&time<14;
  scenarioActors[name].forEach((actor,i)=>{const v=actor.userData.start;let x=v.x,z=v.z;
  if(name==='neighbours'){if(i===0){x=v.x+.6*meet-2*escort;z=v.z+.2*meet+.6*escort;}if(i===1){x=v.x-2*escort;z=v.z+.6*escort;}if(i===3){x=v.x-.15*meet;z=v.z-.6*meet;}}
  else{if(i===0){x=v.x+.25*meet;z=v.z+.5*meet;}if(i===1){x=v.x-.3*meet;z=v.z-.1*meet;}if(i===2){x=v.x-.6*meet;z=v.z+.6*meet;}}
- const actorWalking=walking&&(name==='office'||i===0||i===3&&time<9||i===1&&time>11);walk(actor,x,z,time*8,actorWalking?1:0);actor.rotation.y=actorWalking&&name==='neighbours'?(time>11?-1.28:i===0?1.25:-2.9):0;
+ const actorWalking=walking&&(name==='office'||i===0||i===3&&time<7||i===1&&time>8);walk(actor,x,z,time*8,actorWalking?1:0);actor.rotation.y=actorWalking&&name==='neighbours'?(time>8?-1.28:i===0?1.25:-2.9):0;
  });
  if(scenarioBubbles[name])scenarioBubbles[name].visible=false;
- if(name==='neighbours'){requestPhone.visible=time<6;scenarioActors.neighbours[1].userData.arms[1].rotation.x=time<6?-1.15:scenarioActors.neighbours[1].userData.arms[1].rotation.x;helpReply.visible=time>=9;helpReply.position.set(-.2-2*escort,2,1);}
- else{teamReply.visible=time>=11;donationBox.visible=true;const transfer=smooth((time-11)/2);const carrier=scenarioActors.office[0];if(carrier.userData.bag)carrier.userData.bag.visible=transfer===0;donatedBag.visible=transfer>0;donatedBag.position.set(T.MathUtils.lerp(-.75,0,transfer),.76+Math.sin(transfer*Math.PI)*.3,T.MathUtils.lerp(1.5,1.95,transfer));}
+ if(name==='neighbours'){requestSignal.visible=time<3&&scenarioOn[name];requestSignal.position.set(T.MathUtils.lerp(.7,-.7,smooth((time-1)/2)),2.1+Math.sin(time*3)*.08,1);requestPhone.visible=time<3;scenarioActors.neighbours[1].userData.arms[1].rotation.x=time<3?-1.15+Math.sin(time*4)*.12:scenarioActors.neighbours[1].userData.arms[1].rotation.x;helpReply.visible=time>=7;helpReply.position.set(-.2-2*escort,2,1);}
+ else{officeSignal.visible=time<3&&scenarioOn[name];officeSignal.position.y=2.1+Math.sin(time*3)*.1;teamReply.visible=time>=8;donationBox.visible=true;const transfer=smooth((time-8)/3);const carrier=scenarioActors.office[0];if(carrier.userData.bag)carrier.userData.bag.visible=transfer===0;donatedBag.visible=transfer>0;donatedBag.position.set(T.MathUtils.lerp(-.75,0,transfer),.76+Math.sin(transfer*Math.PI)*.3,T.MathUtils.lerp(1.5,1.95,transfer));}
 }
 let visible=false;new IntersectionObserver(entries=>visible=entries[0].isIntersecting).observe(stage);let target=0;
 canvas.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'){const r=canvas.getBoundingClientRect();target=(e.clientX-r.left)/r.width*.3-.15;}});canvas.addEventListener('pointerleave',()=>target=0);
 function resize(){const w=stage.clientWidth,h=w<700?340:stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const mobile=w<700;camera.position.set(mobile?8:8,mobile?7:6.2,mobile?14:10);camera.lookAt(mobile?new T.Vector3(0,.7,0):new T.Vector3(-1.8,.8,0));camera.updateProjectionMatrix();}new ResizeObserver(resize).observe(stage);resize();const reduced=matchMedia('(prefers-reduced-motion: reduce)');let last=0;
-function tick(t){requestAnimationFrame(tick);if(!visible||document.hidden||t-last<33)return;const dt=Math.min((t-last)/1000,.05);last=t;const moving=!reduced.matches&&!document.body.classList.contains('motion-paused');root.rotation.y=T.MathUtils.lerp(root.rotation.y,moving?target:0,.07);if(moving){bubbles.forEach((b,i)=>b.rotation.z=Math.sin(t*.0008+i)*.015);}const goal=schoolConnected?1:0;schoolProgress=moving?T.MathUtils.lerp(schoolProgress,goal,.06):goal;
+function tick(t){requestAnimationFrame(tick);if(!visible||document.hidden||t-last<33)return;const dt=Math.min((t-last)/1000,.2);last=t;const moving=!reduced.matches&&!document.body.classList.contains('motion-paused');root.rotation.y=T.MathUtils.lerp(root.rotation.y,moving?target:0,.07);if(moving){bubbles.forEach((b,i)=>b.rotation.z=Math.sin(t*.0008+i)*.015);}const goal=schoolConnected?1:0;schoolProgress=moving?T.MathUtils.lerp(schoolProgress,goal,.06):goal;
  schoolRooms.forEach(({interior,node})=>{interior.scale.setScalar(Math.max(.001,1-schoolProgress));interior.visible=schoolProgress<.99;node.scale.setScalar(Math.max(.01,schoolProgress));});
  schoolLinks.forEach(link=>link.material.opacity=schoolProgress*.85);
  schoolPackets.forEach(({packet,curve,index})=>{packet.visible=schoolConnected;packet.position.copy(curve.getPoint(moving?(t*.00018+index*.2)%1:.5));});

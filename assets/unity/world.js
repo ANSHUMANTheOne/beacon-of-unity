@@ -1,7 +1,7 @@
 (function() {
   const e = matchMedia("(max-width: 700px)").matches, n = matchMedia("(prefers-reduced-motion: reduce)");
   window._bavPaused = n.matches;
-  const i = e ? 0.88 : 1, o = Math.round(64 * i), s = Math.round(84 * i), k = 0.36, x = 0.967, _ = 0.76, F = 0.52, q = 0.68, Y = 1.8, M = 28;
+  const i = e ? 0.68 : 1, o = Math.round(64 * i), s = Math.round(84 * i), k = 0.36, x = 0.967, _ = 0.76, F = 0.52, q = 0.68, Y = 1.8, M = 28;
   let m = window.innerWidth - 148, h = window.innerHeight * 0.32, r = -1.2, f = 0, u = "idle", l = "", d = !1, y = 0, w = 0, C = [], H = null, Me = 0, X = !1, U = !1, Le = null, se = performance.now(), V = 0, L = 0, O = 0, $ = 0;
   const E = document.getElementById("bav-wrap"), v = document.getElementById("bav-anim"), re = document.getElementById("bav-svg"), Ae = document.getElementById("bav-bubble"), Ke = document.getElementById("bav-msg"), Ce = document.getElementById("bav-shadow"), ce = document.getElementById("bav-el"), le = document.getElementById("bav-er"), Je = document.getElementById("bav-mth"), Ze = document.getElementById("bav-leg-l"), et = document.getElementById("bav-leg-r");
   E.style.width = o + "px", v.style.width = o + "px", v.style.height = s + "px", re.style.width = "100%", re.style.height = "100%";
