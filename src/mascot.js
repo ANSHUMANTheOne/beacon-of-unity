@@ -21,7 +21,7 @@
   const isPhone = matchMedia('(max-width: 700px)').matches;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   window._bavPaused = reduced.matches;
-  const MASC_SCALE = isPhone ? 0.88 : 1;
+  const MASC_SCALE = isPhone ? 0.68 : 1;
   const W = Math.round(64 * MASC_SCALE), H = Math.round(84 * MASC_SCALE);          // avatar container size
   const GRAVITY    = 0.36;
   const AIR_FRIC   = 0.967;      // per-frame multiplier
