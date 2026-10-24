@@ -134,7 +134,7 @@
     happy:     'M22 52 Q32 59 42 52',
     surprised: 'M24 53 Q32 58 40 53',
     sitting:   'M23 52 Q32 57 41 52',
-    flying:    'M24 54 Q32 50 40 54',
+    flying:    'M24 52 Q32 58 40 52',
   };
   function setExpr(e) {
     mouth.setAttribute('d', MOUTH[e] || MOUTH.happy);
@@ -261,7 +261,8 @@
     const dt = Math.min(raw / 16.67, 3);
 
     const VW = window.innerWidth;
-    const VH = window.innerHeight - 12;
+    const dockFloor=document.querySelector('.beacon-dock')?.getBoundingClientRect();
+    const VH = dockFloor && px+W>dockFloor.left-12 && px<dockFloor.right+12 ? dockFloor.top-14 : window.innerHeight-12;
     px = Math.max(0, Math.min(VW - W, px));
     py = Math.max(75, Math.min(VH - H, py));
 
@@ -282,7 +283,7 @@
           mode = 'flying';
           setLegsSwinging(false);
           vy = -1.5;
-          const fallQ = ["Whoa! 😱","Aaaaah! 😵","Not again! 😤","Slipping! 🫨","Noooo! 😩","Help! 🙈","Gravity wins 😔","See ya! 👋","Wheee... 😬","Oh no no no! 😰"];
+          const fallQ = ["Here I come!", "A little hop!", "Off we go!", "Wheee!"];
           showBubble(fallQ[Math.floor(Math.random()*fallQ.length)], 1500);
         }
       } else {
