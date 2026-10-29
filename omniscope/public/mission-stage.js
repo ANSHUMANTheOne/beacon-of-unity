@@ -15,6 +15,12 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  stage.querySelector('#stageBandSlot').appendChild(bandPanel);
  bandPanel.querySelector('.mission-band-top h4').textContent='Infrared band';
  bandPanel.querySelector('.mission-band-top .calm-eyebrow').textContent='CHOOSE THE LIGHT';
+ const spectrum=document.createElement('div');spectrum.className='mission-spectrum';spectrum.innerHTML='<div class="mission-spectrum-head"><span>0.75 \u00b5m</span><strong id="missionSpectrumValue">Measured wavelength</strong><span>5.01 \u00b5m</span></div><div class="mission-spectrum-track"><span class="mission-spectrum-band"></span><span class="mission-spectrum-marker" id="missionSpectrumMarker"></span></div>';
+ bandPanel.appendChild(spectrum);
+ const bands=[[.75,1.12],[1.10,1.65],[1.63,2.43],[2.40,3.85],[3.81,4.43],[4.41,5.01]];
+ let activeBand=0;
+ function updateBandRail(){const selected=Number(band.value);if(selected===activeBand)return;activeBand=selected;const [lo,hi]=bands[selected-1]||bands[1];spectrum.style.setProperty('--band-start',`${(lo-.75)/4.26*100}%`);spectrum.style.setProperty('--band-width',`${(hi-lo)/4.26*100}%`);}
+ updateBandRail();
  const a=$('stageDateA'),b=$('stageDateB'),band=$('missionBand'),visitButton=$('stageVisit'),replayButton=$('stageReplay'),toggle=$('missionEnlarge');
  const cardReplay=document.createElement('button');cardReplay.id='missionReplay';cardReplay.type='button';cardReplay.textContent='▶ Replay';cardReplay.title='Replay both recorded exposures';cardReplay.setAttribute('aria-label','Replay observation');cardReplay.setAttribute('aria-pressed','false');toggle.before(cardReplay);
  toggle.hidden=false;
@@ -52,6 +58,10 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
    $('missionLiveOrbit').textContent=`Recorded position: X ${Math.round(xyz[0])} · Y ${Math.round(xyz[1])} · Z ${Math.round(xyz[2])} km from Earth center · ~${Math.round(altitude)} km altitude`;
   }else if(!busy){$('stageTime').textContent=data.images.length?'No recorded position in this exposure.':'Opening archived observations…';$('stageCoords').textContent='A real position is shown only when the FITS metadata provides it.';$('missionLiveOrbit').textContent='Recorded spacecraft coordinates are unavailable for this exposure.';}
   const pixel=scanSample(progress,index);
+  updateBandRail();
+  const marker=$('missionSpectrumMarker');marker.hidden=!pixel;
+  if(pixel){marker.style.left=`${Math.max(0,Math.min(100,(pixel.wavelength-.75)/4.26*100))}%`;$('missionSpectrumValue').textContent=`${pixel.wavelength.toFixed(3)} \u00b5m`;}
+  else $('missionSpectrumValue').textContent='No clean pixel';
   if(loadError)$('stageTime').textContent=loadError;
   $('stageWave').textContent=pixel?`Nearest clean pixel ${pixel.x}, ${pixel.y} · ${pixel.wavelength.toFixed(4)} µm infrared`:'No clean detector pixel in the selected band.';
   $('missionLiveWave').textContent=pixel?`${index?'Later':'Earlier'} exposure · measured infrared ${pixel.wavelength.toFixed(4)} µm at pixel ${pixel.x}, ${pixel.y}`:`${index?'Later':'Earlier'} exposure · no clean wavelength sample in this band`;
