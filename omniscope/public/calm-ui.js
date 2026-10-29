@@ -64,7 +64,7 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
  document.body.classList.add('unified-mission');
  c.state.visibility.moon=false;c.applyVisibility();c.overlay.querySelector('[data-cat="moon"]')?.classList.add('off');c.overlay.querySelector('[data-cat="moon"] .dot')?.classList.remove('on');
  nav.hidden=true;compareBar.hidden=true;
- const badge=make('button',{className:'mission-source-badge',textContent:'NASA / IPAC open data'});badge.onclick=()=>$('surveyMethods').click();ui.appendChild(badge);
+ const badge=make('button',{className:'mission-source-badge',textContent:'NASA / IPAC data'});badge.onclick=()=>$('surveyMethods').click();ui.appendChild(badge);
  intro.querySelector('.calm-eyebrow').textContent='PLANET X / SPHEREX';$('calmTitle').textContent='Follow the mission. Find the change.';$('calmHint').textContent='SPHEREx surveys the sky. Compare its visits to look for possible moving sources.';
  $('calmHome').onclick=focusMission;$('resetCamera').onclick=focusMission;
  $('aimField').hidden=true;
@@ -72,13 +72,13 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
  card.innerHTML='<div class="mission-comparison-head"><div><span class="calm-eyebrow">SPHEREX / REAL OBSERVATIONS</span><h3>Look for what changed.</h3></div><button id="missionEnlarge" title="Enlarge comparison" aria-label="Enlarge comparison">⛶</button></div><div class="mission-modes"><button data-mission-mode="side" class="active">Side by side</button><button data-mission-mode="swipe">Swipe</button><button data-mission-mode="blink">Blink</button><button data-mission-mode="difference">Difference</button></div><div class="mission-image-area"><canvas id="missionCanvas" width="900" height="430" aria-label="Two aligned SPHEREx observations. Earlier on the left, later on the right."></canvas><span id="missionCanvasHint">Opening real observations…</span></div><label class="mission-wipe" hidden>Earlier<input id="missionWipe" type="range" min="0" max="100" value="50" aria-label="Swipe between visits">Later</label><div class="mission-visit-dates"><span id="missionDateA">Earlier · —</span><span id="missionDateB">Later · —</span></div><div class="mission-comparison-foot"><span id="missionBaseline">Two visits to the same sky field</span><button id="missionDetails">Details & notes ↗</button></div><p class="mission-caution">A change is a clue. Check wavelength and image quality before calling it motion.</p>';
  ui.appendChild(card);
  // The main decision is which real infrared band to inspect; keep one clear selector next to the images.
- intro.querySelector('.calm-eyebrow').textContent='NASA SPACE APPS / PLANET X';
- $('calmTitle').textContent='Search the changing sky.';
- $('calmHint').textContent='SPHEREx revisits the sky. Compare two real images and look for sources that move.';
- actions.querySelector('[data-panel="search"] span').textContent='Choose sky area';
+ intro.querySelector('.calm-eyebrow').textContent='PLANET X / SPHEREX';
+ $('calmTitle').textContent='SPHEREx survey';
+ $('calmHint').textContent='';
+ actions.querySelector('[data-panel="search"] span').textContent='Choose sky field';
  actions.querySelector('[data-panel="observation"]').hidden=true;
  card.querySelector('.mission-comparison-head .calm-eyebrow').textContent='SPHEREX / OBSERVATION PAIR';
- card.querySelector('.mission-comparison-head h3').textContent='Same sky. Two dates.';
+ card.querySelector('.mission-comparison-head h3').textContent='Image comparison';
  card.querySelector('#missionEnlarge').hidden=true;
  card.querySelector('[data-mission-mode="side"]').textContent='Compare images';
  card.querySelector('[data-mission-mode="swipe"]').hidden=true;

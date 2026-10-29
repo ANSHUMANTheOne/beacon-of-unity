@@ -1,0 +1,70 @@
+﻿/* OmniScope field notes: warm instrument surfaces and restrained labels. */
+:root{--void:#080a0d;--panel:rgba(17,20,24,.94);--border:rgba(220,207,181,.24);--cyan:#e7b878;--text:#f0eee8;--muted:#aeb4b2}
+html,body,.unified-mission{background:#080a0d;color:#f0eee8}
+.unified-mission .calm-intro{top:126px;left:36px;max-width:280px}
+.unified-mission .calm-intro:before{background:linear-gradient(90deg,#080a0deb,#080a0d80 70%,transparent)}
+.unified-mission .calm-intro h2{font-family:'Space Grotesk','Inter',sans-serif;font-size:30px;font-weight:500;line-height:1.15;letter-spacing:-.05em;color:#f2efe7;margin:9px 0 0}
+.unified-mission .calm-intro p,.unified-mission .mission-context span,.mission-stage-note,.mission-band-explain{display:none!important}
+.unified-mission .calm-primary-actions{top:205px;left:36px}
+.calm-eyebrow,.mission-stage-head .calm-eyebrow{color:#c1a77e;letter-spacing:.12em}
+.unified-mission .top-left h1{color:#f5f1e9;letter-spacing:.02em}
+.unified-mission .top-left h1::before{color:#d5a86b}
+.mission-source-badge{color:#aaa89f;letter-spacing:.01em}
+.unified-mission .mission-stage,.unified-mission .mission-comparison:not(.is-collapsed),.unified-mission .calm-panel{background:#14181cef;border-color:#4b4841;box-shadow:0 14px 40px #0007}
+.unified-mission .mission-stage{border-top:1px solid #656057;padding-top:17px}
+.mission-stage-head{border-color:#44423e}
+.mission-stage-head h3{font-weight:500;color:#ede8dd;letter-spacing:-.03em}
+.mission-stage-pickers label,.mission-stage-readout,.mission-band-values{color:#aeb3af}
+.mission-stage select,.mission-band-top select{background:#1e2428;border:1px solid #5d5a50;color:#f0ece2;border-radius:4px}
+.mission-stage select:focus-visible,.mission-band-top select:focus-visible,.unified-mission button:focus-visible{outline:2px solid #e9bc7e;outline-offset:2px}
+.mission-band-panel{border-color:#48443d}
+.mission-band-top h4{color:#e8e1d4;font-size:14px}
+.mission-band-top .calm-eyebrow{display:none}
+.mission-stage-actions .stage-primary,.calm-button.emphasis{background:#e5b373;border:1px solid #f0c48b;color:#171b1b;border-radius:4px;font-weight:600;box-shadow:none}
+.mission-stage-actions .stage-primary:hover,.calm-button.emphasis:hover{background:#f2c991}
+.mission-stage-actions .stage-secondary{background:#242b2e;border:1px solid #6c675d;color:#e7e3d9;border-radius:4px}
+.mission-stage-actions .stage-secondary:hover{background:#32383a}
+.mission-stage-readout{border-color:#555149}
+.mission-stage-readout strong{color:#efc78d}
+.unified-mission .mission-comparison-head{border-color:#4a4841}
+.unified-mission .mission-comparison-head h3{font-family:'Space Grotesk','Inter',sans-serif;font-size:24px;font-weight:500;letter-spacing:-.04em;color:#f1ece2}
+.unified-mission .mission-modes button,.unified-mission .mission-comparison-head>button{background:#252b2e;border:1px solid #55544d;border-radius:4px;color:#d7d6cf;box-shadow:none}
+.unified-mission .mission-modes button.active{background:#4c3d2d;border-color:#d2a267;color:#f7d5a7}
+.unified-mission .mission-image-area{background:#080a0d;border-color:#484940;border-radius:4px}
+.unified-mission .mission-image-area>span{background:#171d1cd9;color:#e2e1d7}
+.unified-mission .mission-visit-dates,.mission-live-readout{color:#bec0ba;border-color:#48443d}
+.mission-live-readout strong{color:#efc78d}
+.mission-change-panel{background:#1a1f22;border-color:#45453d;color:#dfddd2}
+.mission-change-head{color:#c4ad8a}
+.mission-change-head strong,.mission-change-panel p{color:#e8e3d8}
+.mission-change-head button{background:#302a21;border-color:#806749;color:#efd3a8}
+.mission-change-head button:hover{background:#433522}
+.mission-change-picks button{background:#302c25;border-color:#857057;color:#f0d3a3}
+.mission-science-note{border-color:#4b4841;color:#c0c2bd}
+.mission-science-note summary{color:#dbc3a0}
+.mission-context-dot{background:#d9ab70;box-shadow:0 0 0 4px #d9ab7030}
+.mission-context b{color:#e8e2d7;font-weight:500}
+.observation-beam-wave{stroke:#e1b579;opacity:.78}
+.observation-beam-ticks,.recorded-trail.is-current{stroke:#efc78d}
+.observation-beam-pulse{fill:#e9bd81;filter:drop-shadow(0 0 4px #d6a96b)}
+.recorded-trail{stroke:#bba982}
+.recorded-trail-b{stroke:#d58f6c}
+.spacecraft-beacon-ring{border-color:#e8bd83;box-shadow:0 0 0 5px #e9bd8225,0 0 15px #d7a86b73}
+.spacecraft-beacon-title,.spacecraft-info{background:#202529ec;border-color:#b78a5e;color:#f1eadf}
+.spacecraft-beacon-title small,.spacecraft-info-head{color:#ddb582}
+.spacecraft-info-actions button,.spacecraft-locate{background:#4b3a29;border-color:#b18b5b;color:#f5e5c9}
+@media(max-width:800px){
+ .unified-mission .calm-intro{top:94px;left:20px}
+ .unified-mission .calm-intro h2{font-size:24px}
+ .unified-mission .calm-primary-actions{top:170px;left:20px}
+ .unified-mission .mission-stage{padding-top:13px}
+}
+
+/* A short loading state replaces the decorative console animation. */
+#loading{background:#101316}
+#loading .data-stream,#loading .scanlines,#loading .eye-wrap{display:none!important}
+#loading .load-text{margin:0;align-items:flex-start;min-width:210px}
+#loading .load-text h1{font-family:'Space Grotesk','Inter',sans-serif;font-size:22px;letter-spacing:-.04em;font-weight:500;color:#f2eee5}
+#loading .load-text .status{font-size:10px;letter-spacing:.07em;color:#b6b7ae}
+#loading .load-bar{width:210px;height:2px;background:#484941}
+#loading .load-bar-fill{background:#e5b373}

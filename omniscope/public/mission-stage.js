@@ -4,12 +4,12 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  const stage=document.createElement('section');
  stage.className='mission-stage';
  stage.setAttribute('aria-label','Choose a SPHEREx observation');
- stage.innerHTML=`<div class="mission-stage-head"><div><span class="calm-eyebrow">THE OBSERVATION</span><h3>Choose two visits.</h3></div><span id="stageField">Opening archive…</span><button id="stageSkyArea" type="button">Change sky area ↗</button></div>
+ stage.innerHTML=`<div class="mission-stage-head"><div><span class="calm-eyebrow">THE OBSERVATION</span><h3>Select two visits</h3></div><span id="stageField">Opening archive…</span><button id="stageSkyArea" type="button">Change sky area ↗</button></div>
  <div class="mission-stage-pickers"><label>Earlier visit<select id="stageDateA" aria-label="Earlier observation date"></select></label><label>Later visit<select id="stageDateB" aria-label="Later observation date"></select></label></div>
  <div id="stageBandSlot"></div>
- <div class="mission-stage-actions"><button id="stageVisit" class="stage-primary">Visit & compare <span aria-hidden="true">↗</span></button><button id="stageReplay" class="stage-secondary" aria-pressed="false">Replay observation</button></div>
+ <div class="mission-stage-actions"><button id="stageVisit" class="stage-primary">Compare images <span aria-hidden="true">↗</span></button><button id="stageReplay" class="stage-secondary" aria-pressed="false">Replay observation</button></div>
  <div class="mission-stage-readout" aria-live="off"><span id="stageTime">Choose a pair to see where SPHEREx was.</span><strong id="stageWave">Measured wavelength will appear here.</strong><span id="stageCoords">Recorded spacecraft position loads with each image.</span></div>
- <p class="mission-stage-note">Spacecraft position: FITS exposure metadata. Light guide and wavelength marks are diagrams, not to scale.</p>`;
+ <p class="mission-stage-note">Spacecraft position from FITS metadata. Diagram is not to scale.</p>`;
  ui.appendChild(stage);
  stage.querySelector('#stageSkyArea').onclick=()=>ui.querySelector('[data-panel="search"]').click();
  stage.querySelector('#stageBandSlot').appendChild(bandPanel);
