@@ -115,7 +115,7 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
   $('missionDateA').textContent='Earlier · '+data.dates[0];$('missionDateB').textContent='Later · '+data.dates[1];$('missionBaseline').textContent=`D${data.detector} · ${data.baseline} apart`;$('missionCanvasHint').textContent=data.marking?'Click a source to mark it.':displayMode==='blink'?`Blinking ${blinkVisit?'later':'earlier'} visit`:displayMode==='difference'?'Raw difference · exploratory':'Aligned to the same sky coordinates';
   if(data.wavelengths.every(Number.isFinite)){
    const delta=Math.abs(data.wavelengths[0]-data.wavelengths[1]);
-   $('missionBandValues').textContent=`Shared quality-checked pixel: earlier ${data.wavelengths[0].toFixed(4)} µm · later ${data.wavelengths[1].toFixed(4)} µm · separation ${delta.toFixed(4)} µm`;
+   $('missionBandValues').textContent=`Earlier ${data.wavelengths[0].toFixed(4)} \u00b5m / later ${data.wavelengths[1].toFixed(4)} \u00b5m / difference ${delta.toFixed(4)} \u00b5m`;
   }else $('missionBandValues').textContent='No shared clean pixel in this band. Try another visit pair.';
   $('missionBand').value=String(data.detector);
  }

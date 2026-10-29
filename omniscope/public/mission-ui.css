@@ -23,6 +23,8 @@ html,body,.unified-mission{background:#0b1118}
 .mission-stage-readout strong{color:#a84e38;font-weight:600}
 .mission-band-panel{border-color:#e0dfd5}
 .mission-band-top h4{font:600 13px 'Inter',sans-serif;color:#33474f;margin:0}
+.unified-mission .mission-stage .mission-band-top h4{color:#33474f;font-size:13px}
+.unified-mission .mission-stage .mission-band-values{color:#516970}
 .mission-band-values{font:11px/1.4 'Inter',sans-serif;color:#526d76;margin:9px 0 0}
 .mission-spectrum{margin:16px 0 0}
 .mission-spectrum-head{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#75838a;font:10px 'Inter',sans-serif}
