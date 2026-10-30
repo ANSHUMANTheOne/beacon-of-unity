@@ -1,4 +1,4 @@
-﻿import { onRequestGet as archive } from '../functions/api/archive.js';
+import { onRequestGet as archive } from '../functions/api/archive.js';
 import { onRequestGet as ephemeris } from '../functions/api/ephemeris.js';
 
 export default {
@@ -14,8 +14,11 @@ export default {
       return path.endsWith('/archive') ? archive({ request }) : ephemeris({ request });
     }
     if (!path.startsWith('/omniscope/')) return new Response('Not found', { status: 404 });
-    url.pathname = path.slice('/omniscope'.length) || '/index.html';
-    if (url.pathname === '/') url.pathname = '/index.html';
+    if (path === '/omniscope/index.html') {
+      url.pathname = '/omniscope/';
+      return Response.redirect(url.toString(), 308);
+    }
+    url.pathname = path.slice('/omniscope'.length) || '/';
     return env.ASSETS.fetch(new Request(url, request));
   },
 };
