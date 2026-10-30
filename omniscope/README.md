@@ -1,13 +1,19 @@
-﻿# OmniScope
+# OmniScope
 
 OmniScope compares real NASA/IPAC SPHEREx FITS observations for the NASA Space Apps Planet X challenge. The solar-system view uses NASA JPL reference positions. Quick-look change markers are unconfirmed candidates.
 
 ## Beacon of Unity path
 
-The repository now has `omniscope/index.html`, so a host that publishes this repository's root serves the app at `/omniscope/`. The app's images, scripts, styles, and bundled FITS files remain in `omniscope/public/`; the entry page uses that folder as its asset base. The root `functions/api/` directory supplies the live NASA/IPAC and JPL API routes when the root is deployed with Cloudflare Pages Git integration.
+`beaconofunity.com` runs an existing Cloudflare Worker. OmniScope is served by its own Worker on the `beaconofunity.com/omniscope*` route, leaving other site paths with the existing Worker. Its entry page is `omniscope/index.html`, the images and bundled FITS files are in `omniscope/public/`, and live NASA/IPAC and JPL requests use `/omniscope/api/`.
 
-A GitHub push updates the source repository. If `beaconofunity.com` is deployed by a separate upload or project, its host must also publish this commit before the path appears there. Static-only hosting can display bundled observations but cannot serve the live `/api/` routes.
+To redeploy after a GitHub update, sign in with Wrangler, then run from this repository's root:
 
+```sh
+node omniscope/worker/prepare-assets.mjs
+wrangler deploy --config omniscope/worker/wrangler.jsonc
+```
+
+GitHub pushes do not automatically redeploy this Worker. The root `functions/api/` directory also supports a separate Cloudflare Pages deployment of the whole repository.
 ## Standalone Cloudflare Pages deployment
 
 The `omniscope/` folder can also be deployed as its own Pages project. Use **Root directory** `omniscope`, **Build output directory** `public`, no framework preset, and an empty build command. Its local `functions/api/` directory provides the same live routes.
