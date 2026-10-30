@@ -30,6 +30,7 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
   if(cardOpen&&!lastCardOpen){info.hidden=true;marker.setAttribute('aria-expanded','false');}lastCardOpen=cardOpen;
   const W=innerWidth,H=innerHeight,p=screen(craft),origin=screen(earth),limit=cardOpen&&W>800?document.querySelector('.mission-comparison').getBoundingClientRect().left-18:W-18;
   trails?.forEach((points,i)=>{const path=beam.querySelector(i?'.recorded-trail-b':'.recorded-trail-a'),label=beam.querySelector(`[data-trail="${i?'b':'a'}"]`);if(!points||points.some(point=>hiddenBehindEarth(point,earth))){path.setAttribute('d','');label.style.display='none';return;}const s=screen(points[0]),e=screen(points[1]);path.setAttribute('d',`M ${s.x.toFixed(1)} ${s.y.toFixed(1)} L ${e.x.toFixed(1)} ${e.y.toFixed(1)}`);path.classList.toggle('is-current',i===index);label.setAttribute('x',String(e.x+5));label.setAttribute('y',String(e.y-5));label.style.display=e.x<limit&&e.y>70&&e.y<H-24?'block':'none';label.classList.toggle('is-current',i===index);});
+  if(cardOpen){marker.hidden=true;beam.hidden=true;locate.hidden=true;info.hidden=true;return;}
   const visible=Boolean(record)&&p.z>-1&&p.z<1&&p.x>22&&p.x<limit-12&&p.y>70&&p.y<H-32&&!hiddenBehindEarth(craft,earth);
   marker.hidden=!visible;beam.hidden=!visible;locate.hidden=visible||!record;
   if(!visible){info.hidden=true;return;}
