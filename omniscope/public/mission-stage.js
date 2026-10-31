@@ -4,7 +4,7 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  const stage=document.createElement('section');
  stage.className='mission-stage';
  stage.setAttribute('aria-label','Choose a SPHEREx observation');
- stage.innerHTML=`<div class="mission-stage-head"><div><span class="stage-kicker">SPHEREx / Planet X</span><h3>Choose a band.</h3></div><button id="stageSkyArea" type="button">Change sky field ↗</button></div>
+ stage.innerHTML=`<div class="mission-stage-head"><div><span class="stage-kicker">SPHEREx / Planet X</span><h3>Vela field</h3></div><button id="stageSkyArea" type="button">Change sky field ↗</button></div>
  <div class="stage-field"><span class="stage-step">01 / SKY FIELD</span><span id="stageField">Opening archive…</span></div>
  <div id="stageBandSlot"></div>
  <details class="stage-visit-details"><summary id="visitSummary">03 / OBSERVATIONS <span>Using the first two visits</span></summary><div class="mission-stage-pickers"><label>Earlier visit<select id="stageDateA" aria-label="Earlier observation date"></select></label><label>Later visit<select id="stageDateB" aria-label="Later observation date"></select></label></div></details>
@@ -23,13 +23,14 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  const bandRanges=['0.75–1.12','1.10–1.65','1.63–2.43','2.40–3.85','3.81–4.43','4.41–5.01'];
  for(let n=1;n<=6;n++){const button=document.createElement('button');button.type='button';button.dataset.band=String(n);button.innerHTML=`<strong>${String(n).padStart(2,'0')}</strong><small>${bandRanges[n-1]} µm</small>`;button.setAttribute('aria-label',`Band ${n}, ${bandRanges[n-1]} micrometers`);button.onclick=()=>{if(band.disabled)return;band.value=String(n);band.dispatchEvent(new Event('change',{bubbles:true}));};bandChoices.appendChild(button);}
  bandPanel.querySelector('.mission-band-top').after(bandChoices);
- function syncBandChoices(){for(const button of bandChoices.children){const active=button.dataset.band===band.value;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));button.disabled=band.disabled;}}
+ const bandRange=document.createElement('p');bandRange.className='stage-selected-range';bandChoices.after(bandRange);
+ function syncBandChoices(){for(const button of bandChoices.children){const active=button.dataset.band===band.value;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));button.disabled=band.disabled;}bandRange.textContent=`Detector ${band.value} · ${bandRanges[Number(band.value)-1]} µm`;}
  syncBandChoices();
  const bands=[[.75,1.12],[1.10,1.65],[1.63,2.43],[2.40,3.85],[3.81,4.43],[4.41,5.01]];
  let activeBand=0;
  function updateBandRail(){const selected=Number(band.value);if(selected===activeBand)return;activeBand=selected;const [lo,hi]=bands[selected-1]||bands[1];spectrum.style.setProperty('--band-start',`${(lo-.75)/4.26*100}%`);spectrum.style.setProperty('--band-width',`${(hi-lo)/4.26*100}%`);}
  updateBandRail();
- const cardReplay=document.createElement('button');cardReplay.id='missionReplay';cardReplay.type='button';cardReplay.textContent='▶ Replay';cardReplay.title='Replay both recorded exposures';cardReplay.setAttribute('aria-label','Replay observation');cardReplay.setAttribute('aria-pressed','false');toggle.before(cardReplay);
+ const cardReplay=document.createElement('button');cardReplay.id='missionReplay';cardReplay.type='button';cardReplay.textContent='▶ Motion preview';cardReplay.title='Replay both recorded exposures';cardReplay.setAttribute('aria-label','Replay observation');cardReplay.setAttribute('aria-pressed','false');toggle.before(cardReplay);
  toggle.hidden=false;
  card.classList.add('is-collapsed');
  card.setAttribute('aria-expanded','false');
@@ -38,12 +39,12 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  const live=document.createElement('div');live.className='mission-live-readout';live.innerHTML='<strong id="missionLiveWave">Reading detector pixels…</strong><span id="missionLiveOrbit">Reading recorded spacecraft position…</span>';
  card.querySelector('.mission-visit-dates').after(live);
  let playing=false,started=0,lastIndex=-1,lastSignature='',lastPaint=0,busy=false,loadError='';
- function openCard(){card.classList.remove('is-collapsed');card.setAttribute('aria-expanded','true');toggle.textContent='← Observation';toggle.title='Return to observation controls';toggle.setAttribute('aria-label','Return to observation controls');drawComparison();document.dispatchEvent(new Event('omni-scan-pair'));}
- function closeCard(){card.classList.add('is-collapsed');card.setAttribute('aria-expanded','false');toggle.textContent='← Observation';toggle.title='Return to observation controls';toggle.setAttribute('aria-label','Return to observation controls');indicator.hidden=true;}
+ function openCard(){card.classList.remove('is-collapsed');card.setAttribute('aria-expanded','true');toggle.textContent='← Scene';toggle.title='Return to observing scene';toggle.setAttribute('aria-label','Return to observing scene');drawComparison();document.dispatchEvent(new Event('omni-scan-pair'));}
+ function closeCard(){card.classList.add('is-collapsed');card.setAttribute('aria-expanded','false');toggle.textContent='← Scene';toggle.title='Return to observing scene';toggle.setAttribute('aria-label','Return to observing scene');indicator.hidden=true;}
  closeCard();
  toggle.onclick=()=>card.classList.contains('is-collapsed')?openCard():closeCard();
- function stop(){playing=false;lastIndex=-1;setStoryState({playing:false,selectedVisit:null,progress:.5});replayButton.textContent='▶ Preview motion';replayButton.setAttribute('aria-pressed','false');cardReplay.textContent='▶ Replay';cardReplay.setAttribute('aria-pressed','false');indicator.hidden=true;}
- function play(){if(playing){stop();return;}if(getComparison().images.length!==2)return;document.dispatchEvent(new Event('omni-stop-blink'));playing=true;started=performance.now();lastIndex=-1;replayButton.textContent='Ⅱ Pause motion';replayButton.setAttribute('aria-pressed','true');cardReplay.textContent='Ⅱ Pause';cardReplay.setAttribute('aria-pressed','true');}
+ function stop(){playing=false;lastIndex=-1;setStoryState({playing:false,selectedVisit:null,progress:.5});replayButton.textContent='▶ Preview motion';replayButton.setAttribute('aria-pressed','false');cardReplay.textContent='▶ Motion preview';cardReplay.setAttribute('aria-pressed','false');indicator.hidden=true;}
+ function play(){if(playing){stop();return;}if(getComparison().images.length!==2)return;document.dispatchEvent(new Event('omni-stop-blink'));playing=true;started=performance.now();lastIndex=-1;replayButton.textContent='Ⅱ Pause motion';replayButton.setAttribute('aria-pressed','true');cardReplay.textContent='Ⅱ Pause motion';cardReplay.setAttribute('aria-pressed','true');}
  replayButton.onclick=play;cardReplay.onclick=play;
  visitButton.onclick=()=>{if(getComparison().images.length!==2)return;openCard();};
  document.addEventListener('omni-stop-replay',stop);
@@ -53,7 +54,7 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  function choices(data){const signature=data.detector+'|'+data.choices.map(r=>r.id+':'+r.date).join('|');if(signature===lastSignature){if(!busy&&!data.busy)for(const [select,selected] of [[a,data.selectedChoices[0]],[b,data.selectedChoices[1]]])if(selected>=0&&select.value!==String(selected))select.value=String(selected);return;}lastSignature=signature;for(const [select,selected] of [[a,data.selectedChoices[0]],[b,data.selectedChoices[1]]]){select.replaceChildren();for(const item of data.choices){const option=document.createElement('option');option.value=String(item.index);option.textContent=`${item.date} · ${item.id||'observation '+(item.index+1)}`;select.appendChild(option);}select.value=String(selected??'');}
   a.disabled=b.disabled=data.choices.length<2||busy;const first=data.choices.find(item=>item.index===Number(a.value)),second=data.choices.find(item=>item.index===Number(b.value));const summary=$('visitSummary').querySelector('span');summary.textContent=first&&second?`${first.date} → ${second.date}`:'Choose two visits';}
  function update(time){const data=getComparison();choices(data);const first=data.choices.find(item=>item.index===data.selectedChoices[0]),second=data.choices.find(item=>item.index===data.selectedChoices[1]);$('visitSummary').querySelector('span').textContent=first&&second?`${first.date} → ${second.date}`:'Choose two visits';visitButton.disabled=busy||data.busy||data.images.length!==2;replayButton.disabled=visitButton.disabled;cardReplay.disabled=visitButton.disabled;band.disabled=busy||data.busy;
-  if(data.field)$('stageField').textContent=`RA ${data.field.ra.toFixed(3)}° · Dec ${data.field.dec.toFixed(3)}°`;
+  if(data.field){$('stageField').textContent=`RA ${data.field.ra.toFixed(3)}° · Dec ${data.field.dec.toFixed(3)}°`;stage.querySelector('h3').textContent=Math.abs(data.field.ra-127.69444)<.01&&Math.abs(data.field.dec+39.1776)<.01?'Vela field':'Selected field';}
   if(playing&&(data.busy||data.images.length!==2))stop();
   let index=data.visit,progress=.5;
   if(playing){const cycle=(time-started)/4600,indexNow=Math.floor(cycle)%2;progress=cycle%1;index=indexNow;if(lastIndex!==index){lastIndex=index;selectVisit(index?'B':'A');}setStoryState({playing:true,selectedVisit:index,progress});}
@@ -73,7 +74,7 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
   if(loadError)$('stageTime').textContent=loadError;
   $('stageWave').textContent=pixel?`Nearest clean pixel ${pixel.x}, ${pixel.y} · ${pixel.wavelength.toFixed(4)} µm infrared`:'No clean detector pixel in the selected band.';
   $('missionLiveWave').textContent=pixel?`${index?'Later':'Earlier'} exposure · measured infrared ${pixel.wavelength.toFixed(4)} µm at pixel ${pixel.x}, ${pixel.y}`:`${index?'Later':'Earlier'} exposure · no clean wavelength sample in this band`;
-  if(playing&&!card.classList.contains('is-collapsed')&&pixel){const area=card.querySelector('.mission-image-area'),canvas=$('missionCanvas');const areaRect=area.getBoundingClientRect(),rect=canvas.getBoundingClientRect();indicator.hidden=false;indicator.style.left=`${rect.left-areaRect.left+rect.width*(index? .5+pixel.x/280*.5:pixel.x/280*.5)}px`;indicator.dataset.visit=index?'B':'A';}
+  if(playing&&!card.classList.contains('is-collapsed')&&pixel&&Number(card.dataset.imageZoom||1)===1&&card.dataset.stacked!=='true'){const area=card.querySelector('.mission-image-area'),canvas=$('missionCanvas');const areaRect=area.getBoundingClientRect(),rect=canvas.getBoundingClientRect();indicator.hidden=false;indicator.style.left=`${rect.left-areaRect.left+rect.width*(index? .5+pixel.x/280*.5:pixel.x/280*.5)}px`;indicator.dataset.visit=index?'B':'A';}
   else indicator.hidden=true;
  }
  document.addEventListener('omni-comparison-frame',()=>update(performance.now()));

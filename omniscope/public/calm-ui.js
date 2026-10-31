@@ -1,5 +1,6 @@
 // Progressive disclosure for the observatory. Scientific controls keep their existing handlers.
 import {installMissionStage} from './mission-stage.js';
+import {outputToWorld} from './sky-engine.js';
 export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample,focusMission,chooseDetector,selectVisit,scanSample,setStoryState,loadPairChoice}){
  const $=id=>document.getElementById(id),make=(tag,props={})=>Object.assign(document.createElement(tag),props);
  let openPanel=null,returnFocus=null;
@@ -69,7 +70,14 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
  $('calmHome').onclick=focusMission;$('resetCamera').onclick=focusMission;
  $('aimField').hidden=true;
  const card=make('section',{className:'mission-comparison',ariaLabel:'SPHEREx image comparison'});
- card.innerHTML='<div class="mission-comparison-head"><div><span class="calm-eyebrow">SPHEREX / REAL OBSERVATIONS</span><h3>Look for what changed.</h3></div><button id="missionEnlarge" title="Enlarge comparison" aria-label="Enlarge comparison">⛶</button></div><div class="mission-modes"><button data-mission-mode="side" class="active">Side by side</button><button data-mission-mode="swipe">Swipe</button><button data-mission-mode="blink">Blink</button><button data-mission-mode="difference">Difference</button></div><div class="mission-image-area"><canvas id="missionCanvas" width="900" height="430" aria-label="Two aligned SPHEREx observations. Earlier on the left, later on the right."></canvas><span id="missionCanvasHint">Opening real observations…</span></div><label class="mission-wipe" hidden>Earlier<input id="missionWipe" type="range" min="0" max="100" value="50" aria-label="Swipe between visits">Later</label><div class="mission-visit-dates"><span id="missionDateA">Earlier · —</span><span id="missionDateB">Later · —</span></div><div class="mission-comparison-foot"><span id="missionBaseline">Two visits to the same sky field</span><button id="missionDetails">Details & notes ↗</button></div><p class="mission-caution">A change is a clue. Check wavelength and image quality before calling it motion.</p>';
+ card.innerHTML=`<div class="mission-comparison-head"><div class="analysis-title"><span class="calm-eyebrow">OMNISCOPE / OBSERVATION ANALYSIS</span><h3>Observation analysis</h3><p id="missionFieldContext">Loading sky field…</p></div><button id="missionEnlarge" type="button" aria-label="Return to the observing scene">← Scene</button></div>
+ <div class="mission-workspace-toolbar"><div class="mission-modes" role="group" aria-label="Image comparison mode"><button data-mission-mode="side" class="active" aria-pressed="true">Side by side</button><button data-mission-mode="swipe">Swipe</button><button data-mission-mode="blink">Blink</button><button data-mission-mode="difference">Difference</button></div><div class="mission-zoom" role="group" aria-label="Shared image zoom"><button id="missionZoomOut" type="button" aria-label="Zoom out">−</button><span id="missionZoomValue">100%</span><button id="missionZoomIn" type="button" aria-label="Zoom in">+</button><button id="missionZoomReset" type="button">Reset</button><button id="missionCoordinates" type="button" aria-pressed="false">Crosshair</button></div></div>
+ <div class="mission-visit-dates"><span id="missionDateA">A / Earlier visit</span><span id="missionDateB">B / Later visit</span></div>
+ <div class="mission-image-area"><span id="missionMobileDateB" class="mission-mobile-date-b"></span><canvas id="missionCanvas" width="900" height="430" aria-label="Registered SPHEREx observations. Images share zoom and pan; drag to pan and scroll to zoom."></canvas><div class="mission-crosshair" hidden></div></div>
+ <div class="mission-registration"><span id="missionCanvasHint">Opening real observations…</span><span id="missionCursor">Scroll to zoom · drag to pan</span></div>
+ <label class="mission-wipe" hidden>Earlier<input id="missionWipe" type="range" min="0" max="100" value="50" aria-label="Swipe between visits">Later</label>
+ <div class="mission-comparison-foot"><span id="missionBaseline">Two visits to the same sky field</span><button id="missionDetails" type="button">More measurements</button></div>
+ <p class="mission-caution">A change is a clue. Check wavelength and image quality before calling it motion.</p>`;
  ui.appendChild(card);
  // The main decision is which real infrared band to inspect; keep one clear selector next to the images.
  intro.querySelector('.calm-eyebrow').textContent='PLANET X / SPHEREX';
@@ -78,17 +86,17 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
  actions.querySelector('[data-panel="search"] span').textContent='Choose sky field';
  actions.querySelector('[data-panel="observation"]').hidden=true;
  card.querySelector('.mission-comparison-head .calm-eyebrow').textContent='SPHEREX / OBSERVATION PAIR';
- card.querySelector('.mission-comparison-head h3').textContent='Image comparison';
- card.querySelector('#missionEnlarge').hidden=true;
- card.querySelector('[data-mission-mode="side"]').textContent='Compare images';
- card.querySelector('[data-mission-mode="swipe"]').hidden=true;
+ card.querySelector('.mission-comparison-head h3').textContent='Observation analysis';
+
+ card.querySelector('[data-mission-mode="side"]').textContent='Side by side';
+
  card.querySelector('[data-mission-mode="difference"]').textContent='Difference';
  const bandPanel=make('div',{className:'mission-band-panel'});
  bandPanel.innerHTML='<div class="mission-band-top"><div><span class="calm-eyebrow">INFRARED WAVELENGTH</span><h4>Which light are we seeing?</h4></div><select id="missionBand" aria-label="Choose SPHEREx wavelength band"><option value="1">Band 1 · 0.75–1.12 µm</option><option value="2" selected>Band 2 · 1.10–1.65 µm</option><option value="3">Band 3 · 1.63–2.43 µm</option><option value="4">Band 4 · 2.40–3.85 µm</option><option value="5">Band 5 · 3.81–4.43 µm</option><option value="6">Band 6 · 4.41–5.01 µm</option></select></div><p id="missionBandValues" class="mission-band-values">Reading the measured wavelengths…</p><p class="mission-band-explain">A micrometer (µm) is one millionth of a meter. Each band captures a different part of infrared light; these values come from the images, not an applied color filter.</p>';
  card.querySelector('.mission-modes').before(bandPanel);
  const changePanel=make('section',{className:'mission-change-panel',ariaLabel:'Possible image changes'});
- changePanel.innerHTML='<div class="mission-change-head"><span>Change scan</span><button id="missionScan" type="button">Scan pair ↻</button><strong id="missionChangeCount">Waiting for two visits</strong></div><div class="mission-change-picks" id="missionChangePicks"></div><p id="missionChangeDetail">Compare aligned pixels for compact changes.</p><small>Candidates are unconfirmed until reviewed.</small>';
- card.querySelector('.mission-image-area').after(changePanel);
+ changePanel.innerHTML='<div class="mission-change-head"><span>Change scan</span><button id="missionScan" type="button">↻ Rescan</button><strong id="missionChangeCount">Waiting for two visits</strong></div><div class="mission-change-picks" id="missionChangePicks"></div><p id="missionChangeDetail">Compare aligned pixels for compact changes.</p><small>Candidates are unconfirmed until reviewed.</small>';
+ card.querySelector('.mission-registration').after(changePanel);
  $('missionBand').onchange=()=>{$('missionBandValues').textContent=`Opening Band ${$('missionBand').value} observations…`;chooseDetector(Number($('missionBand').value));};
  const context=make('div',{className:'mission-context'});
  context.innerHTML='<span class="mission-context-dot"></span><div><b>SPHEREx at the recorded exposure</b><span>Position comes from FITS coordinates. The spacecraft drawing is enlarged so it stays visible.</span></div>';
@@ -104,24 +112,69 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
  function beginScan(){clearTimeout(scanTimer);scanActive=true;card.classList.add('is-scanning');lastPanelSource=null;dirty=true;scanTimer=setTimeout(()=>{scanActive=false;card.classList.remove('is-scanning');lastPanelSource=null;dirty=true;drawComparison();},1300);}
  $('missionScan').onclick=()=>{if(getComparison().images.length===2)beginScan();drawComparison();};
  document.addEventListener('omni-scan-pair',()=>{if(getComparison().images.length===2){beginScan();drawComparison();}});
- function updateChangePanel(changes){if(changes===lastPanelSource&&selectedChange===lastPanelSelection)return;lastPanelSource=changes;lastPanelSelection=selectedChange;const picks=$('missionChangePicks');picks.replaceChildren();if(scanActive){$('missionChangeCount').textContent='Scanning image pair…';$('missionChangeDetail').textContent='Comparing clean pixels at matching sky coordinates and similar wavelengths.';changePanel.querySelector('small').textContent='Quick-look residual search. Results are unconfirmed.';return;}const list=changes?.candidates||[];$('missionChangeCount').textContent=list.length?`${list.length} possible ${list.length===1?'change':'changes'}`:'No strong change found';for(const [index,candidate] of list.entries()){const button=document.createElement('button');button.type='button';button.textContent=String(index+1);button.title=`Candidate ${index+1}: RA ${candidate.sky[0].toFixed(4)}°, Dec ${candidate.sky[1].toFixed(4)}°`;button.classList.toggle('active',index===selectedChange);button.onclick=()=>{selectedChange=index;dirty=true;drawComparison();};picks.appendChild(button);}changePanel.querySelector("small").textContent=(changes?.checked||0)+" clean, wavelength-matched pixels checked. Differences are unconfirmed.";const chosen=list[selectedChange];$('missionChangeDetail').textContent=chosen?`#${selectedChange+1} · ${chosen.direction} · RA ${chosen.sky[0].toFixed(4)}°, Dec ${chosen.sky[1].toFixed(4)}° · ${chosen.wavelengthA.toFixed(3)} / ${chosen.wavelengthB.toFixed(3)} µm`:`${changes?.reason||'Choose two visits to search.'} Quick-look results need visual review.`;}
- function drawComparison(){const data=getComparison();card.classList.toggle('is-loading',data.busy);if(data.busy)return;if(data.images.length!==2)return;if(lastChangeSource!==data.changes){lastChangeSource=data.changes;selectedChange=0;beginScan();}if(!dirty&&lastImages[0]===data.images[0]&&lastImages[1]===data.images[1]&&lastVisit===data.visit&&lastPin===JSON.stringify(data.pin))return;dirty=false;lastImages=data.images;lastVisit=data.visit;lastPin=JSON.stringify(data.pin);updateChangePanel(data.changes);
-  const w=cc.width,h=cc.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#050c12';ctx.fillRect(0,0,w,h);rects=[];
-  const box=(x,width)=>{const side=Math.min(width-20,h-18);return {x:x+(width-side)/2,y:(h-side)/2,w:side,h:side}};
-  if(displayMode==='side'){for(let i=0;i<2;i++){const r=box(i*w/2,w/2);rects.push(r);ctx.drawImage(data.images[i],r.x,r.y,r.w,r.h);ctx.fillStyle='#d5f3eb';ctx.font='18px monospace';ctx.fillText(i?'B':'A',r.x+11,r.y+27);}}
-  else {const r=box(0,w);rects.push(r);ctx.drawImage(displayMode==='difference'?data.preview:displayMode==='blink'?data.images[blinkVisit]:data.images[0],r.x,r.y,r.w,r.h);if(displayMode==='swipe'){const x=r.x+r.w*Number($('missionWipe').value)/100;ctx.save();ctx.beginPath();ctx.rect(x,r.y,r.x+r.w-x,r.h);ctx.clip();ctx.drawImage(data.images[1],r.x,r.y,r.w,r.h);ctx.restore();ctx.strokeStyle='#8edccb';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke();}if(displayMode==='blink'){ctx.fillStyle='#071a21e8';ctx.fillRect(r.x+9,r.y+9,150,32);ctx.fillStyle='#d7f8ed';ctx.font='bold 16px monospace';ctx.fillText(blinkVisit?'B · LATER':'A · EARLIER',r.x+18,r.y+31);}}
-  if(!scanActive)for(const [index,candidate] of (data.changes?.candidates||[]).entries())for(const r of rects){const x=r.x+candidate.x/279*r.w,y=r.y+candidate.y/279*r.h;ctx.beginPath();ctx.arc(x,y,index===selectedChange?13:10,0,Math.PI*2);ctx.strokeStyle=index===selectedChange?'#ffd186':'#9be4d5';ctx.lineWidth=index===selectedChange?3:2;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#061219e8';ctx.fillRect(x+9,y-20,18,16);ctx.fillStyle='#eaf8f2';ctx.font='bold 12px monospace';ctx.fillText(String(index+1),x+14,y-8);}
-  if(data.pin)for(const r of rects){const x=r.x+data.pin.x/279*r.w,y=r.y+data.pin.y/279*r.h;ctx.strokeStyle='#ebc78f';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);ctx.stroke();}
-  $('missionDateA').textContent='Earlier · '+data.dates[0];$('missionDateB').textContent='Later · '+data.dates[1];$('missionBaseline').textContent=`D${data.detector} · ${data.baseline} apart`;$('missionCanvasHint').textContent=data.marking?'Click a source to mark it.':displayMode==='blink'?`Blinking ${blinkVisit?'later':'earlier'} visit`:displayMode==='difference'?'Raw difference · exploratory':'Aligned to the same sky coordinates';
-  if(data.wavelengths.every(Number.isFinite)){
-   const delta=Math.abs(data.wavelengths[0]-data.wavelengths[1]);
-   $('missionBandValues').textContent=`Earlier ${data.wavelengths[0].toFixed(4)} \u00b5m / later ${data.wavelengths[1].toFixed(4)} \u00b5m / difference ${delta.toFixed(4)} \u00b5m`;
-  }else $('missionBandValues').textContent='No shared clean pixel in this band. Try another visit pair.';
+ function updateChangePanel(changes){
+  if(changes===lastPanelSource&&selectedChange===lastPanelSelection)return;
+  lastPanelSource=changes;lastPanelSelection=selectedChange;
+  const picks=$('missionChangePicks'),count=$('missionChangeCount'),detail=$('missionChangeDetail'),note=changePanel.querySelector('small');
+  picks.replaceChildren();
+  if(scanActive){changePanel.dataset.state='pending';count.textContent='Analyzing…';detail.textContent='Checking registered pixels at similar measured wavelengths.';note.textContent='Quick-look analysis in progress.';return;}
+  const checked=changes?.checked||0,list=changes?.candidates||[];
+  if(!changes||checked===0){changePanel.dataset.state='unavailable';count.textContent='Analysis unavailable';detail.textContent=changes?.reason||'A valid image pair is needed.';note.textContent='No wavelength-matched clean pixels were checked.';return;}
+  if(checked<300){changePanel.dataset.state='inconclusive';count.textContent='Inconclusive';detail.textContent=changes.reason||'Too few clean pixels overlap at similar wavelengths.';note.textContent=`Only ${checked} valid pixel pairs checked; try another band or visit pair.`;return;}
+  changePanel.dataset.state=list.length?'candidates':'complete';
+  count.textContent=list.length?`${list.length} possible ${list.length===1?'change':'changes'}`:'No compact change detected';
+  for(const [index,candidate] of list.entries()){const button=document.createElement('button');button.type='button';button.textContent=String(index+1);button.title=`Candidate ${index+1}: RA ${candidate.sky[0].toFixed(4)}°, Dec ${candidate.sky[1].toFixed(4)}°`;button.classList.toggle('active',index===selectedChange);button.onclick=()=>{selectedChange=index;dirty=true;drawComparison();};picks.appendChild(button);}
+  const chosen=list[selectedChange];
+  detail.textContent=chosen?`#${selectedChange+1} · ${chosen.direction} · RA ${chosen.sky[0].toFixed(4)}°, Dec ${chosen.sky[1].toFixed(4)}° · ${chosen.wavelengthA.toFixed(3)} / ${chosen.wavelengthB.toFixed(3)} µm`:changes.reason||'No compact residual passed the quick-look threshold.';
+  note.textContent=`${checked} clean, wavelength-matched pixel pairs checked. Results are unconfirmed.`;
+ }
+ let imageZoom=1,imagePanX=0,imagePanY=0,panStart=null,suppressImageClick=false;
+ const clampImagePan=()=>{const max=(imageZoom-1)/2;imagePanX=Math.max(-max,Math.min(max,imagePanX));imagePanY=Math.max(-max,Math.min(max,imagePanY));};
+ const imagePoint=(r,x,y)=>({x:r.x+(.5+imagePanX+(x/279-.5)*imageZoom)*r.w,y:r.y+(.5+imagePanY+(y/279-.5)*imageZoom)*r.h});
+ const imageCoordinate=(r,x,y)=>({x:((x-r.x)/r.w-.5-imagePanX)/imageZoom+.5,y:((y-r.y)/r.h-.5-imagePanY)/imageZoom+.5});
+ function paintViewport(image,r){ctx.save();ctx.beginPath();ctx.rect(r.x,r.y,r.w,r.h);ctx.clip();ctx.drawImage(image,r.x+(imagePanX+.5-imageZoom/2)*r.w,r.y+(imagePanY+.5-imageZoom/2)*r.h,r.w*imageZoom,r.h*imageZoom);ctx.restore();}
+ function drawComparison(){
+  const data=getComparison();card.classList.toggle('is-loading',data.busy);if(data.busy)return;
+  if(data.images.length!==2){updateChangePanel(null);return;}
+  if(lastChangeSource!==data.changes){lastChangeSource=data.changes;selectedChange=0;beginScan();}
+  if(!dirty&&lastImages[0]===data.images[0]&&lastImages[1]===data.images[1]&&lastVisit===data.visit&&lastPin===JSON.stringify(data.pin))return;
+  dirty=false;lastImages=data.images;lastVisit=data.visit;lastPin=JSON.stringify(data.pin);updateChangePanel(data.changes);
+  const stacked=innerWidth<=800&&displayMode==='side',canvasWidth=stacked?430:900,canvasHeight=stacked?880:410;
+  if(cc.width!==canvasWidth||cc.height!==canvasHeight){cc.width=canvasWidth;cc.height=canvasHeight;}
+  const w=cc.width,h=cc.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#071017';ctx.fillRect(0,0,w,h);rects=[];
+  const box=(x,width)=>{const side=Math.min(width-14,h-12);return {x:x+(width-side)/2,y:(h-side)/2,w:side,h:side}};
+  const stackedBox=(y,height)=>{const side=Math.min(w-14,height-14);return {x:(w-side)/2,y:y+(height-side)/2,w:side,h:side}};
+  if(displayMode==='side'){for(let i=0;i<2;i++){const r=stacked?stackedBox(i*h/2,h/2):box(i*w/2,w/2);rects.push(r);paintViewport(data.images[i],r);}}
+  else {const r=box(0,w);rects.push(r);paintViewport(displayMode==='difference'?data.preview:displayMode==='blink'?data.images[blinkVisit]:data.images[0],r);
+   if(displayMode==='swipe'){const x=r.x+r.w*Number($('missionWipe').value)/100;ctx.save();ctx.beginPath();ctx.rect(x,r.y,r.x+r.w-x,r.h);ctx.clip();paintViewport(data.images[1],r);ctx.restore();ctx.strokeStyle='#d89a71';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke();}}
+  if(!scanActive)for(const [index,candidate] of (data.changes?.candidates||[]).entries())for(const r of rects){const point=imagePoint(r,candidate.x,candidate.y);if(point.x<r.x||point.x>r.x+r.w||point.y<r.y||point.y>r.y+r.h)continue;ctx.beginPath();ctx.arc(point.x,point.y,index===selectedChange?12:9,0,Math.PI*2);ctx.strokeStyle=index===selectedChange?'#efbf81':'#b1d0cc';ctx.lineWidth=index===selectedChange?2.5:1.5;ctx.stroke();ctx.fillStyle='#101e24';ctx.fillRect(point.x+10,point.y-19,17,16);ctx.fillStyle='#f2eee2';ctx.font='bold 12px monospace';ctx.fillText(String(index+1),point.x+14,point.y-7);}
+  if(data.pin)for(const r of rects){const point=imagePoint(r,data.pin.x,data.pin.y);if(point.x<r.x||point.x>r.x+r.w||point.y<r.y||point.y>r.y+r.h)continue;ctx.strokeStyle='#e4af80';ctx.lineWidth=2;ctx.beginPath();ctx.arc(point.x,point.y,12,0,Math.PI*2);ctx.stroke();}
+  $('missionDateA').textContent='A / '+data.dates[0];$('missionDateB').textContent='B / '+data.dates[1];$('missionMobileDateB').textContent='B / '+data.dates[1];
+  if($('analysisAcquiredA')){$('analysisAcquiredA').textContent=`A · ${data.observationTimes[0]||data.dates[0]} UTC`;$('analysisAcquiredB').textContent=`B · ${data.observationTimes[1]||data.dates[1]} UTC`;$('analysisSourceA').href=$('sourceA').href;$('analysisSourceB').href=$('sourceB').href;}
+  $('missionBaseline').textContent=`Detector ${data.detector} · ${data.baseline} between visits`;
+  $('missionCanvasHint').textContent=data.marking?'Click a source to mark it.':displayMode==='blink'?`Blinking ${blinkVisit?'later':'earlier'} visit`:displayMode==='difference'?'Uncalibrated pixel difference · exploratory':'Images registered to the same sky grid';
+  const wavelength=Number.isFinite(data.wavelengths[0])?`${data.wavelengths[0].toFixed(3)} µm`:`Detector ${data.detector}`;
+  $('missionFieldContext').textContent=`RA ${data.field.ra.toFixed(3)}° · Dec ${data.field.dec.toFixed(3)}° · ${wavelength}`;
+  $('missionZoomValue').textContent=`${Math.round(imageZoom*100)}%`;card.dataset.imageZoom=String(imageZoom);card.dataset.stacked=String(stacked);
+  if(data.wavelengths.every(Number.isFinite)){const delta=Math.abs(data.wavelengths[0]-data.wavelengths[1]);$('missionBandValues').textContent=`Earlier ${data.wavelengths[0].toFixed(4)} µm / later ${data.wavelengths[1].toFixed(4)} µm / difference ${delta.toFixed(4)} µm`;}else $('missionBandValues').textContent='No shared clean pixel in this band. Try another visit pair.';
   $('missionBand').value=String(data.detector);
  }
  for(const b of card.querySelectorAll('[data-mission-mode]'))b.onclick=()=>{document.dispatchEvent(new Event('omni-stop-replay'));stopBlink();displayMode=b.dataset.missionMode;card.querySelectorAll('[data-mission-mode]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b));});if(displayMode==='blink')startBlink();else selectVisit(displayMode==='difference'?'difference':'A');card.querySelector('.mission-wipe').hidden=displayMode!=='swipe';dirty=true;drawComparison();};
  $('missionWipe').oninput=()=>{dirty=true;drawComparison()};$('missionEnlarge').onclick=()=>{card.classList.toggle('is-large');dirty=true;drawComparison()};$('missionDetails').textContent='Measurements & notes';$('missionDetails').onclick=()=>{measurements.open=true;notebook.open=true;open('observation')};
- cc.onclick=e=>{const bounds=cc.getBoundingClientRect(),x=(e.clientX-bounds.left)/bounds.width*cc.width,y=(e.clientY-bounds.top)/bounds.height*cc.height,r=rects.find(rect=>x>=rect.x&&x<=rect.x+rect.w&&y>=rect.y&&y<=rect.y+rect.h);if(!r)return;if(getComparison().marking){markSample((x-r.x)/r.w,(y-r.y)/r.h);return;}const px=(x-r.x)/r.w*279,py=(y-r.y)/r.h*279,index=(getComparison().changes?.candidates||[]).findIndex(candidate=>Math.hypot(candidate.x-px,candidate.y-py)<13);if(index>=0){selectedChange=index;dirty=true;drawComparison();}};
+ function canvasPosition(event){const bounds=cc.getBoundingClientRect();return {x:(event.clientX-bounds.left)/bounds.width*cc.width,y:(event.clientY-bounds.top)/bounds.height*cc.height,bounds};}
+ function viewportAt(x,y){return rects.find(r=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h);}
+ function zoomAt(factor,event){const center=event?canvasPosition(event):{x:cc.width/2,y:cc.height/2};const r=viewportAt(center.x,center.y)||rects[0];if(!r)return;const at=imageCoordinate(r,center.x,center.y),next=Math.max(1,Math.min(5,imageZoom*factor));imageZoom=next;imagePanX=(center.x-r.x)/r.w-.5-(at.x-.5)*next;imagePanY=(center.y-r.y)/r.h-.5-(at.y-.5)*next;clampImagePan();dirty=true;drawComparison();}
+ $('missionZoomIn').onclick=()=>zoomAt(1.4);$('missionZoomOut').onclick=()=>zoomAt(1/1.4);
+ $('missionZoomReset').onclick=()=>{imageZoom=1;imagePanX=imagePanY=0;dirty=true;drawComparison();};
+ cc.addEventListener('wheel',event=>{event.preventDefault();zoomAt(event.deltaY<0?1.22:1/1.22,event);},{passive:false});
+ const crosshair=card.querySelector('.mission-crosshair');let showCoordinates=false;
+ $('missionCoordinates').onclick=()=>{showCoordinates=!showCoordinates;$('missionCoordinates').setAttribute('aria-pressed',String(showCoordinates));crosshair.hidden=!showCoordinates;$('missionCursor').textContent=showCoordinates?'Move over an image to read sky coordinates':'Scroll to zoom · drag to pan';};
+ cc.addEventListener('pointerdown',event=>{if(event.button!==0||getComparison().marking)return;const p=canvasPosition(event);if(!viewportAt(p.x,p.y))return;panStart={x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,moved:false};cc.setPointerCapture(event.pointerId);});
+ cc.addEventListener('pointermove',event=>{const p=canvasPosition(event),r=viewportAt(p.x,p.y);if(showCoordinates&&r){const u=imageCoordinate(r,p.x,p.y);if(u.x>=0&&u.x<=1&&u.y>=0&&u.y<=1){const data=getComparison(),sky=outputToWorld(u.x*279,u.y*279,280,data.field.ra,data.field.dec,.22);$('missionCursor').textContent=`RA ${sky[0].toFixed(4)}° · Dec ${sky[1].toFixed(4)}° · pixel ${Math.round(u.x*279)}, ${Math.round(u.y*279)}`;crosshair.hidden=false;crosshair.style.left=`${event.clientX-p.bounds.left}px`;crosshair.style.top=`${event.clientY-p.bounds.top}px`;}}
+  if(!panStart)return;const dx=event.clientX-panStart.lastX,dy=event.clientY-panStart.lastY;if(Math.hypot(event.clientX-panStart.x,event.clientY-panStart.y)>4)panStart.moved=true;if(!panStart.moved||imageZoom===1)return;const box=viewportAt(p.x,p.y)||rects[0];imagePanX+=dx/p.bounds.width*cc.width/box.w;imagePanY+=dy/p.bounds.height*cc.height/box.h;clampImagePan();panStart.lastX=event.clientX;panStart.lastY=event.clientY;dirty=true;drawComparison();});
+ const endPan=()=>{if(panStart?.moved){suppressImageClick=true;setTimeout(()=>suppressImageClick=false,120);}panStart=null;};cc.addEventListener('pointerup',endPan);cc.addEventListener('pointercancel',endPan);
+ cc.addEventListener('pointerleave',()=>{crosshair.hidden=true;if(showCoordinates)$('missionCursor').textContent='Move over an image to read sky coordinates';});
+ cc.onclick=event=>{if(suppressImageClick){suppressImageClick=false;return;}const p=canvasPosition(event),r=viewportAt(p.x,p.y);if(!r)return;const u=imageCoordinate(r,p.x,p.y);if(u.x<0||u.x>1||u.y<0||u.y>1)return;if(getComparison().marking){markSample(u.x,u.y);return;}const px=u.x*279,py=u.y*279,index=(getComparison().changes?.candidates||[]).findIndex(candidate=>Math.hypot(candidate.x-px,candidate.y-py)<13);if(index>=0){selectedChange=index;dirty=true;drawComparison();}};
  $('markSky').addEventListener('click',()=>{$('candidateStatus').textContent='Click a source in the comparison images.';dirty=true;drawComparison()});
  document.addEventListener('omni-comparison-frame',()=>{drawComparison();const p=c.missionMeshes.spherex.group.position.clone().project(c.camera),r=card.getBoundingClientRect(),x=(p.x*.5+.5)*innerWidth,y=(-p.y*.5+.5)*innerHeight;link.setAttribute('viewBox',`0 0 ${innerWidth} ${innerHeight}`);const visible=innerWidth>800&&!card.classList.contains('is-large')&&p.z> -1&&p.z<1&&x>0&&x<r.left;link.style.display=visible?'block':'none';if(visible)link.firstElementChild.setAttribute('d',`M ${x+12} ${y} C ${x+75} ${y}, ${r.left-65} ${r.top+135}, ${r.left} ${r.top+135}`);});
  document.addEventListener('omni-observe-request',e=>{if(e.detail?.comparison){close(false);card.classList.remove('is-collapsed');card.classList.add('attention');setTimeout(()=>card.classList.remove('attention'),900);}else open('search')});
@@ -129,6 +182,17 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
  guide.querySelector('p').textContent='Built around the Planet X and SPHEREx challenge. A visual change needs checks for wavelength, image quality, and independent confirmation.';
  $('calmStart').textContent='Explore the mission';$('calmStart').onclick=()=>{guide.close();focusMission()};
  installMissionStage({ui,card,bandPanel,getComparison,scanSample,setStoryState,loadPairChoice,chooseDetector,selectVisit,drawComparison});
+ const analysisDetails=make('details',{className:'analysis-details'});
+ analysisDetails.innerHTML='<summary>Observation details <span>Acquisition · spectrum · spacecraft · data quality</span></summary><div class="analysis-details-grid"></div>';
+ const analysisGrid=analysisDetails.querySelector('.analysis-details-grid');
+ const group=(title)=>{const section=make('section',{className:'analysis-detail-group'});const heading=make('h4',{textContent:title});section.appendChild(heading);analysisGrid.appendChild(section);return section;};
+ const acquisition=group('Acquisition');acquisition.appendChild($('missionBaseline'));for(const id of ['analysisAcquiredA','analysisAcquiredB'])acquisition.appendChild(make('span',{id}));
+ const spectrumDetails=group('Spectral measurement');spectrumDetails.append($('missionLiveWave'),$('missionBandValues'));
+ const positionDetails=group('Recorded spacecraft position');positionDetails.appendChild($('missionLiveOrbit'));
+ const qualityDetails=group('Interpretation & sources');qualityDetails.append(card.querySelector('.mission-caution'),cleanDetails);for(const suffix of ['A','B']){const link=make('a',{id:'analysisSource'+suffix,textContent:'Original FITS '+suffix+' ↗',target:'_blank',rel:'noopener noreferrer'});qualityDetails.appendChild(link);}qualityDetails.appendChild($('missionDetails'));
+ card.querySelector('.mission-live-readout').remove();card.querySelector('.mission-comparison-foot').remove();
+ changePanel.after(analysisDetails);
+
  document.addEventListener('omni-stop-blink',()=>{if(displayMode!=='side'){stopBlink();displayMode='side';card.querySelectorAll('[data-mission-mode]').forEach(button=>{const active=button.dataset.missionMode==='side';button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});dirty=true;drawComparison();}});
  return {open,close};
 }
