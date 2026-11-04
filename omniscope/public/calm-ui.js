@@ -79,6 +79,7 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
  <div class="mission-comparison-foot"><span id="missionBaseline">Two visits to the same sky field</span><button id="missionDetails" type="button">More measurements</button></div>
  <p class="mission-caution">A change is a clue. Check wavelength and image quality before calling it motion.</p>`;
  ui.appendChild(card);
+ const differenceLegend=make('aside',{className:'mission-difference-legend'});differenceLegend.hidden=true;differenceLegend.innerHTML='<strong>RAW DIFFERENCE / A − B</strong><span><i class="legend-earlier"></i>Earlier brighter</span><span><i class="legend-later"></i>Later brighter</span><small>Color shows the sign of the pixel difference. Wavelength, background and PSF are not matched here.</small>';card.querySelector('.mission-image-area').appendChild(differenceLegend);
  // The main decision is which real infrared band to inspect; keep one clear selector next to the images.
  intro.querySelector('.calm-eyebrow').textContent='PLANET X / SPHEREX';
  $('calmTitle').textContent='SPHEREx survey';
@@ -152,6 +153,7 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
   $('missionDateA').textContent='A / '+data.dates[0];$('missionDateB').textContent='B / '+data.dates[1];$('missionMobileDateB').textContent='B / '+data.dates[1];
   if($('analysisAcquiredA')){$('analysisAcquiredA').textContent=`A · ${data.observationTimes[0]||data.dates[0]} UTC`;$('analysisAcquiredB').textContent=`B · ${data.observationTimes[1]||data.dates[1]} UTC`;$('analysisSourceA').href=$('sourceA').href;$('analysisSourceB').href=$('sourceB').href;}
   $('missionBaseline').textContent=`Detector ${data.detector} · ${data.baseline} between visits`;
+  differenceLegend.hidden=displayMode!=='difference';
   $('missionCanvasHint').textContent=data.marking?'Click a source to mark it.':displayMode==='blink'?`Blinking ${blinkVisit?'later':'earlier'} visit`:displayMode==='difference'?'Uncalibrated pixel difference · exploratory':'Images registered to the same sky grid';
   const wavelength=Number.isFinite(data.wavelengths[0])?`${data.wavelengths[0].toFixed(3)} µm`:`Detector ${data.detector}`;
   $('missionFieldContext').textContent=`RA ${data.field.ra.toFixed(3)}° · Dec ${data.field.dec.toFixed(3)}° · ${wavelength}`;

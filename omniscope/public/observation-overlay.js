@@ -4,10 +4,10 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
  const beam=document.createElementNS('http://www.w3.org/2000/svg','svg');
  beam.setAttribute('class','observation-beam');
  beam.setAttribute('aria-hidden','true');
- beam.innerHTML=`<defs><linearGradient id="observationBeamGradient" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8db7c4" stop-opacity=".9"/><stop offset=".72" stop-color="#8db7c4" stop-opacity=".58"/><stop offset="1" stop-color="#8db7c4" stop-opacity="0"/></linearGradient></defs><path class="recorded-trail recorded-trail-a"/><path class="recorded-trail recorded-trail-b"/><text class="recorded-trail-label" data-trail="a">A</text><text class="recorded-trail-label" data-trail="b">B</text><g class="observation-light-guide"><path class="observation-beam-halo"/><path class="observation-beam-wave"/><path class="observation-beam-ticks"/><text class="observation-beam-label" text-anchor="end"></text></g>`;
+ beam.innerHTML=`<defs><linearGradient id="observationBeamGradient" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d9af87" stop-opacity=".9"/><stop offset=".72" stop-color="#d9af87" stop-opacity=".58"/><stop offset="1" stop-color="#d9af87" stop-opacity="0"/></linearGradient></defs><path class="recorded-trail recorded-trail-a"/><path class="recorded-trail recorded-trail-b"/><text class="recorded-trail-label" data-trail="a">A</text><text class="recorded-trail-label" data-trail="b">B</text><g class="observation-light-guide"><path class="observation-beam-halo"/><path class="observation-beam-wave"/><path class="observation-beam-ticks"/><text class="observation-beam-label" text-anchor="end"></text></g>`;
  ui.appendChild(beam);
  const gradient=beam.querySelector('linearGradient'),halo=beam.querySelector('.observation-beam-halo'),wave=beam.querySelector('.observation-beam-wave'),ticks=beam.querySelector('.observation-beam-ticks'),beamLabel=beam.querySelector('.observation-beam-label');
- const marker=document.createElement('button');marker.className='spacecraft-beacon';marker.type='button';marker.setAttribute('aria-label','Inspect SPHEREx at this exposure');marker.innerHTML='<span class="spacecraft-beacon-ring"><span class="spacecraft-beacon-core"></span></span><span class="spacecraft-beacon-title">SPHEREx <small>inspect</small></span>';
+ const marker=document.createElement('button');marker.className='spacecraft-beacon';marker.type='button';marker.setAttribute('aria-label','Inspect SPHEREx at this exposure');marker.innerHTML='<span class="spacecraft-beacon-ring"><span class="spacecraft-beacon-core"></span></span><span class="spacecraft-beacon-title">SPHEREx <small>infrared</small></span>';
  ui.appendChild(marker);
  const locate=document.createElement('button');locate.className='spacecraft-locate';locate.type='button';locate.textContent='⌖ Locate SPHEREx';locate.hidden=true;locate.onclick=focusSpacecraft;ui.appendChild(locate);
  const info=document.createElement('aside');info.className='spacecraft-info';info.hidden=true;info.setAttribute('aria-label','Recorded SPHEREx position');info.innerHTML='<div class="spacecraft-info-head"><span>SPHEREx / recorded exposure</span><button type="button" aria-label="Close spacecraft details">×</button></div><strong id="spacecraftInfoDate">—</strong><p id="spacecraftInfoPosition">Reading FITS position…</p><p id="spacecraftInfoLight">Reading wavelength…</p><div class="spacecraft-info-actions"><button type="button" id="spacecraftInfoFocus">Center spacecraft</button><button type="button" id="spacecraftInfoCompare">View images ↗</button></div><small>Earth-centered FITS coordinates. Spacecraft model and wavelength marks are enlarged diagrams.</small>';
@@ -34,8 +34,8 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
   const visible=Boolean(record)&&p.z>-1&&p.z<1&&p.x>22&&p.x<limit-12&&p.y>70&&p.y<H-32&&!hiddenBehindEarth(craft,earth);
   marker.hidden=!visible;beam.hidden=!visible;locate.hidden=visible||!record;
   if(!visible){info.hidden=true;return;}
-  marker.style.left=`${p.x}px`;marker.style.top=`${p.y}px`;
-  const stage=document.querySelector('.mission-stage'),floor=!cardOpen&&W>800&&stage?stage.getBoundingClientRect().top-14:H-22;
+  marker.style.left=`${p.x}px`;marker.style.top=`${p.y}px`;marker.querySelector('small').textContent=Number.isFinite(wavelength)?`${wavelength.toFixed(3)} µm`:'infrared';
+  const stage=document.querySelector('.mission-stage'),floor=H-28;
   // Project a short local step: a far point can pass behind the camera and flip the guide.
   const near=screen(craft.clone().addScaledVector(direction,.25));
   let vx=near.x-p.x,vy=near.y-p.y,length=Math.hypot(vx,vy);
@@ -52,17 +52,17 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
   // Start at the apparent limb if the spacecraft projects onto the globe.
   const startOffset=Math.max(0,earthScreenRadius-radialLength+5);
   const bounds=[vx>0?(limit-p.x)/vx:Infinity,vx<0?(p.x-18)/-vx:Infinity,vy>0?(floor-p.y)/vy:Infinity,vy<0?(p.y-82)/-vy:Infinity];
-  const reach=Math.min(Math.max(300,W*.36),520,...bounds.filter(n=>Number.isFinite(n)&&n>0));
+  const reach=Math.min(Math.max(190,W*.18),260,...bounds.filter(n=>Number.isFinite(n)&&n>0));
   if(!Number.isFinite(reach)||reach-startOffset<35){beam.hidden=true;return;}
   const start={x:p.x+vx*startOffset,y:p.y+vy*startOffset},end={x:p.x+vx*reach,y:p.y+vy*reach},crossX=-vy,crossY=vx;
   gradient.setAttribute('x1',String(start.x));gradient.setAttribute('y1',String(start.y));gradient.setAttribute('x2',String(end.x));gradient.setAttribute('y2',String(end.y));
   const path=`M ${start.x.toFixed(1)} ${start.y.toFixed(1)} L ${end.x.toFixed(1)} ${end.y.toFixed(1)}`;
   halo.setAttribute('d',path);wave.setAttribute('d',path);
-  const spacing=Number.isFinite(wavelength)?18+Math.max(0,Math.min(1,(wavelength-.75)/4.26))*34:28;
-  const phase=reducedMotion?0:(elapsed*(playing?38:19))%spacing;
-  const marks=[];for(let d=startOffset+phase+spacing;d<reach-18;d+=spacing){const x=p.x+vx*d,y=p.y+vy*d;marks.push(`M ${(x-crossX*7).toFixed(1)} ${(y-crossY*7).toFixed(1)} L ${(x+crossX*7).toFixed(1)} ${(y+crossY*7).toFixed(1)}`);}ticks.setAttribute('d',marks.join(' '));
-  beamLabel.setAttribute('x',String(end.x-vx*9));beamLabel.setAttribute('y',String(end.y-vy*9-12));
-  beamLabel.textContent=Number.isFinite(wavelength)?`${wavelength.toFixed(3)} \u00b5m`:'infrared';
+  // Animated travel marks indicate direction only. Their spacing is schematic;
+  // the measured wavelength is shown beside the spacecraft and in the band control.
+  const guideLength=reach-startOffset,phase=reducedMotion?0:(elapsed*(playing?42:24))%Math.max(1,guideLength);
+  const marks=[];for(let i=0;i<3;i++){const d=startOffset+(phase+i*guideLength/3)%guideLength,x=p.x+vx*d,y=p.y+vy*d;marks.push(`M ${(x-crossX*3).toFixed(1)} ${(y-crossY*3).toFixed(1)} L ${(x+crossX*3).toFixed(1)} ${(y+crossY*3).toFixed(1)}`);}ticks.setAttribute('d',marks.join(' '));
+  beamLabel.textContent='';
   beam.classList.toggle('is-replaying',Boolean(playing));
   if(performance.now()-lastInfo>100){lastInfo=performance.now();info.querySelector('#spacecraftInfoDate').textContent=`${index?'Later':'Earlier'} · ${date||'archived visit'} UTC`;const km=record.start.map((v,i)=>v+(record.end[i]-v)*progress);info.querySelector('#spacecraftInfoPosition').textContent=`X ${Math.round(km[0])} · Y ${Math.round(km[1])} · Z ${Math.round(km[2])} km from Earth center · ~${Math.round(Math.hypot(...km)-6371)} km altitude`;info.querySelector('#spacecraftInfoLight').textContent=Number.isFinite(wavelength)?`${wavelength.toFixed(4)} µm infrared toward RA ${field.ra.toFixed(3)}°, Dec ${field.dec.toFixed(3)}°`:'No clean wavelength sample at this scan point.';}
   if(!info.hidden){const width=270,left=Math.max(16,Math.min(p.x+30,limit-width-8)),stageTop=!cardOpen&&stage?stage.getBoundingClientRect().top:H,top=Math.max(84,Math.min(p.y+25,stageTop-info.offsetHeight-12,H-info.offsetHeight-24));info.style.left=`${left}px`;info.style.top=`${top}px`;}
