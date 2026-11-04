@@ -60,17 +60,20 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
   if(!Number.isFinite(reach)||reach-startOffset<35){beam.hidden=true;return;}
   const start={x:p.x+vx*startOffset,y:p.y+vy*startOffset},end={x:p.x+vx*reach,y:p.y+vy*reach};
   gradient.setAttribute('x1',String(start.x));gradient.setAttribute('y1',String(start.y));gradient.setAttribute('x2',String(end.x));gradient.setAttribute('y2',String(end.y));
-  const path=`M ${start.x.toFixed(1)} ${start.y.toFixed(1)} L ${end.x.toFixed(1)} ${end.y.toFixed(1)}`;
+  const guideLength=reach-startOffset,perpX=-vy,perpY=vx;
+  const ripple=s=>reducedMotion?0:3.2*(1-Math.exp(-s/26))*(1-.45*s/guideLength)*Math.sin(s*Math.PI*2/116-elapsed*1.8);
+  const point=s=>{const d=startOffset+s,offset=ripple(s);return {x:p.x+vx*d+perpX*offset,y:p.y+vy*d+perpY*offset};};
+  const path=Array.from({length:Math.ceil(guideLength/7)+1},(_,i)=>{const q=point(Math.min(guideLength,i*7));return `${i?'L':'M'} ${q.x.toFixed(1)} ${q.y.toFixed(1)}`;}).join(' ');
   halo.setAttribute('d',path);wave.setAttribute('d',path);
-  // A repeating flow makes the field direction feel open-ended. Particle size
-  // and spacing are a diagram; the measured wavelength remains the numeric value.
-  const guideLength=reach-startOffset,speed=playing?95:61,flow=reducedMotion?0:(elapsed*speed)%guideLength;
+  // A restrained traveling ripple and receding marks show observation direction.
+  // Their spacing is illustrative; the measured wavelength is the numeric value.
+  const speed=playing?95:61,flow=reducedMotion?0:(elapsed*speed)%guideLength;
   for(let i=0;i<particles.length;i++){
    const u=reducedMotion?(i+.5)/particles.length:((i*guideLength/particles.length+flow)%guideLength)/guideLength;
    const t=1-(1-u)*(1-u);
-   const d=startOffset+t*guideLength,dot=particles[i];
-   dot.setAttribute('cx',(p.x+vx*d).toFixed(1));dot.setAttribute('cy',(p.y+vy*d).toFixed(1));
-   dot.setAttribute('r',(2.8-2.25*t).toFixed(2));dot.setAttribute('opacity',(Math.min(1,u*7)*Math.pow(1-t,1.15)*.72).toFixed(2));
+   const q=point(t*guideLength),dot=particles[i];
+   dot.setAttribute('cx',q.x.toFixed(1));dot.setAttribute('cy',q.y.toFixed(1));
+   dot.setAttribute('r',(1.7-1.2*t).toFixed(2));dot.setAttribute('opacity',(Math.min(1,u*7)*Math.pow(1-t,1.15)*.48).toFixed(2));
   }
   beam.classList.toggle('is-replaying',Boolean(playing));
   if(performance.now()-lastInfo>100){lastInfo=performance.now();info.querySelector('#spacecraftInfoDate').textContent=`${index?'Later':'Earlier'} · ${date||'archived visit'} UTC`;const km=record.start.map((v,i)=>v+(record.end[i]-v)*progress);info.querySelector('#spacecraftInfoPosition').textContent=`X ${Math.round(km[0])} · Y ${Math.round(km[1])} · Z ${Math.round(km[2])} km from Earth center · ~${Math.round(Math.hypot(...km)-6371)} km altitude`;info.querySelector('#spacecraftInfoLight').textContent=Number.isFinite(wavelength)?`${wavelength.toFixed(4)} µm infrared toward RA ${field.ra.toFixed(3)}°, Dec ${field.dec.toFixed(3)}°`:'No clean wavelength sample at this scan point.';}
