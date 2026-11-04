@@ -164,6 +164,9 @@
 .observation-beam-halo{opacity:.025}
 .observation-beam-ticks{stroke:#e8b58c;stroke-width:2;opacity:.75}
 .observation-beam-label{display:none}
+.observation-beam-wave{stroke-width:1.2;opacity:.72}
+.observation-beam-halo{stroke-width:12;opacity:.06}
+.observation-beam-particle{fill:#f6d9ad;filter:drop-shadow(0 0 4px #e7ad76)}
 .unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:0;top:72px;bottom:0;width:264px;max-height:none;padding:22px 18px;border-right:1px solid var(--obs-line)}
 .unified-mission .mission-comparison:not(.is-collapsed){left:264px;right:0;top:72px;bottom:0;border:0;border-radius:0;background:#13232c}
 .unified-mission .mission-comparison-head{padding:19px 22px 15px}
