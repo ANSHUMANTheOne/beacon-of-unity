@@ -1,6 +1,7 @@
 .assetsignore
 .gitattributes
 .github/workflows/validate.yml
+.github/workflows/verify-preview.yml
 .gitignore
 README.md
 archive/unclassified/nothing
@@ -31,6 +32,7 @@ docs/audit/migration-summary.json
 docs/audit/mobile.json
 docs/audit/page-titles.json
 docs/audit/pages-settings.json
+docs/audit/provider-preview-validation.json
 docs/audit/route-compatibility.csv
 docs/audit/security-locations.json
 docs/audit/summary.json
@@ -139,6 +141,8 @@ projects/voltway/resources/voltwayvideeeo.mp4
 projects/voltway/resources/voltwayvideeo.mp4
 scripts/build.py
 scripts/check-browser.py
+scripts/check-preview.py
+scripts/cloudflare-build.mjs
 scripts/test-publisher.py
 scripts/test-worker.mjs
 scripts/validate.py
@@ -174,3 +178,4 @@ website/scripts/hero-scene.js
 website/variants/index2.html
 website/variants/oldindex.html
 website/variants/trial.html
+wrangler.jsonc
