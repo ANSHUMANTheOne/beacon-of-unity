@@ -19,7 +19,7 @@
 
   function makeBuilding(x, z, w, h, d, colorHex, threshold, side){
     // A small baseline emissive so the building is always distinguishable
-    // from the dark sky/background regardless of lighting angle — without
+    // from the dark sky/background regardless of lighting angle - without
     // it, buildings whose diffuse-lit colour happens to match the ambient
     // background can render almost invisible, leaving only their window
     // accents visible and looking like they're floating in mid-air.
@@ -38,8 +38,7 @@
     roof.rotation.y = Math.PI/4;
     roof.position.y = h/2 + h*0.11;
     mesh.add(roof);
-    // Window accents on all four faces (not just the street-facing side) —
-    // rows going up the building too, so it reads as genuinely lit all
+    // Window accents on all four faces (not just the street-facing side) - // rows going up the building too, so it reads as genuinely lit all
     // around instead of one bright side and three dark ones. Cheap planes,
     // no grid mesh, so no z-fighting risk.
     mesh.userData.windows = [];
@@ -77,11 +76,11 @@
   }
 
   // The beat-2 "response" building. Earlier versions tried a hollow-wall
-  // reveal (a fading face + separate interior geometry) — it wasn't
+  // reveal (a fading face + separate interior geometry) - it wasn't
   // reliably readable at the actual camera distance/angle. This is a
   // plain solid building like the others, PLUS a large illustrated
   // "window" icon (see makeIconSprite below) showing a lit window with a
-  // person answering — a technique that's already proven reliable (it's
+  // person answering - a technique that's already proven reliable (it's
   // how the chat-bubble/key icons work), rather than depending on real
   // hollow-geometry occlusion that's hard to get right without live
   // testing.
@@ -93,7 +92,7 @@
   function makeStreetlight(x, z, threshold){
     const g = new THREE.Group();
     // the arm/shade/bulb must reach OUT OVER THE ROAD, not just always to
-    // +x — poles on the right side of the street (x>0) need the head
+    // +x - poles on the right side of the street (x>0) need the head
     // mirrored to -x so both sides' lamps lean toward the road center,
     // matching how real streetlights are hung. dir flips the offset sign
     // based on which side of the street this pole is on.
@@ -101,7 +100,7 @@
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.065,2.5,8), new THREE.MeshStandardMaterial({ color:0x0e2c42, roughness:.6, metalness:.3 }));
     pole.position.y = 1.25;
     // a curved arm out to the lamp head, instead of the bulb sitting
-    // directly on top of the pole — reads as an actual streetlight shape
+    // directly on top of the pole - reads as an actual streetlight shape
     const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.025,0.025,0.42,6), new THREE.MeshStandardMaterial({ color:0x0e2c42, roughness:.6 }));
     arm.rotation.z = dir * Math.PI/2.4;
     arm.position.set(dir*0.16, 2.42, 0);
@@ -130,7 +129,7 @@
     const g = new THREE.Group();
     const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.17,1.1,7), new THREE.MeshStandardMaterial({ color:0x3d2a1a, roughness:.9 }));
     trunk.position.y = 0.55;
-    // two-tone foliage — a darker base cone and a smaller, brighter cone
+    // two-tone foliage - a darker base cone and a smaller, brighter cone
     // nested on top gives real shading/depth instead of one flat colour mass
     const leafBase = new THREE.Mesh(new THREE.ConeGeometry(0.85,1.8,8), new THREE.MeshStandardMaterial({ color:0x155f3f, roughness:.95 }));
     leafBase.position.y = 1.55;
@@ -145,15 +144,15 @@
     scene.add(g);
   }
 
-  // Stylised neighbours — torso + shoulders + head + arms + legs, so they
+  // Stylised neighbours - torso + shoulders + head + arms + legs, so they
   // actually read as people from a distance instead of geometric blobs.
   // Skin, hair and shirt colours all vary so a crowd doesn't look like
   // identical plastic pawns. `holdingBag` adds a small dark satchel for
   // the volunteer/clean-up beat, so that scene visibly shows people doing
   // something, not just standing around.
-  // Stylised neighbours with real character — a two-tone torso (shirt +
+  // Stylised neighbours with real character - a two-tone torso (shirt +
   // collar trim), a belt accent, small separate feet, and a slightly
-  // larger "chibi" head for charm — deliberately no thin stick-out limb
+  // larger "chibi" head for charm - deliberately no thin stick-out limb
   // geometry (that's specifically what kept reading as broken/clipping at
   // a distance or from certain angles). Skin, shirt, trim and hair all
   // vary per person so a crowd doesn't look like identical pawns.
@@ -174,7 +173,7 @@
     const skinMat  = new THREE.MeshStandardMaterial({ color: skin, roughness:.6 });
 
     // LEGS: two separate legs with hip joint + shoe
-    // Guard MUST test the constructor itself — `new THREE.CapsuleGeometry ?` evaluates
+    // Guard MUST test the constructor itself - `new THREE.CapsuleGeometry ?` evaluates
     // `new undefined` first in three r128 (no CapsuleGeometry), which THROWS and kills
     // the whole scene init (that was the "intro didn't load at all" bug).
     const legGeo = THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.055, 0.28, 4, 8) : new THREE.CylinderGeometry(0.055, 0.06, 0.38, 8);
@@ -258,7 +257,7 @@
   }
 
   function makeBeam(fromV, toV, threshold){
-    // A true Line, not a mesh — it has no surface/thickness, so unlike a
+    // A true Line, not a mesh - it has no surface/thickness, so unlike a
     // thin cylinder it can never balloon into a big flat wedge no matter
     // how close the camera gets to it. Given a gentle upward arc so it
     // reads as a deliberate "connection" rather than a flat straight bar.
@@ -447,14 +446,14 @@
     camera = new THREE.PerspectiveCamera(46, (canvas.clientWidth||innerWidth)/(canvas.clientHeight||innerHeight), 0.4, 220);
 
     // (lighting rig moved to the golden-hour setup above)
-    // Fill light from the opposite side, plus a hemisphere light — without
+    // Fill light from the opposite side, plus a hemisphere light - without
     // these, only the sun-facing side of each building ever picks up real
     // light and the far side reads as flat/dark, which is what read as
     // "lighting isn't all around the building." This gives even, believable
     // illumination on every face instead of just one.
     
 
-    // ground + road — the road gets a real dashed-lane-line texture and
+    // ground + road - the road gets a real dashed-lane-line texture and
     // lighter sidewalk strips either side, instead of a single flat colour
     // slab, so it reads as an actual street rather than a coloured plane.
     const ground = new THREE.Mesh(new THREE.PlaneGeometry(160,160), new THREE.MeshStandardMaterial({ color:0x0b2438, roughness:1 }));
@@ -473,7 +472,7 @@
       for(let i=0;i<160;i++){
         ctx.fillRect(Math.random()*64, Math.random()*512, 1.2, 1.2);
       }
-      // ONE dash per repeat tile (not several) — real lane markings are
+      // ONE dash per repeat tile (not several) - real lane markings are
       // long dashes with long gaps, not a tight dotted line. Repeating this
       // sparingly (see repeat.set below) is what actually reads as a road.
       ctx.fillStyle = 'rgba(253,230,138,0.8)';
@@ -481,14 +480,14 @@
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
       // dash spacing is ~12.73 world units per repeat tile (140/11 from the
-      // original single-plane road) — keep that same spacing now that the
+      // original single-plane road) - keep that same spacing now that the
       // road is split into two shorter segments around the plaza, instead
       // of hardcoding 11 dashes onto whatever length is passed in (which
       // would bunch or stretch the dashes differently on each segment).
       const len = lengthUnits || 140;
       tex.repeat.set(1, Math.round(len/12.73));
       // the road is viewed at a low, receding angle for most of the camera
-      // path — at that grazing angle, mipmap minification along the
+      // path - at that grazing angle, mipmap minification along the
       // receding axis blurs the dashes into a hazy smear without
       // anisotropic filtering. Max out anisotropy (renderer is already
       // initialized above this call) so the dashes stay crisp into the
@@ -532,7 +531,7 @@
     // ── DISTANT SKYLINE BACKDROP ── cheap silhouette blocks far off both
     // sides of the street and across the far end, so the world doesn't
     // visibly "end" a few metres from the road. One shared material, no
-    // windows/shadows/animations — they're never approached by the camera,
+    // windows/shadows/animations - they're never approached by the camera,
     // just depth behind the lit street.
     // Slightly darker + cooler than the street rows so lit buildings
     // silhouette cleanly against them instead of blending together.
@@ -572,7 +571,7 @@
     });
     // The beat-2 "response" building: its street-facing wall fades away as
     // the camera arrives, revealing a small lit interior with a person
-    // inside and a warm lamp — the actual "camera goes through the window"
+    // inside and a warm lamp - the actual "camera goes through the window"
     // moment, not just an exterior figure standing on the street.
     makeInteriorBuilding(6.5, -23, 3.4, 5.0, 3.2, colors[3], .42, 1);
     [-9,-19,-29,-39,-49].forEach((z,i)=>{
@@ -588,7 +587,7 @@
       makeTree(i%2===0?4.5:-4.5, treeZ);
     });
 
-    // park patch near beat 3 — a real textured lawn with a gravel path
+    // park patch near beat 3 - a real textured lawn with a gravel path
     // crossing it, plus a bench, instead of one flat green disc (which
     // read as a plain shape with no detail).
     function makeParkTexture(){
@@ -597,7 +596,7 @@
       const ctx = c.getContext('2d');
       ctx.fillStyle = '#1f7a52';
       ctx.fillRect(0,0,256,256);
-      // mottled grass texture — small light/dark speckles, not a flat fill
+      // mottled grass texture - small light/dark speckles, not a flat fill
       for(let i=0;i<900;i++){
         const shade = Math.random()>0.5 ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
         ctx.fillStyle = shade;
@@ -627,16 +626,16 @@
     scene.add(benchSeat); scene.add(benchBack);
     makeTree(-2.5,-41); makeTree(2.5,-41); makeTree(0,-36);
 
-    // People — clustered near each story beat so the captions ("someone
+    // People - clustered near each story beat so the captions ("someone
     // loses their keys", "a neighbour answers", "neighbours gather") have
     // actual figures on screen, not just empty buildings. Positioned with
     // real clearance from the camera's own path (see camKeys below) so it
     // never gets close enough to near-clip into one.
-    makePerson(-5.9, -12.4, 0, .16);  // beat 1: lost & found, near the left house — spaced further apart, staggered so they don't all pop in at once
+    makePerson(-5.9, -12.4, 0, .16);  // beat 1: lost & found, near the left house - spaced further apart, staggered so they don't all pop in at once
     makePerson(-4.4, -9.6,  1, .20);
     makePerson(-6.4, -8.6,  2, .24);
     makePerson(-3.7, -13.2, 3, .28);
-    // "found the keys" moment — a small key icon hovering right above the
+    // "found the keys" moment - a small key icon hovering right above the
     // person who found them, right on the caption's cue, so the beat
     // actually shows what happened instead of just two people standing near
     // a building with no visible connection to "lost keys."
@@ -652,11 +651,11 @@
     // The communication moment: a chat icon right above the responder,
     // properly scaled to the scene (roughly head-height) and depth-tested
     // like a normal object, appearing the instant the caption says "a
-    // verified neighbour answers" — reads as something happening at that
+    // verified neighbour answers" - reads as something happening at that
     // person, not a giant detached graphic floating in the sky.
     makeIconSprite(5.2, 1.65, -21.8, .50, 'chat', 0.6);
 
-    // beat 3: a real clean-up crew in the park — volunteers with satchels
+    // beat 3: a real clean-up crew in the park - volunteers with satchels
     // spread across the green
     const parkCrew = [
       makePerson(-1.8, -40.6, 4, .63, true),
@@ -677,7 +676,7 @@
     bagSpecs.forEach(sp=>{ makeTrashBag(sp[0], sp[1], parkCrew[sp[2]], sp[3]); });
 
     // Finale: as the camera rises for the full-street reveal, a lively
-    // scattering of neighbours appears up and down the whole block — the
+    // scattering of neighbours appears up and down the whole block - the
     // "now visibly connected, everyone's out and happy" payoff, instead of
     // just three lonely dots in an otherwise empty street.
     const finalePositions = [
@@ -690,7 +689,7 @@
 
     // Connection beams now link the actual people involved at each beat
     // (not an arbitrary line across the whole street), so what they're
-    // "pointing at" is legible — the two neighbours from the lost & found
+    // "pointing at" is legible - the two neighbours from the lost & found
     // moment, the requester and responder, two of the volunteers.
     makeBeam(new THREE.Vector3(-5.6,1.0,-11.4), new THREE.Vector3(-4.9,1.0,-10.2), .26);
     makeBeam(new THREE.Vector3(6.2,1.0,-24.6),  new THREE.Vector3(7.0,1.0,-23.2),  .50);
@@ -709,7 +708,7 @@
   }
 
   // Camera path: real 3D positions + lookAt targets. Interpolated with
-  // easing between named keyframes — establishing shot, push toward each
+  // easing between named keyframes - establishing shot, push toward each
   // beat's buildings (alternating sides down the street), travel between
   // them, then rise and pull back for the full-street reveal.
   const camKeys = [
@@ -721,13 +720,13 @@
     { p:.00, pos:[0,4,6],      look:[0,26,2]   },
     { p:.05, pos:[0,13,10],    look:[0,3,-10]  },
     { p:.08, pos:[0,6,3],      look:[0,2,-8]   },
-    { p:.20, pos:[-2.2,4,-3],  look:[-6,1.8,-9]   },  // approach beat 1 — pulled back to a proper medium shot, not against the wall
+    { p:.20, pos:[-2.2,4,-3],  look:[-6,1.8,-9]   },  // approach beat 1 - pulled back to a proper medium shot, not against the wall
     { p:.30, pos:[-2.8,3.6,-6],look:[-6,1.5,-10.5] },
     { p:.36, pos:[-1,3,-15],   look:[1,1.8,-20] },
-    { p:.48, pos:[2.8,4,-16],  look:[6,1.8,-22]   },  // approach beat 2 — same fix, clear of the building wall
+    { p:.48, pos:[2.8,4,-16],  look:[6,1.8,-22]   },  // approach beat 2 - same fix, clear of the building wall
     { p:.58, pos:[3.2,3.6,-19],look:[6,1.5,-23.5] },
     { p:.64, pos:[0,3.4,-30],  look:[0,1.7,-36] },
-    { p:.75, pos:[0,5,-31],    look:[0,1.8,-38] },     // approach beat 3 — held back from the (now smaller) park so it doesn't fill the frame
+    { p:.75, pos:[0,5,-31],    look:[0,1.8,-38] },     // approach beat 3 - held back from the (now smaller) park so it doesn't fill the frame
     { p:.83, pos:[0,4.4,-33],  look:[0,1.5,-39] },
     { p:.90, pos:[0,14,-34],   look:[0,2,-42]  },
     { p:.96, pos:[0,30,-24],   look:[0,0,-24]  },
@@ -788,7 +787,7 @@
     buildings.forEach(b=>{
       const lit = Math.max(0, Math.min(1, (lp - b.userData.threshold)/0.16));
       // Always keep a baseline self-glow tinted to the building's own
-      // colour, scaled up as it "warms up" — never let it drop to fully
+      // colour, scaled up as it "warms up" - never let it drop to fully
       // black/emissive-off, which is what made buildings blend invisibly
       // into the dark background (only their window planes stayed visible,
       // looking like they were floating in mid-air with no building behind
@@ -817,7 +816,7 @@
 
 
     // Chat bubble: fades in right on cue, holds visible for a stretch,
-    // then fades back out as the camera moves on — with a gentle float
+    // then fades back out as the camera moves on - with a gentle float
     // and pulse so it reads as an active, live moment.
     const tNow = performance.now() * 0.001;
     bubbles.forEach(bub=>{
@@ -896,7 +895,7 @@
       // Canvas visibility follows the journey: fully transparent at the
       // very start (p=0) so the CSS gradient + grid + orbs + particles
       // show as the homepage backdrop, fading in as the camera tilts down
-      // into the street — and fully transparent again at rest.
+      // into the street - and fully transparent again at rest.
       const restFade = window.__heroResting ? 1 : 0;
       const journeyIn = Math.max(0, Math.min(1, (p - 0.015) / 0.05));
       const cur = parseFloat(canvas.style.opacity || '0');
