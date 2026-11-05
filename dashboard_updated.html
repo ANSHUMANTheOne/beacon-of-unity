@@ -1826,7 +1826,7 @@
                         <div style="font-size:42px;">📰</div>
                         <div>
                             <h3 style="margin:0;">Reliable News</h3>
-                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Important stories from Khaleej Times & Gulf News</p>
+                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Browse headlines from the sources listed below.</p>
                         </div>
                     </div>
 
@@ -4529,7 +4529,18 @@
                 .slice(0, 80);
         }
 
+        // Demo-only fixtures. Never read live feeds or write the real news cache.
+        function renderDemoNews() {
+            const topics=[['uae','Neighbours plan a shared courtyard reading corner'],['sports','Community teams organise a friendly weekend match'],['business','Local makers imagine a neighbourhood craft market'],['tech','Students prototype an accessible community noticeboard'],['health','Volunteers plan a wellbeing information session'],['india','A fictional reading club shares stories across cities'],['politics','A sample residents council discusses shared spaces'],['entertainment','Neighbours rehearse for a community talent evening'],['environment','A sample building starts a balcony gardening club'],['conflict','A fictional workshop explores peaceful conflict resolution']];
+            const sources=['aljazeera','bbc','npr','toi'];
+            // Keep the real publisher names in the source controls; fixtures are not publisher articles.
+            const btn=document.getElementById('newsRefreshBtn');btn.disabled=false;btn.textContent='Reload samples';
+            const items=topics.map(([category,title],i)=>({category,title,source:sources[i%4],label:'Sample source '+String.fromCharCode(65+i%4)})).filter(i=>(_newsSource==='all'||i.source===_newsSource)&&(_newsCat==='all'||i.category===_newsCat));
+            document.getElementById('newsFeed').innerHTML='<aside class="demo-news-notice"><strong>Dashboard simulation</strong><p>The real dashboard includes Al Jazeera, BBC News, NPR News and Times of India. These fictional stories only demonstrate the layout and filters; none were published by these outlets.</p></aside>'+ (items.length?items.map(i=>`<article class="news-card"><div><small class="demo-news-tag">FICTIONAL EXAMPLE &middot; Not a publisher article</small><h4>${i.title}</h4><p>Sample content for the interactive demo only. Explore the topic and source filters to see how the dashboard works.</p><details><summary>Explore sample story</summary><p>This is a made-up scenario, not a reported event. In the real dashboard, news cards link to the original publisher.</p></details></div></article>`).join(''):'<p class="demo-news-notice">No sample stories match these filters. Try All sources or All topics.</p>');
+            _newsLoaded=true;
+        }
         window.loadNews = async (forceRefresh) => {
+            if(window.IS_DEMO_MODE){renderDemoNews();return;}
             if (!document.getElementById('newsFeed')) return;
             const btn = document.getElementById('newsRefreshBtn');
 
@@ -4680,6 +4691,7 @@
         };
 
         function _renderNews() {
+            if(window.IS_DEMO_MODE){renderDemoNews();return;}
             const feed = document.getElementById('newsFeed');
             if (!feed || !_newsLoaded) return;
             const isDark = document.body.classList.contains('dark');
