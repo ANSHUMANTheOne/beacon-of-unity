@@ -1,7 +1,7 @@
 import unittest,tempfile,sys,subprocess,json,shutil
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from build import build
+from build import build, expected_content
 from validate import validate
 class PublisherContract(unittest.TestCase):
  def setUp(self):
@@ -53,4 +53,17 @@ class PublisherContract(unittest.TestCase):
   result=subprocess.run(command,cwd=self.base,capture_output=True,text=True)
   self.assertNotEqual(result.returncode,0)
   self.assertTrue(extra.exists())
+ def test_text_repairs_cannot_override_media_integrity(self):
+  row=dict(original='page.html',bytes=10,sha256='b'*64,source_bytes=12,source_sha256='a'*64,source_change='Repair invalid syntax without changing displayed text')
+  self.assertEqual(expected_content(row),(12,'a'*64))
+  self.assertEqual(row['sha256'],'b'*64)
+  with self.assertRaises(ValueError):expected_content(dict(row,original='clip.mp4'))
+  with self.assertRaises(ValueError):expected_content(dict(row,source_change=''))
+ def test_public_alias_preserves_canonical_binary_bytes(self):
+  self.track('assets/resource.gif',b'GIF89a\x00\xff')
+  self.config([dict(source='assets/resource.gif',original='resource.gif')])
+  data=json.loads(self.manifest.read_text());data['aliases']=[dict(source='assets/resource.gif',original='legacy/resource.gif')];self.manifest.write_text(json.dumps(data))
+  build(self.root,self.out,self.manifest)
+  self.assertEqual((self.out/'resource.gif').read_bytes(),(self.out/'legacy/resource.gif').read_bytes())
+  self.assertTrue(validate(self.root,self.out,self.manifest)['passed'])
 if __name__=='__main__':unittest.main()

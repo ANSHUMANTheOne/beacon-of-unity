@@ -10,21 +10,21 @@ on:
       base_url:
         description: 'Uploaded beaconofunity Worker version URL'
         required: true
-        default: 'https://2462e365-beaconofunity.anshorg.workers.dev'
+        default: 'https://restructure-preserve-public-paths-20261105-beaconofunity.anshorg.workers.dev'
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
     env:
-      PREVIEW_URL: ${{ inputs.base_url || 'https://2462e365-beaconofunity.anshorg.workers.dev' }}
+      PREVIEW_URL: ${{ inputs.base_url || 'https://restructure-preserve-public-paths-20261105-beaconofunity.anshorg.workers.dev' }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
       - name: Compare the original public files with the uploaded preview
-        run: python scripts/check-preview.py --base-url "$PREVIEW_URL"
+        run: python scripts/check-preview.py --base-url "$PREVIEW_URL" --wait-seconds 120
       - uses: actions/upload-artifact@v4
         if: always()
         with:
