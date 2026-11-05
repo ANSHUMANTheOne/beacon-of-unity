@@ -42,7 +42,7 @@ $$('[data-demo]').forEach(b=>b.addEventListener('click',()=>{
 $('#demo-frame').addEventListener('load',()=>{try{const doc=$('#demo-frame').contentDocument;const style=doc.createElement('style');style.textContent='#bav-root,#bav-toggle,#bav-popover,#bav-chat{display:none!important}';doc.head.append(style);const skip=[...doc.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith('Skip'));skip?.click();}catch{/* The demo also supports opening as a standalone page. */}});
 $$('[data-video]').forEach(b=>b.addEventListener('click',()=>{$('#video-frame').src='https://www.youtube-nocookie.com/embed/md8suH2LcHs?autoplay=1&rel=0';openDialog($('#video-dialog'));}));
 window.openSimDemo=()=>$$('[data-demo]')[0].click();window.closeSimDemo=()=>closeDialog($('#demo-dialog'));
-function toggleMotion(){paused=!paused;window._bavPaused=paused;document.body.classList.toggle("motion-paused",paused);world?.setPaused(paused);$('#motion-toggle').textContent=paused?'Resume the world':'Pause the world';$('#motion-toggle').setAttribute('aria-pressed',String(paused));$('#footer-motion').textContent=paused?'Resume motion':'Pause motion';}
+function toggleMotion(){paused=!paused;window._bavPaused=paused;document.body.classList.toggle("motion-paused",paused);world?.setPaused(paused);$('#motion-toggle').textContent=paused?'Resume background motion':'Pause background motion';$('#motion-toggle').setAttribute('aria-pressed',String(paused));$('#footer-motion').textContent=paused?'Resume background motion':'Pause background motion';}
 $('#motion-toggle').addEventListener('click',toggleMotion);$('#footer-motion').addEventListener('click',toggleMotion);
 reduce.addEventListener('change',e=>{if(world){world.reduced=e.matches;world.lastFrame=0;}paused=e.matches;window._bavPaused=e.matches;document.body.classList.toggle("motion-paused",e.matches);$('#motion-toggle').setAttribute('aria-pressed',String(paused));});
 $('#theme-toggle').addEventListener('click',()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';$('#theme-toggle').textContent=dark?'Switch to day':'Switch to night';try{localStorage.setItem('beacon-theme',dark?'dark':'light');}catch{}});
@@ -57,7 +57,7 @@ const mascot=$('#bav-wrap');mascot.setAttribute('role','button');mascot.tabIndex
 $('#bav-chat-input').setAttribute('aria-label','Message Beacon');$('#bav-chat-body').setAttribute('aria-live','polite');
 $('#beacon-chat-button').addEventListener('click',()=>window.__bavOpenChat?.());
 mascot.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();window.__bavOpenChat?.();}});
-$('#beacon-hide').addEventListener('click',()=>{const hidden=document.body.classList.toggle('beacon-hidden');$('#beacon-hide').textContent=hidden?'+':'−';$('#beacon-hide').setAttribute('aria-label',hidden?'Show Beacon mascot':'Hide Beacon mascot');});
+$('#beacon-hide').addEventListener('click',()=>window.__bavTogglePresence?.());
 // Reuse the actual mascot artwork for the chat avatar, with unique SVG definition IDs.
 const avatar=$('#bav-svg').cloneNode(true);const ids=new Map();[avatar,...avatar.querySelectorAll('[id]')].forEach(el=>{if(el.id){ids.set(el.id,'chat-'+el.id);el.id='chat-'+el.id;}});
 [avatar,...avatar.querySelectorAll('*')].forEach(el=>{for(const attr of [...el.attributes]){let value=attr.value;ids.forEach((next,old)=>{value=value.replaceAll('url(#'+old+')','url(#'+next+')');if(value==='#'+old)value='#'+next;});if(value!==attr.value)el.setAttribute(attr.name,value);}});avatar.setAttribute('aria-hidden','true');$('#bav-chat-avatar').replaceChildren(avatar);
@@ -72,3 +72,7 @@ import './pillars.css';
 import './pillars.js';
 
 const spacesObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){import('./spaces.js').catch(()=>document.querySelector('.space-stage').classList.add('space-fallback'));spacesObserver.disconnect();}},{rootMargin:'400px'});spacesObserver.observe(document.querySelector('.community-spaces'));
+
+import './cursor.js';
+
+import './night.css';

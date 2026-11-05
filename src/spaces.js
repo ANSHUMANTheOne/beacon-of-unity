@@ -106,3 +106,6 @@ function tick(t){requestAnimationFrame(tick);if(!visible||document.hidden||t-las
  for(const name of ['neighbours','office'])updateStory(name,dt,moving);storyPanel.hidden=schoolActive;
  renderer.render(scene,camera);}requestAnimationFrame(tick);
 
+
+function applySceneTheme(){const dark=document.documentElement.dataset.theme==='dark';scene.background.set(dark?'#102b3e':'#d5e5ea');sun.intensity=dark?2.1:3.2;}
+new MutationObserver(applySceneTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});applySceneTheme();

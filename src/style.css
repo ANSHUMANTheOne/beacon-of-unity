@@ -39,3 +39,5 @@ dialog{border:0;padding:0;color:var(--ink);background:var(--paper)}dialog::backd
 @media(max-width:359px){.hero-actions .button{padding:0 14px;gap:15px;font-size:10px}.hero-actions{gap:13px}.hero-actions .button span{font-size:19px}}
 body{background:#0b2036}
 @media(max-width:700px){.world-caption{display:none}.scene-label{bottom:105px;max-width:190px}}
+
+.social-label{display:inline-flex;align-items:center;gap:9px}.social-mark{width:20px;height:20px;flex:none}

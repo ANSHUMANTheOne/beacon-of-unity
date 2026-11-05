@@ -85,6 +85,66 @@
     svg.style.height = '100%';
   }
 
+  // Start quietly in the dock. Proximity reveals Beacon without a timed entrance.
+  const presenceButton=document.querySelector('#beacon-hide');
+  const dockEl=document.querySelector('.beacon-dock');
+  let presence='tucked', reveal=0, revealTarget=0, presenceTime=performance.now();
+  let lastPointer=null, presenceAnimation=null;
+  wrap.classList.add('beacon-tucked');
+  function presenceLabel(shown){
+    presenceButton.textContent=shown?'\u2212':'+';
+    presenceButton.setAttribute('aria-label',shown?'Hide Beacon mascot':'Show Beacon mascot');
+    presenceButton.setAttribute('aria-expanded',String(shown));
+    wrap.tabIndex=shown?0:-1;
+  }
+  presenceLabel(false);
+  function drawPeek(){
+    const rect=dockEl.getBoundingClientRect();
+    px=Math.min(innerWidth-W-10,rect.left+rect.width/2-W/2);
+    py=rect.top-H-10;
+    wrap.style.left=px+'px';wrap.style.top=py+'px';
+    wrap.style.opacity=String(reveal);
+    wrap.style.translate=`0 ${(1-reveal)*(H+14)}px`;
+    wrap.style.scale=String(.45+.55*reveal);
+    wrap.style.pointerEvents=reveal>.35?'auto':'none';
+    wrap.style.clipPath=`inset(0 0 ${(1-reveal)*100}% 0)`;
+  }
+  function releasePresence(){
+    presence='shown';wrap.classList.remove('beacon-tucked');
+    for(const key of ['opacity','translate','scale','pointerEvents','clipPath'])wrap.style[key]='';
+    vx=0;vy=0;setExpr('happy');presenceLabel(true);
+  }
+  document.addEventListener('pointermove',e=>{
+    if(presence!=='tucked'||e.pointerType==='touch')return;
+    const r=dockEl.getBoundingClientRect();
+    const distance=Math.hypot(Math.max(r.left-e.clientX,0,e.clientX-r.right),Math.max(r.top-e.clientY,0,e.clientY-r.bottom));
+    const now=performance.now();
+    const speed=lastPointer?Math.hypot(e.clientX-lastPointer.x,e.clientY-lastPointer.y)/Math.max(1,now-lastPointer.t):0;
+    lastPointer={x:e.clientX,y:e.clientY,t:now};
+    revealTarget=Math.max(0,Math.min(1,(210-distance)/170));
+    // Faster approaches respond more promptly, without overshoot.
+    wrap.dataset.approachSpeed=String(Math.min(2,speed));
+  },{passive:true});
+  dockEl.addEventListener('focusin',()=>{if(presence==='tucked')revealTarget=1;});
+  window.__bavTogglePresence=()=>{
+    if(presence==='hiding')return;
+    if(presence!=='shown'){
+      document.body.classList.remove('beacon-hidden');presence='tucked';revealTarget=1;
+      wrap.classList.add('beacon-tucked');return;
+    }
+    presence='hiding';presenceLabel(false);
+    const r=presenceButton.getBoundingClientRect(),w=wrap.getBoundingClientRect();
+    dockEl.classList.add('beacon-recalling');
+    presenceAnimation=wrap.animate([
+      {transform:'translate(0,0) scale(1)',opacity:1},
+      {transform:`translate(${r.left+r.width/2-w.left-w.width/2}px,${r.top+r.height/2-w.top-w.height/2}px) rotate(12deg) scale(.04)`,opacity:0}
+    ],{duration:reduced.matches?0:380,easing:'cubic-bezier(.5,0,.75,.4)',fill:'forwards'});
+    presenceAnimation.onfinish=()=>{
+      presence='hidden';reveal=0;revealTarget=0;document.body.classList.add('beacon-hidden');
+      presenceAnimation.cancel();dockEl.classList.remove('beacon-recalling');
+    };
+  };
+
   function setLegsSwinging(on) {
     legL.classList.toggle('swinging', on);
     legR.classList.toggle('swinging', on);
@@ -259,6 +319,16 @@
 
   // ── main physics loop ─────────────────────────────────
   function loop(now) {
+    if(presence!=='shown'){
+      const dt=Math.min(50,now-presenceTime);presenceTime=now;lastT=now;
+      if(presence==='tucked'){
+        const speed=Number(wrap.dataset.approachSpeed||0);
+        reveal=reduced.matches?revealTarget:reveal+(revealTarget-reveal)*(1-Math.exp(-dt/(160-speed*35)));
+        drawPeek();
+        if(reveal>.985&&revealTarget===1)releasePresence();
+      }
+      requestAnimationFrame(loop);return;
+    }
     if (window._bavPaused || document.hidden || document.body.classList.contains('beacon-hidden') || document.body.classList.contains('beacon-chat-open') || document.querySelector('dialog[open]')) { lastT = now; requestAnimationFrame(loop); return; }
     const raw = now - lastT;
     lastT = now;
