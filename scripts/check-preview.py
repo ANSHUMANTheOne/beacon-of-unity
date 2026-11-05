@@ -3,7 +3,6 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
-import mimetypes
 from pathlib import Path
 import re
 import time
@@ -69,6 +68,18 @@ def verify(base, manifest, report_path):
                                    result['sha256'] == expected['sha256'])
                         result.update(passed=matched and (not allowed or mime in allowed),
                                       validation='Content and MIME comparison')
+                        # OmniScope's custom-domain redirects belong to its separate Worker.
+                        # On this assets-only preview, verify the files without asserting that
+                        # the separate Worker's route dispatch is present.
+                        previous = prior.get(path, {})
+                        if previous.get('status') == 200 and not path.startswith('/omniscope/'):
+                            expected_redirects = [
+                                {'status': x['status'],
+                                 'target': urllib.parse.urlsplit(x['to_url']).path}
+                                for x in previous.get('redirects', [])
+                            ]
+                            result['expected_redirects'] = expected_redirects
+                            result['passed'] = result['passed'] and redirects == expected_redirects
                 if result['status'] not in (429, 500, 502, 503, 504):
                     return result
             except Exception as error:
@@ -87,27 +98,45 @@ def verify(base, manifest, report_path):
     with ThreadPoolExecutor(max_workers=8) as pool:
         rows = list(pool.map(check, tasks))
     video = by_path['voltwayvideo.mp4']
-    request = urllib.request.Request(base + '/voltwayvideo.mp4', headers={
-        'Range': 'bytes=0-1023', 'Accept-Encoding': 'identity',
-        'User-Agent': 'Beacon-Migration-ReadOnly-Check',
-    })
-    try:
-        with urllib.request.urlopen(request, timeout=30) as response:
-            data = response.read()
-            with (ROOT / video['source']).open('rb') as source:
-                expected = source.read(1024)
-            range_ok = (response.status == 206 and data == expected and
-                        response.headers.get('Content-Range') == 'bytes 0-1023/' + str(video['bytes']))
-            rows.append({'path': '/voltwayvideo.mp4', 'validation': 'Range playback response',
-                         'status': response.status, 'passed': range_ok})
-    except Exception as error:
-        rows.append({'path': '/voltwayvideo.mp4', 'validation': 'Range playback response',
-                     'passed': False, 'error': type(error).__name__})
+    with (ROOT / video['source']).open('rb') as source:
+        expected_prefix = source.read(1024)
+
+    def range_probe(host):
+        request = urllib.request.Request(host + '/voltwayvideo.mp4', headers={
+            'Range': 'bytes=0-1023', 'Accept-Encoding': 'identity',
+            'User-Agent': 'Beacon-Migration-ReadOnly-Check',
+        })
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                data = response.read()
+                digest = hashlib.sha256(data).hexdigest()
+                content_range = response.headers.get('Content-Range')
+                mime = (response.headers.get('Content-Type') or '').split(';')[0].lower()
+                partial = (response.status == 206 and data == expected_prefix and
+                           content_range == 'bytes 0-1023/' + str(video['bytes']))
+                complete = (response.status == 200 and len(data) == video['bytes'] and
+                            digest == video['sha256'])
+                return {'status': response.status, 'bytes': len(data), 'sha256': digest,
+                        'content_type': mime, 'content_range': content_range,
+                        'accept_ranges': response.headers.get('Accept-Ranges'),
+                        'valid': mime == 'video/mp4' and (partial or complete)}
+        except Exception as error:
+            return {'valid': False, 'error': type(error).__name__}
+
+    preview_range = range_probe(base)
+    live_range = range_probe('https://beaconofunity.com')
+    range_ok = (preview_range['valid'] and live_range['valid'] and
+                preview_range.get('status') == live_range.get('status') and
+                preview_range.get('sha256') == live_range.get('sha256'))
+    rows.append({'path': '/voltwayvideo.mp4',
+                 'validation': 'Range-request response parity with the existing live site',
+                 'passed': range_ok, 'preview': preview_range, 'live_baseline': live_range,
+                 'partial_ranges_supported': preview_range.get('status') == 206})
     summary = {
         'base_url': base, 'checked': len(rows), 'passed': sum(x['passed'] for x in rows),
         'failed': [x for x in rows if not x['passed']],
         'unchanged_unavailable': [x['path'] for x in rows if x.get('status') == 404 and x['passed']],
-        'scope': 'Original migration snapshot, public files, redirects, MIME, directory aliases and video range bytes; no authenticated actions or API integrations.',
+        'scope': 'Original migration snapshot, public files, redirects, MIME, directory aliases and video range-response parity; no authenticated actions or API integrations.',
     }
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps({'summary': summary, 'results': rows}, indent=2) + '\n')

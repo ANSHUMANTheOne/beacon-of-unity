@@ -13,7 +13,7 @@
 
 1. Confirm GitHub Pages settings and all Cloudflare production/preview branches, build roots, asset directories, existing headers, HTML handling, domains, routes and bindings. Save settings before changing them. Do not merge while any host publishes the reorganized source root directly.
 2. Build with `python scripts/build.py` into a new output directory and run `python scripts/validate.py`. Use `--migration` for the initial byte-preservation gate. Upload `dist/` to an isolated provider preview. Confirm original redirect status codes, targets, query strings, MIME, range playback, fonts, CDN/CORS behavior and authenticated flows on the real provider.
-3. Keep Cloudflare as the main-domain host. The active root `wrangler.jsonc` names the existing `beaconofunity` Worker and points assets at generated `dist/`, retaining the live compatibility date. Its custom build hook runs `scripts/cloudflare-build.mjs`. Configure the explicit Cloudflare Build command described below as well; Workers Builds does not guarantee running Wrangler custom builds. Do not automatically deploy the old branch over main or move the domain to GitHub Pages.
+3. Keep Cloudflare as the main-domain host. The active root `wrangler.jsonc` names the existing `beaconofunity` Worker and points assets at generated `dist/`, retaining the live compatibility date. Its custom build hook runs `scripts/cloudflare-build.mjs`. The existing version-upload command successfully ran the custom build hook in the verified Cloudflare build. The explicit Build command below is an optional fallback for build environments that skip custom hooks; no dashboard setting change was needed for the passing build. Do not automatically deploy the old branch over main or move the domain to GitHub Pages.
 4. If GitHub Pages needs the organized main branch, approve a custom Actions publishing source and use `deployment/pages.yml.example` as a reviewed template. Keep the current domain/HTTPS settings exactly as recorded. The template is inert outside `.github/workflows/`; this branch has only build/validation CI.
 5. OmniScope can still use the existing commands: `node omniscope/worker/prepare-assets.mjs`, then (only with production approval) `wrangler deploy --config omniscope/worker/wrangler.jsonc`. No OmniScope source, build scripts, or configuration are modified. The Worker name, route, HTTP dispatch and bindings are preserved.
 6. A standalone OmniScope Pages project keeps source root `omniscope`, output `public`, no build command, and its local `functions/` directory. A whole-repository Pages project uses root `functions/` with generated static output. Confirm both before cutover.
@@ -43,9 +43,9 @@ The review branch now provides:
 - Root `wrangler.jsonc`: existing Worker name `beaconofunity`, assets `./dist`, live compatibility date `2026-10-19`, no new bindings, routes, domains, or compatibility flags.
 - `node scripts/cloudflare-build.mjs`: generates the original public layout and validates source/output integrity. If `dist/` already exists it is validated instead of overwritten; stale, incomplete, or extra-file output fails. Preserve or move a prior output before rebuilding.
 - A local Wrangler custom build hook and GitHub CI dry-run with Wrangler `4.157.0`. Dry-run does not upload a version or deploy.
-- Cloudflare build settings still need confirmation; repository changes do not edit the dashboard.
+- Cloudflare confirmed a successful version upload for commit `cb60f6066fdb7a8716e8f45cacc18cdd5366b8a3`, producing version `2462e365-f8a9-4c69-a69f-8b36c4bf7089`. Repository changes did not edit the dashboard or promote production traffic.
 
-After the repository checks pass, approve this **build-only** settings change for the connected project:
+The existing settings already produced a passing upload using the custom hook. **Do not change them just to remove the old failure.** If a future build environment skips the hook, review this optional build-only configuration:
 - Root directory: `/` (unchanged).
 - Build command: `node scripts/cloudflare-build.mjs`.
 - Existing upload command: `npx wrangler versions upload` (unchanged; do not replace with `wrangler deploy`).
@@ -58,3 +58,11 @@ The active pre-cutover main version recorded by the read-only audit is `3ed17401
 This resolves the known missing configuration/artifact path. It does not approve production promotion, fix baseline application defects, or complete the GitHub Pages publishing-source transition.
 
 References: [Wrangler custom builds](https://developers.cloudflare.com/workers/wrangler/custom-builds/), [Workers Builds settings](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/), [version uploads](https://developers.cloudflare.com/workers/wrangler/commands/workers/).
+
+## Provider acceptance evidence
+
+The immutable preview `https://2462e365-beaconofunity.anshorg.workers.dev` passed 141 checks: the original file contents and MIME types, applicable main-site redirect chains, four directory/index aliases, and video range-request parity with the current live site. The original `.assetsignore` URL remains 404 as before; its bytes are still retained in the generated artifact. Full results are recorded in `audit/provider-preview-validation.json`.
+
+The preview, the existing live domain, and the original deployed version URL all returned HTTP 200 with the same 23,527,562-byte MP4 and SHA-256 when asked for a range. Partial-range support is therefore not claimed; the first 206-only test was an incorrect assumption about the baseline and was replaced by an explicit live-response comparison. No media content or server behavior was changed to make the test pass.
+
+These are file/HTTP checks, not proof of authenticated Firebase authorization, real Bluetooth behavior, external service availability, or every UI state. OmniScope and social use separate custom-domain Workers; their route dispatch does not run on the main Worker's version URL. Keep those deployments and routes unchanged. GitHub Pages still requires its publishing-source transition before merging the organized layout.
