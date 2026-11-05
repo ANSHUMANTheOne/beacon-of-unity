@@ -18,9 +18,15 @@ jobs:
         with:
           node-version: '22'
       - run: python scripts/test-publisher.py
-      - run: python scripts/build.py
+      - run: node scripts/cloudflare-build.mjs
+      - name: Confirm an unchanged artifact can be reused safely
+        run: node scripts/cloudflare-build.mjs
       - run: python scripts/validate.py
       - run: node scripts/test-worker.mjs
+      - name: Validate Wrangler configuration without uploading or deploying
+        run: npx --yes wrangler@4.157.0 deploy --dry-run --outdir .verification/wrangler-dry-run
+        env:
+          WRANGLER_SEND_METRICS: 'false'
       - uses: actions/upload-artifact@v4
         with:
           name: compatibility-public-tree
