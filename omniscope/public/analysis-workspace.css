@@ -167,7 +167,7 @@
 }
 
 /* Observatory composition: a fixed instrument rail, an open scene, and one image workspace. */
-.unified-mission .mission-stage{left:0;top:72px;bottom:0;width:350px;max-height:none;padding:27px 26px 24px;border:0;border-right:1px solid #344952;border-radius:0;background:#10202a;overflow-y:auto}
+.unified-mission .mission-stage{left:20px;top:92px;bottom:auto;width:336px;max-height:calc(100vh - 112px);padding:25px 25px 23px;border:1px solid #61757a9c;border-radius:12px;background:#10222cce;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 18px 54px #0008;overflow-y:auto}
 .unified-mission .mission-stage-head h3{font-size:28px;line-height:1.08;margin-top:10px}
 .unified-mission .stage-kicker,.unified-mission .stage-step,.unified-mission .mission-stage .mission-band-top h4{font-size:11px;letter-spacing:.055em}
 .unified-mission .stage-field #stageField{font-size:11px}
@@ -175,6 +175,16 @@
 .unified-mission .stage-visit-details summary span{font-size:11px}
 .unified-mission .mission-stage-actions button{font-size:11px}
 .unified-mission .mission-stage-readout{font-size:11px;line-height:1.5}
+.unified-mission .mission-stage *,
+.unified-mission .mission-comparison *{font-family:'SF Pro Text',-apple-system,BlinkMacSystemFont,'Inter',sans-serif!important}
+.unified-mission .mission-stage-head h3{font-family:'New York',Georgia,serif!important;font-size:30px;letter-spacing:-.035em}
+.unified-mission .mission-comparison-head h3,
+.unified-mission .mission-scene-caption strong{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Inter',sans-serif!important}
+.unified-mission .stage-selected-range,
+.unified-mission .mission-stage-readout,
+.unified-mission .mission-spectrum-head,
+.unified-mission .mission-spectrum-head strong,
+.unified-mission .mission-comparison .mono{font-family:'SF Mono','JetBrains Mono',ui-monospace,monospace!important}
 .mission-scene-caption{position:absolute;right:29px;bottom:27px;z-index:5;color:#dce7e7;text-align:right;text-shadow:0 2px 12px #03090d;pointer-events:none}
 .mission-scene-caption strong{font:600 17px/1.1 'Inter',sans-serif;letter-spacing:-.035em}
 .unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-scene-caption{display:none}
@@ -193,8 +203,8 @@
 .observation-beam-halo{stroke-width:12;opacity:.06}
 .observation-beam-particle{fill:#f6d9ad;filter:drop-shadow(0 0 4px #e7ad76)}
 .observation-beam[hidden]{display:none}
-.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:0;top:72px;bottom:0;width:264px;max-height:none;padding:22px 18px;border-right:1px solid var(--obs-line)}
-.unified-mission .mission-comparison:not(.is-collapsed){left:264px;right:0;top:72px;bottom:0;border:0;border-radius:0;background:#13232c}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:16px;top:88px;bottom:16px;width:248px;max-height:none;padding:22px 18px;border:1px solid #61757a9c;border-radius:10px;background:#10222cde}
+.unified-mission .mission-comparison:not(.is-collapsed){left:280px;right:16px;top:88px;bottom:16px;border:1px solid var(--obs-line);border-radius:10px;background:#13232c}
 .unified-mission .mission-comparison-head{padding:19px 22px 15px}
 .unified-mission .mission-comparison-head h3{font-size:23px}
 .mission-workspace-toolbar{padding:12px 22px}
@@ -206,9 +216,9 @@
 .mission-difference-legend i{display:inline-block;flex:none;width:11px;height:11px;border-radius:50%}
 .mission-difference-legend .legend-earlier{background:#cf7954}.mission-difference-legend .legend-later{background:#6587bc}
 .mission-difference-legend small{padding-top:7px;border-top:1px solid var(--obs-line);color:var(--obs-muted);font:10px/1.45 'Inter',sans-serif}
-@media (max-width:1100px) and (min-width:801px){.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:0;width:220px;padding:18px 14px}.unified-mission .mission-comparison:not(.is-collapsed){left:220px;right:0}}
+@media (max-width:1100px) and (min-width:801px){.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:10px;width:210px;padding:18px 14px}.unified-mission .mission-comparison:not(.is-collapsed){left:232px;right:10px}}
 @media (max-width:800px){
- .unified-mission .mission-stage{left:0;right:0;top:auto;bottom:0;width:auto;max-height:min(48vh,365px);padding:16px 19px 18px;border:0;border-top:1px solid var(--obs-line);overflow:auto}
+ .unified-mission .mission-stage{left:10px;right:10px;top:auto;bottom:10px;width:auto;max-height:min(48vh,365px);padding:16px 19px 18px;border:1px solid #61757a9c;border-radius:11px;overflow:auto}
  .unified-mission .mission-stage-head h3{font-size:24px;margin-top:5px}
  .unified-mission .stage-field,.unified-mission .mission-stage-readout{display:none}
  .unified-mission .mission-spectrum{margin-top:10px}

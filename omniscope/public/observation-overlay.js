@@ -29,7 +29,7 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
  let lastInfo=0,lastCardOpen=false;
  function update({craft,earth,direction,record,index,progress,wavelength,playing,date,field,elapsed,cardOpen,trails}){
   if(cardOpen&&!lastCardOpen){info.hidden=true;marker.setAttribute('aria-expanded','false');}lastCardOpen=cardOpen;
-  const orbitContext=c.camera.position.distanceTo(earth)>=10;
+  const orbitContext=c.camera.position.distanceTo(earth)>=20;
   ui.classList.toggle('orbit-context',orbitContext);
   ui.classList.toggle('deep-orbit',c.camera.position.distanceTo(earth)>=80);
   beam.style.display=cardOpen||orbitContext?'none':'';
