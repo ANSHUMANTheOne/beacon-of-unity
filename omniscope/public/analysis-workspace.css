@@ -175,10 +175,13 @@
 .unified-mission .stage-visit-details summary span{font-size:11px}
 .unified-mission .mission-stage-actions button{font-size:11px}
 .unified-mission .mission-stage-readout{font-size:11px;line-height:1.5}
-.mission-scene-caption{position:absolute;right:29px;bottom:27px;z-index:5;display:flex;flex-direction:column;gap:5px;max-width:260px;color:#dce7e7;text-align:right;text-shadow:0 2px 12px #03090d;font-family:'Inter',sans-serif;pointer-events:none}
-.mission-scene-caption span{color:#dfac84;font:600 10px 'Inter',sans-serif;letter-spacing:.1em}
-.mission-scene-caption strong{font:600 19px/1.1 'Inter',sans-serif;letter-spacing:-.035em}
-.mission-scene-caption small{color:#a9bec2;font:11px/1.4 'Inter',sans-serif}
+.mission-scene-caption{position:absolute;right:29px;bottom:27px;z-index:5;pointer-events:none}
+.mission-orbit-toggle{pointer-events:auto;cursor:pointer;border:1px solid #d8ad8b;background:#152630d9;color:#f2d1b4;padding:10px 14px;border-radius:4px;font:600 11px 'Inter',sans-serif;letter-spacing:.01em;transition:background .18s,border-color .18s}
+.mission-orbit-toggle:hover,.mission-orbit-toggle:focus-visible{background:#26343a;border-color:#f1c49e;outline:2px solid transparent}
+.sun-distance-cue{position:absolute;z-index:6;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transform:translate(-50%,-50%);pointer-events:none;padding:7px 9px;border:1px solid #a8764b7d;border-radius:20px;background:#14212bc9;color:#efcda8;font:600 10px 'Inter',sans-serif;letter-spacing:.06em;box-shadow:0 0 24px #d6904220}
+.sun-distance-cue[hidden]{display:none}
+.sun-distance-cue i{width:13px;height:13px;flex:none;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff4ca 0,#edbb73 45%,#c5723b 80%);box-shadow:0 0 12px #e8a85c88}
+.sun-distance-cue b{font-weight:500;color:#f5dfc3;letter-spacing:0}
 .unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-scene-caption{display:none}
 .spacecraft-beacon-ring{border-color:#e9c7a1;background:#bc754355;box-shadow:0 0 0 5px #e8ba8a22,0 0 18px #e6a57855}
 .spacecraft-beacon-core{background:#f5e6d2}
@@ -215,7 +218,9 @@
  .unified-mission .mission-spectrum{margin-top:10px}
  .unified-mission .stage-visit-details{margin-top:12px}
  .unified-mission .mission-stage-actions{margin-top:12px}
- .mission-scene-caption{display:none}
+ .mission-scene-caption{display:block;right:12px;top:72px;bottom:auto;z-index:25}
+ .mission-orbit-toggle{padding:8px 10px;font-size:10px}
+ .sun-distance-cue{font-size:9px;padding:6px 8px}
  .unified-mission .mission-comparison:not(.is-collapsed){left:0;right:0;top:64px;bottom:0}
  .unified-mission .mission-comparison-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px 10px;padding:14px 16px 12px}
  .unified-mission .mission-comparison-head .analysis-title{grid-column:1 / -1}

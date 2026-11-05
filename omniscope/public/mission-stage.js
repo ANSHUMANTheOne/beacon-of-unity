@@ -12,7 +12,8 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  <div class="mission-stage-readout" aria-live="off"><strong id="stageWave">Measured wavelength will appear here.</strong><span id="stageTime">Loading the selected visits…</span><span id="stageCoords">Recorded spacecraft position loads with each image.</span></div>
  <p class="mission-stage-note">Position from FITS metadata. Diagram not to scale.</p>`;
  ui.appendChild(stage);
- const sceneCaption=document.createElement('aside');sceneCaption.className='mission-scene-caption';sceneCaption.innerHTML='<span>OBSERVING GEOMETRY</span><strong>SPHEREx / Earth</strong><small>Recorded spacecraft position. Zoom out for JPL planet orbits.</small>';ui.appendChild(sceneCaption);
+ const sceneCaption=document.createElement('aside');sceneCaption.className='mission-scene-caption';sceneCaption.innerHTML='<button type="button" class="mission-orbit-toggle" aria-pressed="false">View solar system ↗</button>';ui.appendChild(sceneCaption);
+ sceneCaption.querySelector('.mission-orbit-toggle').onclick=()=>document.dispatchEvent(new Event('omni-orbit-toggle'));
  stage.querySelector('#stageSkyArea').onclick=()=>ui.querySelector('[data-panel="search"]').click();
  stage.querySelector('#stageBandSlot').appendChild(bandPanel);
  bandPanel.querySelector('.mission-band-top h4').textContent='02 / INFRARED BAND';

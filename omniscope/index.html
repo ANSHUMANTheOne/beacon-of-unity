@@ -2732,6 +2732,12 @@ function focusOn(id) { state.followId = id; zoomAutoFocusId = id; returnToOrigin
 function releaseFocus() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = true; }
 function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; missionDistanceTarget = 4.2; missionZoomActive = false; camGoal = null; }
 function resetMissionZoom(distance) { missionFovTarget = 45; missionDistanceTarget = distance; missionZoomActive = false; }
+document.addEventListener('omni-orbit-toggle', () => {
+  const overview = missionDistanceTarget < 20;
+  missionFovTarget = overview ? 76 : 45;
+  missionDistanceTarget = overview ? (innerWidth > 800 ? 24 : 36) : (innerWidth > 800 ? 4.2 : 5);
+  missionZoomActive = true;
+});
 
 // Esc lets go of the focus (capture phase, so closing the Ask OmniScope console / skipping a launch with Esc doesn't also do this).
 window.addEventListener('keydown', (e) => {
