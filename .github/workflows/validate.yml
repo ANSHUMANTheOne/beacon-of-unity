@@ -23,6 +23,8 @@ jobs:
         run: node scripts/cloudflare-build.mjs
       - run: python scripts/validate.py
       - run: node scripts/test-worker.mjs
+      - run: node scripts/test-cozystudio.mjs
+      - run: python scripts/check-inline-syntax.py
       - name: Validate Wrangler configuration without uploading or deploying
         run: npx --yes wrangler@4.157.0 deploy --dry-run --outdir .verification/wrangler-dry-run
         env:

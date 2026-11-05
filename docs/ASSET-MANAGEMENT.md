@@ -7,3 +7,5 @@ Every existing resource is copied without compression, conversion, renaming of p
 New resources need explicit manifest entries before publishing. Never repurpose an old public URL for different content without reviewing its consumers. Case matters on deployment hosts.
 
 Public repository contents, Git history and deployed media remain accessible. Folder placement reduces casual visibility but does not provide confidentiality. Obfuscation does not protect browser-delivered assets. Encryption with a user-held key would require a separately approved access-flow change and would not remove existing public copies.
+
+`/og-image.png` is an additional output alias for `assets/branding/logo.png`, repairing an existing metadata reference that returned 404. It uses the same original PNG bytes as `/logo.png`; no extra source image, resizing or encoding is introduced.

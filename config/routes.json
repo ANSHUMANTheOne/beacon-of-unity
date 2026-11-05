@@ -65,7 +65,10 @@
       "source": "projects/CozyStudio/js/animations.js",
       "category": "Independent project",
       "reason": "Retain complete application subtree and case",
-      "published": "/CozyStudio/js/animations.js"
+      "published": "/CozyStudio/js/animations.js",
+      "source_sha256": "e4e8b44f9ca4d13e097abf1d8e8ffb3b85c39c0510ea04cf42d06ba5f0a54161",
+      "source_bytes": 2976,
+      "source_change": "Keep first-frame elapsed time nonnegative and monotonic; no UI, BLE protocol or hardware-send changes."
     },
     {
       "path": "CozyStudio/js/app.js",
@@ -104,7 +107,10 @@
       "source": "projects/CozyStudio/js/presets.js",
       "category": "Independent project",
       "reason": "Retain complete application subtree and case",
-      "published": "/CozyStudio/js/presets.js"
+      "published": "/CozyStudio/js/presets.js",
+      "source_sha256": "bf3b9d6fd94f6b2ec519e2bf601faf9e1326ea50b99f0b4c351fee59bfd95116",
+      "source_bytes": 1952,
+      "source_change": "Preserve valid zero speed and brightness during preset import while retaining defaults for invalid input."
     },
     {
       "path": "CozyStudio/js/protocol.js",
@@ -247,7 +253,10 @@
       "source": "website/app/dashboard.html",
       "category": "Main website",
       "reason": "Account application and alternate dashboard",
-      "published": "/dashboard.html"
+      "published": "/dashboard.html",
+      "source_sha256": "39931def57eeeabcd7923f1d94d77c3be4b1e576799a6179bb2b7a7c29ea134d",
+      "source_bytes": 563961,
+      "source_change": "Escape two apostrophes in existing demo messages so the inline script parses; displayed text is unchanged."
     },
     {
       "path": "dashboard_updated.html",
@@ -260,7 +269,10 @@
       "source": "website/app/dashboard_updated.html",
       "category": "Main website",
       "reason": "Account application and alternate dashboard",
-      "published": "/dashboard_updated.html"
+      "published": "/dashboard_updated.html",
+      "source_sha256": "af8daa3bff4927cfee4a9a809f624c9832a6288bcb591e89af9caaf4ca084be6",
+      "source_bytes": 612659,
+      "source_change": "Escape two apostrophes in existing demo messages so the inline script parses; displayed text is unchanged."
     },
     {
       "path": "data.gif",
@@ -1779,5 +1791,18 @@
     "socialdemo",
     "socialdemo/*",
     "socialdemo.*"
+  ],
+  "aliases": [
+    {
+      "original": "og-image.png",
+      "source": "assets/branding/logo.png",
+      "published": "/og-image.png",
+      "bytes": 503188,
+      "sha256": "b193c8596f248079f5fb4fe7604579d4e5efd92843e5781fb8505bac12839912",
+      "baseline_source": "logo.png",
+      "alias": true,
+      "category": "Shared resource",
+      "reason": "Repair the existing sharing-image URL using the unchanged 1024x1024 site logo; no generated or re-encoded image"
+    }
   ]
 }

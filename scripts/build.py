@@ -18,7 +18,7 @@ def safe_path(root, value):
     return result
 
 def manifest_entries(source_root, manifest):
-    rows = list(manifest['files'])
+    rows = list(manifest['files']) + list(manifest.get('aliases', []))
     existing = {row['source'] for row in rows}
     patterns = manifest.get('passthrough_patterns', [])
     tracked = subprocess.check_output(['git', '-C', str(source_root), 'ls-files', '-z']).decode().split('\0')
@@ -28,6 +28,14 @@ def manifest_entries(source_root, manifest):
                 raise ValueError(f'Sensitive or generated tracked passthrough path requires review: {path}')
             rows.append(dict(source=path, original=path, published='/'+path, concurrent=True))
     return rows
+
+def expected_content(row):
+    """Keep original hashes as evidence; declare narrow text-only functional repairs."""
+    if 'source_sha256' in row:
+        if PurePosixPath(row['original']).suffix not in ('.html', '.js') or not row.get('source_change'):
+            raise ValueError('A source correction requires a documented HTML/JS fix; media overrides are not allowed')
+        return row['source_bytes'], row['source_sha256']
+    return row['bytes'], row['sha256']
 
 def build(source_root, output, manifest_path):
     source_root = source_root.resolve()

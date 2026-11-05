@@ -9,6 +9,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from build import expected_content
 
 ROOT = Path(__file__).resolve().parents[1]
 MIME = {
@@ -21,7 +22,7 @@ MIME = {
     '.zip': {'application/zip', 'application/x-zip-compressed'},
 }
 
-def verify(base, manifest, report_path):
+def verify(base, manifest, report_path, wait_seconds=0):
     origin = urllib.parse.urlsplit(base)
     if (origin.scheme != 'https' or origin.username or origin.password or
             origin.port or origin.path not in ('', '/') or origin.query or origin.fragment or
@@ -87,7 +88,7 @@ def verify(base, manifest, report_path):
             time.sleep(0.5 * (attempt + 1))
         return result
 
-    files = manifest['files']
+    files = [dict(row, bytes=expected_content(row)[0], sha256=expected_content(row)[1]) for row in (manifest['files'] + manifest.get('aliases', []))]
     by_path = {x['original']: x for x in files}
     tasks = [('/' + x['original'], x) for x in files]
     for alias, original in [
@@ -95,6 +96,21 @@ def verify(base, manifest, report_path):
         ('/CozyStudio/', 'CozyStudio/index.html'), ('/omniscope/', 'omniscope/index.html'),
     ]:
         tasks.append((alias, by_path[original]))
+    if wait_seconds:
+        # Cloudflare's upload and GitHub CI run concurrently. Wait for the branch
+        # alias to serve all explicitly repaired files before comparing the snapshot.
+        samples = [('/' + row['original'], row) for row in files if row.get('source_sha256') or row.get('alias')]
+        if not samples:
+            samples = [('/', by_path['index.html'])]
+        deadline = time.monotonic() + wait_seconds
+        while True:
+            with ThreadPoolExecutor(max_workers=4) as pool:
+                ready = list(pool.map(check, samples))
+            if all(row['passed'] for row in ready):
+                break
+            if time.monotonic() >= deadline:
+                raise RuntimeError('The uploaded branch preview has not reached the expected source snapshot; inspect its build before retrying')
+            time.sleep(3)
     with ThreadPoolExecutor(max_workers=8) as pool:
         rows = list(pool.map(check, tasks))
     video = by_path['voltwayvideo.mp4']
@@ -136,7 +152,8 @@ def verify(base, manifest, report_path):
         'base_url': base, 'checked': len(rows), 'passed': sum(x['passed'] for x in rows),
         'failed': [x for x in rows if not x['passed']],
         'unchanged_unavailable': [x['path'] for x in rows if x.get('status') == 404 and x['passed']],
-        'scope': 'Original migration snapshot, public files, redirects, MIME, directory aliases and video range-response parity; no authenticated actions or API integrations.',
+        'intentional_text_fixes': [row['original'] for row in files if row.get('source_sha256') or row.get('alias')],
+        'scope': 'Original paths plus documented text-only repairs, public bytes/MIME, redirects, directory aliases and live video response parity; no authenticated actions.',
     }
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps({'summary': summary, 'results': rows}, indent=2) + '\n')
@@ -147,6 +164,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--base-url', required=True)
     parser.add_argument('--report', type=Path, default=ROOT / '.verification/provider-preview.json')
+    parser.add_argument('--wait-seconds', type=int, default=0)
     args = parser.parse_args()
     manifest = json.loads((ROOT / 'config/routes.json').read_text())
-    raise SystemExit(0 if verify(args.base_url, manifest, args.report) else 1)
+    raise SystemExit(0 if verify(args.base_url, manifest, args.report, args.wait_seconds) else 1)
