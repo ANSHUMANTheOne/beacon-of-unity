@@ -167,7 +167,7 @@
 }
 
 /* Observatory composition: a fixed instrument rail, an open scene, and one image workspace. */
-.unified-mission .mission-stage{left:20px;top:92px;bottom:auto;width:336px;max-height:calc(100vh - 112px);padding:25px 25px 23px;border:1px solid #61757a9c;border-radius:12px;background:#10222cce;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 18px 54px #0008;overflow-y:auto}
+.unified-mission .mission-stage{left:20px;top:92px;bottom:auto;width:336px;max-height:calc(100vh - 112px);padding:25px 25px 23px;border:1px solid #d3edf078;border-radius:18px;background:linear-gradient(153deg,#ffffff29 0%,#d8f3ff0c 23%,transparent 48%),linear-gradient(122deg,#244351bf,#102630bd 58%,#172c38ca);backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);box-shadow:inset 0 1px 0 #ffffff85,inset 0 0 0 1px #bedee01a,0 24px 64px #0009,0 0 28px #9fdce018;overflow-y:auto}
 .unified-mission .mission-stage-head h3{font-size:28px;line-height:1.08;margin-top:10px}
 .unified-mission .stage-kicker,.unified-mission .stage-step,.unified-mission .mission-stage .mission-band-top h4{font-size:11px;letter-spacing:.055em}
 .unified-mission .stage-field #stageField{font-size:11px}
@@ -175,6 +175,14 @@
 .unified-mission .stage-visit-details summary span{font-size:11px}
 .unified-mission .mission-stage-actions button{font-size:11px}
 .unified-mission .mission-stage-readout{font-size:11px;line-height:1.5}
+.unified-mission .stage-band-choices{border-color:#c7e2e159;border-radius:10px;background:#eaf9ff0b;box-shadow:inset 0 1px 1px #ffffff1c}
+.unified-mission .stage-band-choices button{border-color:#c7e2e135;transition:background .2s ease,color .2s ease,box-shadow .2s ease}
+.unified-mission .stage-band-choices button.active{background:linear-gradient(160deg,#f4dbbd,#dca778);box-shadow:inset 0 1px 0 #fff8ecaa}
+.unified-mission .mission-stage-actions button{border-radius:11px;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.unified-mission .mission-stage-actions button:hover{transform:translateY(-2px)}
+.unified-mission .mission-stage-actions .stage-primary{background:linear-gradient(155deg,#f5d7b2,#dba174);box-shadow:inset 0 1px 0 #fff8e0a6,0 7px 20px #d78f5830}
+.unified-mission .mission-stage-actions .stage-secondary{background:#ffffff14;border-color:#d1eaeb64;box-shadow:inset 0 1px 0 #ffffff33}
+.unified-mission .mission-stage-actions .stage-secondary:hover{background:#ffffff27}
 .unified-mission .mission-stage *,
 .unified-mission .mission-comparison *{font-family:'SF Pro Text',-apple-system,BlinkMacSystemFont,'Inter',sans-serif!important}
 .unified-mission .mission-stage-head h3{font-family:'New York',Georgia,serif!important;font-size:30px;letter-spacing:-.035em}
@@ -190,7 +198,7 @@
 .unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-scene-caption{display:none}
 .spacecraft-beacon-ring{border-color:#e9c7a1;background:#bc754355;box-shadow:0 0 0 5px #e8ba8a22,0 0 18px #e6a57855}
 .spacecraft-beacon-core{background:#f5e6d2}
-.spacecraft-beacon-title{border-color:#d7ae8d;color:#f1e9de;background:#172932}
+.spacecraft-beacon-title{border-color:#f4dbb58c;color:#f8eee2;background:linear-gradient(145deg,#6380859e,#243846c9);backdrop-filter:blur(16px) saturate(145%);-webkit-backdrop-filter:blur(16px) saturate(145%);box-shadow:inset 0 1px 0 #fff8dd80,0 8px 22px #0008}
 .spacecraft-beacon-title small{color:#e8be99;font-size:10px}
 .orbit-context .spacecraft-beacon-title{display:none}
 .orbit-context .spacecraft-beacon-ring{transform:scale(.56);box-shadow:0 0 0 3px #e8ba8a22,0 0 12px #e6a57855}
@@ -203,7 +211,7 @@
 .observation-beam-halo{stroke-width:12;opacity:.06}
 .observation-beam-particle{fill:#f6d9ad;filter:drop-shadow(0 0 4px #e7ad76)}
 .observation-beam[hidden]{display:none}
-.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:16px;top:88px;bottom:16px;width:248px;max-height:none;padding:22px 18px;border:1px solid #61757a9c;border-radius:10px;background:#10222cde}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:16px;top:88px;bottom:16px;width:248px;max-height:none;padding:22px 18px;border:1px solid #d3edf078;border-radius:16px;background:linear-gradient(153deg,#ffffff25,transparent 35%),linear-gradient(122deg,#244351d9,#102630e0 58%,#172c38e6)}
 .unified-mission .mission-comparison:not(.is-collapsed){left:280px;right:16px;top:88px;bottom:16px;border:1px solid var(--obs-line);border-radius:10px;background:#13232c}
 .unified-mission .mission-comparison-head{padding:19px 22px 15px}
 .unified-mission .mission-comparison-head h3{font-size:23px}
@@ -218,7 +226,7 @@
 .mission-difference-legend small{padding-top:7px;border-top:1px solid var(--obs-line);color:var(--obs-muted);font:10px/1.45 'Inter',sans-serif}
 @media (max-width:1100px) and (min-width:801px){.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:10px;width:210px;padding:18px 14px}.unified-mission .mission-comparison:not(.is-collapsed){left:232px;right:10px}}
 @media (max-width:800px){
- .unified-mission .mission-stage{left:10px;right:10px;top:auto;bottom:10px;width:auto;max-height:min(48vh,365px);padding:16px 19px 18px;border:1px solid #61757a9c;border-radius:11px;overflow:auto}
+ .unified-mission .mission-stage{left:10px;right:10px;top:auto;bottom:10px;width:auto;max-height:min(48vh,365px);padding:16px 19px 18px;border:1px solid #d3edf078;border-radius:17px;overflow:auto}
  .unified-mission .mission-stage-head h3{font-size:24px;margin-top:5px}
  .unified-mission .stage-field,.unified-mission .mission-stage-readout{display:none}
  .unified-mission .mission-spectrum{margin-top:10px}
@@ -238,3 +246,7 @@
  .mission-difference-legend{position:static;width:auto;box-shadow:none;border:0;border-top:1px solid var(--obs-line);gap:7px;padding:12px 14px}
 }
 @media (max-width:800px){.mission-difference-legend:not([hidden]){display:grid;grid-template-columns:1fr 1fr;gap:7px 10px;padding:10px 12px}.mission-difference-legend strong,.mission-difference-legend small{grid-column:1 / -1}}
+@media (prefers-reduced-transparency:reduce){
+ .unified-mission .mission-stage,.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{background:#172b35;backdrop-filter:none;-webkit-backdrop-filter:none}
+ .spacecraft-beacon-title{background:#223943;backdrop-filter:none;-webkit-backdrop-filter:none}
+}
