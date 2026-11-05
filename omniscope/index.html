@@ -2722,13 +2722,16 @@ const ZOOM_MAX_DIST = 700;
 const AUTO_FOLLOW_RELEASE_DIST = 160;   // only when zoomed right out to system scale
 let zoomPending = 0;
 let missionFovTarget = 45;
+let missionDistanceTarget = 4.2;
+let missionZoomActive = false;
 let zoomAutoFocusId = null;      // object we started following only because the user zoomed toward it
 let returnToOrigin = false;
 const _zp = new THREE.Vector3(), _zoomOff = new THREE.Vector3();
 
 function focusOn(id) { state.followId = id; zoomAutoFocusId = id; returnToOrigin = false; camGoal = null; }
 function releaseFocus() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = true; }
-function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; camGoal = null; }
+function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; missionDistanceTarget = 4.2; missionZoomActive = false; camGoal = null; }
+function resetMissionZoom(distance) { missionFovTarget = 45; missionDistanceTarget = distance; missionZoomActive = false; }
 
 // Esc lets go of the focus (capture phase, so closing the Ask OmniScope console / skipping a launch with Esc doesn't also do this).
 window.addEventListener('keydown', (e) => {
@@ -2804,7 +2807,7 @@ function pickZoomFocus(cx, cy) {
 }
 app.addEventListener('wheel', (e) => {
   if (omni.skyActive) return;
-  if (e.target !== renderer.domElement) return;          // let panels scroll normally
+  if (e.target !== renderer.domElement && !e.target.closest('.spacecraft-beacon')) return; // let panels scroll normally
   if (state.mode === 'pilot' || activeLaunch) return;    // those modes handle the wheel themselves
   e.preventDefault();
   e.stopPropagation();                                   // keeps OrbitControls' own (unbounded) zoom out of it
@@ -2814,7 +2817,12 @@ app.addEventListener('wheel', (e) => {
   if (e.ctrlKey) d *= 6;                                 // trackpad pinch arrives as ctrl+wheel with tiny deltas
   d = Math.max(-150, Math.min(150, d));
   if (document.body.classList.contains('unified-mission')) {
-    missionFovTarget = Math.max(14, Math.min(76, missionFovTarget * Math.exp(d * 0.0011)));
+    missionZoomActive = true;
+    // First widen the field of view, then pull back from Earth. That keeps
+    // close inspection stable while still allowing a real orbital overview.
+    if (d > 0 && missionFovTarget >= 75.5) missionDistanceTarget = Math.min(120, missionDistanceTarget * Math.exp(d * .00135));
+    else if (d < 0 && missionDistanceTarget > 4.21) missionDistanceTarget = Math.max(4.2, missionDistanceTarget * Math.exp(d * .00135));
+    else missionFovTarget = Math.max(14, Math.min(76, missionFovTarget * Math.exp(d * .0011)));
     return;
   }
   zoomPending = Math.max(-ZOOM_MAX_PENDING, Math.min(ZOOM_MAX_PENDING, zoomPending + d * 0.0006));
@@ -2823,12 +2831,18 @@ renderer.domElement.addEventListener('pointerdown', () => { returnToOrigin = fal
 
 function applyZoom(dt) {
   if (document.body.classList.contains('unified-mission')) {
-    if (Math.abs(camera.fov - missionFovTarget) < .015) return;
+    if (!missionZoomActive) return;
+    const earth = bodyMeshes.earth.group.position;
+    const currentDistance = camera.position.distanceTo(earth);
+    if (Math.abs(camera.fov - missionFovTarget) < .015 && Math.abs(currentDistance - missionDistanceTarget) < .015) { missionZoomActive = false; return; }
     // Keep the Earth as the zoom anchor even after a right-button pan.
-    _zp.copy(bodyMeshes.earth.group.position).sub(controls.target).multiplyScalar(1 - Math.exp(-dt * 14));
+    const ease = 1 - Math.exp(-dt * 14);
+    _zp.copy(earth).sub(controls.target).multiplyScalar(ease);
     camera.position.add(_zp);
     controls.target.add(_zp);
-    camera.fov += (missionFovTarget - camera.fov) * (1 - Math.exp(-dt * 14));
+    _zoomOff.copy(camera.position).sub(earth);
+    if (_zoomOff.lengthSq() > 1e-6) camera.position.copy(earth).addScaledVector(_zoomOff.normalize(), currentDistance + (missionDistanceTarget - currentDistance) * ease);
+    camera.fov += (missionFovTarget - camera.fov) * ease;
     camera.updateProjectionMatrix();
     return;
   }
@@ -2850,7 +2864,7 @@ function applyZoom(dt) {
 
 
 const _goalOff = new THREE.Vector3(), _goalWant = new THREE.Vector3();
-renderer.domElement.addEventListener('pointerdown', () => { camGoal = null; });
+renderer.domElement.addEventListener('pointerdown', () => { camGoal = null; missionZoomActive = false; });
 renderer.domElement.addEventListener('wheel', () => { camGoal = null; }, { passive: true });
 
 function animate() {
@@ -3051,7 +3065,7 @@ function flushLabels() {
   labelQueue.length = 0;
 }
 
-const omni = installSurvey({THREE, scene, camera, controls, renderer, state, bodyMeshes, missionMeshes, orbitLines, planets, missions, asteroidBelt, sunMesh, coronaMesh, app, overlay, applyVisibility, releaseFocus, freeOrbit, renderPlayIcon, updateLiveIndicator, exitPilotMode, flyToObject, selectBody, focusOn});
+const omni = installSurvey({THREE, scene, camera, controls, renderer, state, bodyMeshes, missionMeshes, orbitLines, planets, missions, asteroidBelt, sunMesh, coronaMesh, app, overlay, applyVisibility, releaseFocus, freeOrbit, resetMissionZoom, renderPlayIcon, updateLiveIndicator, exitPilotMode, flyToObject, selectBody, focusOn});
 window.omniscope = omni;
 animate();
 

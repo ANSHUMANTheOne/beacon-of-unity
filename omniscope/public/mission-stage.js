@@ -12,7 +12,7 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  <div class="mission-stage-readout" aria-live="off"><strong id="stageWave">Measured wavelength will appear here.</strong><span id="stageTime">Loading the selected visits…</span><span id="stageCoords">Recorded spacecraft position loads with each image.</span></div>
  <p class="mission-stage-note">Position from FITS metadata. Diagram not to scale.</p>`;
  ui.appendChild(stage);
- const sceneCaption=document.createElement('aside');sceneCaption.className='mission-scene-caption';sceneCaption.innerHTML='<span>OBSERVING GEOMETRY</span><strong>SPHEREx / Earth</strong><small>Recorded spacecraft position. Sizes enlarged for visibility.</small>';ui.appendChild(sceneCaption);
+ const sceneCaption=document.createElement('aside');sceneCaption.className='mission-scene-caption';sceneCaption.innerHTML='<span>OBSERVING GEOMETRY</span><strong>SPHEREx / Earth</strong><small>Recorded spacecraft position. Zoom out for JPL planet orbits.</small>';ui.appendChild(sceneCaption);
  stage.querySelector('#stageSkyArea').onclick=()=>ui.querySelector('[data-panel="search"]').click();
  stage.querySelector('#stageBandSlot').appendChild(bandPanel);
  bandPanel.querySelector('.mission-band-top h4').textContent='02 / INFRARED BAND';
@@ -40,7 +40,7 @@ export function installMissionStage({ui,card,bandPanel,getComparison,scanSample,
  const live=document.createElement('div');live.className='mission-live-readout';live.innerHTML='<strong id="missionLiveWave">Reading detector pixels…</strong><span id="missionLiveOrbit">Reading recorded spacecraft position…</span>';
  card.querySelector('.mission-visit-dates').after(live);
  let playing=false,started=0,lastIndex=-1,lastSignature='',lastPaint=0,busy=false,loadError='';
- function openCard(){card.classList.remove('is-collapsed');card.setAttribute('aria-expanded','true');toggle.textContent='← Scene';toggle.title='Return to observing scene';toggle.setAttribute('aria-label','Return to observing scene');drawComparison();document.dispatchEvent(new Event('omni-scan-pair'));}
+ function openCard(){card.classList.remove('is-collapsed');card.scrollTop=0;card.setAttribute('aria-expanded','true');toggle.textContent='← Scene';toggle.title='Return to observing scene';toggle.setAttribute('aria-label','Return to observing scene');drawComparison();document.dispatchEvent(new Event('omni-scan-pair'));}
  function closeCard(){card.classList.add('is-collapsed');card.setAttribute('aria-expanded','false');toggle.textContent='← Scene';toggle.title='Return to observing scene';toggle.setAttribute('aria-label','Return to observing scene');indicator.hidden=true;}
  closeCard();
  toggle.onclick=()=>card.classList.contains('is-collapsed')?openCard():closeCard();
