@@ -1,0 +1,8 @@
+{
+  // Review in an isolated preview; do not deploy until the production topology is confirmed.
+  "name": "beaconofunity",
+  "compatibility_date": "2026-07-12",
+  "observability": { "enabled": true },
+  "assets": { "directory": "../dist" },
+  "compatibility_flags": ["nodejs_compat"]
+}
