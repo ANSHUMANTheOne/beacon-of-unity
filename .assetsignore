@@ -1,1 +1,14 @@
-
+/.git/
+/node_modules/
+/.wrangler/
+/.vite/
+/src/
+/tests/
+/playwright-results/
+/package.json
+/package-lock.json
+/vite.config.js
+/preview-server.mjs
+/wrangler.jsonc
+/REDESIGN.md
+/assets/cursors/
