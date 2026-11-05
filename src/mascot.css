@@ -11,3 +11,9 @@ html[data-theme] #bav-chat-form{background:var(--chat-bg);border-top:1px solid v
 @media(prefers-reduced-motion:reduce){#bav-anim,#bav-wrap *{animation:none!important;transition:none!important}}
 .beacon-dock-icon{display:none}.beacon-dock button .beacon-dock-label{margin-left:0}
 @media(max-width:700px){.beacon-dock{right:10px;bottom:calc(10px + env(safe-area-inset-bottom));border-radius:18px;box-shadow:0 2px 8px #102f4608}.beacon-dock #beacon-chat-button{display:flex;align-items:center;justify-content:center;gap:4px;width:60px;height:34px;min-height:34px;padding:0 7px;font-size:10px}.beacon-dock-icon{display:block;width:15px;height:15px;flex:none}.beacon-dock #beacon-chat-button .beacon-dock-label{font-size:0;margin:0}.beacon-dock-label:after{content:'Ask';font-size:10px}.beacon-dock .beacon-dock-arrow{display:none}.beacon-dock #beacon-hide{width:28px;height:34px;min-height:34px;padding:0;font-size:12px}.beacon-dock button{position:relative}.beacon-dock button:before{content:'';position:absolute;inset:-5px 0}}
+
+#bav-wrap.beacon-tucked{opacity:0;transform-origin:center bottom}
+#bav-wrap.beacon-tucked #bav-bubble{display:none}
+.beacon-dock:after{content:'';position:absolute;right:9px;top:50%;width:14px;height:5px;margin-top:-2px;border-radius:50%;background:#12364d;box-shadow:0 0 0 3px #62c7e321;opacity:0;transform:scale(.3);pointer-events:none;transition:opacity .2s,transform .3s}
+.beacon-dock.beacon-recalling:after{opacity:.65;transform:scale(1)}
+@media(prefers-reduced-motion:reduce){.beacon-dock:after{transition:none}}

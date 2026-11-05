@@ -30,6 +30,8 @@ with sync_playwright() as p:
    page.locator('[data-demo]').first.click();page.frame_locator('#demo-frame').locator('#requestFeed .card').first.wait_for(state='visible');page.screenshot(path=str(out/f'verified-{w}-embedded-demo.png'));page.get_by_role('button',name='Close demo',exact=True).click();assert not page.locator('#demo-dialog').is_visible()
   test('homepage-demo-integration',embed)
   def double():
+   if page.locator("#beacon-hide").get_attribute("aria-expanded")!="true":
+    page.locator("#beacon-hide").click();page.wait_for_timeout(1000)
    if w<700:page.locator('#bav-wrap').tap();page.wait_for_timeout(80);page.locator('#bav-wrap').tap()
    else:page.locator('#bav-wrap').dblclick()
    page.locator('#bav-chat.open').wait_for(state='visible');page.locator('#bav-chat-close').click()
