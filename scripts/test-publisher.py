@@ -1,4 +1,4 @@
-import unittest,tempfile,sys,subprocess,json
+import unittest,tempfile,sys,subprocess,json,shutil
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from build import build
@@ -29,4 +29,28 @@ class PublisherContract(unittest.TestCase):
  def test_refuses_to_overwrite_existing_build(self):
   self.out.mkdir();self.config([])
   with self.assertRaises(ValueError):build(self.root,self.out,self.manifest)
+ def test_cloudflare_entrypoint_rejects_stale_or_extra_output(self):
+  self.track('assets/resource.gif',b'GIF89a-original')
+  self.config([dict(source='assets/resource.gif',original='resource.gif')])
+  scripts=self.root/'scripts';scripts.mkdir()
+  for name in ['build.py','validate.py','cloudflare-build.mjs']:
+   shutil.copyfile(Path(__file__).resolve().parent/name,scripts/name)
+  (self.root/'config').mkdir()
+  shutil.copyfile(self.manifest,self.root/'config/routes.json')
+  command=['node',str(scripts/'cloudflare-build.mjs')]
+  result=subprocess.run(command,cwd=self.base,capture_output=True,text=True)
+  self.assertEqual(result.returncode,0,result.stderr)
+  published=self.root/'dist/resource.gif'
+  self.assertEqual(published.read_bytes(),b'GIF89a-original')
+  result=subprocess.run(command,cwd=self.base,capture_output=True,text=True)
+  self.assertEqual(result.returncode,0,result.stderr)
+  (self.root/'assets/resource.gif').write_bytes(b'GIF89a-changed')
+  result=subprocess.run(command,cwd=self.base,capture_output=True,text=True)
+  self.assertNotEqual(result.returncode,0)
+  self.assertEqual(published.read_bytes(),b'GIF89a-original')
+  (self.root/'assets/resource.gif').write_bytes(b'GIF89a-original')
+  extra=self.root/'dist/.env';extra.write_text('FIXTURE_ONLY=true')
+  result=subprocess.run(command,cwd=self.base,capture_output=True,text=True)
+  self.assertNotEqual(result.returncode,0)
+  self.assertTrue(extra.exists())
 if __name__=='__main__':unittest.main()

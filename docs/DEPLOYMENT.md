@@ -4,7 +4,7 @@
 
 - `main` originally had no tracked `.github` workflows, `CNAME`, `.nojekyll`, root Wrangler configuration or submodules.
 - GitHub reports an active generated `pages-build-deployment` workflow; recent Pages deployments use `main`. An authenticated read confirmed legacy branch publishing from `main`, folder `/`, HTTPS enforced, and no GitHub Pages custom domain. The Pages URL is `https://anshumantheone.github.io/beacon-of-unity/`. Settings have not been changed.
-- The main domain responds through Cloudflare and normalizes many `.html` URLs to extensionless paths. Current live HTML is not byte-identical to main-branch HTML; provider transformations and/or deployed-version differences remain unresolved.
+- An authenticated Cloudflare audit confirmed that the custom domain is attached to the assets-only Worker `beaconofunity`. Its active version was uploaded on 21 October 2026, before the current repository snapshot; live HTML and Git main therefore must be compared before cutover. The live compatibility date is `2026-10-19`, with no compatibility flags or application bindings. No live version or domain attachment was changed.
 - OmniScope's tracked configuration identifies a dedicated Worker named `omniscope-beacon` on `beaconofunity.com/omniscope*`, with an ASSETS binding and `run_worker_first: true`. The production app and API validation errors respond on that route. This Worker is separate from GitHub Pages.
 - The alternate branch is `cloudflare/workers-autoconfig`, with a root static-assets Worker named `beaconofunity`, assets directory `.`, observability and `nodejs_compat`. It also has its own different homepage. It is preserved and not merged. Its current production connection requires console confirmation.
 - Root `functions/api/` is for whole-repository Cloudflare Pages; project-local copies support standalone OmniScope Pages and its Worker imports. GitHub Pages cannot run these functions. The live main-domain `/api/archive` returned 404 at baseline.
@@ -13,7 +13,7 @@
 
 1. Confirm GitHub Pages settings and all Cloudflare production/preview branches, build roots, asset directories, existing headers, HTML handling, domains, routes and bindings. Save settings before changing them. Do not merge while any host publishes the reorganized source root directly.
 2. Build with `python scripts/build.py` into a new output directory and run `python scripts/validate.py`. Use `--migration` for the initial byte-preservation gate. Upload `dist/` to an isolated provider preview. Confirm original redirect status codes, targets, query strings, MIME, range playback, fonts, CDN/CORS behavior and authenticated flows on the real provider.
-3. Keep Cloudflare as the main-domain host. For its main static Worker, point assets at the generated output using a reviewed configuration based on `deployment/cloudflare-main.example.jsonc`; first confirm the actual connected branch and its homepage. Do not automatically deploy the old branch over main or move the domain to GitHub Pages.
+3. Keep Cloudflare as the main-domain host. The active root `wrangler.jsonc` names the existing `beaconofunity` Worker and points assets at generated `dist/`, retaining the live compatibility date. Its custom build hook runs `scripts/cloudflare-build.mjs`. Configure the explicit Cloudflare Build command described below as well; Workers Builds does not guarantee running Wrangler custom builds. Do not automatically deploy the old branch over main or move the domain to GitHub Pages.
 4. If GitHub Pages needs the organized main branch, approve a custom Actions publishing source and use `deployment/pages.yml.example` as a reviewed template. Keep the current domain/HTTPS settings exactly as recorded. The template is inert outside `.github/workflows/`; this branch has only build/validation CI.
 5. OmniScope can still use the existing commands: `node omniscope/worker/prepare-assets.mjs`, then (only with production approval) `wrangler deploy --config omniscope/worker/wrangler.jsonc`. No OmniScope source, build scripts, or configuration are modified. The Worker name, route, HTTP dispatch and bindings are preserved.
 6. A standalone OmniScope Pages project keeps source root `omniscope`, output `public`, no build command, and its local `functions/` directory. A whole-repository Pages project uses root `functions/` with generated static output. Confirm both before cutover.
@@ -34,3 +34,27 @@ OmniScope is explicitly excluded from source moves. Keep the original `omniscope
 ## Reproduce checks
 
 Run `python scripts/test-publisher.py`, `node scripts/test-worker.mjs`, `python scripts/build.py` (fresh output), then `python scripts/validate.py --migration`. Browser parity is optional development tooling: with Playwright already installed and a Chromium browser available, run `python scripts/check-browser.py`; set `BEACON_BROWSER_EXECUTABLE` to an installed browser path if needed. It writes only under ignored `.verification/` and blocks external requests. Ongoing application edits use ordinary `validate.py` source/output checking; the immutable original hashes remain migration evidence.
+
+## Confirmed Workers Builds failure and fix
+
+The failed build ran `npx wrangler versions upload` at root, with **Build command: None**. The log reported **Missing entry-point to Worker script or to assets directory**. There was no active root Wrangler configuration and no generated artifact.
+
+The review branch now provides:
+- Root `wrangler.jsonc`: existing Worker name `beaconofunity`, assets `./dist`, live compatibility date `2026-10-19`, no new bindings, routes, domains, or compatibility flags.
+- `node scripts/cloudflare-build.mjs`: generates the original public layout and validates source/output integrity. If `dist/` already exists it is validated instead of overwritten; stale, incomplete, or extra-file output fails. Preserve or move a prior output before rebuilding.
+- A local Wrangler custom build hook and GitHub CI dry-run with Wrangler `4.157.0`. Dry-run does not upload a version or deploy.
+- Cloudflare build settings still need confirmation; repository changes do not edit the dashboard.
+
+After the repository checks pass, approve this **build-only** settings change for the connected project:
+- Root directory: `/` (unchanged).
+- Build command: `node scripts/cloudflare-build.mjs`.
+- Existing upload command: `npx wrangler versions upload` (unchanged; do not replace with `wrangler deploy`).
+- Keep tokens, variables, production branch, domain, DNS, and other Worker settings unchanged.
+
+Test the review branch as an uploaded version first. `versions upload` does not promote the version to production, but version URLs use any production bindings; this main Worker has none. It also does not include the separate OmniScope/social Workers or reproduce their custom-domain routing. Test their existing live routes separately and do not redeploy them as part of this fix.
+
+The active pre-cutover main version recorded by the read-only audit is `3ed17401-3234-4074-a41f-388209a6dc95`, deployment `ff74e721-78a2-42d3-ab14-aba135decd56`. Re-read the current deployment immediately before any future approved promotion or rollback; other agents may have made changes.
+
+This resolves the known missing configuration/artifact path. It does not approve production promotion, fix baseline application defects, or complete the GitHub Pages publishing-source transition.
+
+References: [Wrangler custom builds](https://developers.cloudflare.com/workers/wrangler/custom-builds/), [Workers Builds settings](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/), [version uploads](https://developers.cloudflare.com/workers/wrangler/commands/workers/).
