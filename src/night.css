@@ -1,0 +1,23 @@
+ï»¿/* Night uses the same hierarchy, with navy surfaces and readable cyan accents. */
+html[data-theme=dark]{color-scheme:dark;--paper:#0d2030;--ink:#edf5fa;--muted:#abc3d3;--line:#8ab3cd30;--accent:#79cde9;background:var(--paper);color:var(--ink)}
+html[data-theme=dark] body{background:var(--paper)}
+html[data-theme=dark] .site-header.scrolled{background:#0d2030f2;color:#edf5fa;border-color:var(--line)}
+html[data-theme=dark] :is(.navigation-panel,.site-footer,.beacon-dock){background:#112b3d;color:#edf5fa;border-color:var(--line)}
+html[data-theme=dark] .icon-button{color:inherit;border-color:#9fbfd445}
+html[data-theme=dark] .feature-tabs button{color:#a9c5d6}html[data-theme=dark] .feature-tabs button[aria-selected=true]{color:#edf7ff}
+html[data-theme=dark] .preview-symbol{color:#79d2ef}html[data-theme=dark] .preview-head{border-color:var(--line)}
+html[data-theme=dark] .how-steps b{color:#78bdd6}
+html[data-theme=dark] .community-spaces{background:#102b3e;color:#e1f0f9;border-color:#365469}
+html[data-theme=dark] :is(.spaces-toolbar,.school-controls){background:#153247;border-color:#365469}
+html[data-theme=dark] .spaces-tabs{border-color:#43677b}html[data-theme=dark] .spaces-tabs button{color:#bed6e5}html[data-theme=dark] .spaces-tabs button[aria-pressed=true]{background:#83d4ee;color:#123548}
+html[data-theme=dark] .school-controls button{border-color:#50778d;color:#d8eaf5}html[data-theme=dark] .school-controls button:first-child{background:#83d4ee;color:#123548;border-color:#83d4ee}
+html[data-theme=dark] :is(.school-controls p,.space-example){color:#b3cedf}
+html[data-theme=dark] .scene-story{background:#17384bf5;border-color:#45677b;color:#e6f3fa}
+html[data-theme=dark] .story-dots i{background:#436172}html[data-theme=dark] .story-dots i.active,html[data-theme=dark] .scene-story:after{background:#80cde8}
+html[data-theme=dark] .space-fallback{background:linear-gradient(150deg,#183c50,#102735)}
+html[data-theme=dark] .pillar-card{box-shadow:0 14px 28px #0002}
+html[data-theme=dark] .pillar-card .pillar-number,html[data-theme=dark] .pillar-card .pillar-action,html[data-theme=dark] .pillar-card>p{color:inherit}
+html[data-theme=dark] .compare-table{background:#102738}html[data-theme=dark] .compare-check{background:#78d1e9;color:#12364a}
+html[data-theme=dark] .button.primary{background:#8bd5eb;color:#102f43}
+html[data-theme=dark] .button.primary:hover{background:#b7edfa;color:#102f43}
+.menu-bottom{flex-wrap:wrap;row-gap:18px}
