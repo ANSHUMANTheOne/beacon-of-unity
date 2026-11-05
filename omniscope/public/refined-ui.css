@@ -1,0 +1,241 @@
+/* Keep the sky scene as context while the archived images do the work. */
+.unified-mission{background:#040b12}
+.unified-mission .planet-strip,.unified-mission .col-right,.unified-mission .calm-utility,.unified-mission .calm-provenance,.unified-mission .mission-data-link,.unified-mission .mission-caution{display:none!important}
+.unified-mission .calm-intro{left:36px;top:166px;max-width:295px}
+.unified-mission .calm-intro h2{font-size:34px;line-height:1.12;max-width:290px;letter-spacing:-1.2px;margin:13px 0 16px;color:#f0f7f5}
+.unified-mission .calm-intro p{font-size:13px;line-height:1.7;max-width:275px;color:#abc1ca}
+.unified-mission .calm-primary-actions{left:36px;top:335px}
+.unified-mission .calm-primary-actions .calm-button{padding:12px 18px;border-radius:8px;font-size:12px}
+.unified-mission .calm-primary-actions [hidden]{display:none!important}
+.unified-mission .top-left{left:36px;top:27px}
+.unified-mission .top-left p{display:none}
+.unified-mission .mission-source-badge{right:34px;top:35px}
+.unified-mission .mission-comparison{left:clamp(352px,35vw,545px);right:32px;top:105px;width:auto;max-width:940px;margin-left:auto;background:#091722f7;border:1px solid #52778072;border-radius:14px;box-shadow:0 20px 70px #0008}
+.unified-mission .mission-comparison-head{padding:22px 24px 14px}
+.unified-mission .mission-comparison-head h3{font-size:25px;margin:7px 0 0}
+.unified-mission .mission-comparison-head{gap:8px}
+.unified-mission .mission-comparison-head #missionReplay{width:auto;min-width:75px;padding:0 8px;margin-left:auto;font:600 10px 'Inter',sans-serif;white-space:nowrap}
+.unified-mission .mission-comparison.is-collapsed #missionReplay{display:none!important}
+.unified-mission .mission-modes{padding:0 24px 19px;gap:8px}
+.unified-mission .mission-modes button{flex:0 0 auto;padding:10px 16px;border-radius:7px;font-size:12px}
+.unified-mission .mission-modes [hidden]{display:none!important}
+.unified-mission .mission-image-area{margin:0 15px;background:#03080c;border:1px solid #4d697043;border-radius:7px;overflow:hidden}
+.unified-mission .mission-image-area canvas{aspect-ratio:900/430}
+.unified-mission .mission-image-area>span{background:#07151dcc;color:#c2d6d7;bottom:10px;font-size:9px}
+.unified-mission .mission-comparison.is-loading .mission-image-area{opacity:.38}
+.unified-mission .mission-comparison.is-loading #missionBand{cursor:wait}
+.unified-mission .mission-visit-dates{padding:13px 24px 4px;font-size:11px;color:#bdd1d6}
+.unified-mission .mission-comparison-foot{padding:9px 24px 18px;font-size:11px}
+.unified-mission .mission-comparison-foot button{font-size:11px}
+.mission-band-panel{padding:18px 24px 15px;border-top:1px solid #536e743e}
+.mission-band-top{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.mission-band-top h4{font-size:16px;font-weight:500;color:#dfeeea;margin:6px 0 0}
+.mission-band-top select{max-width:210px;padding:10px 12px;background:#122b32;border:1px solid #668b8b80;border-radius:7px;color:#e1f4ec;font:12px 'Inter',sans-serif;cursor:pointer}
+.mission-band-values{font-size:11px;line-height:1.5;color:#8fe4ca;margin:13px 0 5px}
+.mission-band-explain{font-size:11px;line-height:1.55;color:#a0b7bd;margin:0}
+.mission-science-note{padding:12px 24px 17px;border-top:1px solid #536e743e;color:#a8c3c7;font-size:11px;line-height:1.65}
+.mission-science-note summary{cursor:pointer;color:#c8dfda;font-size:11px}
+.mission-science-note p{max-width:660px;margin:9px 0 0}
+.mission-context{position:absolute;bottom:48px;left:36px;max-width:285px;display:flex;gap:12px;align-items:flex-start;color:#9eb6bd;font-size:11px;line-height:1.55;pointer-events:none}
+.mission-context-dot{width:9px;height:9px;flex:none;margin-top:5px;border-radius:50%;background:#88d8c4;box-shadow:0 0 0 5px #88d8c424}
+.mission-context b,.mission-context span{display:block}
+.mission-context b{color:#e0f0e9;margin-bottom:4px;font-weight:600}
+.unified-mission .calm-panel{top:105px;bottom:32px;right:32px;z-index:45}
+.unified-mission .survey-panel{left:auto;right:32px}
+.unified-mission .calm-backdrop{z-index:43;background:#02080dbc}
+.unified-mission .calm-panel-open .mission-comparison{opacity:.38}
+.unified-mission .wavelength-dock{display:none!important}
+.unified-mission .sensor-label{display:none!important}
+.unified-mission .sensor-panel .sensor-preview,.unified-mission .sensor-panel .pair-buttons,.unified-mission .sensor-panel #observeLoaded{display:none!important}
+.unified-mission .calm-intro:before{inset:-20px -30px;background:linear-gradient(90deg,#040b12f7,#040b12dc 65%,#040b1200)}
+@media(max-width:1080px){
+ .unified-mission .calm-intro{left:24px;top:143px;max-width:255px}
+ .unified-mission .calm-intro h2{font-size:29px;max-width:245px}
+ .unified-mission .calm-intro p{font-size:11px;max-width:245px}
+ .unified-mission .calm-primary-actions{left:24px;top:304px}
+ .unified-mission .mission-comparison{left:310px;right:20px;top:101px}
+ .unified-mission .mission-context{left:24px;max-width:250px}
+}
+@media(max-width:800px){
+ .unified-mission .top-left{left:20px;top:20px}
+ .unified-mission .mission-source-badge{right:18px;top:32px;font-size:8px}
+ .unified-mission .calm-intro{left:20px;top:97px;max-width:calc(100vw - 40px)}
+ .unified-mission .calm-intro h2{font-size:25px;max-width:335px;margin:8px 0}
+ .unified-mission .calm-intro p{font-size:11px;max-width:335px;line-height:1.5}
+ .unified-mission .calm-primary-actions{left:20px;top:223px}
+ .unified-mission .mission-context{display:none}
+ .unified-mission .mission-comparison{left:16px;right:16px;top:290px;bottom:auto;width:auto;max-width:none;max-height:calc(100vh - 306px);overflow:auto;margin:0}
+ .unified-mission .mission-comparison-head{padding:15px 16px 10px}
+ .unified-mission .mission-comparison-head h3{font-size:19px}
+ .unified-mission .mission-modes{padding:0 16px 12px}
+ .unified-mission .mission-modes button{font-size:11px;padding:8px 12px}
+ .unified-mission .mission-image-area{margin:0 9px}
+ .unified-mission .mission-image-area canvas{max-height:none;height:auto;object-fit:fill}
+ .unified-mission .mission-visit-dates{padding:9px 16px 3px;font-size:10px}
+ .unified-mission .mission-comparison-foot{padding:6px 16px 11px;font-size:9px}
+ .mission-band-panel{padding:12px 16px}
+ .mission-band-top h4{font-size:13px}
+ .mission-band-top select{max-width:180px;padding:8px;font-size:10px}
+ .mission-band-values,.mission-band-explain{font-size:11px}
+ .mission-science-note{padding:11px 16px;font-size:10px}
+ .unified-mission .calm-panel{top:90px;right:16px;left:16px;bottom:20px;width:auto}
+}
+@media(max-width:420px){
+ .unified-mission .calm-intro h2{font-size:23px}
+ .unified-mission .calm-intro p{max-width:315px}
+ .unified-mission .mission-comparison{top:283px;max-height:calc(100vh - 296px)}
+ .mission-band-top{align-items:flex-start}
+ .mission-band-top select{max-width:158px}
+}
+
+/* Pick first, then reveal the comparison. The observing scene owns the opening screen. */
+.unified-mission .calm-intro{top:114px;max-width:330px}
+.unified-mission .calm-intro h2{font-size:31px;max-width:320px}
+.unified-mission .calm-primary-actions{top:303px}
+.unified-mission .mission-stage{position:absolute;z-index:24;left:32px;bottom:24px;width:338px;box-sizing:border-box;padding:18px 19px 15px;border:1px solid #54817e65;border-radius:13px;background:#081923ed;backdrop-filter:blur(20px);box-shadow:0 15px 50px #0007;pointer-events:auto;color:#d5e9e7}
+.mission-stage-head{display:flex;align-items:end;justify-content:space-between;gap:7px;border-bottom:1px solid #668c8840;padding-bottom:11px}
+.mission-stage-head h3{font:400 20px 'Space Grotesk',sans-serif;letter-spacing:-.5px;margin:5px 0 0}
+.mission-stage-head>span{font:9px/1.5 'IBM Plex Mono',monospace;color:#8caeb4;text-align:right;max-width:125px}
+.mission-stage-pickers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.mission-stage-pickers label{font:10px 'IBM Plex Mono',monospace;color:#9bbdc0;min-width:0}
+.mission-stage select{box-sizing:border-box;width:100%;max-width:none;border:1px solid #567a7970;border-radius:6px;background:#112a32;color:#e3f0eb;padding:9px 7px;font:10px 'IBM Plex Mono',monospace;margin-top:5px;cursor:pointer}
+.mission-stage .mission-band-panel{padding:11px 0 0;border:0}
+.mission-stage .mission-band-top{align-items:center}
+.mission-stage .mission-band-top .calm-eyebrow{display:none}
+.mission-stage .mission-band-top h4{font:10px 'IBM Plex Mono',monospace;color:#9bbdc0;margin:0;white-space:nowrap}
+.mission-stage .mission-band-top select{width:205px;margin:0}
+.mission-stage .mission-band-values{font-size:10px;color:#89d4c4;margin:9px 0 0;line-height:1.45}
+.mission-stage .mission-band-explain{display:none}
+.mission-stage-actions{display:flex;gap:8px;margin-top:13px}
+.mission-stage-actions button{border-radius:7px;padding:10px 11px;font:600 11px 'Inter',sans-serif;cursor:pointer}
+.mission-stage-actions button:disabled{opacity:.55;cursor:wait}
+.mission-stage-actions .stage-primary{flex:1;background:#8de1ce;border:1px solid #9becdc;color:#082622}
+.mission-stage-actions .stage-secondary{flex:1;background:#112b32;border:1px solid #537f7c;color:#c2e5de}
+.mission-stage-readout{display:flex;flex-direction:column;gap:4px;border-top:1px solid #668c8840;margin-top:13px;padding-top:10px;font:10px/1.5 'IBM Plex Mono',monospace;color:#91abb4}
+.mission-stage-readout strong{font-size:12px;color:#d7f5ea;font-weight:500}
+.mission-stage-note{font-size:9px;line-height:1.45;color:#7898a0;margin:9px 0 0}
+.unified-mission .mission-comparison.is-collapsed{left:auto;right:31px;top:113px;width:235px;max-width:none;border-radius:9px;background:#0b202bea;box-shadow:0 8px 30px #0005}
+.unified-mission .mission-comparison.is-collapsed .mission-comparison-head{padding:11px 13px}
+.unified-mission .mission-comparison.is-collapsed .mission-comparison-head h3{font-size:13px;margin:4px 0 0}
+.unified-mission .mission-comparison.is-collapsed .mission-comparison-head .calm-eyebrow{font-size:7px}
+.unified-mission .mission-comparison.is-collapsed>:not(.mission-comparison-head){display:none!important}
+.unified-mission .mission-comparison-head>button{display:block!important;font:22px/1 'Inter',sans-serif;width:29px;height:29px}
+.unified-mission .mission-comparison:not(.is-collapsed){max-height:calc(100vh - 140px);overflow:auto;z-index:28}
+.unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area{margin-bottom:4px}
+.mission-scan-indicator{position:absolute;top:9px;bottom:9px;width:2px;background:#aff5e2;box-shadow:0 0 5px #aff5e2,0 0 15px #4dbcae;pointer-events:none;z-index:3}
+.mission-scan-indicator[hidden]{display:none!important}
+.mission-scan-indicator::after{content:attr(data-visit);position:absolute;top:2px;left:6px;background:#06191edd;color:#d7fff3;border:1px solid #74cbbb;border-radius:3px;padding:2px 4px;font:9px 'IBM Plex Mono',monospace}
+@media(max-width:1080px){.unified-mission .mission-stage{left:22px;width:315px}.unified-mission .mission-comparison:not(.is-collapsed){left:355px;right:20px}}
+@media(max-width:800px){
+ .unified-mission .calm-intro{top:94px;max-width:calc(100vw - 40px)}
+ .unified-mission .calm-intro h2{font-size:24px;max-width:300px}
+ .unified-mission .calm-primary-actions{top:218px}
+ .unified-mission .mission-stage{left:16px;right:16px;bottom:15px;width:auto;padding:13px 15px 12px}
+ .mission-stage-head h3{font-size:16px}
+ .mission-stage-head>span{font-size:8px}
+ .mission-stage-pickers{margin-top:8px}
+ .mission-stage select{padding:7px 6px}
+ .mission-stage .mission-band-panel{padding-top:9px}
+ .mission-stage-actions{margin-top:9px}
+ .mission-stage-actions button{padding:8px}
+ .mission-stage-readout{margin-top:8px;padding-top:7px;gap:2px}
+ .mission-stage-note{font-size:8px;margin-top:6px}
+ .unified-mission .mission-comparison.is-collapsed{top:264px;right:16px;width:210px}
+ .unified-mission .mission-comparison:not(.is-collapsed){left:16px;right:16px;top:264px;bottom:auto;max-height:calc(100vh - 279px);z-index:35}
+ .unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{visibility:hidden}
+}
+@media(max-width:430px){.unified-mission .mission-comparison.is-collapsed{top:260px;width:175px}.unified-mission .mission-comparison.is-collapsed .calm-eyebrow{display:none}.mission-stage-pickers label{font-size:9px}.mission-stage .mission-band-top select{width:185px}}
+
+@media(min-width:1081px){
+ .unified-mission .mission-stage{left:32px;right:32px;bottom:22px;width:auto;display:grid;grid-template-columns:1.05fr 1.05fr .8fr 1.35fr;grid-template-rows:auto auto auto;column-gap:19px;padding:15px 18px 12px}
+ .mission-stage-head{grid-column:1;grid-row:1;display:block;border:0;padding:0}
+ .mission-stage-head h3{font-size:17px;margin:4px 0 0}
+ .mission-stage-head>span{display:none}
+ .mission-stage-pickers{grid-column:1;grid-row:2;margin-top:8px}
+ .mission-stage #stageBandSlot{grid-column:2;grid-row:1 / span 2}
+ .mission-stage .mission-band-panel{padding:0}
+ .mission-stage .mission-band-top{display:block}
+ .mission-stage .mission-band-top select{width:100%;margin-top:6px}
+ .mission-stage .mission-band-values{margin-top:9px}
+ .mission-stage-actions{grid-column:3;grid-row:1 / span 2;flex-direction:column;margin:0}
+ .mission-stage-actions button{flex:0 0 auto;height:36px}
+ .mission-stage-readout{grid-column:4;grid-row:1 / span 2;margin:0;padding:0 0 0 16px;border-top:0;border-left:1px solid #668c8840}
+ .mission-stage-readout strong{font-size:11px}
+ .mission-stage-note{grid-column:1 / -1;grid-row:3;margin:10px 0 0;padding-top:7px;border-top:1px solid #668c8840}
+}
+@media(min-width:801px){.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{display:none}}
+.mission-live-readout{display:flex;flex-direction:column;gap:5px;padding:7px 24px 10px;color:#94b8b9;font:10px/1.5 'IBM Plex Mono',monospace;border-bottom:1px solid #536e743e}
+.mission-live-readout strong{color:#b1e9d9;font-weight:500;font-size:11px}
+.mission-change-panel{padding:10px 18px 11px;background:#0a1c25;border-bottom:1px solid #6c968a38;color:#bbd6d0}
+.mission-change-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font:9px 'IBM Plex Mono',monospace;letter-spacing:.07em;color:#89b4ae}
+.mission-change-head strong{font:600 11px 'Inter',sans-serif;letter-spacing:0;color:#e7f4ed}
+.mission-change-picks{display:flex;gap:6px;margin:8px 0 5px}
+.mission-change-picks:empty{display:none}
+.mission-change-picks button{width:25px;height:25px;border:1px solid #6da69b6b;border-radius:50%;background:#122d32;color:#c8efe3;font:600 11px 'IBM Plex Mono',monospace;cursor:pointer}
+.mission-change-picks button.active{border-color:#ffd186;background:#594734;color:#ffdfa8}
+.mission-change-panel p{font:10px/1.4 'IBM Plex Mono',monospace;margin:5px 0 0;color:#d2e8e2}
+.mission-change-panel small{display:block;margin-top:5px;color:#8fa9ae;font:9px/1.4 'Inter',sans-serif}
+@media(max-width:800px){.mission-live-readout{padding:7px 16px 9px;font-size:9px}.mission-live-readout strong{font-size:10px}}
+@media(max-width:800px){.mission-change-panel{padding:8px 13px}.mission-change-head{font-size:8px}.mission-change-head strong{font-size:10px}.mission-change-panel p{font-size:9px}.mission-change-panel small{font-size:8px}}
+
+/* A screen-space guide keeps the recorded marker readable at every zoom level. */
+.observation-beam{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:21}
+.observation-beam-halo{fill:none;stroke:url(#observationBeamGradient);stroke-width:6;stroke-linecap:round;opacity:.13}
+.observation-beam-wave{fill:none;stroke:url(#observationBeamGradient);stroke-width:1.4;stroke-linecap:round;opacity:.85}
+.observation-beam-ticks{fill:none;stroke:#a9f5df;stroke-width:1;opacity:.75}
+.observation-beam.is-replaying .observation-beam-wave{stroke-width:1.8;opacity:1}
+.observation-beam-pulse{fill:#c3ffed;opacity:.8;filter:drop-shadow(0 0 4px #a9f5df)}
+.observation-light-guide{transition:opacity .15s}
+.unified-mission:has(canvas:active) .observation-light-guide,.unified-mission:has(.spacecraft-beacon:active) .observation-light-guide{opacity:0}
+.recorded-trail{fill:none;stroke:#81bdb1;stroke-width:2;stroke-dasharray:3 3;opacity:.52}
+.recorded-trail.is-current{stroke:#b9f5d9;opacity:.9;stroke-width:2.5}
+.recorded-trail-b{stroke:#ddbd89}
+.recorded-trail-label{fill:#8fbdb6;font:9px 'IBM Plex Mono',monospace;paint-order:stroke;stroke:#081923;stroke-width:3px}
+.recorded-trail-label.is-current{fill:#d5f7e8}
+.spacecraft-beacon{position:absolute;z-index:26;width:44px;height:44px;padding:0;border:0;background:transparent;color:#e7fff3;transform:translate(-50%,-50%);pointer-events:auto;overflow:visible}
+.spacecraft-beacon-ring{position:absolute;inset:4px;border:1px solid #a6f5db;border-radius:50%;background:#0a272c26;box-shadow:0 0 0 5px #75e2c318,0 0 18px #81e7cf8c;display:grid;place-items:center;transition:transform .2s,box-shadow .2s}
+.spacecraft-beacon:hover .spacecraft-beacon-ring,.spacecraft-beacon:focus-visible .spacecraft-beacon-ring{transform:scale(1.12);box-shadow:0 0 0 8px #75e2c324,0 0 23px #81e7cf}
+.spacecraft-beacon-core{width:4px;height:4px;border-radius:50%;background:#d0fff1;box-shadow:0 0 8px #b8ffea}
+.spacecraft-beacon-title{position:absolute;left:40px;top:10px;white-space:nowrap;font:700 11px 'Inter',sans-serif;letter-spacing:.04em;text-align:left;text-shadow:0 1px 5px #020a0d;background:#0a1d25e8;border:1px solid #7fd7c885;padding:5px 7px;border-radius:5px}
+.spacecraft-beacon-title small{display:block;font:8px 'IBM Plex Mono',monospace;color:#8fd6c7;margin-top:1px;letter-spacing:0}
+.spacecraft-info{position:absolute;z-index:38;width:270px;box-sizing:border-box;padding:14px;border:1px solid #75cbbd8c;border-radius:10px;background:#081b25f5;box-shadow:0 18px 45px #000b;pointer-events:auto;color:#d9eee9;backdrop-filter:blur(14px)}
+.spacecraft-info-head{display:flex;align-items:center;justify-content:space-between;color:#8dc9be;font:8px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.spacecraft-info-head button{background:transparent;border:0;color:#b9dfd8;font-size:20px;line-height:1}
+.spacecraft-info>strong{display:block;font:500 14px 'Space Grotesk',sans-serif;margin:11px 0 7px}
+.spacecraft-info p{font:10px/1.5 'IBM Plex Mono',monospace;color:#a9c5c5;margin:5px 0}
+.spacecraft-info-actions{display:flex;gap:6px;margin:12px 0 9px}
+.spacecraft-info-actions button,.spacecraft-locate{border:1px solid #5a958b;background:#123b3c;color:#daf7e9;border-radius:5px;padding:8px;font:10px 'Inter',sans-serif;cursor:pointer}
+.spacecraft-info-actions button{flex:1}
+.spacecraft-info>small{font:9px/1.4 'Inter',sans-serif;color:#7fa5a7}
+.spacecraft-locate{position:absolute;z-index:26;left:35px;top:76px;box-shadow:0 8px 24px #0009}
+@media(max-width:800px){.spacecraft-beacon-title{font-size:9px;padding:4px 5px}.spacecraft-beacon-title small{font-size:7px}.spacecraft-locate{left:auto;right:18px;top:66px}}
+@media(prefers-reduced-motion:reduce){.spacecraft-beacon-ring{transition:none}.observation-beam-pulse{display:none}}
+
+/* One anchored observation workspace instead of two floating cards. */
+.unified-mission .mission-stage{left:0;right:0;bottom:0;width:auto;margin:0;border-radius:0;border-left:0;border-right:0;border-bottom:0;box-shadow:none;background:#081923f5}
+.unified-mission .mission-comparison.is-collapsed{display:none!important}
+.unified-mission .mission-comparison:not(.is-collapsed){left:0;right:0;top:auto;bottom:0;width:100%;max-width:none;max-height:min(68vh,620px);margin:0;border-radius:0;border-left:0;border-right:0;border-bottom:0;box-shadow:none;overflow:auto;background:#081923f7}
+.unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area{max-width:1020px;margin-left:auto;margin-right:auto}
+.unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area canvas{max-height:34vh;object-fit:contain}
+.unified-mission .mission-comparison-head>button#missionEnlarge{width:auto;min-width:106px;padding:0 10px;font:600 10px 'Inter',sans-serif;white-space:nowrap}
+.mission-change-head button{margin-left:auto;border:1px solid #5b918787;border-radius:5px;background:#123432;color:#baece0;padding:6px 9px;font:600 10px 'Inter',sans-serif;cursor:pointer}
+.mission-change-head button:hover{background:#1b4b46}
+.mission-comparison.is-scanning .mission-image-area::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:#a3f6e0;box-shadow:0 0 13px 4px #59cdb568;animation:omni-scan 1.3s linear forwards;pointer-events:none}
+@keyframes omni-scan{from{top:0}to{top:100%}}
+@media(max-width:800px){.unified-mission .mission-stage{left:0;right:0;bottom:0;width:auto}.unified-mission .mission-comparison:not(.is-collapsed){left:0;right:0;top:auto;bottom:0;width:100%;max-height:65vh}.unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area canvas{max-height:29vh}}
+@media(prefers-reduced-motion:reduce){.mission-comparison.is-scanning .mission-image-area::after{animation:none;top:50%}}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .calm-intro,.unified-mission:has(.mission-comparison:not(.is-collapsed)) .calm-primary-actions{display:none!important}
+.mission-stage-head #stageSkyArea{display:none}
+@media(max-width:800px){
+ .unified-mission .calm-intro,.unified-mission .calm-primary-actions{display:none!important}
+ .unified-mission .mission-comparison.is-collapsed{top:82px;right:16px;width:175px}
+ .unified-mission .mission-comparison:not(.is-collapsed){top:325px;max-height:calc(100vh - 340px)}
+ .mission-stage-head #stageField{display:none}
+ .mission-stage-head #stageSkyArea{display:inline-flex;align-items:center;border:0;background:transparent;color:#9ee6d3;padding:4px;font:10px 'Inter',sans-serif}
+}
+@media(max-width:800px){.unified-mission .mission-comparison:not(.is-collapsed){top:auto;bottom:0;max-height:65vh}}
+@media(min-width:801px){
+ .unified-mission .mission-comparison:not(.is-collapsed){left:auto;right:0;top:72px;bottom:0;width:min(52vw,710px);height:calc(100vh - 72px);max-width:none;max-height:none;overflow:auto;border-left:1px solid #50787588;border-top:1px solid #50787588;border-radius:0}
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area{max-width:none;margin:0 16px}
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area canvas{max-height:none;object-fit:fill}
+}

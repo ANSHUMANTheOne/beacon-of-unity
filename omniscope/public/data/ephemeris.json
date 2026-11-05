@@ -1,0 +1,113 @@
+{
+  "epoch": "2026-10-17T00:00:00Z",
+  "frame": "Ecliptic J2000",
+  "center": "Sun",
+  "units": "AU and AU/day",
+  "source": "NASA JPL Horizons",
+  "bodies": {
+    "mercury": {
+      "position": [
+        0.2968657498408075,
+        -0.2858563330444158,
+        -0.05058880081916022
+      ],
+      "velocity": [
+        0.01394078835288487,
+        0.02159464852701429,
+        0.0004862064461589515
+      ],
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27199%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&REF_PLANE=%27ECLIPTIC%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&TLIST=%272461330.5%27&TIME_TYPE=%27UT%27"
+    },
+    "venus": {
+      "position": [
+        0.684999509461706,
+        0.2352951046264715,
+        -0.03629023440700917
+      ],
+      "velocity": [
+        -0.006639421832237442,
+        0.0190395818356856,
+        0.0006447113521589568
+      ],
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27299%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&REF_PLANE=%27ECLIPTIC%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&TLIST=%272461330.5%27&TIME_TYPE=%27UT%27"
+    },
+    "earth": {
+      "position": [
+        0.9157073073507597,
+        0.3937809859304027,
+        -2.724403057428054e-05
+      ],
+      "velocity": [
+        -0.007082091838882172,
+        0.01573993629829267,
+        -1.294078886934885e-06
+      ],
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27399%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&REF_PLANE=%27ECLIPTIC%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&TLIST=%272461330.5%27&TIME_TYPE=%27UT%27"
+    },
+    "mars": {
+      "position": [
+        -0.08797222141737104,
+        1.574637757697515,
+        0.03515572041162448
+      ],
+      "velocity": [
+        -0.01344180067372737,
+        0.0004076942880691711,
+        0.0003381366818123762
+      ],
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27499%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&REF_PLANE=%27ECLIPTIC%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&TLIST=%272461330.5%27&TIME_TYPE=%27UT%27"
+    },
+    "jupiter": {
+      "position": [
+        -3.581981680856141,
+        3.922234432406655,
+        0.06384907525544882
+      ],
+      "velocity": [
+        -0.005663660522577332,
+        -0.004740344689477659,
+        0.0001464662748700615
+      ],
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27599%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&REF_PLANE=%27ECLIPTIC%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&TLIST=%272461330.5%27&TIME_TYPE=%27UT%27"
+    },
+    "saturn": {
+      "position": [
+        9.237054585455835,
+        1.854078536684965,
+        -0.399980704212067
+      ],
+      "velocity": [
+        -0.00140686002148041,
+        0.005454915544343374,
+        -3.872254772105172e-05
+      ],
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27699%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&REF_PLANE=%27ECLIPTIC%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&TLIST=%272461330.5%27&TIME_TYPE=%27UT%27"
+    },
+    "uranus": {
+      "position": [
+        8.874228727870735,
+        17.29438698849524,
+        -0.05083427222399702
+      ],
+      "velocity": [
+        -0.00353405971980836,
+        0.001609828921298333,
+        5.171269397708732e-05
+      ],
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27799%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&REF_PLANE=%27ECLIPTIC%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&TLIST=%272461330.5%27&TIME_TYPE=%27UT%27"
+    },
+    "neptune": {
+      "position": [
+        29.83478838042519,
+        1.430582482923816,
+        -0.7169950352036741
+      ],
+      "velocity": [
+        -0.0001769102655211403,
+        0.003151303463518293,
+        -6.073525755458185e-05
+      ],
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27899%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&REF_PLANE=%27ECLIPTIC%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&TLIST=%272461330.5%27&TIME_TYPE=%27UT%27"
+    }
+  }
+}
