@@ -893,7 +893,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.minDistance = 0.4;   // updated every frame from whatever is being looked at
-controls.maxDistance = 700;
+controls.maxDistance = 1200;
 controls.maxPolarAngle = Math.PI * 0.49;
 controls.target.set(0, 0, 0);
 camera.lookAt(0, 0, 0);
@@ -2727,17 +2727,19 @@ let missionZoomActive = false;
 let zoomAutoFocusId = null;      // object we started following only because the user zoomed toward it
 let returnToOrigin = false;
 const _zp = new THREE.Vector3(), _zoomOff = new THREE.Vector3();
+const missionCloseDirection = new THREE.Vector3(0, 0, 1);
+const missionCloseUp = new THREE.Vector3(0, 1, 0);
+const missionOverviewDirection = new THREE.Vector3(.18, 1, .26).normalize();
+const missionOverviewUp = new THREE.Vector3(0, 0, -1);
+const _missionTarget = new THREE.Vector3(), _missionDirection = new THREE.Vector3(), _missionPosition = new THREE.Vector3(), _missionUp = new THREE.Vector3();
 
 function focusOn(id) { state.followId = id; zoomAutoFocusId = id; returnToOrigin = false; camGoal = null; }
 function releaseFocus() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = true; }
 function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; missionDistanceTarget = 4.2; missionZoomActive = false; camGoal = null; }
-function resetMissionZoom(distance) { missionFovTarget = 45; missionDistanceTarget = distance; missionZoomActive = false; }
-document.addEventListener('omni-orbit-toggle', () => {
-  const overview = missionDistanceTarget < 20;
-  missionFovTarget = overview ? 76 : 45;
-  missionDistanceTarget = overview ? (innerWidth > 800 ? 24 : 36) : (innerWidth > 800 ? 4.2 : 5);
-  missionZoomActive = true;
-});
+function resetMissionZoom(distance, pose) {
+  missionFovTarget = 45; missionDistanceTarget = distance; missionZoomActive = false;
+  if (pose) { missionCloseDirection.copy(pose.position).sub(pose.target).normalize(); missionCloseUp.copy(pose.up); }
+}
 
 // Esc lets go of the focus (capture phase, so closing the Ask OmniScope console / skipping a launch with Esc doesn't also do this).
 window.addEventListener('keydown', (e) => {
@@ -2807,7 +2809,7 @@ function pickZoomFocus(cx, cy) {
     // exact ties (pointer inside several discs): the smaller one is the thing "on top"
     if (edge < bestEdge - 1e-6 || (Math.abs(edge - bestEdge) <= 1e-6 && radiusPx < bestRadius)) { best = id; bestEdge = edge; bestRadius = radiusPx; }
   };
-  Object.keys(bodyMeshes).forEach((id) => { if (bodyMeshes[id].group.visible) consider(id, bodyMeshes[id].group.position, bodyMeshes[id].body.displayRadius); });
+  Object.keys(bodyMeshes).forEach((id) => { if (bodyMeshes[id].group.visible) consider(id, bodyMeshes[id].group.position, bodyMeshes[id].body.displayRadius * bodyMeshes[id].group.scale.x); });
   missions.forEach((m) => { if (missionMeshes[m.id].group.visible) consider(m.id, missionMeshes[m.id].group.position, 0.25); });
   return best;
 }
@@ -2823,12 +2825,16 @@ app.addEventListener('wheel', (e) => {
   if (e.ctrlKey) d *= 6;                                 // trackpad pinch arrives as ctrl+wheel with tiny deltas
   d = Math.max(-150, Math.min(150, d));
   if (document.body.classList.contains('unified-mission')) {
+    if (!missionZoomActive && missionDistanceTarget < 10) {
+      missionCloseDirection.copy(camera.position).sub(controls.target).normalize();
+      missionCloseUp.copy(camera.up);
+    }
     missionZoomActive = true;
     // First widen the field of view, then pull back from Earth. That keeps
     // close inspection stable while still allowing a real orbital overview.
-    if (d > 0 && missionFovTarget >= 75.5) missionDistanceTarget = Math.min(120, missionDistanceTarget * Math.exp(d * .00135));
+    if (d > 0 && missionFovTarget >= 75.5) missionDistanceTarget = Math.min(innerWidth > 800 ? 700 : 1100, missionDistanceTarget * Math.exp(d * .00135));
     else if (d < 0 && missionDistanceTarget > 4.21) missionDistanceTarget = Math.max(4.2, missionDistanceTarget * Math.exp(d * .00135));
-    else missionFovTarget = Math.max(14, Math.min(76, missionFovTarget * Math.exp(d * .0011)));
+    else missionFovTarget = Math.max(45, Math.min(76, missionFovTarget * Math.exp(d * .0011)));
     return;
   }
   zoomPending = Math.max(-ZOOM_MAX_PENDING, Math.min(ZOOM_MAX_PENDING, zoomPending + d * 0.0006));
@@ -2839,15 +2845,20 @@ function applyZoom(dt) {
   if (document.body.classList.contains('unified-mission')) {
     if (!missionZoomActive) return;
     const earth = bodyMeshes.earth.group.position;
-    const currentDistance = camera.position.distanceTo(earth);
-    if (Math.abs(camera.fov - missionFovTarget) < .015 && Math.abs(currentDistance - missionDistanceTarget) < .015) { missionZoomActive = false; return; }
-    // Keep the Earth as the zoom anchor even after a right-button pan.
+    const t = Math.max(0, Math.min(1, (missionDistanceTarget - 40) / 100));
+    const overviewBlend = t * t * (3 - 2 * t);
+    _missionTarget.copy(earth).multiplyScalar(1 - overviewBlend);
+    _missionDirection.copy(missionCloseDirection).lerp(missionOverviewDirection, overviewBlend).normalize();
+    _missionPosition.copy(_missionTarget).addScaledVector(_missionDirection, missionDistanceTarget);
+    _missionUp.copy(missionCloseUp).lerp(missionOverviewUp, overviewBlend);
+    if (_missionUp.lengthSq() < .01) _missionUp.copy(missionOverviewUp);
+    _missionUp.normalize();
+    if (Math.abs(camera.fov - missionFovTarget) < .015 && camera.position.distanceTo(_missionPosition) < .02 && controls.target.distanceTo(_missionTarget) < .02) { missionZoomActive = false; return; }
     const ease = 1 - Math.exp(-dt * 14);
-    _zp.copy(earth).sub(controls.target).multiplyScalar(ease);
-    camera.position.add(_zp);
-    controls.target.add(_zp);
-    _zoomOff.copy(camera.position).sub(earth);
-    if (_zoomOff.lengthSq() > 1e-6) camera.position.copy(earth).addScaledVector(_zoomOff.normalize(), currentDistance + (missionDistanceTarget - currentDistance) * ease);
+    camera.position.lerp(_missionPosition, ease);
+    controls.target.lerp(_missionTarget, ease);
+    camera.up.lerp(_missionUp, ease).normalize();
+    camera.lookAt(controls.target);
     camera.fov += (missionFovTarget - camera.fov) * ease;
     camera.updateProjectionMatrix();
     return;
@@ -3023,6 +3034,7 @@ function flushLabels() {
   }
   const piloting = state.mode === 'pilot';
   const W = window.innerWidth, H = window.innerHeight;
+  const orbitalLabels = document.body.classList.contains('unified-mission') && camera.position.distanceTo(bodyMeshes.earth.group.position) > 80;
   const items = [];
   labelQueue.forEach((q) => {
     const { entry, id, isMission } = q;
@@ -3035,7 +3047,7 @@ function flushLabels() {
     const forced = piloting
       ? Boolean(pilotTarget && pilotTarget.ref.id === id)
       : (state.selectedId === id || hoveredId === id || state.followId === id);
-    if (document.body.classList.contains('calm-layout') && !piloting && ((W <= 800 && !forced) || y < 110 || y > H - 190 || (x < 370 && y < 310))) { div.style.display = 'none'; return; }
+    if (document.body.classList.contains('calm-layout') && !piloting && ((W <= 800 && !forced && !(orbitalLabels && entry.body?.category === 'planet')) || y < 110 || y > (W <= 800 ? H - 330 : H - 190) || (W > 800 && x < 370 && y < 310))) { div.style.display = 'none'; return; }
     const dist = camera.position.distanceTo(q.pos);
     let maxDist, priority;
     if (isMission) {
@@ -3057,16 +3069,18 @@ function flushLabels() {
   items.sort((a, b) => b.priority - a.priority);
   const placed = [];
   items.forEach((it) => {
-    const r = { x: it.x + 8, y: it.y - 13, w: it.w, h: 15 };
+    const labelX = orbitalLabels && W <= 800 ? Math.max(8, Math.min(W - it.w - 8, it.x + 10)) : it.x + 10;
+    const r = { x: labelX - 2, y: it.y - 13, w: it.w, h: 15 };
     if (!it.forced && placed.some((p) => r.x < p.x + p.w + 3 && r.x + r.w + 3 > p.x && r.y < p.y + p.h + 2 && r.y + r.h + 2 > p.y)) {
       it.div.style.display = 'none';
       return;
     }
     placed.push(r);
     it.div.style.display = 'block';
-    it.div.style.transform = `translate(${it.x + 10}px, ${it.y - 6}px)`;
-    it.div.style.opacity = it.forced ? '1' : (piloting ? '0.6' : '0.5');
-    it.div.style.color = it.forced ? '#a5f3fc' : '#94a3b8';
+    it.div.style.transform = `translate(${labelX}px, ${it.y - 6}px)`;
+    it.div.style.fontSize = orbitalLabels ? '11px' : '10px';
+    it.div.style.opacity = it.forced ? '1' : (orbitalLabels ? '0.82' : piloting ? '0.6' : '0.5');
+    it.div.style.color = it.forced ? '#a5f3fc' : (orbitalLabels ? '#c1d2d5' : '#94a3b8');
   });
   labelQueue.length = 0;
 }

@@ -10,8 +10,6 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
  const particles=Array.from({length:11},()=>{const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('class','observation-beam-particle');beam.querySelector('.observation-beam-particles').appendChild(dot);return dot;});
  const marker=document.createElement('button');marker.className='spacecraft-beacon';marker.type='button';marker.setAttribute('aria-label','Inspect SPHEREx at this exposure');marker.innerHTML='<span class="spacecraft-beacon-ring"><span class="spacecraft-beacon-core"></span></span><span class="spacecraft-beacon-title">SPHEREx <small>infrared</small></span>';
  ui.appendChild(marker);
- const sunCue=document.createElement('div');sunCue.className='sun-distance-cue';sunCue.innerHTML='<i aria-hidden="true"></i><span>SUN <b>1.00 AU</b></span>';ui.appendChild(sunCue);
- const orbitToggle=ui.querySelector('.mission-orbit-toggle');
  const locate=document.createElement('button');locate.className='spacecraft-locate';locate.type='button';locate.textContent='⌖ Locate SPHEREx';locate.hidden=true;locate.onclick=focusSpacecraft;ui.appendChild(locate);
  const info=document.createElement('aside');info.className='spacecraft-info';info.hidden=true;info.setAttribute('aria-label','Recorded SPHEREx position');info.innerHTML='<div class="spacecraft-info-head"><span>SPHEREx / recorded exposure</span><button type="button" aria-label="Close spacecraft details">×</button></div><strong id="spacecraftInfoDate">—</strong><p id="spacecraftInfoPosition">Reading FITS position…</p><p id="spacecraftInfoLight">Reading wavelength…</p><div class="spacecraft-info-actions"><button type="button" id="spacecraftInfoFocus">Center spacecraft</button><button type="button" id="spacecraftInfoCompare">View images ↗</button></div><small>Earth-centered FITS coordinates. Spacecraft model and wavelength marks are enlarged diagrams.</small>';
  ui.appendChild(info);
@@ -31,31 +29,15 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
  let lastInfo=0,lastCardOpen=false;
  function update({craft,earth,direction,record,index,progress,wavelength,playing,date,field,elapsed,cardOpen,trails}){
   if(cardOpen&&!lastCardOpen){info.hidden=true;marker.setAttribute('aria-expanded','false');}lastCardOpen=cardOpen;
-  const orbitContext=c.camera.position.distanceTo(earth)>=20;
+  const orbitContext=c.camera.position.distanceTo(earth)>=10;
   ui.classList.toggle('orbit-context',orbitContext);
+  ui.classList.toggle('deep-orbit',c.camera.position.distanceTo(earth)>=80);
   beam.style.display=cardOpen||orbitContext?'none':'';
-  if(orbitToggle&&orbitToggle.getAttribute('aria-pressed')!==String(orbitContext)){
-   orbitToggle.setAttribute('aria-pressed',String(orbitContext));
-   orbitToggle.textContent=orbitContext?'Focus SPHEREx ↙':'View solar system ↗';
-  }
   const W=innerWidth,H=innerHeight,p=screen(craft),origin=screen(earth),limit=cardOpen&&W>800?document.querySelector('.mission-comparison').getBoundingClientRect().left-18:W-18;
-  sunCue.hidden=cardOpen||orbitContext;
-  if(!sunCue.hidden){
-   const sun=new c.THREE.Vector3(0,0,0),local=c.camera.worldToLocal(sun.clone()),projected=screen(sun);
-   const forward=local.z<0;
-   let dx=forward?projected.x-origin.x:local.x,dy=forward?projected.y-origin.y:-local.y;
-   if(!Number.isFinite(dx)||!Number.isFinite(dy)||Math.hypot(dx,dy)<.01){dx=1;dy=0;}
-   const left=W>800?420:95,right=W>800?W-105:W-95,top=W>800?108:158,stageTop=document.querySelector('.mission-stage')?.getBoundingClientRect().top||H,bottom=W>800?H-140:Math.max(170,stageTop-52);
-   const ox=Math.max(left,Math.min(right,origin.x)),oy=Math.max(top,Math.min(bottom,origin.y));
-   const tx=dx>0?(right-ox)/dx:dx<0?(left-ox)/dx:Infinity,ty=dy>0?(bottom-oy)/dy:dy<0?(top-oy)/dy:Infinity,t=Math.max(0,Math.min(tx,ty));
-   sunCue.style.left=`${W>800?Math.max(left,Math.min(right,ox+dx*t)):right}px`;sunCue.style.top=`${W>800?Math.max(top,Math.min(bottom,oy+dy*t)):170}px`;
-   sunCue.querySelector('b').textContent=`${(earth.length()/12).toFixed(2)} AU`;
-   sunCue.title=W>800?(forward?'Direction to the Sun; distance from Earth':'Sun is behind this camera view; distance from Earth'):'Sun distance from Earth';
-  }
   trails?.forEach((points,i)=>{const path=beam.querySelector(i?'.recorded-trail-b':'.recorded-trail-a'),label=beam.querySelector(`[data-trail="${i?'b':'a'}"]`);if(!points||points.some(point=>hiddenBehindEarth(point,earth))){path.setAttribute('d','');label.style.display='none';return;}const s=screen(points[0]),e=screen(points[1]);path.setAttribute('d',`M ${s.x.toFixed(1)} ${s.y.toFixed(1)} L ${e.x.toFixed(1)} ${e.y.toFixed(1)}`);path.classList.toggle('is-current',i===index);label.setAttribute('x',String(e.x+5));label.setAttribute('y',String(e.y-5));label.style.display=e.x<limit&&e.y>70&&e.y<H-24?'block':'none';label.classList.toggle('is-current',i===index);});
   if(cardOpen){marker.hidden=true;beam.hidden=true;locate.hidden=true;info.hidden=true;return;}
   const visible=Boolean(record)&&p.z>-1&&p.z<1&&p.x>22&&p.x<limit-12&&p.y>70&&p.y<H-32&&!hiddenBehindEarth(craft,earth);
-  marker.hidden=!visible;beam.hidden=!visible||orbitContext;locate.hidden=visible||!record;
+  marker.hidden=!visible;beam.hidden=!visible||orbitContext;locate.hidden=visible||!record||orbitContext;
   if(!visible){info.hidden=true;return;}
   marker.style.left=`${p.x}px`;marker.style.top=`${p.y}px`;marker.querySelector('small').textContent=Number.isFinite(wavelength)?`${wavelength.toFixed(3)} µm`:'infrared';
   const stage=document.querySelector('.mission-stage'),stageRect=stage?.getBoundingClientRect(),floor=W<=800&&stageRect?stageRect.top-12:H-12;
