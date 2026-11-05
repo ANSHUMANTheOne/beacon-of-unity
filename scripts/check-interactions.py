@@ -33,7 +33,6 @@ else:
  base=f'http://127.0.0.1:{server.server_port}'
 results=[];selected=args.case or os.environ.get('BEACON_CASE')
 old=Q/'interactions.json'
-if selected and old.exists():results=json.loads(old.read_text())
 with sync_playwright() as p:
  browser=p.chromium.launch(**({'executable_path':browser_path} if browser_path else {}),headless=True,args=['--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--no-sandbox','--mute-audio'])
  for mobile in [False,True]:
@@ -48,7 +47,10 @@ with sync_playwright() as p:
    def check(name,condition):
     checks.append(dict(name=name,passed=bool(condition)))
     assert condition,name
-   def goto(path,delay=1200):page.goto(base+path,wait_until='domcontentloaded',timeout=30000);page.wait_for_timeout(delay)
+   def goto(path,delay=1200):
+    response=page.goto(base+path,wait_until='domcontentloaded',timeout=30000)
+    if response is None or response.status>=400:raise RuntimeError('Document unavailable: '+path+' HTTP '+str(response.status if response else 'no response'))
+    page.wait_for_timeout(delay)
    failure=None
    try:
     if case.startswith('main-demo'):
@@ -101,7 +103,7 @@ with sync_playwright() as p:
    except Exception as error:failure=str(error)[:900]
    try:page.screenshot(path=str(Q/(case+('-mobile' if mobile else '-desktop')+'.png')))
    except:pass
-   row=dict(case=case,mobile=mobile,checks=checks,passed=failure is None,failure=failure,page_errors=errors,blocked_mutations=sorted(set(blocked)),dialogs=dialogs)
+   row=dict(base_url=base,case=case,mobile=mobile,checks=checks,passed=failure is None,failure=failure,page_errors=errors,blocked_mutations=sorted(set(blocked)),dialogs=dialogs)
    results=[x for x in results if (x['case'],x['mobile'])!=(case,mobile)]+[row];old.write_text(json.dumps(results,indent=2)+'\n',encoding='utf-8');print(json.dumps(dict(case=case,mobile=mobile,passed=row['passed'],failure=failure,checks=len(checks))),flush=True)
    context.close()
  browser.close()
