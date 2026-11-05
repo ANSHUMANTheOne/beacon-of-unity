@@ -1,0 +1,376 @@
+.side-nav {
+  margin-top: 36px;
+  gap: 5px;
+}
+.inbox-layout {
+  grid-template-columns: 1fr;
+}
+.inbox-layout > .rightbar {
+  display: none;
+}
+.inbox {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  border: 1px solid #343b2c;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 26px;
+  height: 570px;
+  background: #141811;
+}
+.inbox-list {
+  border-right: 1px solid #343b2c;
+  padding: 20px 12px;
+}
+.inbox-list > .between {
+  padding: 0 9px;
+}
+.inbox-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #22291c;
+  border-radius: 7px;
+  padding: 11px;
+  margin: 20px 0 12px;
+  color: #8e9b81;
+}
+.inbox-search input {
+  width: 100%;
+  font-size: 11px;
+}
+.thread {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 14px 8px;
+  gap: 10px;
+  border-radius: 7px;
+  text-align: left;
+}
+.thread.chosen {
+  background: #2a3520;
+}
+.thread img,
+.conversation-head img {
+  height: 37px;
+  width: 37px;
+  border-radius: 50%;
+}
+.thread span {
+  min-width: 0;
+}
+.thread b {
+  font-size: 11px;
+  display: block;
+}
+.thread small {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 165px;
+  margin-top: 6px;
+  color: #8f9d81;
+  font-size: 10px;
+}
+.conversation {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.conversation-head {
+  padding: 18px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid #343b2c;
+}
+.conversation-head b {
+  font-size: 12px;
+}
+.conversation-head small {
+  display: block;
+  color: #859875;
+  margin-top: 3px;
+  font-size: 10px;
+}
+.message-history {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+.chat-date {
+  text-align: center;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #8d9b80;
+  margin: 4px 0 15px;
+}
+.message {
+  align-self: flex-start;
+  max-width: 85%;
+}
+.message p {
+  padding: 12px 15px;
+  background: #282f21;
+  border-radius: 12px 12px 12px 3px;
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.message.mine {
+  align-self: flex-end;
+}
+.message.mine p {
+  background: #3a4b29;
+  border-radius: 12px 12px 3px 12px;
+}
+.message small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 8px;
+  color: #8c9a80;
+  margin-top: 5px;
+}
+.message.mine small {
+  justify-content: flex-end;
+}
+.message-compose {
+  display: flex;
+  gap: 10px;
+  padding: 17px;
+  border-top: 1px solid #343b2c;
+}
+.message-compose input {
+  flex: 1;
+  font-size: 12px;
+}
+.message-compose button {
+  color: #c9e2ac;
+}
+.inbox-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 25px;
+  gap: 15px;
+  color: #a4b690;
+}
+.inbox-empty p {
+  font-size: 12px;
+  color: #7c8c6b;
+}
+.reels-scroller {
+  margin: 24px auto 0;
+  max-width: 420px;
+  height: min(680px, calc(100dvh - 210px));
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  border-radius: 12px;
+  background: #080a07;
+}
+.reel {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background: #1a2415;
+  overflow: hidden;
+}
+.reel video {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+.reel-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#0006, transparent 25%, transparent 50%, #000b);
+  pointer-events: none;
+}
+.reel-top {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.reel-top span {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+}
+.reel-top button {
+  pointer-events: auto;
+}
+.reel-info {
+  position: absolute;
+  bottom: 28px;
+  left: 20px;
+  right: 72px;
+  pointer-events: none;
+}
+.reel-info b {
+  font-size: 13px;
+}
+.reel-info p {
+  margin: 10px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.reel-info small {
+  font-size: 9px;
+  color: #c7d0bf;
+}
+.reel-actions {
+  position: absolute;
+  bottom: 25px;
+  right: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.reel-actions button {
+  flex-direction: column;
+  gap: 5px;
+}
+.reel-actions small {
+  font-size: 9px;
+}
+.reel-play {
+  position: absolute;
+  top: 48%;
+  left: 45%;
+  padding: 10px;
+  background: #0004;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.reel-play:hover {
+  opacity: 1;
+}
+.reel-error {
+  position: absolute;
+  inset: 30% 15%;
+  text-align: center;
+  font-size: 13px;
+}
+.reel-error button {
+  margin-top: 15px;
+  text-decoration: underline;
+}
+.reel-comments {
+  position: absolute;
+  inset: auto 0 0;
+  max-height: 75%;
+  overflow: auto;
+  padding: 25px 20px;
+  background: #1b2316;
+  border-top: 1px solid #495b37;
+  border-radius: 16px 16px 0 0;
+}
+.reel-comments p {
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 20px 0;
+  overflow-wrap: anywhere;
+}
+.reel-comments b {
+  color: #c9dfad;
+}
+.reels-end {
+  height: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 25px;
+  text-align: center;
+}
+.reels-end p {
+  font-size: 12px;
+  color: #9cac8c;
+}
+@media (max-width: 700px) {
+  .mobile-nav {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+  .mobile-nav button {
+    padding: 9px;
+  }
+  .mobile-nav svg {
+    width: 21px;
+    height: 21px;
+  }
+  .inbox {
+    grid-template-columns: 1fr;
+    height: calc(100dvh - 280px);
+    min-height: 350px;
+  }
+  .inbox-list {
+    border: 0;
+    overflow: auto;
+  }
+  .inbox .conversation {
+    display: none;
+  }
+  .inbox.conversation-open .inbox-list {
+    display: none;
+  }
+  .inbox.conversation-open .conversation {
+    display: flex;
+  }
+  .thread small {
+    width: 230px;
+  }
+  .reels-scroller {
+    height: calc(100dvh - 260px);
+    min-height: 330px;
+  }
+  .reel-info {
+    bottom: 24px;
+  }
+  .conversation-head {
+    padding: 12px;
+  }
+  .message-history {
+    padding: 15px;
+  }
+}
+.reel-upload {
+  display: inline-flex;
+  position: relative;
+  margin-top: 18px;
+  padding: 10px 15px;
+  background: #c7e2a7;
+  color: #182111;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.reel-upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  cursor: pointer;
+}
