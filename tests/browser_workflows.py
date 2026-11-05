@@ -5,6 +5,7 @@ sys.stdout.reconfigure(encoding='utf-8');out=Path('playwright-results');out.mkdi
 with sync_playwright() as p:
  b=p.chromium.launch(channel='chrome',headless=True)
  for w,h in [(320,740),(390,844),(1440,900)]:
+  if len(sys.argv)>1 and str(w) not in sys.argv[1:]:continue
   c=b.new_context(viewport={'width':w,'height':h},is_mobile=w<700,has_touch=w<700);page=c.new_page();page.set_default_timeout(12000);errors=[];page.on('pageerror',lambda e:errors.append(str(e)));r={'width':w,'checks':[]}
   def test(name,fn):
    try:fn();r['checks'].append({'name':name,'pass':True})
@@ -27,7 +28,7 @@ with sync_playwright() as p:
   test('lostfound-search-contact',found)
   page.goto('http://127.0.0.1:4174/',wait_until='domcontentloaded');page.wait_for_timeout(2000)
   def embed():
-   page.locator('[data-demo]').first.click();page.frame_locator('#demo-frame').locator('#requestFeed .card').first.wait_for(state='visible');page.screenshot(path=str(out/f'verified-{w}-embedded-demo.png'));page.get_by_role('button',name='Close demo',exact=True).click();assert not page.locator('#demo-dialog').is_visible()
+   page.locator('[data-demo]').first.click();page.frame_locator('#demo-frame').locator('#requestFeed .card').first.wait_for(state='visible');page.get_by_role('button',name='Close demo',exact=True).click();assert not page.locator('#demo-dialog').is_visible()
   test('homepage-demo-integration',embed)
   def double():
    if page.locator("#beacon-hide").get_attribute("aria-expanded")!="true":
