@@ -1,0 +1,275 @@
+.interests-panel {
+  padding: 22px;
+  border: 1px solid #35472b;
+  background: linear-gradient(130deg, #202c18, #161e12);
+  border-radius: 9px;
+  margin: 25px 0;
+}
+.interests-panel h3 {
+  font-size: 15px;
+}
+.interests-panel p,
+.organization-discovery p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #95aa83;
+  margin-top: 7px;
+}
+.interests-panel .between > small {
+  font-size: 8px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  color: #9eb48d;
+}
+.interest-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.interest-chips button {
+  padding: 8px 12px;
+  border: 1px solid #405633;
+  border-radius: 24px;
+  font-size: 11px;
+  color: #a9bd98;
+  gap: 5px;
+}
+.interest-chips button.selected {
+  color: #1d2b12;
+  background: #c7dfa9;
+  border-color: #c7dfa9;
+}
+.discovery-policy {
+  font-size: 10px;
+  line-height: 1.9;
+  color: #839c70;
+}
+.demo-topic-chips {
+  margin: 26px 0;
+}
+.discover-mosaic {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+.discover-mosaic > button {
+  aspect-ratio: 3/4;
+  position: relative;
+  overflow: hidden;
+  display: block;
+  text-align: left;
+  border-radius: 5px;
+}
+.discover-mosaic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.discover-mosaic button:hover img {
+  transform: scale(1.04);
+}
+.discover-mosaic > button > span {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(transparent, #000c);
+  padding: 30px 13px 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  pointer-events: none;
+}
+.discover-mosaic small {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #d1ddc2;
+}
+.discover-mosaic b {
+  font-size: 11px;
+}
+.discover-mosaic > button > p {
+  position: absolute;
+  inset: auto 8px 65px;
+  background: #15200edb;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.organization-discovery {
+  margin-top: 35px;
+  border-top: 1px solid #36462c;
+  padding-top: 25px;
+}
+.organization-discovery > button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 18px 0;
+  border-bottom: 1px solid #2e3d24;
+  text-align: left;
+}
+.organization-discovery button > b {
+  font-size: 12px;
+}
+.organization-discovery button small {
+  display: block;
+  color: #8ea47d;
+  font-size: 9px;
+  margin-top: 5px;
+}
+.organization-discovery button > svg {
+  margin-left: auto;
+}
+.community-profile {
+  padding: 28px 0;
+  text-align: center;
+  border-bottom: 1px solid #3a4f2d;
+}
+.community-profile > .eyebrow {
+  margin-top: 24px;
+}
+.community-profile > p:not(.muted) {
+  font-size: 13px;
+  color: #b1c39f;
+  line-height: 1.9;
+  max-width: 500px;
+  margin: 18px auto;
+}
+.community-profile > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #c7dfa9;
+  margin-bottom: 20px;
+}
+.community-profile > .primary {
+  min-width: 140px;
+  margin: 9px auto;
+}
+.community-profile > small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.9;
+  color: #8ca377;
+  max-width: 420px;
+  margin: 15px auto;
+}
+.profile-initial {
+  display: inline-grid;
+  place-items: center;
+  width: 86px;
+  height: 86px;
+  border-radius: 23px;
+  background: linear-gradient(135deg, #465e34, #24351a);
+  border: 1px solid #5b7644;
+  color: #d9eabe;
+  font-size: 24px;
+}
+.profile-initial.small {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  font-size: 13px;
+}
+.community-posts > article,
+.demo-page-post {
+  padding: 25px 0;
+  border-bottom: 1px solid #364c28;
+}
+.community-posts img,
+.community-posts video,
+.demo-page-post > img {
+  width: 100%;
+  max-height: 650px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #161e10;
+}
+.demo-page-post > img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.community-posts article > p,
+.demo-page-post > p {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #acc198;
+  margin: 15px 0;
+  overflow-wrap: anywhere;
+}
+.demo-page-post h3 {
+  margin-top: 20px;
+}
+.community-post-actions {
+  display: flex;
+  gap: 22px;
+  padding: 5px 0 18px;
+  color: #c1d8a5;
+  font-size: 11px;
+}
+.profile-name-button {
+  font-weight: 600;
+  font-size: 12px;
+  justify-content: flex-start;
+}
+.topic-checkboxes {
+  border: 1px solid #3d542d;
+  border-radius: 6px;
+  padding: 14px;
+  margin: 18px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 14px;
+}
+.topic-checkboxes legend {
+  font-size: 10px;
+  color: #a5bd90;
+  padding: 0 5px;
+}
+.topic-checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: #9eb88a;
+}
+.topic-checkboxes input {
+  accent-color: #c4dea6;
+  width: 13px;
+  height: 13px;
+  padding: 0;
+}
+.settings-card select {
+  width: 100%;
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .discover-mosaic {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .interests-panel {
+    padding: 18px;
+  }
+  .interests-panel .between {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .interest-chips {
+    gap: 7px;
+  }
+  .interest-chips button {
+    font-size: 10px;
+    padding: 8px 10px;
+  }
+  .community-profile h1 {
+    font-size: 26px;
+  }
+}
