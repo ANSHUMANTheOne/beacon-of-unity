@@ -95,17 +95,13 @@ The pilot stores binary files as **base64 text in 192 KiB chunks** in D1. Base64
 
 Cloudflare quotas still apply. These caps keep a small pilot bounded; they do not make a large video network free. Long-form HD uploads, transcoding, thumbnails, adaptive streaming, resumable uploads and a video CDN are future infrastructure work. Add R2 or a purpose-built video service when required; changing encodings or splitting files does not remove provider quotas. Never enable a paid plan without the owner's explicit decision.
 
-## 6. Optional recovery and verification email
+## 6. Recovery and verification email
 
-Password login works without email delivery. Confirmation and password recovery intentionally return a clear service-not-configured error until a real sender is connected. Email addresses are not presented as verified merely because a user typed them.
+The app supports SendPulse's free transactional email plan (12,000/month; 50/hour). Account signup, email/SMS confirmation, SMTP activation and sender verification happen in SendPulse. Complete those steps, then use **Private email connection** in `/social/admin` to connect a static API key. Do not share credentials through chat.
 
-For Resend, verify the sending domain in your own account, configure DNS, then set the server secret:
+Credentials are encrypted in D1 with an independent Worker secret, `EMAIL_SETTINGS_KEY`. The key never appears in source or an API response. The admin panel shows send usage and can send a test only to the administrator's own account email. Password verification/reset links expire in 30 minutes. Provider acceptance and actual inbox delivery are separate checks.
 
-```sh
-npx wrangler secret put RESEND_API_KEY
-```
-
-Set `EMAIL_FROM` to the verified sender in `wrangler.jsonc` and redeploy. Tokens expire after 30 minutes. Resetting a password revokes existing sessions. Token URLs use fragments so the token is not sent as a URL query to the server. Never put email-provider keys in `VITE_*` variables or source files. No mail-provider account has been created by this app.
+See [the complete email setup guide](docs/EMAIL_SETUP.md). Password login works before email setup; confirmation and recovery fail clearly until a sender is connected. Legacy Resend server-secret configuration is retained as a fallback.
 
 ## 7. People-first discovery and organization profiles
 

@@ -15,3 +15,5 @@ Do not store national IDs, medical details, passwords or payment details in post
 Report issues privately to the Beacon of Unity operator through the site's contact page. Do not include passwords, session cookies or another member's private data in public GitHub issues.
 
 The service minimum age is 13, self-declared at signup. This is not automated age verification. Youth-specific safety and privacy controls and applicable consent requirements must be reviewed before general availability. Organization labels can be selected by users and do not indicate identity verification. No organization can purchase Discover placement.
+
+Email configuration is protected by admin authorization, same-origin mutation checks and rate limits. Provider keys are encrypted using AES-256-GCM with a distinct server secret; only configuration metadata is exposed through the admin status endpoint. Test messages can be sent only to the current admin account email. The provider account and sender must still be activated; quota checks do not increase the provider's free allowance.

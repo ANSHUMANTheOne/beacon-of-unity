@@ -28,6 +28,12 @@ function database() {
       "utf8",
     ),
   );
+  sqlite.exec(
+    readFileSync(
+      new URL("../migrations/0004_email_settings.sql", import.meta.url),
+      "utf8",
+    ),
+  );
   class Statement {
     constructor(sql, args = []) {
       this.sql = sql;
