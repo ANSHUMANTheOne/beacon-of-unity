@@ -1,3 +1,9 @@
+import {
+  emailConfigured,
+  emailStatus,
+  connectEmail,
+  deliverEmail,
+} from "./email.js";
 import { listPosts, updateProfile, cleanTopics } from "./community.js";
 import { storeMedia, readMedia, MAX_UPLOAD } from "./media-store.js";
 import {
@@ -130,7 +136,7 @@ async function requirePost(env, user, pid) {
 }
 async function sendEmail(env, u, purpose) {
   assert(
-    env.RESEND_API_KEY,
+    await emailConfigured(env),
     503,
     "Email service is not configured yet. Contact the site owner.",
   );
@@ -145,23 +151,23 @@ async function sendEmail(env, u, purpose) {
     time + 30 * 60000,
   );
   const url = `${env.APP_ORIGIN}/social/${purpose === "verify" ? "verify" : "reset"}#token=${token}`;
-  const result = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: env.EMAIL_FROM,
-      to: [u.email],
+  try {
+    await deliverEmail(env, {
+      to: u.email,
       subject:
         purpose === "verify"
           ? "Confirm your Social email"
           : "Reset your Social password",
       text: `Open this link within 30 minutes: ${url}\nIf you did not request this, ignore this email.`,
-    }),
-  });
-  assert(result.ok, 503, "Email could not be sent. Please try again later.");
+    });
+  } catch (e) {
+    await run(
+      env,
+      "DELETE FROM email_tokens WHERE token_hash=?",
+      await digest(token),
+    );
+    throw e;
+  }
 }
 async function api(request, env) {
   assert(env.DB, 503, "Database setup is incomplete.");
@@ -186,7 +192,7 @@ async function api(request, env) {
     );
   }
   if (path === "/health" && method === "GET")
-    return json({ ok: true, uploads: true, email: !!env.RESEND_API_KEY });
+    return json({ ok: true, uploads: true, email: await emailConfigured(env) });
   if (path === "/auth/username" && method === "GET") {
     await limit(
       env,
@@ -293,7 +299,7 @@ async function api(request, env) {
     );
     const d = await jsonBody(request);
     assert(
-      env.RESEND_API_KEY,
+      await emailConfigured(env),
       503,
       "Password recovery is not configured yet. Contact the site owner.",
     );
@@ -780,6 +786,35 @@ async function api(request, env) {
     });
   if (path.startsWith("/admin")) {
     assert(u.role === "admin", 403, "Administrator access required.");
+    if (path === "/admin/email" && method === "GET")
+      return json(await emailStatus(env));
+    if (path === "/admin/email" && method === "POST") {
+      await limit(env, `email-config:${u.id}`, 5, 3600000);
+      const d = await jsonBody(request);
+      const result = await connectEmail(env, d);
+      await run(
+        env,
+        "INSERT INTO audit VALUES(?,?,?,?,?)",
+        id(),
+        u.id,
+        "email.connected",
+        "sendpulse",
+        now(),
+      );
+      return json(result);
+    }
+    if (path === "/admin/email/test" && method === "POST") {
+      await limit(env, `email-test:${u.id}`, 3, 3600000);
+      await deliverEmail(env, {
+        to: u.email,
+        subject: "Social email connection test",
+        text: "This test confirms the Social app can submit transactional email through its configured provider. If you received this, delivery to your mailbox succeeded.",
+      });
+      return json({
+        message:
+          "Test email accepted by the provider. Check your inbox and spam folder.",
+      });
+    }
     if (path === "/admin/overview" && method === "GET")
       return json({
         pending: await all(
@@ -924,6 +959,7 @@ export default {
       env.DB.prepare("DELETE FROM sessions WHERE expires_at<?").bind(now()),
       env.DB.prepare("DELETE FROM email_tokens WHERE expires_at<?").bind(now()),
       env.DB.prepare("DELETE FROM rate_limits WHERE expires_at<?").bind(now()),
+      env.DB.prepare("DELETE FROM email_usage WHERE expires_at<?").bind(now()),
     ]);
     const orphans = await all(
       env,

@@ -1,3 +1,4 @@
+import EmailSettings from "./EmailSettings.jsx";
 import { Interests, CommunityProfile } from "./Community.jsx";
 import { TOPICS } from "./topics.js";
 import React, { useEffect, useState, useRef, Suspense, lazy } from "react";
@@ -2125,6 +2126,7 @@ function Admin({ user, execute, notify }) {
               </div>
             ))}
           </section>
+          <EmailSettings execute={execute} notify={notify} />
           <section className="settings-card">
             <h3>Audit log</h3>
             {data.audit.slice(0, 30).map((a) => (
