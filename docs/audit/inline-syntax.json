@@ -1,0 +1,17 @@
+{
+  "scripts": 67,
+  "failures": [
+    {
+      "original": "dashboard.html",
+      "source": "website/app/dashboard.html",
+      "line": 5941,
+      "error": "Unexpected identifier 's'"
+    },
+    {
+      "original": "dashboard_updated.html",
+      "source": "website/app/dashboard_updated.html",
+      "line": 6002,
+      "error": "Unexpected identifier 's'"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+name: Validate compatibility artifact
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: python scripts/test-publisher.py
+      - run: python scripts/build.py
+      - run: python scripts/validate.py
+      - run: node scripts/test-worker.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: compatibility-public-tree
+          path: dist/
+          include-hidden-files: true
+          retention-days: 14
