@@ -66,3 +66,7 @@ The immutable preview `https://2462e365-beaconofunity.anshorg.workers.dev` passe
 The preview, the existing live domain, and the original deployed version URL all returned HTTP 200 with the same 23,527,562-byte MP4 and SHA-256 when asked for a range. Partial-range support is therefore not claimed; the first 206-only test was an incorrect assumption about the baseline and was replaced by an explicit live-response comparison. No media content or server behavior was changed to make the test pass.
 
 These are file/HTTP checks, not proof of authenticated Firebase authorization, real Bluetooth behavior, external service availability, or every UI state. OmniScope and social use separate custom-domain Workers; their route dispatch does not run on the main Worker's version URL. Keep those deployments and routes unchanged. GitHub Pages still requires its publishing-source transition before merging the organized layout.
+
+## Final runtime review
+
+`QA.md` records the functional follow-up and its four declared text repairs. Repeat provider checks against the repaired version rather than the earlier immutable snapshot. Current main has a concurrent redesign and merge conflicts, so branch-only preview results are not approval to merge or deploy the combined site. Coordinate its build/Wrangler changes before the Pages transition or any production promotion.

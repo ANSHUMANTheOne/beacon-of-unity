@@ -38,7 +38,7 @@ The final root also contains README, configuration, docs, deployment templates, 
 
 The second branch is substantive: it has 31 files, its own alternate homepage, a Cloudflare Worker configuration, and an environment-file ignore policy. Its only branch-unique commit is the Worker autoconfiguration; its complete file hashes and main differences are recorded in `audit/branches.json` and `audit/history.json`.
 
-## Validation evidence
+## Initial validation evidence (before functional repairs)
 
 - 136/136 files: original Git bytes, reorganized source and published paths match SHA-256 and length.
 - 136/136 local HTTP resources: original and reconstructed tree return matching content and MIME.
@@ -53,7 +53,7 @@ The second branch is substantive: it has 31 files, its own alternate homepage, a
 
 The first publisher-test run exposed missing baseline metadata in the fixture, which was corrected. A fresh build ran out of D: space; only generated duplicates were removed, and a fresh build and strict validation were rerun. A browser GIF check initially used an insufficient fixed delay; an explicit decode wait resolved the mismatch. No application changes were made to mask those results.
 
-## Existing failures and limits
+## Initial findings and limits (status updated below)
 
 - Both dashboards have `Unexpected identifier 's'` in existing inline scripts (original lines 5941 and 6002). Source bytes are deliberately preserved. Fix in a separate application change with owner review.
 - CozyStudio has an existing `undefined.map` runtime error in the offline browser baseline.
@@ -88,3 +88,11 @@ After a future approved cutover, roll Cloudflare back to the saved pre-cutover d
 The Workers Builds failure was traced to a missing root Wrangler configuration and missing generated artifact. Root `wrangler.jsonc` and `scripts/cloudflare-build.mjs` now prepare and validate `dist/` before version upload. Both the GitHub compatibility workflow (including six publisher tests, 62 Worker/API assertions, and a Wrangler 4.157.0 dry-run) and the Cloudflare version upload passed. An additional provider acceptance run passed 141 checks against the immutable uploaded version; see `audit/provider-preview-validation.json`. One unavailable dotfile remains unavailable as in the baseline. Existing video range requests return the whole unchanged file on both live and preview hosts; partial seeking support was not introduced or claimed.
 
 No production promotion, domain/DNS change, GitHub Pages settings change, OmniScope source change, or social deployment change was performed. The PR must still remain draft until the GitHub Pages publishing transition and final cutover are approved. The former statement that all deployment configuration is inert applies to the initial snapshot; the review branch now includes an active root build/version-upload configuration.
+
+## Follow-up: functional QA and concurrent redesign
+
+The initial byte-preservation evidence above describes the initial migration snapshot. The requested deeper testing reproduced the dashboard syntax errors and CozyStudio timing/preset failures. Four text files now contain explicit, minimal repairs; all original media and the other 132 original files retain original bytes. The manifest retains original hashes and separately records each repaired source hash/reason. `/og-image.png` additionally maps to the unchanged logo to repair an existing sharing-image 404. No original file or public route is removed.
+
+All 8 publisher tests, 62 Worker/API assertions, 264 animation combinations, 7 preset cases, 67 inline syntax checks and 16 desktop/mobile browser flows (120 assertions) pass locally. Separate live OmniScope/social UI checks and scientific API probes pass without editing or redeploying those applications. Current results and limitations supersede the initial open-bug notes; see `QA.md` and `audit/runtime-interactions.json`. Provider checks are repeated on the uploaded repaired version before release.
+
+**New release blocker:** current `main` received a substantial separate Beacon redesign after the original snapshot, and GitHub reports merge conflicts. Its changes include page files, new assets/source files, package/build configuration and Wrangler settings. No automatic merge/rebase was performed. Reconcile both workstreams, preserve the redesign and repeat final tests against the resulting merge. The review branch's frozen baseline evidence must not be presented as proof for the redesigned main branch.

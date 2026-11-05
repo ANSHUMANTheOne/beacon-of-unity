@@ -19,7 +19,7 @@ Beacon of Unity remains the primary product. Independent apps stay under `projec
 | `archive/unclassified/` | Unidentified file preserved without deletion | Original path |
 | `functions/api/` | Whole-repository Cloudflare Pages API | `/api/archive`, `/api/ephemeris` on that provider |
 
-The builder copies explicit manifest entries plus tracked files in the declared concurrent-work passthrough patterns. Newly added documentation, audit reports, environment files and repository metadata are not included automatically. The original public tree is reconstructed, including historically published project source and original project documentation; it is not a minimized bundle. No original runtime code or visual style is changed.
+The builder copies explicit manifest entries plus tracked files in the declared concurrent-work passthrough patterns. Newly added documentation, audit reports, environment files and repository metadata are not included automatically. The original public tree is reconstructed, including historically published project source and original project documentation; it is not a minimized bundle. The publisher does not transform source content. Four narrowly scoped HTML/JavaScript repairs discovered during functional QA are documented in `QA.md`; visual styles are unchanged. A sharing-image alias publishes the unchanged existing logo.
 
 The root video is a deliberate compatibility exception, not a second media copy. OmniScope stays in its original root directory; its files, deployment commands and runtime configuration are excluded from restructuring. Do not deploy the source root as static assets after migration.
 
