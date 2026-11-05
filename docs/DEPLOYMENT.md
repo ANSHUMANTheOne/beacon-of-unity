@@ -70,3 +70,5 @@ These are file/HTTP checks, not proof of authenticated Firebase authorization, r
 ## Final runtime review
 
 `QA.md` records the functional follow-up and its four declared text repairs. Repeat provider checks against the repaired version rather than the earlier immutable snapshot. Current main has a concurrent redesign and merge conflicts, so branch-only preview results are not approval to merge or deploy the combined site. Coordinate its build/Wrangler changes before the Pages transition or any production promotion.
+
+The fresh `a64d646` upload passed, but its preview URL currently returns404 to acceptance probes (generic local access can also return403/error1010). The newer main configuration disables workers.dev/preview URLs. Confirm an approved accessible staging/version URL before release; no provider settings were changed to resolve this. Current failed acceptance evidence is in `audit/provider-runtime-validation.json`.

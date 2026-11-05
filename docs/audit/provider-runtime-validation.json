@@ -1,0 +1,3521 @@
+{
+  "summary": {
+    "base_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev",
+    "checked": 142,
+    "passed": 1,
+    "failed": [
+      {
+        "path": "/67.gif",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/67.gif",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/CozyStudio/README.md",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/README.md",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/CozyStudio/index.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/index.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/CozyStudio/js/animations.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/animations.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/CozyStudio/js/app.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/app.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/CozyStudio/js/bluetooth.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/bluetooth.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/CozyStudio/js/presets.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/presets.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/CozyStudio/js/protocol.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/protocol.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/CozyStudio/styles.css",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/styles.css",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/bazooka.gif",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/bazooka.gif",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/bazooka.mp3",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/bazooka.mp3",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/beacon_tutorial_v2.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/beacon_tutorial_v2.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/blog.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/blog.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/blog"
+          }
+        ]
+      },
+      {
+        "path": "/carbon.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/carbon.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/carbon"
+          }
+        ]
+      },
+      {
+        "path": "/code.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/code.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/code"
+          }
+        ]
+      },
+      {
+        "path": "/contact.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/contact.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/contact"
+          }
+        ]
+      },
+      {
+        "path": "/credits.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/credits.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/credits"
+          }
+        ]
+      },
+      {
+        "path": "/dashboard.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/dashboard.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/dashboard"
+          }
+        ]
+      },
+      {
+        "path": "/dashboard_updated.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/dashboard_updated.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/dashboard_updated"
+          }
+        ]
+      },
+      {
+        "path": "/data.gif",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/data.gif",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/data.mp3",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/data.mp3",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/demo.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/demo.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/demo"
+          }
+        ]
+      },
+      {
+        "path": "/eysc.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/eysc.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/eysc"
+          }
+        ]
+      },
+      {
+        "path": "/eysc.zip",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/eysc.zip",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/favicon.ico",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/favicon.ico",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/focus.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/focus.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/focus"
+          }
+        ]
+      },
+      {
+        "path": "/founder.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/founder.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/founder"
+          }
+        ]
+      },
+      {
+        "path": "/functions/api/archive.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/functions/api/archive.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/functions/api/ephemeris.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/functions/api/ephemeris.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/gods-eye/README.md",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/README.md",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/index.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/index.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/gods-eye/"
+          }
+        ]
+      },
+      {
+        "path": "/gods-eye/package-lock.json",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/package-lock.json",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/package.json",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/package.json",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/redacted.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/redacted.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/gods-eye/redacted"
+          }
+        ]
+      },
+      {
+        "path": "/gods-eye/src/App.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/App.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/CameraController.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/CameraController.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/ControlPanel.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/ControlPanel.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/LoadingScreen.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/LoadingScreen.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/ObjectInspector.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/ObjectInspector.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/OrbitPath.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/OrbitPath.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/Planet.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/Planet.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/PlanetRing.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/PlanetRing.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/SolarSystem.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/SolarSystem.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/StarField.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/StarField.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/Sun.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/Sun.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/Timeline.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/Timeline.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/components/UIOverlay.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/UIOverlay.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/data/celestialBodies.ts",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/data/celestialBodies.ts",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/data/orbitalMechanics.ts",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/data/orbitalMechanics.ts",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/hooks/useAppState.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/hooks/useAppState.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/index.css",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/index.css",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/main.tsx",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/main.tsx",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/types/celestial.ts",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/types/celestial.ts",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/src/utils/textures.ts",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/utils/textures.ts",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/tsconfig.app.json",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/tsconfig.app.json",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/tsconfig.json",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/tsconfig.json",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/tsconfig.node.json",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/tsconfig.node.json",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/vite.config.ts",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/vite.config.ts",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/hellopotato.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/hellopotato.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/hellopotato"
+          }
+        ]
+      },
+      {
+        "path": "/hero-scene.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/hero-scene.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/index.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/index.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/"
+          }
+        ]
+      },
+      {
+        "path": "/index2.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/index2.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/index2"
+          }
+        ]
+      },
+      {
+        "path": "/job.mp3",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/job.mp3",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/job.png",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/job.png",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/job2.mp3",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/job2.mp3",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/login.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/login.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/login"
+          }
+        ]
+      },
+      {
+        "path": "/logo.png",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/logo.png",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/nothing",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/nothing",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/oldindex.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/oldindex.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/oldindex"
+          }
+        ]
+      },
+      {
+        "path": "/omniscope/.gitattributes",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/.gitattributes",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/README.md",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/README.md",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/functions/api/archive.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/functions/api/archive.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/functions/api/ephemeris.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/functions/api/ephemeris.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/index.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/index.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/analysis-workspace.css",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/analysis-workspace.css",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/astro-math.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/astro-math.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/calm-ui.css",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/calm-ui.css",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/calm-ui.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/calm-ui.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/change-candidates.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/change-candidates.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/earth-nasa.png",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/earth-nasa.png",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/ephemeris.json",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/ephemeris.json",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/jupiter-jpl.jpg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/jupiter-jpl.jpg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/mars-jpl.jpg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/mars-jpl.jpg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/moon-nasa.jpg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/moon-nasa.jpg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/sky-j.jpg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/sky-j.jpg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/sky-w1.jpg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/sky-w1.jpg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/sky-w2.jpg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/sky-w2.jpg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/sky-w3.jpg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/sky-w3.jpg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d1-0.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d1-0.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d1-1.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d1-1.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d2-0.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d2-0.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d2-1.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d2-1.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d3-0.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d3-0.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d3-1.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d3-1.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d4-0.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d4-0.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d4-1.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d4-1.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d5-0.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d5-0.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d5-1.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d5-1.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d6-0.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d6-0.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/spx-d6-1.fits",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d6-1.fits",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/survey-example.json",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/survey-example.json",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/data/wise-color.jpg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/wise-color.jpg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/favicon.svg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/favicon.svg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/file.svg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/file.svg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/globe.svg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/globe.svg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/index.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/index.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/mission-redesign.css",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/mission-redesign.css",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/mission-stage.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/mission-stage.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/mission-ui.css",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/mission-ui.css",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/observation-overlay.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/observation-overlay.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/observatory.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/observatory.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/refined-ui.css",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/refined-ui.css",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/sky-engine.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/sky-engine.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/solar-system.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/solar-system.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/survey-system.css",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/survey-system.css",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/survey-system.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/survey-system.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/vendor/LICENSE",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/vendor/LICENSE",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/vendor/addons/controls/OrbitControls.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/vendor/addons/controls/OrbitControls.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/vendor/three.module.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/vendor/three.module.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/public/window.svg",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/window.svg",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/worker/.gitignore",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/worker/.gitignore",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/worker/index.js",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/worker/index.js",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/worker/prepare-assets.mjs",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/worker/prepare-assets.mjs",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/worker/wrangler.jsonc",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/worker/wrangler.jsonc",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/privacy.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/privacy.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/privacy"
+          }
+        ]
+      },
+      {
+        "path": "/rick.gif",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/rick.gif",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/rick.mp3",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/rick.mp3",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/sixseven.mp3",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/sixseven.mp3",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/terms.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/terms.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/terms"
+          }
+        ]
+      },
+      {
+        "path": "/trial.html",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/trial.html",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": [
+          {
+            "status": 307,
+            "target": "/trial"
+          }
+        ]
+      },
+      {
+        "path": "/user.gif",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/user.gif",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/user.mp3",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/user.mp3",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/voltwayvideeeo.mp4",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/voltwayvideeeo.mp4",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/voltwayvideeo.mp4",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/voltwayvideeo.mp4",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/voltwayvideo.mp4",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/voltwayvideo.mp4",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/og-image.png",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/og-image.png",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/gods-eye/",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison",
+        "expected_redirects": []
+      },
+      {
+        "path": "/CozyStudio/",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/omniscope/",
+        "status": 404,
+        "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/",
+        "redirects": [],
+        "content_type": "text/plain",
+        "bytes": 17,
+        "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+        "passed": false,
+        "validation": "Content and MIME comparison"
+      },
+      {
+        "path": "/voltwayvideo.mp4",
+        "validation": "Range-request response parity with the existing live site",
+        "passed": false,
+        "preview": {
+          "valid": false,
+          "error": "HTTPError"
+        },
+        "live_baseline": {
+          "status": 200,
+          "bytes": 23527562,
+          "sha256": "abd6ece77246d9d1a3142ea9080afc5079f654158d93f15696923036b9cbbe5b",
+          "content_type": "video/mp4",
+          "content_range": null,
+          "accept_ranges": null,
+          "valid": true
+        },
+        "partial_ranges_supported": false
+      }
+    ],
+    "unchanged_unavailable": [
+      "/.assetsignore"
+    ],
+    "intentional_text_fixes": [
+      "CozyStudio/js/animations.js",
+      "CozyStudio/js/presets.js",
+      "dashboard.html",
+      "dashboard_updated.html"
+    ],
+    "additional_aliases": [
+      "og-image.png"
+    ],
+    "scope": "Original paths plus documented text-only repairs, public bytes/MIME, redirects, directory aliases and live video response parity; no authenticated actions."
+  },
+  "results": [
+    {
+      "path": "/.assetsignore",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/.assetsignore",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": true,
+      "validation": "Previously unavailable path remains unavailable"
+    },
+    {
+      "path": "/67.gif",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/67.gif",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/CozyStudio/README.md",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/README.md",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/CozyStudio/index.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/index.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/CozyStudio/js/animations.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/animations.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/CozyStudio/js/app.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/app.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/CozyStudio/js/bluetooth.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/bluetooth.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/CozyStudio/js/presets.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/presets.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/CozyStudio/js/protocol.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/js/protocol.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/CozyStudio/styles.css",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/styles.css",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/bazooka.gif",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/bazooka.gif",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/bazooka.mp3",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/bazooka.mp3",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/beacon_tutorial_v2.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/beacon_tutorial_v2.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/blog.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/blog.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/blog"
+        }
+      ]
+    },
+    {
+      "path": "/carbon.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/carbon.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/carbon"
+        }
+      ]
+    },
+    {
+      "path": "/code.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/code.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/code"
+        }
+      ]
+    },
+    {
+      "path": "/contact.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/contact.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/contact"
+        }
+      ]
+    },
+    {
+      "path": "/credits.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/credits.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/credits"
+        }
+      ]
+    },
+    {
+      "path": "/dashboard.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/dashboard.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/dashboard"
+        }
+      ]
+    },
+    {
+      "path": "/dashboard_updated.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/dashboard_updated.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/dashboard_updated"
+        }
+      ]
+    },
+    {
+      "path": "/data.gif",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/data.gif",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/data.mp3",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/data.mp3",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/demo.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/demo.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/demo"
+        }
+      ]
+    },
+    {
+      "path": "/eysc.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/eysc.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/eysc"
+        }
+      ]
+    },
+    {
+      "path": "/eysc.zip",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/eysc.zip",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/favicon.ico",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/favicon.ico",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/focus.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/focus.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/focus"
+        }
+      ]
+    },
+    {
+      "path": "/founder.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/founder.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/founder"
+        }
+      ]
+    },
+    {
+      "path": "/functions/api/archive.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/functions/api/archive.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/functions/api/ephemeris.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/functions/api/ephemeris.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/gods-eye/README.md",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/README.md",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/index.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/index.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/gods-eye/"
+        }
+      ]
+    },
+    {
+      "path": "/gods-eye/package-lock.json",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/package-lock.json",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/package.json",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/package.json",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/redacted.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/redacted.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/gods-eye/redacted"
+        }
+      ]
+    },
+    {
+      "path": "/gods-eye/src/App.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/App.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/CameraController.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/CameraController.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/ControlPanel.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/ControlPanel.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/LoadingScreen.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/LoadingScreen.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/ObjectInspector.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/ObjectInspector.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/OrbitPath.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/OrbitPath.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/Planet.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/Planet.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/PlanetRing.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/PlanetRing.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/SolarSystem.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/SolarSystem.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/StarField.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/StarField.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/Sun.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/Sun.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/Timeline.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/Timeline.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/components/UIOverlay.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/components/UIOverlay.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/data/celestialBodies.ts",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/data/celestialBodies.ts",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/data/orbitalMechanics.ts",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/data/orbitalMechanics.ts",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/hooks/useAppState.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/hooks/useAppState.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/index.css",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/index.css",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/main.tsx",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/main.tsx",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/types/celestial.ts",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/types/celestial.ts",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/src/utils/textures.ts",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/src/utils/textures.ts",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/tsconfig.app.json",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/tsconfig.app.json",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/tsconfig.json",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/tsconfig.json",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/tsconfig.node.json",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/tsconfig.node.json",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/vite.config.ts",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/vite.config.ts",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/hellopotato.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/hellopotato.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/hellopotato"
+        }
+      ]
+    },
+    {
+      "path": "/hero-scene.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/hero-scene.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/index.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/index.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/"
+        }
+      ]
+    },
+    {
+      "path": "/index2.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/index2.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/index2"
+        }
+      ]
+    },
+    {
+      "path": "/job.mp3",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/job.mp3",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/job.png",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/job.png",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/job2.mp3",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/job2.mp3",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/login.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/login.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/login"
+        }
+      ]
+    },
+    {
+      "path": "/logo.png",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/logo.png",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/nothing",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/nothing",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/oldindex.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/oldindex.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/oldindex"
+        }
+      ]
+    },
+    {
+      "path": "/omniscope/.gitattributes",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/.gitattributes",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/README.md",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/README.md",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/functions/api/archive.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/functions/api/archive.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/functions/api/ephemeris.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/functions/api/ephemeris.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/index.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/index.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/analysis-workspace.css",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/analysis-workspace.css",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/astro-math.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/astro-math.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/calm-ui.css",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/calm-ui.css",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/calm-ui.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/calm-ui.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/change-candidates.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/change-candidates.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/earth-nasa.png",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/earth-nasa.png",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/ephemeris.json",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/ephemeris.json",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/jupiter-jpl.jpg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/jupiter-jpl.jpg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/mars-jpl.jpg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/mars-jpl.jpg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/moon-nasa.jpg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/moon-nasa.jpg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/sky-j.jpg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/sky-j.jpg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/sky-w1.jpg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/sky-w1.jpg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/sky-w2.jpg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/sky-w2.jpg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/sky-w3.jpg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/sky-w3.jpg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d1-0.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d1-0.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d1-1.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d1-1.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d2-0.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d2-0.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d2-1.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d2-1.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d3-0.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d3-0.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d3-1.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d3-1.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d4-0.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d4-0.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d4-1.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d4-1.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d5-0.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d5-0.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d5-1.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d5-1.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d6-0.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d6-0.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/spx-d6-1.fits",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/spx-d6-1.fits",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/survey-example.json",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/survey-example.json",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/data/wise-color.jpg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/data/wise-color.jpg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/favicon.svg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/favicon.svg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/file.svg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/file.svg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/globe.svg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/globe.svg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/index.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/index.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/mission-redesign.css",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/mission-redesign.css",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/mission-stage.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/mission-stage.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/mission-ui.css",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/mission-ui.css",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/observation-overlay.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/observation-overlay.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/observatory.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/observatory.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/refined-ui.css",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/refined-ui.css",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/sky-engine.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/sky-engine.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/solar-system.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/solar-system.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/survey-system.css",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/survey-system.css",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/survey-system.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/survey-system.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/vendor/LICENSE",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/vendor/LICENSE",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/vendor/addons/controls/OrbitControls.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/vendor/addons/controls/OrbitControls.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/vendor/three.module.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/vendor/three.module.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/public/window.svg",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/public/window.svg",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/worker/.gitignore",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/worker/.gitignore",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/worker/index.js",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/worker/index.js",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/worker/prepare-assets.mjs",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/worker/prepare-assets.mjs",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/worker/wrangler.jsonc",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/worker/wrangler.jsonc",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/privacy.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/privacy.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/privacy"
+        }
+      ]
+    },
+    {
+      "path": "/rick.gif",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/rick.gif",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/rick.mp3",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/rick.mp3",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/sixseven.mp3",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/sixseven.mp3",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/terms.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/terms.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/terms"
+        }
+      ]
+    },
+    {
+      "path": "/trial.html",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/trial.html",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": [
+        {
+          "status": 307,
+          "target": "/trial"
+        }
+      ]
+    },
+    {
+      "path": "/user.gif",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/user.gif",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/user.mp3",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/user.mp3",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/voltwayvideeeo.mp4",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/voltwayvideeeo.mp4",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/voltwayvideeo.mp4",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/voltwayvideeo.mp4",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/voltwayvideo.mp4",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/voltwayvideo.mp4",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/og-image.png",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/og-image.png",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/gods-eye/",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/gods-eye/",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison",
+      "expected_redirects": []
+    },
+    {
+      "path": "/CozyStudio/",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/CozyStudio/",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/omniscope/",
+      "status": 404,
+      "final_url": "https://a9baa6bf-beaconofunity.anshorg.workers.dev/omniscope/",
+      "redirects": [],
+      "content_type": "text/plain",
+      "bytes": 17,
+      "sha256": "a4daf148dd64d1a3e8e8101040915e50d12df29153c5936d377cf2260ccc8ba0",
+      "passed": false,
+      "validation": "Content and MIME comparison"
+    },
+    {
+      "path": "/voltwayvideo.mp4",
+      "validation": "Range-request response parity with the existing live site",
+      "passed": false,
+      "preview": {
+        "valid": false,
+        "error": "HTTPError"
+      },
+      "live_baseline": {
+        "status": 200,
+        "bytes": 23527562,
+        "sha256": "abd6ece77246d9d1a3142ea9080afc5079f654158d93f15696923036b9cbbe5b",
+        "content_type": "video/mp4",
+        "content_range": null,
+        "accept_ranges": null,
+        "valid": true
+      },
+      "partial_ranges_supported": false
+    }
+  ]
+}
