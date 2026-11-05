@@ -1,0 +1,20 @@
+{
+  "tested_commit": "a64d646313670d7d94ec68664626886cdf707067",
+  "cloudflare_build": "success",
+  "cloudflare_build_id": "9e562a6d-24fd-4c72-9856-45e6683a25b7",
+  "uploaded_version": "a9baa6bf-60bf-41c5-808a-6117b024af4f",
+  "fresh_provider_acceptance": "FAILED: preview unavailable",
+  "checked": 142,
+  "passed": 1,
+  "failed": 141,
+  "exception": "Only the explicitly expected unavailable .assetsignore comparison passes; no HTML/media success is claimed.",
+  "spot_checks": {
+    "local_runner": "403 error1010 with generic user agent; checker receives404",
+    "independent_fetch": "404 for root and CozyStudio",
+    "earlier_passing_version": "also no longer accessible from this runner"
+  },
+  "github_actions": "No fresh PR workflow runs; GitHub reports merge conflicts",
+  "local_wrangler_dry_run": "Could not complete npm package download because D: space exhausted; earlier branch dry-run passed",
+  "production": "Not promoted; live video remains200 with original SHA256",
+  "release_decision": "Do not merge or promote. Reconcile concurrent redesign and validate an accessible provider preview first."
+}

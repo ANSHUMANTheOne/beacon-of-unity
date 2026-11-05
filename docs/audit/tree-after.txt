@@ -16,6 +16,7 @@ docs/DEPLOYMENT.md
 docs/MIGRATION.md
 docs/PROJECTS.md
 docs/QA.md
+docs/RECONCILIATION.md
 docs/ROUTES.md
 docs/SECURITY.md
 docs/audit/branches.json
@@ -25,6 +26,7 @@ docs/audit/dependencies.json
 docs/audit/dynamic-references.json
 docs/audit/external-hosts.json
 docs/audit/file-movements.csv
+docs/audit/final-qa-status.json
 docs/audit/history.json
 docs/audit/http-integrity.json
 docs/audit/inline-syntax-current.json
@@ -37,6 +39,7 @@ docs/audit/mobile.json
 docs/audit/page-titles.json
 docs/audit/pages-settings.json
 docs/audit/provider-preview-validation.json
+docs/audit/provider-runtime-validation.json
 docs/audit/route-compatibility.csv
 docs/audit/runtime-baseline-summary.json
 docs/audit/runtime-interactions.json

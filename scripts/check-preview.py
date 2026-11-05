@@ -61,7 +61,7 @@ def verify(base, manifest, report_path, wait_seconds=0):
                     result.update(status=response.status, final_url=response.url, redirects=redirects,
                                   content_type=mime, bytes=len(data),
                                   sha256=hashlib.sha256(data).hexdigest())
-                    if response.status == 404 and prior.get(path, {}).get('status') == 404:
+                    if response.status == 404 and path == '/.assetsignore' and prior.get(path, {}).get('status') == 404:
                         result.update(passed=True, validation='Previously unavailable path remains unavailable')
                     else:
                         allowed = MIME.get(Path(expected['original']).suffix)
@@ -152,7 +152,8 @@ def verify(base, manifest, report_path, wait_seconds=0):
         'base_url': base, 'checked': len(rows), 'passed': sum(x['passed'] for x in rows),
         'failed': [x for x in rows if not x['passed']],
         'unchanged_unavailable': [x['path'] for x in rows if x.get('status') == 404 and x['passed']],
-        'intentional_text_fixes': [row['original'] for row in files if row.get('source_sha256') or row.get('alias')],
+        'intentional_text_fixes': [row['original'] for row in files if row.get('source_sha256')],
+        'additional_aliases': [row['original'] for row in files if row.get('alias')],
         'scope': 'Original paths plus documented text-only repairs, public bytes/MIME, redirects, directory aliases and live video response parity; no authenticated actions.',
     }
     report_path.parent.mkdir(parents=True, exist_ok=True)
