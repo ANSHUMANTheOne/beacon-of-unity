@@ -1,0 +1,123 @@
+"""Read-only acceptance checks for an uploaded Cloudflare migration version."""
+import argparse
+from concurrent.futures import ThreadPoolExecutor
+import hashlib
+import json
+import mimetypes
+from pathlib import Path
+import re
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+
+ROOT = Path(__file__).resolve().parents[1]
+MIME = {
+    '.html': {'text/html'}, '.css': {'text/css'},
+    '.js': {'application/javascript', 'text/javascript'},
+    '.json': {'application/json'}, '.gif': {'image/gif'},
+    '.mp3': {'audio/mpeg'}, '.mp4': {'video/mp4'},
+    '.png': {'image/png'}, '.jpg': {'image/jpeg'},
+    '.ico': {'image/x-icon', 'image/vnd.microsoft.icon'},
+    '.zip': {'application/zip', 'application/x-zip-compressed'},
+}
+
+def verify(base, manifest, report_path):
+    origin = urllib.parse.urlsplit(base)
+    if (origin.scheme != 'https' or origin.username or origin.password or
+            origin.port or origin.path not in ('', '/') or origin.query or origin.fragment or
+            not re.fullmatch(r'[a-z0-9-]+-beaconofunity\.anshorg\.workers\.dev', origin.hostname or '')):
+        raise ValueError('Use an HTTPS version or alias URL for the existing beaconofunity Worker.')
+    base = base.rstrip('/')
+    baseline = json.loads((ROOT / 'docs/audit/live-routes-complete.json').read_text())
+    prior = {urllib.parse.urlsplit(x['url']).path: x for x in baseline
+             if urllib.parse.urlsplit(x['url']).hostname == 'beaconofunity.com'}
+
+    def check(item):
+        path, expected = item
+        redirects = []
+        class SameOrigin(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self, request, fp, code, message, headers, newurl):
+                target = urllib.parse.urlsplit(newurl)
+                if target.scheme != 'https' or target.netloc != origin.netloc:
+                    raise ValueError('Unexpected cross-origin redirect')
+                redirects.append({'status': code, 'target': target.path})
+                return super().redirect_request(request, fp, code, message, headers, newurl)
+        result = {'path': path}
+        for attempt in range(3):
+            try:
+                opener = urllib.request.build_opener(SameOrigin())
+                request = urllib.request.Request(base + path, headers={
+                    'User-Agent': 'Beacon-Migration-ReadOnly-Check',
+                    'Accept-Encoding': 'identity',
+                })
+                try:
+                    response = opener.open(request, timeout=30)
+                except urllib.error.HTTPError as error:
+                    response = error
+                with response:
+                    data = response.read()
+                    mime = (response.headers.get('Content-Type') or '').split(';')[0].lower()
+                    result.update(status=response.status, final_url=response.url, redirects=redirects,
+                                  content_type=mime, bytes=len(data),
+                                  sha256=hashlib.sha256(data).hexdigest())
+                    if response.status == 404 and prior.get(path, {}).get('status') == 404:
+                        result.update(passed=True, validation='Previously unavailable path remains unavailable')
+                    else:
+                        allowed = MIME.get(Path(expected['original']).suffix)
+                        matched = (response.status == 200 and len(data) == expected['bytes'] and
+                                   result['sha256'] == expected['sha256'])
+                        result.update(passed=matched and (not allowed or mime in allowed),
+                                      validation='Content and MIME comparison')
+                if result['status'] not in (429, 500, 502, 503, 504):
+                    return result
+            except Exception as error:
+                result.update(passed=False, error=type(error).__name__)
+            time.sleep(0.5 * (attempt + 1))
+        return result
+
+    files = manifest['files']
+    by_path = {x['original']: x for x in files}
+    tasks = [('/' + x['original'], x) for x in files]
+    for alias, original in [
+        ('/', 'index.html'), ('/gods-eye/', 'gods-eye/index.html'),
+        ('/CozyStudio/', 'CozyStudio/index.html'), ('/omniscope/', 'omniscope/index.html'),
+    ]:
+        tasks.append((alias, by_path[original]))
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        rows = list(pool.map(check, tasks))
+    video = by_path['voltwayvideo.mp4']
+    request = urllib.request.Request(base + '/voltwayvideo.mp4', headers={
+        'Range': 'bytes=0-1023', 'Accept-Encoding': 'identity',
+        'User-Agent': 'Beacon-Migration-ReadOnly-Check',
+    })
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            data = response.read()
+            with (ROOT / video['source']).open('rb') as source:
+                expected = source.read(1024)
+            range_ok = (response.status == 206 and data == expected and
+                        response.headers.get('Content-Range') == 'bytes 0-1023/' + str(video['bytes']))
+            rows.append({'path': '/voltwayvideo.mp4', 'validation': 'Range playback response',
+                         'status': response.status, 'passed': range_ok})
+    except Exception as error:
+        rows.append({'path': '/voltwayvideo.mp4', 'validation': 'Range playback response',
+                     'passed': False, 'error': type(error).__name__})
+    summary = {
+        'base_url': base, 'checked': len(rows), 'passed': sum(x['passed'] for x in rows),
+        'failed': [x for x in rows if not x['passed']],
+        'unchanged_unavailable': [x['path'] for x in rows if x.get('status') == 404 and x['passed']],
+        'scope': 'Original migration snapshot, public files, redirects, MIME, directory aliases and video range bytes; no authenticated actions or API integrations.',
+    }
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps({'summary': summary, 'results': rows}, indent=2) + '\n')
+    print(json.dumps(summary, indent=2))
+    return not summary['failed']
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--base-url', required=True)
+    parser.add_argument('--report', type=Path, default=ROOT / '.verification/provider-preview.json')
+    args = parser.parse_args()
+    manifest = json.loads((ROOT / 'config/routes.json').read_text())
+    raise SystemExit(0 if verify(args.base_url, manifest, args.report) else 1)
