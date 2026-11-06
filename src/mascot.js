@@ -114,6 +114,7 @@
     presence='shown';wrap.classList.remove('beacon-tucked');
     for(const key of ['opacity','translate','scale','pointerEvents','clipPath'])wrap.style[key]='';
     vx=0;vy=0;setExpr('happy');presenceLabel(true);
+    refreshText();
   }
   document.addEventListener('pointermove',e=>{
     if(presence!=='tucked'||e.pointerType==='touch')return;
@@ -274,6 +275,9 @@
   // itself -- eliminates the per-frame layout reads entirely rather than
   // just throttling them.
   function refreshText() {
+    // A tucked mascot cannot land on text. Avoid measuring the entire page until
+    // it is actually in play, especially while fonts and the hero are loading.
+    if(presence!=='shown'||document.hidden)return;
     textEls = Array.from(document.querySelectorAll(
       'h1,h2,h3,h4,h5,h6,p,.ftitle,.stitle,.ctat,.nname,.pct,.ft,.tname,.rpt,figcaption,dt,dd'
     )).map(el => ({ el, r: el.getBoundingClientRect() }))
@@ -322,7 +326,7 @@
   function loop(now) {
     if(presence!=='shown'){
       const dt=Math.min(50,now-presenceTime);presenceTime=now;lastT=now;
-      if(presence==='tucked'){
+      if(presence==='tucked'&&(revealTarget>0||reveal>.001)){
         const speed=Number(wrap.dataset.approachSpeed||0);
         reveal=reduced.matches?revealTarget:reveal+(revealTarget-reveal)*(1-Math.exp(-dt/(160-speed*35)));
         drawPeek();
@@ -596,7 +600,7 @@
     const MAX_TRAVEL = 2.6;
 
     function trackEyes() {
-      if (dragging || document.hidden) { requestAnimationFrame(trackEyes); return; }
+      if (dragging || document.hidden || (presence!=='shown'&&reveal<.01)) { requestAnimationFrame(trackEyes); return; }
 
       const svgEl = document.getElementById('bav-svg');
       const rect  = svgEl.getBoundingClientRect();

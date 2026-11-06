@@ -9,21 +9,34 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 const clamp = THREE.MathUtils.clamp;
 const mix = THREE.MathUtils.lerp;
 const ease = t => t*t*(3-2*t);
+// Return control between startup stages so the cursor, text and controls can paint.
+const yieldToPage = () => globalThis.scheduler?.yield?.() ?? new Promise(resolve=>setTimeout(resolve,0));
 
 /** One scene, a small material palette, shared geometries, and authored camera paths.
  * Scroll stays native. The animation loop only interpolates presentation state. */
 export class UnityWorld {
-  constructor(canvas, onReady) {
+  constructor(canvas) {
     this.canvas=canvas; this.mobile=innerWidth<700; this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.low=this.mobile || matchMedia("(pointer:coarse)").matches || (navigator.hardwareConcurrency||8)<5; this.paused=false; this.hidden=false;
     this.yaw=0;this.targetYaw=0;this.dragStart=null;this.lastDrag=0;this.progress=0;this.targetProgress=0;this.pointer=new THREE.Vector2();this.smoothed=new THREE.Vector2();
+  }
+  async initialize(onReady) {
+    const canvas=this.canvas;
+    await yieldToPage();
     this.renderer=new THREE.WebGLRenderer({canvas,antialias:!this.low,alpha:true,powerPreference:'low-power'});
+    // Driver shader-log queries force synchronous GPU waits; keep those for dev builds.
+    this.renderer.debug.checkShaderErrors=import.meta.env.DEV;
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,this.low?1.35:1.75));
     this.renderer.setSize(innerWidth,innerHeight); this.renderer.outputColorSpace=THREE.SRGBColorSpace;
     this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.3;
     this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     this.scene=new THREE.Scene();this.scene.background=new THREE.Color(0x081827); this.scene.fog=new THREE.FogExp2(0x081827,.035);
-    const pmrem=new THREE.PMREMGenerator(this.renderer);const studio=new RoomEnvironment();this.environment=pmrem.fromScene(studio,.06).texture;this.scene.environment=this.environment;this.scene.environmentIntensity=.75;studio.dispose();pmrem.dispose();
+    await yieldToPage();
+    const studio=new RoomEnvironment();
+    await this.renderer.compileAsync(studio,new THREE.PerspectiveCamera(90,1,.1,100));
+    await yieldToPage();
+    const pmrem=new THREE.PMREMGenerator(this.renderer);this.environment=pmrem.fromScene(studio,.06).texture;this.scene.environment=this.environment;this.scene.environmentIntensity=.75;studio.dispose();pmrem.dispose();
+    await yieldToPage();
     this.camera=new THREE.PerspectiveCamera(this.mobile?43:36,innerWidth/innerHeight,.1,160);
     this.root=new THREE.Group();this.scene.add(this.root);
     this.scene.add(new THREE.HemisphereLight(0xb9ddff,0x38465e,2));
@@ -44,7 +57,13 @@ export class UnityWorld {
     this.box=new THREE.BoxGeometry(1,1,1);this.cylinder=new THREE.CylinderGeometry(1,1,1,48);this.sphere=new THREE.SphereGeometry(1,16,12);
     this.islands=[];this.pickables=[];this.people=[];this.bridges=[];this.rings=[];
     const defs=[[-4.1,1.1,2.2,'help'],[2.7,2.1,1.9,'found'],[.4,-3.5,2.35,'volunteer']];
-    defs.forEach((d,i)=>this.createIsland(d,i));this.batchArchitecture();this.createBridges();this.createWater();
+    for(const [i,definition] of defs.entries()){
+      await yieldToPage();this.createIsland(definition,i);
+      await yieldToPage();this.batchArchitecture([this.islands[i]]);
+    }
+    await yieldToPage();this.createBridges();
+    await yieldToPage();this.createWater();
+    await yieldToPage();
     if(!this.low){this.composer=new EffectComposer(this.renderer);this.composer.addPass(new RenderPass(this.scene,this.camera));this.bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.28,.45,1.35);this.composer.addPass(this.bloom);this.composer.addPass(new OutputPass());}
     this.raycaster=new THREE.Raycaster();this.hit=new THREE.Vector2();this.clock=new THREE.Clock();this.lastFrame=0;
     this.pathPosition=new THREE.Vector3();this.pathLook=new THREE.Vector3();this.look=new THREE.Vector3(); this.camGoal=new THREE.Vector3();this.lookGoal=new THREE.Vector3();
@@ -60,14 +79,19 @@ export class UnityWorld {
     addEventListener('resize',this.resize);addEventListener('scroll',this.updateScroll,{passive:true});addEventListener('pointermove',this.onPointer,{passive:true});canvas.addEventListener('click',this.onClick);
     document.addEventListener('visibilitychange',()=>{this.hidden=document.hidden;});
     canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();this.paused=true;document.documentElement.classList.add('world-unavailable');});
-    this.updateScroll();this.progress=this.targetProgress;this.render(0,true);onReady?.();this.tick=this.tick.bind(this);this.raf=requestAnimationFrame(this.tick);
+    this.updateScroll();this.progress=this.targetProgress;
+    // Compile scene shaders asynchronously before they are needed by the first draw.
+    // This uses parallel shader compilation where the graphics driver supports it.
+    this.render(0,true,false);
+    await this.renderer.compileAsync(this.scene,this.camera);
+    await yieldToPage();this.render(0,true);onReady?.();this.tick=this.tick.bind(this);this.raf=requestAnimationFrame(this.tick);
     window.__unityWorld=this;
   }
   mesh(geometry,material,parent,position,scale){const m=new THREE.Mesh(geometry,material);if(position)m.position.set(...position);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
   block(parent,material,pos,scale){return this.mesh(this.box,material,parent,pos,scale);}
-  batchArchitecture(){
+  batchArchitecture(islands=this.islands){
     // Bake static architectural pieces by material: lower draw-call overhead on phones.
-    this.islands.forEach(island=>{island.updateMatrixWorld(true);const inverse=island.matrixWorld.clone().invert();const batches=new Map();const remove=[];
+    islands.forEach(island=>{island.updateMatrixWorld(true);const inverse=island.matrixWorld.clone().invert();const batches=new Map();const remove=[];
       island.traverse(o=>{if(!o.isMesh||this.pickables.includes(o)||this.rings.includes(o))return;const geo=o.geometry.clone();geo.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse,o.matrixWorld));const plain=geo.index?geo.toNonIndexed():geo;if(plain!==geo)geo.dispose();if(!batches.has(o.material))batches.set(o.material,[]);batches.get(o.material).push(plain);remove.push(o);});
       remove.forEach(o=>o.removeFromParent());batches.forEach((geos,material)=>{const merged=mergeGeometries(geos);if(merged)this.mesh(merged,material,island);geos.forEach(g=>g.dispose());});
     });
@@ -140,10 +164,10 @@ export class UnityWorld {
       for(let f=1;f<h/.35;f++)this.block(group,marking,[-6+i*1.7,f*.35,-5.59],[.87,.025,.01]);
     }
     // Reuse the static batching path for the city ground and distant skyline.
-    this.islands.push(group);this.batchArchitecture();this.islands.pop();
+    this.batchArchitecture([group]);
     this.waterMaterial={uniforms:{uTime:{value:0}}};
   }
-  render(time,immediate=false){
+  render(time,immediate=false,draw=true){
     this.progress=mix(this.progress,this.targetProgress,immediate||this.reduced?1:.07);const p=this.progress;
     this.smoothed.lerp(this.pointer,this.reduced?0:.035);
     const mobile=this.mobile;
@@ -167,7 +191,7 @@ export class UnityWorld {
     this.pickables.forEach(m=>{m.material.emissive.setHex(0x2b87ac);m.material.emissiveIntensity=mix(m.material.emissiveIntensity||0,m===this.hovered ? .18 : 0,.12);});
     this.materials.light.emissiveIntensity=this.reduced?1.7:.5+p*2.1;
     this.waterMaterial.uniforms.uTime.value=this.reduced?0:time;
-    if(this.composer)this.composer.render();else this.renderer.render(this.scene,this.camera);
+    if(draw){if(this.composer)this.composer.render();else this.renderer.render(this.scene,this.camera);}
   }
   tick(ms){this.raf=requestAnimationFrame(this.tick);if(this.hidden||this.paused)return;const interval=this.low?33:16;if(ms-this.lastFrame<interval)return;
     const inStory=scrollY<document.getElementById('story-end').offsetTop;const atClose=document.getElementById('join').getBoundingClientRect().top<innerHeight;
@@ -176,5 +200,5 @@ export class UnityWorld {
     this.lastFrame=ms;this.render(this.clock.getElapsedTime());
   }
   setPaused(value){this.paused=value;}
-  dispose(){cancelAnimationFrame(this.raf);removeEventListener('resize',this.resize);removeEventListener('scroll',this.updateScroll);removeEventListener('pointermove',this.onPointer);this.scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of [].concat(o.material))m.dispose();}});this.composer?.dispose();this.renderer.dispose();}
+  dispose(){cancelAnimationFrame(this.raf);removeEventListener('resize',this.resize);removeEventListener('scroll',this.updateScroll);removeEventListener('pointermove',this.onPointer);this.scene?.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of [].concat(o.material))m.dispose();}});this.environment?.dispose();this.composer?.dispose();this.renderer?.dispose();}
 }

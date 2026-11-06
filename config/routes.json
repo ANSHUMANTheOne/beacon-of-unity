@@ -1977,7 +1977,11 @@
       "sha256": "f509a0bbab66d60dc5f4fab0a6259bcf539476b7e79e35a7a792028888a9cab9",
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
-      "reason": "Preserve current main design dependency at the same public path"
+      "reason": "Preserve current main design dependency at the same public path",
+      "source_bytes": 17456,
+      "source_sha256": "db74797260d3455264affc8987e47ff2921d56df2b5c3cc885984377cf499336",
+      "source_change": "Owner-requested homepage startup optimization: staged initialization, asynchronous shader preparation, redundant geometry and hidden mascot work removal; preserve public URLs and design",
+      "source_change_kind": "performance-refinement"
     },
     {
       "original": "assets/unity/style.css",
@@ -1997,7 +2001,11 @@
       "sha256": "65bb4dd4a09f49f3fb4c68a2337c6cde07f64357d9c65f2544eeb18eefd98ec3",
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
-      "reason": "Preserve current main design dependency at the same public path"
+      "reason": "Preserve current main design dependency at the same public path",
+      "source_bytes": 860406,
+      "source_sha256": "0675a3ec9276956348854eeaffc7b8ceeca73899cd6b1756aba3aeff21530ab6",
+      "source_change": "Owner-requested homepage startup optimization: staged initialization, asynchronous shader preparation, redundant geometry and hidden mascot work removal; preserve public URLs and design",
+      "source_change_kind": "performance-refinement"
     },
     {
       "original": "assets/unity/world.js",
@@ -2007,7 +2015,11 @@
       "sha256": "adb869b7442ab703831030f5556fbf8c76202f94705760f11ffc8d8e994e8057",
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
-      "reason": "Preserve current main design dependency at the same public path"
+      "reason": "Preserve current main design dependency at the same public path",
+      "source_bytes": 43521,
+      "source_sha256": "fae771242450a568aa050d086baa8feeeb058cdb71bf6f494add90e20df2df23",
+      "source_change": "Owner-requested homepage startup optimization: staged initialization, asynchronous shader preparation, redundant geometry and hidden mascot work removal; preserve public URLs and design",
+      "source_change_kind": "performance-refinement"
     },
     {
       "original": "assets/unity/world2.js",
@@ -2017,7 +2029,11 @@
       "sha256": "d8bfba6e09a9a6be650eccbcec8af04866d87cff1a01d3f29e9f238343931fd1",
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
-      "reason": "Preserve current main design dependency at the same public path"
+      "reason": "Preserve current main design dependency at the same public path",
+      "source_bytes": 55170,
+      "source_sha256": "abf5be8ba7fe29aa0eb7f9a9bbc173baea4b8187520345c155f071d76c6796a8",
+      "source_change": "Owner-requested homepage startup optimization: staged initialization, asynchronous shader preparation, redundant geometry and hidden mascot work removal; preserve public URLs and design",
+      "source_change_kind": "performance-refinement"
     },
     {
       "original": "EXPERIENCE-REFINEMENT.md",
