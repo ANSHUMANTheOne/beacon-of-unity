@@ -1,4 +1,4 @@
-import { B as D, a as Y, M as x, O as X, F as B, S as M, U, V as g, W as P, H as k, N as K, C as H, b as _, c as v, A as q, d as J, R as Z, e as $, f as ee, L as te, g as se, h as ie, i as V, j as re, k as oe, l as ae, m as Q, n as W, o as p, p as ne, P as le, I as he, q as ue, r as ce, s as fe, t as de, u as me, v as pe, w as ge, x as ve, G as S, y as be, D as I, z as L, E as N, J as xe, K as we, Q as Me, T as Te, X as _e, Y as ye, Z as Ce, _ as j } from "./three.module.js";
+import { B as D, a as Y, M as x, O as X, F as B, S as M, U, V as g, W as P, H as k, N as K, C as H, b as y, c as v, A as q, d as J, R as Z, e as $, f as ee, L as te, g as se, h as ie, i as V, j as re, k as oe, l as ae, m as Q, n as W, o as p, p as ne, P as le, I as he, q as ue, r as ce, s as fe, t as de, u as me, v as pe, w as ge, x as ve, G as S, y as be, D as I, z as L, E as N, J as xe, K as we, Q as Me, T as Te, X as ye, Y as _e, Z as Ce, _ as j } from "./three.module.js";
 function Se(d, e = !1) {
   const i = d[0].index !== null, o = new Set(Object.keys(d[0].attributes)), s = new Set(Object.keys(d[0].morphAttributes)), t = {}, r = {}, n = d[0].morphTargetsRelative, a = new D();
   let h = 0;
@@ -450,7 +450,7 @@ class Ue extends C {
    * @param {?number} [clearAlpha=null] - The clear alpha of the render pass.
    */
   constructor(e, i, o = null, s = null, t = null) {
-    super(), this.scene = e, this.camera = i, this.overrideMaterial = o, this.clearColor = s, this.clearAlpha = t, this.clear = !0, this.clearDepth = !1, this.needsSwap = !1, this._oldClearColor = new _();
+    super(), this.scene = e, this.camera = i, this.overrideMaterial = o, this.clearColor = s, this.clearAlpha = t, this.clear = !0, this.clearDepth = !1, this.needsSwap = !1, this._oldClearColor = new y();
   }
   /**
    * Performs a beauty pass with the configured scene and camera.
@@ -475,7 +475,7 @@ const Fe = {
     tDiffuse: { value: null },
     luminosityThreshold: { value: 1 },
     smoothWidth: { value: 1 },
-    defaultColor: { value: new _(0) },
+    defaultColor: { value: new y(0) },
     defaultOpacity: { value: 0 }
   },
   vertexShader: (
@@ -519,7 +519,7 @@ const Fe = {
 		}`
   )
 };
-class y extends C {
+class _ extends C {
   /**
    * Constructs a new Unreal Bloom pass.
    *
@@ -529,7 +529,7 @@ class y extends C {
    * @param {number} threshold - The luminance threshold limits which bright areas contribute to the Bloom effect.
    */
   constructor(e, i = 1, o, s) {
-    super(), this.strength = i, this.radius = o, this.threshold = s, this.resolution = e !== void 0 ? new g(e.x, e.y) : new g(256, 256), this.clearColor = new _(0, 0, 0), this.needsSwap = !1, this.renderTargetsHorizontal = [], this.renderTargetsVertical = [], this.nMips = 5;
+    super(), this.strength = i, this.radius = o, this.threshold = s, this.resolution = e !== void 0 ? new g(e.x, e.y) : new g(256, 256), this.clearColor = new y(0, 0, 0), this.needsSwap = !1, this.renderTargetsHorizontal = [], this.renderTargetsVertical = [], this.nMips = 5;
     let t = Math.round(this.resolution.x / 2), r = Math.round(this.resolution.y / 2);
     this.renderTargetBright = new P(t, r, { type: k }), this.renderTargetBright.texture.name = "UnrealBloomPass.bright", this.renderTargetBright.texture.generateMipmaps = !1;
     for (let l = 0; l < this.nMips; l++) {
@@ -558,7 +558,7 @@ class y extends C {
       depthTest: !1,
       depthWrite: !1,
       transparent: !0
-    }), this._oldClearColor = new _(), this._oldClearAlpha = 1, this._basic = new J(), this._fsQuad = new G(null);
+    }), this._oldClearColor = new y(), this._oldClearAlpha = 1, this._basic = new J(), this._fsQuad = new G(null);
   }
   /**
    * Frees the GPU-related resources allocated by this instance. Call this
@@ -603,7 +603,7 @@ class y extends C {
     e.autoClear = !1, e.setClearColor(this.clearColor, 0), t && e.state.buffers.stencil.setTest(!1), this.renderToScreen && (this._fsQuad.material = this._basic, this._basic.map = o.texture, e.setRenderTarget(null), e.clear(), this._fsQuad.render(e)), this.highPassUniforms.tDiffuse.value = o.texture, this.highPassUniforms.luminosityThreshold.value = this.threshold, this._fsQuad.material = this.materialHighPassFilter, e.setRenderTarget(this.renderTargetBright), e.clear(), this._fsQuad.render(e);
     let n = this.renderTargetBright;
     for (let a = 0; a < this.nMips; a++)
-      this._fsQuad.material = this.separableBlurMaterials[a], this.separableBlurMaterials[a].uniforms.colorTexture.value = n.texture, this.separableBlurMaterials[a].uniforms.direction.value = y.BlurDirectionX, e.setRenderTarget(this.renderTargetsHorizontal[a]), e.clear(), this._fsQuad.render(e), this.separableBlurMaterials[a].uniforms.colorTexture.value = this.renderTargetsHorizontal[a].texture, this.separableBlurMaterials[a].uniforms.direction.value = y.BlurDirectionY, e.setRenderTarget(this.renderTargetsVertical[a]), e.clear(), this._fsQuad.render(e), n = this.renderTargetsVertical[a];
+      this._fsQuad.material = this.separableBlurMaterials[a], this.separableBlurMaterials[a].uniforms.colorTexture.value = n.texture, this.separableBlurMaterials[a].uniforms.direction.value = _.BlurDirectionX, e.setRenderTarget(this.renderTargetsHorizontal[a]), e.clear(), this._fsQuad.render(e), this.separableBlurMaterials[a].uniforms.colorTexture.value = this.renderTargetsHorizontal[a].texture, this.separableBlurMaterials[a].uniforms.direction.value = _.BlurDirectionY, e.setRenderTarget(this.renderTargetsVertical[a]), e.clear(), this._fsQuad.render(e), n = this.renderTargetsVertical[a];
     this._fsQuad.material = this.compositeMaterial, this.compositeMaterial.uniforms.bloomStrength.value = this.strength, this.compositeMaterial.uniforms.bloomRadius.value = this.radius, this.compositeMaterial.uniforms.bloomTintColors.value = this.bloomTintColors, e.setRenderTarget(this.renderTargetsHorizontal[0]), e.clear(), this._fsQuad.render(e), this._fsQuad.material = this.blendMaterial, this.copyUniforms.tDiffuse.value = this.renderTargetsHorizontal[0].texture, t && e.state.buffers.stencil.setTest(!0), this.renderToScreen ? (e.setRenderTarget(null), this._fsQuad.render(e)) : (e.setRenderTarget(o), this._fsQuad.render(e)), e.setClearColor(this._oldClearColor, this._oldClearAlpha), e.autoClear = r;
   }
   // internals
@@ -698,8 +698,8 @@ class y extends C {
     });
   }
 }
-y.BlurDirectionX = new g(1, 0);
-y.BlurDirectionY = new g(0, 1);
+_.BlurDirectionX = new g(1, 0);
+_.BlurDirectionY = new g(0, 1);
 const A = {
   name: "OutputShader",
   uniforms: {
@@ -867,7 +867,7 @@ function T(d) {
 const E = j.clamp, F = j.lerp, Ie = (d) => d * d * (3 - 2 * d);
 class Ne {
   constructor(e, i) {
-    this.canvas = e, this.mobile = innerWidth < 700, this.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches, this.low = this.mobile || matchMedia("(pointer:coarse)").matches || (navigator.hardwareConcurrency || 8) < 5, this.paused = !1, this.hidden = !1, this.yaw = 0, this.targetYaw = 0, this.dragStart = null, this.lastDrag = 0, this.progress = 0, this.targetProgress = 0, this.pointer = new g(), this.smoothed = new g(), this.renderer = new fe({ canvas: e, antialias: !this.low, alpha: !0, powerPreference: "low-power" }), this.renderer.setPixelRatio(Math.min(devicePixelRatio, this.low ? 1.35 : 1.75)), this.renderer.setSize(innerWidth, innerHeight), this.renderer.outputColorSpace = de, this.renderer.toneMapping = V, this.renderer.toneMappingExposure = 1.3, this.renderer.shadowMap.enabled = !0, this.renderer.shadowMap.type = me, this.scene = new Q(), this.scene.background = new _(530471), this.scene.fog = new pe(530471, 0.035);
+    this.canvas = e, this.mobile = innerWidth < 700, this.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches, this.low = this.mobile || matchMedia("(pointer:coarse)").matches || (navigator.hardwareConcurrency || 8) < 5, this.paused = !1, this.hidden = !1, this.yaw = 0, this.targetYaw = 0, this.dragStart = null, this.lastDrag = 0, this.progress = 0, this.targetProgress = 0, this.pointer = new g(), this.smoothed = new g(), this.renderer = new fe({ canvas: e, antialias: !this.low, alpha: !0, powerPreference: "low-power" }), this.renderer.setPixelRatio(Math.min(devicePixelRatio, this.low ? 1.35 : 1.75)), this.renderer.setSize(innerWidth, innerHeight), this.renderer.outputColorSpace = de, this.renderer.toneMapping = V, this.renderer.toneMappingExposure = 1.3, this.renderer.shadowMap.enabled = !0, this.renderer.shadowMap.type = me, this.scene = new Q(), this.scene.background = new y(530471), this.scene.fog = new pe(530471, 0.035);
     const o = new ge(this.renderer), s = new Ge();
     this.environment = o.fromScene(s, 0.06).texture, this.scene.environment = this.environment, this.scene.environmentIntensity = 0.75, s.dispose(), o.dispose(), this.camera = new ve(this.mobile ? 43 : 36, innerWidth / innerHeight, 0.1, 160), this.root = new S(), this.scene.add(this.root), this.scene.add(new be(12180991, 3688030, 2));
     const t = new I(16768947, 3.3);
@@ -883,7 +883,7 @@ class Ne {
       glass: new p({ color: 1654107, roughness: 0.12, metalness: 0.85 }),
       leaves: new p({ color: 5405536, roughness: 0.85, side: L }),
       light: new p({ color: 13107184, emissive: 8312302, emissiveIntensity: 1.1, roughness: 0.35 })
-    }, this.box = new W(1, 1, 1), this.cylinder = new N(1, 1, 1, 48), this.sphere = new xe(1, 16, 12), this.islands = [], this.pickables = [], this.people = [], this.bridges = [], this.rings = [], [[-4.1, 1.1, 2.2, "help"], [2.7, 2.1, 1.9, "found"], [0.4, -3.5, 2.35, "volunteer"]].forEach((a, h) => this.createIsland(a, h)), this.batchArchitecture(), this.createBridges(), this.createWater(), this.low || (this.composer = new Be(this.renderer), this.composer.addPass(new Ue(this.scene, this.camera)), this.bloom = new y(new g(innerWidth, innerHeight), 0.28, 0.45, 1.35), this.composer.addPass(this.bloom), this.composer.addPass(new De())), this.raycaster = new we(), this.hit = new g(), this.clock = new H(), this.lastFrame = 0, this.look = new v(), this.camGoal = new v(), this.lookGoal = new v(), this.resize = () => {
+    }, this.box = new W(1, 1, 1), this.cylinder = new N(1, 1, 1, 48), this.sphere = new xe(1, 16, 12), this.islands = [], this.pickables = [], this.people = [], this.bridges = [], this.rings = [], [[-4.1, 1.1, 2.2, "help"], [2.7, 2.1, 1.9, "found"], [0.4, -3.5, 2.35, "volunteer"]].forEach((a, h) => this.createIsland(a, h)), this.batchArchitecture(), this.createBridges(), this.createWater(), this.low || (this.composer = new Be(this.renderer), this.composer.addPass(new Ue(this.scene, this.camera)), this.bloom = new _(new g(innerWidth, innerHeight), 0.28, 0.45, 1.35), this.composer.addPass(this.bloom), this.composer.addPass(new De())), this.raycaster = new we(), this.hit = new g(), this.clock = new H(), this.lastFrame = 0, this.pathPosition = new v(), this.pathLook = new v(), this.look = new v(), this.camGoal = new v(), this.lookGoal = new v(), this.resize = () => {
       this.mobile = innerWidth < 700, this.camera.aspect = innerWidth / innerHeight, this.camera.fov = this.mobile ? 43 : 36, this.camera.updateProjectionMatrix(), this.renderer.setSize(innerWidth, innerHeight), this.composer?.setSize(innerWidth, innerHeight), this.updateScroll();
     }, this.updateScroll = () => {
       const a = document.getElementById("story-end");
@@ -994,11 +994,11 @@ class Ne {
       const t = this.block(e, i.white, [s, 1.5, 0], [0.15, 2.3, 0.25]);
       t.rotation.z = s > 0 ? -0.09 : 0.09;
     }
-    const o = this.mesh(new _e(0.58, 0.085, 12, 64), i.copper, e, [0, 2.75, 0]);
+    const o = this.mesh(new ye(0.58, 0.085, 12, 64), i.copper, e, [0, 2.75, 0]);
     o.rotation.y = 0.3, this.rings.push(o), this.mesh(this.sphere, i.light, e, [0, 2.75, 0], [0.22, 0.22, 0.22]), this.block(e, i.teal, [0, 2.05, 0], [0.7, 0.12, 0.36]);
   }
   createBridges() {
-    const e = new M({ transparent: !0, depthWrite: !1, side: L, uniforms: { uTime: { value: 0 }, uProgress: { value: 0 }, uColor: { value: new _(3581899) } }, vertexShader: "varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}", fragmentShader: "varying vec2 vUv;uniform float uTime;uniform float uProgress;uniform vec3 uColor;void main(){float edge=1.-smoothstep(uProgress-.035,uProgress,vUv.x);float pulse=pow(max(0.,sin(vUv.x*22.-uTime*1.5)),18.);float a=(.36+pulse*.5)*edge;gl_FragColor=vec4(uColor+vec3(pulse*.3),a);}" });
+    const e = new M({ transparent: !0, depthWrite: !1, side: L, uniforms: { uTime: { value: 0 }, uProgress: { value: 0 }, uColor: { value: new y(3581899) } }, vertexShader: "varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}", fragmentShader: "varying vec2 vUv;uniform float uTime;uniform float uProgress;uniform vec3 uColor;void main(){float edge=1.-smoothstep(uProgress-.035,uProgress,vUv.x);float pulse=pow(max(0.,sin(vUv.x*22.-uTime*1.5)),18.);float a=(.36+pulse*.5)*edge;gl_FragColor=vec4(uColor+vec3(pulse*.3),a);}" });
     for (const [i, o] of [[0, 1], [1, 2], [2, 0]]) {
       const s = this.islands[i].position.clone(), t = this.islands[o].position.clone();
       s.y = 2.4, t.y = 3.2;
@@ -1006,7 +1006,7 @@ class Ne {
       s.addScaledVector(r, 1.8), t.addScaledVector(r, -1.65);
       const n = s.clone().lerp(t, 0.5);
       n.y = 5.2;
-      const a = new ye(s, n, t), h = new Ce(a, 64, 0.028, 6, !1), l = e.clone(), u = this.mesh(h, l, this.root);
+      const a = new _e(s, n, t), h = new Ce(a, 64, 0.028, 6, !1), l = e.clone(), u = this.mesh(h, l, this.root);
       u.castShadow = !1;
       const f = [];
       this.bridges.push({ bridge: u, rails: f });
@@ -1047,7 +1047,7 @@ class Ne {
     let r = 0;
     for (; r < t.length - 2 && o > t[r + 1].p; ) r++;
     const n = t[r], a = t[r + 1], h = Ie(E((o - n.p) / (a.p - n.p), 0, 1));
-    this.camGoal.fromArray(n.pos).lerp(new v(...a.pos), h), this.lookGoal.fromArray(n.look).lerp(new v(...a.look), h), this.reduced || (this.camGoal.x += this.smoothed.x * 1.05, this.camGoal.y -= this.smoothed.y * 0.45), this.camera.clearViewOffset(), this.camera.position.copy(this.camGoal), this.camera.lookAt(this.lookGoal), this.yaw = F(this.yaw, this.targetYaw, this.reduced ? 1 : 0.07), this.root.rotation.y = this.yaw, this.reduced || (this.camera.position.x += Math.sin(e * 0.18) * 0.16, this.camera.position.y += Math.sin(e * 0.23) * 0.08), this.bridges.forEach(({ bridge: l, rails: u }, f) => {
+    this.camGoal.fromArray(n.pos).lerp(this.pathPosition.fromArray(a.pos), h), this.lookGoal.fromArray(n.look).lerp(this.pathLook.fromArray(a.look), h), this.reduced || (this.camGoal.x += this.smoothed.x * 1.05, this.camGoal.y -= this.smoothed.y * 0.45), this.camera.clearViewOffset(), this.camera.position.copy(this.camGoal), this.camera.lookAt(this.lookGoal), this.yaw = F(this.yaw, this.targetYaw, this.reduced ? 1 : 0.07), this.root.rotation.y = this.yaw, this.reduced || (this.camera.position.x += Math.sin(e * 0.18) * 0.16, this.camera.position.y += Math.sin(e * 0.23) * 0.08), this.bridges.forEach(({ bridge: l, rails: u }, f) => {
       const c = E((o - 0.08 - f * 0.17) * 3, 0, 1);
       l.material.uniforms.uProgress.value = this.reduced ? 1 : c, l.material.uniforms.uTime.value = e, u.forEach((m) => {
         m.visible = c > 0.95 || this.reduced;
