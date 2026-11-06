@@ -1081,9 +1081,9 @@
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
       "published": "/omniscope/public/analysis-workspace.css",
-      "source_sha256": "ccd564ad92c8ca00949cc413a65af44545278df4dbd5bcbe18dfb12a38630881",
-      "source_bytes": 29356,
-      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "10213b27c2c87167a9cdd8d98410d7cb1a2fe1beaceb3f4e8d5da1ed4456aad9",
+      "source_bytes": 29379,
+      "source_change": "Preserve concurrent main OmniScope glass transparency update from ef7ea23 unchanged while integrating homepage startup fix",
       "source_change_kind": "concurrent-main"
     },
     {
