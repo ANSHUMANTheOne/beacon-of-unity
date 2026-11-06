@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-06",
+  "worker": "beaconofunity",
+  "user_approved": true,
+  "inspection_run": "ad109ad7-309a-4f79-b96e-a90539173a1d",
+  "change_run": "9f84efa9-65e0-468f-90a1-01e8a3cbf066",
+  "before": {
+    "preview_urls": false,
+    "production_workers_dev": false,
+    "custom_domain": "beaconofunity.com"
+  },
+  "after": {
+    "preview_urls": true,
+    "production_workers_dev": false,
+    "custom_domain": "beaconofunity.com"
+  },
+  "scope": "Only preview URL toggle changed; no manual promotion, custom-domain/DNS/build setting change or other Worker modification. Browser reports an automatic build following enablement."
+}
