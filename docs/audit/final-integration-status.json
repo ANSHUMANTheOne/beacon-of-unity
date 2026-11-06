@@ -49,13 +49,10 @@
   "worker_assertions": 62,
   "animation_combinations": 264,
   "preset_cases": 7,
-  "production_promoted": false,
-  "main_changed_by_this_work": false,
+  "production_promoted": true,
+  "main_changed_by_this_work": true,
   "preview_settings_changed": true,
-  "release_blockers": [
-    "Confirm and approve GitHub Pages Source: GitHub Actions cutover before merging",
-    "Production merge/promotion approval"
-  ],
+  "release_blockers": [],
   "real_authentication_backend_and_hardware": "Not tested; user selected public/demo tests without live writes",
   "tested_source_commit": "0df45cee458734fa12824928cb97f1184cb7af6c",
   "hosted_validation_workflow": {
@@ -69,15 +66,12 @@
     "version_id": "7fd58ac6-f06a-44a6-80dd-a1e15d21cf42"
   },
   "integrated_provider_acceptance": {
-    "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
-    "checked": 152,
-    "passed": 152,
+    "checked": 153,
+    "passed": 153,
     "failed": 0,
-    "unchanged_unavailable": [
-      "/.assetsignore"
-    ]
+    "base_url": "https://3e1034f5-beaconofunity.anshorg.workers.dev"
   },
-  "pages_configuration_recheck": "Automatic approval review blocked access using an existing Git credential; credential not retrieved; explicit permission pending. Last confirmed source is legacy main/root.",
+  "pages_configuration_recheck": "Resolved under full owner authorization; only build_type changed to workflow; URL/CNAME/HTTPS preserved",
   "preview_setting_approval": "Explicit user approval; Preview ON after reload, production workers.dev OFF, custom domain unchanged",
   "hosted_main_ui_flows": {
     "passed": 16,
@@ -103,5 +97,13 @@
     "checked": 152,
     "passed": 152
   },
-  "new_document_route": "/EXPERIENCE-REFINEMENT.md"
+  "new_document_route": "/EXPERIENCE-REFINEMENT.md",
+  "status": "Published on main and both existing hosts; post-cutover verified",
+  "cutover_merge_sha": "1a5543da99e6f66a55777feced5795e52801ea5c",
+  "route_comparisons": 330,
+  "route_regressions": 0,
+  "live_main_ui": {
+    "passed": 16,
+    "assertions": 128
+  }
 }

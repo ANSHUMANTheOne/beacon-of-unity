@@ -1,6 +1,6 @@
 # Migration review — 5 November 2026 (Asia/Dubai)
 
-Status: implemented on `restructure/preserve-public-paths-20261105`; production cutover is not approved or performed. Do not merge while GitHub Pages or a Cloudflare build still publishes the source root.
+Status: published to `main` under explicit owner authorization on 6 November 2026. Cloudflare and GitHub Pages deployed successfully; 330 public-route comparisons found zero regressions. Earlier sections retain the migration history; see `audit/cutover-completed.json` for current status.
 
 ## Before and after
 
@@ -108,3 +108,7 @@ The user approved reconciling current main into the review branch. The four conf
 Preview URLs are now verified ON after reload, while Production workers.dev remains OFF and the custom domain is unchanged. The immutable 09b9b63f version passes 152/152 provider checks and 16 uploaded main-site UI flows. All three PR checks passed on ccdf869 after rerunning preview verification. Earlier unavailable-preview notes above are historical; see the latest QA section and `audit/provider-preview-enabled-validation.json`. A main-only Pages artifact workflow is now prepared in the PR, but Pages Settings, main and production have not been changed. The publishing-source cutover still requires approval before merge.
 
 Latest authorization: the user explicitly authorized completing main organization/cutover while preserving links, redirects and icons. The pre-cutover source incorporates main `056b25677afd5a5621fb36a6fcc107a53f553889`. The current Pages backup confirms legacy main/root, HTTPS enforced, no Pages custom domain; the Cloudflare backup records active version prefix 27fbb97f at 100%. The Pages publishing-source transition and main merge follow only after the newer preview passes.
+
+## Completed cutover
+
+PR#2 was merged normally at `1a5543d` after the final required checks passed. Pages changed only from legacy publishing to the prepared Actions workflow; its URL, CNAME and HTTPS settings are unchanged. The custom domain deployed successfully using generated dist. Both 165-route before/after comparisons passed, including query redirects, MIME and original binary integrity. All 16 live main-site UI flows passed; favicon bytes match the original on both hosts. No DNS/domain/visibility changes, branch deletions or history rewrites occurred. The rollback branch/bundle and active pre-cutover Worker version are retained. Known independent-app/hardware/authentication limits remain documented in QA; no private application data was migrated or written.
