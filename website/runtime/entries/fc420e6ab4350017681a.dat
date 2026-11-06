@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel | Beacon of Unity</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>(function(){ emailjs.init("QhpmiLS1azGRS4w23"); })();</script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -179,6 +177,7 @@
             </div>
         </div>
 
+        <details style="margin:20px 0;padding:18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px" ontoggle="if(this.open)refreshApprovalEmails()"><summary style="cursor:pointer;font-weight:700">Approval emails</summary><p style="font-size:13px;color:#64748b">Approvals save immediately. Emails send separately with automatic retries. Provider acceptance does not guarantee inbox delivery.</p><button type="button" class="btn" onclick="refreshApprovalEmails()">Refresh queue</button><div id="approvalEmailStatus" aria-live="polite"></div></details>
         <button onclick="resetTester()" class="btn btn-reset">🔄 Reset Tester (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a1d3c0d2c9ccc8c3c8d2d6c093919199e1c6ccc0c8cd8fc2cecc">[email&#160;protected]</a>)</button>
         <table>
             <thead>
@@ -293,24 +292,53 @@
         }).catch(function(e){alert("Reset Error: "+e.message);});
     }
 
-    // Standard approve - sends EmailJS welcome email
-    function processUser(docId,userEmail,action,userId,fullName){
-        var userRef=db.collection("users").doc(userId);
-        if(action==='approve'){
-            if(!userEmail||userEmail==="undefined"){alert("Invalid email.");return;}
-            emailjs.send("service_w3ai9pm","template_zttw3uf",{email:userEmail,to_email:userEmail,name:fullName||userEmail.split('@')[0]})
-                .then(function(){
-                    return userRef.update({status:"approved",fullName:fullName,approvedAt:new Date().toISOString()});
-                })
-                .then(function(){return db.collection("id_reviews").doc(docId).delete();})
-                .then(function(){alert("Approved! Welcome email sent to "+userEmail);loadData();})
-                .catch(function(e){alert("Approval Error: "+(e.text||e.message));});
-        } else {
-            userRef.update({status:"rejected",hasPreviousDenial:true})
-                .then(function(){return db.collection("id_reviews").doc(docId).delete();})
-                .then(function(){alert("User denied.");loadData();})
-                .catch(function(e){alert("Denial Error: "+e.message);});
-        }
+    // Approval is committed before delivery; only Firebase admin tokens reach the mail bridge.
+    var approvalInFlight=new Set();
+    function unscheduledApprovals(){try{return JSON.parse(localStorage.getItem('beacon-approval-retries')||'[]').filter(function(x){return typeof x==='string';});}catch(e){return [];}}
+    function rememberApproval(uid,keep){var ids=unscheduledApprovals().filter(function(x){return x!==uid;});if(keep)ids.push(uid);try{localStorage.setItem('beacon-approval-retries',JSON.stringify(ids));}catch(e){}}
+    async function approvalApi(path,data){
+        var user=auth.currentUser;if(!user)throw new Error('Sign in again.');
+        var token=await user.getIdToken();
+        var response=await fetch('/social/api/beacon/approval'+path,{method:data?'POST':'GET',headers:Object.assign({'Authorization':'Bearer '+token},data?{'Content-Type':'application/json'}:{}),body:data?JSON.stringify(data):undefined});
+        var result=await response.json().catch(function(){return {};});
+        if(!response.ok)throw new Error(result.error||'Email service unavailable. Retry from Approval emails.');
+        return result;
+    }
+    async function refreshApprovalEmails(){
+        var box=document.getElementById('approvalEmailStatus');if(!box)return;
+        box.textContent='Checking delivery queue...';
+        try{
+            var data=await approvalApi('');box.textContent='';
+            var summary=document.createElement('p');summary.textContent='Sending budget: '+data.usage.hourly_used+'/'+data.usage.hourly_limit+' this hour, '+data.usage.monthly_used+'/'+data.usage.monthly_limit+' this month. Excess mail waits in the queue.';box.appendChild(summary);
+            function row(label,callback){var line=document.createElement('div');line.style.cssText='padding:10px 0;border-top:1px solid #e2e8f0;display:flex;gap:12px;align-items:center;flex-wrap:wrap';var name=document.createElement('span');name.textContent=label;line.appendChild(name);if(callback){var button=document.createElement('button');button.className='btn btn-approve';button.textContent='Retry email';button.onclick=async function(){button.disabled=true;try{await callback();await refreshApprovalEmails();}catch(e){alert(e.message);button.disabled=false;}};line.appendChild(button);}box.appendChild(line);}
+            var pending=unscheduledApprovals();pending.forEach(function(uid){row('Approval saved; email still needs to be queued.',async function(){await approvalApi('',{user_id:uid});rememberApproval(uid,false);});});
+            data.items.forEach(function(item){row(item.name+' ('+item.recipient+') — '+(item.status==='accepted'?'Accepted by email provider':item.status==='failed'?'Needs attention':item.status==='sending'?'Sending':'Queued'),item.status==='failed'?async function(){await approvalApi('/retry',{user_id:item.user_id});}:null);});
+            if(!pending.length&&!data.items.length)row('No approval emails queued yet.');
+        }catch(e){box.textContent=e.message;}
+    }
+    async function processUser(docId,userEmail,action,userId,fullName){
+        if(approvalInFlight.has(userId))return;
+        approvalInFlight.add(userId);
+        var userRef=db.collection('users').doc(userId);
+        try{
+            if(action==='approve'){
+                if(!userEmail||userEmail==='undefined')throw new Error('Invalid email.');
+                var batch=db.batch();
+                batch.update(userRef,{status:'approved',fullName:fullName,approvedAt:new Date().toISOString()});
+                batch.delete(db.collection('id_reviews').doc(docId));
+                await batch.commit();
+                rememberApproval(userId,true);
+                loadData();
+                try{await approvalApi('',{user_id:userId});rememberApproval(userId,false);alert('Approved! The welcome email is queued for delivery.');}
+                catch(e){alert('The member is approved. Their email could not be queued yet: '+e.message+' Use Approval emails to retry.');}
+                refreshApprovalEmails();
+            }else{
+                await userRef.update({status:'rejected',hasPreviousDenial:true});
+                await db.collection('id_reviews').doc(docId).delete();
+                alert('User denied.');loadData();
+            }
+        }catch(e){alert('Approval action failed: '+e.message);}
+        finally{approvalInFlight.delete(userId);}
     }
 
     // Volunteer approve - NO email sent
