@@ -1,0 +1,48 @@
+[
+  {
+    "name": "archive-invalid",
+    "status": 400,
+    "content_type": "application/json",
+    "bytes": 58,
+    "passed": true
+  },
+  {
+    "name": "ephemeris-invalid",
+    "status": 400,
+    "content_type": "application/json",
+    "bytes": 73,
+    "passed": true
+  },
+  {
+    "name": "archive-live",
+    "status": 200,
+    "content_type": "application/xml",
+    "bytes": 27193,
+    "passed": true,
+    "votable": true,
+    "rows": 0
+  },
+  {
+    "name": "ephemeris-live",
+    "status": 200,
+    "content_type": "application/json",
+    "bytes": 598,
+    "passed": true,
+    "position_valid": true
+  },
+  {
+    "name": "archive-known-example-field",
+    "status": 200,
+    "rows": 424,
+    "query_info": [
+      {
+        "name": "QUERY_STATUS",
+        "value": "OK"
+      }
+    ],
+    "passed": true,
+    "collection": "spherex_qr2",
+    "ra": 127.69444,
+    "dec": -39.1776
+  }
+]

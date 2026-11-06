@@ -1,4 +1,4 @@
-ï»¿/* Night uses the same hierarchy, with navy surfaces and readable cyan accents. */
+/* Night uses the same hierarchy, with navy surfaces and readable cyan accents. */
 html[data-theme=dark]{color-scheme:dark;--paper:#0d2030;--ink:#edf5fa;--muted:#abc3d3;--line:#8ab3cd30;--accent:#79cde9;background:var(--paper);color:var(--ink)}
 html[data-theme=dark] body{background:var(--paper)}
 html[data-theme=dark] .site-header.scrolled{background:#0d2030f2;color:#edf5fa;border-color:var(--line)}

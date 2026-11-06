@@ -74,4 +74,11 @@ class PublisherContract(unittest.TestCase):
   build(self.root,self.out,self.manifest)
   self.assertEqual((self.out/'assets/platform.css').read_bytes(),b'body{color:black}')
   self.assertFalse((self.out/'src/not-public.js').exists());self.assertTrue(validate(self.root,self.out,self.manifest)['passed'])
+ def test_new_public_files_cannot_be_silently_omitted(self):
+  self.track('new.html',b'<h1>New project</h1>');self.track('docs/note.md',b'Source-only notes');self.config([])
+  data=json.loads(self.manifest.read_text());data.update(require_explicit_sources=True,source_only_prefixes=['docs/']);self.manifest.write_text(json.dumps(data))
+  with self.assertRaisesRegex(ValueError,'Unmapped tracked sources'):build(self.root,self.out,self.manifest)
+  self.assertFalse(self.out.exists())
+  data['files']=[dict(source='new.html',original='new.html')];self.manifest.write_text(json.dumps(data));build(self.root,self.out,self.manifest)
+  self.assertEqual((self.out/'new.html').read_bytes(),b'<h1>New project</h1>');self.assertFalse((self.out/'docs/note.md').exists());self.assertTrue(validate(self.root,self.out,self.manifest)['passed'])
 if __name__=='__main__':unittest.main()
