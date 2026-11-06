@@ -2,6 +2,11 @@ import EmailSettings from "./EmailSettings.jsx";
 import StorageSettings from "./StorageSettings.jsx";
 import { uploadMedia, discardUpload, formatBytes } from "./uploads";
 import {
+  optimizePhoto,
+  optimizeVideo,
+  MAX_SOURCE_BYTES,
+} from "./media-prepare.js";
+import {
   GoogleButton,
   GoogleEnrollment,
   GoogleAccount,
@@ -924,11 +929,7 @@ function Feed({
               className={profileKind === k ? "selected" : ""}
               onClick={() => setProfileKind(k)}
             >
-              {k === "photo"
-                ? "Photos"
-                : k === "reel"
-                  ? "Reels"
-                  : "Stories"}
+              {k === "photo" ? "Photos" : k === "reel" ? "Reels" : "Stories"}
             </button>
           ))}
         </div>
@@ -1283,6 +1284,10 @@ function Video({ src, vertical }) {
 }
 function CreatePost({ user, execute, notify, done }) {
   const [file, setFile] = useState(null),
+    [original, setOriginal] = useState(null),
+    [prepared, setPrepared] = useState(null),
+    [preparing, setPreparing] = useState(false),
+    [prepareProgress, setPrepareProgress] = useState(0),
     [preview, setPreview] = useState(""),
     [kind, setKind] = useState("photo"),
     [busy, setBusy] = useState(false),
@@ -1290,12 +1295,16 @@ function CreatePost({ user, execute, notify, done }) {
     [capabilities, setCapabilities] = useState(null),
     [progress, setProgress] = useState(null),
     [uploadError, setUploadError] = useState("");
-  const controller = useRef();
+  const controller = useRef(),
+    preparation = useRef();
   useEffect(() => {
     api("/uploads/capabilities")
       .then(setCapabilities)
       .catch((e) => setUploadError(e.message));
-    return () => controller.current?.abort();
+    return () => {
+      controller.current?.abort();
+      preparation.current?.abort();
+    };
   }, []);
   useEffect(() => {
     if (!file) return;
@@ -1303,6 +1312,87 @@ function CreatePost({ user, execute, notify, done }) {
     setPreview(url);
     return () => URL.revokeObjectURL(url);
   }, [file]);
+  const prepare = async (source, video = false) => {
+    preparation.current?.abort();
+    const task = new AbortController();
+    preparation.current = task;
+    setPreparing(true);
+    setPrepareProgress(0);
+    setPrepared(null);
+    setUploadError("");
+    setProgress(null);
+    setPhase(
+      video
+        ? "Making a smaller video on your device…"
+        : "Optimizing your photo on your device…",
+    );
+    try {
+      const result = await (video ? optimizeVideo : optimizePhoto)(source, {
+        maxBytes: capabilities.max_file_bytes,
+        signal: task.signal,
+        onProgress: (value) => {
+          if (preparation.current === task) setPrepareProgress(value);
+        },
+      });
+      if (preparation.current !== task || task.signal.aborted) return;
+      setFile(result.file);
+      setPrepared(result);
+      setPhase("Your sharing copy is ready. Check the preview before posting.");
+    } catch (error) {
+      if (preparation.current !== task) return;
+      setPhase(
+        error.name === "AbortError"
+          ? "Preparation cancelled. Your original is unchanged."
+          : "",
+      );
+      if (error.name !== "AbortError") setUploadError(error.message);
+    } finally {
+      if (preparation.current === task) setPreparing(false);
+    }
+  };
+  const chooseFile = (source) => {
+    preparation.current?.abort();
+    preparation.current = null;
+    setPreparing(false);
+    setPrepared(null);
+    setProgress(null);
+    setPhase("");
+    setUploadError("");
+    if (!source) {
+      setFile(null);
+      setOriginal(null);
+      return;
+    }
+    if (
+      ![
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "video/mp4",
+        "video/webm",
+      ].includes(source.type) ||
+      (kind === "photo" && !source.type.startsWith("image/")) ||
+      (kind === "reel" && !source.type.startsWith("video/"))
+    ) {
+      setFile(null);
+      setOriginal(null);
+      setUploadError("Choose a supported photo or video for this post type.");
+      return;
+    }
+    if (source.size > MAX_SOURCE_BYTES) {
+      setFile(null);
+      setOriginal(null);
+      setUploadError("Choose a source file up to 1 GB.");
+      return;
+    }
+    setOriginal(source);
+    setFile(source);
+    if (source.type.startsWith("image/")) prepare(source);
+    else if (source.size > capabilities.max_file_bytes)
+      setUploadError(
+        "This original is larger than the current upload limit. Try Compress video below, then check the smaller copy.",
+      );
+  };
   const submit = async (e) => {
     e.preventDefault();
     setBusy(true);
@@ -1338,10 +1428,18 @@ function CreatePost({ user, execute, notify, done }) {
       done();
     } catch (e) {
       if (e.name === "AbortError")
-        setPhase("Paused. Press Resume upload to continue.");
+        setPhase(
+          capabilities.resumable
+            ? "Paused. Press Resume upload to continue."
+            : "Upload cancelled. You can try again.",
+        );
       else {
         setUploadError(e.message);
-        setPhase("Your completed parts are kept so you can try again.");
+        setPhase(
+          capabilities.resumable
+            ? "Your completed parts are kept so you can try again."
+            : "Your selected file is ready to try again.",
+        );
       }
     }
     setBusy(false);
@@ -1356,12 +1454,12 @@ function CreatePost({ user, execute, notify, done }) {
           {["photo", "reel", "story"].map((k) => (
             <button
               type="button"
-              disabled={busy}
+              disabled={busy || preparing}
               className={kind === k ? "selected" : ""}
               key={k}
               onClick={() => {
                 setKind(k);
-                setFile(null);
+                chooseFile(null);
                 setPreview("");
                 setProgress(null);
                 setUploadError("");
@@ -1375,7 +1473,7 @@ function CreatePost({ user, execute, notify, done }) {
         <label className="upload-area">
           {file ? (
             file.type.startsWith("video/") ? (
-              <video src={preview} muted controls />
+              <video src={preview} muted controls preload="metadata" />
             ) : (
               <img src={preview} alt="Upload preview" />
             )
@@ -1386,12 +1484,13 @@ function CreatePost({ user, execute, notify, done }) {
               <small>
                 JPG, PNG, WebP, MP4 or WebM ·{" "}
                 {capabilities
-                  ? `up to ${formatBytes(capabilities.max_file_bytes)}`
+                  ? `sharing copy up to ${formatBytes(capabilities.max_file_bytes)}`
                   : "checking upload limit…"}
               </small>
             </>
           )}
           <input
+            key={kind}
             type="file"
             required
             disabled={busy || !capabilities}
@@ -1402,17 +1501,7 @@ function CreatePost({ user, execute, notify, done }) {
                   ? "image/jpeg,image/png,image/webp,video/mp4,video/webm"
                   : "video/mp4,video/webm"
             }
-            onChange={(e) => {
-              const f = e.target.files[0];
-              setProgress(null);
-              setPhase("");
-              setUploadError(
-                f && f.size > capabilities.max_file_bytes
-                  ? `This file is ${formatBytes(f.size)}. The current limit is ${formatBytes(capabilities.max_file_bytes)}.`
-                  : "",
-              );
-              setFile(f || null);
-            }}
+            onChange={(e) => chooseFile(e.target.files[0])}
           />
         </label>
         {file && (
@@ -1420,10 +1509,104 @@ function CreatePost({ user, execute, notify, done }) {
             {file.name} · {formatBytes(file.size)}
           </p>
         )}
+        <p className="fine">
+          Photos are optimized automatically. You can select a source up to 1
+          GB; the prepared copy must fit the current upload limit.
+        </p>
+        {original && !busy && (
+          <div className="media-preparation">
+            {preparing ? (
+              <>
+                <label className="fine" htmlFor="media-preparation-progress">
+                  {original.type.startsWith("video/")
+                    ? "Compressing video"
+                    : "Optimizing photo"}{" "}
+                  · {Math.round(prepareProgress * 100)}%
+                </label>
+                <progress
+                  id="media-preparation-progress"
+                  value={prepareProgress}
+                  max={1}
+                />
+                <button
+                  type="button"
+                  className="text-button"
+                  onClick={() => preparation.current?.abort()}
+                >
+                  Cancel preparation
+                </button>
+              </>
+            ) : (
+              <>
+                {prepared && (
+                  <p className="preparation-result" role="status">
+                    <Check size={16} /> {formatBytes(prepared.originalBytes)} →{" "}
+                    {formatBytes(file.size)}
+                    {prepared.savedBytes > 0
+                      ? ` · ${Math.round((prepared.savedBytes / prepared.originalBytes) * 100)}% smaller`
+                      : " · already compact"}
+                  </p>
+                )}
+                {original.type.startsWith("image/") &&
+                  file === original &&
+                  !prepared && (
+                    <button
+                      type="button"
+                      className="secondary"
+                      onClick={() => prepare(original)}
+                    >
+                      Optimize photo
+                    </button>
+                  )}
+                {original.type.startsWith("video/") && (
+                  <>
+                    <button
+                      type="button"
+                      className="secondary"
+                      onClick={() => prepare(original, true)}
+                    >
+                      Compress video
+                    </button>
+                    <p className="fine">
+                      Makes a lower-resolution copy with audio. Takes about the
+                      clip’s length; preparation pauses when you leave this tab.
+                      Long clips may still need trimming.
+                    </p>
+                  </>
+                )}
+                {prepared?.savedBytes > 0 && (
+                  <a
+                    className="text-button"
+                    href={preview}
+                    download={file.name}
+                  >
+                    Save smaller copy
+                  </a>
+                )}
+                {file !== original &&
+                  original.size <= capabilities.max_file_bytes && (
+                    <button
+                      type="button"
+                      className="text-button"
+                      onClick={() => {
+                        setFile(original);
+                        setPrepared(null);
+                        setPhase("Using your original file.");
+                        setUploadError("");
+                      }}
+                    >
+                      Use original
+                    </button>
+                  )}
+              </>
+            )}
+          </div>
+        )}
         {capabilities?.resumable && (
           <p className="fine">
             Uploads are sent in small parts. Pause any time; choose the same
-            file within 24 hours to resume after closing this page.
+            sharing copy within 24 hours to resume after closing this page. Save
+            your smaller copy first if you optimized it.
           </p>
         )}
         {progress && (
@@ -1482,6 +1665,7 @@ function CreatePost({ user, execute, notify, done }) {
           className="primary wide"
           disabled={
             busy ||
+            preparing ||
             !file ||
             !capabilities ||
             file.size > capabilities.max_file_bytes
