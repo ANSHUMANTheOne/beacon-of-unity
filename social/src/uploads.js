@@ -1,10 +1,12 @@
 import { api } from "./api";
 export const formatBytes = (bytes) =>
-  !bytes
-    ? "0 MB"
-    : bytes >= 1024 ** 3
-      ? `${(bytes / 1024 ** 3).toFixed(1).replace(/\.0$/, "")} GB`
-      : `${Math.max(1, Math.round(bytes / 1024 ** 2))} MB`;
+  bytes < 1024
+    ? `${bytes || 0} B`
+    : bytes < 1024 ** 2
+      ? `${Math.round(bytes / 1024)} KB`
+      : bytes >= 1024 ** 3
+        ? `${(bytes / 1024 ** 3).toFixed(1).replace(/\.0$/, "")} GB`
+        : `${(bytes / 1024 ** 2).toFixed(1).replace(/\.0$/, "")} MB`;
 const abortError = () => new DOMException("Upload paused.", "AbortError");
 export async function fingerprint(file) {
   const prefix = await file.slice(0, 65536).arrayBuffer();

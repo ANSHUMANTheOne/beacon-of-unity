@@ -4,6 +4,8 @@ An early-access React/Tailwind social application with a Cloudflare Worker API a
 
 Large uploads use optional private B2 multipart storage; see [storage setup and limits](docs/STORAGE.md). Main Beacon membership mail uses a separate authenticated persistent queue; see [approval email operations](docs/APPROVAL_EMAIL.md). Long-form Videos are deferred; Reels remain available.
 
+Live uploads now include [local photo and video compression](docs/COMPRESSION.md): photos optimize automatically; Reels and Stories offer a Compress video action. The form shows actual before/after sizes and uploads the smaller sharing copy. A source up to 1 GiB may be selected, but its prepared copy must fit the connected storage limit; compression ratios vary and aggregate quotas remain enforced.
+
 Google sign-in uses Google's official button with server-verified identity tokens and secure existing-account linking. Configure a public Google web client ID and its allowed origin; no client secret is needed for this sign-in flow. See [Google login setup](docs/GOOGLE_LOGIN.md).
 
 ## Two separate experiences

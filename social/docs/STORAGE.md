@@ -2,6 +2,8 @@
 
 Without external storage, the app retains its 8 MiB/file D1 limit. Connecting a dedicated **private Backblaze B2 bucket** enables files up to 1 GiB (1,073,741,824 bytes), in resumable 8 MiB parts. Long-form Videos are deferred; photos, Stories and Reels remain.
 
+The live Create form can prepare a smaller sharing copy locally from a larger source. Photos optimize automatically and videos have an explicit Compress video action. A successful prepared file can use the existing live D1 path if it fits 8 MiB; no B2 account is needed for that path. See [compression behavior and limits](COMPRESSION.md). Text encoding alone does not reduce storage requirements.
+
 ## Free account setup
 
 1. Create a B2 account at https://www.backblaze.com/sign-up/cloud-storage . Its signup advertises no credit card required. Complete your own password, CAPTCHA and email verification privately.

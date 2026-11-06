@@ -36,6 +36,34 @@
   background: #202a19;
   font-size: 12px;
 }
+.media-preparation {
+  padding: 14px;
+  margin: 12px 0;
+  border: 1px solid #39452f;
+  border-radius: 10px;
+  background: #192014;
+}
+.media-preparation progress {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  accent-color: #cee5b2;
+}
+.media-preparation .text-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-right: 12px;
+}
+.preparation-result {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  color: #d5ebbe;
+  font-size: 13px;
+  line-height: 1.6;
+}
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
