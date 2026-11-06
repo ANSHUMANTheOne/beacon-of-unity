@@ -1,9 +1,12 @@
 ﻿import * as T from 'three';
 const canvas=document.querySelector('#spaces-canvas'),stage=canvas.parentElement;
+let needsRender=true;
+document.querySelector('.community-spaces').addEventListener('click',()=>needsRender=true);
+new MutationObserver(()=>needsRender=true).observe(document.body,{attributes:true,attributeFilter:['class']});
 const scene=new T.Scene();scene.background=new T.Color('#d5e5ea');
 const camera=new T.PerspectiveCamera(35,1,.1,80);
-let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});}catch(e){stage.classList.add('space-fallback');throw e;}
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;
+let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:innerWidth>=700,alpha:false,powerPreference:'low-power'});}catch(e){stage.classList.add('space-fallback');throw e;}
+renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<700?1.25:1.6));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;
 scene.add(new T.HemisphereLight(0xf0faff,0x697e88,2.6));const sun=new T.DirectionalLight(0xffebd1,3.2);sun.position.set(-4,9,5);scene.add(sun);
 const mats={};function mat(c){return mats[c]??=(new T.MeshStandardMaterial({color:c,roughness:.65}));}
 const boxGeo=new T.BoxGeometry(1,1,1),sphereGeo=new T.SphereGeometry(1,16,12);
@@ -96,10 +99,10 @@ function updateStory(name,dt,moving){
  if(name==='neighbours'){requestSignal.visible=time<3&&scenarioOn[name];requestSignal.position.set(T.MathUtils.lerp(.7,-.7,smooth((time-1)/2)),2.1+Math.sin(time*3)*.08,1);requestPhone.visible=time<3;scenarioActors.neighbours[1].userData.arms[1].rotation.x=time<3?-1.15+Math.sin(time*4)*.12:scenarioActors.neighbours[1].userData.arms[1].rotation.x;helpReply.visible=time>=7;helpReply.position.set(-.2-2*escort,2,1);}
  else{officeSignal.visible=time<3&&scenarioOn[name];officeSignal.position.y=2.1+Math.sin(time*3)*.1;teamReply.visible=time>=8;donationBox.visible=true;const transfer=smooth((time-8)/3);const carrier=scenarioActors.office[0];if(carrier.userData.bag)carrier.userData.bag.visible=transfer===0;donatedBag.visible=transfer>0;donatedBag.position.set(T.MathUtils.lerp(-.75,0,transfer),.76+Math.sin(transfer*Math.PI)*.3,T.MathUtils.lerp(1.5,1.95,transfer));}
 }
-let visible=false;new IntersectionObserver(entries=>visible=entries[0].isIntersecting).observe(stage);let target=0;
+let visible=false;new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)needsRender=true;}).observe(stage);let target=0;
 canvas.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'){const r=canvas.getBoundingClientRect();target=(e.clientX-r.left)/r.width*.3-.15;}});canvas.addEventListener('pointerleave',()=>target=0);
-function resize(){const w=stage.clientWidth,h=w<700?340:stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const mobile=w<700;camera.position.set(mobile?8:8,mobile?7:6.2,mobile?14:10);camera.lookAt(mobile?new T.Vector3(0,.7,0):new T.Vector3(-1.8,.8,0));camera.updateProjectionMatrix();}new ResizeObserver(resize).observe(stage);resize();const reduced=matchMedia('(prefers-reduced-motion: reduce)');let last=0;
-function tick(t){requestAnimationFrame(tick);if(!visible||document.hidden||t-last<33)return;const dt=Math.min((t-last)/1000,.2);last=t;const moving=!reduced.matches&&!document.body.classList.contains('motion-paused');root.rotation.y=T.MathUtils.lerp(root.rotation.y,moving?target:0,.07);if(moving){bubbles.forEach((b,i)=>b.rotation.z=Math.sin(t*.0008+i)*.015);}const goal=schoolConnected?1:0;schoolProgress=moving?T.MathUtils.lerp(schoolProgress,goal,.06):goal;
+function resize(){needsRender=true;const w=stage.clientWidth,h=w<700?340:stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const mobile=w<700;camera.position.set(mobile?8:8,mobile?7:6.2,mobile?14:10);camera.lookAt(mobile?new T.Vector3(0,.7,0):new T.Vector3(-1.8,.8,0));camera.updateProjectionMatrix();}new ResizeObserver(resize).observe(stage);resize();const reduced=matchMedia('(prefers-reduced-motion: reduce)');let last=0;
+function tick(t){requestAnimationFrame(tick);if(!visible||document.hidden||t-last<33)return;const dt=Math.min((t-last)/1000,.2);last=t;const moving=!reduced.matches&&!document.body.classList.contains('motion-paused');if(!moving&&!scenarioOn.neighbours&&!scenarioOn.office&&!needsRender)return;needsRender=false;root.rotation.y=T.MathUtils.lerp(root.rotation.y,moving?target:0,.07);if(moving){bubbles.forEach((b,i)=>b.rotation.z=Math.sin(t*.0008+i)*.015);}const goal=schoolConnected?1:0;schoolProgress=moving?T.MathUtils.lerp(schoolProgress,goal,.06):goal;
  schoolRooms.forEach(({interior,node})=>{interior.scale.setScalar(Math.max(.001,1-schoolProgress));interior.visible=schoolProgress<.99;node.scale.setScalar(Math.max(.01,schoolProgress));});
  schoolLinks.forEach(link=>link.material.opacity=schoolProgress*.85);
  schoolPackets.forEach(({packet,curve,index})=>{packet.visible=schoolConnected;packet.position.copy(curve.getPoint(moving?(t*.00018+index*.2)%1:.5));});
@@ -107,5 +110,7 @@ function tick(t){requestAnimationFrame(tick);if(!visible||document.hidden||t-las
  renderer.render(scene,camera);}requestAnimationFrame(tick);
 
 
-function applySceneTheme(){const dark=document.documentElement.dataset.theme==='dark';scene.background.set(dark?'#102b3e':'#d5e5ea');sun.intensity=dark?2.1:3.2;}
+function applySceneTheme(){needsRender=true;const dark=document.documentElement.dataset.theme==='dark';scene.background.set(dark?'#102b3e':'#d5e5ea');sun.intensity=dark?2.1:3.2;}
 new MutationObserver(applySceneTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});applySceneTheme();
+
+reduced.addEventListener('change',()=>needsRender=true);
