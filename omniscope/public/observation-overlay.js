@@ -6,8 +6,9 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
  beam.setAttribute('aria-hidden','true');
  beam.innerHTML='<path class="recorded-trail recorded-trail-a"/><path class="recorded-trail recorded-trail-b"/><text class="recorded-trail-label" data-trail="a">A</text><text class="recorded-trail-label" data-trail="b">B</text>';
  ui.appendChild(beam);
- const marker=document.createElement('button');marker.className='spacecraft-beacon';marker.type='button';marker.setAttribute('aria-label','Inspect SPHEREx at this exposure');marker.innerHTML='<span class="spacecraft-beacon-ring"><span class="spacecraft-beacon-core"></span></span><span class="spacecraft-beacon-title">SPHEREx <small>infrared</small></span>';
+ const marker=document.createElement('button');marker.className='spacecraft-beacon';marker.type='button';marker.setAttribute('aria-label','Inspect SPHEREx at this exposure');marker.innerHTML='<span class="spacecraft-beacon-ring"><span class="spacecraft-beacon-core"></span></span><span class="spacecraft-beacon-title">SPHEREx <small>infrared</small></span><span class="spacecraft-wave" aria-hidden="true"><span>IR</span><svg viewBox="0 0 128 28" preserveAspectRatio="none"><path/></svg></span>';
  ui.appendChild(marker);
+ const wavePath=marker.querySelector('.spacecraft-wave path'),reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const locate=document.createElement('button');locate.className='spacecraft-locate';locate.type='button';locate.textContent='⌖ Locate SPHEREx';locate.hidden=true;locate.onclick=focusSpacecraft;ui.appendChild(locate);
  const info=document.createElement('aside');info.className='spacecraft-info';info.hidden=true;info.setAttribute('aria-label','Recorded SPHEREx position');info.innerHTML='<div class="spacecraft-info-head"><span>SPHEREx / recorded exposure</span><button type="button" aria-label="Close spacecraft details">×</button></div><strong id="spacecraftInfoDate">—</strong><p id="spacecraftInfoPosition">Reading FITS position…</p><p id="spacecraftInfoLight">Reading wavelength…</p><div class="spacecraft-info-actions"><button type="button" id="spacecraftInfoFocus">Center spacecraft</button><button type="button" id="spacecraftInfoCompare">View images ↗</button></div><small>Earth-centered FITS coordinates. Spacecraft model and wavelength marks are enlarged diagrams.</small>';
  ui.appendChild(info);
@@ -37,6 +38,12 @@ export function installObservationOverlay({ui,c,focusSpacecraft,cancelCameraMoti
   marker.hidden=!visible;beam.hidden=!visible||orbitContext;locate.hidden=visible||!record||orbitContext;
   if(!visible){info.hidden=true;return;}
   marker.style.left=`${p.x}px`;marker.style.top=`${p.y}px`;marker.querySelector('small').textContent=Number.isFinite(wavelength)?`${wavelength.toFixed(3)} µm`:'infrared';
+  marker.classList.toggle('wave-left',p.x>W-(W<=800?155:205));
+  marker.setAttribute('aria-label',Number.isFinite(wavelength)?`Inspect SPHEREx. Measured infrared wavelength ${wavelength.toFixed(3)} micrometres`:'Inspect SPHEREx at this exposure');
+  if(Number.isFinite(wavelength)){
+   const period=16+Math.max(0,Math.min(1,(wavelength-.75)/4.26))*23,phase=reducedMotion?0:performance.now()*.003;
+   wavePath.setAttribute('d',Array.from({length:65},(_,i)=>{const x=i*2,y=14-Math.sin(x*Math.PI*2/period-phase)*6;return `${i?'L':'M'}${x} ${y.toFixed(2)}`;}).join(' '));
+  }else wavePath.setAttribute('d','');
   const stage=document.querySelector('.mission-stage');
   if(performance.now()-lastInfo>100){lastInfo=performance.now();info.querySelector('#spacecraftInfoDate').textContent=`${index?'Later':'Earlier'} · ${date||'archived visit'} UTC`;const km=record.start.map((v,i)=>v+(record.end[i]-v)*progress);info.querySelector('#spacecraftInfoPosition').textContent=`X ${Math.round(km[0])} · Y ${Math.round(km[1])} · Z ${Math.round(km[2])} km from Earth center · ~${Math.round(Math.hypot(...km)-6371)} km altitude`;info.querySelector('#spacecraftInfoLight').textContent=Number.isFinite(wavelength)?`${wavelength.toFixed(4)} µm infrared toward RA ${field.ra.toFixed(3)}°, Dec ${field.dec.toFixed(3)}°`:'No clean wavelength sample at this scan point.';}
   if(!info.hidden){const width=270,left=Math.max(16,Math.min(p.x+30,limit-width-8)),stageTop=!cardOpen&&stage?stage.getBoundingClientRect().top:H,top=Math.max(84,Math.min(p.y+25,stageTop-info.offsetHeight-12,H-info.offsetHeight-24));info.style.left=`${left}px`;info.style.top=`${top}px`;}
