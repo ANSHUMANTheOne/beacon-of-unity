@@ -1,0 +1,61 @@
+{
+  "origin": "https://beaconofunity.com",
+  "scope": "Separate live OmniScope Worker, not the main-site preview; no app/deployment changes; analytics writes blocked.",
+  "flows": 2,
+  "passed": 1,
+  "results": [
+    {
+      "base_url": "https://beaconofunity.com",
+      "case": "omniscope",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "current-main scene canvas renders",
+          "passed": true
+        }
+      ],
+      "passed": false,
+      "failure": "Locator expected to be enabled\nActual value: disabled \nCall log:\n  - Expect \"to_be_enabled\" get_by_role(\"button\", name=re.compile(r\"^Band 3,\")).first with timeout 90000ms\n  - waiting for get_by_role(\"button\", name=re.compile(r\"^Band 3,\")).first\n    2 \u00d7 locator resolved to <button disabled type=\"button\" data-band=\"3\" class=\"active\" aria-pressed=\"true\" aria-label=\"Band 3, 1.63\u20132.43 micrometers\">\u2026</button>\n      - unexpected value \"disabled\"\n\nAria snapshot:\n- button \"Band 3, 1.63\u20132.43 micrometers\" [disabled] [pressed]:\n  - strong: \"03\"",
+      "page_errors": [],
+      "blocked_mutations": [
+        "https://beaconofunity.com/cdn-cgi/rum"
+      ],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://beaconofunity.com",
+      "case": "omniscope",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "current-main scene canvas renders",
+          "passed": true
+        },
+        {
+          "name": "band controls remain responsive",
+          "passed": true
+        },
+        {
+          "name": "motion preview remains responsive",
+          "passed": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [
+        "https://beaconofunity.com/cdn-cgi/rum"
+      ],
+      "dialogs": []
+    }
+  ],
+  "retry": "Only desktop was retried after mobile passed; it did not complete within the bounded run and was stopped. Scientific desktop data-load behavior remains unverified. No disabled control was forced and no OmniScope code was changed."
+}

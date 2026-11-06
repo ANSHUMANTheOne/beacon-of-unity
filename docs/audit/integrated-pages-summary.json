@@ -1,0 +1,54 @@
+{
+  "integrated_main": "a55e10a99f98191494af656bd788a56071ccfeda",
+  "visits": 52,
+  "uncaught_errors": [],
+  "navigation_failures": [],
+  "network_warnings": [
+    {
+      "mode": "desktop",
+      "path": "/gods-eye/redacted.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:64165/src/main.tsx",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "mode": "desktop",
+      "path": "/hellopotato.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:64165/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "mode": "mobile",
+      "path": "/gods-eye/redacted.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:64165/src/main.tsx",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "mode": "mobile",
+      "path": "/hellopotato.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:64165/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+          "type": "script"
+        }
+      ]
+    }
+  ],
+  "overflow": [],
+  "scope": "All26 HTML pages on integrated artifact at desktop and390px mobile. Local provider-specific/development-entry warnings retained; no live writes."
+}

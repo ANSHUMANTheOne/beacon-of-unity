@@ -108,3 +108,7 @@ Chrome tests covered all requested widths and landscape, scene drag/keyboard inp
 - Added YouTube marks and labels to walkthrough and YouTube links; checked the player still opens.
 - Highlighted Beacon's comparison column with its brand mark, blue surface and checkmarks. Navigation labels the comparison The Beacon difference. No new prominent Reliable News links; help and lost-and-found remain the primary features.
 - Reduced mobile mascot dimensions from 56x74 to 44x57 pixels, maintaining a 44px pointer target. Four viewport checks passed without overflow or axe A/AA violations.
+
+## Organized repository publishing
+
+The compatibility builder recreates the public paths from `config/routes.json`; HTML source now lives under `website/`. `npm run dev` and `npm run preview` prepare/validate `dist/` before serving it on localhost. Preserve an existing stale output before building a new artifact; the builder refuses to overwrite it. Vite still builds the retained homepage source into `assets/unity/`; CI additionally builds into an isolated directory and compares every compiled bundle. No development instruction is added to the repository README.

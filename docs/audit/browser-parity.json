@@ -1,0 +1,1220 @@
+[
+  {
+    "path": "/CozyStudio/index.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "CozyStudio",
+        "headings": [
+          "CozyStudio"
+        ],
+        "elements": 377,
+        "scripts": 1,
+        "canvas": 2,
+        "images": [],
+        "media": [],
+        "base": "/CozyStudio/index.html"
+      },
+      "errors": [
+        "Cannot read properties of undefined (reading 'map')"
+      ],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "CozyStudio",
+        "headings": [
+          "CozyStudio"
+        ],
+        "elements": 377,
+        "scripts": 1,
+        "canvas": 2,
+        "images": [],
+        "media": [],
+        "base": "/CozyStudio/index.html"
+      },
+      "errors": [
+        "Cannot read properties of undefined (reading 'map')"
+      ],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/blog.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Blog | Beacon of Unity",
+        "headings": [
+          "Stories, Guides &Community Insight"
+        ],
+        "elements": 148,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/blog.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Blog | Beacon of Unity",
+        "headings": [
+          "Stories, Guides &Community Insight"
+        ],
+        "elements": 148,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/blog.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/carbon.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Carbon Ledger | Beacon of Unity \u00d7 EcoGen",
+        "headings": [
+          "Carbon Ledger"
+        ],
+        "elements": 212,
+        "scripts": 4,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/carbon.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Carbon Ledger | Beacon of Unity \u00d7 EcoGen",
+        "headings": [
+          "Carbon Ledger"
+        ],
+        "elements": 212,
+        "scripts": 4,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/carbon.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/contact.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Contact Us | Beacon of Unity",
+        "headings": [
+          "Contact Us"
+        ],
+        "elements": 79,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/contact.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Contact Us | Beacon of Unity",
+        "headings": [
+          "Contact Us"
+        ],
+        "elements": 79,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/contact.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/credits.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Credits & Ownership | Beacon of Unity",
+        "headings": [
+          "Credits & Ownership"
+        ],
+        "elements": 75,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/credits.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Credits & Ownership | Beacon of Unity",
+        "headings": [
+          "Credits & Ownership"
+        ],
+        "elements": 75,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/credits.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/dashboard.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Community Hub | Beacon of Unity",
+        "headings": [
+          "Community Hub"
+        ],
+        "elements": 721,
+        "scripts": 5,
+        "canvas": 0,
+        "images": [
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/thumb/msid-47529300/47529300.jpg",
+            "loaded": false
+          }
+        ],
+        "media": [],
+        "base": "/dashboard.html"
+      },
+      "errors": [
+        "Unexpected identifier 's'"
+      ],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Community Hub | Beacon of Unity",
+        "headings": [
+          "Community Hub"
+        ],
+        "elements": 721,
+        "scripts": 5,
+        "canvas": 0,
+        "images": [
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/thumb/msid-47529300/47529300.jpg",
+            "loaded": false
+          }
+        ],
+        "media": [],
+        "base": "/dashboard.html"
+      },
+      "errors": [
+        "Unexpected identifier 's'"
+      ],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/dashboard_updated.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Community Hub | Beacon of Unity",
+        "headings": [
+          "Community Hub"
+        ],
+        "elements": 1128,
+        "scripts": 6,
+        "canvas": 0,
+        "images": [
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/thumb/msid-47529300/47529300.jpg",
+            "loaded": false
+          }
+        ],
+        "media": [],
+        "base": "/dashboard_updated.html"
+      },
+      "errors": [
+        "Unexpected identifier 's'"
+      ],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Community Hub | Beacon of Unity",
+        "headings": [
+          "Community Hub"
+        ],
+        "elements": 1128,
+        "scripts": 6,
+        "canvas": 0,
+        "images": [
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/favicon.ico",
+            "loaded": false
+          },
+          {
+            "path": "/thumb/msid-47529300/47529300.jpg",
+            "loaded": false
+          }
+        ],
+        "media": [],
+        "base": "/dashboard_updated.html"
+      },
+      "errors": [
+        "Unexpected identifier 's'"
+      ],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/demo.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity \u2014 See it in action",
+        "headings": [
+          "A light for the neighbor next door."
+        ],
+        "elements": 104,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [
+          {
+            "path": "/logo.png",
+            "loaded": true
+          },
+          {
+            "path": "/logo.png",
+            "loaded": true
+          }
+        ],
+        "media": [],
+        "base": "/demo.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity \u2014 See it in action",
+        "headings": [
+          "A light for the neighbor next door."
+        ],
+        "elements": 104,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [
+          {
+            "path": "/logo.png",
+            "loaded": true
+          },
+          {
+            "path": "/logo.png",
+            "loaded": true
+          }
+        ],
+        "media": [],
+        "base": "/demo.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/eysc.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "VoltWay | EYSC",
+        "headings": [
+          "VoltWay"
+        ],
+        "elements": 21,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [
+          {
+            "tag": "VIDEO",
+            "path": null
+          }
+        ],
+        "base": "/eysc.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "VoltWay | EYSC",
+        "headings": [
+          "VoltWay"
+        ],
+        "elements": 21,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [
+          {
+            "tag": "VIDEO",
+            "path": null
+          }
+        ],
+        "base": "/eysc.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/focus.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Focus Switch Detector",
+        "headings": [
+          "Focus Switch Detector"
+        ],
+        "elements": 14,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/focus.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {
+        "focusCounter": "1"
+      }
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Focus Switch Detector",
+        "headings": [
+          "Focus Switch Detector"
+        ],
+        "elements": 14,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/focus.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {
+        "focusCounter": "1"
+      }
+    }
+  },
+  {
+    "path": "/founder.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Anshuman Tripathy \u2014 Founder of Beacon of Unity",
+        "headings": [
+          "Anshuman Tripathy"
+        ],
+        "elements": 53,
+        "scripts": 2,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/founder.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Anshuman Tripathy \u2014 Founder of Beacon of Unity",
+        "headings": [
+          "Anshuman Tripathy"
+        ],
+        "elements": 53,
+        "scripts": 2,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/founder.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/gods-eye/index.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "GOD'S EYE",
+        "headings": [
+          "GOD'S EYE",
+          "GOD'S EYE"
+        ],
+        "elements": 135,
+        "scripts": 2,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/gods-eye/index.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "GOD'S EYE",
+        "headings": [
+          "GOD'S EYE",
+          "GOD'S EYE"
+        ],
+        "elements": 135,
+        "scripts": 2,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/gods-eye/index.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/gods-eye/redacted.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "GOD'S EYE",
+        "headings": [],
+        "elements": 8,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/gods-eye/redacted.html"
+      },
+      "errors": [],
+      "missing": [
+        "src/main.tsx"
+      ],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "GOD'S EYE",
+        "headings": [],
+        "elements": 8,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/gods-eye/redacted.html"
+      },
+      "errors": [],
+      "missing": [
+        "src/main.tsx"
+      ],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/hellopotato.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Admin Panel | Beacon of Unity",
+        "headings": [
+          "Beacon of Unity \u2014 Admin Panel"
+        ],
+        "elements": 86,
+        "scripts": 7,
+        "canvas": 0,
+        "images": [
+          {
+            "path": "/hellopotato.html",
+            "loaded": false
+          },
+          {
+            "path": "/firebasejs/ui/2.0.0/images/auth/google.svg",
+            "loaded": false
+          }
+        ],
+        "media": [],
+        "base": "/hellopotato.html"
+      },
+      "errors": [
+        "emailjs is not defined",
+        "firebase is not defined"
+      ],
+      "missing": [
+        "cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+      ],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Admin Panel | Beacon of Unity",
+        "headings": [
+          "Beacon of Unity \u2014 Admin Panel"
+        ],
+        "elements": 86,
+        "scripts": 7,
+        "canvas": 0,
+        "images": [
+          {
+            "path": "/hellopotato.html",
+            "loaded": false
+          },
+          {
+            "path": "/firebasejs/ui/2.0.0/images/auth/google.svg",
+            "loaded": false
+          }
+        ],
+        "media": [],
+        "base": "/hellopotato.html"
+      },
+      "errors": [
+        "emailjs is not defined",
+        "firebase is not defined"
+      ],
+      "missing": [
+        "cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+      ],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/index.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity | UAE's Trusted Community Hub",
+        "headings": [
+          "Beaconof Unity"
+        ],
+        "elements": 763,
+        "scripts": 14,
+        "canvas": 2,
+        "images": [],
+        "media": [],
+        "base": "/index.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity | UAE's Trusted Community Hub",
+        "headings": [
+          "Beaconof Unity"
+        ],
+        "elements": 763,
+        "scripts": 14,
+        "canvas": 2,
+        "images": [],
+        "media": [],
+        "base": "/index.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/index2.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity | UAE's Trusted Community Hub",
+        "headings": [
+          "Beacon of Unity"
+        ],
+        "elements": 878,
+        "scripts": 15,
+        "canvas": 2,
+        "images": [],
+        "media": [],
+        "base": "/index2.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity | UAE's Trusted Community Hub",
+        "headings": [
+          "Beacon of Unity"
+        ],
+        "elements": 878,
+        "scripts": 15,
+        "canvas": 2,
+        "images": [],
+        "media": [],
+        "base": "/index2.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/login.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Login \u2014 Beacon of Unity",
+        "headings": [
+          "Welcome back"
+        ],
+        "elements": 71,
+        "scripts": 2,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/login.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Login \u2014 Beacon of Unity",
+        "headings": [
+          "Welcome back"
+        ],
+        "elements": 71,
+        "scripts": 2,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/login.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/oldindex.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity | UAE's Trusted Community Hub",
+        "headings": [
+          "Building Bridges,One Neighborat a Time",
+          "What is Beacon of Unity?"
+        ],
+        "elements": 592,
+        "scripts": 5,
+        "canvas": 1,
+        "images": [],
+        "media": [],
+        "base": "/oldindex.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity | UAE's Trusted Community Hub",
+        "headings": [
+          "Building Bridges,One Neighborat a Time",
+          "What is Beacon of Unity?"
+        ],
+        "elements": 592,
+        "scripts": 5,
+        "canvas": 1,
+        "images": [],
+        "media": [],
+        "base": "/oldindex.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/omniscope/index.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "OMNISCOPE",
+        "headings": [
+          "OMNISCOPE",
+          "OMNISCOPE",
+          "OMNISCOPE"
+        ],
+        "elements": 1193,
+        "scripts": 2,
+        "canvas": 4,
+        "images": [],
+        "media": [],
+        "base": "/omniscope/public/"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "OMNISCOPE",
+        "headings": [
+          "OMNISCOPE",
+          "OMNISCOPE",
+          "OMNISCOPE"
+        ],
+        "elements": 1193,
+        "scripts": 2,
+        "canvas": 4,
+        "images": [],
+        "media": [],
+        "base": "/omniscope/public/"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/omniscope/public/index.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "OMNISCOPE",
+        "headings": [
+          "OMNISCOPE",
+          "OMNISCOPE",
+          "OMNISCOPE"
+        ],
+        "elements": 1190,
+        "scripts": 2,
+        "canvas": 4,
+        "images": [],
+        "media": [],
+        "base": "/omniscope/public/index.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "OMNISCOPE",
+        "headings": [
+          "OMNISCOPE",
+          "OMNISCOPE",
+          "OMNISCOPE"
+        ],
+        "elements": 1190,
+        "scripts": 2,
+        "canvas": 4,
+        "images": [],
+        "media": [],
+        "base": "/omniscope/public/index.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/omniscope/public/observatory.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "OMNISCOPE",
+        "headings": [
+          "OMNISCOPE",
+          "OMNISCOPE",
+          "OMNISCOPE"
+        ],
+        "elements": 1190,
+        "scripts": 2,
+        "canvas": 4,
+        "images": [],
+        "media": [],
+        "base": "/omniscope/public/solar-system.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "OMNISCOPE",
+        "headings": [
+          "OMNISCOPE",
+          "OMNISCOPE",
+          "OMNISCOPE"
+        ],
+        "elements": 1190,
+        "scripts": 2,
+        "canvas": 4,
+        "images": [],
+        "media": [],
+        "base": "/omniscope/public/solar-system.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/omniscope/public/solar-system.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "OMNISCOPE",
+        "headings": [
+          "OMNISCOPE",
+          "OMNISCOPE",
+          "OMNISCOPE"
+        ],
+        "elements": 1190,
+        "scripts": 2,
+        "canvas": 4,
+        "images": [],
+        "media": [],
+        "base": "/omniscope/public/solar-system.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "OMNISCOPE",
+        "headings": [
+          "OMNISCOPE",
+          "OMNISCOPE",
+          "OMNISCOPE"
+        ],
+        "elements": 1190,
+        "scripts": 2,
+        "canvas": 4,
+        "images": [],
+        "media": [],
+        "base": "/omniscope/public/solar-system.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/privacy.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Privacy Policy | Beacon of Unity",
+        "headings": [
+          "Privacy Policy"
+        ],
+        "elements": 110,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/privacy.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Privacy Policy | Beacon of Unity",
+        "headings": [
+          "Privacy Policy"
+        ],
+        "elements": 110,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/privacy.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/terms.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Terms of Service | Beacon of Unity",
+        "headings": [
+          "Terms of Service"
+        ],
+        "elements": 115,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/terms.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Terms of Service | Beacon of Unity",
+        "headings": [
+          "Terms of Service"
+        ],
+        "elements": 115,
+        "scripts": 1,
+        "canvas": 0,
+        "images": [],
+        "media": [],
+        "base": "/terms.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/trial.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity | UAE's Trusted Community Hub",
+        "headings": [
+          "Building Bridges,One Neighborat a Time",
+          "What is Beacon of Unity?"
+        ],
+        "elements": 710,
+        "scripts": 9,
+        "canvas": 2,
+        "images": [],
+        "media": [],
+        "base": "/trial.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity | UAE's Trusted Community Hub",
+        "headings": [
+          "Building Bridges,One Neighborat a Time",
+          "What is Beacon of Unity?"
+        ],
+        "elements": 710,
+        "scripts": 9,
+        "canvas": 2,
+        "images": [],
+        "media": [],
+        "base": "/trial.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {}
+    }
+  },
+  {
+    "path": "/code.html",
+    "passed": true,
+    "before": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity \u00b7 Code",
+        "headings": [],
+        "elements": 198,
+        "scripts": 4,
+        "canvas": 1,
+        "images": [],
+        "media": [],
+        "base": "/code.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {
+        "interactiveFunctions": [
+          "function",
+          "function",
+          "function",
+          "function",
+          "function",
+          "function"
+        ],
+        "gifLoaded": true
+      }
+    },
+    "after": {
+      "status": 200,
+      "state": {
+        "title": "Beacon of Unity \u00b7 Code",
+        "headings": [],
+        "elements": 198,
+        "scripts": 4,
+        "canvas": 1,
+        "images": [],
+        "media": [],
+        "base": "/code.html"
+      },
+      "errors": [],
+      "missing": [],
+      "behavior": {
+        "interactiveFunctions": [
+          "function",
+          "function",
+          "function",
+          "function",
+          "function",
+          "function"
+        ],
+        "gifLoaded": true
+      }
+    }
+  }
+]

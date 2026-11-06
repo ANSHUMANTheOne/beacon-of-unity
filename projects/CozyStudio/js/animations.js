@@ -32,7 +32,7 @@ export function colorAt(a,t,p){
 // rAF loop that only runs while playing (zero CPU when paused/stopped)
 export class Player{
   constructor(fn){this.fn=fn;this.t=0;this.run=false;this.raf=0;this.last=0}
-  loop=ts=>{if(!this.run)return;this.t+=(ts-this.last)/1000;this.last=ts;this.fn(this.t);this.raf=requestAnimationFrame(this.loop)};
+  loop=ts=>{if(!this.run)return;this.t+=Math.max(0,ts-this.last)/1000;this.last=Math.max(this.last,ts);this.fn(this.t);this.raf=requestAnimationFrame(this.loop)};
   play(){if(this.run)return;this.run=true;this.last=performance.now();this.raf=requestAnimationFrame(this.loop)}
   pause(){this.run=false;cancelAnimationFrame(this.raf)}
   stop(){this.pause();this.t=0;this.fn(0)}

@@ -3,9 +3,9 @@
   "account_id": "6e85ff66dff042cac464c2fc7ec0d7db",
   "compatibility_date": "2026-10-19",
   "workers_dev": false,
-  "preview_urls": false,
+  "preview_urls": true,
   "assets": {
-    "directory": "."
+    "directory": "./dist"
   },
   "routes": [
     {
@@ -15,5 +15,9 @@
   ],
   "observability": {
     "enabled": true
+  },
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "build": {
+    "command": "node scripts/cloudflare-build.mjs"
   }
 }
