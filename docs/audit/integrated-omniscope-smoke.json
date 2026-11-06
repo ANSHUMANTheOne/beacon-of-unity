@@ -1,0 +1,66 @@
+[
+  {
+    "base_url": "http://127.0.0.1:51915",
+    "case": "omniscope",
+    "mobile": false,
+    "checks": [
+      {
+        "name": "current-main scene canvas renders",
+        "passed": true
+      },
+      {
+        "name": "band controls remain responsive",
+        "passed": true
+      },
+      {
+        "name": "motion preview remains responsive",
+        "passed": true
+      },
+      {
+        "name": "no horizontal overflow",
+        "passed": true
+      },
+      {
+        "name": "no uncaught browser errors",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "failure": null,
+    "page_errors": [],
+    "blocked_mutations": [],
+    "dialogs": []
+  },
+  {
+    "base_url": "http://127.0.0.1:51915",
+    "case": "omniscope",
+    "mobile": true,
+    "checks": [
+      {
+        "name": "current-main scene canvas renders",
+        "passed": true
+      },
+      {
+        "name": "band controls remain responsive",
+        "passed": true
+      },
+      {
+        "name": "motion preview remains responsive",
+        "passed": true
+      },
+      {
+        "name": "no horizontal overflow",
+        "passed": true
+      },
+      {
+        "name": "no uncaught browser errors",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "failure": null,
+    "page_errors": [],
+    "blocked_mutations": [],
+    "dialogs": []
+  }
+]

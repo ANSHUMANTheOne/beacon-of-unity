@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-06",
+  "owner_authorization": "Full authorization to finish main organization while preserving current links/icons/redirects/functionality",
+  "merged_pr": "https://github.com/ANSHUMANTheOne/beacon-of-unity/pull/2",
+  "merge_sha": "1a5543da99e6f66a55777feced5795e52801ea5c",
+  "pre_cutover_main": "056b25677afd5a5621fb36a6fcc107a53f553889",
+  "cloudflare_build_id": "6b33f976-7758-49ce-9af0-b0e533bffb62",
+  "cloudflare_version": "4ec867b0-789b-4b5f-ad9a-79797ff3e6ac",
+  "cloudflare_build_status": "success",
+  "pages_workflow_run": 42223500008,
+  "pages_build_and_deploy": "success",
+  "pages_build_type": "workflow",
+  "site_urls": [
+    "https://beaconofunity.com/",
+    "https://anshumantheone.github.io/beacon-of-unity/"
+  ],
+  "route_comparisons": 330,
+  "regressions": 0,
+  "main_ui_flows": 16,
+  "main_ui_assertions": 128,
+  "original_files_retained": 136,
+  "original_binary_content_preserved": true,
+  "favicon_original_sha256": "c95e1ae97ff7f0b325228535f12eb881eded4f19e33a4d8ecbadd87ce14860ad",
+  "favicon_exact_bytes_verified_on_both_hosts": true,
+  "dns_domain_visibility_changes": false,
+  "independent_workers_redeployed": false,
+  "history_rewritten_or_branches_deleted": false,
+  "rollback_branch": "backup/pre-cutover-056b256",
+  "rollback_bundle": "D:\\Codex\\beacon-of-unity-restructure\\pre-cutover-056b256.bundle",
+  "rollback_worker_version_prefix": "27fbb97f",
+  "known_limits": [
+    "Real authenticated backend transactions and physical Bluetooth not tested; user selected public/demo checks without live writes",
+    "Separate live OmniScope mobile detector/replay passed; a cold desktop detector load exceeded90 seconds and remains unverified; no OmniScope logic or separate deployment changed",
+    "Preserved original placeholders/empty ZIP and development-only GODS EYE entry are not represented as functional media/builds"
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "integrated_main": "e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a",
+  "user_approved_review_branch_integration": true,
+  "original_files_retained": 136,
+  "unchanged_original_files": 105,
+  "declared_text_updates": 31,
+  "inherited_main_text_updates": 29,
+  "functional_repairs": [
+    "CozyStudio/js/animations.js",
+    "CozyStudio/js/presets.js"
+  ],
+  "unchanged_original_binary_content": true,
+  "new_design_assets": 10,
+  "additional_unchanged_logo_alias": 1,
+  "artifact_resources": 148,
+  "local_http": {
+    "passed": 151,
+    "checked": 151
+  },
+  "inline_scripts": {
+    "checked": 55,
+    "failed": 0
+  },
+  "ui_flows": {
+    "passed": 16,
+    "assertions": 128
+  },
+  "auth_fixture_flows": {
+    "passed": 22,
+    "assertions": 96
+  },
+  "latest_omniscope_smoke": {
+    "passed": 2,
+    "assertions": 10,
+    "scope": "Earlier integrated source snapshot, superseded by the live test result above"
+  },
+  "main_file_coverage_exceptions": [
+    ".gitignore",
+    "CozyStudio/js/animations.js",
+    "CozyStudio/js/presets.js",
+    "REDESIGN.md",
+    "package.json",
+    "preview-server.mjs",
+    "wrangler.jsonc"
+  ],
+  "fresh_wrangler_dry_run": "passed",
+  "design_bundles_reproduced": 5,
+  "publisher_tests": 10,
+  "worker_assertions": 62,
+  "animation_combinations": 264,
+  "preset_cases": 7,
+  "production_promoted": true,
+  "main_changed_by_this_work": true,
+  "preview_settings_changed": true,
+  "release_blockers": [],
+  "real_authentication_backend_and_hardware": "Not tested; user selected public/demo tests without live writes",
+  "tested_source_commit": "0df45cee458734fa12824928cb97f1184cb7af6c",
+  "hosted_validation_workflow": {
+    "status": "success",
+    "run_id": 42155926797,
+    "url": "https://github.com/ANSHUMANTheOne/beacon-of-unity/actions/runs/42155926797"
+  },
+  "cloudflare_version_upload": {
+    "status": "success",
+    "build_id": "fc322341-b4db-4987-8f71-abe34bc50836",
+    "version_id": "7fd58ac6-f06a-44a6-80dd-a1e15d21cf42"
+  },
+  "integrated_provider_acceptance": {
+    "checked": 153,
+    "passed": 153,
+    "failed": 0,
+    "base_url": "https://3e1034f5-beaconofunity.anshorg.workers.dev"
+  },
+  "pages_configuration_recheck": "Resolved under full owner authorization; only build_type changed to workflow; URL/CNAME/HTTPS preserved",
+  "preview_setting_approval": "Explicit user approval; Preview ON after reload, production workers.dev OFF, custom domain unchanged",
+  "hosted_main_ui_flows": {
+    "passed": 16,
+    "assertions": 128,
+    "scope": "Uploaded main-Worker preview, fresh anonymous contexts; live writes blocked"
+  },
+  "hosted_preview_verification_workflow": {
+    "run_id": 42184600256,
+    "job_id": 127788232287,
+    "status": "success"
+  },
+  "pages_workflow": "Prepared main-only workflow with enablement:false; no Pages setting or deployment changed",
+  "latest_live_omniscope": {
+    "checked": 2,
+    "passed": 1,
+    "desktop": "Detector-load busy state exceeded90-second check; retry stopped without result",
+    "mobile": "Detector3/6/2 and motion replay passed",
+    "source_or_deployment_changed": false
+  },
+  "current_snapshot_main": "056b25677afd5a5621fb36a6fcc107a53f553889",
+  "current_snapshot_provider": "Pending new uploaded153-check acceptance",
+  "current_snapshot_local_http": {
+    "checked": 152,
+    "passed": 152
+  },
+  "new_document_route": "/EXPERIENCE-REFINEMENT.md",
+  "status": "Published on main and both existing hosts; post-cutover verified",
+  "cutover_merge_sha": "1a5543da99e6f66a55777feced5795e52801ea5c",
+  "route_comparisons": 330,
+  "route_regressions": 0,
+  "live_main_ui": {
+    "passed": 16,
+    "assertions": 128
+  }
+}

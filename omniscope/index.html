@@ -10,7 +10,7 @@
 <meta property="og:title" content="OmniScope | SPHEREx Sky Explorer" />
 <meta property="og:description" content="Compare real NASA/IPAC infrared sky images and explore the changing sky." />
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
 
   :root {
     --void: #05070d;
@@ -23,8 +23,8 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--void); color: var(--text);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; }
-  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    font-family: 'Public Sans', Arial, sans-serif; overflow: hidden; }
+  .mono { font-family: 'Public Sans', Arial, sans-serif; font-variant-numeric: tabular-nums; }
   canvas { display: block; }
 
   #app { position: relative; width: 100vw; height: 100vh; }
@@ -176,7 +176,7 @@
   #eyeLog .line.reply { color: #9fb0c3; white-space: pre-line; }
   #eyeConsole .input-row { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); padding: 10px 16px; }
   #eyeConsole .input-row span { color: var(--cyan); font-size: 13px; }
-  #eyeInput { flex: 1; background: none; border: 0; outline: none; padding: 0; margin: 0; -webkit-user-select: text; user-select: text; caret-color: var(--cyan); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: #f1f5f9; }
+  #eyeInput { flex: 1; background: none; border: 0; outline: none; padding: 0; margin: 0; -webkit-user-select: text; user-select: text; caret-color: var(--cyan); font-family: 'Public Sans', Arial, sans-serif; font-size: 13px; color: #f1f5f9; }
   #eyeConsole .hint { padding: 0 16px 12px; font-size: 10.5px; color: #536176; }
 
   /* Launch event HUD */
@@ -893,7 +893,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.minDistance = 0.4;   // updated every frame from whatever is being looked at
-controls.maxDistance = 700;
+controls.maxDistance = 1200;
 controls.maxPolarAngle = Math.PI * 0.49;
 controls.target.set(0, 0, 0);
 camera.lookAt(0, 0, 0);
@@ -2722,13 +2722,24 @@ const ZOOM_MAX_DIST = 700;
 const AUTO_FOLLOW_RELEASE_DIST = 160;   // only when zoomed right out to system scale
 let zoomPending = 0;
 let missionFovTarget = 45;
+let missionDistanceTarget = 4.2;
+let missionZoomActive = false;
 let zoomAutoFocusId = null;      // object we started following only because the user zoomed toward it
 let returnToOrigin = false;
 const _zp = new THREE.Vector3(), _zoomOff = new THREE.Vector3();
+const missionCloseDirection = new THREE.Vector3(0, 0, 1);
+const missionCloseUp = new THREE.Vector3(0, 1, 0);
+const missionOverviewDirection = new THREE.Vector3(.18, 1, .26).normalize();
+const missionOverviewUp = new THREE.Vector3(0, 0, -1);
+const _missionTarget = new THREE.Vector3(), _missionDirection = new THREE.Vector3(), _missionPosition = new THREE.Vector3(), _missionUp = new THREE.Vector3();
 
 function focusOn(id) { state.followId = id; zoomAutoFocusId = id; returnToOrigin = false; camGoal = null; }
 function releaseFocus() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = true; }
-function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; camGoal = null; }
+function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; missionDistanceTarget = 4.2; missionZoomActive = false; camGoal = null; }
+function resetMissionZoom(distance, pose) {
+  missionFovTarget = pose?.fov ?? 45; missionDistanceTarget = distance; missionZoomActive = false;
+  if (pose) { missionCloseDirection.copy(pose.position).sub(pose.target).normalize(); missionCloseUp.copy(pose.up); }
+}
 
 // Esc lets go of the focus (capture phase, so closing the Ask OmniScope console / skipping a launch with Esc doesn't also do this).
 window.addEventListener('keydown', (e) => {
@@ -2798,13 +2809,13 @@ function pickZoomFocus(cx, cy) {
     // exact ties (pointer inside several discs): the smaller one is the thing "on top"
     if (edge < bestEdge - 1e-6 || (Math.abs(edge - bestEdge) <= 1e-6 && radiusPx < bestRadius)) { best = id; bestEdge = edge; bestRadius = radiusPx; }
   };
-  Object.keys(bodyMeshes).forEach((id) => { if (bodyMeshes[id].group.visible) consider(id, bodyMeshes[id].group.position, bodyMeshes[id].body.displayRadius); });
+  Object.keys(bodyMeshes).forEach((id) => { if (bodyMeshes[id].group.visible) consider(id, bodyMeshes[id].group.position, bodyMeshes[id].body.displayRadius * bodyMeshes[id].group.scale.x); });
   missions.forEach((m) => { if (missionMeshes[m.id].group.visible) consider(m.id, missionMeshes[m.id].group.position, 0.25); });
   return best;
 }
 app.addEventListener('wheel', (e) => {
   if (omni.skyActive) return;
-  if (e.target !== renderer.domElement) return;          // let panels scroll normally
+  if (e.target !== renderer.domElement && !e.target.closest('.spacecraft-beacon')) return; // let panels scroll normally
   if (state.mode === 'pilot' || activeLaunch) return;    // those modes handle the wheel themselves
   e.preventDefault();
   e.stopPropagation();                                   // keeps OrbitControls' own (unbounded) zoom out of it
@@ -2814,7 +2825,16 @@ app.addEventListener('wheel', (e) => {
   if (e.ctrlKey) d *= 6;                                 // trackpad pinch arrives as ctrl+wheel with tiny deltas
   d = Math.max(-150, Math.min(150, d));
   if (document.body.classList.contains('unified-mission')) {
-    missionFovTarget = Math.max(14, Math.min(76, missionFovTarget * Math.exp(d * 0.0011)));
+    if (!missionZoomActive && missionDistanceTarget < 10) {
+      missionCloseDirection.copy(camera.position).sub(controls.target).normalize();
+      missionCloseUp.copy(camera.up);
+    }
+    missionZoomActive = true;
+    // First widen the field of view, then pull back from Earth. That keeps
+    // close inspection stable while still allowing a real orbital overview.
+    if (d > 0 && missionFovTarget >= 75.5) missionDistanceTarget = Math.min(innerWidth > 800 ? 700 : 1100, missionDistanceTarget * Math.exp(d * .00135));
+    else if (d < 0 && missionDistanceTarget > 4.21) missionDistanceTarget = Math.max(4.2, missionDistanceTarget * Math.exp(d * .00135));
+    else missionFovTarget = Math.max(innerWidth <= 800 ? 35 : innerWidth < 960 ? 32 : 30, Math.min(76, missionFovTarget * Math.exp(d * .0011)));
     return;
   }
   zoomPending = Math.max(-ZOOM_MAX_PENDING, Math.min(ZOOM_MAX_PENDING, zoomPending + d * 0.0006));
@@ -2823,12 +2843,23 @@ renderer.domElement.addEventListener('pointerdown', () => { returnToOrigin = fal
 
 function applyZoom(dt) {
   if (document.body.classList.contains('unified-mission')) {
-    if (Math.abs(camera.fov - missionFovTarget) < .015) return;
-    // Keep the Earth as the zoom anchor even after a right-button pan.
-    _zp.copy(bodyMeshes.earth.group.position).sub(controls.target).multiplyScalar(1 - Math.exp(-dt * 14));
-    camera.position.add(_zp);
-    controls.target.add(_zp);
-    camera.fov += (missionFovTarget - camera.fov) * (1 - Math.exp(-dt * 14));
+    if (!missionZoomActive) return;
+    const earth = bodyMeshes.earth.group.position;
+    const t = Math.max(0, Math.min(1, (missionDistanceTarget - 40) / 100));
+    const overviewBlend = t * t * (3 - 2 * t);
+    _missionTarget.copy(earth).multiplyScalar(1 - overviewBlend);
+    _missionDirection.copy(missionCloseDirection).lerp(missionOverviewDirection, overviewBlend).normalize();
+    _missionPosition.copy(_missionTarget).addScaledVector(_missionDirection, missionDistanceTarget);
+    _missionUp.copy(missionCloseUp).lerp(missionOverviewUp, overviewBlend);
+    if (_missionUp.lengthSq() < .01) _missionUp.copy(missionOverviewUp);
+    _missionUp.normalize();
+    if (Math.abs(camera.fov - missionFovTarget) < .015 && camera.position.distanceTo(_missionPosition) < .02 && controls.target.distanceTo(_missionTarget) < .02) { missionZoomActive = false; return; }
+    const ease = 1 - Math.exp(-dt * 14);
+    camera.position.lerp(_missionPosition, ease);
+    controls.target.lerp(_missionTarget, ease);
+    camera.up.lerp(_missionUp, ease).normalize();
+    camera.lookAt(controls.target);
+    camera.fov += (missionFovTarget - camera.fov) * ease;
     camera.updateProjectionMatrix();
     return;
   }
@@ -2850,7 +2881,7 @@ function applyZoom(dt) {
 
 
 const _goalOff = new THREE.Vector3(), _goalWant = new THREE.Vector3();
-renderer.domElement.addEventListener('pointerdown', () => { camGoal = null; });
+renderer.domElement.addEventListener('pointerdown', () => { camGoal = null; missionZoomActive = false; });
 renderer.domElement.addEventListener('wheel', () => { camGoal = null; }, { passive: true });
 
 function animate() {
@@ -3003,6 +3034,7 @@ function flushLabels() {
   }
   const piloting = state.mode === 'pilot';
   const W = window.innerWidth, H = window.innerHeight;
+  const orbitalLabels = document.body.classList.contains('unified-mission') && camera.position.distanceTo(bodyMeshes.earth.group.position) > 80;
   const items = [];
   labelQueue.forEach((q) => {
     const { entry, id, isMission } = q;
@@ -3015,7 +3047,7 @@ function flushLabels() {
     const forced = piloting
       ? Boolean(pilotTarget && pilotTarget.ref.id === id)
       : (state.selectedId === id || hoveredId === id || state.followId === id);
-    if (document.body.classList.contains('calm-layout') && !piloting && ((W <= 800 && !forced) || y < 110 || y > H - 190 || (x < 370 && y < 310))) { div.style.display = 'none'; return; }
+    if (document.body.classList.contains('calm-layout') && !piloting && ((W <= 800 && !forced && !(orbitalLabels && entry.body?.category === 'planet')) || y < 110 || y > (W <= 800 ? H - 330 : H - 190) || (W > 800 && x < 370 && y < 310))) { div.style.display = 'none'; return; }
     const dist = camera.position.distanceTo(q.pos);
     let maxDist, priority;
     if (isMission) {
@@ -3037,21 +3069,23 @@ function flushLabels() {
   items.sort((a, b) => b.priority - a.priority);
   const placed = [];
   items.forEach((it) => {
-    const r = { x: it.x + 8, y: it.y - 13, w: it.w, h: 15 };
+    const labelX = orbitalLabels && W <= 800 ? Math.max(8, Math.min(W - it.w - 8, it.x + 10)) : it.x + 10;
+    const r = { x: labelX - 2, y: it.y - 13, w: it.w, h: 15 };
     if (!it.forced && placed.some((p) => r.x < p.x + p.w + 3 && r.x + r.w + 3 > p.x && r.y < p.y + p.h + 2 && r.y + r.h + 2 > p.y)) {
       it.div.style.display = 'none';
       return;
     }
     placed.push(r);
     it.div.style.display = 'block';
-    it.div.style.transform = `translate(${it.x + 10}px, ${it.y - 6}px)`;
-    it.div.style.opacity = it.forced ? '1' : (piloting ? '0.6' : '0.5');
-    it.div.style.color = it.forced ? '#a5f3fc' : '#94a3b8';
+    it.div.style.transform = `translate(${labelX}px, ${it.y - 6}px)`;
+    it.div.style.fontSize = orbitalLabels ? '11px' : '10px';
+    it.div.style.opacity = it.forced ? '1' : (orbitalLabels ? '0.82' : piloting ? '0.6' : '0.5');
+    it.div.style.color = it.forced ? '#a5f3fc' : (orbitalLabels ? '#c1d2d5' : '#94a3b8');
   });
   labelQueue.length = 0;
 }
 
-const omni = installSurvey({THREE, scene, camera, controls, renderer, state, bodyMeshes, missionMeshes, orbitLines, planets, missions, asteroidBelt, sunMesh, coronaMesh, app, overlay, applyVisibility, releaseFocus, freeOrbit, renderPlayIcon, updateLiveIndicator, exitPilotMode, flyToObject, selectBody, focusOn});
+const omni = installSurvey({THREE, scene, camera, controls, renderer, state, bodyMeshes, missionMeshes, orbitLines, planets, missions, asteroidBelt, sunMesh, coronaMesh, app, overlay, applyVisibility, releaseFocus, freeOrbit, resetMissionZoom, renderPlayIcon, updateLiveIndicator, exitPilotMode, flyToObject, selectBody, focusOn});
 window.omniscope = omni;
 animate();
 

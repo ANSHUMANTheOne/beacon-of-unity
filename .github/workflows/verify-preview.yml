@@ -1,0 +1,33 @@
+# Acceptance evidence for the recorded migration preview; does not publish anything.
+name: Verify migration preview
+on:
+  pull_request:
+    paths:
+      - 'scripts/check-preview.py'
+      - '.github/workflows/verify-preview.yml'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Uploaded beaconofunity Worker version URL'
+        required: true
+        default: 'https://restructure-preserve-public-paths-20261105-beaconofunity.anshorg.workers.dev'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      PREVIEW_URL: ${{ inputs.base_url || 'https://restructure-preserve-public-paths-20261105-beaconofunity.anshorg.workers.dev' }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Compare the original public files with the uploaded preview
+        run: python scripts/check-preview.py --base-url "$PREVIEW_URL" --wait-seconds 120
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: provider-preview-validation
+          path: .verification/provider-preview.json
+          retention-days: 14

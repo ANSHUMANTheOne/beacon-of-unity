@@ -1,0 +1,13 @@
+dist/
+.verification/
+__pycache__/
+node_modules/
+**/worker/dist/
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+
+.vite/
+playwright-results/

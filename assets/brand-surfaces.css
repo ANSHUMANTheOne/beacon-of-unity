@@ -1,0 +1,51 @@
+﻿/* A quieter evolution of Beacon's blue atmosphere and frosted surfaces. */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&display=swap');
+body.unity-page .nlogo span{color:var(--navy)!important;font-family:Syne,sans-serif!important;font-size:16px!important;letter-spacing:-.03em}
+body.unity-page h1,body.unity-page h2,body.unity-page h3,body.unity-page .logo-name{font-family:Syne,sans-serif!important;letter-spacing:-.04em!important}
+body.unity-login{--navy:#f3f9ff;--body:#c3d9e9;--surface:#ffffff0d;background:radial-gradient(ellipse at 86% 14%,#246886 0,transparent 53%),radial-gradient(ellipse at 12% 90%,#155d85 0,transparent 55%),#081f31!important;color:#eef8ff!important;padding:40px 20px!important}
+body.unity-login:before{content:'';position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(#bdeaff04 1px,transparent 1px),linear-gradient(90deg,#bdeaff04 1px,transparent 1px);background-size:64px 64px}
+body.unity-login .card{position:relative;max-width:470px!important;background:linear-gradient(135deg,#bfe7ff1c,#ffffff09)!important;border:1px solid #d2eeff36!important;border-radius:26px!important;box-shadow:inset 0 1px #ffffff15,0 32px 100px #00111f45!important;backdrop-filter:blur(24px);padding:40px!important}
+body.unity-login .logo-name{font-size:18px!important;color:#f5faff!important}
+body.unity-login .card-title{color:#f5faff!important;font-size:34px!important;line-height:1.12!important}
+body.unity-login .back,body.unity-login .card-sub,body.unity-login .account-footnote,body.unity-login .div-txt{color:#bfd5e5!important}
+body.unity-login .inp-wrap label,body.unity-login .file-wrap label{color:#dcecf6!important;font-size:11px!important;letter-spacing:.08em}
+body.unity-login .inp,body.unity-login .btn-google{background:#deefff0c!important;border:1px solid #cee8fa42!important;color:#fff!important;border-radius:11px!important;min-height:50px}
+body.unity-login .inp::placeholder{color:#a9c5d8!important}
+body.unity-login .inp:focus{border-color:#79daf7!important;box-shadow:0 0 0 3px #54c8e51a!important}
+body.unity-login .btn-primary{background:#72d7ef!important;color:#082a3c!important;border-radius:11px!important;font-weight:700!important;min-height:50px}
+body.unity-login .btn-google:hover{background:#deefff19!important}
+body.unity-login .div-line{background:#d2eeff29!important}
+body.unity-login .account-footnote a{color:#8fe5f8}
+body.unity-login #statusMsg{color:#c2efff!important}
+body.unity-login #statusMsg.err{color:#ffc0b9!important}
+body.unity-founder .hero{max-width:1180px;margin:auto;padding:88px 56px!important;display:grid;grid-template-columns:minmax(220px,340px) 1fr;align-items:center;gap:64px;text-align:left;min-height:560px;background:transparent!important}
+body.unity-founder .hero:before,body.unity-founder .hero:after{display:none!important}
+body.unity-founder .hero .avatar{width:100%!important;height:390px!important;border-radius:160px 160px 22px 22px!important;object-fit:cover!important;border:6px solid #fff!important;margin:0!important;box-shadow:0 24px 65px #193e5418!important}
+body.unity-founder .hero h1{font-size:clamp(40px,4.9vw,66px)!important;line-height:1.02!important;margin:24px 0 20px!important;max-width:650px}
+body.unity-founder .eyebrow{background:transparent!important;border:0!important;padding:0!important;color:#087297!important;text-transform:uppercase;font-weight:700!important;letter-spacing:.14em!important}
+body.unity-founder .role{font-size:15px!important;font-weight:600;color:#087297!important;margin:0 0 20px!important}
+body.unity-founder .tagline{font-size:17px!important;max-width:460px;line-height:1.7!important}
+body.unity-founder .body-section{max-width:930px!important;padding:64px 56px!important;border-top:1px solid var(--border);margin:auto}
+body.unity-founder .stats{max-width:820px;margin:20px auto 40px!important;border-width:1px 0!important;border-radius:0!important;background:transparent!important}
+body.unity-founder .cta{max-width:820px;margin:50px auto!important;padding:40px!important;background:#e1eef4!important}
+body.unity-contact .main{max-width:1200px!important;margin:auto!important;padding:78px 48px!important;gap:80px!important}
+body.unity-contact .badge{background:transparent!important;border:0!important;padding:0!important;text-transform:uppercase;letter-spacing:.12em!important}
+body.unity-contact .left-col h1{font-size:clamp(46px,5.5vw,76px)!important;line-height:1.05!important;margin:24px 0!important}
+body.unity-contact .contact-cards{gap:0!important;margin-top:36px!important}
+body.unity-contact .cc{background:transparent!important;border:0!important;border-bottom:1px solid var(--border)!important;border-radius:0!important;box-shadow:none!important;padding:20px 0!important}
+body.unity-contact .cc-ico{display:none!important}
+body.unity-contact .cc-label{font-size:10px!important;letter-spacing:.12em!important;margin-bottom:6px}
+body.unity-contact .cc-val{color:var(--navy)!important;font-size:14px!important}
+body.unity-contact .response-note{border:0!important;background:transparent!important;padding:22px 0!important;font-size:12px!important}
+body.unity-contact .form-card{background:linear-gradient(135deg,#d5efff0d,#ffffff03)!important;border:1px solid var(--border)!important;border-radius:22px!important;box-shadow:0 24px 70px #00162314!important;padding:34px!important}
+body.unity-contact .form-title{font-family:Syne,sans-serif!important;font-size:25px!important}
+body.unity-contact .field input,body.unity-contact .field textarea,body.unity-contact .field select{border-color:var(--border)!important;background:#ffffff05!important;border-radius:10px!important}
+body.unity-page .nback:hover,body.unity-page .back-btn:hover{filter:brightness(.95)}
+@media(max-width:700px){body.unity-login{padding:24px 14px!important}body.unity-login .card{padding:28px 24px!important;border-radius:22px!important}body.unity-login .card-title{font-size:29px!important}body.unity-login .logo-name{font-size:16px!important}body.unity-founder .hero{padding:42px 24px!important;grid-template-columns:1fr;gap:30px;min-height:0}body.unity-founder .hero .avatar{height:250px!important;width:210px!important;justify-self:start}body.unity-founder .hero h1{font-size:43px!important}body.unity-founder .tagline{font-size:15px!important}body.unity-founder .body-section{padding:38px 24px!important}body.unity-founder .stats,body.unity-founder .cta{margin:24px!important}body.unity-founder .cta{padding:28px!important}body.unity-contact .main{padding:40px 22px!important;gap:32px!important}body.unity-contact .form-card{padding:25px!important}body.unity-page .nlogo span{font-size:13px!important}}
+body.unity-contact .main{padding-top:150px!important}body.unity-founder .tagline{margin-left:0!important;margin-right:0!important}body.unity-founder .hero h1{font-weight:700!important}body.unity-contact .left-col h1{font-weight:700!important;font-size:clamp(46px,4.7vw,64px)!important}
+@media(max-width:700px){body.unity-contact .main{padding-top:115px!important}}
+body.unity-founder footer a{color:#32647d!important}
+body.unity-founder footer a{text-decoration:underline!important;text-underline-offset:3px}body.unity-page .post-card,body.unity-page .featured-card,body.unity-page .credit-card{transition:border-color .2s,box-shadow .2s!important}body.unity-page .post-card:hover,body.unity-page .featured-card:hover,body.unity-page .credit-card:hover{border-color:#8bb6ca!important;box-shadow:0 12px 28px #12394e0d!important}
+
+/* Policy introductions and credit links retain readable contrast. */
+body.unity-policy .hero>p{color:#b5cbd9!important}body.unity-page .notice-body>a[href$="contact.html"]{color:#126483!important;text-decoration:underline;text-underline-offset:3px}

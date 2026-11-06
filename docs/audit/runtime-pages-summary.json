@@ -1,0 +1,87 @@
+{
+  "visits": 52,
+  "with_uncaught_errors": 0,
+  "navigation_failures": [],
+  "network_failures": [
+    {
+      "mode": "desktop",
+      "path": "/gods-eye/redacted.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:50379/src/main.tsx",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "mode": "desktop",
+      "path": "/hellopotato.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:50379/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "mode": "mobile",
+      "path": "/gods-eye/redacted.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:50379/src/main.tsx",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "mode": "mobile",
+      "path": "/hellopotato.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:50379/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+          "type": "script"
+        }
+      ]
+    }
+  ],
+  "overflow": [],
+  "broken_images": [
+    {
+      "mode": "desktop",
+      "path": "/dashboard_updated.html",
+      "images": [
+        "/favicon.ico",
+        "/favicon.ico",
+        "/favicon.ico"
+      ]
+    },
+    {
+      "mode": "desktop",
+      "path": "/hellopotato.html",
+      "images": [
+        "/hellopotato.html"
+      ]
+    },
+    {
+      "mode": "mobile",
+      "path": "/dashboard_updated.html",
+      "images": [
+        "/favicon.ico",
+        "/favicon.ico",
+        "/favicon.ico"
+      ]
+    },
+    {
+      "mode": "mobile",
+      "path": "/hellopotato.html",
+      "images": [
+        "/hellopotato.html"
+      ]
+    }
+  ],
+  "scope": "Fresh corrected local artifact; all26 HTML pages at desktop and390px mobile; external GET allowed, remote mutations blocked. Preview/provider results are separate."
+}
