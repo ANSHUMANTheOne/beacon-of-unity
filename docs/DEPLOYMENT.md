@@ -1,6 +1,6 @@
 # Deployment and cutover
 
-## Recorded topology
+## Recorded topology before restructuring
 
 - `main` originally had no tracked `.github` workflows, `CNAME`, `.nojekyll`, root Wrangler configuration or submodules.
 - GitHub reports an active generated `pages-build-deployment` workflow; recent Pages deployments use `main`. An authenticated read confirmed legacy branch publishing from `main`, folder `/`, HTTPS enforced, and no GitHub Pages custom domain. The Pages URL is `https://anshumantheone.github.io/beacon-of-unity/`. Settings have not been changed.
@@ -88,3 +88,9 @@ After a read-only dashboard inspection confirmed both workers.dev toggles off, t
 The approved preview change is now verified persistent after reload, and the immutable 09b9b63f upload passes 152/152 provider checks. The branch alias also serves the site and its GitHub verification rerun passes. Keep the approved `preview_urls: true` setting when reconciling future main deployments: an older explicit false configuration can switch it off again. This is configuration drift to avoid, not a reason to enable production workers.dev or alter the custom domain.
 
 Current pre-cutover rollback references are `audit/pages-settings-pre-cutover.json` and `audit/cloudflare-pre-cutover.json`: Pages legacy main/root with HTTPS and no custom domain, and active Cloudflare version prefix 27fbb97f at 100%. Restore these current values if rollback is needed; the original October snapshot above is historical. Revert the merge through a normal commit while preserving later work, never reset/force-push.
+
+## Current production state ? 6 November 2026
+
+The authorized cutover is complete. Main publishes generated `dist/` through the existing Cloudflare production build and the main-only Pages Actions workflow. Pages Source is now GitHub Actions; its existing repository URL and HTTPS settings are preserved. The custom domain and DNS are unchanged. Preview URLs are enabled; production workers.dev remains disabled. OmniScope/social Workers and their route ownership were not redeployed or edited. Cloudflare build 6b33f976 and Pages workflow 42223500008 passed for the merge. Post-deployment checks found zero regressions across 330 path comparisons and passed 16 main-site UI flows. See `audit/cutover-completed.json` and the post-cutover route reports.
+
+For rollback, first restore the previous main-domain Worker version (unique prefix 27fbb97f) if necessary. Review/revert the restructuring merge with `git revert -m 1 1a5543da99e6f66a55777feced5795e52801ea5c`, preserving any later work. Keep the current Pages deployment until the original source tree is restored; only then restore saved legacy main/root publishing if rolling back that migration too. Never force-push or delete history. Backups: remote branch `backup/pre-cutover-056b256` and the verified full-history bundle on D:.
