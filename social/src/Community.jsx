@@ -135,7 +135,6 @@ export function CommunityProfile({ username, execute, notify, onBack }) {
             {[
               ["photo", "Photos"],
               ["reel", "Reels"],
-              ["video", "Videos"],
             ].map(([k, l]) => (
               <button
                 key={k}

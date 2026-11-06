@@ -77,7 +77,7 @@ Do not publish database dumps or screenshots containing other members' private d
 ## 4. Posting and private access
 
 1. Create an account and find people in Discover → Explore people.
-2. Create a photo, Reel, video or 24-hour story. The server validates the media type and signature, checks limits, and stores it privately.
+2. Create a photo, Reel or 24-hour story. The server validates the media type and signature, checks limits, and stores it privately. Long-form video creation is deferred.
 3. New posts enter `pending`. Only the owner and admins can retrieve pending media.
 4. An admin reviews the post and approves or removes it. Approval is a moderation decision, not a scientific proof that no AI was used.
 5. Public approved posts appear in Everyone/Discover. Following shows accepted follows and the viewer's own posts in chronological order. Private accounts require follower approval.
@@ -86,6 +86,8 @@ Do not publish database dumps or screenshots containing other members' private d
 The guest demo uses a separate local-storage namespace and sample data. It has no authority over real users, admin roles, media access or production messages.
 
 ## 5. Free-tier media limits
+
+Connecting private B2 storage enables a 1 GiB file limit, 8 GiB global budget and 2 GiB/member reservations, with resumable 8 MiB parts. The admin connection stays disabled until credentials and private-bucket read/write/delete checks succeed. Follow [storage setup](docs/STORAGE.md); a live provider acceptance test is required before announcing this capability.
 
 The pilot stores binary files as **base64 text in 192 KiB chunks** in D1. Base64 is not encryption and does not bypass storage accounting. Access is protected by session and authorization checks; the database is not a public asset folder.
 
@@ -97,7 +99,7 @@ The pilot stores binary files as **base64 text in 192 KiB chunks** in D1. Base64
 - Daily scheduled cleanup removes expired sessions/tokens/rate counters and unattached uploads older than one day.
 - Account deletion cascades through metadata, chunks and social records.
 
-Cloudflare quotas still apply. These caps keep a small pilot bounded; they do not make a large video network free. Long-form HD uploads, transcoding, thumbnails, adaptive streaming, resumable uploads and a video CDN are future infrastructure work. Add R2 or a purpose-built video service when required; changing encodings or splitting files does not remove provider quotas. Never enable a paid plan without the owner's explicit decision.
+Cloudflare quotas still apply. These default D1 caps keep a small pilot bounded. B2 multipart storage adds larger resumable uploads within its own finite free budget. Transcoding, thumbnails and adaptive streaming remain future infrastructure work. A larger video network requires a funded hosting plan; changing encodings or splitting files does not remove provider quotas. Never enable a paid plan without the owner's explicit decision.
 
 ## 6. Recovery and verification email
 
@@ -132,6 +134,4 @@ Review the diff before merging. Keep `.gitignore`; never upload `.env`, `.dev.va
 
 `npm test` covers authentication, role escalation attempts, cross-origin rejection, pending/private media access, follow approval, blocks, DM isolation, focus enforcement, byte ranges, deletion, input validation, and unavailable email behavior. Browser QA exercises signup, upload, comments, focus reload and mobile/demo navigation.
 
-This is a functioning early-access model, not a finished Instagram/YouTube-scale service. Before wider public launch: connect email recovery, assign the administrator, review applicable legal/privacy requirements, add robust moderation staffing and appeals, abuse/fraud tooling, stronger authentication/MFA, monitoring and incident response, media processing/scanning, pagination and index tuning at scale, and production load tests. The minimum age is 13 and currently relies on user attestation. Youth-specific safety and privacy work remains necessary before general release. Security controls are tested but have not had an independent audit.
-
-See `docs/ARCHITECTURE.md`, `docs/SECURITY.md`, and `docs/ROADMAP.md`.
+This is a functioning early-access model, not a finished Instagram/YouTube-scale service. Before wider public launch: connect email recovery, assign the administrator, review applicable legal/privacy requirements, add robust moderation staffing and appeals, abuse/fraud tooling, stronger authentication/MFA, monitoring and incident response, media processing/scanning, pagination and ind
