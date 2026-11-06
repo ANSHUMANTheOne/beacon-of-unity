@@ -10,7 +10,7 @@
 <meta property="og:title" content="OmniScope | SPHEREx Sky Explorer" />
 <meta property="og:description" content="Compare real NASA/IPAC infrared sky images and explore the changing sky." />
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
 
   :root {
     --void: #05070d;
@@ -23,8 +23,8 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--void); color: var(--text);
-    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; overflow: hidden; }
-  .mono { font-family: 'SF Mono', 'JetBrains Mono', ui-monospace, monospace; }
+    font-family: 'Public Sans', Arial, sans-serif; overflow: hidden; }
+  .mono { font-family: 'Public Sans', Arial, sans-serif; font-variant-numeric: tabular-nums; }
   canvas { display: block; }
 
   #app { position: relative; width: 100vw; height: 100vh; }
@@ -176,7 +176,7 @@
   #eyeLog .line.reply { color: #9fb0c3; white-space: pre-line; }
   #eyeConsole .input-row { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); padding: 10px 16px; }
   #eyeConsole .input-row span { color: var(--cyan); font-size: 13px; }
-  #eyeInput { flex: 1; background: none; border: 0; outline: none; padding: 0; margin: 0; -webkit-user-select: text; user-select: text; caret-color: var(--cyan); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: #f1f5f9; }
+  #eyeInput { flex: 1; background: none; border: 0; outline: none; padding: 0; margin: 0; -webkit-user-select: text; user-select: text; caret-color: var(--cyan); font-family: 'Public Sans', Arial, sans-serif; font-size: 13px; color: #f1f5f9; }
   #eyeConsole .hint { padding: 0 16px 12px; font-size: 10.5px; color: #536176; }
 
   /* Launch event HUD */
@@ -2737,7 +2737,7 @@ function focusOn(id) { state.followId = id; zoomAutoFocusId = id; returnToOrigin
 function releaseFocus() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = true; }
 function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; missionDistanceTarget = 4.2; missionZoomActive = false; camGoal = null; }
 function resetMissionZoom(distance, pose) {
-  missionFovTarget = 45; missionDistanceTarget = distance; missionZoomActive = false;
+  missionFovTarget = pose?.fov ?? 45; missionDistanceTarget = distance; missionZoomActive = false;
   if (pose) { missionCloseDirection.copy(pose.position).sub(pose.target).normalize(); missionCloseUp.copy(pose.up); }
 }
 
