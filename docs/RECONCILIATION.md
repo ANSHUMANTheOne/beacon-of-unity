@@ -1,14 +1,13 @@
-# Concurrent-work reconciliation review
+# Approved concurrent-work integration
 
-No merge/rebase is performed. The original instruction prohibits automatically merging existing branches; approval is pending for reconciliation on the review branch only. Main, live traffic and separate OmniScope/social Workers would remain untouched.
+The user approved reconciliation on the review branch on 6 November 2026 and selected public/demo testing without live writes. Main, production and separate OmniScope/social deployments are unchanged by this work.
 
-The Git merge-tree analysis identifies four explicit conflicts: `.gitignore`, both dashboards (at their reorganized source locations) and `wrangler.jsonc`. The conflict-free portion also brings substantial redesigned HTML, new source/assets, package/build files and updated OmniScope files; it needs semantic review, not just conflict-marker removal.
+Four conflicts were resolved: `.gitignore` combines both policies; both dashboards retain the newer main files (which already fix the demo string syntax); Wrangler keeps main?s account/domain identity, compatibility date, disabled workers.dev/version URLs and observability, while publishing generated `dist/` through the validation hook. No runtime routes, bindings, credentials or DNS values were invented.
 
-Proposed implementation after approval:
+The newer Beacon design source, package/lockfile, Vite configuration, tests and all ten new public assets are retained. A fresh isolated build reproduces all five compiled bundles byte-for-byte. Every main file is accounted for in `audit/integrated-main-coverage.json`; the deliberate differences are the two CozyStudio repairs, combined ignores, artifact-serving local preview server and publishing configuration.
 
-1. Preserve a reference to the current review branch and fetched main before integration. Preserve the newer Beacon design and source as well as every existing public route/media byte. Do not modify concurrent OmniScope/social changes.
-2. Resolve both dashboard conflicts by keeping the newer application changes and retaining the minimal string-syntax repair wherever still applicable. Combine ignore policies without exposing environment/generated files. Reconcile Wrangler around the generated public artifact and validation hook while preserving existing identity/domain/runtime requirements; do not silently change production or preview settings.
-3. Audit new design dependencies and explicitly map every required new source, asset and generated bundle into the original public paths. Review its Vite/library build against the publisher rather than assuming root assets can be deployed unchanged. Retain both original-snapshot and newer-main evidence so baseline checks cannot erase redesign changes.
-4. Repeat syntax, publisher, Worker, desktop/mobile UI, media integrity and provider route acceptance on the integrated review branch. An accessible non-production URL and approved GitHub Pages publishing transition remain required before merge or production promotion.
+The unchanged account flow remains `/login.html` ? `/dashboard.html`; anonymous account access and logout return to `/login.html`. The homepage embeds the existing `/dashboard_updated.html?demo=1`. Twenty-two isolated login/logout/verification-state checks pass without real Firebase use. Sixteen desktop/mobile interaction flows (128 assertions), the 52-visit page sweep, 55 inline script checks, 9 publisher tests, 62 Worker assertions and CozyStudio tests pass. No source was altered to accommodate obsolete test selectors.
 
-This plan is not a guarantee that the resulting merge will pass. Keep the PR draft until the integrated result has been reviewed and verified.
+The fresh Wrangler dry-run passes after installing the exact temporary QA tool with lifecycle scripts disabled and setting an explicit D: Node/Python PATH. Earlier Windows shim/cache failures are retained as historical findings, not current failures. Logs and generated QA files are directed to D:.
+
+Provider acceptance remains a release requirement. Disabled version URLs explain why an upload can succeed without a working preview; no preview setting was changed. Cloudflare browser sign-in has been requested for inspection. The GitHub Pages generated-artifact transition still needs approval before merging the organized source into main. Keep this PR draft until an accessible provider preview passes and cutover is approved. Never force-push or overwrite concurrent work.

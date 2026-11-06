@@ -44,14 +44,14 @@ function wentAway(reason) {
   if (!away) {
     away = true;
     switches++;
-    lastEvent = reason + " — " + new Date().toLocaleTimeString();
+    lastEvent = reason + " - " + new Date().toLocaleTimeString();
     update();
   }
 }
 
 function cameBack(reason) {
   away = false;
-  lastEvent = reason + " — " + new Date().toLocaleTimeString();
+  lastEvent = reason + " - " + new Date().toLocaleTimeString();
   update();
 }
 

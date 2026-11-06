@@ -6,12 +6,12 @@
 <title>Beacon of Unity | UAE's Trusted Community Hub</title>
 <meta name="description" content="Find reliable news, community help requests, volunteer opportunities, and lost & found all in one place. Beacon of Unity is a trust-first platform connecting UAE neighbours through shared support and commitment to one another.">
 <meta property="og:title" content="Beacon of Unity | Reliable News, Help Requests, Volunteer Opportunities & Lost & Found">
-<meta property="og:description" content="A trust-first platform for reliable news, community help requests, volunteer opportunities, and lost & found — connecting UAE neighbours through shared support.">
+<meta property="og:description" content="A trust-first platform for reliable news, community help requests, volunteer opportunities, and lost & found - connecting UAE neighbours through shared support.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://beaconofunity.com">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Beacon of Unity | Reliable News, Help Requests, Volunteer Opportunities & Lost & Found">
-<meta name="twitter:description" content="A trust-first platform for reliable news, community help requests, volunteer opportunities, and lost & found — connecting UAE neighbours through shared support.">
+<meta name="twitter:description" content="A trust-first platform for reliable news, community help requests, volunteer opportunities, and lost & found - connecting UAE neighbours through shared support.">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
@@ -20,7 +20,7 @@
   "name": "Beacon of Unity",
   "url": "https://beaconofunity.com",
   "logo": "https://beaconofunity.com/logo.png",
-  "description": "A UAE-based community platform for help requests, lost & found, volunteer opportunities, and reliable local news — connecting Emirates ID-verified residents through proximity-based community support.",
+  "description": "A UAE-based community platform for help requests, lost & found, volunteer opportunities, and reliable local news - connecting Emirates ID-verified residents through proximity-based community support.",
   "sameAs": [
     "https://www.youtube.com/@BeaconOfUnityHQ",
     "https://www.instagram.com/beaconofunityhq/",
@@ -88,7 +88,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--body-bg);color:var(--text
 @media (max-width:768px){body{cursor:auto}}
 
 /* ── CURSOR ──
-   Pure CSS now, not an <img src="beacon-logo.png"> — that depended on the
+   Pure CSS now, not an <img src="beacon-logo.png"> - that depended on the
    logo file actually sitting next to this HTML file at runtime, which
    silently broke (blank/missing cursor) anywhere that path wasn't
    satisfied. A gradient dot + soft glow + rotating dashed halo has zero
@@ -184,12 +184,12 @@ body.press #cd{width:10px;height:10px}
 /* ── SCROLL STAGE ──
    Extra scroll distance (beyond the original 200vh) is what drives the
    neighborhood story before the original text/CTA phase takes over.
-   Kept deliberately modest for now — segment 1 is about reliability,
+   Kept deliberately modest for now - segment 1 is about reliability,
    not scale. We can lengthen this once the base motion is confirmed. */
 /* ── SCROLL-LOCK HERO STAGE ──
    The hero is genuinely locked to the viewport (position:fixed) while its
    internal story plays out, driven by intercepted wheel/touch/keyboard
-   input rather than document scroll distance — real scroll-hijacking,
+   input rather than document scroll distance - real scroll-hijacking,
    the same technique the Lando Norris reference site uses (confirmed via
    its "tap to lock / back to scroll" affordance). Once the story
    completes it releases into normal page flow. */
@@ -238,7 +238,7 @@ html.hero-lock,body.hero-lock{overflow:hidden;height:100vh;overscroll-behavior:n
 .h3d-cap-txt{font-size:1.05rem;font-weight:600;color:var(--eyebrow-text);white-space:nowrap}
 @media(max-width:640px){.h3d-cap-txt{white-space:normal;font-size:.9rem}.h3d-cap{max-width:82vw}}
 
-/* Animated mini-scenes — sits just above the caption pill, shows the
+/* Animated mini-scenes - sits just above the caption pill, shows the
    actual action (key handoff, call being accepted, trash going in the
    bag) rather than leaving it to the 3D scene alone. */
 #hero3d-minis{position:absolute;left:0;right:0;bottom:calc(14% + 112px);display:flex;justify-content:center;pointer-events:none;z-index:2}
@@ -593,7 +593,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
   .npill { display: none; }
   .nsign { padding: 9px 18px; font-size: .78rem; }
 
-  /* Same lock mechanism on mobile — touch handles the hijack (see JS) */
+  /* Same lock mechanism on mobile - touch handles the hijack (see JS) */
   #p1 { padding: 0 20px; }
   .hh1 { font-size: clamp(2.2rem, 9vw, 3.5rem); letter-spacing: -1.5px; }
   .hsub { font-size: .93rem; padding: 0 4px; }
@@ -653,8 +653,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 }
 
 /* ── TABLET (769px–1024px) ──
-   Previously there was NO dedicated breakpoint in this range at all —
-   anything above 768px fell straight through to the full desktop layout:
+   Previously there was NO dedicated breakpoint in this range at all - anything above 768px fell straight through to the full desktop layout:
    .fgrid's 3 columns, .srow's 4 columns, and .vlayout's 2 columns with an
    80px gap all stayed exactly as wide as on a 1440px desktop, just
    squeezed into a ~768–1024px tablet viewport (e.g. iPad portrait/
@@ -673,7 +672,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
 }
 
 /* Respect reduced motion: the JS lock-mechanism checks this and, when set,
-   skips locking/hijacking entirely — it renders the neighborhood in its
+   skips locking/hijacking entirely - it renders the neighborhood in its
    final "connected" state immediately and lets the page scroll normally. */
 @media (prefers-reduced-motion: reduce) {
   .orb, .pt, .bubble, .sb1, .sb2, .sb3, #bav-chat-hint, #cr, #cclick.go { animation: none !important; }
@@ -788,13 +787,13 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <div id="sim-topbar">
       <div class="sim-label">
         <span class="sim-dot"></span>
-        <span class="sim-full">Simulation Mode — this is a live interactive demo, not your real account</span>
+        <span class="sim-full">Simulation Mode - this is a live interactive demo, not your real account</span>
         <span class="sim-short">Simulation Mode</span>
       </div>
       <button id="sim-exit-btn" onclick="closeSimDemo()">Exit Demo ✕</button>
     </div>
     <div id="sim-body">
-      <iframe id="sim-iframe" src="" title="Beacon of Unity — Interactive Demo" loading="lazy"></iframe>
+      <iframe id="sim-iframe" src="" title="Beacon of Unity - Interactive Demo" loading="lazy"></iframe>
     </div>
   </div>
 </div>
@@ -878,15 +877,15 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
       <div id="hero3d-scrim"></div>
       <div id="hero3d-story">
         <div class="h3d-cap" data-beat="0"><span class="h3d-cap-ico">🏘️</span><span class="h3d-cap-txt">A quiet neighborhood, mostly strangers</span></div>
-        <div class="h3d-cap" data-beat="1"><span class="h3d-cap-ico">🔍</span><span class="h3d-cap-txt">Someone loses their keys near Mega Mall — a neighbour finds them on Beacon of Unity</span></div>
-        <div class="h3d-cap" data-beat="2"><span class="h3d-cap-ico">🆘</span><span class="h3d-cap-txt">A help request goes out — a verified neighbour answers within minutes</span></div>
+        <div class="h3d-cap" data-beat="1"><span class="h3d-cap-ico">🔍</span><span class="h3d-cap-txt">Someone loses their keys near Mega Mall - a neighbour finds them on Beacon of Unity</span></div>
+        <div class="h3d-cap" data-beat="2"><span class="h3d-cap-ico">🆘</span><span class="h3d-cap-txt">A help request goes out - a verified neighbour answers within minutes</span></div>
         <div class="h3d-cap" data-beat="3"><span class="h3d-cap-ico">🤝</span><span class="h3d-cap-txt">Neighbours gather for a weekend clean-up they found on the platform</span></div>
         <div class="h3d-cap" data-beat="4"><span class="h3d-cap-ico">💫</span><span class="h3d-cap-txt">Every small act draws the street a little closer together</span></div>
       </div>
 
       <!-- Animated mini-scenes: the actual action for each beat (key
            handoff, call being accepted, trash going in the bag), built as
-           reliable 2D HTML/CSS rather than 3D objects — the captions have
+           reliable 2D HTML/CSS rather than 3D objects - the captions have
            rendered correctly in every version so far, this rides on the
            same proven system instead of fighting camera/lighting/occlusion
            issues in the 3D scene. -->
@@ -932,7 +931,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <div id="p1">
       <div class="eyebrow"><div class="ebdot"></div>UAE's Emirates ID-Verified Hub</div>
       <h1 class="hh1">Building Bridges,<br><span class="hl">One Neighbor</span><br>at a Time</h1>
-      <p class="hsub">A trust-first platform for reliable news, community help requests, volunteer opportunities, and lost & found — where every neighbour matters.</p>
+      <p class="hsub">A trust-first platform for reliable news, community help requests, volunteer opportunities, and lost & found - where every neighbour matters.</p>
       <div class="hbtns">
         <button class="btn bw" onclick="window.location.href='login.html'"><span>Join the Movement →</span></button>
         <button class="btn bgw" onclick="document.getElementById('body').scrollIntoView({behavior:'smooth'})"><span>Explore Platform</span></button>
@@ -944,7 +943,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
       <div id="payoff-heading">
         <span class="eyebrow" style="margin-bottom:14px"><div class="ebdot"></div>The Neighbourhood, Connected</span>
         <h2 id="payoff-title">Beacon of Unity</h2>
-        <p id="payoff-sub">Every pillar you're about to see below — built from moments like these.</p>
+        <p id="payoff-sub">Every pillar you're about to see below - built from moments like these.</p>
       </div>
     </div>
 
@@ -971,12 +970,12 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
   <div class="si">
     <div class="rv"><span class="stag">Platform Features</span></div>
     <div class="rv d1"><h2 class="stitle">Four Pillars. One Community.</h2></div>
-    <div class="rv d2"><p class="ssub">Help requests, lost & found, volunteering, and trusted news — all in one verified platform built for UAE residents.</p></div>
+    <div class="rv d2"><p class="ssub">Help requests, lost & found, volunteering, and trusted news - all in one verified platform built for UAE residents.</p></div>
     <div class="fgrid">
-      <div class="fc fc-key rv-l d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🆘</div><div class="ftitle">Community Help Requests</div><p class="fdesc">Post requests by category — groceries, tech, transport, and more. Each card shows exact distance from your location, time remaining, and volunteer count. Every responder is Emirates ID-verified.</p><div class="fmeta">→ Sorted by real-time distance & availability</div></div>
-      <div class="fc fc-key rv-r d2"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🔍</div><div class="ftitle">Lost & Found</div><p class="fdesc">Report and recover lost items with photo uploads, FOUND/LOST status tags, and exact Emirate location. A single "Contact User" button connects owner and finder directly — no middlemen.</p><div class="fmeta">→ Direct contact — no public comments</div></div>
-      <div class="fc fc-key rv-l d3"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🤝</div><div class="ftitle">Volunteer Opportunities</div><p class="fdesc">Browse curated community service events — beach cleanups, food drives, and more — sourced from Volunteers.ae. Includes event dates, locations, and direct registration links.</p><div class="fmeta">→ One-tap registration via Volunteers.ae</div></div>
-      <div class="fc fc-key rv-r d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">📰</div><div class="ftitle">Reliable News</div><p class="fdesc">Trusted stories aggregated from Khaleej Times, Gulf News, Al Jazeera, and BBC. Filter by source or topic — War & Conflict, Tech, Environment. No misinformation, no bots.</p><div class="fmeta">→ Filter by source, topic, or Emirate</div></div>
+      <div class="fc fc-key rv-l d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🆘</div><div class="ftitle">Community Help Requests</div><p class="fdesc">Post requests by category - groceries, tech, transport, and more. Each card shows exact distance from your location, time remaining, and volunteer count. Every responder is Emirates ID-verified.</p><div class="fmeta">→ Sorted by real-time distance & availability</div></div>
+      <div class="fc fc-key rv-r d2"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🔍</div><div class="ftitle">Lost & Found</div><p class="fdesc">Report and recover lost items with photo uploads, FOUND/LOST status tags, and exact Emirate location. A single "Contact User" button connects owner and finder directly - no middlemen.</p><div class="fmeta">→ Direct contact - no public comments</div></div>
+      <div class="fc fc-key rv-l d3"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">🤝</div><div class="ftitle">Volunteer Opportunities</div><p class="fdesc">Browse curated community service events - beach cleanups, food drives, and more - sourced from Volunteers.ae. Includes event dates, locations, and direct registration links.</p><div class="fmeta">→ One-tap registration via Volunteers.ae</div></div>
+      <div class="fc fc-key rv-r d1"><div class="fshine"></div><div class="fc-keytag">Core</div><div class="fico">📰</div><div class="ftitle">Reliable News</div><p class="fdesc">Trusted stories aggregated from Khaleej Times, Gulf News, Al Jazeera, and BBC. Filter by source or topic - War & Conflict, Tech, Environment. No misinformation, no bots.</p><div class="fmeta">→ Filter by source, topic, or Emirate</div></div>
       <div class="fc rv-l d2"><div class="fshine"></div><div class="fico">🏆</div><div class="ftitle">Badges & Rewards</div><p class="fdesc">Earn Unity Points for every helpful act. Unlock 37 achievement badges across Helping and Requests milestones. Redeem points for profile gradient skins and rise on the public leaderboard.</p><div class="fmeta">→ 37 badges across Helping & Requests</div></div>
       <div class="fc rv-r d3"><div class="fshine"></div><div class="fico">💬</div><div class="ftitle">Thank You Wall & Chats</div><p class="fdesc">Post public appreciation notes for neighbours who helped you. Track resolved chats, your average rating, and engage with the community through in-app messaging and notifications.</p><div class="fmeta">→ Public appreciation, private chat</div></div>
     </div>
@@ -988,9 +987,9 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <div class="rv"><span class="stag">How It Works</span></div>
     <div class="rv d1"><h2 class="stitle">Verified & Active in Minutes</h2></div>
     <div class="srow">
-      <div class="step rv-l d1"><div class="stepn">1</div><div class="stept">Create Account</div><p class="stepd">Sign up and enter the identity gate — available in English, Arabic, and Hindi.</p></div>
+      <div class="step rv-l d1"><div class="stepn">1</div><div class="stept">Create Account</div><p class="stepd">Sign up and enter the identity gate - available in English, Arabic, and Hindi.</p></div>
       <div class="step rv-r d2"><div class="stepn">2</div><div class="stept">Verify with Emirates ID</div><p class="stepd">Take a live selfie holding your physical Emirates ID. No digital scans accepted. Verification is permanent.</p></div>
-      <div class="step rv-l d3"><div class="stepn">3</div><div class="stept">Access the Dashboard</div><p class="stepd">Post help requests, browse lost & found, volunteer, and read reliable local news — all proximity-sorted.</p></div>
+      <div class="step rv-l d3"><div class="stepn">3</div><div class="stept">Access the Dashboard</div><p class="stepd">Post help requests, browse lost & found, volunteer, and read reliable local news - all proximity-sorted.</p></div>
       <div class="step rv-r d4"><div class="stepn">4</div><div class="stept">Earn & Rise</div><p class="stepd">Collect Unity Points, unlock badges, customise your profile, and build your community rank.</p></div>
     </div>
   </div>
@@ -1015,20 +1014,20 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
           <div id="tv" class="tcards" style="display:none"></div>
           <div id="tn" class="newscards" style="display:none"></div>
         </div>
-        <p style="font-size:.72rem;color:var(--muted);margin-top:14px;font-style:italic">Sample preview data — labeled for testing</p>
+        <p style="font-size:.72rem;color:var(--muted);margin-top:14px;font-style:italic">Sample preview data - labeled for testing</p>
       </div>
       <div class="rv-r d2">
         <div class="pcard">
           <div class="pch"><span class="pct">Community Feed</span><span class="lpill"><span class="ldot"></span>LIVE</span></div>
           <div class="feed">
-            <div class="fi"><div class="fic fib">🆘</div><div><div class="ft">Help: Groceries needed — Abu Shagara</div><div class="fm">Ahmad K. · Verified ✓ · 3 mins ago</div></div></div>
+            <div class="fi"><div class="fic fib">🆘</div><div><div class="ft">Help: Groceries needed - Abu Shagara</div><div class="fm">Ahmad K. · Verified ✓ · 3 mins ago</div></div></div>
             <div class="fi"><div class="fic fig">🔑</div><div><div class="ft">Found: House keys near Mega Mall</div><div class="fm">Sara M. · Verified ✓ · 11 mins ago</div></div></div>
-            <div class="fi"><div class="fic fia">🤝</div><div><div class="ft">Beach Cleanup — Al Mamzar · This Fri</div><div class="fm">Volunteers.ae · 1 hr ago</div></div></div>
+            <div class="fi"><div class="fic fia">🤝</div><div><div class="ft">Beach Cleanup - Al Mamzar · This Fri</div><div class="fm">Volunteers.ae · 1 hr ago</div></div></div>
           </div>
           <div class="pcstats">
-            <div class="pcs"><div class="pcsn">—</div><div class="pcsl">Active Members</div></div>
-            <div class="pcs"><div class="pcsn">—</div><div class="pcsl">Tasks Done</div></div>
-            <div class="pcs"><div class="pcsn">—</div><div class="pcsl">Verified Users</div></div>
+            <div class="pcs"><div class="pcsn"> - </div><div class="pcsl">Active Members</div></div>
+            <div class="pcs"><div class="pcsn"> - </div><div class="pcsl">Tasks Done</div></div>
+            <div class="pcs"><div class="pcsn"> - </div><div class="pcsl">Verified Users</div></div>
           </div>
         </div>
       </div>
@@ -1046,7 +1045,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
         <div class="vsteps rv-l d3">
           <div class="vs"><div class="vn">1</div><div><div class="vt">Sign In</div><div class="vd">Create your account and enter the identity gate.</div></div></div>
           <div class="vs"><div class="vn">2</div><div><div class="vt">Identity Gate</div><div class="vd">You will be prompted to complete live selfie verification.</div></div></div>
-          <div class="vs"><div class="vn">3</div><div><div class="vt">Live Selfie with Emirates ID</div><div class="vd">Hold your physical Emirates ID next to your face — no digital scans accepted.</div></div></div>
+          <div class="vs"><div class="vn">3</div><div><div class="vt">Live Selfie with Emirates ID</div><div class="vd">Hold your physical Emirates ID next to your face - no digital scans accepted.</div></div></div>
           <div class="vs"><div class="vn">4</div><div><div class="vt">Verified Access</div><div class="vd">Once approved, enjoy full access to all community features.</div></div></div>
         </div>
         <!-- Important honest disclosure: verification here is Beacon of
@@ -1058,7 +1057,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
              makes that explicit rather than letting "Emirates ID" +
              "Verified" sit next to each other and imply government
              backing that doesn't exist. -->
-        <p class="rv-l d3" style="font-size:.72rem;color:var(--muted);margin-top:16px;line-height:1.6">This is Beacon of Unity's own identity-verification process — not an official UAE government service or database integration. "Verified" means a member has shown their physical Emirates ID on a live selfie to us, not that they've been checked against a government system.</p>
+        <p class="rv-l d3" style="font-size:.72rem;color:var(--muted);margin-top:16px;line-height:1.6">This is Beacon of Unity's own identity-verification process - not an official UAE government service or database integration. "Verified" means a member has shown their physical Emirates ID on a live selfie to us, not that they've been checked against a government system.</p>
       </div>
       <div class="rv-r d2">
         <div class="shield">
@@ -1079,7 +1078,7 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
   <div class="si">
     <div class="rv"><span class="stag">Why Beacon of Unity</span></div>
     <div class="rv d1"><h2 class="stitle">Not Another Group Chat</h2></div>
-    <div class="rv d2"><p class="ssub">WhatsApp and Facebook groups are where most UAE community help already happens today — just without any of this.</p></div>
+    <div class="rv d2"><p class="ssub">WhatsApp and Facebook groups are where most UAE community help already happens today - just without any of this.</p></div>
     <div class="cmp-table rv d3">
       <div class="cmp-row cmp-head">
         <div class="cmp-cell cmp-label"></div>
@@ -1116,11 +1115,11 @@ footer{background:var(--footer-bg);padding:36px 48px;display:flex;align-items:ce
     <div class="seo-divider rv d1"></div>
     <p class="seo-intro rv d1">Beacon of Unity is a community platform built exclusively for UAE residents, connecting neighbours through trust, Emirates ID verification, and a shared commitment to helping one another across every emirate.</p>
     <div class="seo-grid">
-      <div class="seo-block rv d1"><h2>Community Help Requests</h2><p>Residents post help requests categorised by type — groceries, tech, transport, and more. Every card shows the requester's distance from you, time remaining, and how many volunteers have responded. All interactions are between Emirates ID-verified members.</p></div>
-      <div class="seo-block rv d2"><h2>Lost & Found Board</h2><p>A dedicated space for reporting and recovering lost items. Posts include photos, FOUND or LOST status tags, and exact Emirate locations like Mega Mall or Abu Shagara. A direct "Contact User" button connects owners and finders — no middlemen, no delays.</p></div>
-      <div class="seo-block rv d1"><h2>Volunteer Opportunities</h2><p>A curated list of community service events sourced from Volunteers.ae — beach cleanups, food drives, tree planting, and tutoring sessions. Each listing shows the event date, location, and a direct registration link so you can act immediately.</p></div>
-      <div class="seo-block rv d2"><h2>Reliable News</h2><p>A news aggregator pulling trusted stories from Khaleej Times, Gulf News, Al Jazeera, and BBC. Filter by source or topic — War & Conflict, Tech, Environment — so you stay informed on what matters most to your community, without misinformation.</p></div>
-      <div class="seo-block rv d1"><h2>Gamification & Rewards</h2><p>Every helpful act earns Unity Points. Unlock 37 achievement badges across Helping and Requests milestones — from "First Step" to "10x Helper." Redeem points for profile gradient skins like Ocean, Mint, and Sunset on the public leaderboard.</p></div>
+      <div class="seo-block rv d1"><h2>Community Help Requests</h2><p>Residents post help requests categorised by type - groceries, tech, transport, and more. Every card shows the requester's distance from you, time remaining, and how many volunteers have responded. All interactions are between Emirates ID-verified members.</p></div>
+      <div class="seo-block rv d2"><h2>Lost & Found Board</h2><p>A dedicated space for reporting and recovering lost items. Posts include photos, FOUND or LOST status tags, and exact Emirate locations like Mega Mall or Abu Shagara. A direct "Contact User" button connects owners and finders - no middlemen, no delays.</p></div>
+      <div class="seo-block rv d1"><h2>Volunteer Opportunities</h2><p>A curated list of community service events sourced from Volunteers.ae - beach cleanups, food drives, tree planting, and tutoring sessions. Each listing shows the event date, location, and a direct registration link so you can act immediately.</p></div>
+      <div class="seo-block rv d2"><h2>Reliable News</h2><p>A news aggregator pulling trusted stories from Khaleej Times, Gulf News, Al Jazeera, and BBC. Filter by source or topic - War & Conflict, Tech, Environment - so you stay informed on what matters most to your community, without misinformation.</p></div>
+      <div class="seo-block rv d1"><h2>Gamification & Rewards</h2><p>Every helpful act earns Unity Points. Unlock 37 achievement badges across Helping and Requests milestones - from "First Step" to "10x Helper." Redeem points for profile gradient skins like Ocean, Mint, and Sunset on the public leaderboard.</p></div>
       <div class="seo-block rv d2"><h2>Profile, Thank You Wall & More</h2><p>Your verified name is permanent. Track your volunteer rank, resolved chats, average rating, and badge count on your profile. Post public appreciation notes on the Thank You Wall. Change your Emirate or update your live GPS location anytime from the dashboard.</p></div>
     </div>
 
@@ -1222,19 +1221,19 @@ function toggleTheme(){
 
 /* ── CURSOR ──
    Uses screen width only (matching the CSS @media(max-width:768px) rule
-   that hides #cd/#cr and restores the native cursor) — NOT touch
+   that hides #cd/#cr and restores the native cursor) - NOT touch
    capability. Many touchscreen laptops/tablets report 'ontouchstart' in
    window as true even when used with a real mouse; gating the custom
    cursor on touch-capability meant those devices got the native cursor
    hidden (cursor:none is unconditional in the base CSS) while the custom
-   cursor's mousemove listener never attached — net result: no visible
+   cursor's mousemove listener never attached - net result: no visible
    cursor at all. Width-based gating keeps this consistent with the CSS. */
 const isNarrowScreen = window.innerWidth <= 768;
 const cd=document.getElementById('cd'),cr=document.getElementById('cr'),cclick=document.getElementById('cclick');
 if(!isNarrowScreen){
   let mx=0,my=0,dx=0,dy=0,rx=0,ry=0;
   // Two-tier lerp: the dot eases at a snappier rate (.55) and the ring
-  // trails looser (.16) behind IT (not the raw mouse position) — this
+  // trails looser (.16) behind IT (not the raw mouse position) - this
   // two-tier chase is what actually reads as "smooth" custom-cursor
   // motion. Previously the dot snapped 1:1 to the mouse with zero
   // easing, which felt jittery next to the ring's own smoothing.
@@ -1249,8 +1248,7 @@ if(!isNarrowScreen){
   function addHov(sel){document.querySelectorAll(sel).forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))})}
   addHov('button,a,.fc,.tcard,.lfc,.fi,.step,.vs,.rpc,#theme-dial');
   // Click feedback: squeeze the dot briefly on press, and pop a small
-  // expanding ripple centred on wherever the click actually landed —
-  // previously nothing about the cursor reacted to clicks at all.
+  // expanding ripple centred on wherever the click actually landed - // previously nothing about the cursor reacted to clicks at all.
   document.addEventListener('mousedown', e=>{
     document.body.classList.add('press');
     if(cclick){
@@ -1266,8 +1264,8 @@ if(!isNarrowScreen){
 
 /* ── SCROLL-LOCK HERO (hijack) ──
    The hero is genuinely locked to the viewport (position:fixed) while its
-   story plays out. Wheel/touch/keyboard input is intercepted — not left
-   to move the real document — and converted into a single internal
+   story plays out. Wheel/touch/keyboard input is intercepted - not left
+   to move the real document - and converted into a single internal
    `progress` value (0..1) that drives EVERYTHING: the headline, the
    neighborhood camera path, window/streetlight lighting, connection
    lines, and the final pull-up/reveal. Only once progress reaches 1 does
@@ -1282,7 +1280,7 @@ function map01(p,a,b){return cl((p-a)/(b-a),0,1)}
 
 function renderTextPhase(p){
   // Headline is visible at the very start, then fades out as the journey
-  // begins and STAYS gone — it does not compete for the same screen space
+  // begins and STAYS gone - it does not compete for the same screen space
   // again. The payoff at the end belongs entirely to #p2 (the revealed
   // panel + its own branding line), so there's never a moment where two
   // full-width centered text blocks are fighting for the same spot.
@@ -1305,7 +1303,7 @@ function renderTextPhase(p){
   // The "minimize" hand-off: right at the very end, the whole hero visibly
   // shrinks and softens (rounded corners) like a window closing, instead
   // of an abrupt cut straight into the Features section. Only the 3D
-  // background/scene fades — the headline and payoff text stay at full
+  // background/scene fades - the headline and payoff text stay at full
   // opacity throughout (they already have their own fade-in timing), so
   // the branding moment never gets dimmed along with the background.
   const minimizeT = ez(map01(p,.96,1));
@@ -1325,7 +1323,7 @@ let heroLocked = !reduceMotion;
 // Two-value system for smoothness: `targetProgress` jumps around with raw
 // input; `heroProgress` (what actually gets rendered) eases toward it every
 // frame via a rAF loop. This is the same "smooth scroll" technique behind
-// libraries like Lenis — it's what turns stepped/jittery input into a
+// libraries like Lenis - it's what turns stepped/jittery input into a
 // fluid, continuous camera move instead of a snap per event.
 let targetProgress = reduceMotion ? 1 : 0;
 let heroProgress = targetProgress;
@@ -1346,12 +1344,12 @@ if(reduceMotion){
   renderHero(0);
 
   // SENS just needs to be generous enough that any real scroll gesture
-  // saturates the RATE cap below — actual pacing is governed entirely by
+  // saturates the RATE cap below - actual pacing is governed entirely by
   // time (MAX_RATE), not by how much raw wheel delta piles up or how often
   // the browser calls requestAnimationFrame. That's the key fix: the old
   // per-frame clamp let the journey finish in well under a second on a
   // fast trackpad flick or a high-refresh display (more frames/sec = more
-  // "budget" spent per second) — too fast to ever perceive the rotation.
+  // "budget" spent per second) - too fast to ever perceive the rotation.
   const SENS = 1/650;
   // Mobile/tablet gets a slower rate cap: the same camera movement covers
   // proportionally more of a narrow portrait frame than a wide desktop
@@ -1367,7 +1365,7 @@ if(reduceMotion){
 
   // Smoothing loop: eases heroProgress toward targetProgress every frame,
   // and rate-limits how fast targetProgress itself can move, by real
-  // elapsed time — so the full journey always takes a deliberate several
+  // elapsed time - so the full journey always takes a deliberate several
   // seconds minimum, consistently, on any device or input speed.
   function tick(now){
     const dt = Math.min(now - lastTickT, 50); // clamp so a backgrounded tab can't "catch up" in one huge jump
@@ -1383,7 +1381,7 @@ if(reduceMotion){
     if(heroLocked || Math.abs(targetProgress-heroProgress) > 0.0005){
       // .1 → .16: closes the gap noticeably faster, especially the last
       // stretch approaching p=1 right where the hero hands off to the
-      // page — that tail-end lag is the most likely source of a "stuck"
+      // page - that tail-end lag is the most likely source of a "stuck"
       // feeling scrolling through the transition, since input there still
       // felt responsive but the visible motion lagged behind it.
       heroProgress += (targetProgress - heroProgress) * 0.16;
@@ -1396,8 +1394,7 @@ if(reduceMotion){
 
   // Read the wheel: deltaY sign tells us direction (down = positive =
   // advance the story, up = negative = play it in reverse). Clamp each
-  // tick's magnitude so a single fast trackpad flick can't skip beats —
-  // the smoothing loop above absorbs the rest into a fluid ease.
+  // tick's magnitude so a single fast trackpad flick can't skip beats - // the smoothing loop above absorbs the rest into a fluid ease.
   window.addEventListener('wheel', function(e){
     if(heroLocked){
       e.preventDefault();
@@ -1433,7 +1430,7 @@ if(reduceMotion){
   // Keyboard: arrow/space/page keys also advance the lock (accessibility).
   // BUG: this previously fired even while typing in a text field (e.g. the
   // Beacon chat input) because it only checked heroLocked, never whether
-  // focus was actually on the page body — so pressing Space to type a
+  // focus was actually on the page body - so pressing Space to type a
   // space character instead scrolled/advanced the hero. Skip entirely
   // when an input/textarea/contenteditable has focus.
   window.addEventListener('keydown', function(e){
@@ -1445,7 +1442,7 @@ if(reduceMotion){
   });
 }
 
-/* Subtle cursor-driven parallax tilt on the whole scene — reads live
+/* Subtle cursor-driven parallax tilt on the whole scene - reads live
    mouse position (not the story's scroll progress) and nudges the scene
    a few degrees/pixels toward the cursor, like the camera is gently
    aware of where you're looking. Desktop only; disabled with reduced
@@ -1490,11 +1487,11 @@ document.querySelectorAll('.rv, .rv-l, .rv-r').forEach(el=>ro.observe(el));
 
 /* ── TABS ── */
 const tasks=[
-  {e:'🆘',n:'Groceries needed — elderly neighbour out of stock',l:'Abu Shagara, Sharjah · 1.0km',b:'bu',bl:'Urgent'},
-  {e:'💻',n:'Laptop won\'t connect to WiFi — need tech help',l:'Al Qasimia, Sharjah · 1.4km',b:'bo',bl:'Open'},
+  {e:'🆘',n:'Groceries needed - elderly neighbour out of stock',l:'Abu Shagara, Sharjah · 1.0km',b:'bu',bl:'Urgent'},
+  {e:'💻',n:'Laptop won\'t connect to WiFi - need tech help',l:'Al Qasimia, Sharjah · 1.4km',b:'bo',bl:'Open'},
   {e:'🚗',n:'Car battery jumpstart needed ASAP',l:'Mega Mall parking, Sharjah · 2.1km',b:'bu',bl:'Urgent'},
   {e:'👴',n:'Elderly neighbour needs pharmacy pickup',l:'Al Nahda, Dubai · 3.2km',b:'bn',bl:'Nearby'},
-  {e:'📦',n:'Help moving furniture — 2 hours max',l:'Muwaileh, Sharjah · 4.0km',b:'bo',bl:'Open'},
+  {e:'📦',n:'Help moving furniture - 2 hours max',l:'Muwaileh, Sharjah · 4.0km',b:'bo',bl:'Open'},
 ];
 const lf=[
   {e:'🔑',n:'House Keys',w:'Mega Mall, Sharjah',s:'stf',sl:'Found'},
@@ -1505,10 +1502,10 @@ const lf=[
   {e:'🎒',n:'Kids Backpack',w:'Abu Shagara, Sharjah',s:'stf',sl:'Found'},
 ];
 const volunteers=[
-  {e:'🏖️',n:'Beach Cleanup — Al Mamzar',d:'This Friday · 7:00 AM',src:'Volunteers.ae',b:'bo',bl:'Register'},
-  {e:'🍱',n:'Food Drive — Sharjah Charity Int\'l',d:'Saturday · 9:00 AM',src:'Volunteers.ae',b:'bn',bl:'Open'},
-  {e:'🌳',n:'Tree Planting — Al Qasimia Park',d:'Sunday · 6:30 AM',src:'Beacon HQ',b:'bo',bl:'Register'},
-  {e:'📚',n:'Free Tutoring — Community Centre',d:'Mon & Wed · 4:00 PM',src:'Beacon HQ',b:'bn',bl:'Open'},
+  {e:'🏖️',n:'Beach Cleanup - Al Mamzar',d:'This Friday · 7:00 AM',src:'Volunteers.ae',b:'bo',bl:'Register'},
+  {e:'🍱',n:'Food Drive - Sharjah Charity Int\'l',d:'Saturday · 9:00 AM',src:'Volunteers.ae',b:'bn',bl:'Open'},
+  {e:'🌳',n:'Tree Planting - Al Qasimia Park',d:'Sunday · 6:30 AM',src:'Beacon HQ',b:'bo',bl:'Register'},
+  {e:'📚',n:'Free Tutoring - Community Centre',d:'Mon & Wed · 4:00 PM',src:'Beacon HQ',b:'bn',bl:'Open'},
 ];
 const newsItems=[
   {src:'Khaleej Times',topic:'UAE',n:'UAE Launches New Community Volunteering Initiative Across All Emirates',t:'15 mins ago'},
@@ -1539,7 +1536,7 @@ window.showTab=(tab,btn)=>{
      #anchor jump has nowhere to actually scroll TO yet, even though the
      click itself registers fine. This is a separate, self-contained
      script (not an edit to the hero-lock script above) so it can't
-     destabilize that fragile mechanic — it only reads the shared
+     destabilize that fragile mechanic - it only reads the shared
      setHeroLock/targetProgress/heroProgress/renderHero bindings, which
      stay accessible here since classic (non-module) inline scripts share
      one top-level lexical scope for let/const/function declarations. -->
@@ -1553,8 +1550,7 @@ window.showTab=(tab,btn)=>{
       if(heroLocked){
         e.preventDefault();
         // Jump straight to the hero's finished state (same as reaching
-        // p=1 by scrolling) rather than skipping the story invisibly —
-        // this mirrors exactly where you'd land if you'd scrolled
+        // p=1 by scrolling) rather than skipping the story invisibly - // this mirrors exactly where you'd land if you'd scrolled
         // through it yourself, just instantly.
         targetProgress = 1;
         heroProgress = 1;
@@ -1570,10 +1566,10 @@ window.showTab=(tab,btn)=>{
 </script>
 
 <!-- ═══════════════════════════════════════════════════════
-     NEIGHBORHOOD SCENE — real WebGL/Three.js. Exposes
+     NEIGHBORHOOD SCENE - real WebGL/Three.js. Exposes
      window.__updateNeighborhood(p), called every frame by the
      scroll-lock system above with the SAME 0..1 progress value that
-     already drives the headline/panel — this script only owns the
+     already drives the headline/panel - this script only owns the
      visual engine, not the timing, so the working lock/pacing system
      is untouched. Buildings are real 3D boxes along a street; the
      camera moves through actual 3D space with a real depth buffer, so
@@ -1602,7 +1598,7 @@ window.showTab=(tab,btn)=>{
 
   function makeBuilding(x, z, w, h, d, colorHex, threshold, side){
     // A small baseline emissive so the building is always distinguishable
-    // from the dark sky/background regardless of lighting angle — without
+    // from the dark sky/background regardless of lighting angle - without
     // it, buildings whose diffuse-lit colour happens to match the ambient
     // background can render almost invisible, leaving only their window
     // accents visible and looking like they're floating in mid-air.
@@ -1619,8 +1615,7 @@ window.showTab=(tab,btn)=>{
     roof.rotation.y = Math.PI/4;
     roof.position.y = h/2 + h*0.11;
     mesh.add(roof);
-    // Window accents on all four faces (not just the street-facing side) —
-    // rows going up the building too, so it reads as genuinely lit all
+    // Window accents on all four faces (not just the street-facing side) - // rows going up the building too, so it reads as genuinely lit all
     // around instead of one bright side and three dark ones. Cheap planes,
     // no grid mesh, so no z-fighting risk.
     mesh.userData.windows = [];
@@ -1658,11 +1653,11 @@ window.showTab=(tab,btn)=>{
   }
 
   // The beat-2 "response" building. Earlier versions tried a hollow-wall
-  // reveal (a fading face + separate interior geometry) — it wasn't
+  // reveal (a fading face + separate interior geometry) - it wasn't
   // reliably readable at the actual camera distance/angle. This is a
   // plain solid building like the others, PLUS a large illustrated
   // "window" icon (see makeIconSprite below) showing a lit window with a
-  // person answering — a technique that's already proven reliable (it's
+  // person answering - a technique that's already proven reliable (it's
   // how the chat-bubble/key icons work), rather than depending on real
   // hollow-geometry occlusion that's hard to get right without live
   // testing.
@@ -1673,7 +1668,7 @@ window.showTab=(tab,btn)=>{
   function makeStreetlight(x, z, threshold){
     const g = new THREE.Group();
     // the arm/shade/bulb must reach OUT OVER THE ROAD, not just always to
-    // +x — poles on the right side of the street (x>0) need the head
+    // +x - poles on the right side of the street (x>0) need the head
     // mirrored to -x so both sides' lamps lean toward the road center,
     // matching how real streetlights are hung. dir flips the offset sign
     // based on which side of the street this pole is on.
@@ -1681,7 +1676,7 @@ window.showTab=(tab,btn)=>{
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.065,2.5,8), new THREE.MeshStandardMaterial({ color:0x0e2c42, roughness:.6, metalness:.3 }));
     pole.position.y = 1.25;
     // a curved arm out to the lamp head, instead of the bulb sitting
-    // directly on top of the pole — reads as an actual streetlight shape
+    // directly on top of the pole - reads as an actual streetlight shape
     const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.025,0.025,0.42,6), new THREE.MeshStandardMaterial({ color:0x0e2c42, roughness:.6 }));
     arm.rotation.z = dir * Math.PI/2.4;
     arm.position.set(dir*0.16, 2.42, 0);
@@ -1710,7 +1705,7 @@ window.showTab=(tab,btn)=>{
     const g = new THREE.Group();
     const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.17,1.1,7), new THREE.MeshStandardMaterial({ color:0x3d2a1a, roughness:.9 }));
     trunk.position.y = 0.55;
-    // two-tone foliage — a darker base cone and a smaller, brighter cone
+    // two-tone foliage - a darker base cone and a smaller, brighter cone
     // nested on top gives real shading/depth instead of one flat colour mass
     const leafBase = new THREE.Mesh(new THREE.ConeGeometry(0.85,1.8,8), new THREE.MeshStandardMaterial({ color:0x155f3f, roughness:.95 }));
     leafBase.position.y = 1.55;
@@ -1724,15 +1719,15 @@ window.showTab=(tab,btn)=>{
     scene.add(g);
   }
 
-  // Stylised neighbours — torso + shoulders + head + arms + legs, so they
+  // Stylised neighbours - torso + shoulders + head + arms + legs, so they
   // actually read as people from a distance instead of geometric blobs.
   // Skin, hair and shirt colours all vary so a crowd doesn't look like
   // identical plastic pawns. `holdingBag` adds a small dark satchel for
   // the volunteer/clean-up beat, so that scene visibly shows people doing
   // something, not just standing around.
-  // Stylised neighbours with real character — a two-tone torso (shirt +
+  // Stylised neighbours with real character - a two-tone torso (shirt +
   // collar trim), a belt accent, small separate feet, and a slightly
-  // larger "chibi" head for charm — deliberately no thin stick-out limb
+  // larger "chibi" head for charm - deliberately no thin stick-out limb
   // geometry (that's specifically what kept reading as broken/clipping at
   // a distance or from certain angles). Skin, shirt, trim and hair all
   // vary per person so a crowd doesn't look like identical pawns.
@@ -1748,11 +1743,11 @@ window.showTab=(tab,btn)=>{
 
     const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.155, 0.2, 0.5, 12), shirtMat);
     torso.position.y = 0.36;
-    // collar trim — a slim ring at the neckline for a bit of colour detail
+    // collar trim - a slim ring at the neckline for a bit of colour detail
     const collar = new THREE.Mesh(new THREE.TorusGeometry(0.155, 0.028, 6, 14), trimMat);
     collar.rotation.x = Math.PI/2;
     collar.position.y = 0.6;
-    // belt — a slim ring at the waist
+    // belt - a slim ring at the waist
     const belt = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 6, 14), trimMat);
     belt.rotation.x = Math.PI/2;
     belt.position.y = 0.24;
@@ -1761,13 +1756,13 @@ window.showTab=(tab,btn)=>{
     shoulders.position.y = 0.6;
     const head = new THREE.Mesh(new THREE.SphereGeometry(0.165, 14, 14), new THREE.MeshStandardMaterial({ color: skin, roughness:.7 }));
     head.position.y = 0.85;
-    // hair — a full small sphere nestled into the top of the head (no
+    // hair - a full small sphere nestled into the top of the head (no
     // partial/open geometry, so there's no risk of an odd hollow-looking
     // cut edge from any viewing angle)
     const hair = new THREE.Mesh(new THREE.SphereGeometry(0.15, 12, 10), new THREE.MeshStandardMaterial({ color: hairTones[colorIdx % hairTones.length], roughness:.9 }));
     hair.scale.set(1, 0.85, 1);
     hair.position.y = 0.93;
-    // feet — two small separate ellipsoids rather than one leg stump
+    // feet - two small separate ellipsoids rather than one leg stump
     const footMat = new THREE.MeshStandardMaterial({ color: 0x233d52, roughness:.85 });
     const footL = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), footMat);
     footL.scale.set(1, 0.7, 1.35);
@@ -1813,7 +1808,7 @@ window.showTab=(tab,btn)=>{
   }
 
   function makeBeam(fromV, toV, threshold){
-    // A true Line, not a mesh — it has no surface/thickness, so unlike a
+    // A true Line, not a mesh - it has no surface/thickness, so unlike a
     // thin cylinder it can never balloon into a big flat wedge no matter
     // how close the camera gets to it. Given a gentle upward arc so it
     // reads as a deliberate "connection" rather than a flat straight bar.
@@ -1829,7 +1824,7 @@ window.showTab=(tab,btn)=>{
   }
 
   // A small glowing speech-bubble billboard (always faces the camera, so
-  // no orientation issues) — drawn once onto a canvas texture, then reused
+  // no orientation issues) - drawn once onto a canvas texture, then reused
   // as a Sprite. Sized to real scene proportions (roughly the size of a
   // person's head, not a screen-filling billboard) and depth-tested like
   // a normal object, so it sits IN the scene near what it's illustrating
@@ -1895,7 +1890,7 @@ window.showTab=(tab,btn)=>{
     const sun = new THREE.DirectionalLight(0xbfe3ff, 0.7);
     sun.position.set(-20, 30, 10);
     scene.add(sun);
-    // Fill light from the opposite side, plus a hemisphere light — without
+    // Fill light from the opposite side, plus a hemisphere light - without
     // these, only the sun-facing side of each building ever picks up real
     // light and the far side reads as flat/dark, which is what read as
     // "lighting isn't all around the building." This gives even, believable
@@ -1907,7 +1902,7 @@ window.showTab=(tab,btn)=>{
     scene.add(hemi);
     window.__bavSun = sun; window.__bavAmbient = ambient; window.__bavFill = fill;
 
-    // ground + road — the road gets a real dashed-lane-line texture and
+    // ground + road - the road gets a real dashed-lane-line texture and
     // lighter sidewalk strips either side, instead of a single flat colour
     // slab, so it reads as an actual street rather than a coloured plane.
     scene.add(new THREE.Mesh(new THREE.PlaneGeometry(160,160), new THREE.MeshStandardMaterial({ color:0x0b2438, roughness:1 })).rotateX(-Math.PI/2));
@@ -1923,7 +1918,7 @@ window.showTab=(tab,btn)=>{
       for(let i=0;i<160;i++){
         ctx.fillRect(Math.random()*64, Math.random()*512, 1.2, 1.2);
       }
-      // ONE dash per repeat tile (not several) — real lane markings are
+      // ONE dash per repeat tile (not several) - real lane markings are
       // long dashes with long gaps, not a tight dotted line. Repeating this
       // sparingly (see repeat.set below) is what actually reads as a road.
       ctx.fillStyle = 'rgba(253,230,138,0.8)';
@@ -1931,14 +1926,14 @@ window.showTab=(tab,btn)=>{
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
       // dash spacing is ~12.73 world units per repeat tile (140/11 from the
-      // original single-plane road) — keep that same spacing now that the
+      // original single-plane road) - keep that same spacing now that the
       // road is split into two shorter segments around the plaza, instead
       // of hardcoding 11 dashes onto whatever length is passed in (which
       // would bunch or stretch the dashes differently on each segment).
       const len = lengthUnits || 140;
       tex.repeat.set(1, Math.round(len/12.73));
       // the road is viewed at a low, receding angle for most of the camera
-      // path — at that grazing angle, mipmap minification along the
+      // path - at that grazing angle, mipmap minification along the
       // receding axis blurs the dashes into a hazy smear without
       // anisotropic filtering. Max out anisotropy (renderer is already
       // initialized above this call) so the dashes stay crisp into the
@@ -1995,7 +1990,7 @@ window.showTab=(tab,btn)=>{
     });
     // The beat-2 "response" building: its street-facing wall fades away as
     // the camera arrives, revealing a small lit interior with a person
-    // inside and a warm lamp — the actual "camera goes through the window"
+    // inside and a warm lamp - the actual "camera goes through the window"
     // moment, not just an exterior figure standing on the street.
     makeInteriorBuilding(6.5, -23, 3.4, 5.0, 3.2, colors[3], .42, 1);
     [-9,-19,-29,-39,-49].forEach((z,i)=>{
@@ -2011,7 +2006,7 @@ window.showTab=(tab,btn)=>{
       makeTree(i%2===0?4.5:-4.5, treeZ);
     });
 
-    // park patch near beat 3 — a real textured lawn with a gravel path
+    // park patch near beat 3 - a real textured lawn with a gravel path
     // crossing it, plus a bench, instead of one flat green disc (which
     // read as a plain shape with no detail).
     function makeParkTexture(){
@@ -2020,7 +2015,7 @@ window.showTab=(tab,btn)=>{
       const ctx = c.getContext('2d');
       ctx.fillStyle = '#1f7a52';
       ctx.fillRect(0,0,256,256);
-      // mottled grass texture — small light/dark speckles, not a flat fill
+      // mottled grass texture - small light/dark speckles, not a flat fill
       for(let i=0;i<900;i++){
         const shade = Math.random()>0.5 ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
         ctx.fillStyle = shade;
@@ -2050,16 +2045,16 @@ window.showTab=(tab,btn)=>{
     scene.add(benchSeat); scene.add(benchBack);
     makeTree(-2.5,-41); makeTree(2.5,-41); makeTree(0,-36);
 
-    // People — clustered near each story beat so the captions ("someone
+    // People - clustered near each story beat so the captions ("someone
     // loses their keys", "a neighbour answers", "neighbours gather") have
     // actual figures on screen, not just empty buildings. Positioned with
     // real clearance from the camera's own path (see camKeys below) so it
     // never gets close enough to near-clip into one.
-    makePerson(-5.9, -12.4, 0, .16);  // beat 1: lost & found, near the left house — spaced further apart, staggered so they don't all pop in at once
+    makePerson(-5.9, -12.4, 0, .16);  // beat 1: lost & found, near the left house - spaced further apart, staggered so they don't all pop in at once
     makePerson(-4.4, -9.6,  1, .20);
     makePerson(-6.4, -8.6,  2, .24);
     makePerson(-3.7, -13.2, 3, .28);
-    // "found the keys" moment — a small key icon hovering right above the
+    // "found the keys" moment - a small key icon hovering right above the
     // person who found them, right on the caption's cue, so the beat
     // actually shows what happened instead of just two people standing near
     // a building with no visible connection to "lost keys."
@@ -2075,12 +2070,12 @@ window.showTab=(tab,btn)=>{
     // The communication moment: a chat icon right above the responder,
     // properly scaled to the scene (roughly head-height) and depth-tested
     // like a normal object, appearing the instant the caption says "a
-    // verified neighbour answers" — reads as something happening at that
+    // verified neighbour answers" - reads as something happening at that
     // person, not a giant detached graphic floating in the sky.
     makeIconSprite(5.2, 1.65, -21.8, .50, 'chat', 0.6);
 
     // beat 3: a real clean-up crew in the park, not just three people
-    // standing around — several carrying bags, spread across the green
+    // standing around - several carrying bags, spread across the green
     makePerson(-1.8, -40.6, 4, .63, true);
     makePerson(1.6,  -41.4, 0, .66, true);
     makePerson(0.4,  -36.8, 2, .69);
@@ -2089,7 +2084,7 @@ window.showTab=(tab,btn)=>{
     makePerson(0.7,  -42.6, 5, .78, true);
 
     // Finale: as the camera rises for the full-street reveal, a lively
-    // scattering of neighbours appears up and down the whole block — the
+    // scattering of neighbours appears up and down the whole block - the
     // "now visibly connected, everyone's out and happy" payoff, instead of
     // just three lonely dots in an otherwise empty street.
     const finalePositions = [
@@ -2102,7 +2097,7 @@ window.showTab=(tab,btn)=>{
 
     // Connection beams now link the actual people involved at each beat
     // (not an arbitrary line across the whole street), so what they're
-    // "pointing at" is legible — the two neighbours from the lost & found
+    // "pointing at" is legible - the two neighbours from the lost & found
     // moment, the requester and responder, two of the volunteers.
     makeBeam(new THREE.Vector3(-5.6,1.0,-11.4), new THREE.Vector3(-4.9,1.0,-10.2), .26);
     makeBeam(new THREE.Vector3(6.2,1.0,-24.6),  new THREE.Vector3(7.0,1.0,-23.2),  .50);
@@ -2121,19 +2116,19 @@ window.showTab=(tab,btn)=>{
   }
 
   // Camera path: real 3D positions + lookAt targets. Interpolated with
-  // easing between named keyframes — establishing shot, push toward each
+  // easing between named keyframes - establishing shot, push toward each
   // beat's buildings (alternating sides down the street), travel between
   // them, then rise and pull back for the full-street reveal.
   const camKeys = [
     { p:.00, pos:[0,13,10],    look:[0,3,-10]  },
     { p:.08, pos:[0,6,3],      look:[0,2,-8]   },
-    { p:.20, pos:[-2.2,4,-3],  look:[-6,1.8,-9]   },  // approach beat 1 — pulled back to a proper medium shot, not against the wall
+    { p:.20, pos:[-2.2,4,-3],  look:[-6,1.8,-9]   },  // approach beat 1 - pulled back to a proper medium shot, not against the wall
     { p:.30, pos:[-2.8,3.6,-6],look:[-6,1.5,-10.5] },
     { p:.36, pos:[-1,3,-15],   look:[1,1.8,-20] },
-    { p:.48, pos:[2.8,4,-16],  look:[6,1.8,-22]   },  // approach beat 2 — same fix, clear of the building wall
+    { p:.48, pos:[2.8,4,-16],  look:[6,1.8,-22]   },  // approach beat 2 - same fix, clear of the building wall
     { p:.58, pos:[3.2,3.6,-19],look:[6,1.5,-23.5] },
     { p:.64, pos:[0,3.4,-30],  look:[0,1.7,-36] },
-    { p:.75, pos:[0,5,-31],    look:[0,1.8,-38] },     // approach beat 3 — held back from the (now smaller) park so it doesn't fill the frame
+    { p:.75, pos:[0,5,-31],    look:[0,1.8,-38] },     // approach beat 3 - held back from the (now smaller) park so it doesn't fill the frame
     { p:.83, pos:[0,4.4,-33],  look:[0,1.5,-39] },
     { p:.90, pos:[0,14,-34],   look:[0,2,-42]  },
     { p:.96, pos:[0,30,-24],   look:[0,0,-24]  },
@@ -2174,7 +2169,7 @@ window.showTab=(tab,btn)=>{
     buildings.forEach(b=>{
       const lit = Math.max(0, Math.min(1, (p - b.userData.threshold)/0.16));
       // Always keep a baseline self-glow tinted to the building's own
-      // colour, scaled up as it "warms up" — never let it drop to fully
+      // colour, scaled up as it "warms up" - never let it drop to fully
       // black/emissive-off, which is what made buildings blend invisibly
       // into the dark background (only their window planes stayed visible,
       // looking like they were floating in mid-air with no building behind
@@ -2218,7 +2213,7 @@ window.showTab=(tab,btn)=>{
     }
 
     // Chat bubble: fades in right on cue, holds visible for a stretch,
-    // then fades back out as the camera moves on — with a gentle float
+    // then fades back out as the camera moves on - with a gentle float
     // and pulse so it reads as an active, live moment.
     const tNow = performance.now() * 0.001;
     bubbles.forEach(bub=>{
@@ -2231,7 +2226,7 @@ window.showTab=(tab,btn)=>{
     });
 
     // People scale in with a little bounce once their beat is reached, then
-    // gently bob in place — so they read as present and alive, not static
+    // gently bob in place - so they read as present and alive, not static
     // props, when the camera arrives at each interaction.
     const t = performance.now() * 0.001;
     people.forEach(person=>{
@@ -2286,7 +2281,7 @@ window.showTab=(tab,btn)=>{
 
 
 <!-- ═══════════════════════════════════════════════════════
-     BEACON MASCOT  —  paste this entire block before </body>
+     BEACON MASCOT - paste this entire block before </body>
      ═══════════════════════════════════════════════════════ -->
 
 <style id="bav-css">
@@ -2600,7 +2595,7 @@ window.showTab=(tab,btn)=>{
 #bav-chat-badge.hide{ display:none; }
 /* The old discoverability story was a hover-only title tooltip (invisible
    on mobile) plus a bubble that showed once for 3.6s and was gone for
-   good — nothing told a first-time visitor the mascot opens a chat at
+   good - nothing told a first-time visitor the mascot opens a chat at
    all. This is a persistent, actually clickable label (not just a
    decorative badge) that stays up until the chat's been opened once. */
 #bav-chat-hint{
@@ -2678,11 +2673,11 @@ window.showTab=(tab,btn)=>{
 <div id="bav-root">
   <div id="bav-wrap" title="Drag me! Double-click (or double-tap) to chat 💬">
 
-    <!-- Persistent chat affordance — a small pulsing badge on the mascot
+    <!-- Persistent chat affordance - a small pulsing badge on the mascot
          itself, so the chat feature is discoverable at a glance, not just
          via a one-time tooltip that could be missed. -->
     <div id="bav-chat-badge" aria-hidden="true">💬</div>
-    <!-- Explicit, clickable label — the badge alone doesn't say what it
+    <!-- Explicit, clickable label - the badge alone doesn't say what it
          does, and double-click/double-tap has no visual affordance at
          all, so first-time visitors (especially on mobile) had no way to
          discover the chat existed. This is a real click target, not just
@@ -2816,7 +2811,7 @@ window.showTab=(tab,btn)=>{
   <button id="bav-action-btn" class="mode-delete">🕳️ Delete Beacon</button>
 </div>
 
-<!-- ── Beacon chat panel — opens on double-clicking the mascot ── -->
+<!-- ── Beacon chat panel - opens on double-clicking the mascot ── -->
 <div id="bav-chat" role="dialog" aria-label="Chat with Beacon" aria-hidden="true">
   <div id="bav-chat-head">
     <div id="bav-chat-head-info">
@@ -3227,8 +3222,7 @@ window.showTab=(tab,btn)=>{
   });
 
   wrap.addEventListener('dblclick', () => {
-    // Double-click now opens the chat (physics/drag/throw are untouched —
-    // this only fires on the distinct dblclick event, not during dragging).
+    // Double-click now opens the chat (physics/drag/throw are untouched - // this only fires on the distinct dblclick event, not during dragging).
     if (!dragging) {
       vy = -8 - Math.random() * 2;
       vx = (Math.random() - 0.5) * 5;
@@ -3647,8 +3641,7 @@ window.showTab=(tab,btn)=>{
 </script>
 <!-- ═══════════════════════ END BEACON MASCOT ════════════ -->
 
-<!-- ── BEACON CHAT ── simple, fully client-side FAQ assistant. No backend
-     — keyword-matched canned answers about the platform's real features,
+<!-- ── BEACON CHAT ── simple, fully client-side FAQ assistant. No backend - keyword-matched canned answers about the platform's real features,
      with a sensible fallback that points people to Join/Sign In. Opens via
      window.__bavOpenChat(), called from the mascot's dblclick/double-tap
      handlers above so physics (drag/throw/sit) stay completely separate
@@ -3665,19 +3658,18 @@ window.showTab=(tab,btn)=>{
   const badge   = document.getElementById('bav-chat-badge');
   const hint    = document.getElementById('bav-chat-hint');
   // The hint's text should match whatever gesture the mascot actually
-  // listens for — double-click on desktop (mouse), double-tap on touch —
-  // instead of a generic "tap" that's just wrong on desktop. A local
+  // listens for - double-click on desktop (mouse), double-tap on touch - // instead of a generic "tap" that's just wrong on desktop. A local
   // width check here (rather than reusing isNarrowScreen from the
   // hero-lock script) keeps this script's behavior self-contained.
   if(hint && window.innerWidth <= 768) hint.textContent = 'Double-tap to chat 💬';
   if(!panel) return;
 
   // Both the badge and the hint label sit INSIDE #bav-wrap, which has its
-  // own mousedown/touchstart listeners for dragging the mascot — without
+  // own mousedown/touchstart listeners for dragging the mascot - without
   // stopping propagation, clicking either would also kick off a drag.
   // Chat itself opens on the SAME double-click/double-tap gesture as the
   // mascot body (not a single click) so the "Double-click to chat" /
-  // "Double-tap to chat" label stays literally true — a single-click
+  // "Double-tap to chat" label stays literally true - a single-click
   // shortcut here would silently contradict its own text.
   [badge, hint].forEach(el=>{
     if(!el) return;
@@ -3739,36 +3731,36 @@ window.showTab=(tab,btn)=>{
     // 'found') were checked first, a question like "who is the founder"
     // would incorrectly match Lost & Found instead. First-match-wins, so
     // order here isn't cosmetic.
-    { k:['founder','who built','who made','who created','about beacon','mission','company'], a:"Beacon of Unity was built to give UAE residents a single trusted place for help requests, lost & found, volunteering, and reliable local news — all gated behind real Emirates ID verification. You can read more on the <a href=\"founder.html\">About the Founder</a> page, linked in the footer." },
-    { k:['legit','scam','trustworthy','is this real','is this safe','can i trust'], a:"Every member on Beacon of Unity verifies with a live selfie holding their physical Emirates ID — no digital scans accepted, and it's a one-time, permanent step. There are zero anonymous users on the platform. To be upfront: this is our own verification process, not an official UAE government service or database check — it just means every member has shown a real Emirates ID on camera to us. You can see the full flow in the <a href=\"#trust\">Verification System</a> section, and our <a href=\"privacy.html\">Privacy</a> and <a href=\"terms.html\">Terms</a> pages are linked in the footer if you want the full detail." },
-    { k:['verify','emirates id','verification','id check'], a:"Every member verifies with a live selfie holding their physical Emirates ID — no digital scans accepted. It's a one-time step, then you're in for good. See the <a href=\"#trust\">Verification System</a> section for the full flow." },
+    { k:['founder','who built','who made','who created','about beacon','mission','company'], a:"Beacon of Unity was built to give UAE residents a single trusted place for help requests, lost & found, volunteering, and reliable local news - all gated behind real Emirates ID verification. You can read more on the <a href=\"founder.html\">About the Founder</a> page, linked in the footer." },
+    { k:['legit','scam','trustworthy','is this real','is this safe','can i trust'], a:"Every member on Beacon of Unity verifies with a live selfie holding their physical Emirates ID - no digital scans accepted, and it's a one-time, permanent step. There are zero anonymous users on the platform. To be upfront: this is our own verification process, not an official UAE government service or database check - it just means every member has shown a real Emirates ID on camera to us. You can see the full flow in the <a href=\"#trust\">Verification System</a> section, and our <a href=\"privacy.html\">Privacy</a> and <a href=\"terms.html\">Terms</a> pages are linked in the footer if you want the full detail." },
+    { k:['verify','emirates id','verification','id check'], a:"Every member verifies with a live selfie holding their physical Emirates ID - no digital scans accepted. It's a one-time step, then you're in for good. See the <a href=\"#trust\">Verification System</a> section for the full flow." },
     { k:['help request','need help','ask for help','groceries'], a:"You can post a Help Request by category (groceries, tech, transport, etc). It shows up to nearby verified neighbours, sorted by distance." },
-    { k:['lost','found','keys','wallet','phone'], a:"Head to Lost & Found — report an item with a photo and status tag (LOST/FOUND), and a direct 'Contact User' button connects you straight to the other person." },
-    { k:['volunteer','event','cleanup','clean up'], a:"The Volunteer tab lists curated community events — cleanups, food drives, tutoring — sourced from Volunteers.ae, each with a direct registration link." },
+    { k:['lost','found','keys','wallet','phone'], a:"Head to Lost & Found - report an item with a photo and status tag (LOST/FOUND), and a direct 'Contact User' button connects you straight to the other person." },
+    { k:['volunteer','event','cleanup','clean up'], a:"The Volunteer tab lists curated community events - cleanups, food drives, tutoring - sourced from Volunteers.ae, each with a direct registration link." },
     { k:['news','article','khaleej','gulf news'], a:"Reliable News aggregates trusted stories from Khaleej Times, Gulf News, Al Jazeera and BBC, filterable by source or topic." },
     { k:['badge','points','unity points','reward','leaderboard'], a:"Every helpful act earns Unity Points. There are 37 badges to unlock, and points can be redeemed for profile skins on the public leaderboard." },
-    { k:['sign up','join','create account','get started','register'], a:"You can create your account right from the hero — the 'Join the Movement' button takes you straight to sign-up." },
+    { k:['sign up','join','create account','get started','register'], a:"You can create your account right from the hero - the 'Join the Movement' button takes you straight to sign-up." },
     { k:['sign in','log in','login'], a:"Use 'Sign In' in the top-right of the navigation bar." },
-    { k:['demo','try it','preview'], a:"There's a live interactive demo — look for the 'Try a Demo' button near the top of the page." },
+    { k:['demo','try it','preview'], a:"There's a live interactive demo - look for the 'Try a Demo' button near the top of the page." },
     { k:['language','arabic','hindi'], a:"Beacon of Unity is available in English, Arabic, and Hindi." },
     { k:['contact','support','email'], a:"You'll find a Contact link in the footer at the very bottom of the page." },
     { k:['profile','rank','my account'], a:"Your profile keeps your verified name (permanent once set), volunteer rank, resolved chats, average rating, and badge count all in one place. You can also update your Emirate or live GPS location from there." },
-    { k:['gps','location','emirate ','which emirate','change my emirate'], a:"You can update your live GPS location or change your Emirate anytime from your profile/dashboard — it's what keeps help requests and lost & found sorted by real proximity to you." },
-    { k:['thank you wall','appreciation'], a:"The Thank You Wall lets you post public appreciation notes for neighbours who helped you — it sits alongside your resolved chats and rating on your profile." },
+    { k:['gps','location','emirate ','which emirate','change my emirate'], a:"You can update your live GPS location or change your Emirate anytime from your profile/dashboard - it's what keeps help requests and lost & found sorted by real proximity to you." },
+    { k:['thank you wall','appreciation'], a:"The Thank You Wall lets you post public appreciation notes for neighbours who helped you - it sits alongside your resolved chats and rating on your profile." },
     { k:['report a user','report someone','block','harassment','unsafe'], a:"Every member is Emirates-ID-verified with no anonymous accounts, which is the platform's main safety layer. For anything specific about reporting or blocking, the <a href=\"contact.html\">Contact</a> page in the footer is the right place to reach out." },
     { k:['privacy','my data','data safe','gdpr'], a:"For exactly what's collected and how it's handled, see the <a href=\"privacy.html\">Privacy</a> page linked in the footer." },
     { k:['terms','terms of service','terms and conditions'], a:"You'll find the full <a href=\"terms.html\">Terms</a> in the footer." },
     { k:['credits','attribution'], a:"Credits are listed on the <a href=\"credits.html\">Credits</a> page, linked in the footer." },
-    { k:['cost','price','free','subscription','paywall'], a:"There's no pricing or subscription mentioned anywhere on the platform — every feature shown (help requests, lost & found, volunteering, news, badges) is just part of the verified community, no paywall in sight." },
-    { k:['mobile app','ios app','android app','app store'], a:"Right now Beacon of Unity is a web platform — everything you see here (help requests, lost & found, volunteering, news) runs in the browser, no separate app download needed." },
-    { k:['who are you','what are you','your name'], a:"I'm Beacon — the little guardian who hangs out on this page! Drag me around, throw me, or tap the 'Tap to chat' label any time 😊" }
+    { k:['cost','price','free','subscription','paywall'], a:"There's no pricing or subscription mentioned anywhere on the platform - every feature shown (help requests, lost & found, volunteering, news, badges) is just part of the verified community, no paywall in sight." },
+    { k:['mobile app','ios app','android app','app store'], a:"Right now Beacon of Unity is a web platform - everything you see here (help requests, lost & found, volunteering, news) runs in the browser, no separate app download needed." },
+    { k:['who are you','what are you','your name'], a:"I'm Beacon - the little guardian who hangs out on this page! Drag me around, throw me, or tap the 'Tap to chat' label any time 😊" }
   ];
 
   function botReply(userText){
     const lower = userText.toLowerCase();
     const hit = FAQ.find(f => f.k.some(kw => lower.includes(kw)));
     if(hit) return hit.a;
-    return "I'm not totally sure about that one — but I can tell you about Help Requests, Lost & Found, Volunteering, News, Verification, or how to join. What sounds useful?";
+    return "I'm not totally sure about that one - but I can tell you about Help Requests, Lost & Found, Volunteering, News, Verification, or how to join. What sounds useful?";
   }
 
   function handleSubmit(){
@@ -3782,7 +3774,7 @@ window.showTab=(tab,btn)=>{
   form.addEventListener('submit', e => { e.preventDefault(); handleSubmit(); });
   // Belt-and-suspenders: a lone text input in a form should implicitly
   // submit on Enter natively, but that's a "should" across browsers, not
-  // a guarantee — this makes it explicit instead of relying on it.
+  // a guarantee - this makes it explicit instead of relying on it.
   // preventDefault stops the native implicit-submit from also firing,
   // so this can't double-send a message.
   input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); handleSubmit(); } });
@@ -3812,7 +3804,7 @@ window.showTab=(tab,btn)=>{
   closeBtn.addEventListener('click', closeChat);
 
   // Also let the toggle/popover's mascot icon open chat on a normal click
-  // modifier isn't needed — the dedicated dblclick/double-tap on the
+  // modifier isn't needed - the dedicated dblclick/double-tap on the
   // mascot itself is the documented way in, per the on-load hint bubble.
 })();
 </script>

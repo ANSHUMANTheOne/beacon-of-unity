@@ -21,3 +21,9 @@ All other original HTML, script, media and data paths are listed individually in
 Cloudflare's observed HTML normalization remains provider behavior. Keeping the artifact paths supports it; the complete status/Location/query-string contract must still be checked on the provider preview. GitHub Pages uses a repository subpath, while the custom domain uses the origin root. Their pre-existing base-path assumptions are not rewritten. The primary domain is not moved between providers.
 
 New tracked files under declared OmniScope/social passthrough patterns are copied to the identical public path. Untracked work is not deployed. Sensitive/generated passthrough names fail the build for review. Other new resources need explicit manifest entries. For normal later edits run `validate.py` to compare source with output; `--migration` additionally verifies the immutable original snapshot and is intended for this migration review.
+
+## Account and demo contract after integration
+
+The current main application files are retained byte-for-byte at their reorganized source paths. `/login.html` redirects an approved account to `/dashboard.html`. Anonymous account-dashboard access and account logout return to `/login.html`; pending/banned states retain their existing login/verification views. `/dashboard_updated.html?demo=1` remains the homepage?s standalone demo, rather than replacing the account dashboard. Its existing demo logout notices and navigation behavior are retained. Twenty-two isolated fixture-based checks verify these paths without real sign-in or database access; they do not prove backend authorization.
+
+The original 136 paths plus the logo alias and ten new current-main design assets produce 147 mapped resources. Original snapshot hashes and declared concurrent-main source updates are retained separately; the builder does not publish source folders directly.

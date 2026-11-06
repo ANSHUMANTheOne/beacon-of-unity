@@ -116,12 +116,20 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
  function updateChangePanel(changes){
   if(changes===lastPanelSource&&selectedChange===lastPanelSelection)return;
   lastPanelSource=changes;lastPanelSelection=selectedChange;
-  const picks=$('missionChangePicks'),count=$('missionChangeCount'),detail=$('missionChangeDetail'),note=changePanel.querySelector('small');
+  const picks=$('missionChangePicks'),count=$('missionChangeCount'),detail=$('missionChangeDetail'),note=changePanel.querySelector('small'),scanButton=$('missionScan');
   picks.replaceChildren();
   if(scanActive){changePanel.dataset.state='pending';count.textContent='Analyzing…';detail.textContent='Checking registered pixels at similar measured wavelengths.';note.textContent='Quick-look analysis in progress.';return;}
   const checked=changes?.checked||0,list=changes?.candidates||[];
-  if(!changes||checked===0){changePanel.dataset.state='unavailable';count.textContent='Analysis unavailable';detail.textContent=changes?.reason||'A valid image pair is needed.';note.textContent='No wavelength-matched clean pixels were checked.';return;}
-  if(checked<300){changePanel.dataset.state='inconclusive';count.textContent='Inconclusive';detail.textContent=changes.reason||'Too few clean pixels overlap at similar wavelengths.';note.textContent=`Only ${checked} valid pixel pairs checked; try another band or visit pair.`;return;}
+  scanButton.textContent='↻ Rescan';scanButton.onclick=()=>{if(getComparison().images.length===2)beginScan();drawComparison();};
+  if(!changes){changePanel.dataset.state='unavailable';count.textContent='Choose two visits';detail.textContent='Load two observations of the same sky field to look for changes.';note.textContent='The scan starts after the images load.';return;}
+  if(checked<300){
+   changePanel.dataset.state='inconclusive';count.textContent='Raw difference shown';
+   detail.textContent=checked?`The automatic source scan found only ${checked} comparable wavelength-matched pixels; it needs at least 300.`:'These visits have no clean pixels at similar wavelengths for an automatic source scan.';
+   note.textContent='The orange/blue A − B image is a raw visual comparison, not a confirmed anomaly. Try another band or visit pair for a matched scan.';
+   scanButton.textContent='Change visits';scanButton.onclick=()=>{const visits=document.querySelector('.stage-visit-details');if(visits)visits.open=true;if(innerWidth<=800)$('missionEnlarge').click();visits?.querySelector('select')?.focus({preventScroll:true});};
+   if(displayMode==='side'&&!card.classList.contains('is-collapsed'))queueMicrotask(()=>card.querySelector('[data-mission-mode="difference"]')?.click());
+   return;
+  }
   changePanel.dataset.state=list.length?'candidates':'complete';
   count.textContent=list.length?`${list.length} possible ${list.length===1?'change':'changes'}`:'No compact change detected';
   for(const [index,candidate] of list.entries()){const button=document.createElement('button');button.type='button';button.textContent=String(index+1);button.title=`Candidate ${index+1}: RA ${candidate.sky[0].toFixed(4)}°, Dec ${candidate.sky[1].toFixed(4)}°`;button.classList.toggle('active',index===selectedChange);button.onclick=()=>{selectedChange=index;dirty=true;drawComparison();};picks.appendChild(button);}
@@ -140,7 +148,7 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
   if(lastChangeSource!==data.changes){lastChangeSource=data.changes;selectedChange=0;beginScan();}
   if(!dirty&&lastImages[0]===data.images[0]&&lastImages[1]===data.images[1]&&lastVisit===data.visit&&lastPin===JSON.stringify(data.pin))return;
   dirty=false;lastImages=data.images;lastVisit=data.visit;lastPin=JSON.stringify(data.pin);updateChangePanel(data.changes);
-  const stacked=innerWidth<=800&&displayMode==='side',canvasWidth=stacked?430:900,canvasHeight=stacked?880:410;
+  const compact=innerWidth<=800,stacked=compact&&displayMode==='side',canvasWidth=compact?430:900,canvasHeight=stacked?880:compact?430:410;
   if(cc.width!==canvasWidth||cc.height!==canvasHeight){cc.width=canvasWidth;cc.height=canvasHeight;}
   const w=cc.width,h=cc.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#071017';ctx.fillRect(0,0,w,h);rects=[];
   const box=(x,width)=>{const side=Math.min(width-14,h-12);return {x:x+(width-side)/2,y:(h-side)/2,w:side,h:side}};
@@ -151,6 +159,8 @@ export function installCalmUI({ui,c,grid,setPerspective,getComparison,markSample
   if(!scanActive)for(const [index,candidate] of (data.changes?.candidates||[]).entries())for(const r of rects){const point=imagePoint(r,candidate.x,candidate.y);if(point.x<r.x||point.x>r.x+r.w||point.y<r.y||point.y>r.y+r.h)continue;ctx.beginPath();ctx.arc(point.x,point.y,index===selectedChange?12:9,0,Math.PI*2);ctx.strokeStyle=index===selectedChange?'#efbf81':'#b1d0cc';ctx.lineWidth=index===selectedChange?2.5:1.5;ctx.stroke();ctx.fillStyle='#101e24';ctx.fillRect(point.x+10,point.y-19,17,16);ctx.fillStyle='#f2eee2';ctx.font='bold 12px monospace';ctx.fillText(String(index+1),point.x+14,point.y-7);}
   if(data.pin)for(const r of rects){const point=imagePoint(r,data.pin.x,data.pin.y);if(point.x<r.x||point.x>r.x+r.w||point.y<r.y||point.y>r.y+r.h)continue;ctx.strokeStyle='#e4af80';ctx.lineWidth=2;ctx.beginPath();ctx.arc(point.x,point.y,12,0,Math.PI*2);ctx.stroke();}
   $('missionDateA').textContent='A / '+data.dates[0];$('missionDateB').textContent='B / '+data.dates[1];$('missionMobileDateB').textContent='B / '+data.dates[1];
+  if(compact&&!stacked)$('missionDateA').textContent=`A ${data.dates[0]}  /  B ${data.dates[1]}`;
+  $('missionMobileDateB').hidden=!stacked;
   if($('analysisAcquiredA')){$('analysisAcquiredA').textContent=`A · ${data.observationTimes[0]||data.dates[0]} UTC`;$('analysisAcquiredB').textContent=`B · ${data.observationTimes[1]||data.dates[1]} UTC`;$('analysisSourceA').href=$('sourceA').href;$('analysisSourceB').href=$('sourceB').href;}
   $('missionBaseline').textContent=`Detector ${data.detector} · ${data.baseline} between visits`;
   differenceLegend.hidden=displayMode!=='difference';
