@@ -1,0 +1,11 @@
+{
+  "html_url": "https://anshumantheone.github.io/beacon-of-unity/",
+  "cname": null,
+  "https_enforced": true,
+  "build_type": "legacy",
+  "source": {
+    "branch": "main",
+    "path": "/"
+  },
+  "status": "built"
+}
