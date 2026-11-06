@@ -1,0 +1,98 @@
+[
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 2133,
+    "rule": "google-browser-key"
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 2133,
+    "rule": "credential-assignment"
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 2133,
+    "rule": "google-browser-key"
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 2133,
+    "rule": "credential-assignment"
+  },
+  {
+    "branch": "main",
+    "path": "hellopotato.html",
+    "line": 225,
+    "rule": "google-browser-key"
+  },
+  {
+    "branch": "main",
+    "path": "hellopotato.html",
+    "line": 225,
+    "rule": "credential-assignment"
+  },
+  {
+    "branch": "main",
+    "path": "login.html",
+    "line": 269,
+    "rule": "google-browser-key"
+  },
+  {
+    "branch": "main",
+    "path": "login.html",
+    "line": 269,
+    "rule": "credential-assignment"
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 2133,
+    "rule": "google-browser-key"
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 2133,
+    "rule": "credential-assignment"
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 2133,
+    "rule": "google-browser-key"
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 2133,
+    "rule": "credential-assignment"
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "hellopotato.html",
+    "line": 225,
+    "rule": "google-browser-key"
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "hellopotato.html",
+    "line": 225,
+    "rule": "credential-assignment"
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "login.html",
+    "line": 269,
+    "rule": "google-browser-key"
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "login.html",
+    "line": 269,
+    "rule": "credential-assignment"
+  }
+]

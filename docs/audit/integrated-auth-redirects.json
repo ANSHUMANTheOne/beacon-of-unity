@@ -1,0 +1,642 @@
+{
+  "scope": "Redirect behavior with local Firebase fixtures; no real sign-in, database calls or writes; destination HTML intercepted only after navigation, actual artifact files verified separately.",
+  "flows": 22,
+  "passed": 22,
+  "assertions": 96,
+  "results": [
+    {
+      "case": "login-approved",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "login-pending",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "pending approval remains in existing verification view",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "login-banned",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "banned fixture stays on login",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "login-guest",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "anonymous login stays on login",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "dashboard-guest",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard.html-logoutBtn",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard.html-logoutBtnNav",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard.html-logoutBtnInner",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard_updated.html-logoutBtn",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "standalone demo preserves its disabled logout notice",
+          "passed": true
+        },
+        {
+          "name": "demo stays at its existing route",
+          "passed": true
+        },
+        {
+          "name": "demo does not sign out an account",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": [
+        "Demo mode - logout disabled."
+      ]
+    },
+    {
+      "case": "logout-dashboard_updated.html-logoutBtnNav",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard_updated.html-logoutBtnInner",
+      "mobile": false,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "standalone demo preserves its disabled logout notice",
+          "passed": true
+        },
+        {
+          "name": "demo stays at its existing route",
+          "passed": true
+        },
+        {
+          "name": "demo does not sign out an account",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": [
+        "Demo mode - logout disabled."
+      ]
+    },
+    {
+      "case": "login-approved",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "login-pending",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "pending approval remains in existing verification view",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "login-banned",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "banned fixture stays on login",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "login-guest",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "anonymous login stays on login",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "dashboard-guest",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard.html-logoutBtn",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard.html-logoutBtnNav",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard.html-logoutBtnInner",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard_updated.html-logoutBtn",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "standalone demo preserves its disabled logout notice",
+          "passed": true
+        },
+        {
+          "name": "demo stays at its existing route",
+          "passed": true
+        },
+        {
+          "name": "demo does not sign out an account",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": [
+        "Demo mode - logout disabled."
+      ]
+    },
+    {
+      "case": "logout-dashboard_updated.html-logoutBtnNav",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "existing public redirect target renders",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": []
+    },
+    {
+      "case": "logout-dashboard_updated.html-logoutBtnInner",
+      "mobile": true,
+      "passed": true,
+      "failure": null,
+      "checks": [
+        {
+          "name": "original entry serves HTML",
+          "passed": true
+        },
+        {
+          "name": "standalone demo preserves its disabled logout notice",
+          "passed": true
+        },
+        {
+          "name": "demo stays at its existing route",
+          "passed": true
+        },
+        {
+          "name": "demo does not sign out an account",
+          "passed": true
+        },
+        {
+          "name": "no uncaught JavaScript errors",
+          "passed": true
+        },
+        {
+          "name": "no attempted live writes",
+          "passed": true
+        }
+      ],
+      "page_errors": [],
+      "blocked_requests": [],
+      "dialogs": [
+        "Demo mode - logout disabled."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "scope": "Non-destructive pattern check of tracked source/build/config text candidates after integration; skips files above3MB; no secret values recorded. Browser Firebase configuration and backend rules remain subject to the original security review. Not a comprehensive credential/security audit.",
+  "findings": []
+}
