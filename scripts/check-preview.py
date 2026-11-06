@@ -109,7 +109,14 @@ def verify(base, manifest, report_path, wait_seconds=0):
             if all(row['passed'] for row in ready):
                 break
             if time.monotonic() >= deadline:
-                raise RuntimeError('The uploaded branch preview has not reached the expected source snapshot; inspect its build before retrying')
+                summary = {'base_url': base, 'phase': 'Preview readiness only; full acceptance not run',
+                           'checked': len(ready), 'passed': sum(row['passed'] for row in ready),
+                           'failed': [row for row in ready if not row['passed']],
+                           'blocked': 'Preview unavailable or not serving the expected source snapshot; inspect build and version-URL settings before retrying'}
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                report_path.write_bytes((json.dumps({'summary': summary, 'results': ready}, indent=2) + '\n').encode('utf-8'))
+                print(json.dumps({key: value for key, value in summary.items() if key != 'failed'}, indent=2))
+                return False
             time.sleep(3)
     with ThreadPoolExecutor(max_workers=8) as pool:
         rows = list(pool.map(check, tasks))

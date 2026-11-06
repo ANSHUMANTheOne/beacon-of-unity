@@ -50,7 +50,9 @@ docs/audit/integrated-interactions.json
 docs/audit/integrated-main-coverage.json
 docs/audit/integrated-omniscope-smoke.json
 docs/audit/integrated-pages-summary.json
+docs/audit/integrated-provider-validation.json
 docs/audit/integrated-routes.csv
+docs/audit/integrated-security-check.json
 docs/audit/live-api-validation.json
 docs/audit/live-baseline.json
 docs/audit/live-routes-complete.json
