@@ -165,7 +165,7 @@ def verify(base, manifest, report_path, wait_seconds=0):
         'scope': 'Original paths with declared source updates and preserved current-main design assets, public bytes/MIME, redirects, directory aliases and live video response parity; no authenticated actions.',
     }
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps({'summary': summary, 'results': rows}, indent=2) + '\n')
+    report_path.write_bytes((json.dumps({'summary': summary, 'results': rows}, indent=2) + '\n').encode('utf-8'))
     print(json.dumps(summary, indent=2))
     return not summary['failed']
 
