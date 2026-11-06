@@ -1,0 +1,53 @@
+{
+  "main": "056b25677afd5a5621fb36a6fcc107a53f553889",
+  "visits": 52,
+  "uncaught_errors": [],
+  "navigation_failures": [],
+  "network_warnings": [
+    {
+      "viewport": "desktop",
+      "path": "/gods-eye/redacted.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:59501/src/main.tsx",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "path": "/hellopotato.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:59501/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "path": "/gods-eye/redacted.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:59501/src/main.tsx",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "path": "/hellopotato.html",
+      "errors": [
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:59501/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+          "type": "script"
+        }
+      ]
+    }
+  ],
+  "overflow": []
+}

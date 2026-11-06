@@ -38,6 +38,7 @@
   let mode     = 'idle';   // idle | walking | flying | sitting
   let prevMode = '';
   let dragging = false;
+  let gestureStart=null, gestureMoved=false;
   let dragOX = 0, dragOY = 0;
   let mHist = [];          // mouse history for throw
   let sitEl = null;
@@ -477,8 +478,9 @@
 
   wrap.addEventListener('mousedown', e => {
     if (e.button !== 0) return;
+    if(presence==='tucked')releasePresence();
     e.preventDefault();
-    dragging = true;
+    dragging = true;gestureStart={x:e.clientX,y:e.clientY};gestureMoved=false;
     dragOX = e.clientX - px;
     dragOY = e.clientY - py;
     lastDragX = e.clientX;
@@ -494,6 +496,8 @@
 
   document.addEventListener('mousemove', e => {
     if (!dragging) return;
+    gestureMoved=gestureMoved||Math.hypot(e.clientX-gestureStart.x,e.clientY-gestureStart.y)>7;
+    if(!gestureMoved)return;
     const dx = e.clientX - lastDragX;
     lastDragX = e.clientX;
     dragSwayTarget = Math.max(-38, Math.min(38, -dx * 3.2));
@@ -510,6 +514,7 @@
   document.addEventListener('mouseup', () => {
     if (!dragging) return;
     dragging = false;
+    if(!gestureMoved){vx=0;vy=0;setExpr('happy');window.__bavOpenChat?.();return;}
     dragSwayTarget = 0;
     setExpr('happy');
     const now = performance.now();
@@ -523,30 +528,11 @@
     mode = 'flying'; prevMode = '';
   });
 
-  wrap.addEventListener('dblclick', () => {
-    // Double-click now opens the chat (physics/drag/throw are untouched - // this only fires on the distinct dblclick event, not during dragging).
-    if (!dragging) {
-      vy = -8 - Math.random() * 2;
-      vx = (Math.random() - 0.5) * 5;
-      mode = 'flying'; prevMode = '';
-      squish();
-    }
-    if (window.__bavOpenChat) window.__bavOpenChat();
-  });
-
-  let lastTapT = 0;
   wrap.addEventListener('touchstart', e => {
+    if(presence==='tucked')releasePresence();
     e.preventDefault();
-    const now = performance.now();
-    const isDoubleTap = (now - lastTapT) < 320;
-    lastTapT = now;
-    if (isDoubleTap) {
-      if (window.__bavOpenChat) window.__bavOpenChat();
-      squish();
-      return;
-    }
     const t = e.touches[0];
-    dragging = true;
+    dragging = true;gestureStart={x:t.clientX,y:t.clientY};gestureMoved=false;
     dragOX = t.clientX - px; dragOY = t.clientY - py;
     lastDragX = t.clientX;
     mHist  = [{ x: t.clientX, y: t.clientY, t: performance.now() }];
@@ -563,6 +549,8 @@
     if (!dragging) return;
     e.preventDefault();
     const t = e.touches[0];
+    gestureMoved=gestureMoved||Math.hypot(t.clientX-gestureStart.x,t.clientY-gestureStart.y)>7;
+    if(!gestureMoved)return;
     const dx = t.clientX - lastDragX;
     lastDragX = t.clientX;
     dragSwayTarget = Math.max(-38, Math.min(38, -dx * 3.2));
@@ -578,6 +566,7 @@
   document.addEventListener('touchend', () => {
     if (!dragging) return;
     dragging = false; setExpr('happy');
+    if(!gestureMoved){vx=0;vy=0;window.__bavOpenChat?.();return;}
     dragSwayTarget = 0;
     const now = performance.now();
     const rec = mHist.filter(p => now - p.t < 130);
@@ -589,6 +578,8 @@
     }
     mode = 'flying'; prevMode = '';
   });
+
+  document.addEventListener('touchcancel',()=>{dragging=false;gestureMoved=true;setExpr('happy');});
 
   const isTouchDevice = matchMedia('(hover: none)').matches;
   if (!isTouchDevice) {

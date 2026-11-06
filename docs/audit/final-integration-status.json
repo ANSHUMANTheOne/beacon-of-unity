@@ -12,7 +12,7 @@
   "unchanged_original_binary_content": true,
   "new_design_assets": 10,
   "additional_unchanged_logo_alias": 1,
-  "artifact_resources": 147,
+  "artifact_resources": 148,
   "local_http": {
     "passed": 151,
     "checked": 151
@@ -45,7 +45,7 @@
   ],
   "fresh_wrangler_dry_run": "passed",
   "design_bundles_reproduced": 5,
-  "publisher_tests": 9,
+  "publisher_tests": 10,
   "worker_assertions": 62,
   "animation_combinations": 264,
   "preset_cases": 7,
@@ -96,5 +96,12 @@
     "desktop": "Detector-load busy state exceeded90-second check; retry stopped without result",
     "mobile": "Detector3/6/2 and motion replay passed",
     "source_or_deployment_changed": false
-  }
+  },
+  "current_snapshot_main": "056b25677afd5a5621fb36a6fcc107a53f553889",
+  "current_snapshot_provider": "Pending new uploaded153-check acceptance",
+  "current_snapshot_local_http": {
+    "checked": 152,
+    "passed": 152
+  },
+  "new_document_route": "/EXPERIENCE-REFINEMENT.md"
 }
