@@ -61,11 +61,13 @@ docs/audit/integrated-routes.csv
 docs/audit/integrated-security-check.json
 docs/audit/live-api-validation.json
 docs/audit/live-baseline.json
+docs/audit/live-domain-pre-cutover.json
 docs/audit/live-routes-complete.json
 docs/audit/migration-summary.json
 docs/audit/mobile.json
 docs/audit/page-titles.json
 docs/audit/pages-markdown-route-probes.json
+docs/audit/pages-pre-cutover-routes.json
 docs/audit/pages-settings-pre-cutover.json
 docs/audit/pages-settings.json
 docs/audit/preview-setting-approval.json
@@ -78,6 +80,7 @@ docs/audit/refinement-integrity.json
 docs/audit/refinement-interactions.json
 docs/audit/refinement-main-coverage.json
 docs/audit/refinement-pages-summary.json
+docs/audit/refinement-provider-validation.json
 docs/audit/route-compatibility.csv
 docs/audit/runtime-baseline-summary.json
 docs/audit/runtime-interactions.json
@@ -198,6 +201,7 @@ scripts/check-browser.py
 scripts/check-design-build.py
 scripts/check-inline-syntax.py
 scripts/check-interactions.py
+scripts/check-live-routes.py
 scripts/check-preview.py
 scripts/cloudflare-build.mjs
 scripts/test-cozystudio.mjs

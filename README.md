@@ -23,6 +23,6 @@ Beacon of Unity is a community platform connecting UAE residents through help re
 
 Source folders are separate from public URLs. Publishing reconstructs the original path layout without rewriting application code or media. Keep paths and capitalization in `config/routes.json` stable. See [architecture](docs/ARCHITECTURE.md), [deployment](docs/DEPLOYMENT.md), [projects](docs/PROJECTS.md), and [migration](docs/MIGRATION.md).
 
-This restructuring is prepared for review. **Do not merge until the publishing-source transition and provider previews are approved and validated.** The validation workflow uploads a review artifact and does not deploy it.
+Compatibility checks validate the public artifact before publication. Cloudflare publishes the custom domain; the main-only Pages workflow publishes the repository site. Keep source-to-route mappings current whenever adding pages or assets, and use the recorded rollback procedure for deployment failures.
 
 No repository-wide license was found. Existing third-party license notices are retained; no new license is implied. Changes should be proposed through pull requests with compatibility checks.
