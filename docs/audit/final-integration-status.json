@@ -56,5 +56,23 @@
     "Approved GitHub Pages generated-artifact publishing transition",
     "Production cutover approval"
   ],
-  "real_authentication_backend_and_hardware": "Not tested; user selected public/demo tests without live writes"
+  "real_authentication_backend_and_hardware": "Not tested; user selected public/demo tests without live writes",
+  "tested_source_commit": "0df45cee458734fa12824928cb97f1184cb7af6c",
+  "hosted_validation_workflow": {
+    "status": "success",
+    "run_id": 42155926797,
+    "url": "https://github.com/ANSHUMANTheOne/beacon-of-unity/actions/runs/42155926797"
+  },
+  "cloudflare_version_upload": {
+    "status": "success",
+    "build_id": "fc322341-b4db-4987-8f71-abe34bc50836",
+    "version_id": "7fd58ac6-f06a-44a6-80dd-a1e15d21cf42"
+  },
+  "integrated_provider_acceptance": {
+    "checked": 152,
+    "passed": 1,
+    "failed": 151,
+    "reason": "Version URLs unavailable; only the expected unavailable dotfile comparison passes. No successful page/media availability is claimed."
+  },
+  "pages_configuration_recheck": "Automatic approval review blocked access using an existing Git credential; credential not retrieved; explicit permission pending. Last confirmed source is legacy main/root."
 }
