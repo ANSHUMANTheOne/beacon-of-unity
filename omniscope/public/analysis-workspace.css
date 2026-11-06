@@ -172,7 +172,7 @@
 }
 
 /* Observatory composition: a fixed instrument rail, an open scene, and one image workspace. */
-.unified-mission .mission-stage{left:20px;top:92px;bottom:auto;width:336px;max-height:calc(100vh - 112px);padding:25px 25px 23px;border:1px solid #e9fdff9e;border-radius:18px;background:radial-gradient(180px 150px at var(--glass-x,16%) var(--glass-y,0%),#e6fbff3f,transparent 85%),linear-gradient(155deg,#b6e0e930,#315c6a45 34%,#10293780 78%);backdrop-filter:blur(18px) saturate(165%) brightness(1.18);-webkit-backdrop-filter:blur(18px) saturate(165%) brightness(1.18);box-shadow:inset 0 1px 0 #ffffffb3,inset 0 0 0 1px #bedee040,0 24px 64px #0009,0 0 28px #9fdce025;overflow-y:auto}
+.unified-mission .mission-stage{left:20px;top:92px;bottom:auto;width:336px;max-height:calc(100vh - 112px);padding:25px 25px 23px;border:1px solid #e9fdffc4;border-radius:18px;background:radial-gradient(220px 180px at var(--glass-x,16%) var(--glass-y,0%),#e6fbff38,transparent 80%),linear-gradient(155deg,#b6e0e921,#315c6a30 34%,#1029375c 78%);backdrop-filter:blur(12px) saturate(175%) brightness(1.22);-webkit-backdrop-filter:blur(12px) saturate(175%) brightness(1.22);box-shadow:inset 0 1px 0 #ffffffd4,inset 1px 0 0 #d4f4f65e,inset -1px 0 0 #e1f9ff35,0 24px 64px #0009,0 0 28px #9fdce020;overflow-y:auto}
 .unified-mission .mission-stage-head h3{font-size:28px;line-height:1.08;margin-top:10px}
 .unified-mission .stage-kicker,.unified-mission .stage-step,.unified-mission .mission-stage .mission-band-top h4{font-size:11px;letter-spacing:.055em}
 .unified-mission .stage-field #stageField{font-size:11px}
@@ -222,7 +222,7 @@
 .observation-beam-halo{stroke-width:12;opacity:.06}
 .observation-beam-particle{fill:#f6d9ad;filter:drop-shadow(0 0 4px #e7ad76)}
 .observation-beam[hidden]{display:none}
-.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:16px;top:88px;bottom:auto;width:248px;max-height:calc(100vh - 104px);padding:22px 18px;border:1px solid #e9fdff9e;border-radius:16px;background:radial-gradient(180px 150px at var(--glass-x,16%) var(--glass-y,0%),#e6fbff3f,transparent 85%),linear-gradient(155deg,#b6e0e930,#315c6a45 34%,#1029378a 78%)}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:16px;top:88px;bottom:auto;width:248px;max-height:calc(100vh - 104px);padding:22px 18px;border:1px solid #e9fdffc4;border-radius:16px;background:radial-gradient(220px 180px at var(--glass-x,16%) var(--glass-y,0%),#e6fbff38,transparent 80%),linear-gradient(155deg,#b6e0e921,#315c6a30 34%,#10293770 78%)}
 .unified-mission:has(.mission-comparison:not(.is-collapsed)) .stage-wave,
 .unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-spectrum-guide{display:none}
 .unified-mission:has(.mission-comparison:not(.is-collapsed)) .stage-range-text{font-size:10px;white-space:nowrap}
