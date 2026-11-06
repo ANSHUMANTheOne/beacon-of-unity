@@ -1,4 +1,10 @@
 import EmailSettings from "./EmailSettings.jsx";
+import {
+  GoogleButton,
+  GoogleEnrollment,
+  GoogleAccount,
+  GoogleSettings,
+} from "./GoogleAuth.jsx";
 import { Interests, CommunityProfile } from "./Community.jsx";
 import { TOPICS } from "./topics.js";
 import React, { useEffect, useState, useRef, Suspense, lazy } from "react";
@@ -107,7 +113,15 @@ function App() {
       </div>
     );
   if (!user)
-    return <Auth tab={tab} setUser={setUser} nav={nav} notify={notify} />;
+    return tab === "google" ? (
+      <GoogleEnrollment
+        UsernameField={UsernameField}
+        setUser={setUser}
+        nav={nav}
+      />
+    ) : (
+      <Auth tab={tab} setUser={setUser} nav={nav} notify={notify} />
+    );
   if (user.lock_until > time)
     return (
       <div className="focus-shield">
@@ -401,7 +415,14 @@ function Auth({ tab, setUser, nav, notify }) {
       ["register", "forgot", "reset", "verify"].includes(tab) ? tab : "login",
     ),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState(""),
+    [error, setError] = useState(() => {
+      const status = new URLSearchParams(location.hash.slice(1)).get("google");
+      return status === "link-required"
+        ? "An account already uses this email. Sign in with your password, then link Google in Settings."
+        : status === "failed"
+          ? "Google sign-in could not be completed. Please try again."
+          : "";
+    }),
     [message, setMessage] = useState("");
   const submit = async (e) => {
     e.preventDefault();
@@ -464,6 +485,12 @@ function Auth({ tab, setUser, nav, notify }) {
               ? "Create your account. Make it yours."
               : "Photos, videos, conversations. All yours to explore."}
           </p>
+          {["login", "register"].includes(mode) && (
+            <>
+              <GoogleButton />
+              <div className="auth-divider">or continue with email</div>
+            </>
+          )}
           <form onSubmit={submit}>
             {mode === "register" && (
               <>
@@ -1846,6 +1873,7 @@ function SettingsPage({ user, setUser, execute, notify, nav }) {
     <>
       <span className="eyebrow">MAKE THIS SPACE YOURS</span>
       <h1>Settings & privacy.</h1>
+      <GoogleAccount execute={execute} notify={notify} />
       <form
         className="settings-card"
         onSubmit={async (e) => {
@@ -2127,6 +2155,7 @@ function Admin({ user, execute, notify }) {
             ))}
           </section>
           <EmailSettings execute={execute} notify={notify} />
+          <GoogleSettings execute={execute} notify={notify} />
           <section className="settings-card">
             <h3>Audit log</h3>
             {data.audit.slice(0, 30).map((a) => (

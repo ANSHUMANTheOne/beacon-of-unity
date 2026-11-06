@@ -13,14 +13,15 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "jose": "^6.2.15",
+    "lucide-react": "^0.468.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "lucide-react": "^0.468.0"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "vite": "^6.0.0",
-    "tailwindcss": "^4.0.0",
     "@tailwindcss/vite": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "vite": "^6.0.0",
     "wrangler": "^4.92.0"
   }
 }

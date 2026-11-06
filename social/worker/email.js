@@ -21,23 +21,23 @@ async function key(env) {
     ["encrypt", "decrypt"],
   );
 }
-export async function seal(env, value) {
+export async function seal(env, value, context = "social-email-v1") {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const encrypted = await crypto.subtle.encrypt(
-    { name: "AES-GCM", iv, additionalData: encoder.encode("social-email-v1") },
+    { name: "AES-GCM", iv, additionalData: encoder.encode(context) },
     await key(env),
     encoder.encode(JSON.stringify(value)),
   );
   return JSON.stringify({ v: 1, iv: b64(iv), data: b64(encrypted) });
 }
-export async function unseal(env, packed) {
+export async function unseal(env, packed, context = "social-email-v1") {
   const d = JSON.parse(packed);
   assert(d.v === 1, 503, "Email settings require migration.");
   const plain = await crypto.subtle.decrypt(
     {
       name: "AES-GCM",
       iv: unb64(d.iv),
-      additionalData: encoder.encode("social-email-v1"),
+      additionalData: encoder.encode(context),
     },
     await key(env),
     unb64(d.data),
