@@ -1,4 +1,12 @@
 import {
+  googleStatus,
+  connectGoogle,
+  startGoogle,
+  googleCallback,
+  pendingGoogle,
+  completeGoogle,
+} from "./google.js";
+import {
   emailConfigured,
   emailStatus,
   connectEmail,
@@ -193,6 +201,43 @@ async function api(request, env) {
   }
   if (path === "/health" && method === "GET")
     return json({ ok: true, uploads: true, email: await emailConfigured(env) });
+  if (path === "/auth/providers" && method === "GET")
+    return json({ google: (await googleStatus(env)).configured });
+  if (path === "/auth/google/start" && method === "POST") {
+    await limit(
+      env,
+      `google:${request.headers.get("CF-Connecting-IP") || "local"}`,
+      15,
+      900000,
+    );
+    const d = await jsonBody(request);
+    assert(
+      d.mode === "signin" || d.mode === "link",
+      400,
+      "Choose sign-in or account linking.",
+    );
+    return startGoogle(
+      request,
+      env,
+      await session(request, env),
+      d.mode === "link",
+    );
+  }
+  if (path === "/auth/google/callback" && method === "GET")
+    return googleCallback(request, env);
+  if (path === "/auth/google/pending" && method === "GET") {
+    const { row } = await pendingGoogle(request, env);
+    return json({ email: row.email, display_name: row.display_name });
+  }
+  if (path === "/auth/google/complete" && method === "POST") {
+    await limit(
+      env,
+      `google-complete:${request.headers.get("CF-Connecting-IP") || "local"}`,
+      10,
+      900000,
+    );
+    return completeGoogle(request, env, await jsonBody(request));
+  }
   if (path === "/auth/username" && method === "GET") {
     await limit(
       env,
@@ -374,6 +419,15 @@ async function api(request, env) {
     return json({ ok: true }, 200, { "Set-Cookie": cookie("", secure, 0) });
   }
   assert(u.lock_until <= now(), 423, "Your focus session is active.");
+  if (path === "/auth/google/status" && method === "GET")
+    return json({
+      configured: (await googleStatus(env)).configured,
+      linked: !!(await one(
+        env,
+        "SELECT 1 FROM google_identities WHERE user_id=?",
+        u.id,
+      )),
+    });
   if (path === "/auth/verification" && method === "POST") {
     await limit(env, `verify:${u.id}`, 3, 3600000);
     await sendEmail(env, u, "verify");
@@ -786,6 +840,22 @@ async function api(request, env) {
     });
   if (path.startsWith("/admin")) {
     assert(u.role === "admin", 403, "Administrator access required.");
+    if (path === "/admin/google" && method === "GET")
+      return json(await googleStatus(env));
+    if (path === "/admin/google" && method === "POST") {
+      await limit(env, `google-settings:${u.id}`, 5, 3600000);
+      const result = await connectGoogle(env, await jsonBody(request));
+      await run(
+        env,
+        "INSERT INTO audit(id,actor,action,target,created_at) VALUES(?,?,?,?,?)",
+        id(),
+        u.id,
+        "google.connected",
+        "google",
+        now(),
+      );
+      return json(result);
+    }
     if (path === "/admin/email" && method === "GET")
       return json(await emailStatus(env));
     if (path === "/admin/email" && method === "POST") {
@@ -948,8 +1018,10 @@ export default {
       );
     }
     const out = new Response(response.body, response);
-    for (const [key, value] of Object.entries(securityHeaders()))
+    for (const [key, value] of Object.entries(securityHeaders())) {
+      if (key === "Referrer-Policy" && out.headers.get(key) === "no-referrer") continue;
       out.headers.set(key, value);
+    }
     if (!out.headers.has("Cache-Control"))
       out.headers.set("Cache-Control", "no-store");
     return out;
@@ -960,6 +1032,10 @@ export default {
       env.DB.prepare("DELETE FROM email_tokens WHERE expires_at<?").bind(now()),
       env.DB.prepare("DELETE FROM rate_limits WHERE expires_at<?").bind(now()),
       env.DB.prepare("DELETE FROM email_usage WHERE expires_at<?").bind(now()),
+      env.DB.prepare("DELETE FROM oauth_states WHERE expires_at<?").bind(now()),
+      env.DB.prepare("DELETE FROM oauth_enrollments WHERE expires_at<?").bind(
+        now(),
+      ),
     ]);
     const orphans = await all(
       env,
