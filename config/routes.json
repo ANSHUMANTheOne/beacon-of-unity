@@ -16,7 +16,7 @@
       "published": "/.assetsignore",
       "source_sha256": "24124b5a9308291e3cb38a31e8c772a3adcff53f83d1751fa3654c3070aab485",
       "source_bytes": 192,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -184,7 +184,7 @@
       "published": "/beacon_tutorial_v2.js",
       "source_sha256": "c389da6a4df60bd100c3f6eacc071138509a5673774fde634131b70f7e606984",
       "source_bytes": 41339,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -201,7 +201,7 @@
       "published": "/blog.html",
       "source_sha256": "34493ce43d7f0beb43a0dd3eaee9a7405fce11a0de9e93ff2e99eb4c49f8a409",
       "source_bytes": 182933,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -218,7 +218,7 @@
       "published": "/carbon.html",
       "source_sha256": "c961caa6d177036ff940a418497da0fa7e73ee816f61f644c27726fab93fd4de",
       "source_bytes": 314017,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -235,7 +235,7 @@
       "published": "/code.html",
       "source_sha256": "5c44d13de5684abc3a2bea9c6f49021fb69d9c2fd888abb9784845e8fedeee13",
       "source_bytes": 73904,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -252,7 +252,7 @@
       "published": "/contact.html",
       "source_sha256": "f32ea4ef1864701cc0505010474f2aa96437fcbffb25b0bf290b00f61ab6e495",
       "source_bytes": 141796,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -269,7 +269,7 @@
       "published": "/credits.html",
       "source_sha256": "32fe94f8f591f660738c23ea2903b7de5ff4c466c84d35076425a4810c54b925",
       "source_bytes": 38265,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -286,7 +286,7 @@
       "published": "/dashboard.html",
       "source_sha256": "9a6995b8c6169e7d9268da600d1bd172075f27cd5b4328be4a099d7f535cb909",
       "source_bytes": 563889,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -303,7 +303,7 @@
       "published": "/dashboard_updated.html",
       "source_sha256": "55a295d58abd48038018729db2d778a17682becdbc8044ffec45d6a2aefdd980",
       "source_bytes": 615953,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -346,7 +346,7 @@
       "published": "/demo.html",
       "source_sha256": "6bb21df047f18ce3a268c0e308e9e0cfdf950a82cf93755a312d0d813884b602",
       "source_bytes": 17631,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -402,7 +402,7 @@
       "published": "/focus.html",
       "source_sha256": "002d2025d214f9f2f6fd1d7f1962ed310c90dcc401c8db9ee270838aea564dc0",
       "source_bytes": 1924,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -419,7 +419,7 @@
       "published": "/founder.html",
       "source_sha256": "280987511f487c52b1ed72ecef46cb540d2c2f829e170757f7714367edbc9354",
       "source_bytes": 281042,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -462,7 +462,7 @@
       "published": "/gods-eye/README.md",
       "source_sha256": "513efe695691b0a2c7804f04e8c25d11513cb533eaa99b584a7296eead44fcc1",
       "source_bytes": 2009,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -479,7 +479,7 @@
       "published": "/gods-eye/index.html",
       "source_sha256": "9137a88a12970142422744568c4ecccaf0611d5cfbb3f28c07a936733af83e35",
       "source_bytes": 161337,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -847,7 +847,7 @@
       "published": "/hellopotato.html",
       "source_sha256": "58e108e8040cb97dee0345e2099875e7fa44eef2806d5c80d4fde57ac9149182",
       "source_bytes": 33925,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -864,7 +864,7 @@
       "published": "/hero-scene.js",
       "source_sha256": "510801f24a3d44af3fb62f4ebdeb74c29a19cd5ca51830d2fdb54cb4cb1c7361",
       "source_bytes": 48055,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -879,9 +879,9 @@
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
       "published": "/index.html",
-      "source_sha256": "09235f5c7c9765a5d96031e5e6a59bd0a406678b2d021b3139ccb6aff6154569",
-      "source_bytes": 36607,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "8580a5d004444570a3a6e575100e50dea9e42ab9796a4f4f422b0d6abb39140b",
+      "source_bytes": 39794,
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -898,7 +898,7 @@
       "published": "/index2.html",
       "source_sha256": "eaeaeb5e508d0eefd2afd3ce4c12f56c54d40483972d889a3ac58bcef5f79c99",
       "source_bytes": 319973,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -954,7 +954,7 @@
       "published": "/login.html",
       "source_sha256": "55d4c9f8d99d5a1ab8f147a904af69dedf35b0ed418f310c4c021c6e93ffd0d4",
       "source_bytes": 149266,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -997,7 +997,7 @@
       "published": "/oldindex.html",
       "source_sha256": "f192dc87cdc5a13d7892b12792d3162485160fd14cc1c77f03dee60b37fbeb06",
       "source_bytes": 252919,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1064,9 +1064,9 @@
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
       "published": "/omniscope/index.html",
-      "source_sha256": "327f19c604d4581ebd920e56236b73a9c467b981bd0f9cbd13f54f0d961a8a2a",
-      "source_bytes": 165393,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "95ea025a43187220d5d3b529bf1f8498a7bae6907666df47c100158b6cf3bc7e",
+      "source_bytes": 165347,
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1081,9 +1081,9 @@
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
       "published": "/omniscope/public/analysis-workspace.css",
-      "source_sha256": "24f7e6e70408cfb7a1b089432f43bf2532899605931c64b371edd037bc41198f",
-      "source_bytes": 27028,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "ccd564ad92c8ca00949cc413a65af44545278df4dbd5bcbe18dfb12a38630881",
+      "source_bytes": 29356,
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1126,7 +1126,7 @@
       "published": "/omniscope/public/calm-ui.js",
       "source_sha256": "fc7f392d74c87259935a13b770ad76ab6aa1e10c812ff8eec44cdddce798153a",
       "source_bytes": 39311,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1518,9 +1518,9 @@
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
       "published": "/omniscope/public/mission-stage.js",
-      "source_sha256": "26fefac0fad3ccc6bc3c889fef13d0b62029e243241f5f13ef1dd474f1fbc019",
-      "source_bytes": 13109,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "d173027c00ff8d8754a990df0ef28dc63e0992c106bb32785fca29b611c44933",
+      "source_bytes": 14294,
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1548,9 +1548,9 @@
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
       "published": "/omniscope/public/observation-overlay.js",
-      "source_sha256": "2ac6403fc31a798b78f2d86403385860f8f0615356a21fa2f0ee2d4e9e251a07",
-      "source_bytes": 11562,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "7e4f509ad214578905784747ce4ae8afa515f91eaef49c1d85f5e8b0ccc1cfb8",
+      "source_bytes": 8034,
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1630,9 +1630,9 @@
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
       "published": "/omniscope/public/survey-system.js",
-      "source_sha256": "928d7d76d18b94de23e1c683296a61687d5b294f92b5db4461e554a904c4996f",
-      "source_bytes": 63154,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "9c30c3aac664e65a1ec754cc2decc8ac11bb2c574833ab2008a62eda0a89b3cb",
+      "source_bytes": 63212,
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1751,9 +1751,9 @@
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
       "published": "/privacy.html",
-      "source_sha256": "5cf7b3a4216f98fe3d371a3abb88793644ed1521a420780714351567b03a6fd1",
-      "source_bytes": 139758,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "38bc77ebd6353ce4c3905360d5647a0abf3c4c43c0d585c8b6a6fcfd4d14dcae",
+      "source_bytes": 139771,
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1807,9 +1807,9 @@
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
       "published": "/terms.html",
-      "source_sha256": "befe2be70a310c0e99c6668a8159e1754a8c2c3c98fcad60bd4565b0b4d1831a",
-      "source_bytes": 140931,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "3f4f592f79926188df767156574fbe1b1c8dbc45a569291a6976805e886ba1d0",
+      "source_bytes": 140944,
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1826,7 +1826,7 @@
       "published": "/trial.html",
       "source_sha256": "649a0a5914c0df49f156245c188326ebcf29396dcac3f8c000b7f3e44607b195",
       "source_bytes": 275141,
-      "source_change": "Retain current main source at e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a at its unchanged public path; no additional application redesign in this branch",
+      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1917,15 +1917,15 @@
       "reason": "Repair the existing sharing-image URL using the unchanged 1024x1024 site logo; no generated or re-encoded image"
     }
   ],
-  "integrated_main": "e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a",
+  "integrated_main": "056b25677afd5a5621fb36a6fcc107a53f553889",
   "additions": [
     {
       "original": "assets/brand-surfaces.css",
       "source": "assets/brand-surfaces.css",
       "published": "/assets/brand-surfaces.css",
-      "bytes": 7489,
-      "sha256": "d562d12e36480d9bbdd5f34e67481edafe1751d988eea8b03cb0f4d84ae560e8",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "bytes": 7740,
+      "sha256": "dfbe57a5214db02633c894e51688d68e0bc6634b4886fb90d121e21c9f551ac2",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -1935,7 +1935,7 @@
       "published": "/assets/platform.css",
       "bytes": 31656,
       "sha256": "bb1982511759f2fdab7df0a6ead1f1dd198c21de7469a23f08ad441aaa3857ca",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -1945,7 +1945,7 @@
       "published": "/assets/platform.js",
       "bytes": 12100,
       "sha256": "b4082ffed84f71ffc32f596a56cb36b6542c40d59b4d3127406b68b48a8c10b6",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -1955,7 +1955,7 @@
       "published": "/assets/secondary.css",
       "bytes": 16176,
       "sha256": "87dc1a17be58ecb003a22acac0bca083a38c9db5cfbeba2883a81d9799f1c44a",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -1965,7 +1965,7 @@
       "published": "/assets/secondary.js",
       "bytes": 1880,
       "sha256": "9830c1c86bc891583ae7b8804fba8090dbdfdd55b02f46d89bad2dcb351cdf70",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -1973,9 +1973,9 @@
       "original": "assets/unity/spaces.js",
       "source": "assets/unity/spaces.js",
       "published": "/assets/unity/spaces.js",
-      "bytes": 17047,
-      "sha256": "7533174de90713bdb82e0f51b0deefec0198d0436b38fa5ba7d888c062fcaf4b",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "bytes": 17456,
+      "sha256": "f509a0bbab66d60dc5f4fab0a6259bcf539476b7e79e35a7a792028888a9cab9",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -1983,9 +1983,9 @@
       "original": "assets/unity/style.css",
       "source": "assets/unity/style.css",
       "published": "/assets/unity/style.css",
-      "bytes": 80528,
-      "sha256": "602ac31a90188bb2d6267e265f55246b9b2dc6be94a193f9c295cd5aa99f3a01",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "bytes": 90627,
+      "sha256": "da5c824016225d388e3790240532fd259bf24463e6ef51abdf3525b85e33959d",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -1995,7 +1995,7 @@
       "published": "/assets/unity/three.module.js",
       "bytes": 860406,
       "sha256": "65bb4dd4a09f49f3fb4c68a2337c6cde07f64357d9c65f2544eeb18eefd98ec3",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -2003,9 +2003,9 @@
       "original": "assets/unity/world.js",
       "source": "assets/unity/world.js",
       "published": "/assets/unity/world.js",
-      "bytes": 40713,
-      "sha256": "0c26eebf04d1c2822e653bca9aa5c2aec81a0658068eccb889f5353fc956d4c4",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "bytes": 43340,
+      "sha256": "adb869b7442ab703831030f5556fbf8c76202f94705760f11ffc8d8e994e8057",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
     },
@@ -2013,15 +2013,47 @@
       "original": "assets/unity/world2.js",
       "source": "assets/unity/world2.js",
       "published": "/assets/unity/world2.js",
-      "bytes": 54556,
-      "sha256": "7a64d67e9585a9f52400b6dded73e688cc70a11780d185d2be6907c51283e932",
-      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "bytes": 54644,
+      "sha256": "d8bfba6e09a9a6be650eccbcec8af04866d87cff1a01d3f29e9f238343931fd1",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "EXPERIENCE-REFINEMENT.md",
+      "source": "docs/EXPERIENCE-REFINEMENT.md",
+      "published": "/EXPERIENCE-REFINEMENT.md",
+      "bytes": 1598,
+      "sha256": "599e620829ba291d9cbbd33af57a54496f0e57f041a9f6300834d146984c17ac",
+      "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
+      "category": "Documentation",
+      "reason": "Preserve newly tracked main refinement notes and their possible public route while organizing source documentation"
     }
   ],
   "integration_snapshots": [
     "a55e10a99f98191494af656bd788a56071ccfeda",
-    "e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a"
+    "e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a",
+    "056b25677afd5a5621fb36a6fcc107a53f553889"
+  ],
+  "require_explicit_sources": true,
+  "source_only_prefixes": [
+    ".github/",
+    "docs/",
+    "scripts/",
+    "tests/",
+    "src/",
+    "config/",
+    "deployment/"
+  ],
+  "source_only_files": [
+    "README.md",
+    "REDESIGN.md",
+    "package.json",
+    "package-lock.json",
+    "preview-server.mjs",
+    "vite.config.js",
+    "wrangler.jsonc",
+    ".gitignore",
+    ".gitattributes"
   ]
 }

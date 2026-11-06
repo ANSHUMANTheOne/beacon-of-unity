@@ -28,15 +28,15 @@ with sync_playwright() as p:
   test('lostfound-search-contact',found)
   page.goto('http://127.0.0.1:4174/',wait_until='domcontentloaded');page.wait_for_timeout(2000)
   def embed():
-   page.locator('[data-demo]').first.click();page.frame_locator('#demo-frame').locator('#requestFeed .card').first.wait_for(state='visible');page.get_by_role('button',name='Close demo',exact=True).click();assert not page.locator('#demo-dialog').is_visible()
+   page.locator('#home [data-demo]').click();page.frame_locator('#demo-frame').locator('#requestFeed .card').first.wait_for(state='visible');page.get_by_role('button',name='Close demo',exact=True).click();assert not page.locator('#demo-dialog').is_visible()
   test('homepage-demo-integration',embed)
   def double():
    if page.locator("#beacon-hide").get_attribute("aria-expanded")!="true":
     page.locator("#beacon-hide").click();page.wait_for_timeout(1000)
-   if w<700:page.locator('#bav-wrap').tap();page.wait_for_timeout(80);page.locator('#bav-wrap').tap()
-   else:page.locator('#bav-wrap').dblclick()
+   if w<700:page.locator('#bav-wrap').tap()
+   else:page.locator('#bav-wrap').click()
    page.locator('#bav-chat.open').wait_for(state='visible');page.locator('#bav-chat-close').click()
-  test('mascot-double-gesture',double)
+  test('mascot-single-gesture',double)
   r['errors']=errors;results.append(r);print(r,flush=True);c.close()
  (out/'workflow-checks.json').write_text(json.dumps(results,indent=2),encoding='utf-8');b.close()
 

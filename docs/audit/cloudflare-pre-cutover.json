@@ -1,0 +1,13 @@
+{
+  "worker": "beaconofunity",
+  "active_version_prefix": "27fbb97f",
+  "traffic_percent": 100,
+  "preview_url": "https://27fbb97f-beaconofunity.anshorg.workers.dev/",
+  "message": "Publish approved Beacon experience refinements2026-11-06",
+  "full_version_id": "Not visible in read-only browser inspection; use unique prefix in rollout history",
+  "browser_snapshot_run": "70fdfc9c-ea06-418a-b854-e906d0be01b8",
+  "custom_domain": "beaconofunity.com",
+  "production_workers_dev": false,
+  "preview_urls": true,
+  "note": "Read-only rollback snapshot; build IDs were not substituted for version IDs."
+}

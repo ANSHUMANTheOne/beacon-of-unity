@@ -25,6 +25,7 @@ deployment/pages.yml.example
 docs/ARCHITECTURE.md
 docs/ASSET-MANAGEMENT.md
 docs/DEPLOYMENT.md
+docs/EXPERIENCE-REFINEMENT.md
 docs/MIGRATION.md
 docs/PROJECTS.md
 docs/QA.md
@@ -33,6 +34,7 @@ docs/ROUTES.md
 docs/SECURITY.md
 docs/audit/branches.json
 docs/audit/browser-parity.json
+docs/audit/cloudflare-pre-cutover.json
 docs/audit/concurrent-main-review.json
 docs/audit/dependencies.json
 docs/audit/dynamic-references.json
@@ -41,6 +43,7 @@ docs/audit/file-movements.csv
 docs/audit/final-integration-status.json
 docs/audit/final-qa-status.json
 docs/audit/history.json
+docs/audit/hosted-live-api-validation.json
 docs/audit/hosted-main-interactions.json
 docs/audit/hosted-omniscope-observation.json
 docs/audit/http-integrity.json
@@ -62,11 +65,19 @@ docs/audit/live-routes-complete.json
 docs/audit/migration-summary.json
 docs/audit/mobile.json
 docs/audit/page-titles.json
+docs/audit/pages-markdown-route-probes.json
+docs/audit/pages-settings-pre-cutover.json
 docs/audit/pages-settings.json
 docs/audit/preview-setting-approval.json
 docs/audit/provider-preview-enabled-validation.json
 docs/audit/provider-preview-validation.json
 docs/audit/provider-runtime-validation.json
+docs/audit/refinement-http-validation.json
+docs/audit/refinement-inline-syntax.json
+docs/audit/refinement-integrity.json
+docs/audit/refinement-interactions.json
+docs/audit/refinement-main-coverage.json
+docs/audit/refinement-pages-summary.json
 docs/audit/route-compatibility.csv
 docs/audit/runtime-baseline-summary.json
 docs/audit/runtime-interactions.json
@@ -204,11 +215,13 @@ src/mascot.js
 src/night.css
 src/pillars.css
 src/pillars.js
+src/refinement.css
 src/spaces.js
 src/style.css
 src/world.js
 tests/browser_workflows.py
 tests/cinematic_homepage.py
+tests/experience_refinement.py
 tests/responsive_matrix.py
 vite.config.js
 voltwayvideo.mp4

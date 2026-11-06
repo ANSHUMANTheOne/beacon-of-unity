@@ -66,7 +66,7 @@ with sync_playwright() as p:
      before=page.locator('html').get_attribute('data-theme');page.locator('#theme-toggle' if redesigned else '#theme-toggle-btn').click();check('theme toggles',page.locator('html').get_attribute('data-theme')!=before)
      if redesigned:
       page.locator('#motion-toggle').click();motion=page.locator('#motion-toggle').get_attribute('aria-pressed');page.locator('#motion-toggle').click();check('motion control toggles between both states',page.locator('#motion-toggle').get_attribute('aria-pressed')!=motion)
-      page.get_by_role('button',name='Close navigation',exact=True).click();page.locator('[data-demo]').first.click();expect(page.locator('#demo-dialog')).to_be_visible();frame=page.locator('#demo-frame').element_handle().content_frame()
+      page.get_by_role('button',name='Close navigation',exact=True).click();page.locator('[data-demo]:visible').first.click();expect(page.locator('#demo-dialog')).to_be_visible();frame=page.locator('#demo-frame').element_handle().content_frame()
      else:
       (page.locator('[onclick*=openSimDemo]').last if case=='main-demo-reduced' else page.locator('#bav-try-demo-btn')).click();expect(page.locator('#sim-overlay')).to_have_class(__import__('re').compile('active'));frame=page.locator('#sim-iframe').element_handle().content_frame()
      frame.wait_for_function("window.IS_DEMO_MODE===true&&document.getElementById('requestFeed').children.length>0",timeout=20000)
