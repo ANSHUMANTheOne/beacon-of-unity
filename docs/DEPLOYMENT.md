@@ -76,3 +76,7 @@ The fresh `a64d646` upload passed, but its preview URL currently returns404 to a
 ## Reconciled design build
 
 The approved integration retains current main?s Worker name/account, custom-domain declaration, compatibility date, observability and disabled workers.dev/version URLs. Only asset input (`./dist`) and the validated artifact build hook replace source-root publication. New shared assets are explicit manifest additions; Vite source/build metadata is not deployed. `node node_modules/vite/bin/vite.js build --outDir .verification/design-build` reproduces the five retained bundles. The local preview server serves generated `dist/`. The fresh integrated Wrangler dry-run passes. Version URL access still requires inspection/approved enablement; a passing upload alone is not acceptance.
+
+## Approved version URL enablement ?6 November2026
+
+After a read-only dashboard inspection confirmed both workers.dev toggles off, the user explicitly approved enabling only Preview URLs. The dashboard now shows Preview ON, Production workers.dev OFF, and the existing beaconofunity.com custom domain unchanged. The review branch records `preview_urls: true` so future uploads retain that approved intent. No version was manually promoted and no DNS/domain/build setting was changed. Earlier disabled-preview findings above remain historical; fresh provider acceptance follows this setting change. See `audit/preview-setting-approval.json`.
