@@ -2,7 +2,7 @@
 
 An early-access React/Tailwind social application with a Cloudflare Worker API and D1 persistence. Brand name and logo are intentionally temporary.
 
-Google sign-in and secure existing-account linking are implemented. Activate them with a Google web OAuth client using the private admin panel; see [Google login setup](docs/GOOGLE_LOGIN.md). Until configured, the sign-in screen clearly shows Google setup is pending.
+Google sign-in uses Google's official button with server-verified identity tokens and secure existing-account linking. Configure a public Google web client ID and its allowed origin; no client secret is needed for this sign-in flow. See [Google login setup](docs/GOOGLE_LOGIN.md).
 
 ## Two separate experiences
 

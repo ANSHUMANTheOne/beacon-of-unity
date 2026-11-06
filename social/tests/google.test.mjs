@@ -117,6 +117,87 @@ async function begin(req, mode = "signin", cookie = "") {
   };
 }
 
+test("Google Identity Services signs in using only a public client ID and rejects CSRF/replay", async () => {
+  const { req, env, db } = setup(),
+    original = globalThis.fetch;
+  delete env.GOOGLE_CLIENT_SECRET;
+  let networkCalls = 0;
+  globalThis.fetch = async (url) => {
+    networkCalls++;
+    assert.equal(String(url), "https://www.googleapis.com/oauth2/v3/certs");
+    return Response.json({ keys: [jwk] });
+  };
+  const start = async () => {
+    const response = await req("/auth/google/start", {
+      method: "POST",
+      body: { mode: "signin", flow: "identity" },
+    });
+    assert.equal(response.status, 200);
+    return {
+      data: await response.json(),
+      cookie: response.headers.get("Set-Cookie").split(";")[0],
+    };
+  };
+  try {
+    assert.equal(
+      (await req("/auth/providers")).headers.get("Referrer-Policy"),
+      "strict-origin-when-cross-origin",
+    );
+    assert.equal((await (await req("/auth/providers")).json()).google, true);
+    const first = await start();
+    assert.equal(first.data.client_id, clientId);
+    assert.ok(!JSON.stringify(first.data).includes("secret"));
+    const credential = await signing({ nonce: first.data.nonce });
+    const body = { state: first.data.state, credential };
+    assert.equal(
+      (
+        await req("/auth/google/credential", {
+          method: "POST",
+          body,
+          cookie: first.cookie,
+          origin: "https://attacker.test",
+        })
+      ).status,
+      403,
+    );
+    assert.equal(
+      (await req("/auth/google/credential", { method: "POST", body })).status,
+      400,
+    );
+    const verified = await req("/auth/google/credential", {
+      method: "POST",
+      body,
+      cookie: first.cookie,
+    });
+    assert.equal(verified.status, 200);
+    assert.equal((await verified.json()).redirect, "/social/google");
+    assert.equal(db.prepare("SELECT COUNT(*) n FROM users").get().n, 0);
+    assert.equal(
+      (
+        await req("/auth/google/credential", {
+          method: "POST",
+          body,
+          cookie: first.cookie,
+        })
+      ).status,
+      400,
+    );
+    const next = await start();
+    const mismatched = await req("/auth/google/credential", {
+      method: "POST",
+      body: { state: next.data.state, credential },
+      cookie: next.cookie,
+    });
+    assert.equal(mismatched.status, 401);
+    assert.ok(
+      networkCalls <= 1,
+      "no client-secret exchange endpoint was called",
+    );
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
 test("Google token requires valid signature, audience, issuer, nonce, expiry and verified email", async () => {
   const nonce = await digest("test-nonce");
   assert.equal(

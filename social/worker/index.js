@@ -3,6 +3,7 @@ import {
   connectGoogle,
   startGoogle,
   googleCallback,
+  googleCredential,
   pendingGoogle,
   completeGoogle,
 } from "./google.js";
@@ -221,10 +222,20 @@ async function api(request, env) {
       env,
       await session(request, env),
       d.mode === "link",
+      d.flow === "identity",
     );
   }
   if (path === "/auth/google/callback" && method === "GET")
     return googleCallback(request, env);
+  if (path === "/auth/google/credential" && method === "POST") {
+    await limit(
+      env,
+      `google-credential:${request.headers.get("CF-Connecting-IP") || "local"}`,
+      20,
+      900000,
+    );
+    return googleCredential(request, env, await jsonBody(request));
+  }
   if (path === "/auth/google/pending" && method === "GET") {
     const { row } = await pendingGoogle(request, env);
     return json({ email: row.email, display_name: row.display_name });
@@ -1019,7 +1030,8 @@ export default {
     }
     const out = new Response(response.body, response);
     for (const [key, value] of Object.entries(securityHeaders())) {
-      if (key === "Referrer-Policy" && out.headers.get(key) === "no-referrer") continue;
+      if (key === "Referrer-Policy" && out.headers.get(key) === "no-referrer")
+        continue;
       out.headers.set(key, value);
     }
     if (!out.headers.has("Cache-Control"))

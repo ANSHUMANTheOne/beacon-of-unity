@@ -26,6 +26,7 @@
   ],
   "vars": {
     "APP_ORIGIN": "https://beaconofunity.com",
+    "GOOGLE_CLIENT_ID": "37918398882-n8rv2d5oflh59u07tdpcssnvi2vgiodi.apps.googleusercontent.com",
     "EMAIL_FROM": "Social <hello@beaconofunity.com>",
   },
   "d1_databases": [

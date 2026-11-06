@@ -1,6 +1,15 @@
 .google-entry {
   margin: 18px 0;
 }
+.google-official-button {
+  min-height: 44px;
+  width: 100%;
+  max-width: 400px;
+}
+.google-official-button.busy {
+  pointer-events: none;
+  opacity: 0.6;
+}
 .google-button {
   display: flex;
   align-items: center;
