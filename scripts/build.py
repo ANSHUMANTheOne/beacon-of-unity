@@ -27,6 +27,13 @@ def manifest_entries(source_root, manifest):
             if any(part.startswith(('.env', '.dev.vars')) or part in ('.git', '.wrangler', 'node_modules') or part.endswith(('.pem', '.key')) for part in path.split('/')):
                 raise ValueError(f'Sensitive or generated tracked passthrough path requires review: {path}')
             rows.append(dict(source=path, original=path, published='/'+path, concurrent=True))
+    if manifest.get('require_explicit_sources'):
+        known = {row['source'] for row in rows}
+        source_only = set(manifest.get('source_only_files', []))
+        prefixes = tuple(manifest.get('source_only_prefixes', []))
+        unknown = sorted(path for path in tracked if path and path not in known and path not in source_only and not path.startswith(prefixes))
+        if unknown:
+            raise ValueError('Unmapped tracked sources require an explicit public route or source-only classification: ' + ', '.join(unknown))
     return rows
 
 def expected_content(row):
