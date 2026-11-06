@@ -66,4 +66,12 @@ class PublisherContract(unittest.TestCase):
   build(self.root,self.out,self.manifest)
   self.assertEqual((self.out/'resource.gif').read_bytes(),(self.out/'legacy/resource.gif').read_bytes())
   self.assertTrue(validate(self.root,self.out,self.manifest)['passed'])
+ def test_current_main_design_assets_require_explicit_mapping(self):
+  self.track('assets/platform.css',b'body{color:black}')
+  self.track('src/not-public.js',b'export const sourceOnly=true')
+  self.config([])
+  data=json.loads(self.manifest.read_text());data['additions']=[dict(source='assets/platform.css',original='assets/platform.css')];self.manifest.write_text(json.dumps(data))
+  build(self.root,self.out,self.manifest)
+  self.assertEqual((self.out/'assets/platform.css').read_bytes(),b'body{color:black}')
+  self.assertFalse((self.out/'src/not-public.js').exists());self.assertTrue(validate(self.root,self.out,self.manifest)['passed'])
 if __name__=='__main__':unittest.main()

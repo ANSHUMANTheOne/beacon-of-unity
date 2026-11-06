@@ -1,0 +1,75 @@
+/* Small Beacon orbit. Position follows the pointer directly, without trailing lag. */
+#beacon-orbit{position:fixed;inset:0 auto auto 0;margin:0;padding:0;border:0;overflow:visible;width:0;height:0;background:none;pointer-events:none!important;opacity:0;z-index:2147483647}
+#beacon-orbit::backdrop{background:transparent;pointer-events:none}
+#beacon-orbit.visible{opacity:1}
+.orbit-shell{position:absolute;left:-8px;top:-8px;width:16px;height:16px;box-sizing:border-box;border-radius:50%;background:#86ddf2;border:1.5px solid #163c50;box-shadow:0 0 0 1.5px #fff;display:flex;align-items:center;justify-content:center;gap:3px;transition:width .16s ease,height .16s ease,left .16s ease,top .16s ease,transform .1s ease,background .16s ease}
+.orbit-shell i{width:2px;height:3px;border-radius:2px;background:#163c50}
+#beacon-orbit.clickable .orbit-shell{width:24px;height:24px;left:-12px;top:-12px;background:#b9effa;box-shadow:0 0 0 1.5px #fff,0 0 0 4px #46b9df40}
+#beacon-orbit.clickable .orbit-shell:after{content:'';position:absolute;top:14px;width:5px;height:2px;border-bottom:1px solid #163c50;border-radius:0 0 6px 6px}
+#beacon-orbit.pressed .orbit-shell{transform:scale(.72);background:#44c0e2}
+@media(hover:hover) and (pointer:fine){
+ html.beacon-cursor body{cursor:auto}
+ html.beacon-cursor :is(a,button,summary,[role=button],label[for]){cursor:pointer}
+ html.beacon-cursor :is(a,button,summary) *{cursor:inherit}
+ html.beacon-cursor #unity-canvas,html.beacon-cursor #bav-wrap,html.beacon-cursor #bav-wrap *{cursor:grab}
+ html.beacon-cursor #unity-canvas:active,html.beacon-cursor #bav-wrap:active,html.beacon-cursor #bav-wrap:active *{cursor:grabbing}
+ html.beacon-cursor :is(input,textarea,[contenteditable=true]){cursor:text}
+ html.beacon-cursor :is(select,input[type=checkbox],input[type=radio],input[type=button],input[type=submit]){cursor:pointer}
+ html.beacon-cursor :is(button:disabled,[aria-disabled=true]){cursor:not-allowed}
+ html.beacon-cursor [aria-busy=true]{cursor:progress}
+}
+@media(hover:none),(pointer:coarse){#cursor-toggle,#beacon-orbit{display:none!important}}
+@media(prefers-reduced-motion:reduce){.orbit-shell{transition:none}}
+
+/* Hide the native cursor only on the current target while its replacement is visible. */
+@media(hover:hover) and (pointer:fine){html.beacon-cursor .beacon-cursor-target{cursor:none!important}}
+
+#beacon-orbit.world-drag .orbit-shell{border-style:dashed}
+
+#beacon-orbit{will-change:transform;transition:none!important}
+
+/* A tiny soft Beacon face; motion responds to interaction only. */
+#beacon-orbit .orbit-shell{width:16px;height:18px;left:-8px;top:-9px;border:1px solid #153d52;border-radius:7px 7px 8px 8px;background:#8addf0;box-shadow:0 0 0 1px #fff;transition:transform .14s ease,background .14s ease,border-radius .14s ease}
+#beacon-orbit.world-drag .orbit-shell{border-style:solid}
+#beacon-orbit .orbit-shell i{width:2px;height:3px;border-radius:2px;transition:height .14s ease}
+#beacon-orbit.clickable .orbit-shell{width:16px;height:18px;left:-8px;top:-9px;background:#b8f0fa;border-radius:8px;box-shadow:0 0 0 1px #fff;transform:translateY(-1px) rotate(-8deg) scale(1.12)}
+#beacon-orbit.clickable .orbit-shell i{height:4px}
+#beacon-orbit.clickable .orbit-shell:after{top:11px;width:4px;height:2px}
+#beacon-orbit.pressed .orbit-shell{transform:scale(1.18,.78);background:#55c7e5}
+@media(prefers-reduced-motion:reduce){#beacon-orbit .orbit-shell,#beacon-orbit .orbit-shell i{transition:none}#beacon-orbit.clickable .orbit-shell,#beacon-orbit.pressed .orbit-shell{transform:none}}
+
+/* Gentle idle expression, independent of pointer position and click feedback. */
+#beacon-orbit .orbit-shell,#beacon-orbit.clickable .orbit-shell{width:20px;height:22px;left:-10px;top:-11px;gap:4px;border-radius:9px;animation:beacon-cursor-breathe 3.8s ease-in-out infinite}
+#beacon-orbit .orbit-shell i{width:2.5px;height:4px;animation:beacon-cursor-blink 5.7s ease-in-out infinite;transform-origin:center}
+#beacon-orbit.clickable .orbit-shell:after{top:14px;width:5px}
+#beacon-orbit.pressed .orbit-shell{animation:none}
+@keyframes beacon-cursor-breathe{0%,100%{scale:1}50%{scale:1.06 1.09}}
+@keyframes beacon-cursor-blink{0%,43%,47%,100%{transform:scaleY(1)}45%{transform:scaleY(.12)}}
+@media(prefers-reduced-motion:reduce){#beacon-orbit .orbit-shell,#beacon-orbit .orbit-shell i{animation:none}}
+
+/* Keep the silhouette circular in idle, hover and pressed states. */
+#beacon-orbit .orbit-shell,#beacon-orbit.clickable .orbit-shell{width:20px;height:20px;left:-10px;top:-10px;border-radius:50%}
+#beacon-orbit.pressed .orbit-shell{transform:scale(.88)}
+@keyframes beacon-cursor-breathe{0%,100%{scale:1}50%{scale:1.07}}
+@media(prefers-reduced-motion:reduce){#beacon-orbit.pressed .orbit-shell{transform:none}}
+
+/* Suppress the native arrow across the whole page before entering a new target. */
+@media(hover:hover) and (pointer:fine){
+ html.beacon-cursor.beacon-cursor-ready,html.beacon-cursor.beacon-cursor-ready *{cursor:none!important}
+ html.beacon-cursor.beacon-cursor-ready :is(input,textarea,[contenteditable=true],[contenteditable=true] *){cursor:text!important}
+ html.beacon-cursor.beacon-cursor-ready :is(select,input[type=checkbox],input[type=radio],input[type=button],input[type=submit]){cursor:pointer!important}
+ html.beacon-cursor.beacon-cursor-ready :is(#bav-wrap,#bav-wrap *){cursor:grab!important}
+ html.beacon-cursor.beacon-cursor-ready :is(#bav-wrap:active,#bav-wrap:active *){cursor:grabbing!important}
+ html.beacon-cursor.beacon-cursor-ready :is([disabled],[disabled] *,[aria-disabled=true],[aria-disabled=true] *){cursor:not-allowed!important}
+ html.beacon-cursor.beacon-cursor-ready :is([aria-busy=true],[aria-busy=true] *){cursor:progress!important}
+ html.beacon-cursor.beacon-cursor-ready iframe{cursor:auto!important}
+}
+
+.orbit-trail{position:absolute;width:34px;height:34px;left:-17px;top:-17px;border:1px solid #66cce58c;box-shadow:0 0 0 1px #fff3;border-radius:50%;pointer-events:none;will-change:transform}
+#beacon-orbit.clickable .orbit-trail{border-color:#83e1f1cc}
+@media(prefers-reduced-motion:reduce){.orbit-trail{display:none}}
+
+/* Open, round eyes and a small resting smile for a welcoming expression. */
+#beacon-orbit .orbit-shell i,#beacon-orbit.clickable .orbit-shell i{width:3.5px;height:4.5px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff 0 .65px,#173e52 .85px);position:relative;top:-1px}
+#beacon-orbit .orbit-shell:after{content:'';display:block;position:absolute;top:12px;width:5px;height:3px;border-bottom:1px solid #173e52;border-radius:0 0 50% 50%}
+#beacon-orbit.clickable .orbit-shell:after{top:12px;width:6px;height:3px}
