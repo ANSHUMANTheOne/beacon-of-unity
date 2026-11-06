@@ -1,6 +1,6 @@
 # Asset management
 
-Keep project-specific resources beside their project. Keep branding in `assets/branding/`. The Code-page interactive resources are stored together under `website/interactive-assets/code/` and are not featured in README navigation.
+Keep project-specific resources beside their project. Keep branding in `assets/branding/`. Preserved interaction payloads are stored under neutral identifiers in `website/runtime/resources/` and are not featured in README navigation. The route manifest supplies their original public filenames; source extensions do not determine the published MIME type.
 
 Every existing resource is copied without compression, conversion, renaming of public paths, or redirects. Video filenames with extra letters remain distinct manifest entries. The two 2-byte MP4 placeholders have identical hashes to `nothing`; they are not playable video and are retained. The real `voltwayvideo.mp4` is a different 23,527,562-byte resource and remains at the root for its raw GitHub consumer. `eysc.zip` contains an empty `eysc/` directory; it is preserved, not silently repaired.
 
