@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { api } from "./api";
 import { Loader2, LockKeyhole, Check } from "lucide-react";
 import "./google-auth.css";
@@ -25,10 +25,35 @@ function GoogleMark() {
     </svg>
   );
 }
+let sdkPromise;
+function loadGoogle() {
+  if (window.google?.accounts?.id)
+    return Promise.resolve(window.google.accounts.id);
+  if (!sdkPromise)
+    sdkPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.onload = () => resolve(window.google.accounts.id);
+      script.onerror = () => {
+        sdkPromise = null;
+        script.remove();
+        reject(
+          new Error(
+            "Google sign-in could not load. Check your connection or use email and password.",
+          ),
+        );
+      };
+      document.head.appendChild(script);
+    });
+  return sdkPromise;
+}
 export function GoogleButton({ link = false, ready = null }) {
   const [available, setAvailable] = useState(ready),
+    [loading, setLoading] = useState(true),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
+  const container = useRef(null);
   useEffect(() => {
     if (ready === null)
       api("/auth/providers")
@@ -36,39 +61,126 @@ export function GoogleButton({ link = false, ready = null }) {
         .catch(() => setAvailable(false));
     else setAvailable(ready);
   }, [ready]);
+  useEffect(() => {
+    if (!available) return;
+    let stopped = false;
+    let resize;
+    setLoading(true);
+    Promise.all([
+      loadGoogle(),
+      api("/auth/google/start", {
+        method: "POST",
+        body: { mode: link ? "link" : "signin", flow: "identity" },
+      }),
+    ])
+      .then(([google, start]) => {
+        if (stopped || !container.current) return;
+        google.initialize({
+          client_id: start.client_id,
+          nonce: start.nonce,
+          auto_select: false,
+          ux_mode: "popup",
+          context: "signin",
+          callback: async (response) => {
+            if (stopped) return;
+            setBusy(true);
+            setError("");
+            try {
+              const result = await api("/auth/google/credential", {
+                method: "POST",
+                body: { state: start.state, credential: response.credential },
+              });
+              location.assign(result.redirect);
+            } catch (e) {
+              if (!stopped) {
+                setError(e.message);
+                setBusy(false);
+              }
+            }
+          },
+        });
+        let previousWidth = 0;
+        const render = () => {
+          if (stopped || !container.current) return;
+          const width = Math.min(
+            400,
+            Math.floor(container.current.clientWidth || 320),
+          );
+          if (width === previousWidth) return;
+          previousWidth = width;
+          container.current.replaceChildren();
+          google.renderButton(container.current, {
+            theme: "filled_black",
+            size: "large",
+            text: "continue_with",
+            shape: "rectangular",
+            locale: "en",
+            width,
+          });
+        };
+        render();
+        resize = new ResizeObserver(render);
+        resize.observe(container.current);
+        setLoading(false);
+      })
+      .catch((e) => {
+        if (!stopped) {
+          setError(e.message);
+          setLoading(false);
+        }
+      });
+    return () => {
+      stopped = true;
+      resize?.disconnect();
+    };
+  }, [available, link]);
   return (
     <div className="google-entry">
-      <button
-        type="button"
-        className="google-button"
-        disabled={busy || available !== true}
-        onClick={async () => {
-          setBusy(true);
-          setError("");
-          try {
-            const d = await api("/auth/google/start", {
-              method: "POST",
-              body: { mode: link ? "link" : "signin" },
-            });
-            location.assign(d.url);
-          } catch (e) {
-            setError(e.message);
-            setBusy(false);
-          }
-        }}
-      >
-        {busy ? <Loader2 className="spin" size={19} /> : <GoogleMark />}
-        {link ? "Link Google account" : "Continue with Google"}
-      </button>
+      {available ? (
+        <>
+          <div
+            className={
+              busy ? "google-official-button busy" : "google-official-button"
+            }
+            ref={container}
+            aria-label={link ? "Link Google account" : "Continue with Google"}
+          />
+          {(loading || busy) && (
+            <p className="fine" role="status">
+              <Loader2 className="spin" size={14} />{" "}
+              {busy
+                ? "Confirming your Google account…"
+                : "Loading Google sign-in…"}
+            </p>
+          )}
+          {link && !loading && (
+            <p className="fine">Choose the Google account you want to link.</p>
+          )}
+        </>
+      ) : (
+        <button type="button" className="google-button" disabled>
+          <GoogleMark />
+          Continue with Google
+        </button>
+      )}
       {available === false && (
         <p className="fine">
           Google sign-in is awaiting setup. Email and password are available.
         </p>
       )}
       {error && (
-        <p className="form-error" role="alert">
-          {error}
-        </p>
+        <>
+          <p className="form-error" role="alert">
+            {error}
+          </p>
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => location.reload()}
+          >
+            Reload Google sign-in
+          </button>
+        </>
       )}
     </div>
   );
@@ -205,20 +317,19 @@ export function GoogleSettings({ execute, notify }) {
   return (
     <section className="settings-card">
       <h3>
-        <LockKeyhole size={17} /> Private Google sign-in connection
+        <LockKeyhole size={17} /> Google sign-in setup
       </h3>
       <p className="muted">
         {status?.configured
-          ? "Google credentials are configured. Test sign-in to verify the Google console settings."
+          ? "Google client ID is configured. Test sign-in to confirm your Google origin and audience settings."
           : "Awaiting Google OAuth configuration."}
       </p>
       <p className="fine">
-        Use a Google OAuth client of type Web application. Add this exact
-        authorized redirect URI:
+        Use a Google OAuth client of type Web application. Add this authorized
+        JavaScript origin:
       </p>
       <code className="oauth-callback">
-        {status?.callback_url ||
-          "https://beaconofunity.com/social/api/auth/google/callback"}
+        {status?.origin || "https://beaconofunity.com"}
       </code>
       <form
         autoComplete="off"
@@ -249,26 +360,16 @@ export function GoogleSettings({ execute, notify }) {
             placeholder="…apps.googleusercontent.com"
           />
         </label>
-        <label className="field">
-          <span>Google client secret</span>
-          <input
-            name="client_secret"
-            type="password"
-            autoComplete="new-password"
-            minLength={16}
-            maxLength={4096}
-            required
-            placeholder="Stored privately on the server"
-          />
-        </label>
+
         <button className="primary" disabled={busy || !status?.vault_ready}>
           {busy && <Loader2 className="spin" size={15} />}Save Google connection
         </button>
       </form>
       <p className="fine">
-        The secret is encrypted on the server and never returned by this panel.
-        Google Cloud must also have your consent screen and allowed audience
-        configured. No Gmail or Drive permissions are needed.
+        Google Identity Services uses your public client ID; no client secret is
+        needed for this sign-in flow. Google must also have your consent screen
+        and allowed audience configured. No Gmail or Drive permissions are
+        needed.
       </p>
       <a
         href="https://console.cloud.google.com/auth/clients"

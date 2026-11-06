@@ -1,24 +1,24 @@
 # Google sign-in
 
-Implemented as an OAuth authorization-code flow with PKCE, browser-bound single-use state, a nonce and verified Google ID-token signatures using `jose`. Tokens and the Google client secret stay on the Worker. Only `openid email profile` are requested; Gmail, contacts and Drive are not requested. Google access/refresh tokens are not stored.
+The default UI uses Google's official **Google Identity Services** button and a JavaScript credential callback. Only the **public web client ID** is needed: no client secret or access/refresh token is needed for basic sign-in. The ID token is posted over HTTPS to the Worker, which validates Google's signature, issuer, audience, expiration, verified email and a fresh nonce. Browser-bound single-use state and same-origin POST checks protect against login CSRF and replay.
 
-## Configure the Google project
+## Configure
 
-1. In Google Auth Platform, use a project dedicated to this Social app. Configure the consent screen with the actual app name, owner contact, homepage `https://beaconofunity.com/social`, privacy URL `https://beaconofunity.com/social/privacy` and terms URL `https://beaconofunity.com/social/terms`. No billing setup is needed by this implementation.
-2. Create a **Web application** OAuth client. Authorized JavaScript origin: `https://beaconofunity.com`. Exact authorized redirect URI: `https://beaconofunity.com/social/api/auth/google/callback`.
-3. Choose the intended external audience. While Google keeps the app in Testing, add the owner's Google accounts as test users; public login requires Google's appropriate production audience and any required verification. Do not claim general availability from a test-user sign-in alone.
-4. As app admin, open `/social/admin` → **Private Google sign-in connection**. Paste the web client ID and secret into the private form, then save. The secret is AES-GCM encrypted with a distinct authenticated context using the existing Worker vault key. Never commit it or paste it in chat. Alternatively use Worker secrets `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
-5. Use a separate browser session to test Google sign-in. Verify the username/13+ rules screen for a new user, then sign out and back in. For an existing account, first sign in with its password and choose **Settings → Link Google account**. Verify the linked account signs into the same profile and retains its role and privacy settings.
+1. In Google Auth Platform, choose a **Web application** client. Its authorized JavaScript origin must include https://beaconofunity.com. The popup/JavaScript flow does not require a redirect URI. Preserve unrelated clients and site routes.
+2. Configure the actual app name, owner contact, authorized domain, homepage, privacy and terms in Google Console. Preserve valid existing project settings. For a Testing audience, add intended test users and check actual restrictions before promising public availability.
+3. Set Worker variable GOOGLE_CLIENT_ID, or save the public ID through **Admin ? Google sign-in setup**. The current deployment uses the app-specific **Beacon Social Web** client in the owner's Google project. Saved admin settings override the environment fallback. Client IDs are public identifiers, not secrets.
+4. Test from a separate browser session. New users choose a lowercase handle and accept the 13+ rules before an app account is created. Existing users first sign in with their current password and choose **Settings ? Link Google account**. Verify Google sign-in returns to that same account.
 
-Until credentials are configured, the Google button clearly says setup is pending and email/password sign-in remains available. Credential presence is not proof of correct Google console configuration; a real sign-in is required.
+The Google library loads only where its button is needed. It does not automatically show One Tap or silently choose an account. No Gmail, Drive, contacts or other Google API access is requested. A registered client ID alone does not prove the origin/consent configuration works: test the real chooser and server sign-in.
 
-## Account behavior
+## Security and behavior
 
-- Google `sub`, not a mutable email address, identifies a linked account. No silent linking by matching email: an existing email account must authenticate first and link from Settings.
-- Existing-account linking rechecks the originating session at callback, so logout, password reset, suspension and focus lock invalidate a pending link. One Google identity per app account, one app account per Google identity.
-- New Google users choose a unique lowercase handle and explicitly accept the 13+ community rules before an account is created. They start as ordinary members. Their Google-verified email is marked verified.
-- New Google accounts have an unguessable, unusable initial password. They can use email recovery to set a password once transactional email is connected. Google profile images are not imported.
-- OAuth redirects do not bypass focus locks, blocks, suspension, private account checks or admin authorization. The existing strict app session cookie is unchanged; only a short-lived, scoped OAuth binding cookie uses SameSite=Lax for the return from Google.
-- OAuth state/enrollment rows expire after ten minutes and are cleaned by the scheduled cleanup. Callback failures return a generic explanation without exposing codes or tokens. Provider endpoints are fixed Google URLs, and return paths are fixed app paths.
+- Google sub, not email, identifies a linked account. Existing email accounts never silently merge with an unlinked Google account: authenticate to the existing app account first.
+- Linking rechecks the originating session. Logout, password reset, suspension and a focus lock invalidate pending linking. One Google identity per app account, one app account per Google identity.
+- New Google accounts start as ordinary members with Google-verified email and an unguessable initial password. They can set a password through email recovery after transactional email is connected.
+- Focus locks, privacy, blocks and admin checks remain enforced. Google does not confer admin privileges or prove age. The 13+ checkbox is self-declaration.
+- JWTs are never logged or stored. Nonce/state records expire after ten minutes and are periodically cleaned. Tokens require fixed Google signing-key endpoints and the configured client audience.
+- CSP permits Google's required GIS script, style, frame and connection paths. Cross-Origin-Opener-Policy: same-origin-allow-popups supports the popup fallback. The app session remains HttpOnly, Secure and SameSite=Strict.
+- Admin-saved settings use AES-GCM with a distinct authenticated context. No client secret is collected by the default UI. Existing optional server authorization-code integrations can retain a server-only GOOGLE_CLIENT_SECRET; that separate API still validates PKCE, nonce and state.
 
-References: https://developers.google.com/identity/openid-connect/openid-connect and https://github.com/panva/jose .
+References: https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid , https://developers.google.com/identity/gsi/web/guides/verify-google-id-token and https://github.com/panva/jose .

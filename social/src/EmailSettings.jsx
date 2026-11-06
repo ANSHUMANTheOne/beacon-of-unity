@@ -82,8 +82,9 @@ export default function EmailSettings({ execute, notify }) {
             <span>Verified sender email</span>
             <input
               name="sender_email"
+              key={status?.sender || "default-sender"}
               type="email"
-              defaultValue={status?.sender || "hello@beaconofunity.com"}
+              defaultValue={status?.sender || "anshuman@beaconofunity.com"}
               required
             />
           </label>
