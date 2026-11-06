@@ -918,7 +918,7 @@ function Feed({
       )}
       {["profile", "saved"].includes(tab) && (
         <div className="feed-tabs">
-          {["photo", "reel", "video", "story"].map((k) => (
+          {["photo", "reel", "story"].map((k) => (
             <button
               key={k}
               className={profileKind === k ? "selected" : ""}
@@ -928,9 +928,7 @@ function Feed({
                 ? "Photos"
                 : k === "reel"
                   ? "Reels"
-                  : k === "video"
-                    ? "Videos"
-                    : "Stories"}
+                  : "Stories"}
             </button>
           ))}
         </div>

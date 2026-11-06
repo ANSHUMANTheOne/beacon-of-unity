@@ -23,11 +23,13 @@ Browser
 - `src/demo/`: refined guest demo, loaded only at `/socialdemo`.
 - `worker/index.js`: API routes, session authorization, data ownership and privacy.
 - `worker/security.js`: validation, password hashing, secure cookies and response headers.
-- `worker/media-store.js`: capped D1 media storage, authenticated byte-range streaming; optional R2 adapter for a future migration.
+- `worker/media-store.js`: capped D1 media storage, authenticated byte-range streaming and legacy R2 compatibility.
+- `worker/object-storage.js`: encrypted private B2 connection, resumable multipart uploads, quota reservations, private streamed reads and version-aware cleanup. See [storage operations](STORAGE.md).
+- `worker/beacon-mail.js`: separate Firebase-admin authorization for main-site membership mail, escaped branded templates and persistent outbox processing. See [approval mail operations](APPROVAL_EMAIL.md).
 - `migrations/`: versioned SQL schema, foreign keys, indexes and storage quota triggers.
 - `scripts/prepare.mjs`: builds physical `/social/index.html` and `/socialdemo/index.html` directories and shared `/social/assets/*` files.
 - `tests/`: isolated SQLite tests calling the actual Worker handler.
-- `wrangler.jsonc`: only the four social routes, D1 binding and cleanup schedule.
+- `wrangler.jsonc`: only the four social routes, D1 binding, minute email queue and daily cleanup schedules.
 
 ## Request lifecycle
 

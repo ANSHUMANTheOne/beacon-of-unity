@@ -24,7 +24,7 @@ The alternative server secret `SENDPULSE_API_KEY` is supported when deploying wi
 
 ## Sending safeguards
 
-The app atomically reserves one hourly and monthly send allowance in D1. It rejects requests beyond 50/hour or 12,000/calendar month, and rolls back counters for immediate provider rejection. It does not quietly queue recovery emails for hours or charge for extra volume. Other applications sharing the same SendPulse account can use the same provider allowance; the provider remains the final authority for total account limits.
+The app atomically reserves one hourly and monthly send allowance in D1. It rejects requests beyond 50/hour or 12,000/calendar month, and rolls back counters for immediate provider rejection. It does not quietly queue recovery emails for hours or charge for extra volume. Main Beacon approval emails use a persistent outbox and share this same budget; excess approval mail waits for the next window. See [approval email operations](APPROVAL_EMAIL.md). Other applications sharing the same SendPulse account can use the same provider allowance; the provider remains the final authority for total account limits.
 
 Provider signup, SMTP activation, verified sender/domain records, and a successful delivery test must all be completed before claiming email is operational. User registration and password login continue to work while email is not configured. Confirmation and recovery routes fail explicitly rather than pretending to send.
 
