@@ -134,4 +134,6 @@ Review the diff before merging. Keep `.gitignore`; never upload `.env`, `.dev.va
 
 `npm test` covers authentication, role escalation attempts, cross-origin rejection, pending/private media access, follow approval, blocks, DM isolation, focus enforcement, byte ranges, deletion, input validation, and unavailable email behavior. Browser QA exercises signup, upload, comments, focus reload and mobile/demo navigation.
 
-This is a functioning early-access model, not a finished Instagram/YouTube-scale service. Before wider public launch: connect email recovery, assign the administrator, review applicable legal/privacy requirements, add robust moderation staffing and appeals, abuse/fraud tooling, stronger authentication/MFA, monitoring and incident response, media processing/scanning, pagination and ind
+This is a functioning early-access model, not a finished Instagram/YouTube-scale service. Before wider public launch: connect email recovery, assign the administrator, review applicable legal/privacy requirements, add robust moderation staffing and appeals, abuse/fraud tooling, stronger authentication/MFA, monitoring and incident response, media processing/scanning, pagination and index tuning at scale, and production load tests. The minimum age is 13 and currently relies on user attestation. Youth-specific safety and privacy work remains necessary before general release. Security controls are tested but have not had an independent audit.
+
+See `docs/ARCHITECTURE.md`, `docs/SECURITY.md`, and `docs/ROADMAP.md`.
