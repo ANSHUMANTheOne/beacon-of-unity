@@ -54,16 +54,24 @@ with sync_playwright() as p:
    failure=None
    try:
     if case.startswith('main-demo'):
-     goto('/',2500);
-     if page.locator('#skip-intro').is_visible():page.locator('#skip-intro').click();page.wait_for_timeout(500)
-     before=page.locator('html').get_attribute('data-theme');page.locator('#theme-toggle-btn').click();check('theme toggles',page.locator('html').get_attribute('data-theme')!=before)
-     (page.locator('[onclick*=openSimDemo]').last if case=='main-demo-reduced' else page.locator('#bav-try-demo-btn')).click();expect(page.locator('#sim-overlay')).to_have_class(__import__('re').compile('active'))
-     frame=page.locator('#sim-iframe').element_handle().content_frame();frame.wait_for_function("window.IS_DEMO_MODE===true&&document.getElementById('requestFeed').children.length>0",timeout=20000)
-     check('demo iframe preserves query and loads simulated requests','demo=1' in frame.url)
-     check('no demo parse errors',not errors)
+     goto('/',2500)
+     redesigned=page.locator('#demo-dialog').count()>0
+     if not redesigned and page.locator('#skip-intro').is_visible():page.locator('#skip-intro').click();page.wait_for_timeout(500)
+     if redesigned:page.get_by_role('button',name='Open navigation',exact=True).click()
+     before=page.locator('html').get_attribute('data-theme');page.locator('#theme-toggle' if redesigned else '#theme-toggle-btn').click();check('theme toggles',page.locator('html').get_attribute('data-theme')!=before)
+     if redesigned:
+      page.locator('#motion-toggle').click();motion=page.locator('#motion-toggle').get_attribute('aria-pressed');page.locator('#motion-toggle').click();check('motion control toggles between both states',page.locator('#motion-toggle').get_attribute('aria-pressed')!=motion)
+      page.get_by_role('button',name='Close navigation',exact=True).click();page.locator('[data-demo]').first.click();expect(page.locator('#demo-dialog')).to_be_visible();frame=page.locator('#demo-frame').element_handle().content_frame()
+     else:
+      (page.locator('[onclick*=openSimDemo]').last if case=='main-demo-reduced' else page.locator('#bav-try-demo-btn')).click();expect(page.locator('#sim-overlay')).to_have_class(__import__('re').compile('active'));frame=page.locator('#sim-iframe').element_handle().content_frame()
+     frame.wait_for_function("window.IS_DEMO_MODE===true&&document.getElementById('requestFeed').children.length>0",timeout=20000)
+     check('demo iframe preserves query and loads simulated requests','demo=1' in frame.url);check('no demo parse errors',not errors)
      if not mobile:
-      frame.locator("[onclick*=switchTab][onclick*=lostfound]:visible").first.click();expect(frame.locator('#lostFoundTab')).to_be_visible();check('demo lost-and-found tab',True)
-      frame.locator("[onclick*=switchTab][onclick*=community]:visible").first.click();frame.locator('#helpbtn-r1').click();expect(frame.locator('#chatPopup')).to_be_visible();check('simulated help opens chat',True)
+      control=frame.locator('[data-tab=lostfound]:visible, [onclick*=switchTab][onclick*=lostfound]:visible') if redesigned else frame.locator("[onclick*=switchTab][onclick*=lostfound]:visible")
+      control.first.click();expect(frame.locator('#lostFoundTab')).to_be_visible();check('demo lost-and-found tab',True)
+      control=frame.locator('[data-tab=community]:visible, [onclick*=switchTab][onclick*=community]:visible') if redesigned else frame.locator("[onclick*=switchTab][onclick*=community]:visible")
+      control.first.click();frame.locator('#requestFeed .btn-help').first.click();expect(frame.locator('#chatPopup')).to_be_visible();check('simulated help opens chat',True)
+     if redesigned:page.get_by_role('button',name='Close demo',exact=True).click();check('demo closes',not page.locator('#demo-dialog').is_visible())
     elif case=='cozy':
      goto('/CozyStudio/',2000);check('animation boots without page errors',not errors)
      page.get_by_role('button',name='Animation Studio',exact=True).click();types=page.locator('#types button');check('all patterns available',types.count()==11)

@@ -17,6 +17,11 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
+      - name: Install the existing redesign build dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build the retained design in isolation
+        run: node node_modules/vite/bin/vite.js build --outDir .verification/design-build
+      - run: python scripts/check-design-build.py
       - run: python scripts/test-publisher.py
       - run: node scripts/cloudflare-build.mjs
       - name: Confirm an unchanged artifact can be reused safely

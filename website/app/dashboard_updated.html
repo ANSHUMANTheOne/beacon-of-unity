@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Hub | Beacon of Unity</title>
     <style>
-        /* ── Fonts — Segoe UI as primary (original warmth), Inter as fallback ── */
+        /* ── Fonts - Segoe UI as primary (original warmth), Inter as fallback ── */
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
@@ -15,7 +15,7 @@
         }
 
         /* ════════════════════════════════════════════
-           SIDEBAR  — dark navy from original, now with
+           SIDEBAR - dark navy from original, now with
            subtle depth and a warm sky-blue accent
         ════════════════════════════════════════════ */
         .sidebar {
@@ -32,7 +32,7 @@
             box-shadow: 4px 0 24px rgba(0,0,0,.18);
         }
 
-        /* Scrollable nav wrapper — always present, scrolls when content overflows */
+        /* Scrollable nav wrapper - always present, scrolls when content overflows */
         .sidebar-nav-scroll {
             flex: 1;
             overflow-y: auto;
@@ -45,7 +45,7 @@
         }
         .sidebar-nav-scroll::-webkit-scrollbar { display: none; }
 
-        /* Very faint top-right ambient orb — barely noticeable, just adds life */
+        /* Very faint top-right ambient orb - barely noticeable, just adds life */
         .sidebar::after {
             content: '';
             position: absolute;
@@ -60,19 +60,19 @@
         .sidebar h2 {
             font-size: 22px;
             font-weight: 800;
-            color: #38bdf8;       /* original sky blue — kept exactly */
+            color: #38bdf8;       /* original sky blue - kept exactly */
             margin-bottom: 4px;
             letter-spacing: -0.5px;
         }
 
         .region-tag {
             font-size: 12px;
-            color: #94a3b8;       /* original muted slate — unchanged */
+            color: #94a3b8;       /* original muted slate - unchanged */
             margin-bottom: 22px;
             display: block;
         }
 
-        /* ── Nav items — original shape + new micro-polish ── */
+        /* ── Nav items - original shape + new micro-polish ── */
         .nav-item {
             padding: 12px 15px;
             cursor: pointer;
@@ -90,17 +90,17 @@
         }
 
         .nav-item:hover {
-            background: #1e293b;           /* original hover — unchanged */
+            background: #1e293b;           /* original hover - unchanged */
             color: #fff;
-            transform: translateX(2px);    /* subtle nudge — new */
+            transform: translateX(2px);    /* subtle nudge - new */
         }
 
-        /* Active — original sky blue pill + new left accent */
+        /* Active - original sky blue pill + new left accent */
         .nav-item.active {
             background: #38bdf8;
             color: #0f172a;
             font-weight: 600;
-            box-shadow: 0 4px 14px rgba(56,189,248,.3);  /* soft glow — new */
+            box-shadow: 0 4px 14px rgba(56,189,248,.3);  /* soft glow - new */
         }
 
         /* Tiny left-edge shine on active for depth */
@@ -113,12 +113,12 @@
             border-radius: 8px 0 0 8px;
         }
 
-        /* Icon — slight glow when active */
+        /* Icon - slight glow when active */
         .nav-item.active .nav-emoji {
             filter: drop-shadow(0 0 4px rgba(15,23,42,.3));
         }
 
-        /* Logout — Uiverse pill button */
+        /* Logout - Uiverse pill button */
         #logoutBtnNav {
             position: fixed !important;
             bottom: 198px !important;
@@ -174,7 +174,7 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
 
-        /* ── Cards — original feel + slightly warmer shadow ── */
+        /* ── Cards - original feel + slightly warmer shadow ── */
         .card {
             background: white;
             padding: 25px;
@@ -191,7 +191,7 @@
             transform: translateY(-1px);
         }
 
-        /* Request card — original left border + new top accent line */
+        /* Request card - original left border + new top accent line */
         .request-card { border-left: 5px solid #38bdf8; }
         .request-card::before {
             content: '';
@@ -232,7 +232,7 @@
         }
         .fab:hover { transform: scale(1.1) rotate(90deg); background: #0ea5e9; }
 
-        /* ── Badges — unchanged ── */
+        /* ── Badges - unchanged ── */
         .badge { font-size: 11px; padding: 4px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
         .badge-food      { background: #e0f2fe; color: #0369a1; }
         .badge-transport { background: #fef9c3; color: #854d0e; }
@@ -273,7 +273,7 @@
             bottom: 24px; right: 24px;
             width: 360px; height: 580px;
             background: #f2f2f7;
-            /* Pill shape — very generous radius top corners */
+            /* Pill shape - very generous radius top corners */
             border-radius: 36px 36px 28px 28px;
             box-shadow:
                 0 0 0 0.5px rgba(0,0,0,.12),
@@ -350,7 +350,7 @@
             font-size: 14.5px; line-height: 1.44; word-break: break-word;
             position: relative;
         }
-        /* Default (first in group) — full rounded with tail */
+        /* Default (first in group) - full rounded with tail */
         .imsg-row.me .imsg-bubble {
             background: #007aff; color: white;
             border-radius: 18px 18px 5px 18px;
@@ -360,7 +360,7 @@
             border-radius: 18px 18px 18px 5px;
             box-shadow: 0 1px 2px rgba(0,0,0,.08);
         }
-        /* Consecutive bubbles — fully rounded, no tail */
+        /* Consecutive bubbles - fully rounded, no tail */
         .imsg-row.me.consec .imsg-bubble {
             border-radius: 18px 5px 5px 18px;
         }
@@ -388,7 +388,7 @@
         }
         .imsg-row.them.no-av .imsg-mini-av { visibility: hidden; }
         /* Time on hover */
-        /* Bubble wrapper — stacks bubble + timestamp vertically */
+        /* Bubble wrapper - stacks bubble + timestamp vertically */
         .imsg-bubble-wrap {
             display: flex;
             flex-direction: column;
@@ -399,7 +399,7 @@
         .imsg-row.them .imsg-bubble-wrap { align-items: flex-start; }
         /* Bubble itself no longer needs max-width (wrap handles it) */
         .imsg-bubble { max-width: 100%; }
-        /* Time sits beside the bubble in the row — left for me, right for them */
+        /* Time sits beside the bubble in the row - left for me, right for them */
         .imsg-time {
             font-size: 10px; color: #8e8e93;
             opacity: 0; transition: opacity .2s;
@@ -430,7 +430,7 @@
         .ibar-btn:hover { opacity:.84; transform:scale(.97); }
         .ibar-btn.resolve { background:#34c759; color:white; }
         .ibar-btn.endchat  { background:#ff3b30; color:white; }
-        /* Input bar — pill container at the bottom */
+        /* Input bar - pill container at the bottom */
         #chatInputRow {
             display: flex; align-items: center; gap: 8px;
             padding: 10px 14px 16px;
@@ -472,13 +472,13 @@
         .chat-unread { border-color:#ef4444 !important; box-shadow:0 0 0 2px rgba(239,68,68,.25), 0 0 12px rgba(239,68,68,.2) !important; background:#fff8f8 !important; }
 
     
-        /* ── Google Translate widget — hide the toolbar it injects ── */
+        /* ── Google Translate widget - hide the toolbar it injects ── */
         /* ── Lock layout against ALL Google Translate interference ── */
         .goog-te-banner-frame, .skiptranslate, #goog-gt-tt,
         .goog-tooltip, .goog-te-balloon-frame,
         .goog-te-ftab-float, .VIpgJd-ZVi9od-aZ2wEe { display: none !important; }
 
-        /* GT shifts body.top when it injects the toolbar — hard-lock it */
+        /* GT shifts body.top when it injects the toolbar - hard-lock it */
         body { top: 0 !important; position: static !important; }
 
         /* Prevent GT from changing text direction or layout on any element */
@@ -489,7 +489,7 @@
             text-align: left !important;
         }
 
-        /* GT wraps translated text in <font> tags — make sure they're inline only */
+        /* GT wraps translated text in <font> tags - make sure they're inline only */
         font[class^="notranslate"], .VIpgJd-yAWNEb-VIpgJd-fmcmS { display: inline !important; }
 
         /* ══ Language Switcher ══ */
@@ -787,7 +787,7 @@
             #leaderboardTab > div:first-child { flex-wrap:wrap; }
             .hovername .hovercard { bottom:auto; top:130%; white-space:normal; min-width:150px; }
             #quoteText { font-size:17px; }
-            /* Fix UPM modal — keep padding:0 for banner, add scroll */
+            /* Fix UPM modal - keep padding:0 for banner, add scroll */
             #userProfileModal .modal-content {
                 padding: 0 !important;
                 max-height: 90vh !important;
@@ -807,7 +807,7 @@
                 bottom: 14px;
                 left: 14px; right: 14px;
                 border-radius: 28px;
-                /* Solid navy tint — no blur, no faded look */
+                /* Solid navy tint - no blur, no faded look */
                 background: #0d1a2e;
                 border: 1px solid rgba(56, 189, 248, 0.18);
                 box-shadow:
@@ -852,7 +852,7 @@
                 font-size: 9px;
                 font-weight: 600;
                 gap: 3px;
-                /* Glass border — transparent by default */
+                /* Glass border - transparent by default */
                 border: 1.5px solid transparent;
                 background: transparent;
                 text-transform: uppercase;
@@ -873,14 +873,14 @@
                 transition: transform .22s cubic-bezier(.34,1.56,.64,1), filter .22s ease;
             }
 
-            /* Active state — glass refraction border + subtle lift */
+            /* Active state - glass refraction border + subtle lift */
             .mob-tab.active {
                 color: #38bdf8;
                 background: rgba(56, 189, 248, 0.08);
                 border-color: transparent;
                 transform: scale(1.06);
             }
-            /* Iridescent glass border — light refracting through the edge */
+            /* Iridescent glass border - light refracting through the edge */
             .mob-tab.active::before {
                 content: '';
                 position: absolute;
@@ -913,13 +913,13 @@
                 filter: drop-shadow(0 2px 6px rgba(56,189,248,.5));
             }
 
-            /* Press — squish down then spring */
+            /* Press - squish down then spring */
             .mob-tab:active {
                 transform: scale(0.90);
                 transition: transform .08s ease;
             }
 
-            /* Profile is a modal trigger, not a tab — never show active glow */
+            /* Profile is a modal trigger, not a tab - never show active glow */
             #mob-profile.active, #mob-profile:focus {
                 background: none !important;
                 box-shadow: none !important;
@@ -1147,8 +1147,10 @@
         body.dark .adm-msg-bubble { background:#334155; color:#e2e8f0; }
         body.dark .adm-msg.right .adm-msg-bubble { background:#1e3a5f; }
     </style>
+<link rel="stylesheet" href="assets/platform.css">
+<script src="assets/platform.js" defer></script>
 </head>
-<body>
+<body class="platform">
 
     <!-- ── MINIMAP WIDGET ── -->
     <div id="minimap-widget" title="Click to expand map">
@@ -1193,7 +1195,7 @@
                 </div>
                 <div class="upm-stats">
                     <div class="upm-stat"><div class="upm-stat-num" id="upmHelps">0</div><div class="upm-stat-lbl">Helps</div></div>
-                    <div class="upm-stat"><div class="upm-stat-num" id="upmRating">—</div><div class="upm-stat-lbl">Rating</div></div>
+                    <div class="upm-stat"><div class="upm-stat-num" id="upmRating"> - </div><div class="upm-stat-lbl">Rating</div></div>
                     <div class="upm-stat"><div class="upm-stat-num" id="upmPosts">0</div><div class="upm-stat-lbl">Posts</div></div>
                 </div>
                 <!-- Admin-only email + status section -->
@@ -1201,11 +1203,11 @@
                     <div style="font-size:11px;font-weight:700;color:#38bdf8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">🛡️ Admin View</div>
                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
                         <span style="font-size:13px;">📧</span>
-                        <span id="upmAdminEmail" style="font-size:13px;color:#e2e8f0;font-family:monospace;word-break:break-all;">—</span>
+                        <span id="upmAdminEmail" style="font-size:13px;color:#e2e8f0;font-family:monospace;word-break:break-all;"> - </span>
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;">
                         <span style="font-size:13px;">🔖</span>
-                        <span id="upmAdminStatus" style="font-size:12px;color:#94a3b8;">—</span>
+                        <span id="upmAdminStatus" style="font-size:12px;color:#94a3b8;"> - </span>
                     </div>
                     <!-- Admin award points -->
                     <div style="margin-top:12px;padding-top:12px;border-top:1px solid #334155;">
@@ -1219,7 +1221,7 @@
                 </div>
                 <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Badges</div>
                 <div class="upm-badges-grid" id="upmBadges"></div>
-                <!-- Report button — hidden for own profile -->
+                <!-- Report button - hidden for own profile -->
                 <div id="upmReportBtnWrap" style="display:none;">
                     <button class="upm-report-btn" id="upmReportBtn">
                         🚩 Report User
@@ -1234,7 +1236,7 @@
         <div class="modal-content">
             <div class="ls-icon">📍</div>
             <h2 style="margin:0 0 6px;font-family:'Syne',sans-serif;">Set Your Area</h2>
-            <p style="font-size:13px;color:#64748b;margin:0 0 18px;">Search for your street, neighbourhood, building, or landmark in the UAE — the more specific, the better.</p>
+            <p style="font-size:13px;color:#64748b;margin:0 0 18px;">Search for your street, neighbourhood, building, or landmark in the UAE - the more specific, the better.</p>
             <input type="text" id="lsInput" placeholder="e.g. Al Majaz 2, Rolla Square, Al Nahda…" oninput="lsDebounce()" autocomplete="off">
             <div id="lsSearchResults"></div>
             <div id="lsStatus" style="font-size:12px;color:#64748b;margin-top:8px;min-height:16px;"></div>
@@ -1431,7 +1433,7 @@
                             <h3 style="margin:0;">🏆 Leaderboard</h3>
                             <p style="font-size:13px; color:#64748b; margin:4px 0 0;">Resolve: 2 pts &nbsp;·&nbsp; 4★: 3 pts &nbsp;·&nbsp; 5★: 4 pts &nbsp;·&nbsp; Thank You: +1 pt</p>
                         </div>
-                        <div id="myPointsBadge" style="background:#0f172a; color:#38bdf8; padding:8px 16px; border-radius:10px; font-weight:700; font-size:14px; font-family:'Syne',sans-serif;">My Points: —</div>
+                        <div id="myPointsBadge" style="background:#0f172a; color:#38bdf8; padding:8px 16px; border-radius:10px; font-weight:700; font-size:14px; font-family:'Syne',sans-serif;">My Points: - </div>
                     </div>
                     <!-- 🏅 Top 3 Certificate Banner -->
                     <div style="display:flex;align-items:flex-start;gap:12px;background:linear-gradient(135deg,#fefce8,#fef9c3);border:1.5px solid #fde68a;border-radius:14px;padding:14px 18px;margin-bottom:18px;">
@@ -1602,7 +1604,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2025</span>
                             </div>
                             <h4 style="margin:0 0 8px; color:#166534; font-family:'Syne',sans-serif;">Pilot Phase Now Live!</h4>
-                            <p style="font-size:14px; color:#15803d; margin:0; line-height:1.6;">The pilot phase of the Beacon of Unity program is currently ongoing. We're testing, learning, and growing together — and we couldn't do it without you. <b>Thank you for being a part of this!</b> 🌟</p>
+                            <p style="font-size:14px; color:#15803d; margin:0; line-height:1.6;">The pilot phase of the Beacon of Unity program is currently ongoing. We're testing, learning, and growing together - and we couldn't do it without you. <b>Thank you for being a part of this!</b> 🌟</p>
                         </div>
 
                         <!-- ── March 2026 (new features) ── -->
@@ -1612,7 +1614,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2026</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Rewards, Badges & Cosmetics</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points and unlock cosmetic rewards — gradient profile skins, chat bubble colours, and chat backgrounds. 35 achievement badges track your milestones automatically. View cosmetic rewards in 🎁 Rewards and all badges in 🏅 Badges.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points and unlock cosmetic rewards - gradient profile skins, chat bubble colours, and chat backgrounds. 35 achievement badges track your milestones automatically. View cosmetic rewards in 🎁 Rewards and all badges in 🏅 Badges.</p>
                         </div>
 
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -1621,7 +1623,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2026</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">In-App Notification Centre</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The bell 🔔 in the top bar now shows a live notification feed — messages, volunteers, resolves, and thank-yous appear there instantly without needing push notifications.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The bell 🔔 in the top bar now shows a live notification feed - messages, volunteers, resolves, and thank-yous appear there instantly without needing push notifications.</p>
                         </div>
 
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -1639,7 +1641,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2026</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Volunteer Opportunities Launched</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The Volunteer Opportunities tab is now live. Curated opportunities are posted by our team — browse events by category, date, and location across the UAE.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The Volunteer Opportunities tab is now live. Curated opportunities are posted by our team - browse events by category, date, and location across the UAE.</p>
                         </div>
 
                         <!-- ── March 2026 (existing) ── -->
@@ -1658,7 +1660,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2026</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Push Notifications</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The Android app now delivers real-time push notifications for new chat messages, help requests posted in your region, and lost & found reports. Notifications work even when the app is closed — you'll never miss something important in your community.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The Android app now delivers real-time push notifications for new chat messages, help requests posted in your region, and lost & found reports. Notifications work even when the app is closed - you'll never miss something important in your community.</p>
                         </div>
 
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -1667,7 +1669,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2026</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Real-Time Chat Unread Indicator</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The red unread glow on active conversations now updates live — no reload needed. If someone messages you while the site is open, the glow appears instantly. Opening a chat also clears the indicator immediately.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The red unread glow on active conversations now updates live - no reload needed. If someone messages you while the site is open, the glow appears instantly. Opening a chat also clears the indicator immediately.</p>
                         </div>
 
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -1676,7 +1678,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2026</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Volunteer Rank System Launched</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points with every resolved chat and climb through volunteer ranks — from Newcomer all the way to Guardian of Unity. Check your rank on the Leaderboard!</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Earn points with every resolved chat and climb through volunteer ranks - from Newcomer all the way to Guardian of Unity. Check your rank on the Leaderboard!</p>
                         </div>
 
                         <!-- ── March 2025 ── -->
@@ -1686,7 +1688,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2025</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Mobile Browser Compatibility</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Fixed a critical issue where news would not load on mobile browsers (Android Chrome, iOS Safari). The root cause was an unsupported AbortSignal.timeout() API — replaced with a universal AbortController + setTimeout approach that works across all devices and browsers.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">Fixed a critical issue where news would not load on mobile browsers (Android Chrome, iOS Safari). The root cause was an unsupported AbortSignal.timeout() API - replaced with a universal AbortController + setTimeout approach that works across all devices and browsers.</p>
                         </div>
 
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -1704,7 +1706,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2025</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Modern Chat Bubbles</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The chat UI was redesigned with modern message bubbles — consecutive messages from the same sender are grouped together, timestamps appear beside the bubble on hover (left for you, right for them), and the overall feel is cleaner and more modern.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The chat UI was redesigned with modern message bubbles - consecutive messages from the same sender are grouped together, timestamps appear beside the bubble on hover (left for you, right for them), and the overall feel is cleaner and more modern.</p>
                         </div>
 
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -1731,7 +1733,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2025</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Reliable News Tab Launched</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">A brand new Reliable News tab is now live, pulling real-time stories from Al Jazeera, BBC News, NPR News, and Times of India. Filter by source or topic — War & Conflict, Sports, Business, Tech, Health, UAE Local, India, Politics, Entertainment, and Environment.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">A brand new Reliable News tab is now live, pulling real-time stories from Al Jazeera, BBC News, NPR News, and Times of India. Filter by source or topic - War & Conflict, Sports, Business, Tech, Health, UAE Local, India, Politics, Entertainment, and Environment.</p>
                         </div>
 
                         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:22px;">
@@ -1776,7 +1778,7 @@
                                 <span style="font-size:12px; color:#64748b;">March 2025</span>
                             </div>
                             <h4 style="margin:0 0 8px; font-family:'Syne',sans-serif;">Dark Sidebar & Navigation Polish</h4>
-                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The sidebar received a full visual overhaul — deep navy background (#0f172a), sky-blue active states, Segoe UI typography, smooth hover transitions, and a consistent icon layout across all nav items.</p>
+                            <p style="font-size:14px; color:#475569; margin:0; line-height:1.6;">The sidebar received a full visual overhaul - deep navy background (#0f172a), sky-blue active states, Segoe UI typography, smooth hover transitions, and a consistent icon layout across all nav items.</p>
                         </div>
                     </div>
                 </div>
@@ -1824,7 +1826,7 @@
                         <div style="font-size:42px;">📰</div>
                         <div>
                             <h3 style="margin:0;">Reliable News</h3>
-                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Important stories from Khaleej Times & Gulf News</p>
+                            <p style="color:#64748b; font-size:13px; margin:4px 0 0;">Browse headlines from the sources listed below.</p>
                         </div>
                     </div>
 
@@ -1940,19 +1942,19 @@
             <!-- Stats grid -->
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
                 <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:12px; text-align:center;">
-                    <div id="statChatsHelped" style="font-size:22px; font-weight:800; color:#16a34a; font-family:'Syne',sans-serif;">—</div>
+                    <div id="statChatsHelped" style="font-size:22px; font-weight:800; color:#16a34a; font-family:'Syne',sans-serif;"> - </div>
                     <div style="font-size:11px; color:#15803d; font-weight:600;">Chats Resolved</div>
                 </div>
                 <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px; text-align:center;">
-                    <div id="statRating" style="font-size:22px; font-weight:800; color:#1d4ed8; font-family:'Syne',sans-serif;">—</div>
+                    <div id="statRating" style="font-size:22px; font-weight:800; color:#1d4ed8; font-family:'Syne',sans-serif;"> - </div>
                     <div style="font-size:11px; color:#1e40af; font-weight:600;">Avg Rating</div>
                 </div>
                 <div style="background:#fdf4ff; border:1px solid #e9d5ff; border-radius:10px; padding:12px; text-align:center;">
-                    <div id="statBadges" style="font-size:22px; font-weight:800; color:#7c3aed; font-family:'Syne',sans-serif;">—</div>
+                    <div id="statBadges" style="font-size:22px; font-weight:800; color:#7c3aed; font-family:'Syne',sans-serif;"> - </div>
                     <div style="font-size:11px; color:#6d28d9; font-weight:600;">Badges Earned</div>
                 </div>
                 <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:12px; text-align:center;">
-                    <div id="statJoined" style="font-size:13px; font-weight:800; color:#c2410c; font-family:'Syne',sans-serif;">—</div>
+                    <div id="statJoined" style="font-size:13px; font-weight:800; color:#c2410c; font-family:'Syne',sans-serif;"> - </div>
                     <div style="font-size:11px; color:#ea580c; font-weight:600;">Member Since</div>
                 </div>
             </div>
@@ -2094,11 +2096,11 @@
             </div>
             <p id="starLabel" style="font-size:13px; color:#94a3b8; margin-bottom:18px; min-height:18px;"></p>
             <button id="submitRatingBtn" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:8px; font-weight:bold; cursor:pointer; opacity:0.4;" disabled>Submit Rating &amp; Resolve</button>
-            <button id="skipRatingBtn" style="width:100%; background:none; border:none; color:#94a3b8; margin-top:10px; cursor:pointer; font-size:13px;">Skip — just end chat</button>
+            <button id="skipRatingBtn" style="width:100%; background:none; border:none; color:#94a3b8; margin-top:10px; cursor:pointer; font-size:13px;">Skip - just end chat</button>
         </div>
     </div>
 
-    <!-- Chat popup — Apple iMessage style -->
+    <!-- Chat popup - Apple iMessage style -->
     <div id="chatPopup">
         <!-- Header -->
         <div id="chatHeader">
@@ -2143,7 +2145,7 @@
         const db = getFirestore(app);
 
         // Demo mode: loaded inside the homepage's "Try a Demo" simulation overlay.
-        // Never touch real auth/session data or hit Firestore — always show the
+        // Never touch real auth/session data or hit Firestore - always show the
         // self-contained fake-data demo, regardless of any cached login.
         window.IS_DEMO_MODE = new URLSearchParams(location.search).get('demo') === '1';
 
@@ -2289,7 +2291,7 @@
             { id:'ten_helps',      icon:'💪', label:'10x Helper',          desc:'Resolved 10 chats',                                check: d => (d.chatsResolved||0) >= 10 },
             { id:'twenty_helps',   icon:'🦾', label:'Committed Helper',    desc:'Resolved 20 chats',                                check: d => (d.chatsResolved||0) >= 20 },
             { id:'fifty_helps',    icon:'🏅', label:'Community Pillar',    desc:'Resolved 50 chats',                                check: d => (d.chatsResolved||0) >= 50 },
-            { id:'hundred_helps',  icon:'🎖️', label:'Centurion',           desc:'Resolved 100 chats — incredible dedication',       check: d => (d.chatsResolved||0) >= 100 },
+            { id:'hundred_helps',  icon:'🎖️', label:'Centurion',           desc:'Resolved 100 chats - incredible dedication',       check: d => (d.chatsResolved||0) >= 100 },
             // ── Requests ──
             { id:'first_req',      icon:'✋', label:'Help Seeker',         desc:'Posted your first help request',                   check: d => (d.reqPosts||0) >= 1 },
             { id:'five_reqs',      icon:'📋', label:'Frequent Asker',      desc:'Posted 5 help requests',                           check: d => (d.reqPosts||0) >= 5 },
@@ -2351,7 +2353,7 @@
         function showBadgeToast(ach) {
             const t = document.createElement('div');
             t.style.cssText = 'position:fixed;bottom:calc(90px + env(safe-area-inset-bottom, 0px));left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1e293b,#0f172a);color:white;padding:14px 22px;border-radius:16px;z-index:9999;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.35);animation:slideUp .4s ease;pointer-events:none;max-width:90vw;';
-            t.innerHTML = `<span style="font-size:28px;">${ach.icon}</span><div><div style="font-weight:700;font-size:14px;">Badge Unlocked!</div><div style="color:#94a3b8;font-size:12px;">${ach.label} — ${ach.desc}</div></div>`;
+            t.innerHTML = `<span style="font-size:28px;">${ach.icon}</span><div><div style="font-weight:700;font-size:14px;">Badge Unlocked!</div><div style="color:#94a3b8;font-size:12px;">${ach.label} - ${ach.desc}</div></div>`;
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 4000);
         }
@@ -2449,7 +2451,7 @@
             modal.style.display = 'flex';
 
             // Remove the active glow from the profile button on mobile
-            // (profile is not a tab — the previously active tab should stay highlighted)
+            // (profile is not a tab - the previously active tab should stay highlighted)
             const mobProfileBtn = document.getElementById('mob-profile');
             if (mobProfileBtn) mobProfileBtn.classList.remove('active');
         };
@@ -2462,8 +2464,7 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (window.IS_DEMO_MODE) {
-                // Demo mode never uses real auth/session state or live Firestore data —
-                // the standalone demo engine (bottom of file) populates the UI instead.
+                // Demo mode never uses real auth/session state or live Firestore data - // the standalone demo engine (bottom of file) populates the UI instead.
                 return;
             }
             if (user) {
@@ -2697,7 +2698,7 @@
                 lastExtendedAt: serverTimestamp()
             });
             const msg = isFinalExt
-                ? '✅ Extended by 2 days. This is your final extension — the post will auto-delete when it expires.'
+                ? '✅ Extended by 2 days. This is your final extension - the post will auto-delete when it expires.'
                 : '✅ Extended by 2 more days!';
             alert(msg);
         };
@@ -2709,7 +2710,7 @@
                 lastExtendedAt: serverTimestamp()
             });
             const msg = isFinalExt
-                ? '✅ Extended by 2 days. This is your final extension — the post will auto-delete when it expires.'
+                ? '✅ Extended by 2 days. This is your final extension - the post will auto-delete when it expires.'
                 : '✅ Extended by 2 more days!';
             alert(msg);
         };
@@ -2794,7 +2795,7 @@
                         ? `<span style="font-size:10px;color:#7c3aed;font-weight:600;background:#f3e8ff;border:1px solid #ddd6fe;border-radius:99px;padding:1px 7px;margin-left:4px;">🔁 Ext ${info.extensions}/${info.MAX_EXT}</span>`
                         : '';
 
-                    // Expiry warning banner — shown to owner when ≤ WARN_DAYS remain
+                    // Expiry warning banner - shown to owner when ≤ WARN_DAYS remain
                     let expiryWarningHtml = '';
                     const warnKey = `exp_warned_req_${docSnap.id}`;
                     if (isOwner && dL <= WARN_DAYS && !sessionStorage.getItem(warnKey)) {
@@ -2810,10 +2811,10 @@
                                 <div style="font-size:12px;font-weight:700;color:#c2410c;margin-bottom:2px;">Is this request still relevant?</div>
                                 <div style="font-size:11px;color:#ea580c;line-height:1.55;">Expires in <b>${daysStr}</b>.${finalNote}</div>
                                 ${canExtend ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
-                                    <button onclick="keepPost('${docSnap.id}',${info.extensions},${info.MAX_EXT});sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-${docSnap.id}').remove();" style="background:#f97316;color:white;border:none;padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✅ Keep — Extend 2 Days</button>
+                                    <button onclick="keepPost('${docSnap.id}',${info.extensions},${info.MAX_EXT});sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-${docSnap.id}').remove();" style="background:#f97316;color:white;border:none;padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✅ Keep - Extend 2 Days</button>
                                     <button onclick="deletePost('${docSnap.id}', this);sessionStorage.setItem('${warnKey}','1');" style="background:#fee2e2;color:#991b1b;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑 Delete Now</button>
                                     <button onclick="sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-${docSnap.id}').remove();" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;line-height:1;padding:0;">✕</button>
-                                </div>` : `<div style="font-size:11px;font-weight:700;color:#ef4444;margin-top:6px;">⚠️ No more extensions available — this post will be auto-deleted when it expires.</div>`}
+                                </div>` : `<div style="font-size:11px;font-weight:700;color:#ef4444;margin-top:6px;">⚠️ No more extensions available - this post will be auto-deleted when it expires.</div>`}
                             </div>
                         </div>`;
                     }
@@ -2903,7 +2904,7 @@
                         ? `<span style="font-size:10px;color:#7c3aed;font-weight:600;background:#f3e8ff;border:1px solid #ddd6fe;border-radius:99px;padding:1px 7px;margin-left:4px;">🔁 Ext ${info.extensions}/${info.MAX_EXT}</span>`
                         : '';
 
-                    // Expiry warning banner — owner only, ≤ WARN_DAYS left
+                    // Expiry warning banner - owner only, ≤ WARN_DAYS left
                     let expiryWarningHtml = '';
                     const warnKey = `exp_warned_lf_${docSnap.id}`;
                     if (isOwner && dL <= WARN_DAYS && !sessionStorage.getItem(warnKey)) {
@@ -2919,10 +2920,10 @@
                                 <div style="font-size:12px;font-weight:700;color:#c2410c;margin-bottom:2px;">Is this item still missing / unclaimed?</div>
                                 <div style="font-size:11px;color:#ea580c;line-height:1.55;">Expires in <b>${daysStr}</b>.${finalNote}</div>
                                 ${canExtend ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
-                                    <button onclick="keepLFPost('${docSnap.id}',${info.extensions},${info.MAX_EXT});sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-lf-${docSnap.id}').remove();" style="background:#f97316;color:white;border:none;padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✅ Keep — Extend 2 Days</button>
+                                    <button onclick="keepLFPost('${docSnap.id}',${info.extensions},${info.MAX_EXT});sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-lf-${docSnap.id}').remove();" style="background:#f97316;color:white;border:none;padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✅ Keep - Extend 2 Days</button>
                                     <button onclick="deleteLF('${docSnap.id}', this);sessionStorage.setItem('${warnKey}','1');" style="background:#fee2e2;color:#991b1b;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑 Delete Now</button>
                                     <button onclick="sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-lf-${docSnap.id}').remove();" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;line-height:1;padding:0;">✕</button>
-                                </div>` : `<div style="font-size:11px;font-weight:700;color:#ef4444;margin-top:6px;">⚠️ No more extensions available — this post will be auto-deleted when it expires.</div>`}
+                                </div>` : `<div style="font-size:11px;font-weight:700;color:#ef4444;margin-top:6px;">⚠️ No more extensions available - this post will be auto-deleted when it expires.</div>`}
                             </div>
                         </div>`;
                     }
@@ -2961,7 +2962,7 @@
                 if (card) card.remove();
             } catch (err) {
                 console.error('deletePost failed:', err);
-                alert('Could not delete this post — please check your connection and try again.');
+                alert('Could not delete this post - please check your connection and try again.');
             }
         };
         window.deleteLF = async (id, btnEl) => {
@@ -2972,7 +2973,7 @@
                 if (card) card.remove();
             } catch (err) {
                 console.error('deleteLF failed:', err);
-                alert('Could not delete this post — please check your connection and try again.');
+                alert('Could not delete this post - please check your connection and try again.');
             }
         };
         window.toggleVols = (id) => { const el = document.getElementById(`vols-${id}`); el.style.display = el.style.display === 'none' ? 'block' : 'none'; };
@@ -3096,7 +3097,7 @@
                     const sameSenderAsPrev = prevMsg && !isSys && prevMsg.senderId === data.senderId && prevMsg.senderId !== 'system';
                     const sameSenderAsNext = nextMsg && !isSys && nextMsg.senderId === data.senderId && nextMsg.senderId !== 'system';
 
-                    // Date chip — reset on new day
+                    // Date chip - reset on new day
                     if (ts) {
                         const ds = ts.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
                         if (ds !== lastDateStr) {
@@ -3126,7 +3127,7 @@
                         if (!isMe && sameSenderAsPrev) classes.push('no-av');
                         row.className = classes.join(' ');
 
-                        // Mini avatar for "them" side — only show on last bubble of their group
+                        // Mini avatar for "them" side - only show on last bubble of their group
                         if (!isMe) {
                             const av = document.createElement('div');
                             av.className = 'imsg-mini-av';
@@ -3142,7 +3143,7 @@
                         bub.textContent = data.text;
                         wrap.appendChild(bub);
 
-                        // Translate button — shows on hover
+                        // Translate button - shows on hover
                         const tBtn = document.createElement('button');
                         tBtn.className = 'translate-btn';
                         tBtn.innerHTML = '🌐 Translate';
@@ -3160,7 +3161,7 @@
                                 btnEl.innerHTML = '⏳';
                                 btnEl.disabled = true;
                                 const targetLang = window._currentLang || 'en';
-                                // Detect source — if target is en, translate to en; else to target
+                                // Detect source - if target is en, translate to en; else to target
                                 const langpair = targetLang === 'en' ? 'ar|en' : 'en|' + targetLang;
                                 try {
                                     const res = await fetch(
@@ -3191,7 +3192,7 @@
 
                         row.appendChild(wrap);
 
-                        // Timestamp beside bubble — only on last in group
+                        // Timestamp beside bubble - only on last in group
                         // "me" = time on LEFT (prepended before wrap)
                         // "them" = time on RIGHT (appended after wrap)
                         if (!sameSenderAsNext && ts) {
@@ -3542,7 +3543,7 @@
                         const mobIcon = document.getElementById('mobChatsIcon');
                         if (mobIcon) mobIcon.innerText = anyUnread ? '🔴' : '💬';
                         syncMobileChats();
-                        // Stop here — do NOT kick off an async re-render for modified events.
+                        // Stop here - do NOT kick off an async re-render for modified events.
                         // The async render uses a captured chatData snapshot and can race with
                         // subsequent fast-path updates, causing the glow to flip back incorrectly.
                         // Name and rating don't change on every message, so a full re-render
@@ -3620,7 +3621,7 @@
                     users.push({
                         uid: d.id, name: data.fullName,
                         pts: data.leaderboardPoints || 0,
-                        region: data.region || '—',
+                        region: data.region || ' - ',
                         rating: data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : null,
                         ratingCount: data.ratingCount || 0,
                         equippedSkin: data.equippedSkin || 'ocean',
@@ -3648,7 +3649,7 @@
                 feed.innerHTML = '';
                 _lbAllRows = [];
                 if (!users.length) {
-                    feed.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:30px;">No helpers yet — be the first!</p>';
+                    feed.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:30px;">No helpers yet - be the first!</p>';
                     return;
                 }
 
@@ -3904,7 +3905,7 @@
                         <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">Your Badges</span>
                         <span style="font-size:18px;font-weight:800;color:#38bdf8;">${earnedCount} <span style="font-size:13px;color:#94a3b8;font-weight:500;">/ ${total}</span></span>
                     </div>
-                    <div style="font-size:12px;color:#94a3b8;margin-bottom:6px;">${pct}% collected — keep helping to unlock more!</div>
+                    <div style="font-size:12px;color:#94a3b8;margin-bottom:6px;">${pct}% collected - keep helping to unlock more!</div>
                     <div style="background:#334155;border-radius:99px;height:6px;overflow:hidden;">
                         <div style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);height:100%;width:${pct}%;border-radius:99px;transition:width .5s;"></div>
                     </div>`;
@@ -3975,7 +3976,7 @@
                 document.getElementById('notifSubtitle').textContent = `${unread} unread`;
                 renderNotifList(items);
             }, err => {
-                // Likely missing Firestore composite index — fall back to unordered query
+                // Likely missing Firestore composite index - fall back to unordered query
                 console.warn('Notifications index missing, falling back:', err.message);
                 const qFallback = query(collection(db, 'notifications'), where('toUid','==',uid));
                 _notifUnsub = onSnapshot(qFallback, snap => {
@@ -4031,7 +4032,7 @@
             o.style.display = open ? 'none' : 'block';
         };
 
-        /* ── Mobile More Sheet removed — using scrollable tab bar ── */
+        /* ── Mobile More Sheet removed - using scrollable tab bar ── */
 
         window.markAllNotifsRead = async () => {
             const uid = auth.currentUser?.uid;
@@ -4059,7 +4060,7 @@
                 const urgent = snap.docs.filter(d => !d.data().resolved);
                 if (urgent.length > 0) {
                     const first = urgent[0].data();
-                    text.textContent = `${first.title} — ${first.location}`;
+                    text.textContent = `${first.title} - ${first.location}`;
                     banner.style.display = 'flex';
                 } else {
                     banner.style.display = 'none';
@@ -4106,7 +4107,7 @@
         window.adminEditTY = (tyId, currentMsg) => {
             const newMsg = prompt('Edit thank you message (admin):', currentMsg);
             if (newMsg === null) return;
-            // Editing does NOT adjust points — points are awarded at post time only
+            // Editing does NOT adjust points - points are awarded at post time only
             updateDoc(doc(db,'thankyou',tyId), { message: newMsg.trim() }).catch(()=>{});
         };
         window.adminDeleteTY = async (tyId) => {
@@ -4203,8 +4204,8 @@
         // ═══════════════════════════════════════════════
         async function loadProfileStats(data, pts) {
             document.getElementById('statChatsHelped').textContent = data.chatsResolved || 0;
-            const rating = data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : '—';
-            document.getElementById('statRating').textContent = rating !== '—' ? `${rating}⭐` : '—';
+            const rating = data.ratingCount ? (data.ratingTotal / data.ratingCount).toFixed(1) : ' - ';
+            document.getElementById('statRating').textContent = rating !== ' - ' ? `${rating}⭐` : ' - ';
             const badgeIds = Array.isArray(data.badges) ? data.badges : [];
             document.getElementById('statBadges').textContent = badgeIds.length;
             if (data.joinedAt) {
@@ -4308,7 +4309,7 @@
         };
 
         // ══════════════════════════════════════════
-        //  RELIABLE NEWS — Khaleej Times + Gulf News + Al Jazeera
+        //  RELIABLE NEWS - Khaleej Times + Gulf News + Al Jazeera
         // ══════════════════════════════════════════
         let _newsItems = [];
         let _newsSource = 'all';
@@ -4528,11 +4529,22 @@
                 .slice(0, 80);
         }
 
+        // Demo-only fixtures. Never read live feeds or write the real news cache.
+        function renderDemoNews() {
+            const topics=[['uae','Neighbours plan a shared courtyard reading corner'],['sports','Community teams organise a friendly weekend match'],['business','Local makers imagine a neighbourhood craft market'],['tech','Students prototype an accessible community noticeboard'],['health','Volunteers plan a wellbeing information session'],['india','A fictional reading club shares stories across cities'],['politics','A sample residents council discusses shared spaces'],['entertainment','Neighbours rehearse for a community talent evening'],['environment','A sample building starts a balcony gardening club'],['conflict','A fictional workshop explores peaceful conflict resolution']];
+            const sources=['aljazeera','bbc','npr','toi'];
+            // Keep the real publisher names in the source controls; fixtures are not publisher articles.
+            const btn=document.getElementById('newsRefreshBtn');btn.disabled=false;btn.textContent='Reload samples';
+            const items=topics.map(([category,title],i)=>({category,title,source:sources[i%4],label:'Sample source '+String.fromCharCode(65+i%4)})).filter(i=>(_newsSource==='all'||i.source===_newsSource)&&(_newsCat==='all'||i.category===_newsCat));
+            document.getElementById('newsFeed').innerHTML='<aside class="demo-news-notice"><strong>Dashboard simulation</strong><p>The real dashboard includes Al Jazeera, BBC News, NPR News and Times of India. These fictional stories only demonstrate the layout and filters; none were published by these outlets.</p></aside>'+ (items.length?items.map(i=>`<article class="news-card"><div><small class="demo-news-tag">FICTIONAL EXAMPLE &middot; Not a publisher article</small><h4>${i.title}</h4><p>Sample content for the interactive demo only. Explore the topic and source filters to see how the dashboard works.</p><details><summary>Explore sample story</summary><p>This is a made-up scenario, not a reported event. In the real dashboard, news cards link to the original publisher.</p></details></div></article>`).join(''):'<p class="demo-news-notice">No sample stories match these filters. Try All sources or All topics.</p>');
+            _newsLoaded=true;
+        }
         window.loadNews = async (forceRefresh) => {
+            if(window.IS_DEMO_MODE){renderDemoNews();return;}
             if (!document.getElementById('newsFeed')) return;
             const btn = document.getElementById('newsRefreshBtn');
 
-            // If we have ANY cache, show it instantly — then refresh in background
+            // If we have ANY cache, show it instantly - then refresh in background
             const cached = _getAnyCache();
             if (cached && !forceRefresh) {
                 _newsItems = cached;
@@ -4544,7 +4556,7 @@
                 return;
             }
 
-            // No cache (first ever load) or force refresh — show skeleton, fetch, display
+            // No cache (first ever load) or force refresh - show skeleton, fetch, display
             if (btn) { btn.disabled = true; btn.textContent = '↻ Loading…'; }
             document.getElementById('newsFeed').innerHTML = `
                 <div style="display:flex;flex-direction:column;gap:14px;">
@@ -4565,14 +4577,14 @@
             await _fetchAllFeeds();
             _newsLoaded = true;
             if (!_newsItems.length) {
-                // Total failure — check stale cache one last time
+                // Total failure - check stale cache one last time
                 const stale = _getAnyCache();
                 if (stale) { _newsItems = stale; _renderNews(); }
             }
             if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh'; }
         };
 
-        // Fire all 4 proxies simultaneously for one URL — first valid response wins
+        // Fire all 4 proxies simultaneously for one URL - first valid response wins
         function _fetchUrl(url, src) {
             const enc = encodeURIComponent(url);
             return _firstSuccess([
@@ -4583,7 +4595,7 @@
             ]);
         }
 
-        // Try all URLs of a source — first one that returns items wins
+        // Try all URLs of a source - first one that returns items wins
         async function _fetchSource(src) {
             for (const url of src.urls) {
                 try {
@@ -4607,9 +4619,9 @@
             if (ajItems.length) {
                 _newsItems = _processItems(ajItems);
                 _saveCache(_newsItems);
-                _renderNews(); // AJ loaded — show immediately
+                _renderNews(); // AJ loaded - show immediately
             }
-            // If AJ failed, DON'T render yet — other sources are about to fire
+            // If AJ failed, DON'T render yet - other sources are about to fire
 
             // Other sources: staggered starts so rss2json doesn't rate-limit all at once
             // Each independently merges into feed the moment it loads
@@ -4623,7 +4635,7 @@
                             _saveCache(_newsItems);
                             _renderNews();
                         } else if (pending === 0 && !_newsItems.length) {
-                            // All sources done and nothing loaded — show error
+                            // All sources done and nothing loaded - show error
                             _fetchingInProgress = false;
                             _renderNews();
                         }
@@ -4679,6 +4691,7 @@
         };
 
         function _renderNews() {
+            if(window.IS_DEMO_MODE){renderDemoNews();return;}
             const feed = document.getElementById('newsFeed');
             if (!feed || !_newsLoaded) return;
             const isDark = document.body.classList.contains('dark');
@@ -4688,7 +4701,7 @@
             if (_newsCat !== 'all')    items = items.filter(i => i.category === _newsCat);
 
             if (!_newsItems.length) {
-                // Still fetching — keep skeleton showing, don't flash error
+                // Still fetching - keep skeleton showing, don't flash error
                 if (_fetchingInProgress) return;
                 feed.innerHTML = `
                 <div style="text-align:center;padding:50px 20px;">
@@ -4850,7 +4863,7 @@
 
         function applySettings() {
             const dark  = localStorage.getItem('bou_dark')  === 'true';
-            const quote = localStorage.getItem('bou_quote') !== 'false';
+            const quote = localStorage.getItem('bou_quote') === 'true';
             document.body.classList.toggle('dark', dark);
             document.getElementById('darkToggle').classList.toggle('on', dark);
             document.getElementById('quoteToggle').classList.toggle('on', quote);
@@ -4861,7 +4874,7 @@
                 const now = localStorage.getItem('bou_dark') === 'true';
                 localStorage.setItem('bou_dark', !now);
             } else {
-                const now = localStorage.getItem('bou_quote') !== 'false';
+                const now = localStorage.getItem('bou_quote') === 'true';
                 localStorage.setItem('bou_quote', !now);
             }
             applySettings();
@@ -4879,15 +4892,15 @@
             "Community is strength.",
             "Do good and good comes back.",
             "A little help goes a long way.",
-            "Kindness is free — spread it everywhere.",
+            "Kindness is free - spread it everywhere.",
             "Every neighbour matters.",
             "The world is better because you're in it.",
-            "Help someone today — they'll help another tomorrow.",
+            "Help someone today - they'll help another tomorrow.",
             "Great things happen when people come together.",
         ];
 
         function runQuote() {
-            if (localStorage.getItem('bou_quote') === 'false') return;
+            if (localStorage.getItem('bou_quote') !== 'true') return;
             let seen = JSON.parse(localStorage.getItem('bou_seen_quotes') || '[]');
             const remaining = QUOTES.filter((_, i) => !seen.includes(i));
             if (!remaining.length) { seen = []; localStorage.setItem('bou_seen_quotes', '[]'); }
@@ -5066,7 +5079,7 @@
                 statusBox.style.display = 'none';
             }
 
-            // Report button — only show for other users
+            // Report button - only show for other users
             const reportWrap = document.getElementById('upmReportBtnWrap');
             const reportBtn  = document.getElementById('upmReportBtn');
             const isSelf = data.uid === auth.currentUser.uid;
@@ -5097,7 +5110,7 @@
 
             // Stats
             document.getElementById('upmHelps').textContent  = data.chatsResolved || 0;
-            document.getElementById('upmRating').textContent = data.rating ? `${data.rating}⭐` : '—';
+            document.getElementById('upmRating').textContent = data.rating ? `${data.rating}⭐` : ' - ';
             document.getElementById('upmPosts').textContent  = (data.reqPosts || 0) + (data.lfPosts || 0);
 
             // Badges
@@ -5122,7 +5135,7 @@
                     if (adminSnap.exists()) {
                         const ad = adminSnap.data();
                         document.getElementById('upmAdminEmail').textContent = ad.email || '(no email stored)';
-                        document.getElementById('upmAdminStatus').textContent = ad.status || '—';
+                        document.getElementById('upmAdminStatus').textContent = ad.status || ' - ';
                     }
                 } catch (_) {
                     document.getElementById('upmAdminEmail').textContent = '(could not load)';
@@ -5181,7 +5194,7 @@
                 `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', Dubai, United Arab Emirates')}&format=json&limit=5&addressdetails=1`,
                 // Generic UAE search biased to UAE bbox
                 `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', United Arab Emirates')}&format=json&limit=5&viewbox=${uaeBbox}&bounded=0&addressdetails=1`,
-                // Photon (Komoot) geocoder — great neighbourhood coverage, no rate limit
+                // Photon (Komoot) geocoder - great neighbourhood coverage, no rate limit
                 `https://photon.komoot.io/api/?q=${encodeURIComponent(query + ' UAE')}&limit=5&lang=en`,
             ];
             for (const url of urls) {
@@ -5227,12 +5240,12 @@
             const box = document.getElementById('lsSearchResults');
             if (!results.length) {
                 box.style.display='none';
-                document.getElementById('lsStatus').textContent = 'No results found — try a different spelling or nearby landmark';
+                document.getElementById('lsStatus').textContent = 'No results found - try a different spelling or nearby landmark';
                 return;
             }
             document.getElementById('lsStatus').textContent = '';
             box.style.display = 'block';
-            // Clean up display names — show shorter readable label
+            // Clean up display names - show shorter readable label
             box.innerHTML = results.slice(0, 10).map((r) => {
                 const addr = r.address || {};
                 // Build a short readable label: road first, then neighbourhood, city, state
@@ -5304,7 +5317,7 @@
             const box = document.getElementById('ulSearchResults');
             if (!results.length) {
                 box.style.display = 'none';
-                document.getElementById('ulStatus').textContent = 'No results — try a street name, building, or nearby landmark';
+                document.getElementById('ulStatus').textContent = 'No results - try a street name, building, or nearby landmark';
                 return;
             }
             document.getElementById('ulStatus').textContent = '';
@@ -5366,7 +5379,7 @@
                 document.body.appendChild(t);
                 setTimeout(() => { t.style.transition='opacity .5s'; t.style.opacity='0'; setTimeout(()=>t.remove(),500); }, 2500);
             } catch(e) {
-                document.getElementById('ulStatus').textContent = 'Failed to save — please try again.';
+                document.getElementById('ulStatus').textContent = 'Failed to save - please try again.';
             }
             btn.disabled = false;
             btn.textContent = '✅ Save Location';
@@ -5402,7 +5415,7 @@
 
         window.initMinimap = function initMinimap() {
             if (_mapInited) return;
-            // Always use demo coords — no browser geolocation needed
+            // Always use demo coords - no browser geolocation needed
             if (!userLat) { userLat = DEMO_MAP_LAT; userLng = DEMO_MAP_LNG; }
             _mapInited = true;
             _map = L.map('minimap-el', {
@@ -5415,11 +5428,11 @@
                 doubleClickZoom: false,
                 tap: false
             });
-            // CartoDB Positron — clean white roads, English labels, no orange/red
+            // CartoDB Positron - clean white roads, English labels, no orange/red
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 19
             }).addTo(_map);
-            // No CSS filter — Positron is already clean and neutral
+            // No CSS filter - Positron is already clean and neutral
 
             // Google Maps-style teardrop pin for user location
             const gmapsPin = L.divIcon({
@@ -5452,7 +5465,7 @@
 
         function refreshMapPins() {
             if (!_map) return;
-            // In demo mode, pins are added by the standalone demo script — skip Firebase
+            // In demo mode, pins are added by the standalone demo script - skip Firebase
             if (window._demoMode) return;
             _postMarkers.forEach(m => _map.removeLayer(m));
             _postMarkers = [];
@@ -5471,7 +5484,7 @@
                 });
             }
 
-            // Load requests — red for urgent (#ef4444), sky blue for normal (#38bdf8)
+            // Load requests - red for urgent (#ef4444), sky blue for normal (#38bdf8)
             getDocs(query(collection(db, 'requests'), orderBy('createdAt','desc'))).then(snap => {
                 snap.forEach(ds => {
                     const d = ds.data();
@@ -5484,7 +5497,7 @@
                 });
             }).catch(()=>{});
 
-            // Load lost & found — orange for lost (#f97316), green for found (#16a34a)
+            // Load lost & found - orange for lost (#f97316), green for found (#16a34a)
             getDocs(query(collection(db, 'lostfound'), orderBy('createdAt','desc'))).then(snap => {
                 snap.forEach(ds => {
                     const d = ds.data();
@@ -5603,7 +5616,7 @@
             } catch(e) { console.warn('Location init failed:', e); }
         }
 
-        // Hook into existing onAuthStateChanged — call our location init
+        // Hook into existing onAuthStateChanged - call our location init
         // We do this by watching for auth user being set
         (function watchForAuth() {
             const check = setInterval(() => {
@@ -5615,7 +5628,7 @@
         })();
     </script>
 
-    <!-- ── CUSTOM CURSOR — Mickey hand, directional ── -->
+    <!-- ── CUSTOM CURSOR - Mickey hand, directional ── -->
     <script>
     (function () {
         'use strict';
@@ -5624,11 +5637,11 @@
         // ── Cursor images (64×64 px images displayed at 32×32 CSS px = crisp 2x) ─
         //   hx/hy = hotspot in CSS px at the 32px display size
         const CURSORS = [
-            // 0 — Arrow (normal)
+            // 0 - Arrow (normal)
             { src: 'data:image/png;base64,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',   hx: 1,  hy: 2  },
-            // 1 — Hand pointer (links, buttons) — finger naturally points UP
+            // 1 - Hand pointer (links, buttons) - finger naturally points UP
             { src: 'data:image/png;base64,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', hx: 3,  hy: 5  },
-            // 2 — I-beam (text)
+            // 2 - I-beam (text)
             { src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABQUlEQVR4nO2aMUoEQRBF/+qCmXiFBXMPIMKEc6M5Q0UeZ9NKvIXgAUxkQVBkV5NqdmgQW9T5WP0fNNUz3cGf3x86mFoNw3AGANM0vWCGmW1i+hx1F/UNANz9gAScsAWwWZeTH8exXnsAADO7mr9098dlpC1D9wloMeAmxnmMVHSfgHXDnouo6U4fUAKaEnAaNaVZKT/qO/zEgFWMf40SwBbApnsDWm6Bz3j/NRVEuk+ADGALYCMD2ALYyAC2ADYygC2AjQxgC2AjA9gC2MgAtgA2MoAtgI0MYAtgIwPYAtjIALYANi3/BfZRU3SF1SgBZnYZ8/v5gpndxvQp6g4ASl+hu78uIfCvUQIQJzvrB7yu9txFLZ2ieyRCCcDxZAvb6rnuFU51GygBOHZ/lx7gVL3AX9F9AoQQQgghhBBCCNEfH5oNMiGD+05QAAAAAElFTkSuQmCC',    hx: 1,  hy: 9  },
         ];
 
@@ -5717,7 +5730,7 @@
             const dx = mx - px, dy = my - py;
             px = mx; py = my;
 
-            // Leaky integrator velocity — smooth + auto-decays to 0
+            // Leaky integrator velocity - smooth + auto-decays to 0
             vx = vx * 0.75 + dx * 0.25;
             vy = vy * 0.75 + dy * 0.25;
 
@@ -5764,7 +5777,7 @@
 
     <script>
     // ═══════════════════════════════════════════
-    //  ADMIN PANEL JS — Beacon of Unity
+    //  ADMIN PANEL JS - Beacon of Unity
     // ═══════════════════════════════════════════
     window.admSubTab = (sub, btn) => {
         document.querySelectorAll('.adm-sub').forEach(el => { el.style.display='none'; el.classList.remove('on'); });
@@ -5841,9 +5854,9 @@
                     <div class="lb-info">
                         <div class="lb-name">${d.fullName||'Unknown'}</div>
                         <div class="lb-sub" style="display:flex;gap:8px;flex-wrap:wrap;">
-                            <span>📍 ${d.region||'—'}</span>
+                            <span>📍 ${d.region||' - '}</span>
                             <span>· ${d.chatsResolved||0} resolved</span>
-                            <span>· ⭐ ${d.ratingCount ? (d.ratingTotal/d.ratingCount).toFixed(1) : '—'}</span>
+                            <span>· ⭐ ${d.ratingCount ? (d.ratingTotal/d.ratingCount).toFixed(1) : ' - '}</span>
                             <span>· ❤️ ${d.thankYousReceived||0} TY</span>
                         </div>
                     </div>
@@ -5906,7 +5919,7 @@
     };
     </script>
 
-<!-- ── Beacon Tutorial v3 — Interactive Simulation ── -->
+<!-- ── Beacon Tutorial v3 - Interactive Simulation ── -->
 <script>
 (function () {
   'use strict';
@@ -5974,16 +5987,16 @@
 
   /* ══ SIMULATION CONFIG ════════════════════════════════════════
      Steps can be:
-       type:'guide'      — Beacon speaks, user clicks Continue
-       type:'interact'   — user must click a real/fake element
-       type:'sim-chat'   — fake chat simulation (bot messages)
-       type:'sim-post'   — user fills fake post form
-       type:'sim-rate'   — user rates the bot
-       type:'points'     — points celebration overlay
+       type:'guide' - Beacon speaks, user clicks Continue
+       type:'interact' - user must click a real/fake element
+       type:'sim-chat' - fake chat simulation (bot messages)
+       type:'sim-post' - user fills fake post form
+       type:'sim-rate' - user rates the bot
+       type:'points' - points celebration overlay
   ══════════════════════════════════════════════════════════════ */
   const STEPS = [
     /* 0 */ { type:'guide', tab:'community', target:'communityTab', side:'left', yFrac:.38,
-      say: n=>`Hey ${n}! I'm Beacon — your guide on Beacon of Unity! 🌟 This is your Community Hub. I'll walk you through every feature interactively — you'll actually try things yourself. Let's start!` },
+      say: n=>`Hey ${n}! I'm Beacon - your guide on Beacon of Unity! 🌟 This is your Community Hub. I'll walk you through every feature interactively - you'll actually try things yourself. Let's start!` },
 
     /* 1 */ { type:'guide', tab:'community', target:'requestFeed', side:'left', yFrac:.48,
       say: ()=>`This is the request feed. Neighbours post help requests here. I've added a demo post so you can see how it works. Notice the category badge, urgency indicator, and the "I can help" button. Let's try it!` },
@@ -5993,13 +6006,13 @@
       hint:'Click the "I can help" button on the demo post' },
 
     /* 3 */ { type:'sim-chat', tab:'community', target:'#chatPopup', side:null, yFrac:.5,
-      say: ()=>`Great! A chat opened with Ahmed (the demo person). He'll send you a message — respond to him and experience how the chat works!`,
+      say: ()=>`Great! A chat opened with Ahmed (the demo person). He'll send you a message - respond to him and experience how the chat works!`,
       botName:'Ahmed Al Rashid', botInitial:'A',
       messages:[
-        { from:'bot', text:'Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?', delay:1200 },
-        { from:'user-prompt', text:'Type a reply and press Send…', delay:0 },
-        { from:'bot', text:'That\'s perfect, thank you so much! I really appreciate your help. 🙏', delay:1000 },
-        { from:'bot', text:'I\'ll be ready at 8:50am outside Block 3, Al Majaz 2.', delay:2200 },
+        { from:'bot', text:`Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?`, delay:1200 },
+        { from:'user-prompt', text:`Type a reply and press Send…`, delay:0 },
+        { from:'bot', text:`That's perfect, thank you so much! I really appreciate your help. 🙏`, delay:1000 },
+        { from:'bot', text:`I'll be ready at 8:50am outside Block 3, Al Majaz 2.`, delay:2200 },
       ]},
 
     /* 4 */ { type:'guide', tab:'community', target:'#chatPopup', side:null, yFrac:.5,
@@ -6017,17 +6030,17 @@
       hint:'Click the + button' },
 
     /* 8 */ { type:'interact', tab:'community', target:'#fabBtn', side:'right', yFrac:.82,
-      say: ()=>`👆 Go ahead — tap the ＋ button to open the post form!`,
+      say: ()=>`👆 Go ahead - tap the ＋ button to open the post form!`,
       hint:'Tap the + button' },
 
     /* 9 */ { type:'sim-post', tab:'community', target:'#requestModal', side:null, yFrac:.5,
-      say: ()=>`Fill in the form! I've pre-filled a demo for you — just click "Post Request" to see it appear in the feed.` },
+      say: ()=>`Fill in the form! I've pre-filled a demo for you - just click "Post Request" to see it appear in the feed.` },
 
     /* 10 */ { type:'guide', tab:'community', target:'#requestFeed', side:'left', yFrac:.48,
       say: ()=>`Your post appeared in the feed! Your neighbours can now see it and offer help. Posts with high urgency glow red so no-one misses them.` },
 
     /* 11 */ { type:'guide', tab:'lostfound', target:'lostFoundTab', side:'left', yFrac:.4,
-      say: ()=>`Lost & Found! 🔍 Report lost keys, wallets, phones — or items you've found. Everything is tagged LOST or FOUND so the community can reunite them with their owners.` },
+      say: ()=>`Lost & Found! 🔍 Report lost keys, wallets, phones - or items you've found. Everything is tagged LOST or FOUND so the community can reunite them with their owners.` },
 
     /* 12 */ { type:'guide', tab:'volunteer-opps', target:'volunteer-oppsTab', side:'left', yFrac:.4,
       say: ()=>`Volunteer Opportunities! 🤝 Join beach cleanups, food drives, and education events. Admins can award you up to 10 manual points if your contribution is verified.` },
@@ -6039,13 +6052,13 @@
       say: ()=>`The Leaderboard! 🏆 Your points rank you against neighbours locally and globally across UAE. Top 3 at month-end get an official Beacon of Unity certificate!` },
 
     /* 15 */ { type:'guide', tab:'reliable-news', target:'reliable-newsTab', side:'left', yFrac:.4,
-      say: ()=>`Reliable News! 📰 Only verified, trusted sources — no misinformation. Stay informed about what matters in your neighbourhood and across the UAE.` },
+      say: ()=>`Reliable News! 📰 Only verified, trusted sources - no misinformation. Stay informed about what matters in your neighbourhood and across the UAE.` },
 
     /* 16 */ { type:'guide', tab:'rewards', target:'rewardsTab', side:'left', yFrac:.4,
       say: ()=>`Rewards! 🎁 Spend your points on profile skins, picture frame colours, and exclusive perks. Your good deeds have real tangible value here!` },
 
     /* 17 */ { type:'guide', tab:'badges', target:'badgesTab', side:'left', yFrac:.4,
-      say: ()=>`Badges! 🏅 Earn them by hitting milestones — first help, streaks, top helper, and more. They show on your profile and tell your story to the community.` },
+      say: ()=>`Badges! 🏅 Earn them by hitting milestones - first help, streaks, top helper, and more. They show on your profile and tell your story to the community.` },
 
     /* 18 */ { type:'guide', tab:null, target:'minimap-widget', side:'right', yFrac:.75,
       say: ()=>`Your Region Minimap! 📍 Live activity around you. Click it to expand and see exactly what's happening in your neighbourhood right now.` },
@@ -6532,7 +6545,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
       // handle different step types
       if (step.type === 'interact') {
-        // Beacon speaks, no Continue — user must click the target
+        // Beacon speaks, no Continue - user must click the target
         if (nxt) { nxt.classList.remove('on'); }
         if (hint) { hint.textContent = step.hint || 'Click the highlighted element'; hint.classList.add('on'); }
         positionGuide(step);
@@ -6694,7 +6707,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     _next() {
       document.getElementById('bt-spl')?.classList.remove('on');
       document.getElementById('bt-nxt')?.classList.remove('on');
-      // Special: after step 4 (guide about ending chat) — just continue
+      // Special: after step 4 (guide about ending chat) - just continue
       if (idx >= STEPS.length-1) { this._finish(); return; }
       runStep(idx+1);
     },
@@ -6785,17 +6798,17 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     const big=document.getElementById('bt-big-wrap'), gl=document.getElementById('bt-gl');
     const gsub=document.getElementById('bt-gsub'), btn=document.getElementById('bt-go-btn');
     const greets=[
-      n=>`Hey ${n}! I'm Beacon — your guide! ✨`,
+      n=>`Hey ${n}! I'm Beacon - your guide! ✨`,
       n=>`${n}! You made it. I'm Beacon. Let's explore! 🚀`,
-      n=>`Welcome, ${n}! Beacon here — ready to show you around! 🌟`,
+      n=>`Welcome, ${n}! Beacon here - ready to show you around! 🌟`,
       n=>`Oh hey, ${n}! The name's Beacon. This is going to be fun! 🎉`,
-      n=>`${n}! I'm Beacon — your beacon of unity. Let's go! 💡`,
+      n=>`${n}! I'm Beacon - your beacon of unity. Let's go! 💡`,
     ];
     const subs=[
-      "I'll walk you through every feature — you'll actually try things yourself.",
-      "Stick with me — this is an interactive tour, not just a slideshow.",
+      "I'll walk you through every feature - you'll actually try things yourself.",
+      "Stick with me - this is an interactive tour, not just a slideshow.",
       "Together we'll try every feature hands-on. Ready?",
-      "Your community journey starts here — let's explore it together.",
+      "Your community journey starts here - let's explore it together.",
     ];
     if(gl)   gl.textContent  = greets[Math.floor(Math.random()*greets.length)](uName);
     if(gsub) gsub.textContent= subs[Math.floor(Math.random()*subs.length)];
@@ -6810,6 +6823,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
   /* ══ AUTO-START ═══════════════════════════════════════════════ */
   function autoStart() {
+    return; // Onboarding is available from Settings, never mandatory on sign-in.
     if (window.IS_DEMO_MODE) return; // mascot tutorial is disabled inside the demo overlay
     if (localStorage.getItem('bou_tutorial_done')) return;
     let tries=0;
@@ -6829,7 +6843,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
 
 <script>
-/* BEACON OF UNITY — STANDALONE DEMO ENGINE (self-contained, no Firebase dependency) */
+/* BEACON OF UNITY - STANDALONE DEMO ENGINE (self-contained, no Firebase dependency) */
 (function(){
 'use strict';
 var REWARD_SKINS=[{id:'ocean',label:'Ocean',gradient:'linear-gradient(135deg,#38bdf8,#0ea5e9)',pts:0},{id:'mint',label:'Mint',gradient:'linear-gradient(135deg,#6ee7b7,#34d399)',pts:4},{id:'lavender',label:'Lavender',gradient:'linear-gradient(135deg,#c4b5fd,#a78bfa)',pts:10},{id:'peach',label:'Peach',gradient:'linear-gradient(135deg,#fca5a5,#fb923c)',pts:20},{id:'sunset',label:'Sunset',gradient:'linear-gradient(135deg,#f97316,#ec4899)',pts:30},{id:'sky',label:'Sky',gradient:'linear-gradient(135deg,#7dd3fc,#2563eb)',pts:45},{id:'aurora',label:'Aurora',gradient:'linear-gradient(135deg,#8b5cf6,#6366f1)',pts:60},{id:'coral',label:'Coral',gradient:'linear-gradient(135deg,#fb7185,#f43f5e)',pts:80},{id:'forest',label:'Forest',gradient:'linear-gradient(135deg,#10b981,#059669)',pts:100},{id:'storm',label:'Storm',gradient:'linear-gradient(135deg,#64748b,#334155)',pts:130},{id:'cherry',label:'Cherry Blossom',gradient:'linear-gradient(135deg,#f9a8d4,#ec4899)',pts:160},{id:'ember',label:'Ember',gradient:'linear-gradient(135deg,#ef4444,#f97316)',pts:200},{id:'ocean2',label:'Deep Ocean',gradient:'linear-gradient(135deg,#0c4a6e,#0369a1)',pts:250},{id:'midnight',label:'Midnight',gradient:'linear-gradient(135deg,#1e293b,#334155)',pts:300},{id:'prism',label:'Prism',gradient:'linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#38bdf8,#8b5cf6)',pts:350},{id:'lava',label:'Lava',gradient:'linear-gradient(135deg,#dc2626,#7c2d12)',pts:400},{id:'galaxy',label:'Galaxy',gradient:'linear-gradient(135deg,#1e1b4b,#7c3aed,#db2777)',pts:450},{id:'gold',label:'Gold Crown',gradient:'linear-gradient(135deg,#f59e0b,#d97706)',pts:500}];
@@ -6841,20 +6855,36 @@ function getVR(pts){var r=VOLUNTEER_RANKS[0];VOLUNTEER_RANKS.forEach(function(v)
 var DEMO_USER={uid:'demo_self',name:'Anshuman Tripathy',region:'Sharjah',pts:999};
 var eqSkin='ocean',eqBubble='blue',eqChat='default';
 var DEMO_USERS=[{id:'u1',name:'Priya Sharma',bg:'#6ee7b7,#34d399',online:true,pts:284,rating:4.9,rc:18,isVol:true},{id:'u2',name:'Ravi Fernandes',bg:'#f97316,#ec4899',online:true,pts:231,rating:4.7,rc:14,isVol:false},{id:'u3',name:'Carlos Mendez',bg:'#7dd3fc,#2563eb',online:false,pts:198,rating:4.8,rc:11,isVol:true},{id:'u4',name:'Nadia Khalil',bg:'#c4b5fd,#a78bfa',online:true,pts:175,rating:4.6,rc:9,isVol:false},{id:'u5',name:"George D'Souza",bg:'#64748b,#334155',online:false,pts:162,rating:5.0,rc:22,isVol:true},{id:'u6',name:'Divya Menon',bg:'#fca5a5,#fb923c',online:true,pts:143,rating:4.5,rc:8,isVol:false},{id:'u7',name:'Mark Stevens',bg:'#10b981,#059669',online:false,pts:127,rating:4.7,rc:7,isVol:true},{id:'u8',name:'Sushila Patel',bg:'#f9a8d4,#ec4899',online:true,pts:109,rating:4.9,rc:19,isVol:true},{id:'u9',name:'Jake Thompson',bg:'#8b5cf6,#6366f1',online:false,pts:88,rating:4.4,rc:5,isVol:false},{id:'u10',name:'Roberto Tan',bg:'#fb7185,#f43f5e',online:true,pts:74,rating:4.6,rc:6,isVol:false},{id:'u11',name:'Aisha Nair',bg:'#6ee7b7,#34d399',online:true,pts:61,rating:4.8,rc:4,isVol:true},{id:'u12',name:'Margaret Collins',bg:'#0c4a6e,#0369a1',online:false,pts:48,rating:4.5,rc:3,isVol:false},{id:'u13',name:'Daniel Osei',bg:'#7dd3fc,#2563eb',online:true,pts:35,rating:4.3,rc:2,isVol:false},{id:'u14',name:'Fatima Cruz',bg:'#fca5a5,#fb923c',online:false,pts:22,rating:4.7,rc:1,isVol:false},{id:'u15',name:'Anshuman Tripathy',bg:'#38bdf8,#0ea5e9',online:true,pts:999,rating:4.8,rc:8,isVol:true,isMe:true}];
-var DEMO_REQUESTS=[{id:'r1',title:'Need a step ladder for ceiling light fix',category:'Tools',urgency:'normal',location:'Al Nahda 2, Sharjah',userName:'Priya Sharma',uid:'u1',desc:'Looking to borrow a step ladder (2m+) for a ceiling light replacement. Same day return!',volunteers:[{uid:'u7',name:'Mark Stevens'},{uid:'u3',name:'Carlos Mendez'},{uid:'u11',name:'Aisha Nair'}],daysLeft:5},{id:'r2',title:'Need airport lift at 4am tomorrow',category:'Transport',urgency:'high',location:'Al Majaz 1, Sharjah',userName:'Sushila Patel',uid:'u8',desc:'Early morning flight — need a kind person with a car to DXB. Will cover fuel.',volunteers:[{uid:'u2',name:'Ravi Fernandes'},{uid:'u5',name:"George D'Souza"},{uid:'u10',name:'Roberto Tan'},{uid:'u4',name:'Nadia Khalil'}],daysLeft:1},{id:'r3',title:'Can someone pick up groceries from Carrefour?',category:'Food',urgency:'normal',location:'Al Qasimi, Sharjah',userName:"George D'Souza",uid:'u5',desc:"Can't go out this week. Need milk, bread, eggs, veggies. Happy to transfer money.",volunteers:[{uid:'u1',name:'Priya Sharma'},{uid:'u8',name:'Sushila Patel'}],daysLeft:6},{id:'r4',title:'Looking for a printer to print 10 pages',category:'Tech',urgency:'normal',location:'University City, Sharjah',userName:'Jake Thompson',uid:'u9',desc:'Need to print my internship offer letter today. Any home printer nearby would be a lifesaver!',volunteers:[{uid:'u6',name:'Divya Menon'},{uid:'u13',name:'Daniel Osei'},{uid:'u11',name:'Aisha Nair'}],daysLeft:3},{id:'r5',title:'Help moving a sofa to spare bedroom',category:'Labour',urgency:'normal',location:'Al Taawun, Sharjah',userName:'Carlos Mendez',uid:'u3',desc:'Just one sofa, 10 minutes for two people. Happy to offer chai and snacks!',volunteers:[{uid:'u2',name:'Ravi Fernandes'},{uid:'u7',name:'Mark Stevens'},{uid:'u4',name:'Nadia Khalil'},{uid:'u10',name:'Roberto Tan'}],daysLeft:4},{id:'r6',title:'Does anyone have a blood pressure monitor to lend?',category:'Medical',urgency:'normal',location:'Muwaileh, Sharjah',userName:'Margaret Collins',uid:'u12',desc:'My doctor asked me to track BP at home this week. 3-4 days loan would be wonderful.',volunteers:[{uid:'u3',name:'Carlos Mendez'},{uid:'u8',name:'Sushila Patel'}],daysLeft:2}];
+var DEMO_REQUESTS=[{id:'r1',title:'Need a step ladder for ceiling light fix',category:'Tools',urgency:'normal',location:'Al Nahda 2, Sharjah',userName:'Priya Sharma',uid:'u1',desc:'Looking to borrow a step ladder (2m+) for a ceiling light replacement. Same day return!',volunteers:[{uid:'u7',name:'Mark Stevens'},{uid:'u3',name:'Carlos Mendez'},{uid:'u11',name:'Aisha Nair'}],daysLeft:5},{id:'r2',title:'Need airport lift at 4am tomorrow',category:'Transport',urgency:'high',location:'Al Majaz 1, Sharjah',userName:'Sushila Patel',uid:'u8',desc:'Early morning flight - need a kind person with a car to DXB. Will cover fuel.',volunteers:[{uid:'u2',name:'Ravi Fernandes'},{uid:'u5',name:"George D'Souza"},{uid:'u10',name:'Roberto Tan'},{uid:'u4',name:'Nadia Khalil'}],daysLeft:1},{id:'r3',title:'Can someone pick up groceries from Carrefour?',category:'Food',urgency:'normal',location:'Al Qasimi, Sharjah',userName:"George D'Souza",uid:'u5',desc:"Can't go out this week. Need milk, bread, eggs, veggies. Happy to transfer money.",volunteers:[{uid:'u1',name:'Priya Sharma'},{uid:'u8',name:'Sushila Patel'}],daysLeft:6},{id:'r4',title:'Looking for a printer to print 10 pages',category:'Tech',urgency:'normal',location:'University City, Sharjah',userName:'Jake Thompson',uid:'u9',desc:'Need to print my internship offer letter today. Any home printer nearby would be a lifesaver!',volunteers:[{uid:'u6',name:'Divya Menon'},{uid:'u13',name:'Daniel Osei'},{uid:'u11',name:'Aisha Nair'}],daysLeft:3},{id:'r5',title:'Help moving a sofa to spare bedroom',category:'Labour',urgency:'normal',location:'Al Taawun, Sharjah',userName:'Carlos Mendez',uid:'u3',desc:'Just one sofa, 10 minutes for two people. Happy to offer chai and snacks!',volunteers:[{uid:'u2',name:'Ravi Fernandes'},{uid:'u7',name:'Mark Stevens'},{uid:'u4',name:'Nadia Khalil'},{uid:'u10',name:'Roberto Tan'}],daysLeft:4},{id:'r6',title:'Does anyone have a blood pressure monitor to lend?',category:'Medical',urgency:'normal',location:'Muwaileh, Sharjah',userName:'Margaret Collins',uid:'u12',desc:'My doctor asked me to track BP at home this week. 3-4 days loan would be wonderful.',volunteers:[{uid:'u3',name:'Carlos Mendez'},{uid:'u8',name:'Sushila Patel'}],daysLeft:2}];
 var DEMO_LF=[{id:'lf1',type:'Lost',item:'House keys on blue keyring',location:'Al Majaz Park, Sharjah',userName:'Roberto Tan',uid:'u10',desc:'Lost near the fountain around 7pm Thursday. Blue rubber keyring, 3 keys, small red tag.'},{id:'lf2',type:'Found',item:'Samsung Galaxy phone',location:'Carrefour City Centre, Sharjah',userName:'Divya Menon',uid:'u6',desc:'Found on a shopping cart near the entrance. Phone is locked. Contact me with details.'},{id:'lf3',type:'Lost',item:'Brown leather wallet',location:'Al Qasba Canal, Sharjah',userName:'Daniel Osei',uid:'u13',desc:'Lost along the canal walk Friday evening. Has ID, two cards, some cash. No questions asked.'},{id:'lf4',type:'Found',item:"Child's yellow backpack",location:'Al Nahda Park, Sharjah',userName:'Aisha Nair',uid:'u11',desc:"Found at the children's play area. Has a water bottle inside. Safe with me."}];
-var DEMO_TY=[{from:'Sushila Patel',to:'Carlos Mendez',msg:'Carlos drove my husband to the hospital at 5:30am without hesitation. We will never forget this kindness. \uD83D\uDE4F'},{from:'Jake Thompson',to:'Aisha Nair',msg:'Aisha let me use her printer AND helped me scan documents. Saved my internship application! Thank you \uD83D\uDC99'},{from:"George D'Souza",to:'Priya Sharma',msg:'Priya brought groceries for three weeks when I was unwell. A true community hero. God bless you.'},{from:'Margaret Collins',to:'Sushila Patel',msg:'Sushila lent me her BP monitor and even taught me how to use it properly. So warm and patient. \uD83D\uDC9C'},{from:'Daniel Osei',to:'Ravi Fernandes',msg:'Ravi helped me move furniture on a Friday evening — no complaints, just good vibes. Absolute legend! \u26A1'}];
+var DEMO_TY=[{from:'Sushila Patel',to:'Carlos Mendez',msg:'Carlos drove my husband to the hospital at 5:30am without hesitation. We will never forget this kindness. \uD83D\uDE4F'},{from:'Jake Thompson',to:'Aisha Nair',msg:'Aisha let me use her printer AND helped me scan documents. Saved my internship application! Thank you \uD83D\uDC99'},{from:"George D'Souza",to:'Priya Sharma',msg:'Priya brought groceries for three weeks when I was unwell. A true community hero. God bless you.'},{from:'Margaret Collins',to:'Sushila Patel',msg:'Sushila lent me her BP monitor and even taught me how to use it properly. So warm and patient. \uD83D\uDC9C'},{from:'Daniel Osei',to:'Ravi Fernandes',msg:'Ravi helped me move furniture on a Friday evening - no complaints, just good vibes. Absolute legend! \u26A1'}];
 var DEMO_VO=[{title:'Beach Cleanup Drive',org:'Emirates Nature-WWF',date:'Sat 5 Jul, 8:00 AM',loc:'Al Khan Beach, Sharjah',cat:'Environment',desc:'Morning cleanup along Al Khan Beach. Gloves and bags provided.'},{title:'Food Parcel Distribution',org:"Sharjah Charity Int'l",date:'Fri 4 Jul, 10:00 AM',loc:'Industrial Area 1, Sharjah',cat:'Food & Aid',desc:'Help pack and distribute food parcels to 200+ families.'},{title:'Free Tutoring for School Kids',org:'Sharjah Youth Club',date:'Every Sat, 4:00 PM',loc:'Al Taawun Community Centre',cat:'Education',desc:'Volunteer tutors needed for Maths and English (grades 4-9).'}];
-var PERSONAS={u1:{o:"Hi Anshuman! That's so kind \uD83D\uDE0A Are you nearby to help?",meet:"Al Nahda 2, Building 7. After 5pm!",when:"Around 6pm?",where:"Al Nahda 2 near the park.",help:"Yes of course!",thanks:"You're so welcome \uD83D\uDE0A",ok:"Great, see you then \uD83D\uDC4D",fb:["No problem!","Happy to help \uD83D\uDE0A","Sure!","Of course!"]},u2:{o:"Hey! What do you need help with?",meet:"Near Al Taawun mall.",when:"Evenings after 6.",where:"Al Taawun area.",help:"Sure, happy to help.",thanks:"No worries!",ok:"Sounds good!",fb:["Got it.","Works for me.","Sure thing.","I'll sort it."]},u3:{o:"Hey Anshuman! Happy to help \uD83D\uDC4D What's the plan?",meet:"I can meet at the entrance.",when:"Weekends or evenings after 7.",where:"Near Al Majaz.",help:"Count me in!",thanks:"Anytime, mate!",ok:"Let's do it!",fb:["Sounds good!","I'm in!","No problem.","On my way!"]},u4:{o:"Hello! I can help. What do you need?",meet:"We can meet at the lobby.",when:"After 5pm weekdays.",where:"Al Qasimi area.",help:"Yes, happy to assist.",thanks:"You're welcome!",ok:"Perfect.",fb:["Of course.","Let me know.","That works.","Sure!"]},u5:{o:"Good day, Anshuman. How kind of you to reach out. I am most grateful.",meet:"Perhaps the building entrance? Stairs are difficult for me.",when:"Morning, between 9 and 11 if possible.",where:"Al Qasimi, Building 3, near the mosque.",help:"Thank you so much.",thanks:"God bless you.",ok:"Wonderful. I shall be ready.",fb:["Thank you so much.","Most appreciated.","Very kind.","Many thanks."]},u6:{o:"Hey!! Yes I can help \uD83D\uDE04 What do u need?",meet:"City Centre works!",when:"Anytime lol",where:"Al Nahda, close to everything!",help:"Yep yep!",thanks:"No worries!!",ok:"Let's go!",fb:["Sure!","On it!","No probs!","Done!"]},u7:{o:"Hey. Yeah I can lend a hand. What's involved?",meet:"Ground floor or I can drive over.",when:"Saturday morning or weekday evenings.",where:"Al Taawun.",help:"Happy to help.",thanks:"No problem.",ok:"Sorted.",fb:["That works.","Done.","No worries.","Fair enough."]},u8:{o:"Oh hello dear Anshuman. Thank you so much. We are very grateful.",meet:"Al Majaz Tower 2. We will be at the entrance.",when:"Need to leave by 5:30am. Is that too early?",where:"Al Majaz 1, near the corniche.",help:"Oh that would be wonderful.",thanks:"May God bless you and your family.",ok:"Wonderful, we will be ready.",fb:["You are so kind.","Thank you dear.","We appreciate it.","God bless you."]},u9:{o:"Hey mate! Yes desperately need help \uD83D\uDE05 You're a legend!",meet:"Uni City, Block D. Message when nearby!",when:"ASAP, deadline is today \uD83D\uDE2C",where:"University City, well signposted.",help:"Yes please!!",thanks:"Owe you one mate!!",ok:"Coming now!!",fb:["Legend!!","You're the best!","Cheers mate!","On my way!"]},u10:{o:"Hello. Thank you for getting in touch. I am quite worried about those keys.",meet:"I can be at Al Majaz Park entrance in 20 mins.",when:"Available most of the day.",where:"Near the main fountain, south side.",help:"That would be wonderful.",thanks:"I am truly grateful.",ok:"I will head there now.",fb:["Thank you.","Very kind.","Much appreciated.","I see."]},u11:{o:"Hi Anshuman! Yes I found the bag \uD83D\uDE0A Safe with me!",meet:"Near Al Nahda Park — main gate!",when:"Free all afternoon!",where:"Al Nahda Park, main entrance \uD83D\uDC99",help:"Of course!",thanks:"You're welcome! \uD83D\uDC99",ok:"See you soon!",fb:["No problem!","Happy to help!","Of course!","Sure \uD83D\uDE0A"]},u12:{o:"Good afternoon, Anshuman. How very kind of you to respond.",meet:"Perhaps the building lobby? I am on the ground floor.",when:"Any weekday morning.",where:"Muwaileh Residential, near Al Wahda school.",help:"That would be most appreciated.",thanks:"You are very kind.",ok:"Splendid. I shall be ready.",fb:["How kind.","Much obliged.","Thank you dear.","Very good."]},u13:{o:"Hey! Thanks for reaching out! Really hoping someone found my wallet \uD83E\uDD1E",meet:"Al Qasba — near the wheel?",when:"Free from 4pm today.",where:"Canal walk, near Echo restaurant.",help:"Oh amazing, thank you!",thanks:"You're a lifesaver!",ok:"I'll be there!",fb:["Fingers crossed!","Really hope so!","Thank you!","That's great!"]},u14:{o:"Hello! How can I help you today? \uD83D\uDE0A",meet:"I can meet anywhere in Sharjah, I have a car!",when:"Pretty flexible, what works for you?",where:"Just let me know the address.",help:"Happy to assist \uD83D\uDC99",thanks:"You're welcome!",ok:"See you soon!",fb:["Happy to help!","No problem!","Sure!","Sounds great!"]}};
+var PERSONAS={u1:{o:"Hi Anshuman! That's so kind \uD83D\uDE0A Are you nearby to help?",meet:"Al Nahda 2, Building 7. After 5pm!",when:"Around 6pm?",where:"Al Nahda 2 near the park.",help:"Yes of course!",thanks:"You're so welcome \uD83D\uDE0A",ok:"Great, see you then \uD83D\uDC4D",fb:["No problem!","Happy to help \uD83D\uDE0A","Sure!","Of course!"]},u2:{o:"Hey! What do you need help with?",meet:"Near Al Taawun mall.",when:"Evenings after 6.",where:"Al Taawun area.",help:"Sure, happy to help.",thanks:"No worries!",ok:"Sounds good!",fb:["Got it.","Works for me.","Sure thing.","I'll sort it."]},u3:{o:"Hey Anshuman! Happy to help \uD83D\uDC4D What's the plan?",meet:"I can meet at the entrance.",when:"Weekends or evenings after 7.",where:"Near Al Majaz.",help:"Count me in!",thanks:"Anytime, mate!",ok:"Let's do it!",fb:["Sounds good!","I'm in!","No problem.","On my way!"]},u4:{o:"Hello! I can help. What do you need?",meet:"We can meet at the lobby.",when:"After 5pm weekdays.",where:"Al Qasimi area.",help:"Yes, happy to assist.",thanks:"You're welcome!",ok:"Perfect.",fb:["Of course.","Let me know.","That works.","Sure!"]},u5:{o:"Good day, Anshuman. How kind of you to reach out. I am most grateful.",meet:"Perhaps the building entrance? Stairs are difficult for me.",when:"Morning, between 9 and 11 if possible.",where:"Al Qasimi, Building 3, near the mosque.",help:"Thank you so much.",thanks:"God bless you.",ok:"Wonderful. I shall be ready.",fb:["Thank you so much.","Most appreciated.","Very kind.","Many thanks."]},u6:{o:"Hey!! Yes I can help \uD83D\uDE04 What do u need?",meet:"City Centre works!",when:"Anytime lol",where:"Al Nahda, close to everything!",help:"Yep yep!",thanks:"No worries!!",ok:"Let's go!",fb:["Sure!","On it!","No probs!","Done!"]},u7:{o:"Hey. Yeah I can lend a hand. What's involved?",meet:"Ground floor or I can drive over.",when:"Saturday morning or weekday evenings.",where:"Al Taawun.",help:"Happy to help.",thanks:"No problem.",ok:"Sorted.",fb:["That works.","Done.","No worries.","Fair enough."]},u8:{o:"Oh hello dear Anshuman. Thank you so much. We are very grateful.",meet:"Al Majaz Tower 2. We will be at the entrance.",when:"Need to leave by 5:30am. Is that too early?",where:"Al Majaz 1, near the corniche.",help:"Oh that would be wonderful.",thanks:"May God bless you and your family.",ok:"Wonderful, we will be ready.",fb:["You are so kind.","Thank you dear.","We appreciate it.","God bless you."]},u9:{o:"Hey mate! Yes desperately need help \uD83D\uDE05 You're a legend!",meet:"Uni City, Block D. Message when nearby!",when:"ASAP, deadline is today \uD83D\uDE2C",where:"University City, well signposted.",help:"Yes please!!",thanks:"Owe you one mate!!",ok:"Coming now!!",fb:["Legend!!","You're the best!","Cheers mate!","On my way!"]},u10:{o:"Hello. Thank you for getting in touch. I am quite worried about those keys.",meet:"I can be at Al Majaz Park entrance in 20 mins.",when:"Available most of the day.",where:"Near the main fountain, south side.",help:"That would be wonderful.",thanks:"I am truly grateful.",ok:"I will head there now.",fb:["Thank you.","Very kind.","Much appreciated.","I see."]},u11:{o:"Hi Anshuman! Yes I found the bag \uD83D\uDE0A Safe with me!",meet:"Near Al Nahda Park - main gate!",when:"Free all afternoon!",where:"Al Nahda Park, main entrance \uD83D\uDC99",help:"Of course!",thanks:"You're welcome! \uD83D\uDC99",ok:"See you soon!",fb:["No problem!","Happy to help!","Of course!","Sure \uD83D\uDE0A"]},u12:{o:"Good afternoon, Anshuman. How very kind of you to respond.",meet:"Perhaps the building lobby? I am on the ground floor.",when:"Any weekday morning.",where:"Muwaileh Residential, near Al Wahda school.",help:"That would be most appreciated.",thanks:"You are very kind.",ok:"Splendid. I shall be ready.",fb:["How kind.","Much obliged.","Thank you dear.","Very good."]},u13:{o:"Hey! Thanks for reaching out! Really hoping someone found my wallet \uD83E\uDD1E",meet:"Al Qasba - near the wheel?",when:"Free from 4pm today.",where:"Canal walk, near Echo restaurant.",help:"Oh amazing, thank you!",thanks:"You're a lifesaver!",ok:"I'll be there!",fb:["Fingers crossed!","Really hope so!","Thank you!","That's great!"]},u14:{o:"Hello! How can I help you today? \uD83D\uDE0A",meet:"I can meet anywhere in Sharjah, I have a car!",when:"Pretty flexible, what works for you?",where:"Just let me know the address.",help:"Happy to assist \uD83D\uDC99",thanks:"You're welcome!",ok:"See you soon!",fb:["Happy to help!","No problem!","Sure!","Sounds great!"]}};
 function getRep(uid,text){var p=PERSONAS[uid];if(!p)return"Thanks for reaching out!";var t=text.toLowerCase();if(/where|location|address|building|block|area/.test(t))return p.where||p.fb[0];if(/when|time|morning|evening|tonight|today|tomorrow|\bam\b|\bpm\b/.test(t))return p.when||p.fb[1];if(/meet|come|drop|pick.?up|visit/.test(t))return p.meet||p.fb[0];if(/thank|thanks|appreciate|grateful|\bty\b/.test(t))return p.thanks||p.fb[2];if(/\bok\b|okay|sure|great|perfect|sounds good|alright|done|see you/.test(t))return p.ok||p.fb[0];if(/help|assist|available|can you/.test(t))return p.help||p.fb[1];if(!p._i)p._i=0;var r=p.fb[p._i%p.fb.length];p._i++;return r;}
 function uG(uid){var u=DEMO_USERS.find(function(x){return x.id===uid;});return u?'linear-gradient(135deg,'+u.bg+')':'linear-gradient(135deg,#38bdf8,#0ea5e9)';}
 var _cUid='',_cName='',_cGrad='';
-window.openDemoChat=function(uid,name){_cUid=uid;_cName=name;_cGrad=uG(uid);var av=document.getElementById('chatAvatarCircle');if(av){av.textContent=name.charAt(0);av.style.background=_cGrad;}var cw=document.getElementById('chatWith');if(cw)cw.textContent=name;var cs=document.getElementById('chatSubline');if(cs)cs.textContent='Community Member \u00B7 Sharjah';var ma=document.getElementById('messageArea');if(ma)ma.innerHTML='';var popup=document.getElementById('chatPopup');if(popup)popup.style.display='flex';var bar=document.getElementById('chatFooterBar');if(bar)bar.innerHTML='<div class="ibar endchat"><span class="ibar-label">Chatting with <b>'+name+'</b></span><button class="ibar-btn endchat" onclick="window.demoChatEnd()">End Chat</button></div>';var sb=document.getElementById('sendMsgBtn');var mi=document.getElementById('msgInput');if(sb){var nb=sb.cloneNode(true);sb.parentNode.replaceChild(nb,sb);nb.onclick=function(){_dS();};}if(mi){mi.value='';mi.onkeydown=function(e){if(e.key==='Enter')_dS();};setTimeout(function(){mi.focus();},200);}var p=PERSONAS[uid];_showT();setTimeout(function(){_remT();_addM('them',p?p.o:'Hello! How can I help?');},1100);};
-window.demoChatEnd=function(){var popup=document.getElementById('chatPopup');if(popup)popup.style.display='none';var bar=document.getElementById('chatFooterBar');if(bar)bar.innerHTML='';var ma=document.getElementById('messageArea');if(ma)ma.innerHTML='';var mi=document.getElementById('msgInput');if(mi)mi.value='';_cUid='';_cName='';_cGrad='';};
-function _dS(){var mi=document.getElementById('msgInput');if(!mi||!_cUid)return;var t=mi.value.trim();if(!t)return;mi.value='';_addM('me',t);_showT();setTimeout(function(){_remT();_addM('them',getRep(_cUid,t));},800+Math.random()*600);}
-function _addM(side,text){var a=document.getElementById('messageArea');if(!a)return;var r=document.createElement('div');r.className='imsg-row '+side;r.innerHTML=side==='them'?'<div style="width:28px;height:28px;border-radius:50%;background:'+_cGrad+';display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:11px;flex-shrink:0;">'+(_cName||'?').charAt(0)+'</div><div class="imsg-bubble them">'+text+'</div>':'<div class="imsg-bubble me">'+text+'</div>';a.appendChild(r);a.scrollTop=a.scrollHeight;}
-function _showT(){var a=document.getElementById('messageArea');if(!a||document.getElementById('demo-typing'))return;var el=document.createElement('div');el.id='demo-typing';el.className='imsg-row them';el.innerHTML='<div class="imsg-bubble them" style="padding:10px 14px;"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';a.appendChild(el);a.scrollTop=a.scrollHeight;}
-function _remT(){var el=document.getElementById('demo-typing');if(el)el.remove();}
+var demoHistory = Object.create(null);
+function renderDemoMessage(message){
+ var area=document.getElementById('messageArea');if(!area)return;
+ var row=document.createElement('div');row.className='imsg-row '+message.side;
+ if(message.side==='them'){var avatar=document.createElement('div');avatar.className='demo-chat-avatar';avatar.style.background=_cGrad;avatar.textContent=(_cName||'?').charAt(0);row.appendChild(avatar);}
+ var column=document.createElement('div');column.className='demo-message-column';var bubble=document.createElement('div');bubble.className='imsg-bubble '+message.side;bubble.textContent=message.text;var time=document.createElement('time');time.className='demo-message-time';time.dateTime=new Date(message.at).toISOString();time.textContent=new Date(message.at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});column.appendChild(bubble);column.appendChild(time);row.appendChild(column);area.appendChild(row);area.scrollTop=area.scrollHeight;
+}
+window.openDemoChat=function(uid,name){
+ _cUid=uid;_cName=name;_cGrad=uG(uid);
+ var avatar=document.getElementById('chatAvatarCircle');if(avatar){avatar.textContent=name.charAt(0);avatar.style.background=_cGrad;}
+ document.getElementById('chatWith').textContent=name;document.getElementById('chatSubline').textContent='Demo conversation · Sharjah';document.getElementById('messageArea').replaceChildren();document.getElementById('chatPopup').style.display='flex';
+ var bar=document.getElementById('chatFooterBar');bar.replaceChildren();var line=document.createElement('div');line.className='ibar endchat';var label=document.createElement('span');label.className='ibar-label';label.textContent='Chatting with '+name;var end=document.createElement('button');end.className='ibar-btn endchat';end.textContent='End chat';end.onclick=window.demoChatEnd;line.append(label,end);bar.append(line);
+ var send=document.getElementById('sendMsgBtn'),input=document.getElementById('msgInput');var button=send.cloneNode(true);send.replaceWith(button);button.onclick=_dS;input.value='';input.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();_dS();}};
+ var messages=demoHistory[uid];if(messages&&messages.length){messages.forEach(renderDemoMessage);}else{demoHistory[uid]=[];_showT();setTimeout(function(){if(_cUid===uid)_remT();var persona=PERSONAS[uid];_addM('them',persona?persona.o:'Hello! How can I help?',uid);},1100);}
+ setTimeout(function(){input.focus();},200);
+};
+window.demoChatEnd=function(){document.getElementById('chatPopup').style.display='none';document.getElementById('chatFooterBar').replaceChildren();document.getElementById('messageArea').replaceChildren();document.getElementById('msgInput').value='';_cUid='';_cName='';_cGrad='';};
+function _dS(){var input=document.getElementById('msgInput');if(!input||!_cUid)return;var text=input.value.trim();if(!text)return;var uid=_cUid;input.value='';_addM('me',text,uid);_showT();setTimeout(function(){if(_cUid===uid)_remT();_addM('them',getRep(uid,text),uid);},900);}
+function _addM(side,text,uid){uid=uid||_cUid;if(!uid)return;var message={side:side,text:text,at:Date.now()};(demoHistory[uid]||(demoHistory[uid]=[])).push(message);if(uid===_cUid)renderDemoMessage(message);}
+function _showT(){var area=document.getElementById('messageArea');if(!area||document.getElementById('demo-typing'))return;var el=document.createElement('div');el.id='demo-typing';el.className='imsg-row them';el.setAttribute('aria-label','Neighbour is typing');el.innerHTML='<div class="imsg-bubble them"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';area.appendChild(el);area.scrollTop=area.scrollHeight;}
+function _remT(){document.getElementById('demo-typing')?.remove();}
+
 function toast(h){var t=document.createElement('div');t.style.cssText='position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#0f172a;color:#38bdf8;padding:12px 22px;border-radius:12px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 6px 24px rgba(0,0,0,.3);pointer-events:none;font-size:13px;font-weight:600;max-width:90vw;';t.innerHTML=h;document.body.appendChild(t);setTimeout(function(){t.style.transition='opacity .5s';t.style.opacity='0';setTimeout(function(){t.remove();},500);},3000);}
 function addNotif(icon,title,body){var list=document.getElementById('notifList')||document.getElementById('notifDrawer');if(!list)return;var el=document.createElement('div');el.className='notif-item unread';el.innerHTML='<span style="font-size:22px;">'+icon+'</span><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:#0f172a;">'+title+'</div><div style="font-size:11px;color:#64748b;">'+body+'</div><div style="font-size:10px;color:#94a3b8;margin-top:2px;">Just now</div></div>';list.insertBefore(el,list.firstChild);var badge=document.getElementById('bellBadge');if(badge){badge.textContent=(parseInt(badge.textContent)||0)+1;badge.style.display='block';}}
 function addToChatPanel(reqId,uid,name,label){var list=document.getElementById('activeChatsList');if(!list)return;var nm=document.getElementById('noChatsMsg');if(nm)nm.remove();if(list.querySelector('#item-demo-'+reqId))return;var g=uG(uid);var div=document.createElement('div');div.id='item-demo-'+reqId;div.className='chat-list-item chat-unread';div.innerHTML='<div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;background:#e0f2fe;color:#0369a1;">\u2728 Community</span><span class="chat-new-badge" style="background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;">NEW</span></div><span style="font-weight:700;font-size:13px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+g+';margin-right:4px;vertical-align:middle;"></span>'+name+'</span><br><small style="color:#94a3b8;font-size:11px;">'+label+'</small></div><button onclick="openDemoChat(\''+uid+'\',\''+name.replace(/'/g,"\\'")+'\')" style="background:#0f172a;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:12px;flex-shrink:0;margin-left:8px;">Open</button>';list.prepend(div);var mi=document.getElementById('mobChatsIcon');if(mi)mi.innerText='\uD83D\uDD34';}
@@ -6874,8 +6904,8 @@ var RC=[[25.358,55.403],[25.339,55.381],[25.354,55.392],[25.316,55.500],[25.327,
 function mPin(c,l){return L.divIcon({className:'',html:'<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg" width="22" height="28" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))"><path d="M12 0C5.37 0 0 5.37 0 12c0 8.2 12 20 12 20S24 20.2 24 12C24 5.37 18.63 0 12 0z" fill="'+c+'" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/><text x="12" y="16" text-anchor="middle" font-size="8" font-weight="bold" fill="white" font-family="Arial">'+l+'</text></svg>',iconSize:[22,28],iconAnchor:[11,28]});}
 window.addDemoMapPins=function(map){if(!map||typeof L==='undefined')return;DEMO_REQUESTS.forEach(function(r,i){if(!RC[i])return;L.marker(RC[i],{icon:mPin(r.urgency==='high'?'#ef4444':'#38bdf8',r.urgency==='high'?'!':'H')}).bindPopup('<b>'+r.title+'</b><br><small>\uD83D\uDCCD '+r.location+'</small>',{maxWidth:180}).addTo(map);});DEMO_LF.forEach(function(item,i){if(!LC[i])return;L.marker(LC[i],{icon:mPin(item.type==='Lost'?'#f97316':'#16a34a',item.type==='Lost'?'L':'F')}).bindPopup('<b>'+item.type+': '+item.item+'</b><br><small>\uD83D\uDCCD '+item.location+'</small>',{maxWidth:180}).addTo(map);});};
 function initDemoMap(){window._demoMode=true;window.userLat=25.3463;window.userLng=55.3813;function tryMap(){if(typeof L==='undefined'){setTimeout(tryMap,200);return;}if(window._map){window.addDemoMapPins(window._map);return;}if(typeof window.initMinimap==='function'){window.initMinimap();}else{setTimeout(tryMap,200);}}tryMap();}
-function disableLogout(){['logoutBtn','logoutBtnInner'].forEach(function(id){var b=document.getElementById(id);if(b)b.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();alert('Demo mode \u2014 logout disabled.');},true);});}
-function initDemo(){try{localStorage.setItem('bou_tutorial_done','1');}catch(e){}var wu=document.getElementById('welcomeUser');if(wu)wu.innerText='Hello, Anshuman Tripathy';var ur=document.getElementById('userRegionDisplay');if(ur)ur.innerText='Region: '+DEMO_USER.region;document.querySelectorAll('.current-region-text').forEach(function(el){el.innerText=DEMO_USER.region;});window.currentUserFirstName='Anshuman';window.userName=DEMO_USER.name;window.userRegion=DEMO_USER.region;renderRequests();renderLF();renderLeaderboard();renderThankYou();renderVolOpps();wireSubmit();patchProfile();disableLogout();function tryW(){if(typeof window.switchTab==='function')wireTabSwitch();else setTimeout(tryW,150);}tryW();initDemoMap();}
+function disableLogout(){['logoutBtn','logoutBtnInner'].forEach(function(id){var b=document.getElementById(id);if(b)b.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();alert('Demo mode - logout disabled.');},true);});}
+function initDemo(){try{localStorage.setItem('bou_tutorial_done','1');}catch(e){}var wu=document.getElementById('welcomeUser');if(wu)wu.innerText='Hello, Anshuman Tripathy';var ur=document.getElementById('userRegionDisplay');if(ur)ur.innerText='Region: '+DEMO_USER.region;document.querySelectorAll('.current-region-text').forEach(function(el){el.innerText=DEMO_USER.region;});window.currentUserFirstName='Anshuman';window.userName=DEMO_USER.name;window.userRegion=DEMO_USER.region;renderRequests();renderLF();renderLeaderboard();renderThankYou();renderVolOpps();wireSubmit();patchProfile();disableLogout();function tryW(){if(typeof window.switchTab==='function'){wireTabSwitch();window.__beaconDemoReady=true;}else setTimeout(tryW,150);}tryW();initDemoMap();}
 window.initDemoMode=function(){};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initDemo);else initDemo();
 })();
