@@ -5,11 +5,11 @@ Beacon of Unity remains the primary product. Independent apps stay under `projec
 | Source | Purpose | Published location |
 | --- | --- | --- |
 | `website/pages/` | Public Beacon pages and demonstration | Original root HTML filenames |
-| `website/app/` | Login and both dashboard versions | Original root HTML filenames |
-| `website/admin/` | Existing administration UI | Original root HTML filename |
+| `website/app/` | Public sign-in entry | Original root HTML filename |
+| `website/runtime/entries/` | Preserved application entry payloads | Manifest-defined original HTML filenames |
 | `website/variants/` | Distinct homepage alternatives | Original root HTML filenames |
 | `website/scripts/` | Main website JavaScript | Original root script filenames |
-| `website/interactive-assets/code/` | Resources used by Code-page interactions | Original root asset filenames |
+| `website/runtime/resources/` | Preserved interaction payloads | Manifest-defined original asset filenames |
 | `omniscope/` | SPHEREx app, data, API and Worker | `/omniscope/` subtree |
 | `projects/gods-eye/` | Static orrery and separate React source | `/gods-eye/` subtree |
 | `projects/CozyStudio/` | Web Bluetooth light controller | `/CozyStudio/` subtree |
@@ -28,3 +28,5 @@ A source move changes the corresponding GitHub blob/raw path on the restructurin
 `social` and `socialdemo` are reserved for concurrent work and are not relocated. Only tracked additions in those reserved paths or `omniscope/` pass through automatically. New unrelated projects must declare their routes.
 
 The authorized integration retains the newer main design source in `src/`, shared page styling in `assets/`, and its five compiled bundles in `assets/unity/`. All ten new deployment assets have explicit manifest entries and retain current-main bytes. Source/build/test files excluded by main?s `.assetsignore` are not added to the public artifact. The local preview server now serves `dist/`, so moving HTML source does not change the URLs used during checks. The existing package, lockfile and Vite configuration are retained; the build is checked in isolation before publishing.
+
+Runtime payloads use neutral source identifiers and extensions to reduce casual discovery in the current tree. The publisher restores original filenames and extensions; browser MIME types, links and behavior are unchanged. This is organization and obscurity, not access control: the manifest, public URLs and history remain discoverable.
