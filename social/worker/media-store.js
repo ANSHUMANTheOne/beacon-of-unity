@@ -1,4 +1,5 @@
-// D1-backed private pilot storage. Base64 is an encoding, not encryption.
+import { readObject, deleteObject } from "./object-storage.js";
+// Legacy small private media remains readable after object storage is enabled.
 // Authorization happens in the API before a read; never expose the table directly.
 const CHUNK = 192 * 1024;
 export const MAX_UPLOAD = 8 * 1024 * 1024;
@@ -10,8 +11,10 @@ const encode = (bytes) => {
 };
 const decode = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 export async function storeMedia(env, mid, uid, mime, bytes) {
-  await env.DB.prepare("INSERT INTO media VALUES(?,?,?,?,?)")
-    .bind(mid, uid, mime, bytes.length, Date.now())
+  await env.DB.prepare(
+    "INSERT INTO media(id,user_id,mime,size,created_at,backend) VALUES(?,?,?,?,?,?)",
+  )
+    .bind(mid, uid, mime, bytes.length, Date.now(), env.MEDIA ? "r2" : "d1")
     .run();
   try {
     if (env.MEDIA)
@@ -35,7 +38,9 @@ export async function storeMedia(env, mid, uid, mime, bytes) {
   }
 }
 export async function readMedia(env, m, request) {
-  if (env.MEDIA) {
+  if (!m.ready && m.ready !== undefined) return null;
+  if (m.backend === "b2") return readObject(env, m, request);
+  if (env.MEDIA && m.backend !== "d1") {
     const object = await env.MEDIA.get(m.id, { range: request.headers });
     if (!object) return null;
     return new Response(object.body, {
@@ -110,4 +115,9 @@ export async function readMedia(env, m, request) {
         : {}),
     },
   });
+}
+export async function removeMedia(env, media) {
+  if (media.backend === "b2") await deleteObject(env, media);
+  else if (env.MEDIA && media.backend !== "d1")
+    await env.MEDIA.delete(media.id);
 }

@@ -2,6 +2,8 @@
 
 An early-access React/Tailwind social application with a Cloudflare Worker API and D1 persistence. Brand name and logo are intentionally temporary.
 
+Large uploads use optional private B2 multipart storage; see [storage setup and limits](docs/STORAGE.md). Main Beacon membership mail uses a separate authenticated persistent queue; see [approval email operations](docs/APPROVAL_EMAIL.md). Long-form Videos are deferred; Reels remain available.
+
 Google sign-in uses Google's official button with server-verified identity tokens and secure existing-account linking. Configure a public Google web client ID and its allowed origin; no client secret is needed for this sign-in flow. See [Google login setup](docs/GOOGLE_LOGIN.md).
 
 ## Two separate experiences

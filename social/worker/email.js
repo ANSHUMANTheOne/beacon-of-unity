@@ -167,7 +167,7 @@ async function reserve(env) {
     throw e;
   }
 }
-export async function deliverEmail(env, { to, subject, text }) {
+export async function deliverEmail(env, { to, subject, text, html, senderName, replyTo }) {
   const config = await configuration(env);
   assert(
     config,
@@ -188,7 +188,9 @@ export async function deliverEmail(env, { to, subject, text }) {
           email: {
             subject,
             text,
-            from: { name: config.senderName, email: config.senderEmail },
+            ...(html ? {html: b64(encoder.encode(html))} : {}),
+            ...(replyTo ? {reply_to: {name: senderName || config.senderName, email: replyTo}} : {}),
+            from: { name: senderName || config.senderName, email: config.senderEmail },
             to: [{ email: to }],
           },
         }),
@@ -208,7 +210,7 @@ export async function deliverEmail(env, { to, subject, text }) {
         Authorization: "Bearer " + config.apiKey,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ from: env.EMAIL_FROM, to: [to], subject, text }),
+      body: JSON.stringify({ from: env.EMAIL_FROM, to: [to], subject, text, ...(html ? {html} : {}), ...(replyTo ? {reply_to:replyTo} : {}) }),
       signal: AbortSignal.timeout(15000),
     });
     assert(result.ok, 503, "The email provider could not accept this email.");
