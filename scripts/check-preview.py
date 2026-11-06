@@ -88,7 +88,7 @@ def verify(base, manifest, report_path, wait_seconds=0):
             time.sleep(0.5 * (attempt + 1))
         return result
 
-    files = [dict(row, bytes=expected_content(row)[0], sha256=expected_content(row)[1]) for row in (manifest['files'] + manifest.get('aliases', []))]
+    files = [dict(row, bytes=expected_content(row)[0], sha256=expected_content(row)[1]) for row in (manifest['files'] + manifest.get('aliases', []) + manifest.get('additions', []))]
     by_path = {x['original']: x for x in files}
     tasks = [('/' + x['original'], x) for x in files]
     for alias, original in [
@@ -152,9 +152,10 @@ def verify(base, manifest, report_path, wait_seconds=0):
         'base_url': base, 'checked': len(rows), 'passed': sum(x['passed'] for x in rows),
         'failed': [x for x in rows if not x['passed']],
         'unchanged_unavailable': [x['path'] for x in rows if x.get('status') == 404 and x['passed']],
-        'intentional_text_fixes': [row['original'] for row in files if row.get('source_sha256')],
+        'declared_source_updates': [row['original'] for row in files if row.get('source_sha256')],
+        'new_design_assets': [row['original'] for row in manifest.get('additions', [])],
         'additional_aliases': [row['original'] for row in files if row.get('alias')],
-        'scope': 'Original paths plus documented text-only repairs, public bytes/MIME, redirects, directory aliases and live video response parity; no authenticated actions.',
+        'scope': 'Original paths with declared source updates and preserved current-main design assets, public bytes/MIME, redirects, directory aliases and live video response parity; no authenticated actions.',
     }
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps({'summary': summary, 'results': rows}, indent=2) + '\n')

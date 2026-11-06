@@ -13,7 +13,11 @@
       "source": ".assetsignore",
       "category": "Deployment or infrastructure",
       "reason": "Preserve existing Cloudflare asset policy",
-      "published": "/.assetsignore"
+      "published": "/.assetsignore",
+      "source_sha256": "24124b5a9308291e3cb38a31e8c772a3adcff53f83d1751fa3654c3070aab485",
+      "source_bytes": 192,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "67.gif",
@@ -68,7 +72,8 @@
       "published": "/CozyStudio/js/animations.js",
       "source_sha256": "e4e8b44f9ca4d13e097abf1d8e8ffb3b85c39c0510ea04cf42d06ba5f0a54161",
       "source_bytes": 2976,
-      "source_change": "Keep first-frame elapsed time nonnegative and monotonic; no UI, BLE protocol or hardware-send changes."
+      "source_change": "Keep first-frame elapsed time nonnegative and monotonic; no UI, BLE protocol or hardware-send changes.",
+      "source_change_kind": "functional-repair"
     },
     {
       "path": "CozyStudio/js/app.js",
@@ -110,7 +115,8 @@
       "published": "/CozyStudio/js/presets.js",
       "source_sha256": "bf3b9d6fd94f6b2ec519e2bf601faf9e1326ea50b99f0b4c351fee59bfd95116",
       "source_bytes": 1952,
-      "source_change": "Preserve valid zero speed and brightness during preset import while retaining defaults for invalid input."
+      "source_change": "Preserve valid zero speed and brightness during preset import while retaining defaults for invalid input.",
+      "source_change_kind": "functional-repair"
     },
     {
       "path": "CozyStudio/js/protocol.js",
@@ -175,7 +181,11 @@
       "source": "website/scripts/beacon_tutorial_v2.js",
       "category": "Shared resource",
       "reason": "Website scripts; publish under unchanged root URLs",
-      "published": "/beacon_tutorial_v2.js"
+      "published": "/beacon_tutorial_v2.js",
+      "source_sha256": "c389da6a4df60bd100c3f6eacc071138509a5673774fde634131b70f7e606984",
+      "source_bytes": 41339,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "blog.html",
@@ -188,7 +198,11 @@
       "source": "website/pages/blog.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/blog.html"
+      "published": "/blog.html",
+      "source_sha256": "34493ce43d7f0beb43a0dd3eaee9a7405fce11a0de9e93ff2e99eb4c49f8a409",
+      "source_bytes": 182933,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "carbon.html",
@@ -201,7 +215,11 @@
       "source": "projects/carbon/carbon.html",
       "category": "Independent project",
       "reason": "Separate self-contained utility",
-      "published": "/carbon.html"
+      "published": "/carbon.html",
+      "source_sha256": "c961caa6d177036ff940a418497da0fa7e73ee816f61f644c27726fab93fd4de",
+      "source_bytes": 314017,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "code.html",
@@ -214,7 +232,11 @@
       "source": "website/pages/code.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/code.html"
+      "published": "/code.html",
+      "source_sha256": "5c44d13de5684abc3a2bea9c6f49021fb69d9c2fd888abb9784845e8fedeee13",
+      "source_bytes": 73904,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "contact.html",
@@ -227,7 +249,11 @@
       "source": "website/pages/contact.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/contact.html"
+      "published": "/contact.html",
+      "source_sha256": "f32ea4ef1864701cc0505010474f2aa96437fcbffb25b0bf290b00f61ab6e495",
+      "source_bytes": 141796,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "credits.html",
@@ -240,7 +266,11 @@
       "source": "website/pages/credits.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/credits.html"
+      "published": "/credits.html",
+      "source_sha256": "32fe94f8f591f660738c23ea2903b7de5ff4c466c84d35076425a4810c54b925",
+      "source_bytes": 38265,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "dashboard.html",
@@ -254,9 +284,10 @@
       "category": "Main website",
       "reason": "Account application and alternate dashboard",
       "published": "/dashboard.html",
-      "source_sha256": "39931def57eeeabcd7923f1d94d77c3be4b1e576799a6179bb2b7a7c29ea134d",
-      "source_bytes": 563961,
-      "source_change": "Escape two apostrophes in existing demo messages so the inline script parses; displayed text is unchanged."
+      "source_sha256": "9a6995b8c6169e7d9268da600d1bd172075f27cd5b4328be4a099d7f535cb909",
+      "source_bytes": 563889,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "dashboard_updated.html",
@@ -270,9 +301,10 @@
       "category": "Main website",
       "reason": "Account application and alternate dashboard",
       "published": "/dashboard_updated.html",
-      "source_sha256": "af8daa3bff4927cfee4a9a809f624c9832a6288bcb591e89af9caaf4ca084be6",
-      "source_bytes": 612659,
-      "source_change": "Escape two apostrophes in existing demo messages so the inline script parses; displayed text is unchanged."
+      "source_sha256": "55a295d58abd48038018729db2d778a17682becdbc8044ffec45d6a2aefdd980",
+      "source_bytes": 615953,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "data.gif",
@@ -311,7 +343,11 @@
       "source": "website/pages/demo.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/demo.html"
+      "published": "/demo.html",
+      "source_sha256": "6bb21df047f18ce3a268c0e308e9e0cfdf950a82cf93755a312d0d813884b602",
+      "source_bytes": 17631,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "eysc.html",
@@ -363,7 +399,11 @@
       "source": "projects/focus/focus.html",
       "category": "Independent project",
       "reason": "Separate self-contained utility",
-      "published": "/focus.html"
+      "published": "/focus.html",
+      "source_sha256": "002d2025d214f9f2f6fd1d7f1962ed310c90dcc401c8db9ee270838aea564dc0",
+      "source_bytes": 1924,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "founder.html",
@@ -376,7 +416,11 @@
       "source": "website/pages/founder.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/founder.html"
+      "published": "/founder.html",
+      "source_sha256": "280987511f487c52b1ed72ecef46cb540d2c2f829e170757f7714367edbc9354",
+      "source_bytes": 281042,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "functions/api/archive.js",
@@ -415,7 +459,11 @@
       "source": "projects/gods-eye/README.md",
       "category": "Independent project",
       "reason": "Retain complete application subtree and case",
-      "published": "/gods-eye/README.md"
+      "published": "/gods-eye/README.md",
+      "source_sha256": "513efe695691b0a2c7804f04e8c25d11513cb533eaa99b584a7296eead44fcc1",
+      "source_bytes": 2009,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "gods-eye/index.html",
@@ -428,7 +476,11 @@
       "source": "projects/gods-eye/index.html",
       "category": "Independent project",
       "reason": "Retain complete application subtree and case",
-      "published": "/gods-eye/index.html"
+      "published": "/gods-eye/index.html",
+      "source_sha256": "9137a88a12970142422744568c4ecccaf0611d5cfbb3f28c07a936733af83e35",
+      "source_bytes": 161337,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "gods-eye/package-lock.json",
@@ -792,7 +844,11 @@
       "source": "website/admin/hellopotato.html",
       "category": "Main website",
       "reason": "Admin UI; excluded from README navigation",
-      "published": "/hellopotato.html"
+      "published": "/hellopotato.html",
+      "source_sha256": "58e108e8040cb97dee0345e2099875e7fa44eef2806d5c80d4fde57ac9149182",
+      "source_bytes": 33925,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "hero-scene.js",
@@ -805,7 +861,11 @@
       "source": "website/scripts/hero-scene.js",
       "category": "Shared resource",
       "reason": "Website scripts; publish under unchanged root URLs",
-      "published": "/hero-scene.js"
+      "published": "/hero-scene.js",
+      "source_sha256": "510801f24a3d44af3fb62f4ebdeb74c29a19cd5ca51830d2fdb54cb4cb1c7361",
+      "source_bytes": 48055,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "index.html",
@@ -818,7 +878,11 @@
       "source": "website/pages/index.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/index.html"
+      "published": "/index.html",
+      "source_sha256": "09235f5c7c9765a5d96031e5e6a59bd0a406678b2d021b3139ccb6aff6154569",
+      "source_bytes": 36607,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "index2.html",
@@ -831,7 +895,11 @@
       "source": "website/variants/index2.html",
       "category": "Legacy or experimental file",
       "reason": "Distinct homepage variants; activity uncertain; preserve access",
-      "published": "/index2.html"
+      "published": "/index2.html",
+      "source_sha256": "eaeaeb5e508d0eefd2afd3ce4c12f56c54d40483972d889a3ac58bcef5f79c99",
+      "source_bytes": 319973,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "job.mp3",
@@ -883,7 +951,11 @@
       "source": "website/app/login.html",
       "category": "Main website",
       "reason": "Account application and alternate dashboard",
-      "published": "/login.html"
+      "published": "/login.html",
+      "source_sha256": "55d4c9f8d99d5a1ab8f147a904af69dedf35b0ed418f310c4c021c6e93ffd0d4",
+      "source_bytes": 149266,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "logo.png",
@@ -922,7 +994,11 @@
       "source": "website/variants/oldindex.html",
       "category": "Legacy or experimental file",
       "reason": "Distinct homepage variants; activity uncertain; preserve access",
-      "published": "/oldindex.html"
+      "published": "/oldindex.html",
+      "source_sha256": "f192dc87cdc5a13d7892b12792d3162485160fd14cc1c77f03dee60b37fbeb06",
+      "source_bytes": 252919,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/.gitattributes",
@@ -987,7 +1063,11 @@
       "source": "omniscope/index.html",
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
-      "published": "/omniscope/index.html"
+      "published": "/omniscope/index.html",
+      "source_sha256": "534abcafaeae942318f7dd9391bcbccb4c198c21ced5d5d82dc4f7a04523df9d",
+      "source_bytes": 165344,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/public/analysis-workspace.css",
@@ -1000,7 +1080,11 @@
       "source": "omniscope/public/analysis-workspace.css",
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
-      "published": "/omniscope/public/analysis-workspace.css"
+      "published": "/omniscope/public/analysis-workspace.css",
+      "source_sha256": "96656fb38a8846fa8ac4251487af60d3ba4b154ea848c22fa03ab4cfcfd03d06",
+      "source_bytes": 25198,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/public/astro-math.js",
@@ -1039,7 +1123,11 @@
       "source": "omniscope/public/calm-ui.js",
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
-      "published": "/omniscope/public/calm-ui.js"
+      "published": "/omniscope/public/calm-ui.js",
+      "source_sha256": "fc7f392d74c87259935a13b770ad76ab6aa1e10c812ff8eec44cdddce798153a",
+      "source_bytes": 39311,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/public/change-candidates.js",
@@ -1429,7 +1517,11 @@
       "source": "omniscope/public/mission-stage.js",
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
-      "published": "/omniscope/public/mission-stage.js"
+      "published": "/omniscope/public/mission-stage.js",
+      "source_sha256": "26fefac0fad3ccc6bc3c889fef13d0b62029e243241f5f13ef1dd474f1fbc019",
+      "source_bytes": 13109,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/public/mission-ui.css",
@@ -1455,7 +1547,11 @@
       "source": "omniscope/public/observation-overlay.js",
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
-      "published": "/omniscope/public/observation-overlay.js"
+      "published": "/omniscope/public/observation-overlay.js",
+      "source_sha256": "2ac6403fc31a798b78f2d86403385860f8f0615356a21fa2f0ee2d4e9e251a07",
+      "source_bytes": 11562,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/public/observatory.html",
@@ -1533,7 +1629,11 @@
       "source": "omniscope/public/survey-system.js",
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
-      "published": "/omniscope/public/survey-system.js"
+      "published": "/omniscope/public/survey-system.js",
+      "source_sha256": "928d7d76d18b94de23e1c683296a61687d5b294f92b5db4461e554a904c4996f",
+      "source_bytes": 63154,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/public/vendor/LICENSE",
@@ -1650,7 +1750,11 @@
       "source": "website/pages/privacy.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/privacy.html"
+      "published": "/privacy.html",
+      "source_sha256": "5cf7b3a4216f98fe3d371a3abb88793644ed1521a420780714351567b03a6fd1",
+      "source_bytes": 139758,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "rick.gif",
@@ -1702,7 +1806,11 @@
       "source": "website/pages/terms.html",
       "category": "Main website",
       "reason": "Beacon of Unity public pages and demo",
-      "published": "/terms.html"
+      "published": "/terms.html",
+      "source_sha256": "befe2be70a310c0e99c6668a8159e1754a8c2c3c98fcad60bd4565b0b4d1831a",
+      "source_bytes": 140931,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "trial.html",
@@ -1715,7 +1823,11 @@
       "source": "website/variants/trial.html",
       "category": "Legacy or experimental file",
       "reason": "Distinct homepage variants; activity uncertain; preserve access",
-      "published": "/trial.html"
+      "published": "/trial.html",
+      "source_sha256": "649a0a5914c0df49f156245c188326ebcf29396dcac3f8c000b7f3e44607b195",
+      "source_bytes": 275141,
+      "source_change": "Integrate newer main source at a55e10a99f98191494af656bd788a56071ccfeda while retaining its existing public path; no additional application redesign in the restructuring branch",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "user.gif",
@@ -1803,6 +1915,109 @@
       "alias": true,
       "category": "Shared resource",
       "reason": "Repair the existing sharing-image URL using the unchanged 1024x1024 site logo; no generated or re-encoded image"
+    }
+  ],
+  "integrated_main": "a55e10a99f98191494af656bd788a56071ccfeda",
+  "additions": [
+    {
+      "original": "assets/brand-surfaces.css",
+      "source": "assets/brand-surfaces.css",
+      "published": "/assets/brand-surfaces.css",
+      "bytes": 7489,
+      "sha256": "d562d12e36480d9bbdd5f34e67481edafe1751d988eea8b03cb0f4d84ae560e8",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/platform.css",
+      "source": "assets/platform.css",
+      "published": "/assets/platform.css",
+      "bytes": 31656,
+      "sha256": "bb1982511759f2fdab7df0a6ead1f1dd198c21de7469a23f08ad441aaa3857ca",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/platform.js",
+      "source": "assets/platform.js",
+      "published": "/assets/platform.js",
+      "bytes": 12100,
+      "sha256": "b4082ffed84f71ffc32f596a56cb36b6542c40d59b4d3127406b68b48a8c10b6",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/secondary.css",
+      "source": "assets/secondary.css",
+      "published": "/assets/secondary.css",
+      "bytes": 16176,
+      "sha256": "87dc1a17be58ecb003a22acac0bca083a38c9db5cfbeba2883a81d9799f1c44a",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/secondary.js",
+      "source": "assets/secondary.js",
+      "published": "/assets/secondary.js",
+      "bytes": 1880,
+      "sha256": "9830c1c86bc891583ae7b8804fba8090dbdfdd55b02f46d89bad2dcb351cdf70",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/unity/spaces.js",
+      "source": "assets/unity/spaces.js",
+      "published": "/assets/unity/spaces.js",
+      "bytes": 17047,
+      "sha256": "7533174de90713bdb82e0f51b0deefec0198d0436b38fa5ba7d888c062fcaf4b",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/unity/style.css",
+      "source": "assets/unity/style.css",
+      "published": "/assets/unity/style.css",
+      "bytes": 80528,
+      "sha256": "602ac31a90188bb2d6267e265f55246b9b2dc6be94a193f9c295cd5aa99f3a01",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/unity/three.module.js",
+      "source": "assets/unity/three.module.js",
+      "published": "/assets/unity/three.module.js",
+      "bytes": 860406,
+      "sha256": "65bb4dd4a09f49f3fb4c68a2337c6cde07f64357d9c65f2544eeb18eefd98ec3",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/unity/world.js",
+      "source": "assets/unity/world.js",
+      "published": "/assets/unity/world.js",
+      "bytes": 40713,
+      "sha256": "0c26eebf04d1c2822e653bca9aa5c2aec81a0658068eccb889f5353fc956d4c4",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
+    },
+    {
+      "original": "assets/unity/world2.js",
+      "source": "assets/unity/world2.js",
+      "published": "/assets/unity/world2.js",
+      "bytes": 54556,
+      "sha256": "7a64d67e9585a9f52400b6dded73e688cc70a11780d185d2be6907c51283e932",
+      "baseline_commit": "a55e10a99f98191494af656bd788a56071ccfeda",
+      "category": "Shared resource",
+      "reason": "Preserve current main design dependency at the same public path"
     }
   ]
 }

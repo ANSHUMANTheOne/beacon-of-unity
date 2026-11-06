@@ -9,6 +9,8 @@ Beacon of Unity is a community platform connecting UAE residents through help re
 - `website/` — the main website, account application, scripts, and preserved page variants.
 - `omniscope/` — the existing SPHEREx application, kept in place during concurrent work.
 - `projects/` — independent side projects: VoltWay, GOD'S EYE, CozyStudio, Carbon Ledger, and Focus Switch Detector.
+- `src/` ? source for the current Beacon homepage experience; published bundles remain under `assets/unity/`.
+- `assets/` ? shared site styles/scripts, compiled homepage bundles and branding.
 - `assets/branding/` — the site's logo and favicon.
 - `functions/api/` — Cloudflare Pages API handlers; their discovery location is preserved.
 - `config/routes.json` — explicit source-to-public-path mappings.
