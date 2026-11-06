@@ -36,7 +36,7 @@ old=Q/'interactions.json'
 with sync_playwright() as p:
  browser=p.chromium.launch(**({'executable_path':browser_path} if browser_path else {}),headless=True,args=['--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--no-sandbox','--mute-audio'])
  for mobile in [False,True]:
-  for case in ['main-demo','main-demo-reduced','cozy','carbon','code','focus','login-admin','eysc']:
+  for case in ['main-demo','main-demo-reduced','cozy','carbon','code','focus','login-admin','eysc','omniscope']:
    if selected and not case.startswith(selected):continue
    context=browser.new_context(viewport={'width':390 if mobile else 1440,'height':844 if mobile else 1000},is_mobile=mobile,reduced_motion=('no-preference' if case=='main-demo' else 'reduce'),accept_downloads=True)
    blocked=[];errors=[];checks=[];dialogs=[]
@@ -103,6 +103,11 @@ with sync_playwright() as p:
      goto('/focus.html');page.evaluate("window.dispatchEvent(new Event('focus'));window.dispatchEvent(new Event('blur'));window.dispatchEvent(new Event('blur'));window.dispatchEvent(new Event('focus'))");check('focus counts one departure once',page.locator('#count').inner_text()=='1')
     elif case=='login-admin':
      goto('/login.html',2500);page.locator('#emailLoginBtn').click();check('empty login remains on form','login' in page.url);check('Google login control available',page.locator('#googleLoginBtn').is_visible());goto('/hellopotato.html',2500);check('anonymous admin visitor sees sign-in gate',page.locator('#authGate').is_visible());check('anonymous admin content hidden',not page.locator('#adminContent').is_visible())
+    elif case=='omniscope':
+     goto('/omniscope/',5000);check('current-main scene canvas renders',page.locator('canvas:visible').count()>0)
+     for detector in ['3','6','2']:page.get_by_role('button',name=__import__('re').compile('^Band '+detector+',')).first.click();page.wait_for_timeout(250)
+     check('band controls remain responsive',not errors);page.locator('#stageReplay').click();page.wait_for_timeout(1000);check('motion preview remains responsive',not errors)
+     check('no horizontal overflow',page.evaluate('document.documentElement.scrollWidth<=innerWidth'))
     elif case=='eysc':
      goto('/eysc.html',1500);page.wait_for_function("document.querySelector('video').readyState>=1||document.querySelector('video').error",timeout=25000)
      media=page.locator('video').evaluate('(v)=>({ready:v.readyState,error:v.error?.code,duration:Number.isFinite(v.duration)?v.duration:null,width:v.videoWidth,src:v.currentSrc})');check('original video sources load metadata',media['ready']>=1 and media['duration'] is not None and media['width']>0)
