@@ -27,6 +27,7 @@ jobs:
       - name: Confirm an unchanged artifact can be reused safely
         run: node scripts/cloudflare-build.mjs
       - run: python scripts/validate.py
+      - run: python scripts/check-artifact-http.py
       - run: node scripts/test-worker.mjs
       - run: node scripts/test-cozystudio.mjs
       - run: python scripts/check-inline-syntax.py

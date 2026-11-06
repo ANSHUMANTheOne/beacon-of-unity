@@ -2834,7 +2834,7 @@ app.addEventListener('wheel', (e) => {
     // close inspection stable while still allowing a real orbital overview.
     if (d > 0 && missionFovTarget >= 75.5) missionDistanceTarget = Math.min(innerWidth > 800 ? 700 : 1100, missionDistanceTarget * Math.exp(d * .00135));
     else if (d < 0 && missionDistanceTarget > 4.21) missionDistanceTarget = Math.max(4.2, missionDistanceTarget * Math.exp(d * .00135));
-    else missionFovTarget = Math.max(45, Math.min(76, missionFovTarget * Math.exp(d * .0011)));
+    else missionFovTarget = Math.max(innerWidth <= 800 ? 35 : innerWidth < 960 ? 32 : 30, Math.min(76, missionFovTarget * Math.exp(d * .0011)));
     return;
   }
   zoomPending = Math.max(-ZOOM_MAX_PENDING, Math.min(ZOOM_MAX_PENDING, zoomPending + d * 0.0006));

@@ -1,0 +1,60 @@
+{
+  "integrated_main": "e9f6bc27796ab8d154f5ea72e9c69c5e73fdc31a",
+  "user_approved_review_branch_integration": true,
+  "original_files_retained": 136,
+  "unchanged_original_files": 105,
+  "declared_text_updates": 31,
+  "inherited_main_text_updates": 29,
+  "functional_repairs": [
+    "CozyStudio/js/animations.js",
+    "CozyStudio/js/presets.js"
+  ],
+  "unchanged_original_binary_content": true,
+  "new_design_assets": 10,
+  "additional_unchanged_logo_alias": 1,
+  "artifact_resources": 147,
+  "local_http": {
+    "passed": 151,
+    "checked": 151
+  },
+  "inline_scripts": {
+    "checked": 55,
+    "failed": 0
+  },
+  "ui_flows": {
+    "passed": 16,
+    "assertions": 128
+  },
+  "auth_fixture_flows": {
+    "passed": 22,
+    "assertions": 96
+  },
+  "latest_omniscope_smoke": {
+    "passed": 2,
+    "assertions": 10
+  },
+  "main_file_coverage_exceptions": [
+    ".gitignore",
+    "CozyStudio/js/animations.js",
+    "CozyStudio/js/presets.js",
+    "REDESIGN.md",
+    "package.json",
+    "preview-server.mjs",
+    "wrangler.jsonc"
+  ],
+  "fresh_wrangler_dry_run": "passed",
+  "design_bundles_reproduced": 5,
+  "publisher_tests": 9,
+  "worker_assertions": 62,
+  "animation_combinations": 264,
+  "preset_cases": 7,
+  "production_promoted": false,
+  "main_changed_by_this_work": false,
+  "preview_settings_changed": false,
+  "release_blockers": [
+    "Accessible provider/version preview acceptance (version URLs remain disabled)",
+    "Approved GitHub Pages generated-artifact publishing transition",
+    "Production cutover approval"
+  ],
+  "real_authentication_backend_and_hardware": "Not tested; user selected public/demo tests without live writes"
+}
