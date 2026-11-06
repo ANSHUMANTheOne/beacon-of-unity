@@ -1,0 +1,721 @@
+{
+  "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+  "flows": 16,
+  "passed": 16,
+  "assertions": 128,
+  "scope": "Main website/project UI on uploaded preview; dedicated OmniScope backend is tested on its separate live Worker, not this assets-only origin. Remote writes blocked.",
+  "results": [
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "main-demo",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "theme toggles",
+          "passed": true
+        },
+        {
+          "name": "motion control toggles between both states",
+          "passed": true
+        },
+        {
+          "name": "demo iframe preserves query and loads simulated requests",
+          "passed": true
+        },
+        {
+          "name": "no demo parse errors",
+          "passed": true
+        },
+        {
+          "name": "demo lost-and-found tab",
+          "passed": true
+        },
+        {
+          "name": "simulated help opens chat",
+          "passed": true
+        },
+        {
+          "name": "demo closes",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [
+        "https://translate.googleapis.com/element/log"
+      ],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "main-demo-reduced",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "theme toggles",
+          "passed": true
+        },
+        {
+          "name": "motion control toggles between both states",
+          "passed": true
+        },
+        {
+          "name": "demo iframe preserves query and loads simulated requests",
+          "passed": true
+        },
+        {
+          "name": "no demo parse errors",
+          "passed": true
+        },
+        {
+          "name": "demo lost-and-found tab",
+          "passed": true
+        },
+        {
+          "name": "simulated help opens chat",
+          "passed": true
+        },
+        {
+          "name": "demo closes",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "cozy",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "animation boots without page errors",
+          "passed": true
+        },
+        {
+          "name": "all patterns available",
+          "passed": true
+        },
+        {
+          "name": "all patterns render without errors",
+          "passed": true
+        },
+        {
+          "name": "pause stops canvas changes",
+          "passed": true
+        },
+        {
+          "name": "play resumes animation",
+          "passed": true
+        },
+        {
+          "name": "add palette color",
+          "passed": true
+        },
+        {
+          "name": "remove palette color",
+          "passed": true
+        },
+        {
+          "name": "preset appears",
+          "passed": true
+        },
+        {
+          "name": "export preserves zero settings",
+          "passed": true
+        },
+        {
+          "name": "import roundtrip preserves zero settings",
+          "passed": true
+        },
+        {
+          "name": "presets survive reload",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "carbon",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "question 1 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 2 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 3 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 4 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 5 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 6 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 7 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 8 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 9 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 10 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 11 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 12 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 13 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 14 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 15 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "complete questionnaire produces finite nonnegative result",
+          "passed": true
+        },
+        {
+          "name": "completed questionnaire resumes",
+          "passed": true
+        },
+        {
+          "name": "retake resets answers",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "code",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "Python runner executes",
+          "passed": true
+        },
+        {
+          "name": "terminal clears",
+          "passed": true
+        },
+        {
+          "name": "code download preserves editor content",
+          "passed": true
+        },
+        {
+          "name": "triggerSixSeven loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "triggerBazooka loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "triggerData loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "triggerEpstein loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "triggerRickroll loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "focus",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "focus counts one departure once",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "login-admin",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "empty login remains on form",
+          "passed": true
+        },
+        {
+          "name": "Google login control available",
+          "passed": true
+        },
+        {
+          "name": "anonymous admin visitor sees sign-in gate",
+          "passed": true
+        },
+        {
+          "name": "anonymous admin content hidden",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword",
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp"
+      ],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "eysc",
+      "mobile": false,
+      "checks": [
+        {
+          "name": "original video sources load metadata",
+          "passed": true
+        },
+        {
+          "name": "download retains original raw GitHub URL",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "main-demo",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "theme toggles",
+          "passed": true
+        },
+        {
+          "name": "motion control toggles between both states",
+          "passed": true
+        },
+        {
+          "name": "demo iframe preserves query and loads simulated requests",
+          "passed": true
+        },
+        {
+          "name": "no demo parse errors",
+          "passed": true
+        },
+        {
+          "name": "demo closes",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "main-demo-reduced",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "theme toggles",
+          "passed": true
+        },
+        {
+          "name": "motion control toggles between both states",
+          "passed": true
+        },
+        {
+          "name": "demo iframe preserves query and loads simulated requests",
+          "passed": true
+        },
+        {
+          "name": "no demo parse errors",
+          "passed": true
+        },
+        {
+          "name": "demo closes",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "cozy",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "animation boots without page errors",
+          "passed": true
+        },
+        {
+          "name": "all patterns available",
+          "passed": true
+        },
+        {
+          "name": "all patterns render without errors",
+          "passed": true
+        },
+        {
+          "name": "pause stops canvas changes",
+          "passed": true
+        },
+        {
+          "name": "play resumes animation",
+          "passed": true
+        },
+        {
+          "name": "add palette color",
+          "passed": true
+        },
+        {
+          "name": "remove palette color",
+          "passed": true
+        },
+        {
+          "name": "preset appears",
+          "passed": true
+        },
+        {
+          "name": "export preserves zero settings",
+          "passed": true
+        },
+        {
+          "name": "import roundtrip preserves zero settings",
+          "passed": true
+        },
+        {
+          "name": "presets survive reload",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "carbon",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "question 1 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 2 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 3 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 4 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 5 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 6 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 7 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 8 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 9 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 10 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 11 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 12 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 13 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 14 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "question 15 accepts an answer",
+          "passed": true
+        },
+        {
+          "name": "complete questionnaire produces finite nonnegative result",
+          "passed": true
+        },
+        {
+          "name": "completed questionnaire resumes",
+          "passed": true
+        },
+        {
+          "name": "retake resets answers",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "code",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "Python runner executes",
+          "passed": true
+        },
+        {
+          "name": "terminal clears",
+          "passed": true
+        },
+        {
+          "name": "code download preserves editor content",
+          "passed": true
+        },
+        {
+          "name": "triggerSixSeven loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "triggerBazooka loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "triggerData loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "triggerEpstein loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "triggerRickroll loads original GIF",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "focus",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "focus counts one departure once",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "login-admin",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "empty login remains on form",
+          "passed": true
+        },
+        {
+          "name": "Google login control available",
+          "passed": true
+        },
+        {
+          "name": "anonymous admin visitor sees sign-in gate",
+          "passed": true
+        },
+        {
+          "name": "anonymous admin content hidden",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword",
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp"
+      ],
+      "dialogs": []
+    },
+    {
+      "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
+      "case": "eysc",
+      "mobile": true,
+      "checks": [
+        {
+          "name": "original video sources load metadata",
+          "passed": true
+        },
+        {
+          "name": "download retains original raw GitHub URL",
+          "passed": true
+        },
+        {
+          "name": "no uncaught browser errors",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "failure": null,
+      "page_errors": [],
+      "blocked_mutations": [],
+      "dialogs": []
+    }
+  ]
+}

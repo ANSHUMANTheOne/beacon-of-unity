@@ -1,5 +1,6 @@
 .assetsignore
 .gitattributes
+.github/workflows/pages.yml
 .github/workflows/validate.yml
 .github/workflows/verify-preview.yml
 .gitignore
@@ -40,6 +41,8 @@ docs/audit/file-movements.csv
 docs/audit/final-integration-status.json
 docs/audit/final-qa-status.json
 docs/audit/history.json
+docs/audit/hosted-main-interactions.json
+docs/audit/hosted-omniscope-observation.json
 docs/audit/http-integrity.json
 docs/audit/inline-syntax-current.json
 docs/audit/inline-syntax.json
@@ -60,6 +63,8 @@ docs/audit/migration-summary.json
 docs/audit/mobile.json
 docs/audit/page-titles.json
 docs/audit/pages-settings.json
+docs/audit/preview-setting-approval.json
+docs/audit/provider-preview-enabled-validation.json
 docs/audit/provider-preview-validation.json
 docs/audit/provider-runtime-validation.json
 docs/audit/route-compatibility.csv

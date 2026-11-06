@@ -77,6 +77,12 @@ The fresh `a64d646` upload passed, but its preview URL currently returns404 to a
 
 The approved integration retains current main?s Worker name/account, custom-domain declaration, compatibility date, observability and disabled workers.dev/version URLs. Only asset input (`./dist`) and the validated artifact build hook replace source-root publication. New shared assets are explicit manifest additions; Vite source/build metadata is not deployed. `node node_modules/vite/bin/vite.js build --outDir .verification/design-build` reproduces the five retained bundles. The local preview server serves generated `dist/`. The fresh integrated Wrangler dry-run passes. Version URL access still requires inspection/approved enablement; a passing upload alone is not acceptance.
 
-## Approved version URL enablement ?6 November2026
+## Approved version URL enablement ? 6 November 2026
 
 After a read-only dashboard inspection confirmed both workers.dev toggles off, the user explicitly approved enabling only Preview URLs. The dashboard now shows Preview ON, Production workers.dev OFF, and the existing beaconofunity.com custom domain unchanged. The review branch records `preview_urls: true` so future uploads retain that approved intent. No version was manually promoted and no DNS/domain/build setting was changed. Earlier disabled-preview findings above remain historical; fresh provider acceptance follows this setting change. See `audit/preview-setting-approval.json`.
+
+## Prepared Pages cutover workflow
+
+`.github/workflows/pages.yml` now prepares the same validated `dist/` artifact for GitHub Pages after the separately approved source transition. It runs only for main pushes or an explicitly dispatched main run; both build and deploy refuse other refs. It cannot publish from this review branch. `configure-pages` explicitly has `enablement: false`, so it does not enable Pages automatically. Build permissions are read-only, while the deployment job alone receives Pages-write and OIDC permissions. The previous template remains historical reference. Do not merge until the Pages source setting is confirmed/approved; no Pages setting or deployment has been changed here.
+
+The approved preview change is now verified persistent after reload, and the immutable 09b9b63f upload passes 152/152 provider checks. The branch alias also serves the site and its GitHub verification rerun passes. Keep the approved `preview_urls: true` setting when reconciling future main deployments: an older explicit false configuration can switch it off again. This is configuration drift to avoid, not a reason to enable production workers.dev or alter the custom domain.

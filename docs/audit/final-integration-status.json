@@ -31,7 +31,8 @@
   },
   "latest_omniscope_smoke": {
     "passed": 2,
-    "assertions": 10
+    "assertions": 10,
+    "scope": "Earlier integrated source snapshot, superseded by the live test result above"
   },
   "main_file_coverage_exceptions": [
     ".gitignore",
@@ -50,11 +51,10 @@
   "preset_cases": 7,
   "production_promoted": false,
   "main_changed_by_this_work": false,
-  "preview_settings_changed": false,
+  "preview_settings_changed": true,
   "release_blockers": [
-    "Accessible provider/version preview acceptance (version URLs remain disabled)",
-    "Approved GitHub Pages generated-artifact publishing transition",
-    "Production cutover approval"
+    "Confirm and approve GitHub Pages Source: GitHub Actions cutover before merging",
+    "Production merge/promotion approval"
   ],
   "real_authentication_backend_and_hardware": "Not tested; user selected public/demo tests without live writes",
   "tested_source_commit": "0df45cee458734fa12824928cb97f1184cb7af6c",
@@ -69,10 +69,32 @@
     "version_id": "7fd58ac6-f06a-44a6-80dd-a1e15d21cf42"
   },
   "integrated_provider_acceptance": {
+    "base_url": "https://09b9b63f-beaconofunity.anshorg.workers.dev",
     "checked": 152,
-    "passed": 1,
-    "failed": 151,
-    "reason": "Version URLs unavailable; only the expected unavailable dotfile comparison passes. No successful page/media availability is claimed."
+    "passed": 152,
+    "failed": 0,
+    "unchanged_unavailable": [
+      "/.assetsignore"
+    ]
   },
-  "pages_configuration_recheck": "Automatic approval review blocked access using an existing Git credential; credential not retrieved; explicit permission pending. Last confirmed source is legacy main/root."
+  "pages_configuration_recheck": "Automatic approval review blocked access using an existing Git credential; credential not retrieved; explicit permission pending. Last confirmed source is legacy main/root.",
+  "preview_setting_approval": "Explicit user approval; Preview ON after reload, production workers.dev OFF, custom domain unchanged",
+  "hosted_main_ui_flows": {
+    "passed": 16,
+    "assertions": 128,
+    "scope": "Uploaded main-Worker preview, fresh anonymous contexts; live writes blocked"
+  },
+  "hosted_preview_verification_workflow": {
+    "run_id": 42184600256,
+    "job_id": 127788232287,
+    "status": "success"
+  },
+  "pages_workflow": "Prepared main-only workflow with enablement:false; no Pages setting or deployment changed",
+  "latest_live_omniscope": {
+    "checked": 2,
+    "passed": 1,
+    "desktop": "Detector-load busy state exceeded90-second check; retry stopped without result",
+    "mobile": "Detector3/6/2 and motion replay passed",
+    "source_or_deployment_changed": false
+  }
 }

@@ -102,3 +102,7 @@ Latest follow-up: the `a64d646` Cloudflare upload succeeded, but its preview is 
 ## Approved integration ? 6 November 2026
 
 The user approved reconciling current main into the review branch. The four conflicts are resolved while retaining the newer design, login/dashboard code and current-main OmniScope work. Public paths remain unchanged; ten new design assets are explicitly mapped. Fresh app/build/redirect checks pass, including 22 isolated login/logout cases and a successful Wrangler dry-run. The detailed current state is in `RECONCILIATION.md` and the latest section of `QA.md`. Prior source-only counts and open-conflict notes above remain historical evidence. No main merge, production promotion, Pages-source change or preview-setting change is performed.
+
+## Successful provider acceptance after approved preview enablement
+
+Preview URLs are now verified ON after reload, while Production workers.dev remains OFF and the custom domain is unchanged. The immutable 09b9b63f version passes 152/152 provider checks and 16 uploaded main-site UI flows. All three PR checks passed on ccdf869 after rerunning preview verification. Earlier unavailable-preview notes above are historical; see the latest QA section and `audit/provider-preview-enabled-validation.json`. A main-only Pages artifact workflow is now prepared in the PR, but Pages Settings, main and production have not been changed. The publishing-source cutover still requires approval before merge.
