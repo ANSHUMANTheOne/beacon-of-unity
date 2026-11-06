@@ -278,6 +278,9 @@ export default function App() {
             <button aria-label="Messages" onClick={() => nav("Messages")}>
               <Send size={21} />
             </button>
+            <button aria-label="Create a post" onClick={() => open("create")}>
+              <Plus size={21} />
+            </button>
             <button
               className="notification"
               aria-label="Notifications"
@@ -639,10 +642,8 @@ export default function App() {
         {[
           [House, "Home"],
           [Compass, "Discover"],
-          [Clapperboard, "Reels"],
           [LockKeyhole, "Deep focus"],
-          [Send, "Messages"],
-          [Plus, "Create"],
+          [Clapperboard, "Reels"],
           [User, "Profile"],
         ].map(([I, n]) => (
           <button

@@ -34,6 +34,16 @@ function database() {
       "utf8",
     ),
   );
+  for (const migration of [
+    "0005_google_login.sql",
+    "0006_resumable_storage.sql",
+  ])
+    sqlite.exec(
+      readFileSync(
+        new URL("../migrations/" + migration, import.meta.url),
+        "utf8",
+      ),
+    );
   class Statement {
     constructor(sql, args = []) {
       this.sql = sql;
@@ -483,19 +493,25 @@ test("database triggers enforce storage quotas atomically", async () => {
   await assert.rejects(
     () =>
       db
-        .prepare("INSERT INTO media VALUES(?,?,?,?,?)")
+        .prepare(
+          "INSERT INTO media(id,user_id,mime,size,created_at) VALUES(?,?,?,?,?)",
+        )
         .bind("oversized", a.id, "image/png", 20971521, Date.now())
         .run(),
     /MEMBER_STORAGE_LIMIT/,
   );
   await db
-    .prepare("INSERT INTO media VALUES(?,?,?,?,?)")
+    .prepare(
+      "INSERT INTO media(id,user_id,mime,size,created_at) VALUES(?,?,?,?,?)",
+    )
     .bind("reserved", a.id, "image/png", 20971520, Date.now())
     .run();
   await assert.rejects(
     () =>
       db
-        .prepare("INSERT INTO media VALUES(?,?,?,?,?)")
+        .prepare(
+          "INSERT INTO media(id,user_id,mime,size,created_at) VALUES(?,?,?,?,?)",
+        )
         .bind("overflow", a.id, "image/png", 1, Date.now())
         .run(),
     /MEMBER_STORAGE_LIMIT/,

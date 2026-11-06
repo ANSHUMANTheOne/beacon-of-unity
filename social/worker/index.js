@@ -7,6 +7,7 @@ import {
   pendingGoogle,
   completeGoogle,
 } from "./google.js";
+import {verifyBeaconAdmin, enqueueApproval, approvalOverview, retryApproval, drainApprovals} from './beacon-mail.js';
 import {
   emailConfigured,
   emailStatus,
@@ -14,7 +15,22 @@ import {
   deliverEmail,
 } from "./email.js";
 import { listPosts, updateProfile, cleanTopics } from "./community.js";
-import { storeMedia, readMedia, MAX_UPLOAD } from "./media-store.js";
+import {
+  storeMedia,
+  readMedia,
+  removeMedia,
+  MAX_UPLOAD,
+} from "./media-store.js";
+import {
+  storageStatus,
+  connectStorage,
+  beginUpload,
+  uploadStatus,
+  putPart,
+  completeUpload,
+  cancelUpload,
+  UPLOAD_PART,
+} from "./object-storage.js";
 import {
   assert,
   HttpError,
@@ -197,11 +213,20 @@ async function api(request, env) {
     await limit(
       env,
       `write:${request.headers.get("CF-Connecting-IP") || "local"}`,
-      120,
+      /^\/uploads\/resumable\//.test(path) ? 600 : 120,
     );
   }
   if (path === "/health" && method === "GET")
     return json({ ok: true, uploads: true, email: await emailConfigured(env) });
+  if (path === '/beacon/approval' || path === '/beacon/approval/retry') {
+    const token=await verifyBeaconAdmin(request);
+    if(path==='/beacon/approval' && method==='GET') return json(await approvalOverview(env));
+    if(method==='POST') {
+      const data=await jsonBody(request);
+      return json(path.endsWith('/retry') ? await retryApproval(env,data.user_id) : await enqueueApproval(env,token,data.user_id));
+    }
+    assert(false,405,'Method not allowed.');
+  }
   if (path === "/auth/providers" && method === "GET")
     return json({ google: (await googleStatus(env)).configured });
   if (path === "/auth/google/start" && method === "POST") {
@@ -471,8 +496,8 @@ async function api(request, env) {
       403,
       "Confirm your password.",
     );
-    const files = await all(env, "SELECT id FROM media WHERE user_id=?", u.id);
-    for (const f of files) await env.MEDIA?.delete(f.id);
+    const files = await all(env, "SELECT * FROM media WHERE user_id=?", u.id);
+    for (const f of files) await removeMedia(env, f);
     await run(env, "DELETE FROM users WHERE id=?", u.id);
     return json({ ok: true }, 200, { "Set-Cookie": cookie("", secure, 0) });
   }
@@ -507,7 +532,8 @@ async function api(request, env) {
     return json({
       people: await all(
         env,
-        `SELECT id,username,display_name,bio,private,account_type,EXISTS(SELECT 1 FROM follows f WHERE f.follower=? AND f.following=u.id) AS following FROM users u WHERE status='active' AND id<>? AND (username LIKE ? OR display_name LIKE ?) AND NOT EXISTS(SELECT 1 FROM blocks b WHERE (b.blocker=? AND b.blocked=u.id) OR (b.blocked=? AND b.blocker=u.id)) ORDER BY username LIMIT 30`,
+        `SELECT id,username,display_name,bio,private,account_type,EXISTS(SELECT 1 FROM follows f WHERE f.follower=? AND f.following=u.id) AS following,EXISTS(SELECT 1 FROM follows f WHERE f.follower=? AND f.following=u.id AND f.accepted=0) AS requested FROM users u WHERE status='active' AND id<>? AND (username LIKE ? OR display_name LIKE ?) AND NOT EXISTS(SELECT 1 FROM blocks b WHERE (b.blocker=? AND b.blocked=u.id) OR (b.blocked=? AND b.blocker=u.id)) ORDER BY username LIMIT 30`,
+        u.id,
         u.id,
         u.id,
         `%${q}%`,
@@ -582,6 +608,44 @@ async function api(request, env) {
       requested: !existing && !!target.private,
     });
   }
+  if (path === "/uploads/capabilities" && method === "GET") {
+    const s = await storageStatus(env);
+    return json({
+      resumable: s.configured,
+      max_file_bytes: s.max_file_bytes,
+      part_bytes: s.part_bytes,
+    });
+  }
+  if (path === "/uploads/resumable" && method === "POST") {
+    await limit(env, `multipart-start:${u.id}`, 15, 3600000);
+    return json(await beginUpload(env, u, await jsonBody(request)), 201);
+  }
+  const multipart = path.match(
+    /^\/uploads\/resumable\/([\w-]+)(?:\/(parts\/(\d+)|complete))?$/,
+  );
+  if (multipart) {
+    const [, mid, action, part] = multipart;
+    if (!action && method === "GET")
+      return json(
+        await uploadStatus(env, u, mid, url.searchParams.get("fingerprint")),
+      );
+    if (!action && method === "DELETE")
+      return json(await cancelUpload(env, u, mid));
+    if (action === "complete" && method === "POST")
+      return json(await completeUpload(env, u, mid));
+    if (part && method === "PUT") {
+      await limit(env, `multipart-part:${u.id}`, 1024, 3600000);
+      return json(
+        await putPart(
+          env,
+          u,
+          mid,
+          Number(part),
+          () => body(request, UPLOAD_PART),
+        ),
+      );
+    }
+  }
   if (path === "/uploads" && method === "POST") {
     await limit(env, `upload:${u.id}`, 15, 3600000);
     const mime = request.headers.get("Content-Type")?.split(";")[0];
@@ -634,6 +698,7 @@ async function api(request, env) {
   if (media && method === "GET") {
     const m = await one(env, "SELECT * FROM media WHERE id=?", media[1]);
     assert(m, 404, "Media not found.");
+    assert(m.ready === 1, 404, "Media not found.");
     if (m.user_id !== u.id && u.role !== "admin") {
       const post = await one(
         env,
@@ -668,6 +733,18 @@ async function api(request, env) {
     );
     assert(m, 404, "Upload not found.");
     assert(
+      m.ready === 1,
+      409,
+      "Finish uploading the file before creating a post.",
+    );
+    const previousPost = await one(
+      env,
+      "SELECT id,status FROM posts WHERE media_id=? AND user_id=?",
+      m.id,
+      u.id,
+    );
+    if (previousPost) return json(previousPost);
+    assert(
       d.kind === "photo"
         ? m.mime.startsWith("image/")
         : d.kind === "story" || m.mime.startsWith("video/"),
@@ -700,7 +777,8 @@ async function api(request, env) {
       p = await requirePost(env, u, pid);
     if (!action && method === "DELETE") {
       assert(p.user_id === u.id, 403, "Only the owner can delete this post.");
-      await env.MEDIA?.delete(p.media_id);
+      const file = await one(env, "SELECT * FROM media WHERE id=?", p.media_id);
+      if (file) await removeMedia(env, file);
       await env.DB.batch([
         env.DB.prepare("DELETE FROM posts WHERE id=?").bind(pid),
         env.DB.prepare("DELETE FROM media WHERE id=? AND user_id=?").bind(
@@ -851,6 +929,22 @@ async function api(request, env) {
     });
   if (path.startsWith("/admin")) {
     assert(u.role === "admin", 403, "Administrator access required.");
+    if (path === "/admin/storage" && method === "GET")
+      return json(await storageStatus(env));
+    if (path === "/admin/storage" && method === "POST") {
+      await limit(env, `storage-config:${u.id}`, 5, 3600000);
+      const result = await connectStorage(env, await jsonBody(request));
+      await run(
+        env,
+        "INSERT INTO audit VALUES(?,?,?,?,?)",
+        id(),
+        u.id,
+        "storage.connected",
+        "b2",
+        now(),
+      );
+      return json(result);
+    }
     if (path === "/admin/google" && method === "GET")
       return json(await googleStatus(env));
     if (path === "/admin/google" && method === "POST") {
@@ -1039,6 +1133,10 @@ export default {
     return out;
   },
   async scheduled(event, env) {
+    if(event.cron !== '15 3 * * *') {
+      await drainApprovals(env);
+      return;
+    }
     await env.DB.batch([
       env.DB.prepare("DELETE FROM sessions WHERE expires_at<?").bind(now()),
       env.DB.prepare("DELETE FROM email_tokens WHERE expires_at<?").bind(now()),
@@ -1051,12 +1149,16 @@ export default {
     ]);
     const orphans = await all(
       env,
-      "SELECT m.id FROM media m LEFT JOIN posts p ON p.media_id=m.id WHERE p.id IS NULL AND m.created_at<? LIMIT 100",
+      "SELECT m.* FROM media m LEFT JOIN posts p ON p.media_id=m.id WHERE p.id IS NULL AND m.created_at<? LIMIT 100",
       now() - 86400000,
     );
     for (const m of orphans) {
-      await env.MEDIA?.delete(m.id);
-      await run(env, "DELETE FROM media WHERE id=?", m.id);
+      try {
+        await removeMedia(env, m);
+        await run(env, "DELETE FROM media WHERE id=?", m.id);
+      } catch {
+        /* Keep failed cleanup reservations for the next run. */
+      }
     }
   },
 };

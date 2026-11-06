@@ -1,4 +1,6 @@
 import EmailSettings from "./EmailSettings.jsx";
+import StorageSettings from "./StorageSettings.jsx";
+import { uploadMedia, discardUpload, formatBytes } from "./uploads";
 import {
   GoogleButton,
   GoogleEnrollment,
@@ -41,6 +43,7 @@ import {
 } from "lucide-react";
 import { api, mediaUrl } from "./api";
 import "./app.css";
+import "./polish.css";
 const Demo = lazy(() => import("./demo/Demo.jsx"));
 const when = (t) =>
   new Date(t).toLocaleDateString(undefined, { month: "short", day: "numeric" });
@@ -140,7 +143,6 @@ function App() {
     [House, "home", "Home"],
     [Compass, "discover", "Discover"],
     [Clapperboard, "reels", "Reels"],
-    [MonitorPlay, "videos", "Videos"],
     [LockKeyhole, "focus", "Deep focus"],
     [Send, "messages", "Messages"],
     [Plus, "create", "Create"],
@@ -214,6 +216,12 @@ function App() {
             </button>
             <button aria-label="Messages" onClick={() => nav("messages")}>
               <Send size={21} />
+            </button>
+            <button
+              aria-label="Create a post"
+              onClick={() => setDialog("create")}
+            >
+              <Plus size={21} />
             </button>
             <button
               aria-label="Account settings"
@@ -329,18 +337,8 @@ function App() {
         </div>
       </div>
       <nav className="mobile-dock">
-        {navigation
-          .filter(([, v]) =>
-            [
-              "home",
-              "discover",
-              "reels",
-              "focus",
-              "messages",
-              "create",
-              "profile",
-            ].includes(v),
-          )
+        {["home", "discover", "focus", "reels", "profile"]
+          .map((value) => navigation.find(([, v]) => v === value))
           .map(([Icon, value, label]) => (
             <button
               key={value}
@@ -360,6 +358,7 @@ function App() {
         <Modal close={() => setDialog(null)}>
           {dialog === "create" ? (
             <CreatePost
+              user={user}
               {...{ execute, notify }}
               done={() => {
                 setDialog(null);
@@ -750,12 +749,19 @@ function Modal({ children, close }) {
     previous = useRef(document.activeElement);
   useEffect(() => {
     const el = ref.current;
-    el.focus();
+    const scroll = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    el.querySelector("button")?.focus();
     const key = (e) => {
       if (e.key === "Escape") close();
       if (e.key === "Tab") {
-        const nodes = el.querySelectorAll(
-          "button,input,select,textarea,a[href]",
+        const nodes = [
+          ...el.querySelectorAll("button,input,select,textarea,a[href]"),
+        ].filter(
+          (node) =>
+            !node.disabled &&
+            node.tabIndex !== -1 &&
+            node.getClientRects().length,
         );
         const first = nodes[0],
           last = nodes[nodes.length - 1];
@@ -771,6 +777,7 @@ function Modal({ children, close }) {
     document.addEventListener("keydown", key);
     return () => {
       document.removeEventListener("keydown", key);
+      document.body.style.overflow = scroll;
       previous.current?.focus();
     };
   }, []);
@@ -1276,12 +1283,22 @@ function Video({ src, vertical }) {
     </>
   );
 }
-function CreatePost({ execute, notify, done }) {
+function CreatePost({ user, execute, notify, done }) {
   const [file, setFile] = useState(null),
     [preview, setPreview] = useState(""),
     [kind, setKind] = useState("photo"),
     [busy, setBusy] = useState(false),
-    [phase, setPhase] = useState("");
+    [phase, setPhase] = useState(""),
+    [capabilities, setCapabilities] = useState(null),
+    [progress, setProgress] = useState(null),
+    [uploadError, setUploadError] = useState("");
+  const controller = useRef();
+  useEffect(() => {
+    api("/uploads/capabilities")
+      .then(setCapabilities)
+      .catch((e) => setUploadError(e.message));
+    return () => controller.current?.abort();
+  }, []);
   useEffect(() => {
     if (!file) return;
     const url = URL.createObjectURL(file);
@@ -1291,17 +1308,25 @@ function CreatePost({ execute, notify, done }) {
   const submit = async (e) => {
     e.preventDefault();
     setBusy(true);
-    const form = new FormData(e.target);
-    await execute(async () => {
+    const element = e.currentTarget;
+    setUploadError("");
+    controller.current = new AbortController();
+    try {
       setPhase("Uploading your media…");
-      const media = await api("/uploads", {
-        method: "POST",
-        headers: { "Content-Type": file.type },
-        body: file,
+      const media = await uploadMedia(file, {
+        owner: user.id,
+        capabilities,
+        signal: controller.current.signal,
+        onProgress: (loaded, total) => setProgress({ loaded, total }),
+        onPhase: setPhase,
       });
+      if (controller.current.signal.aborted)
+        throw new DOMException("Upload paused.", "AbortError");
+      const form = new FormData(element);
       setPhase("Sending to the moderation queue…");
       await api("/posts", {
         method: "POST",
+        signal: controller.current.signal,
         body: {
           media_id: media.id,
           caption: form.get("caption"),
@@ -1310,28 +1335,39 @@ function CreatePost({ execute, notify, done }) {
           topics: form.getAll("topics"),
         },
       });
+      if (media.resume_key) localStorage.removeItem(media.resume_key);
       notify("Uploaded. Your post is private until approved by a moderator.");
       done();
-    });
+    } catch (e) {
+      if (e.name === "AbortError")
+        setPhase("Paused. Press Resume upload to continue.");
+      else {
+        setUploadError(e.message);
+        setPhase("Your completed parts are kept so you can try again.");
+      }
+    }
     setBusy(false);
-    setPhase("");
   };
   return (
     <>
       <span className="eyebrow">A GLIMPSE OF YOUR WORLD</span>
       <h2>Share something real.</h2>
-      <p className="muted">A photo, a film, a little part of your day.</p>
+      <p className="muted">A photo, a Reel, a little part of your day.</p>
       <form onSubmit={submit}>
         <div className="type-picker">
-          {["photo", "reel", "video", "story"].map((k) => (
+          {["photo", "reel", "story"].map((k) => (
             <button
               type="button"
+              disabled={busy}
               className={kind === k ? "selected" : ""}
               key={k}
               onClick={() => {
                 setKind(k);
                 setFile(null);
                 setPreview("");
+                setProgress(null);
+                setUploadError("");
+                setPhase("");
               }}
             >
               {k}
@@ -1349,12 +1385,18 @@ function CreatePost({ execute, notify, done }) {
             <>
               <Plus size={30} />
               <b>Choose your {kind}</b>
-              <small>JPG, PNG, WebP, MP4 or WebM · up to 8 MB</small>
+              <small>
+                JPG, PNG, WebP, MP4 or WebM ·{" "}
+                {capabilities
+                  ? `up to ${formatBytes(capabilities.max_file_bytes)}`
+                  : "checking upload limit…"}
+              </small>
             </>
           )}
           <input
             type="file"
             required
+            disabled={busy || !capabilities}
             accept={
               kind === "photo"
                 ? "image/jpeg,image/png,image/webp"
@@ -1364,15 +1406,55 @@ function CreatePost({ execute, notify, done }) {
             }
             onChange={(e) => {
               const f = e.target.files[0];
-              if (f?.size > 8 * 1024 * 1024) {
-                notify("Choose a file under 8 MB.");
-                e.target.value = "";
-                return;
-              }
+              setProgress(null);
+              setPhase("");
+              setUploadError(
+                f && f.size > capabilities.max_file_bytes
+                  ? `This file is ${formatBytes(f.size)}. The current limit is ${formatBytes(capabilities.max_file_bytes)}.`
+                  : "",
+              );
               setFile(f || null);
             }}
           />
         </label>
+        {file && (
+          <p className="fine selected-file">
+            {file.name} · {formatBytes(file.size)}
+          </p>
+        )}
+        {capabilities?.resumable && (
+          <p className="fine">
+            Uploads are sent in small parts. Pause any time; choose the same
+            file within 24 hours to resume after closing this page.
+          </p>
+        )}
+        {progress && (
+          <div className="upload-progress" aria-live="polite">
+            <progress
+              value={progress.loaded}
+              max={progress.total}
+              aria-label="Upload progress"
+            />
+            <span>
+              {Math.min(
+                100,
+                Math.round((progress.loaded / progress.total) * 100),
+              )}
+              % · {formatBytes(progress.loaded)} of{" "}
+              {formatBytes(progress.total)}
+            </span>
+          </div>
+        )}
+        {phase && (
+          <p className="fine" role="status">
+            {phase}
+          </p>
+        )}
+        {uploadError && (
+          <p className="form-error" role="alert">
+            {uploadError}
+          </p>
+        )}
         <label className="field">
           <span>A few words</span>
           <textarea
@@ -1398,17 +1480,54 @@ function CreatePost({ execute, notify, done }) {
           New uploads go through human moderation. We don't claim an automated
           scanner can prove authenticity. Stories expire 24 hours after upload.
         </p>
-        <button className="primary wide" disabled={busy || !file}>
+        <button
+          className="primary wide"
+          disabled={
+            busy ||
+            !file ||
+            !capabilities ||
+            file.size > capabilities.max_file_bytes
+          }
+        >
           {busy ? (
             <>
               <Loader2 size={16} className="spin" />
               {phase}
             </>
+          ) : progress ? (
+            "Resume upload"
           ) : (
             "Submit for review"
           )}
           <ArrowUpRight size={16} />
         </button>
+        {busy && (
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => controller.current?.abort()}
+          >
+            Pause upload
+          </button>
+        )}
+        {!busy && file && progress && capabilities?.resumable && (
+          <button
+            type="button"
+            className="text-button"
+            onClick={async () => {
+              try {
+                await discardUpload(file, user.id);
+                setProgress(null);
+                setPhase("Upload discarded. Storage space released.");
+                setUploadError("");
+              } catch (e) {
+                setUploadError(e.message);
+              }
+            }}
+          >
+            Discard unfinished upload
+          </button>
+        )}
       </form>
     </>
   );
@@ -1608,20 +1727,20 @@ function People({ execute, notify }) {
         ),
       250,
     );
-    if (profileName)
-      return (
-        <CommunityProfile
-          username={profileName}
-          execute={execute}
-          notify={notify}
-          onBack={() => {
-            setProfileName(null);
-            history.replaceState({}, "", "/social/people");
-          }}
-        />
-      );
     return () => clearTimeout(t);
   }, [query]);
+  if (profileName)
+    return (
+      <CommunityProfile
+        username={profileName}
+        execute={execute}
+        notify={notify}
+        onBack={() => {
+          setProfileName(null);
+          history.replaceState({}, "", "/social/people");
+        }}
+      />
+    );
   return (
     <>
       <span className="eyebrow">FIND YOUR CORNER OF THE WORLD</span>
@@ -1667,14 +1786,16 @@ function People({ execute, notify }) {
                 });
                 setPeople((ps) =>
                   ps.map((x) =>
-                    x.id === p.id ? { ...x, following: d.following } : x,
+                    x.id === p.id
+                      ? { ...x, following: d.following, requested: d.requested }
+                      : x,
                   ),
                 );
                 if (d.requested) notify("Follow request sent.");
               })
             }
           >
-            {p.following ? "Following" : "Follow"}
+            {p.requested ? "Requested" : p.following ? "Following" : "Follow"}
           </button>
         </div>
       ))}
@@ -2155,6 +2276,7 @@ function Admin({ user, execute, notify }) {
             ))}
           </section>
           <EmailSettings execute={execute} notify={notify} />
+          <StorageSettings execute={execute} notify={notify} />
           <GoogleSettings execute={execute} notify={notify} />
           <section className="settings-card">
             <h3>Audit log</h3>
