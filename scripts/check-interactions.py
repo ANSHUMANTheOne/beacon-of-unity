@@ -12,8 +12,11 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--base-url',help='Optional uploaded preview origin; omit to serve a local artifact')
 parser.add_argument('--directory',type=pathlib.Path,default=R/'dist')
 parser.add_argument('--case')
+parser.add_argument('--viewport',choices=['desktop','mobile'],help='Run only the selected viewport; default runs both')
+parser.add_argument('--omniscope-base-url',help='Optional dedicated OmniScope Worker origin; main-Worker previews do not dispatch its API routes')
 parser.add_argument('--browser',default=os.environ.get('BEACON_BROWSER_EXECUTABLE'))
 args=parser.parse_args();output=args.directory.resolve()
+if args.case=='omniscope' and not args.omniscope_base_url:parser.error('OmniScope data tests require --omniscope-base-url for its dedicated API Worker')
 browser_path=args.browser or shutil.which('google-chrome') or shutil.which('chromium')
 if not browser_path and pathlib.Path(r'C:\Program Files\Google\Chrome\Application\chrome.exe').exists():browser_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -36,9 +39,11 @@ old=Q/'interactions.json'
 with sync_playwright() as p:
  browser=p.chromium.launch(**({'executable_path':browser_path} if browser_path else {}),headless=True,args=['--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--no-sandbox','--mute-audio'])
  for mobile in [False,True]:
-  for case in ['main-demo','main-demo-reduced','cozy','carbon','code','focus','login-admin','eysc','omniscope']:
+  if args.viewport and (args.viewport=='mobile')!=mobile:continue
+  for case in ['main-demo','main-demo-reduced','cozy','carbon','code','focus','login-admin','eysc']+(['omniscope'] if args.omniscope_base_url else []):
    if selected and not case.startswith(selected):continue
    context=browser.new_context(viewport={'width':390 if mobile else 1440,'height':844 if mobile else 1000},is_mobile=mobile,reduced_motion=('no-preference' if case=='main-demo' else 'reduce'),accept_downloads=True)
+   case_origin=args.omniscope_base_url.rstrip('/') if case=='omniscope' and args.omniscope_base_url else base
    blocked=[];errors=[];checks=[];dialogs=[]
    def route(r):
     if r.request.method not in ('GET','HEAD','OPTIONS'):blocked.append(r.request.url.split('?')[0]);r.abort()
@@ -48,7 +53,7 @@ with sync_playwright() as p:
     checks.append(dict(name=name,passed=bool(condition)))
     assert condition,name
    def goto(path,delay=1200):
-    response=page.goto(base+path,wait_until='domcontentloaded',timeout=30000)
+    response=page.goto(case_origin+path,wait_until='domcontentloaded',timeout=30000)
     if response is None or response.status>=400:raise RuntimeError('Document unavailable: '+path+' HTTP '+str(response.status if response else 'no response'))
     page.wait_for_timeout(delay)
    failure=None
@@ -105,8 +110,11 @@ with sync_playwright() as p:
      goto('/login.html',2500);page.locator('#emailLoginBtn').click();check('empty login remains on form','login' in page.url);check('Google login control available',page.locator('#googleLoginBtn').is_visible());goto('/hellopotato.html',2500);check('anonymous admin visitor sees sign-in gate',page.locator('#authGate').is_visible());check('anonymous admin content hidden',not page.locator('#adminContent').is_visible())
     elif case=='omniscope':
      goto('/omniscope/',5000);check('current-main scene canvas renders',page.locator('canvas:visible').count()>0)
-     for detector in ['3','6','2']:page.get_by_role('button',name=__import__('re').compile('^Band '+detector+',')).first.click();page.wait_for_timeout(250)
-     check('band controls remain responsive',not errors);page.locator('#stageReplay').click();page.wait_for_timeout(1000);check('motion preview remains responsive',not errors)
+     for detector in ['3','6','2']:
+      control=page.get_by_role('button',name=__import__('re').compile('^Band '+detector+',')).first
+      expect(control).to_be_enabled(timeout=90000);control.click();expect(control).to_be_enabled(timeout=90000)
+      print(json.dumps({'case':case,'mobile':mobile,'band_loaded':detector}),flush=True)
+     check('band controls remain responsive',not errors);expect(page.locator('#stageReplay')).to_be_enabled(timeout=90000);page.locator('#stageReplay').click();page.wait_for_timeout(1000);check('motion preview remains responsive',not errors)
      check('no horizontal overflow',page.evaluate('document.documentElement.scrollWidth<=innerWidth'))
     elif case=='eysc':
      goto('/eysc.html',1500);page.wait_for_function("document.querySelector('video').readyState>=1||document.querySelector('video').error",timeout=25000)
@@ -116,7 +124,7 @@ with sync_playwright() as p:
    except Exception as error:failure=str(error)[:900]
    try:page.screenshot(path=str(Q/(case+('-mobile' if mobile else '-desktop')+'.png')))
    except:pass
-   row=dict(base_url=base,case=case,mobile=mobile,checks=checks,passed=failure is None,failure=failure,page_errors=errors,blocked_mutations=sorted(set(blocked)),dialogs=dialogs)
+   row=dict(base_url=case_origin,case=case,mobile=mobile,checks=checks,passed=failure is None,failure=failure,page_errors=errors,blocked_mutations=sorted(set(blocked)),dialogs=dialogs)
    results=[x for x in results if (x['case'],x['mobile'])!=(case,mobile)]+[row];old.write_text(json.dumps(results,indent=2)+'\n',encoding='utf-8');print(json.dumps(dict(case=case,mobile=mobile,passed=row['passed'],failure=failure,checks=len(checks))),flush=True)
    context.close()
  browser.close()
