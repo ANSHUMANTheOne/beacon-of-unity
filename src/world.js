@@ -47,7 +47,7 @@ export class UnityWorld {
     defs.forEach((d,i)=>this.createIsland(d,i));this.batchArchitecture();this.createBridges();this.createWater();
     if(!this.low){this.composer=new EffectComposer(this.renderer);this.composer.addPass(new RenderPass(this.scene,this.camera));this.bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.28,.45,1.35);this.composer.addPass(this.bloom);this.composer.addPass(new OutputPass());}
     this.raycaster=new THREE.Raycaster();this.hit=new THREE.Vector2();this.clock=new THREE.Clock();this.lastFrame=0;
-    this.look=new THREE.Vector3(); this.camGoal=new THREE.Vector3();this.lookGoal=new THREE.Vector3();
+    this.pathPosition=new THREE.Vector3();this.pathLook=new THREE.Vector3();this.look=new THREE.Vector3(); this.camGoal=new THREE.Vector3();this.lookGoal=new THREE.Vector3();
     this.resize=()=>{this.mobile=innerWidth<700;this.camera.aspect=innerWidth/innerHeight;this.camera.fov=this.mobile?43:36;this.camera.updateProjectionMatrix();this.renderer.setSize(innerWidth,innerHeight);this.composer?.setSize(innerWidth,innerHeight);this.updateScroll();};
     this.updateScroll=()=>{const end=document.getElementById('story-end');this.targetProgress=clamp(scrollY/Math.max(1,end.offsetTop-innerHeight*.2),0,1);};
     this.onPointer=e=>{if(this.dragStart){const dx=e.clientX-this.dragStart.x;if(Math.abs(dx)>5){this.targetYaw=clamp(this.dragStart.yaw+dx*.004,-.5,.5);this.lastDrag=performance.now();}}this.pointer.set(e.clientX/innerWidth*2-1,e.clientY/innerHeight*2-1);if(e.target===canvas&&e.pointerType!=='touch'){this.hit.set(this.pointer.x,-this.pointer.y);this.raycaster.setFromCamera(this.hit,this.camera);this.hovered=this.raycaster.intersectObjects(this.pickables)[0]?.object;canvas.style.cursor=this.hovered?'pointer':'';}else this.hovered=null;};
@@ -155,7 +155,7 @@ export class UnityWorld {
       {p:.46,pos:[9,4,9],look:[1.7,2.5,1]}, {p:.69,pos:[2,21,10],look:[0,1,0]}, {p:1,pos:[-10,7,15],look:[0,2.5,0]}
     ];
     let k=0;while(k<paths.length-2&&p>paths[k+1].p)k++;const a=paths[k],b=paths[k+1],t=ease(clamp((p-a.p)/(b.p-a.p),0,1));
-    this.camGoal.fromArray(a.pos).lerp(new THREE.Vector3(...b.pos),t);this.lookGoal.fromArray(a.look).lerp(new THREE.Vector3(...b.look),t);
+    this.camGoal.fromArray(a.pos).lerp(this.pathPosition.fromArray(b.pos),t);this.lookGoal.fromArray(a.look).lerp(this.pathLook.fromArray(b.look),t);
     if(!this.reduced){this.camGoal.x+=this.smoothed.x*1.05;this.camGoal.y-=this.smoothed.y*.45;}
     this.camera.clearViewOffset();
     this.camera.position.copy(this.camGoal);this.camera.lookAt(this.lookGoal);

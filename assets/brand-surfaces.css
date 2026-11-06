@@ -46,3 +46,6 @@ body.unity-contact .main{padding-top:150px!important}body.unity-founder .tagline
 @media(max-width:700px){body.unity-contact .main{padding-top:115px!important}}
 body.unity-founder footer a{color:#32647d!important}
 body.unity-founder footer a{text-decoration:underline!important;text-underline-offset:3px}body.unity-page .post-card,body.unity-page .featured-card,body.unity-page .credit-card{transition:border-color .2s,box-shadow .2s!important}body.unity-page .post-card:hover,body.unity-page .featured-card:hover,body.unity-page .credit-card:hover{border-color:#8bb6ca!important;box-shadow:0 12px 28px #12394e0d!important}
+
+/* Policy introductions and credit links retain readable contrast. */
+body.unity-policy .hero>p{color:#b5cbd9!important}body.unity-page .notice-body>a[href$="contact.html"]{color:#126483!important;text-decoration:underline;text-underline-offset:3px}

@@ -1,62 +1,62 @@
 (function() {
   const e = matchMedia("(max-width: 700px)").matches, n = matchMedia("(prefers-reduced-motion: reduce)");
   window._bavPaused = n.matches;
-  const a = e ? 0.68 : 1, i = Math.round(64 * a), s = Math.round(84 * a), L = 0.36, x = 0.967, q = 0.76, H = 0.52, F = 0.68, R = 1.8, M = 28;
-  let h = window.innerWidth - 148, u = window.innerHeight * 0.32, r = -1.2, y = 0, p = "idle", l = "", m = !1, v = 0, k = 0, S = [], X = null, Ke = 0, z = !1, K = !1, Je = null, ue = performance.now(), J = 0, C = 0, W = 0, Z = 0;
-  const d = document.getElementById("bav-wrap"), b = document.getElementById("bav-anim"), Me = document.getElementById("bav-svg"), Ze = document.getElementById("bav-bubble"), Bt = document.getElementById("bav-msg"), et = document.getElementById("bav-shadow"), Ae = document.getElementById("bav-el"), Te = document.getElementById("bav-er"), It = document.getElementById("bav-mth"), Yt = document.getElementById("bav-leg-l"), qt = document.getElementById("bav-leg-r");
-  d.style.width = i + "px", b.style.width = i + "px", b.style.height = s + "px", Me.style.width = "100%", Me.style.height = "100%";
-  const me = document.querySelector("#beacon-hide"), se = document.querySelector(".beacon-dock");
-  let _ = "tucked", P = 0, Q = 0, tt = performance.now(), re = null, Ce = null;
-  d.classList.add("beacon-tucked");
-  function Se(t) {
-    me.textContent = t ? "−" : "+", me.setAttribute("aria-label", t ? "Hide Beacon mascot" : "Show Beacon mascot"), me.setAttribute("aria-expanded", String(t)), d.tabIndex = t ? 0 : -1;
+  const r = e ? 0.68 : 1, i = Math.round(64 * r), o = Math.round(84 * r), C = 0.36, B = 0.967, T = 0.76, S = 0.52, N = 0.68, j = 1.8, L = 28;
+  let u = window.innerWidth - 148, m = window.innerHeight * 0.32, c = -1.2, f = 0, l = "idle", d = "", h = !1, y = null, v = !1, K = 0, me = 0, P = [], H = null, et = 0, z = !1, J = !1, tt = null, he = performance.now(), Z = 0, Y = 0, W = 0, ee = 0;
+  const p = document.getElementById("bav-wrap"), w = document.getElementById("bav-anim"), Ce = document.getElementById("bav-svg"), nt = document.getElementById("bav-bubble"), Ft = document.getElementById("bav-msg"), ot = document.getElementById("bav-shadow"), Te = document.getElementById("bav-el"), Se = document.getElementById("bav-er"), Pt = document.getElementById("bav-mth"), Rt = document.getElementById("bav-leg-l"), Ht = document.getElementById("bav-leg-r");
+  p.style.width = i + "px", w.style.width = i + "px", w.style.height = o + "px", Ce.style.width = "100%", Ce.style.height = "100%";
+  const pe = document.querySelector("#beacon-hide"), se = document.querySelector(".beacon-dock");
+  let q = "tucked", R = 0, Q = 0, at = performance.now(), re = null, Be = null;
+  p.classList.add("beacon-tucked");
+  function Ie(t) {
+    pe.textContent = t ? "−" : "+", pe.setAttribute("aria-label", t ? "Hide Beacon mascot" : "Show Beacon mascot"), pe.setAttribute("aria-expanded", String(t)), p.tabIndex = t ? 0 : -1;
   }
-  Se(!1);
-  function Ft() {
+  Ie(!1);
+  function Xt() {
     const t = se.getBoundingClientRect();
-    h = Math.min(innerWidth - i - 10, t.left + t.width / 2 - i / 2), u = t.top - s - 10, d.style.left = h + "px", d.style.top = u + "px", d.style.opacity = String(P), d.style.translate = `0 ${(1 - P) * (s + 14)}px`, d.style.scale = String(0.45 + 0.55 * P), d.style.pointerEvents = P > 0.35 ? "auto" : "none", d.style.clipPath = `inset(0 0 ${(1 - P) * 100}% 0)`;
+    u = Math.min(innerWidth - i - 10, t.left + t.width / 2 - i / 2), m = t.top - o - 10, p.style.left = u + "px", p.style.top = m + "px", p.style.opacity = String(R), p.style.translate = `0 ${(1 - R) * (o + 14)}px`, p.style.scale = String(0.45 + 0.55 * R), p.style.pointerEvents = R > 0.35 ? "auto" : "none", p.style.clipPath = `inset(0 0 ${(1 - R) * 100}% 0)`;
   }
-  function _t() {
-    _ = "shown", d.classList.remove("beacon-tucked");
-    for (const t of ["opacity", "translate", "scale", "pointerEvents", "clipPath"]) d.style[t] = "";
-    r = 0, y = 0, A("happy"), Se(!0);
+  function Ye() {
+    q = "shown", p.classList.remove("beacon-tucked");
+    for (const t of ["opacity", "translate", "scale", "pointerEvents", "clipPath"]) p.style[t] = "";
+    c = 0, f = 0, M("happy"), Ie(!0);
   }
   document.addEventListener("pointermove", (t) => {
-    if (_ !== "tucked" || t.pointerType === "touch") return;
-    const o = se.getBoundingClientRect(), f = Math.hypot(Math.max(o.left - t.clientX, 0, t.clientX - o.right), Math.max(o.top - t.clientY, 0, t.clientY - o.bottom)), g = performance.now(), T = re ? Math.hypot(t.clientX - re.x, t.clientY - re.y) / Math.max(1, g - re.t) : 0;
-    re = { x: t.clientX, y: t.clientY, t: g }, Q = Math.max(0, Math.min(1, (210 - f) / 170)), d.dataset.approachSpeed = String(Math.min(2, T));
+    if (q !== "tucked" || t.pointerType === "touch") return;
+    const a = se.getBoundingClientRect(), g = Math.hypot(Math.max(a.left - t.clientX, 0, t.clientX - a.right), Math.max(a.top - t.clientY, 0, t.clientY - a.bottom)), b = performance.now(), I = re ? Math.hypot(t.clientX - re.x, t.clientY - re.y) / Math.max(1, b - re.t) : 0;
+    re = { x: t.clientX, y: t.clientY, t: b }, Q = Math.max(0, Math.min(1, (210 - g) / 170)), p.dataset.approachSpeed = String(Math.min(2, I));
   }, { passive: !0 }), se.addEventListener("focusin", () => {
-    _ === "tucked" && (Q = 1);
+    q === "tucked" && (Q = 1);
   }), window.__bavTogglePresence = () => {
-    if (_ === "hiding") return;
-    if (_ !== "shown") {
-      document.body.classList.remove("beacon-hidden"), _ = "tucked", Q = 1, d.classList.add("beacon-tucked");
+    if (q === "hiding") return;
+    if (q !== "shown") {
+      document.body.classList.remove("beacon-hidden"), q = "tucked", Q = 1, p.classList.add("beacon-tucked");
       return;
     }
-    _ = "hiding", Se(!1);
-    const t = me.getBoundingClientRect(), o = d.getBoundingClientRect();
-    se.classList.add("beacon-recalling"), Ce = d.animate([
+    q = "hiding", Ie(!1);
+    const t = pe.getBoundingClientRect(), a = p.getBoundingClientRect();
+    se.classList.add("beacon-recalling"), Be = p.animate([
       { transform: "translate(0,0) scale(1)", opacity: 1 },
-      { transform: `translate(${t.left + t.width / 2 - o.left - o.width / 2}px,${t.top + t.height / 2 - o.top - o.height / 2}px) rotate(12deg) scale(.04)`, opacity: 0 }
-    ], { duration: n.matches ? 0 : 380, easing: "cubic-bezier(.5,0,.75,.4)", fill: "forwards" }), Ce.onfinish = () => {
-      _ = "hidden", P = 0, Q = 0, document.body.classList.add("beacon-hidden"), Ce.cancel(), se.classList.remove("beacon-recalling");
+      { transform: `translate(${t.left + t.width / 2 - a.left - a.width / 2}px,${t.top + t.height / 2 - a.top - a.height / 2}px) rotate(12deg) scale(.04)`, opacity: 0 }
+    ], { duration: n.matches ? 0 : 380, easing: "cubic-bezier(.5,0,.75,.4)", fill: "forwards" }), Be.onfinish = () => {
+      q = "hidden", R = 0, Q = 0, document.body.classList.add("beacon-hidden"), Be.cancel(), se.classList.remove("beacon-recalling");
     };
   };
-  function Be(t) {
-    Yt.classList.toggle("swinging", t), qt.classList.toggle("swinging", t);
+  function qe(t) {
+    Rt.classList.toggle("swinging", t), Ht.classList.toggle("swinging", t);
   }
-  function Ie() {
-    if (window._bavPaused && !m) return;
+  function Fe() {
+    if (window._bavPaused && !h) return;
     const t = document.querySelector(".beacon-dock")?.getBoundingClientRect();
-    t && h + i > t.left - 12 && h < t.right + 12 && u + s > t.top - 14 && (u = t.top - s - 14), d.style.left = h + "px", d.style.top = u + "px";
+    t && u + i > t.left - 12 && u < t.right + 12 && m + o > t.top - 14 && (m = t.top - o - 14), p.style.left = u + "px", p.style.top = m + "px";
   }
-  function B(t, o) {
-    clearTimeout(Je), Bt.textContent = t, Ze.classList.add("on"), Je = setTimeout(() => Ze.classList.remove("on"), o || 3e3);
+  function F(t, a) {
+    clearTimeout(tt), Ft.textContent = t, nt.classList.add("on"), tt = setTimeout(() => nt.classList.remove("on"), a || 3e3);
   }
   setTimeout(() => {
-    B("Hi! I'm Beacon! 👋", 4e3), setTimeout(() => B("Your community guardian ✨", 3200), 4700), setTimeout(() => B("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
+    F("Hi! I'm Beacon! 👋", 4e3), setTimeout(() => F("Your community guardian ✨", 3200), 4700), setTimeout(() => F("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
   }, 1400);
-  const nt = [
+  const it = [
     "🛡️ Keeping UAE safe!",
     "🤝 Community first!",
     "🇦🇪 Proud to serve!",
@@ -65,248 +65,251 @@
     "🌟 Verified & trusted"
   ];
   setInterval(() => {
-    (p === "idle" || p === "sitting") && Math.random() < 0.28 && B(nt[Math.floor(Math.random() * nt.length)], 2800);
+    (l === "idle" || l === "sitting") && Math.random() < 0.28 && F(it[Math.floor(Math.random() * it.length)], 2800);
   }, 11e3);
-  const Ye = {
+  const Pe = {
     happy: "M22 52 Q32 59 42 52",
     surprised: "M24 53 Q32 58 40 53",
     sitting: "M23 52 Q32 57 41 52",
     flying: "M24 52 Q32 58 40 52"
   };
-  function A(t) {
-    It.setAttribute("d", Ye[t] || Ye.happy), d.dataset.expression = t in Ye ? t : "happy", t === "surprised" && [Ae, Te].forEach((o) => {
-      o.style.transform = "scale(1.3)", setTimeout(() => o.style.transform = "scale(1)", 550);
+  function M(t) {
+    Pt.setAttribute("d", Pe[t] || Pe.happy), p.dataset.expression = t in Pe ? t : "happy", t === "surprised" && [Te, Se].forEach((a) => {
+      a.style.transform = "scale(1.3)", setTimeout(() => a.style.transform = "scale(1)", 550);
     });
   }
-  A("happy");
-  function qe() {
-    K || n.matches || [Ae, Te].forEach((t) => {
+  M("happy");
+  function Re() {
+    J || n.matches || [Te, Se].forEach((t) => {
       t.style.transform = "scaleY(0.06)", setTimeout(() => t.style.transform = "scaleY(1)", 110);
     });
   }
-  function at() {
-    clearTimeout(ot);
+  function st() {
+    clearTimeout(rt);
     const t = 2600 + Math.random() * 2800;
-    ot = setTimeout(() => {
-      qe(), Math.random() < 0.22 && setTimeout(qe, 300), at();
+    rt = setTimeout(() => {
+      Re(), Math.random() < 0.22 && setTimeout(Re, 300), st();
     }, t);
   }
-  let ot;
+  let rt;
   setTimeout(() => {
-    qe(), at();
+    Re(), st();
   }, 1800 + Math.random() * 1200);
-  function ee() {
-    K || n.matches || (K = !0, b.style.animation = "none", b.offsetHeight, b.style.animation = "bav-squish .46s cubic-bezier(.36,.07,.19,.97) forwards", A("surprised"), setTimeout(() => {
-      K = !1, b.style.animation = "", it(), A(p === "sitting" ? "sitting" : "happy");
+  function fe() {
+    J || n.matches || (J = !0, w.style.animation = "none", w.offsetHeight, w.style.animation = "bav-squish .46s cubic-bezier(.36,.07,.19,.97) forwards", M("surprised"), setTimeout(() => {
+      J = !1, w.style.animation = "", ct(), M(l === "sitting" ? "sitting" : "happy");
     }, 460));
   }
-  function it() {
-    if (!(K || n.matches))
-      switch (p) {
+  function ct() {
+    if (!(J || n.matches))
+      switch (l) {
         case "idle":
-          b.style.animation = "bav-idle 3.4s ease-in-out infinite";
+          w.style.animation = "bav-idle 3.4s ease-in-out infinite";
           break;
         case "walking":
-          b.style.animation = "bav-walk 0.46s ease-in-out infinite";
+          w.style.animation = "bav-walk 0.46s ease-in-out infinite";
           break;
         case "sitting":
-          b.style.animation = "bav-sit  2.9s ease-in-out infinite";
+          w.style.animation = "bav-sit  2.9s ease-in-out infinite";
           break;
         case "flying":
-          b.style.animation = "";
+          w.style.animation = "";
           break;
       }
   }
-  let st = [];
-  function he() {
-    st = Array.from(document.querySelectorAll(
+  let lt = [];
+  function ge() {
+    lt = Array.from(document.querySelectorAll(
       "h1,h2,h3,h4,h5,h6,p,.ftitle,.stitle,.ctat,.nname,.pct,.ft,.tname,.rpt,figcaption,dt,dd"
-    )).map((t) => ({ el: t, r: t.getBoundingClientRect() })).filter(({ r: t, el: o }) => t.width > 120 && t.height > 20 && t.bottom > 0 && t.top < window.innerHeight && !o.closest("#bav-chat,dialog,.beacon-dock,#bav-root") && o.textContent.trim().length > 8);
+    )).map((t) => ({ el: t, r: t.getBoundingClientRect() })).filter(({ r: t, el: a }) => t.width > 120 && t.height > 20 && t.bottom > 0 && t.top < window.innerHeight && !a.closest("#bav-chat,dialog,.beacon-dock,#bav-root") && a.textContent.trim().length > 8);
   }
-  he(), setInterval(he, 700);
-  let Fe = !1;
+  ge(), setInterval(ge, 700);
+  let He = !1;
   window.addEventListener("scroll", () => {
-    Fe || (Fe = !0, requestAnimationFrame(() => {
-      Fe = !1, he();
+    He || (He = !0, requestAnimationFrame(() => {
+      He = !1, ge();
     }));
-  }, { passive: !0 }), window.addEventListener("resize", he, { passive: !0 });
-  function Pt() {
-    if (m) return null;
-    const t = u + s, o = h + i * 0.5;
-    for (const { el: f, r: g } of st)
-      if (Math.abs(t - g.top) < 28 && o > g.left + 10 && o < g.right - 10 && g.top > 55)
-        return { el: f, snapY: g.top - s };
+  }, { passive: !0 }), window.addEventListener("resize", ge, { passive: !0 });
+  function _t() {
+    if (h) return null;
+    const t = m + o, a = u + i * 0.5;
+    for (const { el: g, r: b } of lt)
+      if (Math.abs(t - b.top) < 28 && a > b.left + 10 && a < b.right - 10 && b.top > 55)
+        return { el: g, snapY: b.top - o };
     return null;
   }
-  const te = ["Oof! 😅", "Wheee! 🌀", "Boing! 🎯", "Hey! 😄", "Woo! 💫"], pe = ["Whoa! 😲", "Wee! 🚀", "Flying! 🌟", "Catch me! 😄"], rt = ["Nice read! 📖", "Interesting! 🤔", "Love this! ✨", "Reading... 👀"];
-  function fe(t) {
-    if (_ !== "shown") {
-      const ce = Math.min(50, t - tt);
-      if (tt = t, ue = t, _ === "tucked") {
-        const ne = Number(d.dataset.approachSpeed || 0);
-        P = n.matches ? Q : P + (Q - P) * (1 - Math.exp(-ce / (160 - ne * 35))), Ft(), P > 0.985 && Q === 1 && _t();
+  const te = ["Oof! 😅", "Wheee! 🌀", "Boing! 🎯", "Hey! 😄", "Woo! 💫"], ye = ["Whoa! 😲", "Wee! 🚀", "Flying! 🌟", "Catch me! 😄"], dt = ["Nice read! 📖", "Interesting! 🤔", "Love this! ✨", "Reading... 👀"];
+  function ve(t) {
+    if (q !== "shown") {
+      const ce = Math.min(50, t - at);
+      if (at = t, he = t, q === "tucked") {
+        const ne = Number(p.dataset.approachSpeed || 0);
+        R = n.matches ? Q : R + (Q - R) * (1 - Math.exp(-ce / (160 - ne * 35))), Xt(), R > 0.985 && Q === 1 && Ye();
       }
-      requestAnimationFrame(fe);
+      requestAnimationFrame(ve);
       return;
     }
     if (window._bavPaused || document.hidden || document.body.classList.contains("beacon-hidden") || document.body.classList.contains("beacon-chat-open") || document.querySelector("dialog[open]")) {
-      ue = t, requestAnimationFrame(fe);
+      he = t, requestAnimationFrame(ve);
       return;
     }
-    const o = t - ue;
-    ue = t;
-    const f = Math.min(o / 16.67, 3), g = window.innerWidth, T = document.querySelector(".beacon-dock")?.getBoundingClientRect(), D = T && h + i > T.left - 12 && h < T.right + 12 ? T.top - 14 : window.innerHeight - 12;
-    if (h = Math.max(0, Math.min(g - i, h)), u = Math.max(75, Math.min(D - s, u)), !m) {
-      if (p === "sitting" && X) {
-        const E = X.getBoundingClientRect(), N = E.top > 55 && E.top < D + 20, le = h + i * 0.5, de = le > E.left - 10 && le < E.right + 10;
-        if (N && de)
-          u = E.top - s + 12, y = 0, r *= q;
+    const a = t - he;
+    he = t;
+    const g = Math.min(a / 16.67, 3), b = window.innerWidth, I = document.querySelector(".beacon-dock")?.getBoundingClientRect(), X = I && u + i > I.left - 12 && u < I.right + 12 ? I.top - 14 : window.innerHeight - 12;
+    if (u = Math.max(0, Math.min(b - i, u)), m = Math.max(75, Math.min(X - o, m)), !h) {
+      if (l === "sitting" && H) {
+        const k = H.getBoundingClientRect(), _ = k.top > 55 && k.top < X + 20, le = u + i * 0.5, de = le > k.left - 10 && le < k.right + 10;
+        if (_ && de)
+          m = k.top - o + 12, f = 0, c *= T;
         else {
-          X = null, p = "flying", Be(!1), y = -1.5;
-          const O = ["Here I come!", "A little hop!", "Off we go!", "Wheee!"];
-          B(O[Math.floor(Math.random() * O.length)], 1500);
+          H = null, l = "flying", qe(!1), f = -1.5;
+          const D = ["Here I come!", "A little hop!", "Off we go!", "Wheee!"];
+          F(D[Math.floor(Math.random() * D.length)], 1500);
         }
       } else {
-        const E = Pt();
-        if (E && Math.abs(y) < 7)
-          (p !== "sitting" || X !== E.el) && (X = E.el, Ke = E.snapY, p = "sitting", y = 0, r *= 0.35, u = Ke, ee(), A("sitting"), Be(!0), (Math.abs(r) > 1.2 || Math.abs(y) > 2) && B(rt[Math.floor(Math.random() * rt.length)], 2400));
+        const k = _t();
+        if (k && Math.abs(f) < 7)
+          (l !== "sitting" || H !== k.el) && (H = k.el, et = k.snapY, l = "sitting", f = 0, c *= 0.35, m = et, fe(), M("sitting"), qe(!0), (Math.abs(c) > 1.2 || Math.abs(f) > 2) && F(dt[Math.floor(Math.random() * dt.length)], 2400));
         else {
-          y = Math.min(y + L * f, M), r *= Math.pow(x, f), h += r * f, u += y * f, h < 0 && (h = 0, Math.abs(r) > R ? (r = Math.abs(r) * F, ee(), Math.random() < 0.4 && B(te[Math.floor(Math.random() * te.length)], 1500)) : r = 0, z = !1), h + i > g && (h = g - i, Math.abs(r) > R ? (r = -Math.abs(r) * F, ee(), Math.random() < 0.4 && B(te[Math.floor(Math.random() * te.length)], 1500)) : r = 0, z = !0), u + s > D && (u = D - s, Math.abs(y) > R ? (y = -Math.abs(y) * H, r *= q, ee(), Math.random() < 0.28 && B(te[Math.floor(Math.random() * te.length)], 1500)) : (y = 0, r *= q, p !== "sitting" && (p = Math.abs(r) > 1.1 ? "walking" : "idle"))), u < 0 && (u = 0, y = Math.abs(y) * H);
-          const N = Math.sqrt(r * r + y * y);
-          p !== "sitting" && (N > 3.5 ? p = "flying" : Math.abs(r) > 1 && u + s >= D - 2 ? p = "walking" : N < 0.7 && (p = "idle"));
+          f = Math.min(f + C * g, L), c *= Math.pow(B, g), u += c * g, m += f * g, u < 0 && (u = 0, Math.abs(c) > j ? (c = Math.abs(c) * N, fe(), Math.random() < 0.4 && F(te[Math.floor(Math.random() * te.length)], 1500)) : c = 0, z = !1), u + i > b && (u = b - i, Math.abs(c) > j ? (c = -Math.abs(c) * N, fe(), Math.random() < 0.4 && F(te[Math.floor(Math.random() * te.length)], 1500)) : c = 0, z = !0), m + o > X && (m = X - o, Math.abs(f) > j ? (f = -Math.abs(f) * S, c *= T, fe(), Math.random() < 0.28 && F(te[Math.floor(Math.random() * te.length)], 1500)) : (f = 0, c *= T, l !== "sitting" && (l = Math.abs(c) > 1.1 ? "walking" : "idle"))), m < 0 && (m = 0, f = Math.abs(f) * S);
+          const _ = Math.sqrt(c * c + f * f);
+          l !== "sitting" && (_ > 3.5 ? l = "flying" : Math.abs(c) > 1 && m + o >= X - 2 ? l = "walking" : _ < 0.7 && (l = "idle"));
         }
       }
-      if (r < -0.3 && (z = !0), r > 0.3 && (z = !1), p === "flying") {
-        const E = Math.max(-30, Math.min(30, r * 2.8));
-        J += (E - J) * 0.18 * f, C += (0 - C) * 0.12 * f, b.style.transform = `rotate(${(J + C).toFixed(2)}deg)`;
+      if (c < -0.3 && (z = !0), c > 0.3 && (z = !1), l === "flying") {
+        const k = Math.max(-30, Math.min(30, c * 2.8));
+        Z += (k - Z) * 0.18 * g, Y += (0 - Y) * 0.12 * g, w.style.transform = `rotate(${(Z + Y).toFixed(2)}deg)`;
       } else {
-        J *= 0.8, C += (0 - C) * 0.14 * f;
-        const E = J + C;
-        Math.abs(E) < 0.2 ? (J = 0, C = 0, b.style.transform = "") : b.style.transform = `rotate(${E.toFixed(2)}deg)`;
+        Z *= 0.8, Y += (0 - Y) * 0.14 * g;
+        const k = Z + Y;
+        Math.abs(k) < 0.2 ? (Z = 0, Y = 0, w.style.transform = "") : w.style.transform = `rotate(${k.toFixed(2)}deg)`;
       }
-      Me.style.transform = `scaleX(${z ? -1 : 1})`;
-      const ce = Math.max(0, D - (u + s)), ne = Math.max(0.15, 1 - ce / D);
-      et.style.width = 38 * ne + "px", et.style.opacity = (0.72 * ne).toString(), p !== l && !K && (it(), A(p === "sitting" ? "sitting" : p === "flying" ? "flying" : "happy"), l = p);
+      Ce.style.transform = `scaleX(${z ? -1 : 1})`;
+      const ce = Math.max(0, X - (m + o)), ne = Math.max(0.15, 1 - ce / X);
+      ot.style.width = 38 * ne + "px", ot.style.opacity = (0.72 * ne).toString(), l !== d && !J && (ct(), M(l === "sitting" ? "sitting" : l === "flying" ? "flying" : "happy"), d = l);
     }
-    Ie(), requestAnimationFrame(fe);
+    Fe(), requestAnimationFrame(ve);
   }
-  d.style.left = h + "px", d.style.top = u + "px", requestAnimationFrame(fe), d.addEventListener("mouseenter", () => document.body.classList.add("hov")), d.addEventListener("mouseleave", () => document.body.classList.remove("hov")), d.addEventListener("mousedown", (t) => {
-    t.button === 0 && (t.preventDefault(), m = !0, v = t.clientX - h, k = t.clientY - u, Z = t.clientX, S = [{ x: t.clientX, y: t.clientY, t: performance.now() }], r = 0, y = 0, X = null, p = l = "flying", b.style.animation = "", b.style.transform = "", A("surprised"), B(pe[Math.floor(Math.random() * pe.length)], 1e3));
+  if (p.style.left = u + "px", p.style.top = m + "px", requestAnimationFrame(ve), p.addEventListener("mouseenter", () => document.body.classList.add("hov")), p.addEventListener("mouseleave", () => document.body.classList.remove("hov")), p.addEventListener("mousedown", (t) => {
+    t.button === 0 && (q === "tucked" && Ye(), t.preventDefault(), h = !0, y = { x: t.clientX, y: t.clientY }, v = !1, K = t.clientX - u, me = t.clientY - m, ee = t.clientX, P = [{ x: t.clientX, y: t.clientY, t: performance.now() }], c = 0, f = 0, H = null, l = d = "flying", w.style.animation = "", w.style.transform = "", M("surprised"), F(ye[Math.floor(Math.random() * ye.length)], 1e3));
   }), document.addEventListener("mousemove", (t) => {
-    if (!m) return;
-    const o = t.clientX - Z;
-    Z = t.clientX, W = Math.max(-38, Math.min(38, -o * 3.2)), h = t.clientX - v, u = t.clientY - k, S.push({ x: t.clientX, y: t.clientY, t: performance.now() }), S.length > 10 && S.shift(), C += (W - C) * 0.28, W *= 0.82, b.style.transform = `rotate(${C.toFixed(1)}deg)`, Ie();
+    if (!h || (v = v || Math.hypot(t.clientX - y.x, t.clientY - y.y) > 7, !v)) return;
+    const a = t.clientX - ee;
+    ee = t.clientX, W = Math.max(-38, Math.min(38, -a * 3.2)), u = t.clientX - K, m = t.clientY - me, P.push({ x: t.clientX, y: t.clientY, t: performance.now() }), P.length > 10 && P.shift(), Y += (W - Y) * 0.28, W *= 0.82, w.style.transform = `rotate(${Y.toFixed(1)}deg)`, Fe();
   }), document.addEventListener("mouseup", () => {
-    if (!m) return;
-    m = !1, W = 0, A("happy");
-    const t = performance.now(), o = S.filter((f) => t - f.t < 130);
-    if (o.length >= 2) {
-      const f = o[0], g = o[o.length - 1], T = Math.max(g.t - f.t, 5) / 16.67;
-      r = Math.max(-M, Math.min(M, (g.x - f.x) / T * 0.62)), y = Math.max(-M, Math.min(M, (g.y - f.y) / T * 0.62));
-    }
-    p = "flying", l = "";
-  }), d.addEventListener("dblclick", () => {
-    m || (y = -8 - Math.random() * 2, r = (Math.random() - 0.5) * 5, p = "flying", l = "", ee()), window.__bavOpenChat && window.__bavOpenChat();
-  });
-  let ct = 0;
-  if (d.addEventListener("touchstart", (t) => {
-    t.preventDefault();
-    const o = performance.now(), f = o - ct < 320;
-    if (ct = o, f) {
-      window.__bavOpenChat && window.__bavOpenChat(), ee();
+    if (!h) return;
+    if (h = !1, !v) {
+      c = 0, f = 0, M("happy"), window.__bavOpenChat?.();
       return;
     }
-    const g = t.touches[0];
-    m = !0, v = g.clientX - h, k = g.clientY - u, Z = g.clientX, S = [{ x: g.clientX, y: g.clientY, t: performance.now() }], r = 0, y = 0, X = null, Be(!1), p = l = "flying", b.style.animation = "", A("surprised"), B(pe[Math.floor(Math.random() * pe.length)], 1e3);
-  }, { passive: !1 }), document.addEventListener("touchmove", (t) => {
-    if (!m) return;
-    t.preventDefault();
-    const o = t.touches[0], f = o.clientX - Z;
-    Z = o.clientX, W = Math.max(-38, Math.min(38, -f * 3.2)), h = o.clientX - v, u = o.clientY - k, S.push({ x: o.clientX, y: o.clientY, t: performance.now() }), S.length > 10 && S.shift(), C += (W - C) * 0.28, W *= 0.82, b.style.transform = `rotate(${C.toFixed(1)}deg)`, Ie();
-  }, { passive: !1 }), document.addEventListener("touchend", () => {
-    if (!m) return;
-    m = !1, A("happy"), W = 0;
-    const t = performance.now(), o = S.filter((f) => t - f.t < 130);
-    if (o.length >= 2) {
-      const f = o[0], g = o[o.length - 1], T = Math.max(g.t - f.t, 5) / 16.67;
-      r = Math.max(-M, Math.min(M, (g.x - f.x) / T * 0.62)), y = Math.max(-M, Math.min(M, (g.y - f.y) / T * 0.62));
+    W = 0, M("happy");
+    const t = performance.now(), a = P.filter((g) => t - g.t < 130);
+    if (a.length >= 2) {
+      const g = a[0], b = a[a.length - 1], I = Math.max(b.t - g.t, 5) / 16.67;
+      c = Math.max(-L, Math.min(L, (b.x - g.x) / I * 0.62)), f = Math.max(-L, Math.min(L, (b.y - g.y) / I * 0.62));
     }
-    p = "flying", l = "";
+    l = "flying", d = "";
+  }), p.addEventListener("touchstart", (t) => {
+    q === "tucked" && Ye(), t.preventDefault();
+    const a = t.touches[0];
+    h = !0, y = { x: a.clientX, y: a.clientY }, v = !1, K = a.clientX - u, me = a.clientY - m, ee = a.clientX, P = [{ x: a.clientX, y: a.clientY, t: performance.now() }], c = 0, f = 0, H = null, qe(!1), l = d = "flying", w.style.animation = "", M("surprised"), F(ye[Math.floor(Math.random() * ye.length)], 1e3);
+  }, { passive: !1 }), document.addEventListener("touchmove", (t) => {
+    if (!h) return;
+    t.preventDefault();
+    const a = t.touches[0];
+    if (v = v || Math.hypot(a.clientX - y.x, a.clientY - y.y) > 7, !v) return;
+    const g = a.clientX - ee;
+    ee = a.clientX, W = Math.max(-38, Math.min(38, -g * 3.2)), u = a.clientX - K, m = a.clientY - me, P.push({ x: a.clientX, y: a.clientY, t: performance.now() }), P.length > 10 && P.shift(), Y += (W - Y) * 0.28, W *= 0.82, w.style.transform = `rotate(${Y.toFixed(1)}deg)`, Fe();
+  }, { passive: !1 }), document.addEventListener("touchend", () => {
+    if (!h) return;
+    if (h = !1, M("happy"), !v) {
+      c = 0, f = 0, window.__bavOpenChat?.();
+      return;
+    }
+    W = 0;
+    const t = performance.now(), a = P.filter((g) => t - g.t < 130);
+    if (a.length >= 2) {
+      const g = a[0], b = a[a.length - 1], I = Math.max(b.t - g.t, 5) / 16.67;
+      c = Math.max(-L, Math.min(L, (b.x - g.x) / I * 0.62)), f = Math.max(-L, Math.min(L, (b.y - g.y) / I * 0.62));
+    }
+    l = "flying", d = "";
+  }), document.addEventListener("touchcancel", () => {
+    h = !1, v = !0, M("happy");
   }), !matchMedia("(hover: none)").matches) {
-    let N = function() {
-      if (m || document.hidden) {
-        requestAnimationFrame(N);
+    let _ = function() {
+      if (h || document.hidden) {
+        requestAnimationFrame(_);
         return;
       }
-      const _e = document.getElementById("bav-svg").getBoundingClientRect(), lt = _e.width / 64, Ht = z ? -1 : 1;
+      const Xe = document.getElementById("bav-svg").getBoundingClientRect(), ut = Xe.width / 64, Dt = z ? -1 : 1;
       [
-        { base: ce, pupil: f, iris: g },
-        { base: ne, pupil: T, iris: D }
-      ].forEach(({ base: G, pupil: dt, iris: ut }) => {
-        const Rt = _e.left + (z ? 64 - G.x : G.x) * lt, Xt = _e.top + G.y * lt, Pe = t - Rt, He = o - Xt, Re = Math.sqrt(Pe * Pe + He * He) || 1, mt = Math.min(Re / 55, 1) * E, ht = Pe / Re * mt * Ht, pt = He / Re * mt;
-        dt.setAttribute("cx", (G.x + ht).toFixed(2)), dt.setAttribute("cy", (G.y + pt).toFixed(2)), ut.setAttribute("cx", (G.x + ht * 0.55).toFixed(2)), ut.setAttribute("cy", (G.y + pt * 0.55).toFixed(2));
-      }), requestAnimationFrame(N);
+        { base: ce, pupil: g, iris: b },
+        { base: ne, pupil: I, iris: X }
+      ].forEach(({ base: G, pupil: mt, iris: ht }) => {
+        const Ot = Xe.left + (z ? 64 - G.x : G.x) * ut, Nt = Xe.top + G.y * ut, _e = t - Ot, De = a - Nt, Oe = Math.sqrt(_e * _e + De * De) || 1, pt = Math.min(Oe / 55, 1) * k, ft = _e / Oe * pt * Dt, gt = De / Oe * pt;
+        mt.setAttribute("cx", (G.x + ft).toFixed(2)), mt.setAttribute("cy", (G.y + gt).toFixed(2)), ht.setAttribute("cx", (G.x + ft * 0.55).toFixed(2)), ht.setAttribute("cy", (G.y + gt * 0.55).toFixed(2));
+      }), requestAnimationFrame(_);
     };
-    var Vt = N;
-    let t = window.innerWidth / 2, o = window.innerHeight / 2;
-    document.addEventListener("mousemove", (O) => {
-      t = O.clientX, o = O.clientY;
+    var Kt = _;
+    let t = window.innerWidth / 2, a = window.innerHeight / 2;
+    document.addEventListener("mousemove", (D) => {
+      t = D.clientX, a = D.clientY;
     });
-    const f = document.getElementById("bav-pupil-l"), g = document.getElementById("bav-iris-l"), T = document.getElementById("bav-pupil-r"), D = document.getElementById("bav-iris-r"), ce = { x: 23, y: 38 }, ne = { x: 41, y: 38 }, E = 2.6;
-    N();
+    const g = document.getElementById("bav-pupil-l"), b = document.getElementById("bav-iris-l"), I = document.getElementById("bav-pupil-r"), X = document.getElementById("bav-iris-r"), ce = { x: 23, y: 38 }, ne = { x: 41, y: 38 }, k = 2.6;
+    _();
     let le = null, de = !1;
-    d.addEventListener("mousedown", () => {
+    p.addEventListener("mousedown", () => {
       de = !1, le = setTimeout(() => {
-        m && !de && (de = !0, B("🥰 Squeezing me!", 1800), [Ae, Te].forEach((O) => {
-          O.style.transform = "scale(1.22)", setTimeout(() => O.style.transform = "scale(1)", 700);
+        h && !de && (de = !0, F("🥰 Squeezing me!", 1800), [Te, Se].forEach((D) => {
+          D.style.transform = "scale(1.22)", setTimeout(() => D.style.transform = "scale(1)", 700);
         }));
       }, 1200);
     }), document.addEventListener("mouseup", () => clearTimeout(le));
   }
   window.addEventListener("resize", () => {
-    h = Math.max(0, Math.min(innerWidth - i, h)), u = Math.max(75, Math.min(innerHeight - s - 12, u)), d.style.left = h + "px", d.style.top = u + "px";
-  }), d.addEventListener("bav-teleport", (t) => {
-    h = t.detail.x, u = t.detail.y, r = 0, y = 0, p = "idle", l = "", A("happy"), X = null;
-  }), d.addEventListener("bav-restore", () => {
-    r = (Math.random() - 0.5) * 4, y = -3, p = "flying", l = "", X = null, b.style.transform = "", A("happy");
+    u = Math.max(0, Math.min(innerWidth - i, u)), m = Math.max(75, Math.min(innerHeight - o - 12, m)), p.style.left = u + "px", p.style.top = m + "px";
+  }), p.addEventListener("bav-teleport", (t) => {
+    u = t.detail.x, m = t.detail.y, c = 0, f = 0, l = "idle", d = "", M("happy"), H = null;
+  }), p.addEventListener("bav-restore", () => {
+    c = (Math.random() - 0.5) * 4, f = -3, l = "flying", d = "", H = null, w.style.transform = "", M("happy");
   });
 })();
 (function() {
-  const e = document.getElementById("bav-chat"), n = document.getElementById("bav-chat-body"), a = document.getElementById("bav-chat-form"), i = document.getElementById("bav-chat-input"), s = document.getElementById("bav-chat-close"), L = document.getElementById("bav-chat-badge"), x = document.getElementById("bav-chat-hint");
-  if (x && window.innerWidth <= 768 && (x.textContent = "Double-tap to chat"), !e) return;
-  e.inert = !0, [L, x].forEach((l) => {
-    if (!l) return;
-    ["mousedown", "touchstart"].forEach((v) => l.addEventListener(v, (k) => k.stopPropagation())), l.addEventListener("dblclick", (v) => {
-      v.stopPropagation(), window.__bavOpenChat && window.__bavOpenChat();
+  const e = document.getElementById("bav-chat"), n = document.getElementById("bav-chat-body"), r = document.getElementById("bav-chat-form"), i = document.getElementById("bav-chat-input"), o = document.getElementById("bav-chat-close"), C = document.getElementById("bav-chat-badge"), B = document.getElementById("bav-chat-hint");
+  if (B && window.innerWidth <= 768 && (B.textContent = "Double-tap to chat"), !e) return;
+  e.inert = !0, [C, B].forEach((d) => {
+    if (!d) return;
+    ["mousedown", "touchstart"].forEach((y) => d.addEventListener(y, (v) => v.stopPropagation())), d.addEventListener("dblclick", (y) => {
+      y.stopPropagation(), window.__bavOpenChat && window.__bavOpenChat();
     });
-    let m = 0;
-    l.addEventListener("touchend", (v) => {
-      v.stopPropagation();
-      const k = performance.now();
-      k - m < 320 && window.__bavOpenChat && window.__bavOpenChat(), m = k;
+    let h = 0;
+    d.addEventListener("touchend", (y) => {
+      y.stopPropagation();
+      const v = performance.now();
+      v - h < 320 && window.__bavOpenChat && window.__bavOpenChat(), h = v;
     });
   });
-  let q = !1, H = !1;
-  function F(l, m) {
-    const v = document.createElement("div");
-    return v.className = "bav-msg " + m, m === "user" ? v.textContent = l : v.innerHTML = l, n.appendChild(v), n.scrollTop = n.scrollHeight, v;
+  let T = !1, S = !1;
+  function N(d, h) {
+    const y = document.createElement("div");
+    return y.className = "bav-msg " + h, h === "user" ? y.textContent = d : y.innerHTML = d, n.appendChild(y), n.scrollTop = n.scrollHeight, y;
   }
-  function R(l) {
-    const m = document.createElement("div");
-    m.className = "bav-quick", l.forEach((v) => {
-      const k = document.createElement("button");
-      k.type = "button", k.textContent = v, k.addEventListener("click", () => {
-        i.value = v, r();
-      }), m.appendChild(k);
-    }), n.appendChild(m), n.scrollTop = n.scrollHeight;
+  function j(d) {
+    const h = document.createElement("div");
+    h.className = "bav-quick", d.forEach((y) => {
+      const v = document.createElement("button");
+      v.type = "button", v.textContent = y, v.addEventListener("click", () => {
+        i.value = y, c();
+      }), h.appendChild(v);
+    }), n.appendChild(h), n.scrollTop = n.scrollHeight;
   }
-  function M(l) {
-    const m = document.createElement("div");
-    m.className = "bav-typing", m.innerHTML = "<span></span><span></span><span></span>", n.appendChild(m), n.scrollTop = n.scrollHeight, setTimeout(() => {
-      m.remove(), l();
+  function L(d) {
+    const h = document.createElement("div");
+    h.className = "bav-typing", h.innerHTML = "<span></span><span></span><span></span>", n.appendChild(h), n.scrollTop = n.scrollHeight, setTimeout(() => {
+      h.remove(), d();
     }, 500 + Math.random() * 450);
   }
-  const h = [
+  const u = [
     // Placed BEFORE the Lost & Found entry deliberately: "founder" contains
     // the substring "found", so if the Lost & Found entry (keyed on
     // 'found') were checked first, a question like "who is the founder"
@@ -336,100 +339,100 @@
     { k: ["mobile app", "ios app", "android app", "app store"], a: "Right now Beacon of Unity is a web platform - everything you see here (help requests, lost & found, volunteering, news) runs in the browser, no separate app download needed." },
     { k: ["who are you", "what are you", "your name"], a: "I'm Beacon - the little guardian who hangs out on this page! Drag me around, throw me, or tap the 'Tap to chat' label any time 😊" }
   ];
-  function u(l) {
-    const m = l.toLowerCase(), v = h.find((k) => k.k.some((S) => m.includes(S)));
-    return v ? v.a : "I'm not totally sure about that one - but I can tell you about Help Requests, Lost & Found, Volunteering, News, Verification, or how to join. What sounds useful?";
+  function m(d) {
+    const h = d.toLowerCase(), y = u.find((v) => v.k.some((K) => h.includes(K)));
+    return y ? y.a : "I'm not totally sure about that one - but I can tell you about Help Requests, Lost & Found, Volunteering, News, Verification, or how to join. What sounds useful?";
   }
-  function r() {
-    const l = i.value.trim();
-    l && (F(l, "user"), i.value = "", M(() => F(u(l), "bot")));
+  function c() {
+    const d = i.value.trim();
+    d && (N(d, "user"), i.value = "", L(() => N(m(d), "bot")));
   }
-  a.addEventListener("submit", (l) => {
-    l.preventDefault(), r();
-  }), i.addEventListener("keydown", (l) => {
-    l.key === "Enter" && (l.preventDefault(), r());
+  r.addEventListener("submit", (d) => {
+    d.preventDefault(), c();
+  }), i.addEventListener("keydown", (d) => {
+    d.key === "Enter" && (d.preventDefault(), c());
   });
-  function y() {
-    H = !0, document.body.classList.add("beacon-chat-open"), e.classList.add("open"), e.setAttribute("aria-hidden", "false"), e.inert = !1, L && L.classList.add("hide"), x && x.classList.add("hide"), q || (q = !0, M(() => {
-      F("Hey! I'm Beacon 👋 Ask me anything about the platform, or tap a topic below.", "bot"), R(["How do I verify?", "Post a help request", "Lost & Found", "Volunteer events"]);
+  function f() {
+    S = !0, document.body.classList.add("beacon-chat-open"), e.classList.add("open"), e.setAttribute("aria-hidden", "false"), e.inert = !1, C && C.classList.add("hide"), B && B.classList.add("hide"), T || (T = !0, L(() => {
+      N("Hey! I'm Beacon 👋 Ask me anything about the platform, or tap a topic below.", "bot"), j(["How do I verify?", "Post a help request", "Lost & Found", "Volunteer events"]);
     })), setTimeout(() => i.focus(), 250);
   }
-  function p() {
-    H = !1, document.body.classList.remove("beacon-chat-open"), e.classList.remove("open"), e.setAttribute("aria-hidden", "true"), e.inert = !0, document.getElementById("beacon-chat-button")?.focus();
+  function l() {
+    S = !1, document.body.classList.remove("beacon-chat-open"), e.classList.remove("open"), e.setAttribute("aria-hidden", "true"), e.inert = !0, document.getElementById("beacon-chat-button")?.focus();
   }
   window.__bavOpenChat = function() {
-    H ? p() : y();
-  }, s.addEventListener("click", p), document.addEventListener("keydown", (l) => {
-    l.key === "Escape" && H && p();
+    S ? l() : f();
+  }, o.addEventListener("click", l), document.addEventListener("keydown", (d) => {
+    d.key === "Escape" && S && l();
   });
 })();
-const bt = document.querySelector(".pillar-gallery"), Dt = [...bt.querySelectorAll(".pillar-card")], wt = matchMedia("(prefers-reduced-motion: reduce)");
-let De = !1;
-function be() {
-  De = !1;
-  const e = bt.getBoundingClientRect(), n = !wt.matches && !document.body.classList.contains("motion-paused") && innerWidth > 550, a = Math.max(-1, Math.min(1, (innerHeight / 2 - e.top - e.height / 2) / innerHeight));
-  Dt.forEach((i, s) => i.style.setProperty("--offset", n ? `${a * (s % 2 ? -58 : 58)}px` : "0px"));
+const Et = document.querySelector(".pillar-gallery"), Wt = [...Et.querySelectorAll(".pillar-card")], kt = matchMedia("(prefers-reduced-motion: reduce)");
+let We = !1;
+function Ee() {
+  We = !1;
+  const e = Et.getBoundingClientRect(), n = !kt.matches && !document.body.classList.contains("motion-paused") && innerWidth > 550, r = Math.max(-1, Math.min(1, (innerHeight / 2 - e.top - e.height / 2) / innerHeight));
+  Wt.forEach((i, o) => i.style.setProperty("--offset", n ? `${r * (o % 2 ? -58 : 58)}px` : "0px"));
 }
 addEventListener("scroll", () => {
-  De || (De = !0, requestAnimationFrame(be));
+  We || (We = !0, requestAnimationFrame(Ee));
 }, { passive: !0 });
-addEventListener("resize", be);
-wt.addEventListener("change", be);
-be();
-const Et = matchMedia("(hover: hover) and (pointer: fine)"), kt = matchMedia("(forced-colors: active)"), ze = document.documentElement;
-let ae = !0;
+addEventListener("resize", Ee);
+kt.addEventListener("change", Ee);
+Ee();
+const xt = matchMedia("(hover: hover) and (pointer: fine)"), Lt = matchMedia("(forced-colors: active)"), Ke = document.documentElement;
+let oe = !0;
 try {
-  ae = localStorage.getItem("beacon-cursor") !== "standard";
+  oe = localStorage.getItem("beacon-cursor") !== "standard";
 } catch {
 }
-const w = document.createElement("div");
-w.id = "beacon-orbit";
-w.setAttribute("aria-hidden", "true");
-w.setAttribute("popover", "manual");
-w.innerHTML = '<span class="orbit-trail"></span><span class="orbit-shell"><i></i><i></i></span>';
-document.body.append(w);
-const we = document.createElement("button");
-we.id = "cursor-toggle";
-const Lt = () => Et.matches && ae && !kt.matches && typeof w.showPopover == "function";
+const E = document.createElement("div");
+E.id = "beacon-orbit";
+E.setAttribute("aria-hidden", "true");
+E.setAttribute("popover", "manual");
+E.innerHTML = '<span class="orbit-trail"></span><span class="orbit-shell"><i></i><i></i></span>';
+document.body.append(E);
+const ke = document.createElement("button");
+ke.id = "cursor-toggle";
+const Mt = () => xt.matches && oe && !Lt.matches && typeof E.showPopover == "function";
 function V() {
-  ze.classList.remove("beacon-cursor-ready"), w.classList.remove("visible", "pressed"), Qe();
+  Ke.classList.remove("beacon-cursor-ready"), E.classList.remove("visible", "pressed"), Je();
 }
-function Ee() {
-  ze.classList.toggle("beacon-cursor", Lt()), we.textContent = ae ? "Use standard cursor" : "Use Beacon cursor", V();
+function xe() {
+  Ke.classList.toggle("beacon-cursor", Mt()), ke.textContent = oe ? "Use standard cursor" : "Use Beacon cursor", V();
 }
-we.addEventListener("click", () => {
-  ae = !ae;
+ke.addEventListener("click", () => {
+  oe = !oe;
   try {
-    localStorage.setItem("beacon-cursor", ae ? "beacon" : "standard");
+    localStorage.setItem("beacon-cursor", oe ? "beacon" : "standard");
   } catch {
   }
-  Ee();
+  xe();
 });
-document.querySelector(".menu-bottom")?.append(we);
-Et.addEventListener("change", Ee);
-kt.addEventListener("change", Ee);
-const ge = w.querySelector(".orbit-trail"), Ne = matchMedia("(prefers-reduced-motion: reduce)");
-let $ = 0, U = 0, Oe = 0, We = 0, oe = 0, $e = 0, Ue = !1;
-function Qe() {
-  cancelAnimationFrame(oe), oe = 0, Ue = !1, ge.style.transform = "translate3d(0,0,0)";
+document.querySelector(".menu-bottom")?.append(ke);
+xt.addEventListener("change", xe);
+Lt.addEventListener("change", xe);
+const be = E.querySelector(".orbit-trail"), $e = matchMedia("(prefers-reduced-motion: reduce)");
+let $ = 0, U = 0, Ue = 0, Ve = 0, ae = 0, je = 0, ze = !1;
+function Je() {
+  cancelAnimationFrame(ae), ae = 0, ze = !1, be.style.transform = "translate3d(0,0,0)";
 }
-function xt(e) {
-  const n = Math.min(40, e - $e);
-  $e = e;
-  const a = 1 - Math.exp(-n / 65);
-  $ += (Oe - $) * a, U += (We - U) * a;
-  const i = $ - Oe, s = U - We;
-  ge.style.transform = `translate3d(${i}px,${s}px,0)`, Math.hypot(i, s) > 0.15 ? oe = requestAnimationFrame(xt) : (oe = 0, ge.style.transform = "translate3d(0,0,0)");
+function At(e) {
+  const n = Math.min(40, e - je);
+  je = e;
+  const r = 1 - Math.exp(-n / 65);
+  $ += (Ue - $) * r, U += (Ve - U) * r;
+  const i = $ - Ue, o = U - Ve;
+  be.style.transform = `translate3d(${i}px,${o}px,0)`, Math.hypot(i, o) > 0.15 ? ae = requestAnimationFrame(At) : (ae = 0, be.style.transform = "translate3d(0,0,0)");
 }
-function Nt(e, n) {
-  Oe = e, We = n, (!Ue || Ne.matches) && ($ = e, U = n, Ue = !0);
-  const a = Math.hypot($ - e, U - n);
-  a > 42 && ($ = e + ($ - e) * 42 / a, U = n + (U - n) * 42 / a), ge.style.transform = `translate3d(${$ - e}px,${U - n}px,0)`, !oe && !Ne.matches && ($e = performance.now(), oe = requestAnimationFrame(xt));
+function $t(e, n) {
+  Ue = e, Ve = n, (!ze || $e.matches) && ($ = e, U = n, ze = !0);
+  const r = Math.hypot($ - e, U - n);
+  r > 42 && ($ = e + ($ - e) * 42 / r, U = n + (U - n) * 42 / r), be.style.transform = `translate3d(${$ - e}px,${U - n}px,0)`, !ae && !$e.matches && (je = performance.now(), ae = requestAnimationFrame(At));
 }
-Ne.addEventListener("change", Qe);
-let ft = null, Ve = null;
-function ke(e) {
-  if (!Lt() || e.pointerType === "touch") {
+$e.addEventListener("change", Je);
+let yt = null, Qe = null;
+function Le(e) {
+  if (!Mt() || e.pointerType === "touch") {
     V();
     return;
   }
@@ -438,229 +441,251 @@ function ke(e) {
     V();
     return;
   }
-  Ve = { x: e.clientX, y: e.clientY };
-  const a = n.closest("#unity-canvas");
+  Qe = { x: e.clientX, y: e.clientY };
+  const r = n.closest("#unity-canvas");
   if (n.closest("iframe,select,input,textarea,[contenteditable=true],#bav-wrap,[disabled],[aria-disabled=true],[aria-busy=true]")) {
-    w.classList.remove("visible", "pressed"), Qe();
+    E.classList.remove("visible", "pressed"), Je();
     return;
   }
-  const s = n.closest("dialog[open]");
-  s !== ft && (w.matches(":popover-open") && w.hidePopover(), ft = s);
+  const o = n.closest("dialog[open]");
+  o !== yt && (E.matches(":popover-open") && E.hidePopover(), yt = o);
   try {
-    w.matches(":popover-open") || w.showPopover();
+    E.matches(":popover-open") || E.showPopover();
   } catch {
     V();
     return;
   }
-  Nt(e.clientX, e.clientY), w.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`, w.classList.add("visible"), w.classList.toggle("world-drag", !!a), ze.classList.add("beacon-cursor-ready"), w.classList.toggle("clickable", !!n.closest("a,button,summary,[role=button],label[for]"));
+  $t(e.clientX, e.clientY), E.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`, E.classList.add("visible"), E.classList.toggle("world-drag", !!r), Ke.classList.add("beacon-cursor-ready"), E.classList.toggle("clickable", !!n.closest("a,button,summary,[role=button],label[for]"));
 }
-document.addEventListener("pointermove", ke, { passive: !0, capture: !0 });
-document.addEventListener("pointerover", ke, { passive: !0, capture: !0 });
+document.addEventListener("pointermove", Le, { passive: !0, capture: !0 });
+document.addEventListener("pointerover", Le, { passive: !0, capture: !0 });
 document.addEventListener("pointerdown", (e) => {
-  ke(e), e.button === 0 && w.classList.add("pressed");
+  Le(e), e.button === 0 && E.classList.add("pressed");
 }, { passive: !0 });
-window.addEventListener("pointerup", () => w.classList.remove("pressed"), { passive: !0 });
+window.addEventListener("pointerup", () => E.classList.remove("pressed"), { passive: !0 });
 window.addEventListener("pointercancel", V);
 window.addEventListener("blur", V);
 document.documentElement.addEventListener("pointerleave", V);
 document.addEventListener("visibilitychange", () => {
   document.hidden && V();
 });
-let Xe = 0;
+let Ne = 0;
 document.addEventListener("scroll", () => {
-  !Ve || Xe || (Xe = requestAnimationFrame(() => {
-    Xe = 0;
-    const { x: e, y: n } = Ve;
-    ke({ target: document.elementFromPoint(e, n), clientX: e, clientY: n, pointerType: "mouse" });
+  !Qe || Ne || (Ne = requestAnimationFrame(() => {
+    Ne = 0;
+    const { x: e, y: n } = Qe;
+    Le({ target: document.elementFromPoint(e, n), clientX: e, clientY: n, pointerType: "mouse" });
   }));
 }, { passive: !0, capture: !0 });
-Ee();
-const c = (e) => document.querySelector(e), Y = (e) => [...document.querySelectorAll(e)], Le = matchMedia("(prefers-reduced-motion: reduce)");
-let j, I = Le.matches;
-const gt = setTimeout(() => document.documentElement.classList.add("world-unavailable"), 12e3);
-async function Ot() {
+xe();
+const s = (e) => document.querySelector(e), A = (e) => [...document.querySelectorAll(e)], Me = matchMedia("(prefers-reduced-motion: reduce)");
+let O, x = Me.matches;
+const vt = setTimeout(() => document.documentElement.classList.add("world-unavailable"), 12e3);
+async function Ut() {
   try {
     const { UnityWorld: e } = await import("./world2.js");
-    j = new e(c("#unity-canvas"), () => {
-      clearTimeout(gt), document.documentElement.classList.remove("world-unavailable"), document.documentElement.classList.add("world-ready");
+    O = new e(s("#unity-canvas"), () => {
+      clearTimeout(vt), document.documentElement.classList.remove("world-unavailable"), document.documentElement.classList.add("world-ready");
     });
   } catch (e) {
-    clearTimeout(gt), document.documentElement.classList.add("world-unavailable"), console.warn("The lightweight world illustration is active.", e.message);
+    clearTimeout(vt), document.documentElement.classList.add("world-unavailable"), console.warn("The lightweight world illustration is active.", e.message);
   }
 }
-Ot();
-const yt = {
+Ut();
+const bt = {
   help: [["↗", "A ladder for a little home improvement", "Al Nahda, Sharjah · Nearby", "Tools & everyday help"], ["↗", "An extra pair of hands with groceries", "Al Majaz, Sharjah · Nearby", "Community support"], ["↗", "A friendly hand setting up a laptop", "Abu Shagara, Sharjah · Nearby", "Tech help"]],
   found: [["⌕", "A set of keys, waiting to come home", "Al Majaz waterfront · Example listing", "Found"], ["⌕", "Looking for a much-loved backpack", "Al Nahda park · Example listing", "Lost"], ["⌕", "A wallet found on an evening walk", "Abu Shagara · Example listing", "Found"]],
   volunteer: [["✳", "A cleaner coast, together", "Community beach cleanup · Example event", "Environment"], ["✳", "Give a little time. Share a meal.", "Community food drive · Example event", "Community care"], ["✳", "Help someone take their next step", "Neighbourhood skills exchange · Example event", "Share a skill"]],
   news: [["↗", "Keep up with your neighbourhood", "Discover community updates in one place", "Local updates"], ["↗", "Find stories with their sources attached", "Explore the platform’s local news space", "Stay informed"], ["↗", "Know what is happening nearby", "Open the demo to explore news categories", "Community news"]]
 };
-function ye(e, n = !1) {
-  if (!yt[e]) return;
-  Y("[data-preview]").forEach((L) => {
-    const x = L.dataset.preview === e;
-    L.setAttribute("aria-selected", String(x)), L.tabIndex = x ? 0 : -1, x && n && L.focus();
-  }), c("#feature-panel").setAttribute("aria-labelledby", "tab-" + e);
-  const a = c("#preview-content");
-  a.replaceChildren();
-  const i = { help: "Ask for groceries, transport, tools or tech support. See distance, time remaining and volunteer counts, then message a neighbour directly.", found: "Photo listings, clear Lost and Found labels, and Emirate locations. Contact the person who posted an item directly.", volunteer: "Community events sourced from Volunteers.ae, with dates, locations and direct registration links.", news: "Stories from Khaleej Times, Gulf News, Al Jazeera and BBC. Filter by source or topic in the dashboard." }, s = document.createElement("p");
-  s.className = "preview-description", s.textContent = i[e], a.append(s), yt[e].forEach(([L, x, q, H]) => {
-    const F = document.createElement("article");
-    F.className = "preview-item";
-    const R = document.createElement("span");
-    R.className = "preview-symbol", R.textContent = L;
-    const M = document.createElement("div"), h = document.createElement("h3");
-    h.textContent = x;
-    const u = document.createElement("p");
-    u.textContent = q;
-    const r = document.createElement("span");
-    r.className = "tag", r.textContent = H, M.append(h, u, r), F.append(R, M), a.append(F);
+function we(e, n = !1) {
+  if (!bt[e]) return;
+  A("[data-preview]").forEach((T) => {
+    const S = T.dataset.preview === e;
+    T.setAttribute("aria-selected", String(S)), T.tabIndex = S ? 0 : -1, S && n && T.focus();
+  }), s("#feature-panel").setAttribute("aria-labelledby", "tab-" + e);
+  const r = { help: "community", found: "lostfound", volunteer: "volunteer-opps", news: "reliable-news" }, i = s(".preview-cta");
+  i.dataset.demo = r[e], i.firstChild.textContent = { help: "Try posting or answering a request ", found: "Try searching Lost & Found ", volunteer: "Explore volunteer opportunities ", news: "Try the news filters " }[e];
+  const o = s("#preview-content");
+  o.replaceChildren();
+  const C = { help: "Ask for groceries, transport, tools or tech support. See distance, time remaining and volunteer counts, then message a neighbour directly.", found: "Photo listings, clear Lost and Found labels, and Emirate locations. Contact the person who posted an item directly.", volunteer: "Community events sourced from Volunteers.ae, with dates, locations and direct registration links.", news: "Stories from Al Jazeera, BBC News, NPR News and Times of India. Filter by source or topic. Demo stories are fictional examples." }, B = document.createElement("p");
+  B.className = "preview-description", B.textContent = C[e], o.append(B), bt[e].forEach(([T, S, N, j]) => {
+    const L = document.createElement("article");
+    L.className = "preview-item";
+    const u = document.createElement("span");
+    u.className = "preview-symbol", u.textContent = T;
+    const m = document.createElement("div"), c = document.createElement("h3");
+    c.textContent = S;
+    const f = document.createElement("p");
+    f.textContent = N;
+    const l = document.createElement("span");
+    l.className = "tag", l.textContent = j, m.append(c, f, l), L.append(u, m), o.append(L);
   });
 }
-Y("[data-preview]").forEach((e, n) => {
-  e.addEventListener("click", () => ye(e.dataset.preview)), e.addEventListener("keydown", (a) => {
-    const i = Y("[data-preview]");
-    let s;
-    (a.key === "ArrowRight" || a.key === "ArrowDown") && (s = (n + 1) % i.length), (a.key === "ArrowLeft" || a.key === "ArrowUp") && (s = (n + i.length - 1) % i.length), a.key === "Home" && (s = 0), a.key === "End" && (s = i.length - 1), s !== void 0 && (a.preventDefault(), ye(i[s].dataset.preview, !0));
+A("[data-preview]").forEach((e, n) => {
+  e.addEventListener("click", () => we(e.dataset.preview)), e.addEventListener("keydown", (r) => {
+    const i = A("[data-preview]");
+    let o;
+    (r.key === "ArrowRight" || r.key === "ArrowDown") && (o = (n + 1) % i.length), (r.key === "ArrowLeft" || r.key === "ArrowUp") && (o = (n + i.length - 1) % i.length), r.key === "Home" && (o = 0), r.key === "End" && (o = i.length - 1), o !== void 0 && (r.preventDefault(), we(i[o].dataset.preview, !0));
   });
 });
-Y("[data-select]").forEach((e) => e.addEventListener("click", () => ye(e.dataset.select)));
-ye("help");
-let Mt;
-function Ge(e) {
-  Mt = document.activeElement, e.showModal(), j?.setPaused(!0);
+A("[data-select]").forEach((e) => e.addEventListener("click", () => we(e.dataset.select)));
+we("help");
+const Vt = A(".desktop-nav a,#navigation nav a"), jt = A("#home,#community,#how,#trust,#compare,#beyond,#questions");
+let Ct;
+function Ze(e) {
+  Ct = document.activeElement, e.showModal(), O?.setPaused(!0);
 }
-function ve(e) {
-  e.close(), j?.setPaused(I), Mt?.focus();
+function ue(e) {
+  e.close(), O?.setPaused(x), Ct?.focus();
 }
-Y("dialog").forEach((e) => {
-  e.querySelector("[data-close]").addEventListener("click", () => ve(e)), e.addEventListener("click", (n) => {
+A("dialog").forEach((e) => {
+  e.querySelector("[data-close]").addEventListener("click", () => ue(e)), e.addEventListener("click", (n) => {
     if (n.target === e) {
-      const a = e.getBoundingClientRect();
-      (n.clientX < a.left || n.clientX > a.right || n.clientY < a.top || n.clientY > a.bottom) && ve(e);
+      const r = e.getBoundingClientRect();
+      (n.clientX < r.left || n.clientX > r.right || n.clientY < r.top || n.clientY > r.bottom) && ue(e);
     }
   }), e.addEventListener("close", () => {
-    j?.setPaused(I), c("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && c("#video-frame").removeAttribute("src");
+    O?.setPaused(x), s("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && s("#video-frame").removeAttribute("src");
   });
 });
-c("#menu-toggle").addEventListener("click", () => {
-  Ge(c("#navigation")), c("#menu-toggle").setAttribute("aria-expanded", "true");
+s("#menu-toggle").addEventListener("click", () => {
+  Ze(s("#navigation")), s("#menu-toggle").setAttribute("aria-expanded", "true");
 });
-Y("#navigation a").forEach((e) => e.addEventListener("click", () => ve(c("#navigation"))));
-let vt;
-Y("[data-demo]").forEach((e) => e.addEventListener("click", () => {
-  const n = c("#demo-frame"), a = e.dataset.demo || "community";
-  n.getAttribute("src") || (n.src = n.dataset.src), Ge(c("#demo-dialog")), clearTimeout(vt);
+A("#navigation a").forEach((e) => e.addEventListener("click", () => ue(s("#navigation"))));
+let wt;
+A("[data-demo]").forEach((e) => e.addEventListener("click", () => {
+  const n = s("#demo-frame"), r = e.dataset.demo || "community";
+  n.getAttribute("src") || (n.src = n.dataset.src), s("#navigation").open && ue(s("#navigation")), Ze(s("#demo-dialog")), clearTimeout(wt);
   let i = 0;
-  function s() {
-    if (c("#demo-dialog").open) {
+  function o() {
+    if (s("#demo-dialog").open) {
       try {
         if (n.contentWindow?.__beaconDemoReady) {
-          n.contentWindow.switchTab(a);
+          n.contentWindow.switchTab(r);
           return;
         }
       } catch {
       }
-      ++i < 100 && (vt = setTimeout(s, 100));
+      ++i < 100 && (wt = setTimeout(o, 100));
     }
   }
-  s();
+  o();
 }));
-c("#demo-frame").addEventListener("load", () => {
+s("#demo-frame").addEventListener("load", () => {
   try {
-    const e = c("#demo-frame").contentDocument, n = e.createElement("style");
+    const e = s("#demo-frame").contentDocument, n = e.createElement("style");
     n.textContent = "#bav-root,#bav-toggle,#bav-popover,#bav-chat{display:none!important}", e.head.append(n), [...e.querySelectorAll("button")].find((i) => i.textContent.trim().startsWith("Skip"))?.click();
   } catch {
   }
 });
-Y("[data-video]").forEach((e) => e.addEventListener("click", () => {
-  c("#video-frame").src = "https://www.youtube-nocookie.com/embed/md8suH2LcHs?autoplay=1&rel=0", Ge(c("#video-dialog"));
+A("[data-video]").forEach((e) => e.addEventListener("click", () => {
+  s("#video-frame").src = "https://www.youtube-nocookie.com/embed/md8suH2LcHs?autoplay=1&rel=0", Ze(s("#video-dialog"));
 }));
-window.openSimDemo = () => Y("[data-demo]")[0].click();
-window.closeSimDemo = () => ve(c("#demo-dialog"));
-function At() {
-  I = !I, window._bavPaused = I, document.body.classList.toggle("motion-paused", I), j?.setPaused(I), c("#motion-toggle").textContent = I ? "Resume background motion" : "Pause background motion", c("#motion-toggle").setAttribute("aria-pressed", String(I)), c("#footer-motion").textContent = I ? "Resume background motion" : "Pause background motion";
+window.openSimDemo = () => A("[data-demo]")[0].click();
+window.closeSimDemo = () => ue(s("#demo-dialog"));
+function Tt() {
+  x = !x, window._bavPaused = x, document.body.classList.toggle("motion-paused", x), O?.setPaused(x), s("#motion-toggle").textContent = x ? "Resume background motion" : "Pause background motion", s("#motion-toggle").setAttribute("aria-pressed", String(x)), s("#footer-motion").textContent = x ? "Resume background motion" : "Pause background motion";
 }
-c("#motion-toggle").addEventListener("click", At);
-c("#footer-motion").addEventListener("click", At);
-Le.addEventListener("change", (e) => {
-  j && (j.reduced = e.matches, j.lastFrame = 0), I = e.matches, window._bavPaused = e.matches, document.body.classList.toggle("motion-paused", e.matches), c("#motion-toggle").setAttribute("aria-pressed", String(I));
+function St() {
+  document.body.classList.toggle("motion-paused", x), s("#motion-toggle").textContent = x ? "Resume background motion" : "Pause background motion", s("#motion-toggle").setAttribute("aria-pressed", String(x)), s("#footer-motion").textContent = x ? "Resume background motion" : "Pause background motion";
+}
+St();
+s("#motion-toggle").addEventListener("click", Tt);
+s("#footer-motion").addEventListener("click", Tt);
+Me.addEventListener("change", (e) => {
+  O && (O.reduced = e.matches, O.lastFrame = 0), x = e.matches, window._bavPaused = e.matches, document.body.classList.toggle("motion-paused", e.matches), s("#motion-toggle").setAttribute("aria-pressed", String(x)), O?.setPaused(x), St();
 });
-c("#theme-toggle").addEventListener("click", () => {
+s("#theme-toggle").addEventListener("click", () => {
   const e = document.documentElement.dataset.theme !== "dark";
-  document.documentElement.dataset.theme = e ? "dark" : "light", c("#theme-toggle").textContent = e ? "Switch to day" : "Switch to night";
+  document.documentElement.dataset.theme = e ? "dark" : "light", s("#theme-toggle").textContent = e ? "Switch to day" : "Switch to night";
   try {
     localStorage.setItem("beacon-theme", e ? "dark" : "light");
   } catch {
   }
 });
 try {
-  localStorage.getItem("beacon-theme") === "dark" && c("#theme-toggle").click();
+  localStorage.getItem("beacon-theme") === "dark" && s("#theme-toggle").click();
 } catch {
 }
-c("#year").textContent = (/* @__PURE__ */ new Date()).getFullYear();
-const Wt = Y(".chapter");
-let je = !1;
-function Tt() {
-  je = !1;
-  const e = scrollY;
-  c(".site-header").classList.toggle("scrolled", e > 60);
-  const n = e > c("#story-end").offsetTop - innerHeight * 0.6;
-  document.body.classList.toggle("past-story", n);
-  let a = 0;
-  Wt.forEach((i, s) => {
-    const L = i.getBoundingClientRect();
-    L.top < innerHeight * 0.4 && (a = s);
-    const x = i.querySelector(".chapter-copy");
-    if (!Le.matches && innerWidth > 700) {
-      const q = Math.max(-30, Math.min(30, -L.top * 0.06));
-      x.style.transform = `translateY(${q}px)`;
+s("#year").textContent = (/* @__PURE__ */ new Date()).getFullYear();
+const zt = A(".chapter");
+let Ge = !1;
+function Bt() {
+  Ge = !1;
+  let e = "home";
+  jt.forEach((o) => {
+    o.getBoundingClientRect().top < innerHeight * 0.35 && (e = o.id);
+  }), Vt.forEach((o) => {
+    o.getAttribute("href") === "#" + e ? o.setAttribute("aria-current", "location") : o.removeAttribute("aria-current");
+  });
+  const n = scrollY;
+  s(".site-header").classList.toggle("scrolled", n > 60);
+  const r = n > s("#story-end").offsetTop - innerHeight * 0.6;
+  document.body.classList.toggle("past-story", r);
+  let i = 0;
+  zt.forEach((o, C) => {
+    const B = o.getBoundingClientRect();
+    B.top < innerHeight * 0.4 && (i = C);
+    const T = o.querySelector(".chapter-copy");
+    if (!Me.matches && innerWidth > 700) {
+      const S = Math.max(-30, Math.min(30, -B.top * 0.06));
+      T.style.transform = `translateY(${S}px)`;
     }
-  }), Y("#chapter-progress a").forEach((i, s) => {
-    i.classList.toggle("active", s === a), s === a ? i.setAttribute("aria-current", "step") : i.removeAttribute("aria-current");
-  }), c("#chapter-number").textContent = `0${a + 1} / 05`, document.body.classList.toggle("footer-visible", c(".site-footer").getBoundingClientRect().top < innerHeight - 100);
+  }), A("#chapter-progress a").forEach((o, C) => {
+    o.classList.toggle("active", C === i), C === i ? o.setAttribute("aria-current", "step") : o.removeAttribute("aria-current");
+  }), s("#chapter-number").textContent = `0${i + 1} / 05`, document.body.classList.toggle("footer-visible", s(".site-footer").getBoundingClientRect().top < innerHeight - 100);
 }
 addEventListener("scroll", () => {
-  je || (je = !0, requestAnimationFrame(Tt));
+  Ge || (Ge = !0, requestAnimationFrame(Bt));
 }, { passive: !0 });
-Tt();
-const xe = c("#bav-wrap");
-xe.setAttribute("role", "button");
-xe.tabIndex = 0;
-xe.setAttribute("aria-label", "Beacon mascot. Double-click to chat, or drag and throw to play.");
-c("#bav-chat-input").setAttribute("aria-label", "Message Beacon");
-c("#bav-chat-body").setAttribute("aria-live", "polite");
-c("#beacon-chat-button").addEventListener("click", () => window.__bavOpenChat?.());
-xe.addEventListener("keydown", (e) => {
+Bt();
+const Ae = s("#bav-wrap");
+Ae.setAttribute("role", "button");
+Ae.tabIndex = s("#beacon-hide").getAttribute("aria-expanded") === "true" ? 0 : -1;
+Ae.setAttribute("aria-label", "Ask Beacon. Click or tap to chat, or drag to play.");
+s("#bav-chat-input").setAttribute("aria-label", "Message Beacon");
+s("#bav-chat-body").setAttribute("aria-live", "polite");
+s("#beacon-chat-button").addEventListener("click", () => window.__bavOpenChat?.());
+Ae.addEventListener("keydown", (e) => {
   (e.key === "Enter" || e.key === " ") && (e.preventDefault(), window.__bavOpenChat?.());
 });
-c("#beacon-hide").addEventListener("click", () => window.__bavTogglePresence?.());
-const ie = c("#bav-svg").cloneNode(!0), Ct = /* @__PURE__ */ new Map();
+s("#beacon-hide").addEventListener("click", () => window.__bavTogglePresence?.());
+const ie = s("#bav-svg").cloneNode(!0), It = /* @__PURE__ */ new Map();
 [ie, ...ie.querySelectorAll("[id]")].forEach((e) => {
-  e.id && (Ct.set(e.id, "chat-" + e.id), e.id = "chat-" + e.id);
+  e.id && (It.set(e.id, "chat-" + e.id), e.id = "chat-" + e.id);
 });
 [ie, ...ie.querySelectorAll("*")].forEach((e) => {
   for (const n of [...e.attributes]) {
-    let a = n.value;
-    Ct.forEach((i, s) => {
-      a = a.replaceAll("url(#" + s + ")", "url(#" + i + ")"), a === "#" + s && (a = "#" + i);
-    }), a !== n.value && e.setAttribute(n.name, a);
+    let r = n.value;
+    It.forEach((i, o) => {
+      r = r.replaceAll("url(#" + o + ")", "url(#" + i + ")"), r === "#" + o && (r = "#" + i);
+    }), r !== n.value && e.setAttribute(n.name, r);
   }
 });
 ie.setAttribute("aria-hidden", "true");
-c("#bav-chat-avatar").replaceChildren(ie);
-const $t = new IntersectionObserver((e) => {
+s("#bav-chat-avatar").replaceChildren(ie);
+const Yt = new IntersectionObserver((e) => {
   e.forEach((n) => {
-    n.target.classList.toggle("in-view", n.isIntersecting);
+    n.isIntersecting && (n.target.classList.add("in-view"), Yt.unobserve(n.target));
   });
-}, { threshold: 0.13 });
-Y(".chapter-copy,.story-signal,.section-heading,.how-steps article,.platform-explained article,.organisation-types article,.compare-row,.beyond-layout,.trust-layout").forEach((e) => {
-  e.classList.add("motion-reveal"), $t.observe(e);
+}, { threshold: 0.08 });
+A(".chapter-copy,.story-signal,.section-heading,.how-steps article,.platform-explained article,.organisation-types article,.compare-row,.beyond-layout,.trust-layout").forEach((e) => {
+  e.classList.add("motion-reveal"), Yt.observe(e);
 });
 addEventListener("pointermove", (e) => {
-  e.pointerType === "touch" || Le.matches || (document.documentElement.style.setProperty("--pointer-x", `${e.clientX / innerWidth * 100}%`), document.documentElement.style.setProperty("--pointer-y", `${e.clientY / innerHeight * 100}%`));
+  e.pointerType === "touch" || Me.matches || (document.documentElement.style.setProperty("--pointer-x", `${e.clientX / innerWidth * 100}%`), document.documentElement.style.setProperty("--pointer-y", `${e.clientY / innerHeight * 100}%`));
 }, { passive: !0 });
-const St = new IntersectionObserver((e) => {
-  e.some((n) => n.isIntersecting) && (import("./spaces.js").catch(() => document.querySelector(".space-stage").classList.add("space-fallback")), St.disconnect());
+function Qt() {
+  s(".space-stage").classList.add("space-fallback");
+  const n = { neighbours: ["AT HOME", "A request. Someone nearby.", "An older neighbour asks for company for a hospital appointment. Another neighbour offers support. A second example shows help with groceries for a wheelchair user."], school: ["SCHOOL CONCEPT", "Every classroom. One connected school.", "Classroom nodes illustrate how announcements and shared resources could connect a school. This is a concept, not an available classroom-management product."], office: ["WORKPLACE CONCEPT", "A shared space. A shared purpose.", "Colleagues coordinate a small community collection. This illustrative concept is available to discuss through the organisation enquiry link."] };
+  function r(i) {
+    const o = n[i];
+    s("#space-label").textContent = o[0], s("#space-title").textContent = o[1], s("#space-copy").textContent = o[2], s(".space-example").textContent = "3D preview unavailable on this device. These text scenarios are illustrative, not live activity.", A("[data-space]").forEach((C) => C.setAttribute("aria-pressed", String(C.dataset.space === i)));
+  }
+  A("[data-space]").forEach((i) => i.addEventListener("click", () => r(i.dataset.space))), r("neighbours");
+}
+const qt = new IntersectionObserver((e) => {
+  e.some((n) => n.isIntersecting) && (import("./spaces.js").catch(Qt), qt.disconnect());
 }, { rootMargin: "400px" });
-St.observe(document.querySelector(".community-spaces"));
+qt.observe(document.querySelector(".community-spaces"));
