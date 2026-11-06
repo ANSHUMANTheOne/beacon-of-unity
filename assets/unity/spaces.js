@@ -1,4 +1,4 @@
-import { m as xe, b as Ce, x as Me, s as ke, t as he, i as Te, y as Ae, D as Le, n as qe, J as Pe, G as M, M as k, T as le, X as Ie, $ as Be, a0 as Re, a1 as Oe, Y as De, c as D, Z as Ge, d as Fe, _ as A, o as ze, E as He } from "./three.module.js";
+import { m as xe, b as Ce, w as Me, s as ke, t as he, i as Te, y as Ae, D as Le, n as qe, J as Pe, G as M, M as k, T as le, X as Ie, $ as Be, a0 as Re, a1 as Oe, Y as De, c as D, Z as Ge, d as Fe, _ as A, o as ze, E as He } from "./three.module.js";
 const N = document.querySelector("#spaces-canvas"), y = N.parentElement;
 let E = !0;
 document.querySelector(".community-spaces").addEventListener("click", () => E = !0);

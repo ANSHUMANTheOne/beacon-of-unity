@@ -2,59 +2,59 @@
   const e = matchMedia("(max-width: 700px)").matches, n = matchMedia("(prefers-reduced-motion: reduce)");
   window._bavPaused = n.matches;
   const r = e ? 0.68 : 1, i = Math.round(64 * r), o = Math.round(84 * r), C = 0.36, B = 0.967, T = 0.76, S = 0.52, N = 0.68, j = 1.8, L = 28;
-  let u = window.innerWidth - 148, m = window.innerHeight * 0.32, c = -1.2, f = 0, l = "idle", d = "", h = !1, y = null, v = !1, K = 0, me = 0, P = [], H = null, et = 0, z = !1, J = !1, tt = null, he = performance.now(), Z = 0, Y = 0, W = 0, ee = 0;
-  const p = document.getElementById("bav-wrap"), w = document.getElementById("bav-anim"), Ce = document.getElementById("bav-svg"), nt = document.getElementById("bav-bubble"), Ft = document.getElementById("bav-msg"), ot = document.getElementById("bav-shadow"), Te = document.getElementById("bav-el"), Se = document.getElementById("bav-er"), Pt = document.getElementById("bav-mth"), Rt = document.getElementById("bav-leg-l"), Ht = document.getElementById("bav-leg-r");
+  let u = window.innerWidth - 148, m = window.innerHeight * 0.32, c = -1.2, f = 0, l = "idle", d = "", h = !1, y = null, v = !1, K = 0, he = 0, H = [], X = null, et = 0, Q = !1, J = !1, tt = null, pe = performance.now(), Z = 0, q = 0, W = 0, ee = 0;
+  const p = document.getElementById("bav-wrap"), w = document.getElementById("bav-anim"), Ce = document.getElementById("bav-svg"), nt = document.getElementById("bav-bubble"), Pt = document.getElementById("bav-msg"), ot = document.getElementById("bav-shadow"), Te = document.getElementById("bav-el"), Se = document.getElementById("bav-er"), Ft = document.getElementById("bav-mth"), Rt = document.getElementById("bav-leg-l"), Ht = document.getElementById("bav-leg-r");
   p.style.width = i + "px", w.style.width = i + "px", w.style.height = o + "px", Ce.style.width = "100%", Ce.style.height = "100%";
-  const pe = document.querySelector("#beacon-hide"), se = document.querySelector(".beacon-dock");
-  let q = "tucked", R = 0, Q = 0, at = performance.now(), re = null, Be = null;
+  const fe = document.querySelector("#beacon-hide"), se = document.querySelector(".beacon-dock");
+  let I = "tucked", F = 0, $ = 0, at = performance.now(), re = null, Be = null;
   p.classList.add("beacon-tucked");
   function Ie(t) {
-    pe.textContent = t ? "−" : "+", pe.setAttribute("aria-label", t ? "Hide Beacon mascot" : "Show Beacon mascot"), pe.setAttribute("aria-expanded", String(t)), p.tabIndex = t ? 0 : -1;
+    fe.textContent = t ? "−" : "+", fe.setAttribute("aria-label", t ? "Hide Beacon mascot" : "Show Beacon mascot"), fe.setAttribute("aria-expanded", String(t)), p.tabIndex = t ? 0 : -1;
   }
   Ie(!1);
   function Xt() {
     const t = se.getBoundingClientRect();
-    u = Math.min(innerWidth - i - 10, t.left + t.width / 2 - i / 2), m = t.top - o - 10, p.style.left = u + "px", p.style.top = m + "px", p.style.opacity = String(R), p.style.translate = `0 ${(1 - R) * (o + 14)}px`, p.style.scale = String(0.45 + 0.55 * R), p.style.pointerEvents = R > 0.35 ? "auto" : "none", p.style.clipPath = `inset(0 0 ${(1 - R) * 100}% 0)`;
+    u = Math.min(innerWidth - i - 10, t.left + t.width / 2 - i / 2), m = t.top - o - 10, p.style.left = u + "px", p.style.top = m + "px", p.style.opacity = String(F), p.style.translate = `0 ${(1 - F) * (o + 14)}px`, p.style.scale = String(0.45 + 0.55 * F), p.style.pointerEvents = F > 0.35 ? "auto" : "none", p.style.clipPath = `inset(0 0 ${(1 - F) * 100}% 0)`;
   }
   function Ye() {
-    q = "shown", p.classList.remove("beacon-tucked");
+    I = "shown", p.classList.remove("beacon-tucked");
     for (const t of ["opacity", "translate", "scale", "pointerEvents", "clipPath"]) p.style[t] = "";
-    c = 0, f = 0, M("happy"), Ie(!0);
+    c = 0, f = 0, M("happy"), Ie(!0), ce();
   }
   document.addEventListener("pointermove", (t) => {
-    if (q !== "tucked" || t.pointerType === "touch") return;
-    const a = se.getBoundingClientRect(), g = Math.hypot(Math.max(a.left - t.clientX, 0, t.clientX - a.right), Math.max(a.top - t.clientY, 0, t.clientY - a.bottom)), b = performance.now(), I = re ? Math.hypot(t.clientX - re.x, t.clientY - re.y) / Math.max(1, b - re.t) : 0;
-    re = { x: t.clientX, y: t.clientY, t: b }, Q = Math.max(0, Math.min(1, (210 - g) / 170)), p.dataset.approachSpeed = String(Math.min(2, I));
+    if (I !== "tucked" || t.pointerType === "touch") return;
+    const a = se.getBoundingClientRect(), g = Math.hypot(Math.max(a.left - t.clientX, 0, t.clientX - a.right), Math.max(a.top - t.clientY, 0, t.clientY - a.bottom)), b = performance.now(), Y = re ? Math.hypot(t.clientX - re.x, t.clientY - re.y) / Math.max(1, b - re.t) : 0;
+    re = { x: t.clientX, y: t.clientY, t: b }, $ = Math.max(0, Math.min(1, (210 - g) / 170)), p.dataset.approachSpeed = String(Math.min(2, Y));
   }, { passive: !0 }), se.addEventListener("focusin", () => {
-    q === "tucked" && (Q = 1);
+    I === "tucked" && ($ = 1);
   }), window.__bavTogglePresence = () => {
-    if (q === "hiding") return;
-    if (q !== "shown") {
-      document.body.classList.remove("beacon-hidden"), q = "tucked", Q = 1, p.classList.add("beacon-tucked");
+    if (I === "hiding") return;
+    if (I !== "shown") {
+      document.body.classList.remove("beacon-hidden"), I = "tucked", $ = 1, p.classList.add("beacon-tucked");
       return;
     }
-    q = "hiding", Ie(!1);
-    const t = pe.getBoundingClientRect(), a = p.getBoundingClientRect();
+    I = "hiding", Ie(!1);
+    const t = fe.getBoundingClientRect(), a = p.getBoundingClientRect();
     se.classList.add("beacon-recalling"), Be = p.animate([
       { transform: "translate(0,0) scale(1)", opacity: 1 },
       { transform: `translate(${t.left + t.width / 2 - a.left - a.width / 2}px,${t.top + t.height / 2 - a.top - a.height / 2}px) rotate(12deg) scale(.04)`, opacity: 0 }
     ], { duration: n.matches ? 0 : 380, easing: "cubic-bezier(.5,0,.75,.4)", fill: "forwards" }), Be.onfinish = () => {
-      q = "hidden", R = 0, Q = 0, document.body.classList.add("beacon-hidden"), Be.cancel(), se.classList.remove("beacon-recalling");
+      I = "hidden", F = 0, $ = 0, document.body.classList.add("beacon-hidden"), Be.cancel(), se.classList.remove("beacon-recalling");
     };
   };
   function qe(t) {
     Rt.classList.toggle("swinging", t), Ht.classList.toggle("swinging", t);
   }
-  function Fe() {
+  function Pe() {
     if (window._bavPaused && !h) return;
     const t = document.querySelector(".beacon-dock")?.getBoundingClientRect();
     t && u + i > t.left - 12 && u < t.right + 12 && m + o > t.top - 14 && (m = t.top - o - 14), p.style.left = u + "px", p.style.top = m + "px";
   }
-  function F(t, a) {
-    clearTimeout(tt), Ft.textContent = t, nt.classList.add("on"), tt = setTimeout(() => nt.classList.remove("on"), a || 3e3);
+  function R(t, a) {
+    clearTimeout(tt), Pt.textContent = t, nt.classList.add("on"), tt = setTimeout(() => nt.classList.remove("on"), a || 3e3);
   }
   setTimeout(() => {
-    F("Hi! I'm Beacon! 👋", 4e3), setTimeout(() => F("Your community guardian ✨", 3200), 4700), setTimeout(() => F("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
+    R("Hi! I'm Beacon! 👋", 4e3), setTimeout(() => R("Your community guardian ✨", 3200), 4700), setTimeout(() => R("Double-click (or double-tap) me to chat! 💬", 3600), 8200);
   }, 1400);
   const it = [
     "🛡️ Keeping UAE safe!",
@@ -65,16 +65,16 @@
     "🌟 Verified & trusted"
   ];
   setInterval(() => {
-    (l === "idle" || l === "sitting") && Math.random() < 0.28 && F(it[Math.floor(Math.random() * it.length)], 2800);
+    (l === "idle" || l === "sitting") && Math.random() < 0.28 && R(it[Math.floor(Math.random() * it.length)], 2800);
   }, 11e3);
-  const Pe = {
+  const Fe = {
     happy: "M22 52 Q32 59 42 52",
     surprised: "M24 53 Q32 58 40 53",
     sitting: "M23 52 Q32 57 41 52",
     flying: "M24 52 Q32 58 40 52"
   };
   function M(t) {
-    Pt.setAttribute("d", Pe[t] || Pe.happy), p.dataset.expression = t in Pe ? t : "happy", t === "surprised" && [Te, Se].forEach((a) => {
+    Ft.setAttribute("d", Fe[t] || Fe.happy), p.dataset.expression = t in Fe ? t : "happy", t === "surprised" && [Te, Se].forEach((a) => {
       a.style.transform = "scale(1.3)", setTimeout(() => a.style.transform = "scale(1)", 550);
     });
   }
@@ -95,7 +95,7 @@
   setTimeout(() => {
     Re(), st();
   }, 1800 + Math.random() * 1200);
-  function fe() {
+  function ge() {
     J || n.matches || (J = !0, w.style.animation = "none", w.offsetHeight, w.style.animation = "bav-squish .46s cubic-bezier(.36,.07,.19,.97) forwards", M("surprised"), setTimeout(() => {
       J = !1, w.style.animation = "", ct(), M(l === "sitting" ? "sitting" : "happy");
     }, 460));
@@ -118,18 +118,18 @@
       }
   }
   let lt = [];
-  function ge() {
-    lt = Array.from(document.querySelectorAll(
+  function ce() {
+    I !== "shown" || document.hidden || (lt = Array.from(document.querySelectorAll(
       "h1,h2,h3,h4,h5,h6,p,.ftitle,.stitle,.ctat,.nname,.pct,.ft,.tname,.rpt,figcaption,dt,dd"
-    )).map((t) => ({ el: t, r: t.getBoundingClientRect() })).filter(({ r: t, el: a }) => t.width > 120 && t.height > 20 && t.bottom > 0 && t.top < window.innerHeight && !a.closest("#bav-chat,dialog,.beacon-dock,#bav-root") && a.textContent.trim().length > 8);
+    )).map((t) => ({ el: t, r: t.getBoundingClientRect() })).filter(({ r: t, el: a }) => t.width > 120 && t.height > 20 && t.bottom > 0 && t.top < window.innerHeight && !a.closest("#bav-chat,dialog,.beacon-dock,#bav-root") && a.textContent.trim().length > 8));
   }
-  ge(), setInterval(ge, 700);
+  ce(), setInterval(ce, 700);
   let He = !1;
   window.addEventListener("scroll", () => {
     He || (He = !0, requestAnimationFrame(() => {
-      He = !1, ge();
+      He = !1, ce();
     }));
-  }, { passive: !0 }), window.addEventListener("resize", ge, { passive: !0 });
+  }, { passive: !0 }), window.addEventListener("resize", ce, { passive: !0 });
   function _t() {
     if (h) return null;
     const t = m + o, a = u + i * 0.5;
@@ -140,62 +140,62 @@
   }
   const te = ["Oof! 😅", "Wheee! 🌀", "Boing! 🎯", "Hey! 😄", "Woo! 💫"], ye = ["Whoa! 😲", "Wee! 🚀", "Flying! 🌟", "Catch me! 😄"], dt = ["Nice read! 📖", "Interesting! 🤔", "Love this! ✨", "Reading... 👀"];
   function ve(t) {
-    if (q !== "shown") {
-      const ce = Math.min(50, t - at);
-      if (at = t, he = t, q === "tucked") {
+    if (I !== "shown") {
+      const le = Math.min(50, t - at);
+      if (at = t, pe = t, I === "tucked" && ($ > 0 || F > 1e-3)) {
         const ne = Number(p.dataset.approachSpeed || 0);
-        R = n.matches ? Q : R + (Q - R) * (1 - Math.exp(-ce / (160 - ne * 35))), Xt(), R > 0.985 && Q === 1 && Ye();
+        F = n.matches ? $ : F + ($ - F) * (1 - Math.exp(-le / (160 - ne * 35))), Xt(), F > 0.985 && $ === 1 && Ye();
       }
       requestAnimationFrame(ve);
       return;
     }
     if (window._bavPaused || document.hidden || document.body.classList.contains("beacon-hidden") || document.body.classList.contains("beacon-chat-open") || document.querySelector("dialog[open]")) {
-      he = t, requestAnimationFrame(ve);
+      pe = t, requestAnimationFrame(ve);
       return;
     }
-    const a = t - he;
-    he = t;
-    const g = Math.min(a / 16.67, 3), b = window.innerWidth, I = document.querySelector(".beacon-dock")?.getBoundingClientRect(), X = I && u + i > I.left - 12 && u < I.right + 12 ? I.top - 14 : window.innerHeight - 12;
-    if (u = Math.max(0, Math.min(b - i, u)), m = Math.max(75, Math.min(X - o, m)), !h) {
-      if (l === "sitting" && H) {
-        const k = H.getBoundingClientRect(), _ = k.top > 55 && k.top < X + 20, le = u + i * 0.5, de = le > k.left - 10 && le < k.right + 10;
-        if (_ && de)
-          m = k.top - o + 12, f = 0, c *= T;
+    const a = t - pe;
+    pe = t;
+    const g = Math.min(a / 16.67, 3), b = window.innerWidth, Y = document.querySelector(".beacon-dock")?.getBoundingClientRect(), _ = Y && u + i > Y.left - 12 && u < Y.right + 12 ? Y.top - 14 : window.innerHeight - 12;
+    if (u = Math.max(0, Math.min(b - i, u)), m = Math.max(75, Math.min(_ - o, m)), !h) {
+      if (l === "sitting" && X) {
+        const x = X.getBoundingClientRect(), D = x.top > 55 && x.top < _ + 20, de = u + i * 0.5, ue = de > x.left - 10 && de < x.right + 10;
+        if (D && ue)
+          m = x.top - o + 12, f = 0, c *= T;
         else {
-          H = null, l = "flying", qe(!1), f = -1.5;
-          const D = ["Here I come!", "A little hop!", "Off we go!", "Wheee!"];
-          F(D[Math.floor(Math.random() * D.length)], 1500);
+          X = null, l = "flying", qe(!1), f = -1.5;
+          const O = ["Here I come!", "A little hop!", "Off we go!", "Wheee!"];
+          R(O[Math.floor(Math.random() * O.length)], 1500);
         }
       } else {
-        const k = _t();
-        if (k && Math.abs(f) < 7)
-          (l !== "sitting" || H !== k.el) && (H = k.el, et = k.snapY, l = "sitting", f = 0, c *= 0.35, m = et, fe(), M("sitting"), qe(!0), (Math.abs(c) > 1.2 || Math.abs(f) > 2) && F(dt[Math.floor(Math.random() * dt.length)], 2400));
+        const x = _t();
+        if (x && Math.abs(f) < 7)
+          (l !== "sitting" || X !== x.el) && (X = x.el, et = x.snapY, l = "sitting", f = 0, c *= 0.35, m = et, ge(), M("sitting"), qe(!0), (Math.abs(c) > 1.2 || Math.abs(f) > 2) && R(dt[Math.floor(Math.random() * dt.length)], 2400));
         else {
-          f = Math.min(f + C * g, L), c *= Math.pow(B, g), u += c * g, m += f * g, u < 0 && (u = 0, Math.abs(c) > j ? (c = Math.abs(c) * N, fe(), Math.random() < 0.4 && F(te[Math.floor(Math.random() * te.length)], 1500)) : c = 0, z = !1), u + i > b && (u = b - i, Math.abs(c) > j ? (c = -Math.abs(c) * N, fe(), Math.random() < 0.4 && F(te[Math.floor(Math.random() * te.length)], 1500)) : c = 0, z = !0), m + o > X && (m = X - o, Math.abs(f) > j ? (f = -Math.abs(f) * S, c *= T, fe(), Math.random() < 0.28 && F(te[Math.floor(Math.random() * te.length)], 1500)) : (f = 0, c *= T, l !== "sitting" && (l = Math.abs(c) > 1.1 ? "walking" : "idle"))), m < 0 && (m = 0, f = Math.abs(f) * S);
-          const _ = Math.sqrt(c * c + f * f);
-          l !== "sitting" && (_ > 3.5 ? l = "flying" : Math.abs(c) > 1 && m + o >= X - 2 ? l = "walking" : _ < 0.7 && (l = "idle"));
+          f = Math.min(f + C * g, L), c *= Math.pow(B, g), u += c * g, m += f * g, u < 0 && (u = 0, Math.abs(c) > j ? (c = Math.abs(c) * N, ge(), Math.random() < 0.4 && R(te[Math.floor(Math.random() * te.length)], 1500)) : c = 0, Q = !1), u + i > b && (u = b - i, Math.abs(c) > j ? (c = -Math.abs(c) * N, ge(), Math.random() < 0.4 && R(te[Math.floor(Math.random() * te.length)], 1500)) : c = 0, Q = !0), m + o > _ && (m = _ - o, Math.abs(f) > j ? (f = -Math.abs(f) * S, c *= T, ge(), Math.random() < 0.28 && R(te[Math.floor(Math.random() * te.length)], 1500)) : (f = 0, c *= T, l !== "sitting" && (l = Math.abs(c) > 1.1 ? "walking" : "idle"))), m < 0 && (m = 0, f = Math.abs(f) * S);
+          const D = Math.sqrt(c * c + f * f);
+          l !== "sitting" && (D > 3.5 ? l = "flying" : Math.abs(c) > 1 && m + o >= _ - 2 ? l = "walking" : D < 0.7 && (l = "idle"));
         }
       }
-      if (c < -0.3 && (z = !0), c > 0.3 && (z = !1), l === "flying") {
-        const k = Math.max(-30, Math.min(30, c * 2.8));
-        Z += (k - Z) * 0.18 * g, Y += (0 - Y) * 0.12 * g, w.style.transform = `rotate(${(Z + Y).toFixed(2)}deg)`;
+      if (c < -0.3 && (Q = !0), c > 0.3 && (Q = !1), l === "flying") {
+        const x = Math.max(-30, Math.min(30, c * 2.8));
+        Z += (x - Z) * 0.18 * g, q += (0 - q) * 0.12 * g, w.style.transform = `rotate(${(Z + q).toFixed(2)}deg)`;
       } else {
-        Z *= 0.8, Y += (0 - Y) * 0.14 * g;
-        const k = Z + Y;
-        Math.abs(k) < 0.2 ? (Z = 0, Y = 0, w.style.transform = "") : w.style.transform = `rotate(${k.toFixed(2)}deg)`;
+        Z *= 0.8, q += (0 - q) * 0.14 * g;
+        const x = Z + q;
+        Math.abs(x) < 0.2 ? (Z = 0, q = 0, w.style.transform = "") : w.style.transform = `rotate(${x.toFixed(2)}deg)`;
       }
-      Ce.style.transform = `scaleX(${z ? -1 : 1})`;
-      const ce = Math.max(0, X - (m + o)), ne = Math.max(0.15, 1 - ce / X);
+      Ce.style.transform = `scaleX(${Q ? -1 : 1})`;
+      const le = Math.max(0, _ - (m + o)), ne = Math.max(0.15, 1 - le / _);
       ot.style.width = 38 * ne + "px", ot.style.opacity = (0.72 * ne).toString(), l !== d && !J && (ct(), M(l === "sitting" ? "sitting" : l === "flying" ? "flying" : "happy"), d = l);
     }
-    Fe(), requestAnimationFrame(ve);
+    Pe(), requestAnimationFrame(ve);
   }
   if (p.style.left = u + "px", p.style.top = m + "px", requestAnimationFrame(ve), p.addEventListener("mouseenter", () => document.body.classList.add("hov")), p.addEventListener("mouseleave", () => document.body.classList.remove("hov")), p.addEventListener("mousedown", (t) => {
-    t.button === 0 && (q === "tucked" && Ye(), t.preventDefault(), h = !0, y = { x: t.clientX, y: t.clientY }, v = !1, K = t.clientX - u, me = t.clientY - m, ee = t.clientX, P = [{ x: t.clientX, y: t.clientY, t: performance.now() }], c = 0, f = 0, H = null, l = d = "flying", w.style.animation = "", w.style.transform = "", M("surprised"), F(ye[Math.floor(Math.random() * ye.length)], 1e3));
+    t.button === 0 && (I === "tucked" && Ye(), t.preventDefault(), h = !0, y = { x: t.clientX, y: t.clientY }, v = !1, K = t.clientX - u, he = t.clientY - m, ee = t.clientX, H = [{ x: t.clientX, y: t.clientY, t: performance.now() }], c = 0, f = 0, X = null, l = d = "flying", w.style.animation = "", w.style.transform = "", M("surprised"), R(ye[Math.floor(Math.random() * ye.length)], 1e3));
   }), document.addEventListener("mousemove", (t) => {
     if (!h || (v = v || Math.hypot(t.clientX - y.x, t.clientY - y.y) > 7, !v)) return;
     const a = t.clientX - ee;
-    ee = t.clientX, W = Math.max(-38, Math.min(38, -a * 3.2)), u = t.clientX - K, m = t.clientY - me, P.push({ x: t.clientX, y: t.clientY, t: performance.now() }), P.length > 10 && P.shift(), Y += (W - Y) * 0.28, W *= 0.82, w.style.transform = `rotate(${Y.toFixed(1)}deg)`, Fe();
+    ee = t.clientX, W = Math.max(-38, Math.min(38, -a * 3.2)), u = t.clientX - K, m = t.clientY - he, H.push({ x: t.clientX, y: t.clientY, t: performance.now() }), H.length > 10 && H.shift(), q += (W - q) * 0.28, W *= 0.82, w.style.transform = `rotate(${q.toFixed(1)}deg)`, Pe();
   }), document.addEventListener("mouseup", () => {
     if (!h) return;
     if (h = !1, !v) {
@@ -203,23 +203,23 @@
       return;
     }
     W = 0, M("happy");
-    const t = performance.now(), a = P.filter((g) => t - g.t < 130);
+    const t = performance.now(), a = H.filter((g) => t - g.t < 130);
     if (a.length >= 2) {
-      const g = a[0], b = a[a.length - 1], I = Math.max(b.t - g.t, 5) / 16.67;
-      c = Math.max(-L, Math.min(L, (b.x - g.x) / I * 0.62)), f = Math.max(-L, Math.min(L, (b.y - g.y) / I * 0.62));
+      const g = a[0], b = a[a.length - 1], Y = Math.max(b.t - g.t, 5) / 16.67;
+      c = Math.max(-L, Math.min(L, (b.x - g.x) / Y * 0.62)), f = Math.max(-L, Math.min(L, (b.y - g.y) / Y * 0.62));
     }
     l = "flying", d = "";
   }), p.addEventListener("touchstart", (t) => {
-    q === "tucked" && Ye(), t.preventDefault();
+    I === "tucked" && Ye(), t.preventDefault();
     const a = t.touches[0];
-    h = !0, y = { x: a.clientX, y: a.clientY }, v = !1, K = a.clientX - u, me = a.clientY - m, ee = a.clientX, P = [{ x: a.clientX, y: a.clientY, t: performance.now() }], c = 0, f = 0, H = null, qe(!1), l = d = "flying", w.style.animation = "", M("surprised"), F(ye[Math.floor(Math.random() * ye.length)], 1e3);
+    h = !0, y = { x: a.clientX, y: a.clientY }, v = !1, K = a.clientX - u, he = a.clientY - m, ee = a.clientX, H = [{ x: a.clientX, y: a.clientY, t: performance.now() }], c = 0, f = 0, X = null, qe(!1), l = d = "flying", w.style.animation = "", M("surprised"), R(ye[Math.floor(Math.random() * ye.length)], 1e3);
   }, { passive: !1 }), document.addEventListener("touchmove", (t) => {
     if (!h) return;
     t.preventDefault();
     const a = t.touches[0];
     if (v = v || Math.hypot(a.clientX - y.x, a.clientY - y.y) > 7, !v) return;
     const g = a.clientX - ee;
-    ee = a.clientX, W = Math.max(-38, Math.min(38, -g * 3.2)), u = a.clientX - K, m = a.clientY - me, P.push({ x: a.clientX, y: a.clientY, t: performance.now() }), P.length > 10 && P.shift(), Y += (W - Y) * 0.28, W *= 0.82, w.style.transform = `rotate(${Y.toFixed(1)}deg)`, Fe();
+    ee = a.clientX, W = Math.max(-38, Math.min(38, -g * 3.2)), u = a.clientX - K, m = a.clientY - he, H.push({ x: a.clientX, y: a.clientY, t: performance.now() }), H.length > 10 && H.shift(), q += (W - q) * 0.28, W *= 0.82, w.style.transform = `rotate(${q.toFixed(1)}deg)`, Pe();
   }, { passive: !1 }), document.addEventListener("touchend", () => {
     if (!h) return;
     if (h = !1, M("happy"), !v) {
@@ -227,51 +227,51 @@
       return;
     }
     W = 0;
-    const t = performance.now(), a = P.filter((g) => t - g.t < 130);
+    const t = performance.now(), a = H.filter((g) => t - g.t < 130);
     if (a.length >= 2) {
-      const g = a[0], b = a[a.length - 1], I = Math.max(b.t - g.t, 5) / 16.67;
-      c = Math.max(-L, Math.min(L, (b.x - g.x) / I * 0.62)), f = Math.max(-L, Math.min(L, (b.y - g.y) / I * 0.62));
+      const g = a[0], b = a[a.length - 1], Y = Math.max(b.t - g.t, 5) / 16.67;
+      c = Math.max(-L, Math.min(L, (b.x - g.x) / Y * 0.62)), f = Math.max(-L, Math.min(L, (b.y - g.y) / Y * 0.62));
     }
     l = "flying", d = "";
   }), document.addEventListener("touchcancel", () => {
     h = !1, v = !0, M("happy");
   }), !matchMedia("(hover: none)").matches) {
-    let _ = function() {
-      if (h || document.hidden) {
-        requestAnimationFrame(_);
+    let D = function() {
+      if (h || document.hidden || I !== "shown" && F < 0.01) {
+        requestAnimationFrame(D);
         return;
       }
-      const Xe = document.getElementById("bav-svg").getBoundingClientRect(), ut = Xe.width / 64, Dt = z ? -1 : 1;
+      const Xe = document.getElementById("bav-svg").getBoundingClientRect(), ut = Xe.width / 64, Dt = Q ? -1 : 1;
       [
-        { base: ce, pupil: g, iris: b },
-        { base: ne, pupil: I, iris: X }
+        { base: le, pupil: g, iris: b },
+        { base: ne, pupil: Y, iris: _ }
       ].forEach(({ base: G, pupil: mt, iris: ht }) => {
-        const Ot = Xe.left + (z ? 64 - G.x : G.x) * ut, Nt = Xe.top + G.y * ut, _e = t - Ot, De = a - Nt, Oe = Math.sqrt(_e * _e + De * De) || 1, pt = Math.min(Oe / 55, 1) * k, ft = _e / Oe * pt * Dt, gt = De / Oe * pt;
+        const Ot = Xe.left + (Q ? 64 - G.x : G.x) * ut, Nt = Xe.top + G.y * ut, _e = t - Ot, De = a - Nt, Oe = Math.sqrt(_e * _e + De * De) || 1, pt = Math.min(Oe / 55, 1) * x, ft = _e / Oe * pt * Dt, gt = De / Oe * pt;
         mt.setAttribute("cx", (G.x + ft).toFixed(2)), mt.setAttribute("cy", (G.y + gt).toFixed(2)), ht.setAttribute("cx", (G.x + ft * 0.55).toFixed(2)), ht.setAttribute("cy", (G.y + gt * 0.55).toFixed(2));
-      }), requestAnimationFrame(_);
+      }), requestAnimationFrame(D);
     };
-    var Kt = _;
+    var Kt = D;
     let t = window.innerWidth / 2, a = window.innerHeight / 2;
-    document.addEventListener("mousemove", (D) => {
-      t = D.clientX, a = D.clientY;
+    document.addEventListener("mousemove", (O) => {
+      t = O.clientX, a = O.clientY;
     });
-    const g = document.getElementById("bav-pupil-l"), b = document.getElementById("bav-iris-l"), I = document.getElementById("bav-pupil-r"), X = document.getElementById("bav-iris-r"), ce = { x: 23, y: 38 }, ne = { x: 41, y: 38 }, k = 2.6;
-    _();
-    let le = null, de = !1;
+    const g = document.getElementById("bav-pupil-l"), b = document.getElementById("bav-iris-l"), Y = document.getElementById("bav-pupil-r"), _ = document.getElementById("bav-iris-r"), le = { x: 23, y: 38 }, ne = { x: 41, y: 38 }, x = 2.6;
+    D();
+    let de = null, ue = !1;
     p.addEventListener("mousedown", () => {
-      de = !1, le = setTimeout(() => {
-        h && !de && (de = !0, F("🥰 Squeezing me!", 1800), [Te, Se].forEach((D) => {
-          D.style.transform = "scale(1.22)", setTimeout(() => D.style.transform = "scale(1)", 700);
+      ue = !1, de = setTimeout(() => {
+        h && !ue && (ue = !0, R("🥰 Squeezing me!", 1800), [Te, Se].forEach((O) => {
+          O.style.transform = "scale(1.22)", setTimeout(() => O.style.transform = "scale(1)", 700);
         }));
       }, 1200);
-    }), document.addEventListener("mouseup", () => clearTimeout(le));
+    }), document.addEventListener("mouseup", () => clearTimeout(de));
   }
   window.addEventListener("resize", () => {
     u = Math.max(0, Math.min(innerWidth - i, u)), m = Math.max(75, Math.min(innerHeight - o - 12, m)), p.style.left = u + "px", p.style.top = m + "px";
   }), p.addEventListener("bav-teleport", (t) => {
-    u = t.detail.x, m = t.detail.y, c = 0, f = 0, l = "idle", d = "", M("happy"), H = null;
+    u = t.detail.x, m = t.detail.y, c = 0, f = 0, l = "idle", d = "", M("happy"), X = null;
   }), p.addEventListener("bav-restore", () => {
-    c = (Math.random() - 0.5) * 4, f = -3, l = "flying", d = "", H = null, w.style.transform = "", M("happy");
+    c = (Math.random() - 0.5) * 4, f = -3, l = "flying", d = "", X = null, w.style.transform = "", M("happy");
   });
 })();
 (function() {
@@ -394,11 +394,11 @@ document.body.append(E);
 const ke = document.createElement("button");
 ke.id = "cursor-toggle";
 const Mt = () => xt.matches && oe && !Lt.matches && typeof E.showPopover == "function";
-function V() {
+function z() {
   Ke.classList.remove("beacon-cursor-ready"), E.classList.remove("visible", "pressed"), Je();
 }
 function xe() {
-  Ke.classList.toggle("beacon-cursor", Mt()), ke.textContent = oe ? "Use standard cursor" : "Use Beacon cursor", V();
+  Ke.classList.toggle("beacon-cursor", Mt()), ke.textContent = oe ? "Use standard cursor" : "Use Beacon cursor", z();
 }
 ke.addEventListener("click", () => {
   oe = !oe;
@@ -412,33 +412,33 @@ document.querySelector(".menu-bottom")?.append(ke);
 xt.addEventListener("change", xe);
 Lt.addEventListener("change", xe);
 const be = E.querySelector(".orbit-trail"), $e = matchMedia("(prefers-reduced-motion: reduce)");
-let $ = 0, U = 0, Ue = 0, Ve = 0, ae = 0, je = 0, ze = !1;
+let U = 0, V = 0, Ue = 0, Ve = 0, ae = 0, ze = 0, je = !1;
 function Je() {
-  cancelAnimationFrame(ae), ae = 0, ze = !1, be.style.transform = "translate3d(0,0,0)";
+  cancelAnimationFrame(ae), ae = 0, je = !1, be.style.transform = "translate3d(0,0,0)";
 }
 function At(e) {
-  const n = Math.min(40, e - je);
-  je = e;
+  const n = Math.min(40, e - ze);
+  ze = e;
   const r = 1 - Math.exp(-n / 65);
-  $ += (Ue - $) * r, U += (Ve - U) * r;
-  const i = $ - Ue, o = U - Ve;
+  U += (Ue - U) * r, V += (Ve - V) * r;
+  const i = U - Ue, o = V - Ve;
   be.style.transform = `translate3d(${i}px,${o}px,0)`, Math.hypot(i, o) > 0.15 ? ae = requestAnimationFrame(At) : (ae = 0, be.style.transform = "translate3d(0,0,0)");
 }
 function $t(e, n) {
-  Ue = e, Ve = n, (!ze || $e.matches) && ($ = e, U = n, ze = !0);
-  const r = Math.hypot($ - e, U - n);
-  r > 42 && ($ = e + ($ - e) * 42 / r, U = n + (U - n) * 42 / r), be.style.transform = `translate3d(${$ - e}px,${U - n}px,0)`, !ae && !$e.matches && (je = performance.now(), ae = requestAnimationFrame(At));
+  Ue = e, Ve = n, (!je || $e.matches) && (U = e, V = n, je = !0);
+  const r = Math.hypot(U - e, V - n);
+  r > 42 && (U = e + (U - e) * 42 / r, V = n + (V - n) * 42 / r), be.style.transform = `translate3d(${U - e}px,${V - n}px,0)`, !ae && !$e.matches && (ze = performance.now(), ae = requestAnimationFrame(At));
 }
 $e.addEventListener("change", Je);
 let yt = null, Qe = null;
 function Le(e) {
   if (!Mt() || e.pointerType === "touch") {
-    V();
+    z();
     return;
   }
   const n = e.target instanceof Element ? e.target : null;
   if (!n) {
-    V();
+    z();
     return;
   }
   Qe = { x: e.clientX, y: e.clientY };
@@ -452,7 +452,7 @@ function Le(e) {
   try {
     E.matches(":popover-open") || E.showPopover();
   } catch {
-    V();
+    z();
     return;
   }
   $t(e.clientX, e.clientY), E.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`, E.classList.add("visible"), E.classList.toggle("world-drag", !!r), Ke.classList.add("beacon-cursor-ready"), E.classList.toggle("clickable", !!n.closest("a,button,summary,[role=button],label[for]"));
@@ -463,11 +463,11 @@ document.addEventListener("pointerdown", (e) => {
   Le(e), e.button === 0 && E.classList.add("pressed");
 }, { passive: !0 });
 window.addEventListener("pointerup", () => E.classList.remove("pressed"), { passive: !0 });
-window.addEventListener("pointercancel", V);
-window.addEventListener("blur", V);
-document.documentElement.addEventListener("pointerleave", V);
+window.addEventListener("pointercancel", z);
+window.addEventListener("blur", z);
+document.documentElement.addEventListener("pointerleave", z);
 document.addEventListener("visibilitychange", () => {
-  document.hidden && V();
+  document.hidden && z();
 });
 let Ne = 0;
 document.addEventListener("scroll", () => {
@@ -479,16 +479,16 @@ document.addEventListener("scroll", () => {
 }, { passive: !0, capture: !0 });
 xe();
 const s = (e) => document.querySelector(e), A = (e) => [...document.querySelectorAll(e)], Me = matchMedia("(prefers-reduced-motion: reduce)");
-let O, x = Me.matches;
+let P, k = Me.matches;
 const vt = setTimeout(() => document.documentElement.classList.add("world-unavailable"), 12e3);
 async function Ut() {
   try {
     const { UnityWorld: e } = await import("./world2.js");
-    O = new e(s("#unity-canvas"), () => {
+    P = new e(s("#unity-canvas")), P.setPaused(k || !!s("dialog[open]")), await P.initialize(() => {
       clearTimeout(vt), document.documentElement.classList.remove("world-unavailable"), document.documentElement.classList.add("world-ready");
     });
   } catch (e) {
-    clearTimeout(vt), document.documentElement.classList.add("world-unavailable"), console.warn("The lightweight world illustration is active.", e.message);
+    clearTimeout(vt), P?.dispose(), P = void 0, document.documentElement.classList.add("world-unavailable"), console.warn("The lightweight world illustration is active.", e.message);
   }
 }
 Ut();
@@ -531,32 +531,32 @@ A("[data-preview]").forEach((e, n) => {
 });
 A("[data-select]").forEach((e) => e.addEventListener("click", () => we(e.dataset.select)));
 we("help");
-const Vt = A(".desktop-nav a,#navigation nav a"), jt = A("#home,#community,#how,#trust,#compare,#beyond,#questions");
+const Vt = A(".desktop-nav a,#navigation nav a"), zt = A("#home,#community,#how,#trust,#compare,#beyond,#questions");
 let Ct;
 function Ze(e) {
-  Ct = document.activeElement, e.showModal(), O?.setPaused(!0);
+  Ct = document.activeElement, e.showModal(), P?.setPaused(!0);
 }
-function ue(e) {
-  e.close(), O?.setPaused(x), Ct?.focus();
+function me(e) {
+  e.close(), P?.setPaused(k), Ct?.focus();
 }
 A("dialog").forEach((e) => {
-  e.querySelector("[data-close]").addEventListener("click", () => ue(e)), e.addEventListener("click", (n) => {
+  e.querySelector("[data-close]").addEventListener("click", () => me(e)), e.addEventListener("click", (n) => {
     if (n.target === e) {
       const r = e.getBoundingClientRect();
-      (n.clientX < r.left || n.clientX > r.right || n.clientY < r.top || n.clientY > r.bottom) && ue(e);
+      (n.clientX < r.left || n.clientX > r.right || n.clientY < r.top || n.clientY > r.bottom) && me(e);
     }
   }), e.addEventListener("close", () => {
-    O?.setPaused(x), s("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && s("#video-frame").removeAttribute("src");
+    P?.setPaused(k), s("#menu-toggle").setAttribute("aria-expanded", "false"), e.id === "video-dialog" && s("#video-frame").removeAttribute("src");
   });
 });
 s("#menu-toggle").addEventListener("click", () => {
   Ze(s("#navigation")), s("#menu-toggle").setAttribute("aria-expanded", "true");
 });
-A("#navigation a").forEach((e) => e.addEventListener("click", () => ue(s("#navigation"))));
+A("#navigation a").forEach((e) => e.addEventListener("click", () => me(s("#navigation"))));
 let wt;
 A("[data-demo]").forEach((e) => e.addEventListener("click", () => {
   const n = s("#demo-frame"), r = e.dataset.demo || "community";
-  n.getAttribute("src") || (n.src = n.dataset.src), s("#navigation").open && ue(s("#navigation")), Ze(s("#demo-dialog")), clearTimeout(wt);
+  n.getAttribute("src") || (n.src = n.dataset.src), s("#navigation").open && me(s("#navigation")), Ze(s("#demo-dialog")), clearTimeout(wt);
   let i = 0;
   function o() {
     if (s("#demo-dialog").open) {
@@ -583,18 +583,18 @@ A("[data-video]").forEach((e) => e.addEventListener("click", () => {
   s("#video-frame").src = "https://www.youtube-nocookie.com/embed/md8suH2LcHs?autoplay=1&rel=0", Ze(s("#video-dialog"));
 }));
 window.openSimDemo = () => A("[data-demo]")[0].click();
-window.closeSimDemo = () => ue(s("#demo-dialog"));
+window.closeSimDemo = () => me(s("#demo-dialog"));
 function Tt() {
-  x = !x, window._bavPaused = x, document.body.classList.toggle("motion-paused", x), O?.setPaused(x), s("#motion-toggle").textContent = x ? "Resume background motion" : "Pause background motion", s("#motion-toggle").setAttribute("aria-pressed", String(x)), s("#footer-motion").textContent = x ? "Resume background motion" : "Pause background motion";
+  k = !k, window._bavPaused = k, document.body.classList.toggle("motion-paused", k), P?.setPaused(k), s("#motion-toggle").textContent = k ? "Resume background motion" : "Pause background motion", s("#motion-toggle").setAttribute("aria-pressed", String(k)), s("#footer-motion").textContent = k ? "Resume background motion" : "Pause background motion";
 }
 function St() {
-  document.body.classList.toggle("motion-paused", x), s("#motion-toggle").textContent = x ? "Resume background motion" : "Pause background motion", s("#motion-toggle").setAttribute("aria-pressed", String(x)), s("#footer-motion").textContent = x ? "Resume background motion" : "Pause background motion";
+  document.body.classList.toggle("motion-paused", k), s("#motion-toggle").textContent = k ? "Resume background motion" : "Pause background motion", s("#motion-toggle").setAttribute("aria-pressed", String(k)), s("#footer-motion").textContent = k ? "Resume background motion" : "Pause background motion";
 }
 St();
 s("#motion-toggle").addEventListener("click", Tt);
 s("#footer-motion").addEventListener("click", Tt);
 Me.addEventListener("change", (e) => {
-  O && (O.reduced = e.matches, O.lastFrame = 0), x = e.matches, window._bavPaused = e.matches, document.body.classList.toggle("motion-paused", e.matches), s("#motion-toggle").setAttribute("aria-pressed", String(x)), O?.setPaused(x), St();
+  P && (P.reduced = e.matches, P.lastFrame = 0), k = e.matches, window._bavPaused = e.matches, document.body.classList.toggle("motion-paused", e.matches), s("#motion-toggle").setAttribute("aria-pressed", String(k)), P?.setPaused(k), St();
 });
 s("#theme-toggle").addEventListener("click", () => {
   const e = document.documentElement.dataset.theme !== "dark";
@@ -609,12 +609,12 @@ try {
 } catch {
 }
 s("#year").textContent = (/* @__PURE__ */ new Date()).getFullYear();
-const zt = A(".chapter");
+const jt = A(".chapter");
 let Ge = !1;
 function Bt() {
   Ge = !1;
   let e = "home";
-  jt.forEach((o) => {
+  zt.forEach((o) => {
     o.getBoundingClientRect().top < innerHeight * 0.35 && (e = o.id);
   }), Vt.forEach((o) => {
     o.getAttribute("href") === "#" + e ? o.setAttribute("aria-current", "location") : o.removeAttribute("aria-current");
@@ -624,7 +624,7 @@ function Bt() {
   const r = n > s("#story-end").offsetTop - innerHeight * 0.6;
   document.body.classList.toggle("past-story", r);
   let i = 0;
-  zt.forEach((o, C) => {
+  jt.forEach((o, C) => {
     const B = o.getBoundingClientRect();
     B.top < innerHeight * 0.4 && (i = C);
     const T = o.querySelector(".chapter-copy");
