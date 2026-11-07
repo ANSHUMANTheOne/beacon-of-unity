@@ -1315,6 +1315,7 @@
                 <p style="font-size:11px; color:#94a3b8; margin:2px 0 0;" id="notifSubtitle">Loading...</p>
             </div>
             <div style="display:flex; gap:8px; align-items:center;">
+                <button id="clearAllNotifications" onclick="clearAllNotifications()" style="font-size:11px;background:none;border:0;cursor:pointer;">Clear all</button>
                 <button onclick="markAllNotifsRead()" style="font-size:11px; color:#38bdf8; background:none; border:none; cursor:pointer; font-weight:600;">Mark all read</button>
                 <button onclick="toggleNotifDrawer()" style="background:#f1f5f9; border:none; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:14px;">✕</button>
             </div>
@@ -2150,13 +2151,23 @@
         let currentChatType = null;
         let currentChatPostOwnerId = null;
         let unsubscribeChat = null;
+        let _chatOpenToken = 0;
         let _unsubChatDoc = null;   // chat doc subscription for read receipts
 
         window.closeChatPopup = () => {
+            _chatOpenToken++;
             if (_unsubChatDoc)   { _unsubChatDoc();   _unsubChatDoc   = null; }
             if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
             document.getElementById('chatPopup').style.display = 'none';
         };
+        let _mapRecords = { requests: [], lostfound: [] };
+        const markVisibleChatRead = () => {
+            if (!document.hidden && currentChatId && auth.currentUser && document.getElementById('chatPopup').style.display === 'flex') {
+                updateDoc(doc(db,'chats',currentChatId),{[`unread_${auth.currentUser.uid}`]:false}).catch(()=>{});
+            }
+        };
+        document.addEventListener('visibilitychange',markVisibleChatRead);
+        window.addEventListener('focus',markVisibleChatRead);
         let userRegion = null;
         let userName = "";
         let userEquippedSkin = null;    // gradient id for pfp
@@ -2485,6 +2496,8 @@
 
                 userName = userSnap.data().fullName;
                 userRegion = userSnap.data().region;
+                window.__beaconAccountKey = user.uid;
+                window.dispatchEvent(new CustomEvent('beacon:account-ready', { detail: { uid: user.uid } }));
                 // Expose first name for Beacon Tutorial
                 window.currentUserFirstName = userName.split(' ')[0] || userName;
 
@@ -2755,6 +2768,7 @@
             const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
 
             onSnapshot(q, (snapshot) => {
+                updateMapRecords('requests', snapshot);
                 feed.innerHTML = "";
                 let hasPosts = false;
 
@@ -2833,7 +2847,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:start;">
                             <span class="badge badge-${data.category.toLowerCase()}">${data.category}</span>
                             <div style="text-align:right;"><small>📍 ${data.location}</small>${distHtml}${daysLeftHtml}${extBadge}
-                            ${isOwner ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
+                            ${isOwner && !adminUser ? `<button class="btn-delete" onclick="deletePost('${docSnap.id}')">Delete</button>` : ''}</div>
                         </div>
                         <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.title}</h4>
                         <p style="font-size:11px; color:#64748b;">Posted by: <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${getEquippedSkin(data.equippedSkin||'ocean').gradient};margin-right:3px;vertical-align:middle;"></span>${data.userName}</p>
@@ -2865,6 +2879,7 @@
             const feed = document.getElementById('lfFeed');
             const q = query(collection(db, "lostfound"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
+                updateMapRecords('lostfound', snapshot);
                 feed.innerHTML = "";
                 let hasItems = false;
                 snapshot.forEach(docSnap => {
@@ -2929,7 +2944,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:start;">
                             <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
                             <div style="text-align:right;"><small>📍 ${data.location}</small>${lfDistHtml}${daysLeftHtml}${extBadge}
-                            ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}</div>
+                            ${isOwner && !adminUser ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}')">Delete</button>` : ''}</div>
                         </div>
                         ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
                         <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.item}</h4>
@@ -2982,6 +2997,13 @@
         };
 
         async function openChatWindow(label) {
+            const openedId = currentChatId, openedOtherId = currentChatOtherUserId;
+            const openToken = ++_chatOpenToken;
+            const stillOpen = () => openToken === _chatOpenToken && currentChatId === openedId;
+            // Clear the local indicator immediately; Firestore persists the read state below.
+            document.getElementById('item-' + openedId)?.classList.remove('chat-unread');
+            document.getElementById('item-' + openedId)?.querySelector('.chat-new-badge')?.remove();
+            syncMobileChats();
             // Set header
             const initials = label ? label.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : '?';
             document.getElementById('chatAvatarCircle').textContent = initials;
@@ -2994,7 +3016,8 @@
             if (msgArea && window._chatBgStyle) msgArea.style.background = window._chatBgStyle;
 
             if (!currentChatOtherName && currentChatOtherUserId) {
-                const od = await getDoc(doc(db, "users", currentChatOtherUserId));
+                const od = await getDoc(doc(db, "users", openedOtherId));
+                if (!stillOpen()) return;
                 currentChatOtherName = od.exists() ? od.data().fullName : "User";
                 const i2 = currentChatOtherName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
                 document.getElementById('chatAvatarCircle').textContent = i2;
@@ -3003,14 +3026,15 @@
 
             if (!currentChatPostOwnerId) {
                 const chatSnap = await getDoc(doc(db, "chats", currentChatId));
+                if (!stillOpen()) return;
                 if (chatSnap.exists()) currentChatPostOwnerId = chatSnap.data().postOwnerId || auth.currentUser.uid;
             }
 
-            await updateDoc(doc(db, "chats", currentChatId), {
-                [`unread_${auth.currentUser.uid}`]: false
-            });
+            try { await updateDoc(doc(db, "chats", openedId), { [`unread_${auth.currentUser.uid}`]: false }); }
+            catch (error) { console.warn('Could not save chat read state.', error.code); }
+            if (!stillOpen()) return;
             const _acl = document.getElementById('activeChatsList');
-            const chatItem = _acl ? _acl.querySelector(`#item-${currentChatId}`) : null;
+            const chatItem = _acl ? document.getElementById('item-' + currentChatId) : null;
             if (chatItem) {
                 chatItem.classList.remove('chat-unread');
                 // remove NEW badge from DOM immediately
@@ -3031,7 +3055,11 @@
             let _otherHasSeen = false;
             if (_unsubChatDoc) { _unsubChatDoc(); _unsubChatDoc = null; }
             _unsubChatDoc = onSnapshot(doc(db, 'chats', currentChatId), (snap) => {
-                if (!snap.exists()) return;
+                if (!stillOpen()) return;
+                if (!snap.exists()) { window.closeChatPopup(); return; }
+                if (snap.data()[`unread_${auth.currentUser.uid}`] && !document.hidden) {
+                    updateDoc(doc(db, 'chats', openedId), { [`unread_${auth.currentUser.uid}`]: false }).catch(()=>{});
+                }
                 const newSeen = snap.data()[`unread_${currentChatOtherUserId}`] === false;
                 if (newSeen !== _otherHasSeen) {
                     _otherHasSeen = newSeen;
@@ -3047,6 +3075,7 @@
 
             const q = query(collection(db, "chats", currentChatId, "messages"), orderBy("createdAt", "asc"));
             unsubscribeChat = onSnapshot(q, (snapshot) => {
+                if (!stillOpen()) return;
                 const area = document.getElementById('messageArea');
                 area.innerHTML = '';
 
@@ -3281,7 +3310,7 @@
             try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
             document.getElementById('chatPopup').style.display = 'none';
             const _aclRC = document.getElementById('activeChatsList');
-            const el = _aclRC ? _aclRC.querySelector(`#item-${currentChatId}`) : null;
+            const el = _aclRC ? document.getElementById('item-' + currentChatId) : null;
             if (el) el.remove();
             if (_unsubChatDoc) { _unsubChatDoc(); _unsubChatDoc = null; }
             if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
@@ -3334,20 +3363,25 @@
         }
 
         window.endChat = async (skipConfirm) => {
-            if (!currentChatId) return;
-            if (!skipConfirm) {
-                const confirmed = await showConfirmEndChat();
-                if (!confirmed) return;
+            const endingId = currentChatId;
+            if (!endingId) return;
+            if (!skipConfirm && !(await showConfirmEndChat())) return;
+            try { await deleteDoc(doc(db, "chats", endingId)); }
+            catch (error) {
+                const footer = document.getElementById('chatFooterBar');
+                let message = document.getElementById('chatActionError');
+                if (!message) { message = document.createElement('p'); message.id = 'chatActionError'; message.setAttribute('role','alert'); footer.append(message); }
+                message.textContent = 'Could not end this chat. Please try again.';
+                return;
             }
-            try { await deleteDoc(doc(db, "chats", currentChatId)); } catch {}
-            document.getElementById('chatPopup').style.display = 'none';
-            const _aclE = document.getElementById('activeChatsList');
-            const el = _aclE ? _aclE.querySelector(`#item-${currentChatId}`) : null;
-            if (el) el.remove();
-            if (_unsubChatDoc) { _unsubChatDoc(); _unsubChatDoc = null; }
-            if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
-            currentChatId = null; currentChatOtherUserId = null;
-            currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
+            document.getElementById('item-' + endingId)?.remove();
+            _chatRenderQueue.delete(endingId);
+            syncMobileChats();
+            if (currentChatId === endingId) {
+                window.closeChatPopup();
+                currentChatId = null; currentChatOtherUserId = null;
+                currentChatOtherName = null; currentChatType = null; currentChatPostOwnerId = null;
+            }
         };
 
         function showConfirmEndChat() {
@@ -3413,6 +3447,7 @@
         });
 
         const _chatRenderQueue = new Map();
+        const _chatLatest = new Map();
 
         function renderChatItem(chatId, chatData, otherName, ratingTxt) {
             const list = document.getElementById('activeChatsList');
@@ -3423,7 +3458,7 @@
             const pOwnerId = chatData.postOwnerId || '';
             const hasUnread = chatData[`unread_${auth.currentUser.uid}`] === true;
 
-            let chatDiv = list.querySelector(`#item-${chatId}`);
+            let chatDiv = document.getElementById('item-' + chatId);
             if (!chatDiv) {
                 chatDiv = document.createElement('div');
                 chatDiv.id = `item-${chatId}`;
@@ -3474,11 +3509,13 @@
 
                 snapshot.docChanges().forEach((change) => {
                     const chatId = change.doc.id;
+                    if (change.type !== 'removed') _chatLatest.set(chatId, change.doc.data());
 
                     if (change.type === 'removed') {
-                        const el = list.querySelector(`#item-${chatId}`);
+                        const el = document.getElementById('item-' + chatId);
                         if (el) el.remove();
                         _chatRenderQueue.delete(chatId);
+                        _chatLatest.delete(chatId);
                         if (!list.querySelector('.chat-list-item')) {
                             if (!document.getElementById('noChatsMsg')) {
                                 const p = document.createElement('p');
@@ -3498,7 +3535,7 @@
                     const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
 
                     // if element already rendered, update glow + NEW badge immediately without waiting
-                    const existing = list.querySelector(`#item-${chatId}`);
+                    const existing = document.getElementById('item-' + chatId);
                     if (existing) {
                         const hasUnread = chatData[`unread_${auth.currentUser.uid}`] === true;
                         existing.className = 'chat-list-item' + (hasUnread ? ' chat-unread' : '');
@@ -3535,7 +3572,7 @@
                         const ratingTxt = await getRatingText(otherId);
                         if (_chatRenderQueue.get(chatId) !== renderToken) return;
                         _chatRenderQueue.delete(chatId);
-                        renderChatItem(chatId, chatData, otherName, ratingTxt);
+                        renderChatItem(chatId, _chatLatest.get(chatId) || chatData, otherName, ratingTxt);
                     })();
                 });
             });
@@ -3544,7 +3581,9 @@
         function syncMobileChats() {
             const desktop = document.getElementById('activeChatsList');
             const mobile  = document.getElementById('activeChatsMobile');
-            if (desktop && mobile) { mobile.innerHTML = desktop.innerHTML; }
+            if (desktop && mobile) { mobile.innerHTML = desktop.innerHTML; mobile.querySelectorAll('[id]').forEach(el => el.removeAttribute('id')); }
+            const count = desktop?.querySelectorAll('.chat-unread').length || 0;
+            window.dispatchEvent(new CustomEvent('beacon:chat-unread', { detail: { count } }));
         }
 
         window.resumeChat = (id, name, otherId, cType, pOwnerId) => {
@@ -3683,6 +3722,7 @@
         }
 
         function applyChatBgSkin() {
+            document.body.dataset.chatBackground = userEquippedChat || 'default';
             const bg = getEquippedChatBg(userEquippedChat);
             const area = document.getElementById('messageArea');
             if (area) area.style.background = bg.bg;
@@ -3938,6 +3978,7 @@
         // ═══════════════════════════════════════════════
         let _notifUnsub = null;
         function initNotifications(uid) {
+            _notifUnsub?.();
             const q = query(collection(db, 'notifications'), where('toUid','==',uid), orderBy('createdAt','desc'));
             _notifUnsub = onSnapshot(q, snap => {
                 const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -3969,6 +4010,8 @@
         }
 
         function renderNotifList(items) {
+            const cutoff = Date.now() - 30 * 86400000;
+            items = items.filter(n => !(n.read && n.createdAt?.seconds && n.createdAt.seconds * 1000 < cutoff));
             const list = document.getElementById('notifList');
             if (!items.length) { list.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:30px;font-size:13px;">No notifications yet</p>'; return; }
             list.innerHTML = '';
@@ -4012,6 +4055,20 @@
             const snap = await getDocs(query(collection(db,'notifications'), where('toUid','==',uid), where('read','==',false)));
             const batch_arr = snap.docs;
             for (const d2 of batch_arr) await updateDoc(doc(db,'notifications',d2.id),{read:true});
+        };
+
+        window.clearAllNotifications = async () => {
+            const uid = auth.currentUser?.uid;
+            if (!uid || !confirm('Clear all your notifications? This does not delete conversations.')) return;
+            const button = document.getElementById('clearAllNotifications');
+            if (button) button.disabled = true;
+            try {
+                const snap = await getDocs(query(collection(db, 'notifications'), where('toUid','==',uid)));
+                for (let i = 0; i < snap.docs.length; i += 20) {
+                    await Promise.all(snap.docs.slice(i,i+20).map(d => deleteDoc(doc(db,'notifications',d.id))));
+                }
+            } catch (error) { alert('Could not clear notifications. Please try again.'); }
+            finally { if (button) button.disabled = false; }
         };
 
         async function pushNotif(toUid, icon, title, body) {
@@ -4375,11 +4432,18 @@
                             'green energy','electric','sustainability','glacier','sea level','ecosystem'],
         };
 
+        const _categoryPatterns = Object.fromEntries(Object.entries(_CATS).map(([cat, words]) => [cat,
+            words.map(word => new RegExp('(?:^|[^a-z0-9])' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:$|[^a-z0-9])', 'i'))]));
         function _categorise(title, desc) {
-            const t = (title + ' ' + (desc || '')).toLowerCase();
-            for (const [cat, kws] of Object.entries(_CATS)) {
-                if (kws.some(kw => t.includes(kw))) return cat;
-            }
+            const text = String(title || '') + ' ' + String(desc || '');
+            const has = cat => _categoryPatterns[cat].some(pattern => pattern.test(text));
+            // Military reporting stays explicit, even when it mentions sport or business.
+            if (/\b(military|missiles?|airstrikes?|bombs?|bombing|troops?|soldiers?|gunfire|ceasefire|invasion|terrorists?|terrorism|hostages?|weapons?|genocide|massacre|warzone|armed forces|armed attack|combat|idf)\b/i.test(text)) return 'conflict';
+            if (/\b(army|navy|air force|naval|defence minister|defense minister)\b/i.test(text) && /\b(deploys?|deployed|deployment|exercises?|defence|defense|border|combat|weaponry|artillery)\b/i.test(text)) return 'conflict';
+            const sports = has('sports');
+            if (/\b(wars?|warfare|conflict|siege|frontline)\b/i.test(text) && !(sports && /\b(war of words|battle for|title defence|title defense)\b/i.test(text))) return 'conflict';
+            if (!sports && /\b(attack|strike|battle|fighting|offensive|drone)\b/i.test(text) && /\b(army|defence ministry|defense ministry|gaza|ukraine|hamas|hezbollah|nato)\b/i.test(text)) return 'conflict';
+            for (const cat of Object.keys(_CATS)) if (cat !== 'conflict' && has(cat)) return cat;
             return 'other';
         }
 
@@ -4506,7 +4570,7 @@
             // If we have ANY cache, show it instantly - then refresh in background
             const cached = _getAnyCache();
             if (cached && !forceRefresh) {
-                _newsItems = cached;
+                _newsItems = cached.map(item => ({ ...item, category: _categorise(item.title, item.description) }));
                 _newsLoaded = true;
                 _renderNews(); // instant display
                 if (btn) btn.textContent = '↻ Refresh';
@@ -4538,7 +4602,7 @@
             if (!_newsItems.length) {
                 // Total failure - check stale cache one last time
                 const stale = _getAnyCache();
-                if (stale) { _newsItems = stale; _renderNews(); }
+                if (stale) { _newsItems = stale.map(item => ({ ...item, category: _categorise(item.title, item.description) })); _renderNews(); }
             }
             if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh'; }
         };
@@ -5383,6 +5447,8 @@
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 19
             }).addTo(_map);
+            window._map = _map;
+            refreshMapPins();
             // No CSS filter - Positron is already clean and neutral
 
             // Google Maps-style teardrop pin for user location
@@ -5403,12 +5469,21 @@
                 .addTo(_map);
         }
 
-        function refreshMapPins() {
-            if (!_map) return;
-            _postMarkers.forEach(m => _map.removeLayer(m));
-            _postMarkers = [];
-
-            function makePin(color, letter, size) {
+        function updateMapRecords(kind, snapshot) {
+            _mapRecords[kind] = snapshot.docs.map(ds => ({ id: ds.id, ...ds.data() }));
+            refreshMapPins();
+        }
+        function visibleMapRecords() {
+            return Object.entries(_mapRecords).flatMap(([kind, rows]) => rows
+                .filter(d => (d.region || 'Sharjah') === userRegion && !getExpiryInfo(d).isDead
+                    && d.lat != null && d.lng != null && Number.isFinite(Number(d.lat)) && Number.isFinite(Number(d.lng))
+                    && Math.abs(Number(d.lat)) <= 90 && Math.abs(Number(d.lng)) <= 180)
+                .map(d => ({ ...d, kind })));
+        }
+        function mapText(value) {
+            const text = document.createElement('span'); text.textContent = String(value || ''); return text.innerHTML;
+        }
+            function makePostMapPin(color, letter, size) {
                 return L.divIcon({
                     className: '',
                     html: `<div style="filter:drop-shadow(0 2px 5px rgba(0,0,0,0.35));">
@@ -5422,31 +5497,20 @@
                 });
             }
 
-            // Load requests - red for urgent (#ef4444), sky blue for normal (#38bdf8)
-            getDocs(query(collection(db, 'requests'), orderBy('createdAt','desc'))).then(snap => {
-                snap.forEach(ds => {
-                    const d = ds.data();
-                    if (!d.lat || !d.lng) return;
-                    const isUrgent = d.urgency === 'high';
-                    const m = L.marker([d.lat, d.lng], { icon: makePin(isUrgent ? '#ef4444' : '#38bdf8', isUrgent ? '!' : 'H', 22) })
-                        .bindPopup(`<b>${d.title||'Request'}</b><br><span style="font-size:11px;color:#64748b;">📍 ${d.location||''}</span>`, { maxWidth: 180 })
-                        .addTo(_map);
-                    _postMarkers.push(m);
-                });
-            }).catch(()=>{});
-
-            // Load lost & found - orange for lost (#f97316), green for found (#16a34a)
-            getDocs(query(collection(db, 'lostfound'), orderBy('createdAt','desc'))).then(snap => {
-                snap.forEach(ds => {
-                    const d = ds.data();
-                    if (!d.lat || !d.lng) return;
-                    const isLost = d.type === 'Lost';
-                    const m = L.marker([d.lat, d.lng], { icon: makePin(isLost ? '#f97316' : '#16a34a', isLost ? 'L' : 'F', 22) })
-                        .bindPopup(`<b>${d.type||'Item'}: ${d.item||''}</b><br><span style="font-size:11px;color:#64748b;">📍 ${d.location||''}</span>`, { maxWidth: 180 })
-                        .addTo(_map);
-                    _postMarkers.push(m);
-                });
-            }).catch(()=>{});
+        function createPostMapMarkers(map) {
+            return visibleMapRecords().map(d => {
+                const request = d.kind === 'requests', urgent = request && d.urgency === 'high', lost = d.type === 'Lost';
+                const color = request ? (urgent ? '#ef4444' : '#38bdf8') : (lost ? '#f97316' : '#16a34a');
+                const letter = request ? (urgent ? '!' : 'H') : (lost ? 'L' : 'F');
+                const label = request ? d.title : `${d.type || 'Item'}: ${d.item || ''}`;
+                return L.marker([Number(d.lat), Number(d.lng)], { icon: makePostMapPin(color, letter, 22) })
+                    .bindPopup(`<b>${mapText(label)}</b><br><small>${mapText(d.location)}</small>`).addTo(map);
+            });
+        }
+        let _mobilePostMarkers = [];
+        function refreshMapPins() {
+            if (_map) { _postMarkers.forEach(m => _map.removeLayer(m)); _postMarkers = createPostMapMarkers(_map); }
+            if (_mobileMap) addMobileMapPins(_mobileMap);
         }
 
         document.getElementById('minimap-widget').addEventListener('click', function(e) {
@@ -5516,13 +5580,8 @@
             document.getElementById('minimapModal').classList.remove('open');
         };
         function addMobileMapPins(map) {
-            function makePin2(color, letter) {
-                return L.divIcon({ className:'', html:`<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg" width="22" height="28" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))"><path d="M12 0C5.37 0 0 5.37 0 12c0 8.2 12 20 12 20S24 20.2 24 12C24 5.37 18.63 0 12 0z" fill="${color}" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/><text x="12" y="16" text-anchor="middle" font-size="8" font-weight="bold" fill="white" font-family="Arial">${letter}</text></svg>`, iconSize:[22,28], iconAnchor:[11,28] });
-            }
-            getDocs(query(collection(db,'requests'),orderBy('createdAt','desc'))).then(snap=>{
-                snap.forEach(ds=>{ const d=ds.data(); if(!d.lat||!d.lng) return; L.marker([d.lat,d.lng],{icon:makePin2(d.urgency==='high'?'#ef4444':'#38bdf8',d.urgency==='high'?'!':'H')}).bindPopup(`<b>${d.title||'Request'}</b><br><small>📍 ${d.location||''}</small>`).addTo(map); }); }).catch(()=>{});
-            getDocs(query(collection(db,'lostfound'),orderBy('createdAt','desc'))).then(snap=>{
-                snap.forEach(ds=>{ const d=ds.data(); if(!d.lat||!d.lng) return; L.marker([d.lat,d.lng],{icon:makePin2(d.type==='Lost'?'#f97316':'#16a34a',d.type==='Lost'?'L':'F')}).bindPopup(`<b>${d.item||''}</b><br><small>📍 ${d.location||''}</small>`).addTo(map); }); }).catch(()=>{});
+            _mobilePostMarkers.forEach(marker => map.removeLayer(marker));
+            _mobilePostMarkers = createPostMapMarkers(map);
         }
 
         // ── User location init after auth ─────────────────────
@@ -6389,8 +6448,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
   }
 
   function removeSimFeed() {
-    const el = document.getElementById('bt-sim-feed');
-    if (el) el.remove();
+    for (const id of ['bt-sim-feed','bt-sim-mypost']) document.getElementById(id)?.remove();
   }
 
   /* ══ INJECT FAKE POST TO FEED ═════════════════════════════════ */
@@ -6534,19 +6592,22 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     });
   }
 
+  let tutorialRunning = false, tutorialPostTimer = null, tutorialPostCleanup = null;
+  const targetStyles = new Map();
   function enableTarget(sel) {
     if (!sel) return;
     const el = document.getElementById(sel.replace('#','')) || document.querySelector(sel);
     if (el) {
       // raise z-index so it's clickable above the dark overlay
-      el.style.position = 'relative';
+      targetStyles.set(el, { position: el.style.position, zIndex: el.style.zIndex });
+      if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
       el.style.zIndex = '18200';
     }
   }
   function disableTarget(sel) {
     if (!sel) return;
     const el = document.getElementById(sel.replace('#','')) || document.querySelector(sel);
-    if (el) { el.style.zIndex = ''; }
+    if (el && targetStyles.has(el)) { const saved = targetStyles.get(el); el.style.position = saved.position; el.style.zIndex = saved.zIndex; targetStyles.delete(el); }
   }
 
   /* ══ SIM ACTIONS ══════════════════════════════════════════════ */
@@ -6610,6 +6671,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     },
 
     start() {
+      tutorialPostCleanup?.(); clearTimeout(tutorialPostTimer); tutorialRunning = true;
       uName = (window.currentUserFirstName) ||
               (window.currentUserName ? window.currentUserName.split(' ')[0] : '') ||
               localStorage.getItem('bou_user_first') || 'friend';
@@ -6641,6 +6703,9 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     },
 
     _finish() {
+      tutorialRunning = false; clearTimeout(tutorialPostTimer); tutorialPostCleanup?.();
+      for (const [el, saved] of targetStyles) { el.style.position = saved.position; el.style.zIndex = saved.zIndex; }
+      targetStyles.clear();
       ['bt-dk','bt-spl','bt-guide','bt-bub','bt-dots','bt-nxt','bt-skp','bt-hint'].forEach(id => {
         document.getElementById(id)?.classList.remove('on');
       });
@@ -6670,40 +6735,31 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
   /* ══ SIM POST ═════════════════════════════════════════════════ */
   function openSimPost() {
-    // Pre-fill the existing request modal and open it
     const modal = document.getElementById('requestModal');
     if (!modal) return;
-    setTimeout(() => {
-      const title = document.getElementById('reqTitle');
-      const cat   = document.getElementById('reqCat');
-      const desc  = document.getElementById('reqDesc');
-      const loc   = document.getElementById('reqLoc');
-      if (title) title.value = 'Need a ladder for ceiling repair';
-      if (cat)   cat.value   = 'Tools';
-      if (desc)  desc.value  = 'Need a 3m+ ladder for a weekend repair. Happy to return same day!';
-      if (loc)   loc.value   = 'Al Majaz 2';
-      modal.style.display = 'flex';
-      modal.style.zIndex = '19300';
-
-      // Override submit button to trigger tutorial advance
-      const submitBtn = document.getElementById('submitReqBtn');
-      if (submitBtn && !submitBtn._tutorialHooked) {
-        submitBtn._tutorialHooked = true;
-        submitBtn._origClick = submitBtn.onclick;
-        submitBtn.addEventListener('click', function onTutPost(e) {
-          e.preventDefault(); e.stopImmediatePropagation();
-          modal.style.display = 'none';
-          modal.style.zIndex = '';
-          injectPostedCard();
-          submitBtn.removeEventListener('click', onTutPost);
-          submitBtn._tutorialHooked = false;
-          setTimeout(() => {
-            if (typeof window.switchTab === 'function') window.switchTab('community');
-            runStep(10);
-          }, 400);
-        }, true);
+    clearTimeout(tutorialPostTimer);
+    tutorialPostTimer = setTimeout(() => {
+      if (!tutorialRunning) return;
+      const values = { reqTitle:'Need a ladder for ceiling repair', reqCat:'Tools', reqDesc:'Need a 3m+ ladder for a weekend repair. Happy to return same day!', reqLoc:'Al Majaz 2' };
+      const saved = Object.fromEntries(Object.keys(values).map(id => [id,document.getElementById(id)?.value]));
+      const oldDisplay = modal.style.display, oldZ = modal.style.zIndex;
+      for (const [id,value] of Object.entries(values)) { const field=document.getElementById(id);if(field)field.value=value; }
+      modal.style.display='flex';modal.style.zIndex='19300';
+      const button=document.getElementById('submitReqBtn');
+      const cleanup=()=>{
+        button?.removeEventListener('click',onTutorialPost,true);
+        if(button)button._tutorialHooked=false;
+        modal.style.display=oldDisplay;modal.style.zIndex=oldZ;
+        for(const [id,value] of Object.entries(saved)){const field=document.getElementById(id);if(field&&value!==undefined)field.value=value;}
+        tutorialPostCleanup=null;
+      };
+      function onTutorialPost(event){
+        event.preventDefault();event.stopImmediatePropagation();cleanup();injectPostedCard();
+        tutorialPostTimer=setTimeout(()=>{if(tutorialRunning){window.switchTab?.('community');runStep(10);}},400);
       }
-    }, 600);
+      if(button){button._tutorialHooked=true;button.addEventListener('click',onTutorialPost,true);}
+      tutorialPostCleanup=cleanup;
+    },600);
   }
 
   /* ══ CONFETTI ═════════════════════════════════════════════════ */
