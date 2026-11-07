@@ -1,0 +1,98 @@
+.google-entry {
+  margin: 18px 0;
+}
+.google-official-button {
+  min-height: 44px;
+  width: 100%;
+  max-width: 400px;
+}
+.google-official-button.busy {
+  pointer-events: none;
+  opacity: 0.6;
+}
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 48px;
+  width: 100%;
+  border: 1px solid #646b60;
+  border-radius: 6px;
+  background: #161b15;
+  color: #f4f5f0;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.16s,
+    border-color 0.16s;
+}
+.google-button:hover:not(:disabled) {
+  background: #232b20;
+  border-color: #becdaf;
+}
+.google-button:focus-visible {
+  outline: 2px solid #d9edb7;
+  outline-offset: 4px;
+}
+.google-button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #939b8c;
+  font-size: 12px;
+  margin: 22px 0;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  height: 1px;
+  background: #333a2d;
+  flex: 1;
+}
+.google-onboarding {
+  max-width: 520px;
+  margin: 8vh auto;
+  padding: 26px;
+}
+.google-onboarding .wordmark {
+  display: block;
+  margin-bottom: 60px;
+}
+.google-onboarding .field {
+  margin: 22px 0;
+}
+.google-onboarding .check-field {
+  margin: 26px 0;
+  align-items: flex-start;
+}
+.google-identity,
+.google-linked {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #d9edb7;
+  overflow-wrap: anywhere;
+}
+.oauth-callback {
+  display: block;
+  padding: 14px;
+  background: #10150d;
+  overflow-wrap: anywhere;
+  margin: 14px 0 24px;
+  font-size: 12px;
+}
+@media (max-width: 640px) {
+  .google-onboarding {
+    margin: 3vh auto;
+    padding: 22px;
+  }
+  .google-onboarding .wordmark {
+    margin-bottom: 38px;
+  }
+}

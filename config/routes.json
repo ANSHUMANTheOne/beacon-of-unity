@@ -979,7 +979,7 @@
       "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
       "original": "nothing",
       "source": "archive/unclassified/nothing",
-      "category": "Unknown \u2014 requires investigation",
+      "category": "Unknown — requires investigation",
       "reason": "Unidentified content; retain bytes and route",
       "published": "/nothing"
     },
@@ -1898,7 +1898,6 @@
   "passthrough_patterns": [
     "omniscope/*",
     "social",
-    "social/*",
     "social.*",
     "socialdemo",
     "socialdemo/*",
@@ -2059,7 +2058,8 @@
     "tests/",
     "src/",
     "config/",
-    "deployment/"
+    "deployment/",
+    "social/"
   ],
   "source_only_files": [
     "README.md",
