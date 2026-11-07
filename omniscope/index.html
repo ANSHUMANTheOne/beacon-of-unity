@@ -2723,6 +2723,7 @@ const AUTO_FOLLOW_RELEASE_DIST = 160;   // only when zoomed right out to system 
 let zoomPending = 0;
 let missionFovTarget = 45;
 let missionDistanceTarget = 4.2;
+let missionMinDistance = 4.2;
 let missionZoomActive = false;
 let zoomAutoFocusId = null;      // object we started following only because the user zoomed toward it
 let returnToOrigin = false;
@@ -2735,9 +2736,9 @@ const _missionTarget = new THREE.Vector3(), _missionDirection = new THREE.Vector
 
 function focusOn(id) { state.followId = id; zoomAutoFocusId = id; returnToOrigin = false; camGoal = null; }
 function releaseFocus() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = true; }
-function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; missionDistanceTarget = 4.2; missionZoomActive = false; camGoal = null; }
+function freeOrbit() { state.followId = null; zoomAutoFocusId = null; returnToOrigin = false; zoomPending = 0; missionFovTarget = 45; missionDistanceTarget = 4.2; missionMinDistance = 4.2; missionZoomActive = false; camGoal = null; }
 function resetMissionZoom(distance, pose) {
-  missionFovTarget = pose?.fov ?? 45; missionDistanceTarget = distance; missionZoomActive = false;
+  missionFovTarget = pose?.fov ?? 45; missionDistanceTarget = distance; missionMinDistance = Math.min(4.2, distance); missionZoomActive = false;
   if (pose) { missionCloseDirection.copy(pose.position).sub(pose.target).normalize(); missionCloseUp.copy(pose.up); }
 }
 
@@ -2833,7 +2834,7 @@ app.addEventListener('wheel', (e) => {
     // First widen the field of view, then pull back from Earth. That keeps
     // close inspection stable while still allowing a real orbital overview.
     if (d > 0 && missionFovTarget >= 75.5) missionDistanceTarget = Math.min(innerWidth > 800 ? 700 : 1100, missionDistanceTarget * Math.exp(d * .00135));
-    else if (d < 0 && missionDistanceTarget > 4.21) missionDistanceTarget = Math.max(4.2, missionDistanceTarget * Math.exp(d * .00135));
+    else if (d < 0 && missionDistanceTarget > missionMinDistance + .01) missionDistanceTarget = Math.max(missionMinDistance, missionDistanceTarget * Math.exp(d * .00135));
     else missionFovTarget = Math.max(innerWidth <= 800 ? 35 : innerWidth < 960 ? 32 : 30, Math.min(76, missionFovTarget * Math.exp(d * .0011)));
     return;
   }
