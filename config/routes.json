@@ -1927,7 +1927,11 @@
       "sha256": "dfbe57a5214db02633c894e51688d68e0bc6634b4886fb90d121e21c9f551ac2",
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
-      "reason": "Preserve current main design dependency at the same public path"
+      "reason": "Preserve current main design dependency at the same public path",
+      "source_sha256": "0d5eec4338e9599d9af3b3879e00db2a3fb54c50a1099ca79cfe7025fed080fb",
+      "source_bytes": 8353,
+      "source_change": "Fix login autofill contrast and preserve readable focused/forced-colors input states without changing authentication",
+      "source_change_kind": "visual-fix"
     },
     {
       "original": "assets/platform.css",
