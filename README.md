@@ -25,3 +25,4 @@ Source folders are separate from public URLs. Publishing reconstructs the origin
 Compatibility checks validate the public artifact before publication. Cloudflare publishes the custom domain; the main-only Pages workflow publishes the repository site. Keep source-to-route mappings current whenever adding pages or assets, and use the recorded rollback procedure for deployment failures.
 
 Current licenses aswell as existing third party license notices are retained, no new license is implied. Changes should be proposed through pull requests with compatibility checks.
+Codex listed as collaborator as it assisted with organizing all the files and contents present within this repo to appeal to the public and be easier to access, and thus consists of 11 commmits. Rest 383+ commits done by Anshuman Tripathy's independent work on the project.
