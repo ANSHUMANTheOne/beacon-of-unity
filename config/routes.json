@@ -1942,8 +1942,8 @@
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path",
-      "source_bytes": 32642,
-      "source_sha256": "7bbfa3a18e9fde65388f4ecb7daf0d06bf255f46513236c34db174f319415e75",
+      "source_bytes": 32719,
+      "source_sha256": "91c9fbcfb3ef2853c44ae273622564f13adac3496ef6fde94cdfbb5a22196e07",
       "source_change": "Restore original circular neighbourhood map and existing expand/collapse behavior; keyboard access, focus return and first-click reopening; preserve location data and map handlers",
       "source_change_kind": "map-restoration"
     },
