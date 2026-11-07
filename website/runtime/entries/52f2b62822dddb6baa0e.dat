@@ -3709,6 +3709,7 @@
         }
 
         function applyChatBgSkin() {
+            document.body.dataset.chatBackground = userEquippedChat || 'default';
             const bg = getEquippedChatBg(userEquippedChat);
             const area = document.getElementById('messageArea');
             if (area) area.style.background = bg.bg;
@@ -4405,11 +4406,18 @@
                             'green energy','electric','sustainability','glacier','sea level','ecosystem'],
         };
 
+        const _categoryPatterns = Object.fromEntries(Object.entries(_CATS).map(([cat, words]) => [cat,
+            words.map(word => new RegExp('(?:^|[^a-z0-9])' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:$|[^a-z0-9])', 'i'))]));
         function _categorise(title, desc) {
-            const t = (title + ' ' + (desc || '')).toLowerCase();
-            for (const [cat, kws] of Object.entries(_CATS)) {
-                if (kws.some(kw => t.includes(kw))) return cat;
-            }
+            const text = String(title || '') + ' ' + String(desc || '');
+            const has = cat => _categoryPatterns[cat].some(pattern => pattern.test(text));
+            // Military reporting stays explicit, even when it mentions sport or business.
+            if (/\b(military|missiles?|airstrikes?|bombs?|bombing|troops?|soldiers?|gunfire|ceasefire|invasion|terrorists?|terrorism|hostages?|weapons?|genocide|massacre|warzone|armed forces|armed attack|combat|idf)\b/i.test(text)) return 'conflict';
+            if (/\b(army|navy|air force|naval|defence minister|defense minister)\b/i.test(text) && /\b(deploys?|deployed|deployment|exercises?|defence|defense|border|combat|weaponry|artillery)\b/i.test(text)) return 'conflict';
+            const sports = has('sports');
+            if (/\b(wars?|warfare|conflict|siege|frontline)\b/i.test(text) && !(sports && /\b(war of words|battle for|title defence|title defense)\b/i.test(text))) return 'conflict';
+            if (!sports && /\b(attack|strike|battle|fighting|offensive|drone)\b/i.test(text) && /\b(army|defence ministry|defense ministry|gaza|ukraine|hamas|hezbollah|nato)\b/i.test(text)) return 'conflict';
+            for (const cat of Object.keys(_CATS)) if (cat !== 'conflict' && has(cat)) return cat;
             return 'other';
         }
 
@@ -4547,7 +4555,7 @@
             // If we have ANY cache, show it instantly - then refresh in background
             const cached = _getAnyCache();
             if (cached && !forceRefresh) {
-                _newsItems = cached;
+                _newsItems = cached.map(item => ({ ...item, category: _categorise(item.title, item.description) }));
                 _newsLoaded = true;
                 _renderNews(); // instant display
                 if (btn) btn.textContent = '↻ Refresh';
@@ -4579,7 +4587,7 @@
             if (!_newsItems.length) {
                 // Total failure - check stale cache one last time
                 const stale = _getAnyCache();
-                if (stale) { _newsItems = stale; _renderNews(); }
+                if (stale) { _newsItems = stale.map(item => ({ ...item, category: _categorise(item.title, item.description) })); _renderNews(); }
             }
             if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh'; }
         };
@@ -6461,8 +6469,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
   }
 
   function removeSimFeed() {
-    const el = document.getElementById('bt-sim-feed');
-    if (el) el.remove();
+    for (const id of ['bt-sim-feed','bt-sim-mypost']) document.getElementById(id)?.remove();
   }
 
   /* ══ INJECT FAKE POST TO FEED ═════════════════════════════════ */
@@ -6606,19 +6613,22 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     });
   }
 
+  let tutorialRunning = false, tutorialPostTimer = null, tutorialPostCleanup = null;
+  const targetStyles = new Map();
   function enableTarget(sel) {
     if (!sel) return;
     const el = document.getElementById(sel.replace('#','')) || document.querySelector(sel);
     if (el) {
       // raise z-index so it's clickable above the dark overlay
-      el.style.position = 'relative';
+      targetStyles.set(el, { position: el.style.position, zIndex: el.style.zIndex });
+      if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
       el.style.zIndex = '18200';
     }
   }
   function disableTarget(sel) {
     if (!sel) return;
     const el = document.getElementById(sel.replace('#','')) || document.querySelector(sel);
-    if (el) { el.style.zIndex = ''; }
+    if (el && targetStyles.has(el)) { const saved = targetStyles.get(el); el.style.position = saved.position; el.style.zIndex = saved.zIndex; targetStyles.delete(el); }
   }
 
   /* ══ SIM ACTIONS ══════════════════════════════════════════════ */
@@ -6682,6 +6692,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     },
 
     start() {
+      tutorialPostCleanup?.(); clearTimeout(tutorialPostTimer); tutorialRunning = true;
       uName = (window.currentUserFirstName) ||
               (window.currentUserName ? window.currentUserName.split(' ')[0] : '') ||
               localStorage.getItem('bou_user_first') || 'friend';
@@ -6713,6 +6724,8 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     },
 
     _finish() {
+      tutorialRunning = false; clearTimeout(tutorialPostTimer); tutorialPostCleanup?.();
+      for (const [el,saved] of targetStyles){el.style.position=saved.position;el.style.zIndex=saved.zIndex;}targetStyles.clear();
       ['bt-dk','bt-spl','bt-guide','bt-bub','bt-dots','bt-nxt','bt-skp','bt-hint'].forEach(id => {
         document.getElementById(id)?.classList.remove('on');
       });
@@ -6742,40 +6755,31 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
   /* ══ SIM POST ═════════════════════════════════════════════════ */
   function openSimPost() {
-    // Pre-fill the existing request modal and open it
     const modal = document.getElementById('requestModal');
     if (!modal) return;
-    setTimeout(() => {
-      const title = document.getElementById('reqTitle');
-      const cat   = document.getElementById('reqCat');
-      const desc  = document.getElementById('reqDesc');
-      const loc   = document.getElementById('reqLoc');
-      if (title) title.value = 'Need a ladder for ceiling repair';
-      if (cat)   cat.value   = 'Tools';
-      if (desc)  desc.value  = 'Need a 3m+ ladder for a weekend repair. Happy to return same day!';
-      if (loc)   loc.value   = 'Al Majaz 2';
-      modal.style.display = 'flex';
-      modal.style.zIndex = '19300';
-
-      // Override submit button to trigger tutorial advance
-      const submitBtn = document.getElementById('submitReqBtn');
-      if (submitBtn && !submitBtn._tutorialHooked) {
-        submitBtn._tutorialHooked = true;
-        submitBtn._origClick = submitBtn.onclick;
-        submitBtn.addEventListener('click', function onTutPost(e) {
-          e.preventDefault(); e.stopImmediatePropagation();
-          modal.style.display = 'none';
-          modal.style.zIndex = '';
-          injectPostedCard();
-          submitBtn.removeEventListener('click', onTutPost);
-          submitBtn._tutorialHooked = false;
-          setTimeout(() => {
-            if (typeof window.switchTab === 'function') window.switchTab('community');
-            runStep(10);
-          }, 400);
-        }, true);
+    clearTimeout(tutorialPostTimer);
+    tutorialPostTimer = setTimeout(() => {
+      if (!tutorialRunning) return;
+      const values = { reqTitle:'Need a ladder for ceiling repair', reqCat:'Tools', reqDesc:'Need a 3m+ ladder for a weekend repair. Happy to return same day!', reqLoc:'Al Majaz 2' };
+      const saved = Object.fromEntries(Object.keys(values).map(id => [id,document.getElementById(id)?.value]));
+      const oldDisplay = modal.style.display, oldZ = modal.style.zIndex;
+      for (const [id,value] of Object.entries(values)) { const field=document.getElementById(id);if(field)field.value=value; }
+      modal.style.display='flex';modal.style.zIndex='19300';
+      const button=document.getElementById('submitReqBtn');
+      const cleanup=()=>{
+        button?.removeEventListener('click',onTutorialPost,true);
+        if(button)button._tutorialHooked=false;
+        modal.style.display=oldDisplay;modal.style.zIndex=oldZ;
+        for(const [id,value] of Object.entries(saved)){const field=document.getElementById(id);if(field&&value!==undefined)field.value=value;}
+        tutorialPostCleanup=null;
+      };
+      function onTutorialPost(event){
+        event.preventDefault();event.stopImmediatePropagation();cleanup();injectPostedCard();
+        tutorialPostTimer=setTimeout(()=>{if(tutorialRunning){window.switchTab?.('community');runStep(10);}},400);
       }
-    }, 600);
+      if(button){button._tutorialHooked=true;button.addEventListener('click',onTutorialPost,true);}
+      tutorialPostCleanup=cleanup;
+    },600);
   }
 
   /* ══ CONFETTI ═════════════════════════════════════════════════ */
