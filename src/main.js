@@ -9,7 +9,7 @@ let world, paused=reduce.matches;
 
 // Rendering is progressive enhancement: content, navigation, and links never wait for WebGL.
 const timeout=setTimeout(()=>document.documentElement.classList.add('world-unavailable'),12000);
-async function loadWorld(){try{const {UnityWorld}=await import('./world.js');world=new UnityWorld($('#unity-canvas'),()=>{clearTimeout(timeout);document.documentElement.classList.remove('world-unavailable');document.documentElement.classList.add('world-ready');});}catch(error){clearTimeout(timeout);document.documentElement.classList.add('world-unavailable');console.warn('The lightweight world illustration is active.',error.message);}}
+async function loadWorld(){try{const {UnityWorld}=await import('./world.js');world=new UnityWorld($('#unity-canvas'));world.setPaused(paused||!!$('dialog[open]'));await world.initialize(()=>{clearTimeout(timeout);document.documentElement.classList.remove('world-unavailable');document.documentElement.classList.add('world-ready');});}catch(error){clearTimeout(timeout);world?.dispose();world=undefined;document.documentElement.classList.add('world-unavailable');console.warn('The lightweight world illustration is active.',error.message);}}
 loadWorld();
 
 const data={
