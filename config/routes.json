@@ -1941,7 +1941,11 @@
       "sha256": "bb1982511759f2fdab7df0a6ead1f1dd198c21de7469a23f08ad441aaa3857ca",
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
-      "reason": "Preserve current main design dependency at the same public path"
+      "reason": "Preserve current main design dependency at the same public path",
+      "source_bytes": 32719,
+      "source_sha256": "91c9fbcfb3ef2853c44ae273622564f13adac3496ef6fde94cdfbb5a22196e07",
+      "source_change": "Restore original circular neighbourhood map and existing expand/collapse behavior; keyboard access, focus return and first-click reopening; preserve location data and map handlers",
+      "source_change_kind": "map-restoration"
     },
     {
       "original": "assets/platform.js",
@@ -1951,7 +1955,11 @@
       "sha256": "b4082ffed84f71ffc32f596a56cb36b6542c40d59b4d3127406b68b48a8c10b6",
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
-      "reason": "Preserve current main design dependency at the same public path"
+      "reason": "Preserve current main design dependency at the same public path",
+      "source_bytes": 13763,
+      "source_sha256": "f0fc6269f1ddef6616f5f2eb30d262972fc1021c35343bfc46bc969a92b4c723",
+      "source_change": "Restore original circular neighbourhood map and existing expand/collapse behavior; keyboard access, focus return and first-click reopening; preserve location data and map handlers",
+      "source_change_kind": "map-restoration"
     },
     {
       "original": "assets/secondary.css",
