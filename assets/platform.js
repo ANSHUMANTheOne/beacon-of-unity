@@ -40,6 +40,19 @@
  $('#minimap-close')?.setAttribute('aria-label','Collapse neighbourhood map');$('#minimapModal-close')?.setAttribute('aria-label','Close neighbourhood map');$('#fabBtn')?.setAttribute('aria-label','Create a post');
  // The existing onboarding stays available on demand; signing in never starts it automatically.
  const settings=$('#settingsModal .modal-content');if(settings){const tutorial=document.createElement('button');tutorial.className='btn-help';tutorial.textContent='Take a guided tour';tutorial.addEventListener('click',()=>{settings.closest('.modal').style.display='none';window.BeaconTutorial?.start();});settings.append(tutorial);}
- // Fit the actual Leaflet instance after the sidebar map receives its rectangular composition.
+ // The original map handlers still own expansion, markers and location data.
+ const minimap=$('#minimap-widget');
+ if(minimap){
+  let keyboardExpansion=false;
+  // Leaflet stops some child clicks. Forward compact-preview taps to the existing
+  // widget handler so reopening always works on the first click as well.
+  minimap.addEventListener('click',e=>{if(!minimap.classList.contains('expanded')&&e.target!==minimap){e.preventDefault();e.stopPropagation();minimap.click();}},true);
+  const syncMap=()=>{const expanded=minimap.classList.contains('expanded');minimap.setAttribute('role',expanded?'region':'button');minimap.setAttribute('aria-label',expanded?'Neighbourhood map':'Expand neighbourhood map');minimap.tabIndex=expanded?-1:0;if(expanded){minimap.removeAttribute('aria-expanded');if(keyboardExpansion){$('#minimap-close')?.focus();keyboardExpansion=false;}}else{minimap.setAttribute('aria-expanded','false');if(document.activeElement===$('#minimap-close'))minimap.focus();}};
+  minimap.addEventListener('keydown',e=>{if(e.target===minimap&&!minimap.classList.contains('expanded')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();keyboardExpansion=true;minimap.click();}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&minimap.classList.contains('expanded')&&!$('#minimapModal')?.classList.contains('open')){$('#minimap-close')?.click();minimap.focus();}});
+  minimap.addEventListener('transitionend',e=>{if(e.target===minimap&&(e.propertyName==='width'||e.propertyName==='height'))window._map?.invalidateSize?.({animate:false});});
+  new MutationObserver(syncMap).observe(minimap,{attributes:true,attributeFilter:['class']});syncMap();
+ }
+ // Fit the actual Leaflet instance after the compact preview receives its final size.
  setTimeout(()=>{window._map?.invalidateSize?.();window.dispatchEvent(new Event('resize'));},2000);
 })();
