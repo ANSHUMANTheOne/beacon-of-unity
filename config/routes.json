@@ -1024,7 +1024,11 @@
       "source": "omniscope/README.md",
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
-      "published": "/omniscope/README.md"
+      "published": "/omniscope/README.md",
+      "source_bytes": 175,
+      "source_sha256": "f885fca95b1740fbc693ac93223cfa8bd2d2e4438f1d4df3eab379680139743d",
+      "source_change": "Preserve concurrent main README update 41bdd27 unchanged while integrating dashboard restoration",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/functions/api/archive.js",
