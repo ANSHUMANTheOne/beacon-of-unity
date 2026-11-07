@@ -22,6 +22,7 @@ body.platform #logoutBtnNav{position:absolute!important;top:auto!important;botto
 .app-demo-label{display:block;width:max-content;margin:8px 0 14px;font-size:10px;font-weight:600;color:#436477;border:1px solid #bfd6e3;padding:4px 8px;border-radius:4px}
 
 /* Restore the original circular preview and its existing click-to-expand map. */
+body.platform #minimap-close,body.platform #minimapModal-close{z-index:1001}
 @media(min-width:801px){
  body.platform{--app-map-size:160px}
  body.platform #minimap-widget{width:var(--app-map-size)!important;height:var(--app-map-size)!important;border-radius:50%!important;border:2px solid #66c5e6!important;box-shadow:0 5px 18px #05152240!important}
