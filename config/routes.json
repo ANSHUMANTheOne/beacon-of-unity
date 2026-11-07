@@ -284,10 +284,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/dashboard.html",
-      "source_sha256": "9a6995b8c6169e7d9268da600d1bd172075f27cd5b4328be4a099d7f535cb909",
-      "source_bytes": 563889,
-      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
-      "source_change_kind": "concurrent-main"
+      "source_sha256": "ae9791db02adfe33d3e57e72579da1cb5b2b9325efbf5ecf858350fc0f167f79",
+      "source_bytes": 569001,
+      "source_change": "Owner-requested original dashboard flow restoration: compact layout and phone chat, current feed-only map pins, live amber unread, reliable close, tutorial cleanup, notification controls and scoped news classification",
+      "source_change_kind": "dashboard-flow-refinement"
     },
     {
       "path": "dashboard_updated.html",
@@ -301,10 +301,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/dashboard_updated.html",
-      "source_sha256": "55a295d58abd48038018729db2d778a17682becdbc8044ffec45d6a2aefdd980",
-      "source_bytes": 615953,
-      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
-      "source_change_kind": "concurrent-main"
+      "source_sha256": "140d1c5a35aa4240757dc4927387a5a2e0b609b1f840b8f5cad0c4dcd92b8ba9",
+      "source_bytes": 618289,
+      "source_change": "Owner-requested original dashboard flow restoration: compact layout and phone chat, current feed-only map pins, live amber unread, reliable close, tutorial cleanup, notification controls and scoped news classification",
+      "source_change_kind": "dashboard-flow-refinement"
     },
     {
       "path": "data.gif",
@@ -1024,7 +1024,11 @@
       "source": "omniscope/README.md",
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
-      "published": "/omniscope/README.md"
+      "published": "/omniscope/README.md",
+      "source_bytes": 175,
+      "source_sha256": "f885fca95b1740fbc693ac93223cfa8bd2d2e4438f1d4df3eab379680139743d",
+      "source_change": "Preserve concurrent main README update 41bdd27 unchanged while integrating dashboard restoration",
+      "source_change_kind": "concurrent-main"
     },
     {
       "path": "omniscope/functions/api/archive.js",
@@ -1942,10 +1946,10 @@
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path",
-      "source_bytes": 32719,
-      "source_sha256": "91c9fbcfb3ef2853c44ae273622564f13adac3496ef6fde94cdfbb5a22196e07",
-      "source_change": "Restore original circular neighbourhood map and existing expand/collapse behavior; keyboard access, focus return and first-click reopening; preserve location data and map handlers",
-      "source_change_kind": "map-restoration"
+      "source_bytes": 42053,
+      "source_sha256": "d1d50edd49ab5a957d6f10acea5ce2b0f6cc860a81fb94fa0c426ea3360f52c1",
+      "source_change": "Owner-requested original dashboard flow restoration: compact layout and phone chat, current feed-only map pins, live amber unread, reliable close, tutorial cleanup, notification controls and scoped news classification",
+      "source_change_kind": "dashboard-flow-refinement"
     },
     {
       "original": "assets/platform.js",
@@ -1956,10 +1960,10 @@
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path",
-      "source_bytes": 13763,
-      "source_sha256": "f0fc6269f1ddef6616f5f2eb30d262972fc1021c35343bfc46bc969a92b4c723",
-      "source_change": "Restore original circular neighbourhood map and existing expand/collapse behavior; keyboard access, focus return and first-click reopening; preserve location data and map handlers",
-      "source_change_kind": "map-restoration"
+      "source_bytes": 16241,
+      "source_sha256": "02e70a5a09d0c13488272baa5be6bbceba7dd454a54354ab1d80aef64d29d458",
+      "source_change": "Owner-requested original dashboard flow restoration: compact layout and phone chat, current feed-only map pins, live amber unread, reliable close, tutorial cleanup, notification controls and scoped news classification",
+      "source_change_kind": "dashboard-flow-refinement"
     },
     {
       "original": "assets/secondary.css",
