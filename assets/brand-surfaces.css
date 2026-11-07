@@ -12,6 +12,11 @@ body.unity-login .inp-wrap label,body.unity-login .file-wrap label{color:#dcecf6
 body.unity-login .inp,body.unity-login .btn-google{background:#deefff0c!important;border:1px solid #cee8fa42!important;color:#fff!important;border-radius:11px!important;min-height:50px}
 body.unity-login .inp::placeholder{color:#a9c5d8!important}
 body.unity-login .inp:focus{border-color:#79daf7!important;box-shadow:0 0 0 3px #54c8e51a!important}
+/* Browser autofill must retain contrast against the dark frosted login surface. */
+body.unity-login .inp{color-scheme:dark;caret-color:#f3f9ff}
+body.unity-login .inp:is(:autofill,:-webkit-autofill){-webkit-text-fill-color:#f3f9ff!important;box-shadow:inset 0 0 0 1000px #173e54!important;transition:border-color .2s!important}
+body.unity-login .inp:is(:autofill,:-webkit-autofill):focus{box-shadow:inset 0 0 0 1000px #173e54,0 0 0 3px #54c8e51a!important}
+@media(forced-colors:active){body.unity-login .inp:is(:autofill,:-webkit-autofill){-webkit-text-fill-color:CanvasText!important;box-shadow:none!important}}
 body.unity-login .btn-primary{background:#72d7ef!important;color:#082a3c!important;border-radius:11px!important;font-weight:700!important;min-height:50px}
 body.unity-login .btn-google:hover{background:#deefff19!important}
 body.unity-login .div-line{background:#d2eeff29!important}
