@@ -845,10 +845,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/hellopotato.html",
-      "source_sha256": "58e108e8040cb97dee0345e2099875e7fa44eef2806d5c80d4fde57ac9149182",
-      "source_bytes": 33925,
-      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
-      "source_change_kind": "concurrent-main"
+      "source_sha256": "1d78e32e4cc449e199c0b52736705e504aa6dea82b11159d3cc032bd45e73c8d",
+      "source_bytes": 37480,
+      "source_change": "Owner-requested approval email migration: commit membership first, enqueue authenticated server delivery, and expose queue retry status; retain volunteer approvals without email.",
+      "source_change_kind": "functional-repair"
     },
     {
       "path": "hero-scene.js",
@@ -979,7 +979,7 @@
       "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
       "original": "nothing",
       "source": "archive/unclassified/nothing",
-      "category": "Unknown \u2014 requires investigation",
+      "category": "Unknown — requires investigation",
       "reason": "Unidentified content; retain bytes and route",
       "published": "/nothing"
     },
