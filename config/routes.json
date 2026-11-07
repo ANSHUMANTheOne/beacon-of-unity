@@ -1064,9 +1064,9 @@
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
       "published": "/omniscope/index.html",
-      "source_sha256": "95ea025a43187220d5d3b529bf1f8498a7bae6907666df47c100158b6cf3bc7e",
-      "source_bytes": 165347,
-      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "4f41ef985bf189e9a2c45cf525ff83e0f027907ad0ab5e935756992ca33c4f64",
+      "source_bytes": 165484,
+      "source_change": "Preserve concurrent main OmniScope startup view update c198c86 unchanged while integrating login CSS fix",
       "source_change_kind": "concurrent-main"
     },
     {
@@ -1630,9 +1630,9 @@
       "category": "Independent project",
       "reason": "Excluded from restructuring: concurrent OmniScope work remains in place",
       "published": "/omniscope/public/survey-system.js",
-      "source_sha256": "9c30c3aac664e65a1ec754cc2decc8ac11bb2c574833ab2008a62eda0a89b3cb",
-      "source_bytes": 63212,
-      "source_change": "Retain current main source at 056b25677afd5a5621fb36a6fcc107a53f553889 at its unchanged public path; no additional application redesign in this branch",
+      "source_sha256": "c8e8cca240c0ff12588b852fdba65bb3cd1784ed033dc1d3e923a6dd81099ba8",
+      "source_bytes": 63168,
+      "source_change": "Preserve concurrent main OmniScope startup view update c198c86 unchanged while integrating login CSS fix",
       "source_change_kind": "concurrent-main"
     },
     {
