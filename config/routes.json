@@ -284,10 +284,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/dashboard.html",
-      "source_sha256": "ae9791db02adfe33d3e57e72579da1cb5b2b9325efbf5ecf858350fc0f167f79",
-      "source_bytes": 569001,
-      "source_change": "Owner-requested original dashboard flow restoration: compact layout and phone chat, current feed-only map pins, live amber unread, reliable close, tutorial cleanup, notification controls and scoped news classification",
-      "source_change_kind": "dashboard-flow-refinement"
+      "source_sha256": "ac7f7265bbe3b9e594be59da08f2aeb843761600e1468bb24ed48a0aedbcc26c",
+      "source_bytes": 572442,
+      "source_change": "Keep the restored dashboard layout and fix tutorial actions, phone practice chat, posting overlay, simulation isolation and cleanup on both dashboard entries.",
+      "source_change_kind": "tutorial-action-repair"
     },
     {
       "path": "dashboard_updated.html",
@@ -301,10 +301,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/dashboard_updated.html",
-      "source_sha256": "140d1c5a35aa4240757dc4927387a5a2e0b609b1f840b8f5cad0c4dcd92b8ba9",
-      "source_bytes": 618289,
-      "source_change": "Owner-requested original dashboard flow restoration: compact layout and phone chat, current feed-only map pins, live amber unread, reliable close, tutorial cleanup, notification controls and scoped news classification",
-      "source_change_kind": "dashboard-flow-refinement"
+      "source_sha256": "4be03f14505a55904c9430967c8356f90daf3a56e95abb4b21613df537de4e61",
+      "source_bytes": 621739,
+      "source_change": "Keep the restored dashboard layout and fix tutorial actions, phone practice chat, posting overlay, simulation isolation and cleanup on both dashboard entries.",
+      "source_change_kind": "tutorial-action-repair"
     },
     {
       "path": "data.gif",
@@ -979,7 +979,7 @@
       "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
       "original": "nothing",
       "source": "archive/unclassified/nothing",
-      "category": "Unknown \u2014 requires investigation",
+      "category": "Unknown — requires investigation",
       "reason": "Unidentified content; retain bytes and route",
       "published": "/nothing"
     },
@@ -1946,10 +1946,10 @@
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path",
-      "source_bytes": 42053,
-      "source_sha256": "d1d50edd49ab5a957d6f10acea5ce2b0f6cc860a81fb94fa0c426ea3360f52c1",
-      "source_change": "Owner-requested original dashboard flow restoration: compact layout and phone chat, current feed-only map pins, live amber unread, reliable close, tutorial cleanup, notification controls and scoped news classification",
-      "source_change_kind": "dashboard-flow-refinement"
+      "source_bytes": 44422,
+      "source_sha256": "da902178a0fb268566cb1849427971e605eb425629f2c977962be464d665f8e6",
+      "source_change": "Keep the restored dashboard layout and fix tutorial actions, phone practice chat, posting overlay, simulation isolation and cleanup on both dashboard entries.",
+      "source_change_kind": "tutorial-action-repair"
     },
     {
       "original": "assets/platform.js",

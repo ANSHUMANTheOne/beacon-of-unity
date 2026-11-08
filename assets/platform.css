@@ -140,3 +140,29 @@ body.platform.dark .imsg-row.them .imsg-bubble{background:#343438!important;colo
 body.platform.dark #msgInput{background:#2c2c2e!important;border-color:#48484a!important;color:#f5f5f7!important}
 @media(max-width:800px){body.platform #chatPopup{left:auto!important;right:8px!important;max-width:360px!important;bottom:calc(var(--app-keyboard-inset,0px) + 76px + env(safe-area-inset-bottom))!important;border-radius:36px 36px 28px 28px!important}body.platform #chatBackBtn{width:44px;height:44px}body.platform #sendMsgBtn{width:44px;height:44px}}
 @media(max-width:800px) and (max-height:540px){body.platform #chatPopup{inset:8px!important;max-width:none!important}}
+
+/* The practice controls follow the same phone layout as the actual chat. */
+body.platform #bt-sim-chat{inset:auto 24px 24px auto;width:360px;max-width:calc(100vw - 32px);height:min(540px,calc(100dvh - 180px));border-radius:30px;overflow:hidden;box-shadow:0 20px 70px #0005}
+body.platform #bt-sim-chat-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:#fff3f1;border-top:1px solid #e8d9d7;font-size:11px;color:#6d5353}
+body.platform #bt-sim-end-btn{border:0;border-radius:22px;padding:9px 14px;background:#ff3b30;color:white;font-size:12px;min-height:36px;cursor:pointer}
+body.platform #bt-root[data-phase^="sim-"] #bt-guide{display:none}
+body.platform #bt-root[data-phase^="sim-"] #bt-bub{top:90px!important;left:24px!important;width:min(320px,calc(100vw - 48px));transform:none!important}
+body.platform:has(#bt-root[data-phase="sim-post"]) #requestModal{padding-top:130px!important;padding-bottom:70px!important}
+body.platform:has(#bt-root[data-phase="sim-post"]) #requestModal .modal-content{max-height:calc(100dvh - 220px)!important}
+body.platform #bt-root #bt-hint{max-width:calc(100vw - 40px);text-align:center}
+@media(max-width:800px){
+ body.platform #bt-root #bt-guide{display:none!important}
+ body.platform #bt-root #bt-bub{top:66px!important;left:12px!important;width:calc(100vw - 24px)!important;max-height:145px;overflow:auto;transform:none!important}
+ body.platform #bt-sim-chat{inset:auto 12px calc(var(--app-keyboard-inset,0px) + 86px) auto;width:calc(100vw - 24px);max-width:360px;height:min(480px,calc(var(--app-vh,100dvh) - 250px))}
+ body.platform #bt-sim-msg-field{font-size:16px!important}
+ body.platform:has(#bt-sim-msg-field:focus) #bt-bub{visibility:hidden}
+ body.platform:has(#bt-root[data-phase="sim-post"]) #requestModal{padding-top:220px!important;padding-bottom:65px!important}
+ body.platform:has(#bt-root[data-phase="sim-post"]) #requestModal .modal-content{max-height:calc(100dvh - 285px)!important}
+ body.platform #bt-sim-rating{padding-top:160px;padding-bottom:65px;overflow:auto}
+ body.platform #bt-root #bt-hint{bottom:66px}
+}
+
+@media(max-width:800px){
+ body.platform #bt-root #bt-skp{top:auto!important;bottom:16px!important;right:12px!important}
+ body.platform #bt-root[data-phase^="sim-"] #bt-bub{top:66px!important;left:12px!important;width:calc(100vw - 24px)!important}
+}

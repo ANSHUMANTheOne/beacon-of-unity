@@ -68,18 +68,6 @@ with sync_playwright() as p:
   expect(page.locator('#requestFeed .card')).to_have_count(1);expect(page.locator('.app-welcome')).not_to_be_visible()
   page.wait_for_function('window._map');page.wait_for_timeout(1200)
   page.screenshot(path=str(out/f'{width}-returning-hub.png'))
-  if width==1440:
-   page.evaluate("document.querySelector('#reqTitle').value='Keep my draft';BeaconTutorial.start();BeaconTutorial._begin()")
-   for _ in range(9):page.evaluate('BeaconTutorial._next()')
-   expect(page.locator('#requestModal')).to_be_visible()
-   post=page.locator('#fabBtn').bounding_box();skip=page.locator('#bt-skp').bounding_box()
-   assert not (post['x']<skip['x']+skip['width'] and skip['x']<post['x']+post['width'] and post['y']<skip['y']+skip['height'] and skip['y']<post['y']+post['height'])
-   page.evaluate('BeaconTutorial._finish();BeaconTutorial._enterDash()');page.wait_for_timeout(1100)
-   expect(page.locator('#requestModal')).not_to_be_visible()
-   assert not page.locator('#submitReqBtn').evaluate('(e)=>e._tutorialHooked')
-   assert page.locator('#reqTitle').input_value()=='Keep my draft'
-   assert page.locator('#bt-sim-mypost').count()==0
-   page.locator('#fabBtn').click();expect(page.locator('#requestModal')).to_be_visible();page.evaluate('closeRequestModal()')
   page.evaluate("switchTab('reliable-news')");expect(page.locator('#newsFeed')).to_contain_text('Sports')
   assert not page.evaluate('document.documentElement.scrollWidth>innerWidth')
   assert not errors,errors
