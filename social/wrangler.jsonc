@@ -1,0 +1,60 @@
+{
+  "name": "beacon-social",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "none",
+  },
+  "routes": [
+    { "pattern": "beaconofunity.com/social", "zone_name": "beaconofunity.com" },
+    {
+      "pattern": "beaconofunity.com/social/*",
+      "zone_name": "beaconofunity.com",
+    },
+    {
+      "pattern": "beaconofunity.com/socialdemo",
+      "zone_name": "beaconofunity.com",
+    },
+    {
+      "pattern": "beaconofunity.com/socialdemo/*",
+      "zone_name": "beaconofunity.com",
+    },
+  ],
+  "vars": {
+    "APP_ORIGIN": "https://beaconofunity.com",
+    "GOOGLE_CLIENT_ID": "37918398882-n8rv2d5oflh59u07tdpcssnvi2vgiodi.apps.googleusercontent.com",
+    "EMAIL_FROM": "Social <hello@beaconofunity.com>",
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "social-db",
+      "database_id": "df385f14-8bfc-412d-8da2-038d755e5868",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "triggers": { "crons": ["* * * * *", "15 3 * * *"] },
+  "observability": { "enabled": false },
+  "env": {
+    "local": {
+      "name": "beacon-social-local",
+      "routes": [],
+      "vars": {
+        "APP_ORIGIN": "http://127.0.0.1:8787",
+        "EMAIL_FROM": "Social <hello@beaconofunity.com>",
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "social-db",
+          "database_id": "df385f14-8bfc-412d-8da2-038d755e5868",
+          "migrations_dir": "migrations",
+        },
+      ],
+    },
+  },
+}

@@ -1,0 +1,222 @@
+.username-control .field {
+  margin-bottom: 9px;
+}
+.username-input-wrap {
+  position: relative;
+}
+.username-input-wrap input {
+  padding-right: 42px;
+}
+.username-icon {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: #e2aba1;
+}
+.username-icon.available {
+  color: #badb94;
+}
+.username-icon.checking {
+  color: #9ab887;
+}
+.username-rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px 12px;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.username-rules > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.username-rules i {
+  height: 4px;
+  width: 4px;
+  border-radius: 50%;
+  background: #637a52;
+  margin: 0 4px;
+}
+.username-rules .neutral {
+  color: #859c71;
+}
+.username-rules .passes {
+  color: #b8d49d;
+}
+.username-rules .fails {
+  color: #e2aba1;
+}
+.username-status {
+  min-height: 16px;
+  font-size: 10px;
+  line-height: 1.6;
+  margin: 10px 0;
+  color: #8fa67c;
+}
+.username-status.available {
+  color: #c7e5a9;
+}
+.username-status.taken {
+  color: #e4b3a5;
+}
+.layout.inbox-layout {
+  display: block;
+  max-width: none;
+  width: 100%;
+  padding: 28px 32px 15px;
+}
+.layout.inbox-layout > main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+.layout.inbox-layout .inbox {
+  grid-template-columns: clamp(280px, 27%, 380px) minmax(0, 1fr);
+  height: calc(100dvh - 292px);
+  min-height: 420px;
+  width: 100%;
+  margin-top: 22px;
+}
+.layout.inbox-layout .inbox-list {
+  padding: 22px 16px;
+  overflow: auto;
+}
+.layout.inbox-layout .thread {
+  padding: 17px 12px;
+  gap: 13px;
+}
+.layout.inbox-layout .thread img,
+.layout.inbox-layout .conversation-head img {
+  width: 42px;
+  height: 42px;
+}
+.layout.inbox-layout .thread b {
+  font-size: 13px;
+}
+.layout.inbox-layout .thread small {
+  font-size: 11px;
+  width: auto;
+  max-width: 240px;
+}
+.layout.inbox-layout .thread > span {
+  flex: 1;
+  overflow: hidden;
+}
+.layout.inbox-layout .inbox-empty h3 {
+  font-size: 22px;
+  font-weight: 500;
+}
+.layout.inbox-layout .inbox-empty p {
+  font-size: 13px;
+}
+.layout.inbox-layout .conversation-head {
+  padding: 20px 26px;
+}
+.layout.inbox-layout .conversation-head b {
+  font-size: 14px;
+}
+.layout.inbox-layout .conversation-head small {
+  font-size: 11px;
+}
+.layout.inbox-layout .message-history {
+  padding: 30px;
+  gap: 22px;
+}
+.layout.inbox-layout .message p {
+  font-size: 14px;
+  max-width: 650px;
+  padding: 14px 19px;
+}
+.layout.inbox-layout .message-compose {
+  padding: 20px 25px;
+}
+.layout.inbox-layout .message-compose input {
+  font-size: 14px;
+}
+.content-layout.messages-layout {
+  max-width: none;
+  padding: 30px 35px 20px;
+}
+.messages-layout .live-inbox {
+  grid-template-columns: clamp(260px, 26%, 370px) minmax(0, 1fr);
+  height: calc(100dvh - 265px);
+  min-height: 430px;
+}
+.messages-layout .thread-row {
+  padding: 18px 12px;
+}
+.messages-layout .thread-row b {
+  font-size: 13px;
+}
+.messages-layout .bubble p {
+  font-size: 14px;
+}
+.messages-layout .thread-head {
+  padding: 18px 24px;
+}
+.messages-layout .thread-messages {
+  padding: 28px;
+}
+.messages-layout .message-compose {
+  padding: 20px 25px;
+}
+.messages-layout .message-compose input {
+  font-size: 14px;
+}
+@media (max-width: 750px) {
+  .username-rules {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .layout.inbox-layout {
+    padding: 22px 16px 85px;
+  }
+  .layout.inbox-layout .inbox {
+    display: block;
+    height: calc(100dvh - 300px);
+    min-height: 320px;
+    grid-template-columns: 1fr;
+  }
+  .layout.inbox-layout .inbox-list {
+    height: 100%;
+    padding: 16px 12px;
+  }
+  .layout.inbox-layout .conversation {
+    height: 100%;
+  }
+  .layout.inbox-layout .conversation-head {
+    padding: 15px;
+  }
+  .layout.inbox-layout .message-history {
+    padding: 20px 15px;
+  }
+  .layout.inbox-layout .message-compose {
+    padding: 16px;
+  }
+  .layout.inbox-layout .thread small {
+    max-width: 260px;
+  }
+  .content-layout.messages-layout {
+    padding: 25px 16px 90px;
+  }
+  .messages-layout .live-inbox {
+    display: block;
+    height: calc(100dvh - 280px);
+    min-height: 330px;
+  }
+  .messages-layout .thread-head {
+    padding: 13px;
+  }
+  .messages-layout .thread-messages {
+    padding: 20px 15px;
+  }
+  .messages-layout .message-compose {
+    padding: 16px;
+  }
+  .messages-layout .bubble p {
+    font-size: 13px;
+  }
+}
