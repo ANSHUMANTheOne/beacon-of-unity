@@ -1,0 +1,47 @@
+{
+  "visits": 54,
+  "navigation_failures": [
+    {
+      "phase": "live",
+      "path": "/CozyStudio/index.html"
+    }
+  ],
+  "pages_with_uncaught_errors": [
+    {
+      "phase": "live",
+      "path": "/dashboard.html",
+      "errors": [
+        "Unexpected identifier 's'"
+      ]
+    },
+    {
+      "phase": "live",
+      "path": "/dashboard_updated.html",
+      "errors": [
+        "Unexpected identifier 's'"
+      ]
+    },
+    {
+      "phase": "preview",
+      "path": "/CozyStudio/index.html",
+      "errors": [
+        "TypeError: Cannot read properties of undefined (reading 'map')"
+      ]
+    },
+    {
+      "phase": "preview",
+      "path": "/dashboard.html",
+      "errors": [
+        "Unexpected identifier 's'"
+      ]
+    },
+    {
+      "phase": "preview",
+      "path": "/dashboard_updated.html",
+      "errors": [
+        "Unexpected identifier 's'"
+      ]
+    }
+  ],
+  "scope": "Anonymous read-only pre-repair browser comparison of live and previously uploaded source snapshot. Non-GET/HEAD/OPTIONS requests blocked; no real account or hardware use."
+}

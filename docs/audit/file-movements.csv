@@ -1,0 +1,82 @@
+original,new_source,status,category,reason,sha256
+.assetsignore,.assetsignore,kept,Deployment or infrastructure,Preserve existing Cloudflare asset policy,01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+67.gif,website/interactive-assets/code/67.gif,moved,Media asset,Code-page interactive resources; not featured in navigation,b7746cd80638fb974230b2a8116ec270306ca46512bd6826ce33c11ed0d80232
+CozyStudio/README.md,projects/CozyStudio/README.md,moved,Independent project,Retain complete application subtree and case,8ba48e02e05769f62db9678575b71d44764dda1b619ccabcb922828ce3df0c51
+CozyStudio/index.html,projects/CozyStudio/index.html,moved,Independent project,Retain complete application subtree and case,2445f7ec04c83b754f5049e3834e0137dc8a7fcf3d9d056e7d787d4c1a1bbea0
+CozyStudio/js/animations.js,projects/CozyStudio/js/animations.js,moved,Independent project,Retain complete application subtree and case,77cb634f817c5325d8027b0de71ac9925f94a5dacff7780d41f14f1b1d14c1e9
+CozyStudio/js/app.js,projects/CozyStudio/js/app.js,moved,Independent project,Retain complete application subtree and case,a22bae587e985eb371ba5427329b8b8e60a2b3a359ef4d158f5629d1f0f3408f
+CozyStudio/js/bluetooth.js,projects/CozyStudio/js/bluetooth.js,moved,Independent project,Retain complete application subtree and case,30ad621afd74939fd9d6ccbe408ccb0322ecd223c2941fa6b17abfec2fabbe35
+CozyStudio/js/presets.js,projects/CozyStudio/js/presets.js,moved,Independent project,Retain complete application subtree and case,36aa77a82bfd63aaf3406057fb8af893443bc5154254563547e78e68208720a0
+CozyStudio/js/protocol.js,projects/CozyStudio/js/protocol.js,moved,Independent project,Retain complete application subtree and case,e3cacff4de482747f0055120ef8ff9921c8d3f6ad18480b4e48e0d6f530d9576
+CozyStudio/styles.css,projects/CozyStudio/styles.css,moved,Independent project,Retain complete application subtree and case,8e6dc2477f5c4257ffe0d32dea9a8bd9460fa2974cc1cbe4e4d66dc48f7b4225
+bazooka.gif,website/interactive-assets/code/bazooka.gif,moved,Media asset,Code-page interactive resources; not featured in navigation,4fce00997e684a8713cc0e17d5583f016711404291cf6f9da7ef8fa7d89cb1e4
+bazooka.mp3,website/interactive-assets/code/bazooka.mp3,moved,Media asset,Code-page interactive resources; not featured in navigation,2227dacc253a31c1ccf5921357319fbaf2ca580b04be9e211ddccc3b1362cd38
+beacon_tutorial_v2.js,website/scripts/beacon_tutorial_v2.js,moved,Shared resource,Website scripts; publish under unchanged root URLs,a76105016ed7e8bce47a4ad29bc537e4a51eafdc5276cbf29b9f6c0d5bc97dde
+blog.html,website/pages/blog.html,moved,Main website,Beacon of Unity public pages and demo,8e664186c99ad8a39a81f6dba47ac676546d6e1bd5160dbefc949d5d69e6b5a4
+carbon.html,projects/carbon/carbon.html,moved,Independent project,Separate self-contained utility,497e3612d069c26c02728a3c35ea9884a9c5cd320e4b77eb5ca7aa59cc79efee
+code.html,website/pages/code.html,moved,Main website,Beacon of Unity public pages and demo,e568d6e3e97a6621b1d84899c3a0cf4034ce60dda06b592f1d1a4e183acc232f
+contact.html,website/pages/contact.html,moved,Main website,Beacon of Unity public pages and demo,df99c702b55aad7ffb5a8e03b4da801344178fd9b6ddc1d6b940cb6361cf0710
+credits.html,website/pages/credits.html,moved,Main website,Beacon of Unity public pages and demo,52e822dc897669ad684e6d3a4d352d3fabe158ae17bc093e27f853ac15c79225
+dashboard.html,website/app/dashboard.html,moved,Main website,Account application and alternate dashboard,8dc2db4b9ffb8b49c63b167afbdf4721bd28399d778e8c272e37feebe787fc1d
+dashboard_updated.html,website/app/dashboard_updated.html,moved,Main website,Account application and alternate dashboard,a4f3a5b9e3fa262aaeb72693183c4b121817d7b91e93f970c8418c92d8822d00
+data.gif,website/interactive-assets/code/data.gif,moved,Media asset,Code-page interactive resources; not featured in navigation,89df7558db537028ab152bed5858456cf099f1b5857ad82992de71ffe4d2024a
+data.mp3,website/interactive-assets/code/data.mp3,moved,Media asset,Code-page interactive resources; not featured in navigation,c6f4ff47df008e6019fcb23909ff1da23ea1a77eec6cc80c36b160cc9de97e44
+demo.html,website/pages/demo.html,moved,Main website,Beacon of Unity public pages and demo,7c7116ad08deeea5958c830e672d944cefc4087bba096fd5327198985d1672d5
+eysc.html,projects/voltway/eysc.html,moved,Independent project,VoltWay/EYSC presentation and original archive,720f25d4880bc92eda8569e3a5594edc0c9bf2bae46e87e2062aed42115f1e3d
+eysc.zip,projects/voltway/eysc.zip,moved,Independent project,VoltWay/EYSC presentation and original archive,350ed6074d1180bf0a87c292487d62d8feccc0e822405057c8baa37d76735db1
+favicon.ico,assets/branding/favicon.ico,moved,Media asset,Site branding,c95e1ae97ff7f0b325228535f12eb881eded4f19e33a4d8ecbadd87ce14860ad
+focus.html,projects/focus/focus.html,moved,Independent project,Separate self-contained utility,a8619e8dc15a7ca1848a48206fa41b796c78284d7e4edadd3907041a8d260049
+founder.html,website/pages/founder.html,moved,Main website,Beacon of Unity public pages and demo,874b70e843800d6ecff71dd033d983b684140abbd9b2a25144d25a9ece15ea29
+functions/api/archive.js,functions/api/archive.js,kept,Deployment or infrastructure,Keep Cloudflare Pages function discovery at repository root,1af6a6cb90608321786236db1e7ab6aac314d1554dda28c533cb074d5ffbdf47
+functions/api/ephemeris.js,functions/api/ephemeris.js,kept,Deployment or infrastructure,Keep Cloudflare Pages function discovery at repository root,d3344df784f58bcd4f19da89f08373fea01b8848bc99d45c75d97366e75d8e3e
+gods-eye/README.md,projects/gods-eye/README.md,moved,Independent project,Retain complete application subtree and case,49327678c3bb83c79d1ace005b689d4af885871ca01a4c59b0da3d01e31b3cf0
+gods-eye/index.html,projects/gods-eye/index.html,moved,Independent project,Retain complete application subtree and case,09509d47bbed58cabe99646107fbce9eefd45e84b277bf5d430ab00a01761502
+gods-eye/package-lock.json,projects/gods-eye/package-lock.json,moved,Independent project,Retain complete application subtree and case,fb3289ee56a3b53784d8487faf3a86594cd89ba1241e64ff4b5ecb54b551ce68
+gods-eye/package.json,projects/gods-eye/package.json,moved,Independent project,Retain complete application subtree and case,48a130f766e80da2e118472f8313fdaf4bd804faeb5e9120cedc9a283df302d0
+gods-eye/redacted.html,projects/gods-eye/redacted.html,moved,Independent project,Retain complete application subtree and case,3065c36a4c12c2446334419ca10988fe4b724edb33fb30562dced9aed431248c
+gods-eye/src/App.tsx,projects/gods-eye/src/App.tsx,moved,Independent project,Retain complete application subtree and case,5a97fbccf8b4ec4ed8580926f019c9a37b7529ef84e707a4e96eb8ee5c9168a4
+gods-eye/src/components/CameraController.tsx,projects/gods-eye/src/components/CameraController.tsx,moved,Independent project,Retain complete application subtree and case,cb6651bab7a73afa4cc27b8d54539cdd0baaddeaa64bfbb94dbe93397bbf9e84
+gods-eye/src/components/ControlPanel.tsx,projects/gods-eye/src/components/ControlPanel.tsx,moved,Independent project,Retain complete application subtree and case,b6c532c05c35991e308f0fa30d064baf641840ebf8ac05f215f0611778af6dc0
+gods-eye/src/components/LoadingScreen.tsx,projects/gods-eye/src/components/LoadingScreen.tsx,moved,Independent project,Retain complete application subtree and case,9a96626d03f3c551a9a514571c21d9a9fa117df13962f329da75525209bc7e50
+gods-eye/src/components/ObjectInspector.tsx,projects/gods-eye/src/components/ObjectInspector.tsx,moved,Independent project,Retain complete application subtree and case,5bb200bf1b25c3fa926b6104d208adc0c1ba4c022a0bea7da9ce1ceb34d0c314
+gods-eye/src/components/OrbitPath.tsx,projects/gods-eye/src/components/OrbitPath.tsx,moved,Independent project,Retain complete application subtree and case,8fff23dac6e469eb0a304247960f56b6dd70c14d7cd8779ce51eb23be3e45dd0
+gods-eye/src/components/Planet.tsx,projects/gods-eye/src/components/Planet.tsx,moved,Independent project,Retain complete application subtree and case,dfb579d9516b4ba6835c1b178b9b360521123fef3b8c3eb051385aec09cda324
+gods-eye/src/components/PlanetRing.tsx,projects/gods-eye/src/components/PlanetRing.tsx,moved,Independent project,Retain complete application subtree and case,dcbf45700035a4a8eedd14849cf522a551b0d17eea7cfb7a7491c6a0bbdb6832
+gods-eye/src/components/SolarSystem.tsx,projects/gods-eye/src/components/SolarSystem.tsx,moved,Independent project,Retain complete application subtree and case,a075109a7d461f390acb7a21f07a5086fa00c5131f20d6055d2650b4b349ec37
+gods-eye/src/components/StarField.tsx,projects/gods-eye/src/components/StarField.tsx,moved,Independent project,Retain complete application subtree and case,2b783dfcd7abed891368320320f5b5ad167d1c345b4b803381f6fbdcce21dda0
+gods-eye/src/components/Sun.tsx,projects/gods-eye/src/components/Sun.tsx,moved,Independent project,Retain complete application subtree and case,f86d5363ddbda0974c2a6a72af6eb3d51169997a203724a1dac55482d7705bf4
+gods-eye/src/components/Timeline.tsx,projects/gods-eye/src/components/Timeline.tsx,moved,Independent project,Retain complete application subtree and case,88221a72ef0af1bb5629594116c79407e825aaca5c8bc50011c782b2ef79a93e
+gods-eye/src/components/UIOverlay.tsx,projects/gods-eye/src/components/UIOverlay.tsx,moved,Independent project,Retain complete application subtree and case,88fc2ae0113f2d2ead85c6bf7366cb33c4be1c138c5fad0269d0c6680d23d441
+gods-eye/src/data/celestialBodies.ts,projects/gods-eye/src/data/celestialBodies.ts,moved,Independent project,Retain complete application subtree and case,897020e267c74ed2616d53380ca7d4584eb77b2bcb340041352755714e47189a
+gods-eye/src/data/orbitalMechanics.ts,projects/gods-eye/src/data/orbitalMechanics.ts,moved,Independent project,Retain complete application subtree and case,829c3841fa60e926af460afb4a3d4a6e844ba418674ed6b546a0a38825daf368
+gods-eye/src/hooks/useAppState.tsx,projects/gods-eye/src/hooks/useAppState.tsx,moved,Independent project,Retain complete application subtree and case,a04e72608d7755063c7d750e21ceaa769efe2baf43d2b3809f8f857f6cc14545
+gods-eye/src/index.css,projects/gods-eye/src/index.css,moved,Independent project,Retain complete application subtree and case,31009552a997082a0ec0b311ef0b64c73ace7bcb935c298d662c86362e745149
+gods-eye/src/main.tsx,projects/gods-eye/src/main.tsx,moved,Independent project,Retain complete application subtree and case,6e9e5807fcbd48b75a96db5cbef36c996262196be42e6d4760dc86babbe61ad2
+gods-eye/src/types/celestial.ts,projects/gods-eye/src/types/celestial.ts,moved,Independent project,Retain complete application subtree and case,4640c2f10b5b34fab99fd4d8b04ac309f7778a4869163a3df4341dc016e7c0a2
+gods-eye/src/utils/textures.ts,projects/gods-eye/src/utils/textures.ts,moved,Independent project,Retain complete application subtree and case,f8dfbc47002e370591aaeb54558eda09b1d6b908c5a759b73d1c3be7e3870ae9
+gods-eye/tsconfig.app.json,projects/gods-eye/tsconfig.app.json,moved,Independent project,Retain complete application subtree and case,8e5d12ba330e7d86409edec74b95451e0db22ee09b9426c94b5bf817571eddb0
+gods-eye/tsconfig.json,projects/gods-eye/tsconfig.json,moved,Independent project,Retain complete application subtree and case,770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808
+gods-eye/tsconfig.node.json,projects/gods-eye/tsconfig.node.json,moved,Independent project,Retain complete application subtree and case,d366cc0827139db39c61815f22491bbfda56c654354a42ad7795143d314e45e8
+gods-eye/vite.config.ts,projects/gods-eye/vite.config.ts,moved,Independent project,Retain complete application subtree and case,29d04a671726dfbe0ba4cf5da2e5366d76d7c5493f6da5783d6ffe29456ae8de
+hellopotato.html,website/admin/hellopotato.html,moved,Main website,Admin UI; excluded from README navigation,f9c4abb1d6684441a092ab4bf56c2b93621b35f9ef43544dfd536648733640cf
+hero-scene.js,website/scripts/hero-scene.js,moved,Shared resource,Website scripts; publish under unchanged root URLs,53c0b7ffb64bf89cb44f26c79fc04174a9c3a4989bb03369c7509a817b991938
+index.html,website/pages/index.html,moved,Main website,Beacon of Unity public pages and demo,cd0dda63be389a89570b8009b65b1fd701d3d65c656effe411905d6f44be59a0
+index2.html,website/variants/index2.html,moved,Legacy or experimental file,Distinct homepage variants; activity uncertain; preserve access,d7c1ef45f164d4531936e9022864aa70aec2dd753109594cdb462fb971373add
+job.mp3,website/interactive-assets/code/job.mp3,moved,Media asset,Code-page interactive resources; not featured in navigation,65192507d151de439dbc05df98db569c1a072a4535067e75ef927277ae0d8761
+job.png,website/interactive-assets/code/job.png,moved,Media asset,Code-page interactive resources; not featured in navigation,51304fc7ec32c7215d506987aae420f13817289508bd445a1242e8be8bfbee62
+job2.mp3,website/interactive-assets/code/job2.mp3,moved,Media asset,Code-page interactive resources; not featured in navigation,ccc3eb546c658df48b9d5d5ae82f01f2ea8c58af0d2ab80bf2be97b88e4841bd
+login.html,website/app/login.html,moved,Main website,Account application and alternate dashboard,780e7feda875572bac28acce62537c188bc672f806fe98d191e439360d48c73a
+logo.png,assets/branding/logo.png,moved,Media asset,Site branding,b193c8596f248079f5fb4fe7604579d4e5efd92843e5781fb8505bac12839912
+nothing,archive/unclassified/nothing,moved,Unknown — requires investigation,Unidentified content; retain bytes and route,7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6
+oldindex.html,website/variants/oldindex.html,moved,Legacy or experimental file,Distinct homepage variants; activity uncertain; preserve access,f0b1572c4019f231c734fcc49f77085be252aee15540d8dd42567e0770fda40d
+privacy.html,website/pages/privacy.html,moved,Main website,Beacon of Unity public pages and demo,2d535246a63a38cd915036962c57732db90cdc2375fb6d948d7806c2c69c48d1
+rick.gif,website/interactive-assets/code/rick.gif,moved,Media asset,Code-page interactive resources; not featured in navigation,c17833115c4177f0f88e06803621f310d0e173c159b828c1f56ccb072d956b6e
+rick.mp3,website/interactive-assets/code/rick.mp3,moved,Media asset,Code-page interactive resources; not featured in navigation,0781920c38259b5b5c00519b064f20fc7d3b0a3b1967dfdf896ba1e28ba9c62b
+sixseven.mp3,website/interactive-assets/code/sixseven.mp3,moved,Media asset,Code-page interactive resources; not featured in navigation,9b56eddd3e2752735058338db4bce3066d4baa36adc0f210d99d68fe3853f022
+terms.html,website/pages/terms.html,moved,Main website,Beacon of Unity public pages and demo,bc11e91cea210a6cd715bc56f59c97926e061e166f1d3bf1fa9f70cca5ab3066
+trial.html,website/variants/trial.html,moved,Legacy or experimental file,Distinct homepage variants; activity uncertain; preserve access,57d93190ee5c583a9fa4a1e0a14176b4ff8160dd5dbcc7b2daa66c3328ddd1e1
+user.gif,website/interactive-assets/code/user.gif,moved,Media asset,Code-page interactive resources; not featured in navigation,6f6e321f2e1e1601bec050122bff54729942b1b296ca3d6c6ead105f5b4803c5
+user.mp3,website/interactive-assets/code/user.mp3,moved,Media asset,Code-page interactive resources; not featured in navigation,68c2647a49e1a796101833e09ad01b8a30050a503c5c83c359dfbad581acb7ed
+voltwayvideeeo.mp4,projects/voltway/resources/voltwayvideeeo.mp4,moved,Media asset,Retain distinct original filename and placeholder bytes,7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6
+voltwayvideeo.mp4,projects/voltway/resources/voltwayvideeo.mp4,moved,Media asset,Retain distinct original filename and placeholder bytes,7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6
+voltwayvideo.mp4,voltwayvideo.mp4,kept,Media asset,Required raw.githubusercontent.com/main URL; retain canonical root file,abd6ece77246d9d1a3142ea9080afc5079f654158d93f15696923036b9cbbe5b

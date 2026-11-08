@@ -1,0 +1,1190 @@
+[
+  {
+    "url": "https://beaconofunity.com/",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 309825,
+    "sha256": "f5301e6260b498d346d60916ce7b511dccdaba88c1eae04f441b678f0ce4ae0c"
+  },
+  {
+    "url": "https://beaconofunity.com/.assetsignore",
+    "status": 404,
+    "final_url": "https://beaconofunity.com/.assetsignore",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://beaconofunity.com/67.gif",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/67.gif",
+    "redirects": [],
+    "content_type": "image/gif",
+    "bytes": 2786714,
+    "sha256": "b7746cd80638fb974230b2a8116ec270306ca46512bd6826ce33c11ed0d80232"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/",
+    "status": 404,
+    "final_url": "https://beaconofunity.com/CozyStudio/",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/README.md",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/CozyStudio/README.md",
+    "redirects": [],
+    "content_type": "text/markdown",
+    "bytes": 5376,
+    "sha256": "8ba48e02e05769f62db9678575b71d44764dda1b619ccabcb922828ce3df0c51"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/index",
+    "status": 404,
+    "final_url": "https://beaconofunity.com/CozyStudio/index",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/index.html",
+    "status": 404,
+    "final_url": "https://beaconofunity.com/CozyStudio/index.html",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/js/animations.js",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/CozyStudio/js/animations.js",
+    "redirects": [],
+    "content_type": "text/javascript",
+    "bytes": 2946,
+    "sha256": "77cb634f817c5325d8027b0de71ac9925f94a5dacff7780d41f14f1b1d14c1e9"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/js/app.js",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/CozyStudio/js/app.js",
+    "redirects": [],
+    "content_type": "text/javascript",
+    "bytes": 14220,
+    "sha256": "a22bae587e985eb371ba5427329b8b8e60a2b3a359ef4d158f5629d1f0f3408f"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/js/bluetooth.js",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/CozyStudio/js/bluetooth.js",
+    "redirects": [],
+    "content_type": "text/javascript",
+    "bytes": 4199,
+    "sha256": "30ad621afd74939fd9d6ccbe408ccb0322ecd223c2941fa6b17abfec2fabbe35"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/js/presets.js",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/CozyStudio/js/presets.js",
+    "redirects": [],
+    "content_type": "text/javascript",
+    "bytes": 1634,
+    "sha256": "36aa77a82bfd63aaf3406057fb8af893443bc5154254563547e78e68208720a0"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/js/protocol.js",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/CozyStudio/js/protocol.js",
+    "redirects": [],
+    "content_type": "text/javascript",
+    "bytes": 1668,
+    "sha256": "e3cacff4de482747f0055120ef8ff9921c8d3f6ad18480b4e48e0d6f530d9576"
+  },
+  {
+    "url": "https://beaconofunity.com/CozyStudio/styles.css",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/CozyStudio/styles.css",
+    "redirects": [],
+    "content_type": "text/css",
+    "bytes": 4097,
+    "sha256": "8e6dc2477f5c4257ffe0d32dea9a8bd9460fa2974cc1cbe4e4d66dc48f7b4225"
+  },
+  {
+    "url": "https://beaconofunity.com/api/archive",
+    "status": 404,
+    "final_url": "https://beaconofunity.com/api/archive",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://beaconofunity.com/bazooka.gif",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/bazooka.gif",
+    "redirects": [],
+    "content_type": "image/gif",
+    "bytes": 2110688,
+    "sha256": "4fce00997e684a8713cc0e17d5583f016711404291cf6f9da7ef8fa7d89cb1e4"
+  },
+  {
+    "url": "https://beaconofunity.com/bazooka.mp3",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/bazooka.mp3",
+    "redirects": [],
+    "content_type": "audio/mpeg",
+    "bytes": 136400,
+    "sha256": "2227dacc253a31c1ccf5921357319fbaf2ca580b04be9e211ddccc3b1362cd38"
+  },
+  {
+    "url": "https://beaconofunity.com/beacon_tutorial_v2.js",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/beacon_tutorial_v2.js",
+    "redirects": [],
+    "content_type": "text/javascript",
+    "bytes": 41371,
+    "sha256": "a76105016ed7e8bce47a4ad29bc537e4a51eafdc5276cbf29b9f6c0d5bc97dde"
+  },
+  {
+    "url": "https://beaconofunity.com/blog",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/blog",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 183223,
+    "sha256": "58189c37b0ad8328c8b68a09b7b657a465e297e998aa1616b2f2e8f3f8a943c3"
+  },
+  {
+    "url": "https://beaconofunity.com/blog.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/blog",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/blog.html",
+        "to_url": "https://beaconofunity.com/blog"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 183223,
+    "sha256": "58189c37b0ad8328c8b68a09b7b657a465e297e998aa1616b2f2e8f3f8a943c3"
+  },
+  {
+    "url": "https://beaconofunity.com/carbon",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/carbon",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 314448,
+    "sha256": "5a1bcaaeeda1203546c405196c95ef4485a8a4ff6141eb80833b5f12c2f2749e"
+  },
+  {
+    "url": "https://beaconofunity.com/carbon.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/carbon",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/carbon.html",
+        "to_url": "https://beaconofunity.com/carbon"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 314448,
+    "sha256": "5a1bcaaeeda1203546c405196c95ef4485a8a4ff6141eb80833b5f12c2f2749e"
+  },
+  {
+    "url": "https://beaconofunity.com/code",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/code",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 74293,
+    "sha256": "c9e459cea077e760e4b8634914e0cfeaa8bd8e3eac7447f70ca7599c37a8235a"
+  },
+  {
+    "url": "https://beaconofunity.com/code.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/code",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/code.html",
+        "to_url": "https://beaconofunity.com/code"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 74293,
+    "sha256": "c9e459cea077e760e4b8634914e0cfeaa8bd8e3eac7447f70ca7599c37a8235a"
+  },
+  {
+    "url": "https://beaconofunity.com/contact",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/contact",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 141984,
+    "sha256": "4ccb51c94fcebb422833ead4754500b2e12e4b0d1a2f34543a7dc89179a204bb"
+  },
+  {
+    "url": "https://beaconofunity.com/contact.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/contact",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/contact.html",
+        "to_url": "https://beaconofunity.com/contact"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 141984,
+    "sha256": "4ccb51c94fcebb422833ead4754500b2e12e4b0d1a2f34543a7dc89179a204bb"
+  },
+  {
+    "url": "https://beaconofunity.com/credits",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/credits",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 38457,
+    "sha256": "97c948f3b22add086a318ed52c2d1df499651c4d88485c602be107729d45d346"
+  },
+  {
+    "url": "https://beaconofunity.com/credits.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/credits",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/credits.html",
+        "to_url": "https://beaconofunity.com/credits"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 38457,
+    "sha256": "97c948f3b22add086a318ed52c2d1df499651c4d88485c602be107729d45d346"
+  },
+  {
+    "url": "https://beaconofunity.com/dashboard",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/dashboard",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 564326,
+    "sha256": "41ba4d15ce68deaf23669b768670fcc784ff43b77b0780f7d3ee39d71427a719"
+  },
+  {
+    "url": "https://beaconofunity.com/dashboard.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/dashboard",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/dashboard.html",
+        "to_url": "https://beaconofunity.com/dashboard"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 564326,
+    "sha256": "41ba4d15ce68deaf23669b768670fcc784ff43b77b0780f7d3ee39d71427a719"
+  },
+  {
+    "url": "https://beaconofunity.com/dashboard_updated",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/dashboard_updated",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 613024,
+    "sha256": "b0863f59007403f59d97dadafb23a5b47cb56414da1126198510459eaadc2fdb"
+  },
+  {
+    "url": "https://beaconofunity.com/dashboard_updated.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/dashboard_updated",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/dashboard_updated.html",
+        "to_url": "https://beaconofunity.com/dashboard_updated"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 613024,
+    "sha256": "b0863f59007403f59d97dadafb23a5b47cb56414da1126198510459eaadc2fdb"
+  },
+  {
+    "url": "https://beaconofunity.com/data.gif",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/data.gif",
+    "redirects": [],
+    "content_type": "image/gif",
+    "bytes": 203733,
+    "sha256": "89df7558db537028ab152bed5858456cf099f1b5857ad82992de71ffe4d2024a"
+  },
+  {
+    "url": "https://beaconofunity.com/data.mp3",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/data.mp3",
+    "redirects": [],
+    "content_type": "audio/mpeg",
+    "bytes": 261267,
+    "sha256": "c6f4ff47df008e6019fcb23909ff1da23ea1a77eec6cc80c36b160cc9de97e44"
+  },
+  {
+    "url": "https://beaconofunity.com/demo",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/demo",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 18012,
+    "sha256": "434b25071fa04ce73fdb93b2d456e260a37e54eac6af493eb04e36d40d706225"
+  },
+  {
+    "url": "https://beaconofunity.com/demo.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/demo",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/demo.html",
+        "to_url": "https://beaconofunity.com/demo"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 18012,
+    "sha256": "434b25071fa04ce73fdb93b2d456e260a37e54eac6af493eb04e36d40d706225"
+  },
+  {
+    "url": "https://beaconofunity.com/eysc",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/eysc",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 5073,
+    "sha256": "427278aec8202221f55a8b379b52715324fa1b3d2b8fef3d3c2593f8320214e6"
+  },
+  {
+    "url": "https://beaconofunity.com/eysc.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/eysc",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/eysc.html",
+        "to_url": "https://beaconofunity.com/eysc"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 5073,
+    "sha256": "427278aec8202221f55a8b379b52715324fa1b3d2b8fef3d3c2593f8320214e6"
+  },
+  {
+    "url": "https://beaconofunity.com/eysc.zip",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/eysc.zip",
+    "redirects": [],
+    "content_type": "application/zip",
+    "bytes": 144,
+    "sha256": "350ed6074d1180bf0a87c292487d62d8feccc0e822405057c8baa37d76735db1"
+  },
+  {
+    "url": "https://beaconofunity.com/favicon.ico",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/favicon.ico",
+    "redirects": [],
+    "content_type": "image/vnd.microsoft.icon",
+    "bytes": 99678,
+    "sha256": "c95e1ae97ff7f0b325228535f12eb881eded4f19e33a4d8ecbadd87ce14860ad"
+  },
+  {
+    "url": "https://beaconofunity.com/focus",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/focus",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 2295,
+    "sha256": "cb6d781abaf62566bfbb6a9986c28956ea2f035c0559ca83bed98bb37a03ce9c"
+  },
+  {
+    "url": "https://beaconofunity.com/focus.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/focus",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/focus.html",
+        "to_url": "https://beaconofunity.com/focus"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 2295,
+    "sha256": "cb6d781abaf62566bfbb6a9986c28956ea2f035c0559ca83bed98bb37a03ce9c"
+  },
+  {
+    "url": "https://beaconofunity.com/founder",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/founder",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 281335,
+    "sha256": "93f53237901ae8cec4c867c12c0b8998d9407c1f83ad5580396694b811831046"
+  },
+  {
+    "url": "https://beaconofunity.com/founder.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/founder",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/founder.html",
+        "to_url": "https://beaconofunity.com/founder"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 281335,
+    "sha256": "93f53237901ae8cec4c867c12c0b8998d9407c1f83ad5580396694b811831046"
+  },
+  {
+    "url": "https://beaconofunity.com/functions/api/archive.js",
+    "status": 404,
+    "final_url": "https://beaconofunity.com/functions/api/archive.js",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://beaconofunity.com/functions/api/ephemeris.js",
+    "status": 404,
+    "final_url": "https://beaconofunity.com/functions/api/ephemeris.js",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 161812,
+    "sha256": "9db62a1b25bce0969e2ba522cb94f29c08b21adc5e24fbbf6bd79887d2d51f57"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/README.md",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/README.md",
+    "redirects": [],
+    "content_type": "text/markdown",
+    "bytes": 2015,
+    "sha256": "49327678c3bb83c79d1ace005b689d4af885871ca01a4c59b0da3d01e31b3cf0"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/index",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/gods-eye/index",
+        "to_url": "https://beaconofunity.com/gods-eye/"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 161812,
+    "sha256": "9db62a1b25bce0969e2ba522cb94f29c08b21adc5e24fbbf6bd79887d2d51f57"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/index.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/gods-eye/index.html",
+        "to_url": "https://beaconofunity.com/gods-eye/"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 161812,
+    "sha256": "9db62a1b25bce0969e2ba522cb94f29c08b21adc5e24fbbf6bd79887d2d51f57"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/package-lock.json",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/package-lock.json",
+    "redirects": [],
+    "content_type": "application/json",
+    "bytes": 95552,
+    "sha256": "fb3289ee56a3b53784d8487faf3a86594cd89ba1241e64ff4b5ecb54b551ce68"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/package.json",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/package.json",
+    "redirects": [],
+    "content_type": "application/json",
+    "bytes": 778,
+    "sha256": "48a130f766e80da2e118472f8313fdaf4bd804faeb5e9120cedc9a283df302d0"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/redacted",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/redacted",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 663,
+    "sha256": "f4e252f283c8f98d318d601fd78137f9f62ac6716f5179f5991ff2d2f9d9c5f6"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/redacted.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/redacted",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/gods-eye/redacted.html",
+        "to_url": "https://beaconofunity.com/gods-eye/redacted"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 663,
+    "sha256": "f4e252f283c8f98d318d601fd78137f9f62ac6716f5179f5991ff2d2f9d9c5f6"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/App.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/App.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 2002,
+    "sha256": "5a97fbccf8b4ec4ed8580926f019c9a37b7529ef84e707a4e96eb8ee5c9168a4"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/CameraController.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/CameraController.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 1760,
+    "sha256": "cb6651bab7a73afa4cc27b8d54539cdd0baaddeaa64bfbb94dbe93397bbf9e84"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/ControlPanel.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/ControlPanel.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 1611,
+    "sha256": "b6c532c05c35991e308f0fa30d064baf641840ebf8ac05f215f0611778af6dc0"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/LoadingScreen.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/LoadingScreen.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 6279,
+    "sha256": "9a96626d03f3c551a9a514571c21d9a9fa117df13962f329da75525209bc7e50"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/ObjectInspector.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/ObjectInspector.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 5232,
+    "sha256": "5bb200bf1b25c3fa926b6104d208adc0c1ba4c022a0bea7da9ce1ceb34d0c314"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/OrbitPath.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/OrbitPath.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 767,
+    "sha256": "8fff23dac6e469eb0a304247960f56b6dd70c14d7cd8779ce51eb23be3e45dd0"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/Planet.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/Planet.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 4473,
+    "sha256": "dfb579d9516b4ba6835c1b178b9b360521123fef3b8c3eb051385aec09cda324"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/PlanetRing.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/PlanetRing.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 1188,
+    "sha256": "dcbf45700035a4a8eedd14849cf522a551b0d17eea7cfb7a7491c6a0bbdb6832"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/SolarSystem.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/SolarSystem.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 1789,
+    "sha256": "a075109a7d461f390acb7a21f07a5086fa00c5131f20d6055d2650b4b349ec37"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/StarField.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/StarField.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 2751,
+    "sha256": "2b783dfcd7abed891368320320f5b5ad167d1c345b4b803381f6fbdcce21dda0"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/Sun.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/Sun.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 1619,
+    "sha256": "f86d5363ddbda0974c2a6a72af6eb3d51169997a203724a1dac55482d7705bf4"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/Timeline.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/Timeline.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 2876,
+    "sha256": "88221a72ef0af1bb5629594116c79407e825aaca5c8bc50011c782b2ef79a93e"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/components/UIOverlay.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/components/UIOverlay.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 1383,
+    "sha256": "88fc2ae0113f2d2ead85c6bf7366cb33c4be1c138c5fad0269d0c6680d23d441"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/data/celestialBodies.ts",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/data/celestialBodies.ts",
+    "redirects": [],
+    "content_type": "video/mp2t",
+    "bytes": 7821,
+    "sha256": "897020e267c74ed2616d53380ca7d4584eb77b2bcb340041352755714e47189a"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/data/orbitalMechanics.ts",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/data/orbitalMechanics.ts",
+    "redirects": [],
+    "content_type": "video/mp2t",
+    "bytes": 2730,
+    "sha256": "829c3841fa60e926af460afb4a3d4a6e844ba418674ed6b546a0a38825daf368"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/hooks/useAppState.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/hooks/useAppState.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 4173,
+    "sha256": "a04e72608d7755063c7d750e21ceaa769efe2baf43d2b3809f8f857f6cc14545"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/index.css",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/index.css",
+    "redirects": [],
+    "content_type": "text/css",
+    "bytes": 1336,
+    "sha256": "31009552a997082a0ec0b311ef0b64c73ace7bcb935c298d662c86362e745149"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/main.tsx",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/main.tsx",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 230,
+    "sha256": "6e9e5807fcbd48b75a96db5cbef36c996262196be42e6d4760dc86babbe61ad2"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/types/celestial.ts",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/types/celestial.ts",
+    "redirects": [],
+    "content_type": "video/mp2t",
+    "bytes": 2555,
+    "sha256": "4640c2f10b5b34fab99fd4d8b04ac309f7778a4869163a3df4341dc016e7c0a2"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/src/utils/textures.ts",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/src/utils/textures.ts",
+    "redirects": [],
+    "content_type": "video/mp2t",
+    "bytes": 5904,
+    "sha256": "f8dfbc47002e370591aaeb54558eda09b1d6b908c5a759b73d1c3be7e3870ae9"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/tsconfig.app.json",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/tsconfig.app.json",
+    "redirects": [],
+    "content_type": "application/json",
+    "bytes": 655,
+    "sha256": "8e5d12ba330e7d86409edec74b95451e0db22ee09b9426c94b5bf817571eddb0"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/tsconfig.json",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/tsconfig.json",
+    "redirects": [],
+    "content_type": "application/json",
+    "bytes": 119,
+    "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/tsconfig.node.json",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/tsconfig.node.json",
+    "redirects": [],
+    "content_type": "application/json",
+    "bytes": 558,
+    "sha256": "d366cc0827139db39c61815f22491bbfda56c654354a42ad7795143d314e45e8"
+  },
+  {
+    "url": "https://beaconofunity.com/gods-eye/vite.config.ts",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/gods-eye/vite.config.ts",
+    "redirects": [],
+    "content_type": "video/mp2t",
+    "bytes": 192,
+    "sha256": "29d04a671726dfbe0ba4cf5da2e5366d76d7c5493f6da5783d6ffe29456ae8de"
+  },
+  {
+    "url": "https://beaconofunity.com/hellopotato",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/hellopotato",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 34095,
+    "sha256": "d18b6a1dbcbcedb1bc179ed01adad86686ad5d01847258108d1acd23d64e5a3f"
+  },
+  {
+    "url": "https://beaconofunity.com/hellopotato.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/hellopotato",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/hellopotato.html",
+        "to_url": "https://beaconofunity.com/hellopotato"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 34095,
+    "sha256": "d18b6a1dbcbcedb1bc179ed01adad86686ad5d01847258108d1acd23d64e5a3f"
+  },
+  {
+    "url": "https://beaconofunity.com/hero-scene.js",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/hero-scene.js",
+    "redirects": [],
+    "content_type": "text/javascript",
+    "bytes": 48129,
+    "sha256": "53c0b7ffb64bf89cb44f26c79fc04174a9c3a4989bb03369c7509a817b991938"
+  },
+  {
+    "url": "https://beaconofunity.com/index",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/index",
+        "to_url": "https://beaconofunity.com/"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 309825,
+    "sha256": "f5301e6260b498d346d60916ce7b511dccdaba88c1eae04f441b678f0ce4ae0c"
+  },
+  {
+    "url": "https://beaconofunity.com/index.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/index.html",
+        "to_url": "https://beaconofunity.com/"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 309825,
+    "sha256": "f5301e6260b498d346d60916ce7b511dccdaba88c1eae04f441b678f0ce4ae0c"
+  },
+  {
+    "url": "https://beaconofunity.com/index2",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/index2",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 320594,
+    "sha256": "16c78197f57e7e2a8fd07af4eb4a4ef8e9ae2b5b76d51ab71e20bf27ddd1d057"
+  },
+  {
+    "url": "https://beaconofunity.com/index2.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/index2",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/index2.html",
+        "to_url": "https://beaconofunity.com/index2"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 320594,
+    "sha256": "16c78197f57e7e2a8fd07af4eb4a4ef8e9ae2b5b76d51ab71e20bf27ddd1d057"
+  },
+  {
+    "url": "https://beaconofunity.com/job.mp3",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/job.mp3",
+    "redirects": [],
+    "content_type": "audio/mpeg",
+    "bytes": 113094,
+    "sha256": "65192507d151de439dbc05df98db569c1a072a4535067e75ef927277ae0d8761"
+  },
+  {
+    "url": "https://beaconofunity.com/job.png",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/job.png",
+    "redirects": [],
+    "content_type": "image/png",
+    "bytes": 207271,
+    "sha256": "51304fc7ec32c7215d506987aae420f13817289508bd445a1242e8be8bfbee62"
+  },
+  {
+    "url": "https://beaconofunity.com/job2.mp3",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/job2.mp3",
+    "redirects": [],
+    "content_type": "audio/mpeg",
+    "bytes": 29805,
+    "sha256": "ccc3eb546c658df48b9d5d5ae82f01f2ea8c58af0d2ab80bf2be97b88e4841bd"
+  },
+  {
+    "url": "https://beaconofunity.com/login",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/login",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 149459,
+    "sha256": "5b45ce85c5f0f250cceab5e2b0183abd2ec1d64ebdce16305240b7ef518f8df1"
+  },
+  {
+    "url": "https://beaconofunity.com/login.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/login",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/login.html",
+        "to_url": "https://beaconofunity.com/login"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 149459,
+    "sha256": "5b45ce85c5f0f250cceab5e2b0183abd2ec1d64ebdce16305240b7ef518f8df1"
+  },
+  {
+    "url": "https://beaconofunity.com/logo.png",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/logo.png",
+    "redirects": [],
+    "content_type": "image/png",
+    "bytes": 503188,
+    "sha256": "b193c8596f248079f5fb4fe7604579d4e5efd92843e5781fb8505bac12839912"
+  },
+  {
+    "url": "https://beaconofunity.com/nothing",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/nothing",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 2,
+    "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+  },
+  {
+    "url": "https://beaconofunity.com/old",
+    "status": 404,
+    "final_url": "https://beaconofunity.com/old",
+    "redirects": [],
+    "content_type": null,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://beaconofunity.com/oldindex",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/oldindex",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 253376,
+    "sha256": "3a73866f34f0ac556810197f4ab1387a65d1c57a92cffe26d5d642a6634beac4"
+  },
+  {
+    "url": "https://beaconofunity.com/oldindex.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/oldindex",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/oldindex.html",
+        "to_url": "https://beaconofunity.com/oldindex"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 253376,
+    "sha256": "3a73866f34f0ac556810197f4ab1387a65d1c57a92cffe26d5d642a6634beac4"
+  },
+  {
+    "url": "https://beaconofunity.com/privacy",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/privacy",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 139965,
+    "sha256": "2c5fcca0372167a723e3360bd434956dfd548dcd162148af210a63fd3e838ab1"
+  },
+  {
+    "url": "https://beaconofunity.com/privacy.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/privacy",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/privacy.html",
+        "to_url": "https://beaconofunity.com/privacy"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 139965,
+    "sha256": "2c5fcca0372167a723e3360bd434956dfd548dcd162148af210a63fd3e838ab1"
+  },
+  {
+    "url": "https://beaconofunity.com/rick.gif",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/rick.gif",
+    "redirects": [],
+    "content_type": "image/gif",
+    "bytes": 3522340,
+    "sha256": "c17833115c4177f0f88e06803621f310d0e173c159b828c1f56ccb072d956b6e"
+  },
+  {
+    "url": "https://beaconofunity.com/rick.mp3",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/rick.mp3",
+    "redirects": [],
+    "content_type": "audio/mpeg",
+    "bytes": 272762,
+    "sha256": "0781920c38259b5b5c00519b064f20fc7d3b0a3b1967dfdf896ba1e28ba9c62b"
+  },
+  {
+    "url": "https://beaconofunity.com/sixseven.mp3",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/sixseven.mp3",
+    "redirects": [],
+    "content_type": "audio/mpeg",
+    "bytes": 244444,
+    "sha256": "9b56eddd3e2752735058338db4bce3066d4baa36adc0f210d99d68fe3853f022"
+  },
+  {
+    "url": "https://beaconofunity.com/social",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/social",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 1097,
+    "sha256": "b51b69f70c8b562f01fd1a7cd1694746aea2e925aa8289e0da19032e46ea525e"
+  },
+  {
+    "url": "https://beaconofunity.com/social/",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/social/",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 1097,
+    "sha256": "b51b69f70c8b562f01fd1a7cd1694746aea2e925aa8289e0da19032e46ea525e"
+  },
+  {
+    "url": "https://beaconofunity.com/socialdemo",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/socialdemo",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 1097,
+    "sha256": "b51b69f70c8b562f01fd1a7cd1694746aea2e925aa8289e0da19032e46ea525e"
+  },
+  {
+    "url": "https://beaconofunity.com/socialdemo/",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/socialdemo/",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 1097,
+    "sha256": "b51b69f70c8b562f01fd1a7cd1694746aea2e925aa8289e0da19032e46ea525e"
+  },
+  {
+    "url": "https://beaconofunity.com/terms",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/terms",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 141138,
+    "sha256": "771fdce2e9e55578fc90bdef71d4a22bdb981643a931dd65844fc1902543e378"
+  },
+  {
+    "url": "https://beaconofunity.com/terms.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/terms",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/terms.html",
+        "to_url": "https://beaconofunity.com/terms"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 141138,
+    "sha256": "771fdce2e9e55578fc90bdef71d4a22bdb981643a931dd65844fc1902543e378"
+  },
+  {
+    "url": "https://beaconofunity.com/trial",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/trial",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 275802,
+    "sha256": "6343c43ee5dfc5a19d71321079f1553770b364a83815c437ab0d5dc8959f3802"
+  },
+  {
+    "url": "https://beaconofunity.com/trial.html",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/trial",
+    "redirects": [
+      {
+        "status": 307,
+        "from_url": "https://beaconofunity.com/trial.html",
+        "to_url": "https://beaconofunity.com/trial"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 275802,
+    "sha256": "6343c43ee5dfc5a19d71321079f1553770b364a83815c437ab0d5dc8959f3802"
+  },
+  {
+    "url": "https://beaconofunity.com/user.gif",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/user.gif",
+    "redirects": [],
+    "content_type": "image/gif",
+    "bytes": 4072419,
+    "sha256": "6f6e321f2e1e1601bec050122bff54729942b1b296ca3d6c6ead105f5b4803c5"
+  },
+  {
+    "url": "https://beaconofunity.com/user.mp3",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/user.mp3",
+    "redirects": [],
+    "content_type": "audio/mpeg",
+    "bytes": 303883,
+    "sha256": "68c2647a49e1a796101833e09ad01b8a30050a503c5c83c359dfbad581acb7ed"
+  },
+  {
+    "url": "https://beaconofunity.com/voltwayvideeeo.mp4",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/voltwayvideeeo.mp4",
+    "redirects": [],
+    "content_type": "video/mp4",
+    "bytes": 2,
+    "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+  },
+  {
+    "url": "https://beaconofunity.com/voltwayvideeo.mp4",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/voltwayvideeo.mp4",
+    "redirects": [],
+    "content_type": "video/mp4",
+    "bytes": 2,
+    "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+  },
+  {
+    "url": "https://beaconofunity.com/voltwayvideo.mp4",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/voltwayvideo.mp4",
+    "redirects": [],
+    "content_type": "video/mp4",
+    "bytes": 23527562,
+    "sha256": "abd6ece77246d9d1a3142ea9080afc5079f654158d93f15696923036b9cbbe5b"
+  },
+  {
+    "url": "http://beaconofunity.com/",
+    "status": 200,
+    "final_url": "http://beaconofunity.com/",
+    "redirects": [],
+    "content_type": "text/html",
+    "bytes": 309825,
+    "sha256": "f5301e6260b498d346d60916ce7b511dccdaba88c1eae04f441b678f0ce4ae0c"
+  },
+  {
+    "url": "https://www.beaconofunity.com/",
+    "status": 200,
+    "final_url": "https://beaconofunity.com/",
+    "redirects": [
+      {
+        "status": 301,
+        "from_url": "https://www.beaconofunity.com/",
+        "to_url": "https://beaconofunity.com/"
+      }
+    ],
+    "content_type": "text/html",
+    "bytes": 309825,
+    "sha256": "f5301e6260b498d346d60916ce7b511dccdaba88c1eae04f441b678f0ce4ae0c"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/ANSHUMANTheOne/beacon-of-unity/main/voltwayvideo.mp4",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/ANSHUMANTheOne/beacon-of-unity/main/voltwayvideo.mp4",
+    "redirects": [],
+    "content_type": "application/octet-stream",
+    "bytes": 23527562,
+    "sha256": "abd6ece77246d9d1a3142ea9080afc5079f654158d93f15696923036b9cbbe5b"
+  },
+  {
+    "url": "https://anshumantheone.github.io/beacon-of-unity/voltwayvideo.mp4",
+    "status": 200,
+    "final_url": "https://anshumantheone.github.io/beacon-of-unity/voltwayvideo.mp4",
+    "redirects": [],
+    "content_type": "video/mp4",
+    "bytes": 23527562,
+    "sha256": "abd6ece77246d9d1a3142ea9080afc5079f654158d93f15696923036b9cbbe5b"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "files": 148,
+  "passed": true,
+  "errors": [],
+  "baseline": "77f3d901930729f5a3af72ec371ffdca7a85a3f9",
+  "declared_source_updates": [
+    ".assetsignore",
+    "CozyStudio/js/animations.js",
+    "CozyStudio/js/presets.js",
+    "beacon_tutorial_v2.js",
+    "blog.html",
+    "carbon.html",
+    "code.html",
+    "contact.html",
+    "credits.html",
+    "dashboard.html",
+    "dashboard_updated.html",
+    "demo.html",
+    "focus.html",
+    "founder.html",
+    "gods-eye/README.md",
+    "gods-eye/index.html",
+    "hellopotato.html",
+    "hero-scene.js",
+    "index.html",
+    "index2.html",
+    "login.html",
+    "oldindex.html",
+    "privacy.html",
+    "terms.html",
+    "trial.html"
+  ],
+  "functional_repairs": [
+    "CozyStudio/js/animations.js",
+    "CozyStudio/js/presets.js"
+  ]
+}

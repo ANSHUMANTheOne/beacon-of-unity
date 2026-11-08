@@ -1,0 +1,146 @@
+[
+  {
+    "case": "social",
+    "mobile": false,
+    "checks": [
+      {
+        "name": "entry returns HTML",
+        "passed": true
+      },
+      {
+        "name": "anonymous user receives sign-in view",
+        "passed": true
+      },
+      {
+        "name": "signup form can open without submitting",
+        "passed": true
+      },
+      {
+        "name": "no uncaught browser errors",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "failure": null,
+    "page_errors": [],
+    "blocked_mutations": []
+  },
+  {
+    "case": "socialdemo",
+    "mobile": false,
+    "checks": [
+      {
+        "name": "entry returns HTML",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Discover",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Reels",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Deep focus",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Messages",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Profile",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Home",
+        "passed": true
+      },
+      {
+        "name": "demo remains on its own route",
+        "passed": true
+      },
+      {
+        "name": "no uncaught browser errors",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "failure": null,
+    "page_errors": [],
+    "blocked_mutations": []
+  },
+  {
+    "case": "social",
+    "mobile": true,
+    "checks": [
+      {
+        "name": "entry returns HTML",
+        "passed": true
+      },
+      {
+        "name": "anonymous user receives sign-in view",
+        "passed": true
+      },
+      {
+        "name": "signup form can open without submitting",
+        "passed": true
+      },
+      {
+        "name": "no uncaught browser errors",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "failure": null,
+    "page_errors": [],
+    "blocked_mutations": []
+  },
+  {
+    "case": "socialdemo",
+    "mobile": true,
+    "checks": [
+      {
+        "name": "entry returns HTML",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Discover",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Reels",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Deep focus",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Messages",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Profile",
+        "passed": true
+      },
+      {
+        "name": "demo navigation Home",
+        "passed": true
+      },
+      {
+        "name": "demo remains on its own route",
+        "passed": true
+      },
+      {
+        "name": "no uncaught browser errors",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "failure": null,
+    "page_errors": [],
+    "blocked_mutations": []
+  }
+]
