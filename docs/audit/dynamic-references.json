@@ -1,0 +1,2202 @@
+[
+  {
+    "branch": "main",
+    "path": "CozyStudio/js/app.js",
+    "line": 68,
+    "mechanisms": [
+      ".href="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "CozyStudio/js/app.js",
+    "line": 69,
+    "mechanisms": [
+      "import("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "CozyStudio/js/presets.js",
+    "line": 13,
+    "mechanisms": [
+      "import("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "beacon_tutorial_v2.js",
+    "line": 73,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "beacon_tutorial_v2.js",
+    "line": 74,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "beacon_tutorial_v2.js",
+    "line": 75,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "beacon_tutorial_v2.js",
+    "line": 77,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "beacon_tutorial_v2.js",
+    "line": 78,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "beacon_tutorial_v2.js",
+    "line": 82,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "beacon_tutorial_v2.js",
+    "line": 90,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "beacon_tutorial_v2.js",
+    "line": 117,
+    "mechanisms": []
+  },
+  {
+    "branch": "main",
+    "path": "blog.html",
+    "line": 272,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "blog.html",
+    "line": 426,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "carbon.html",
+    "line": 507,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "carbon.html",
+    "line": 668,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "carbon.html",
+    "line": 669,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "carbon.html",
+    "line": 670,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "carbon.html",
+    "line": 672,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "carbon.html",
+    "line": 674,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "carbon.html",
+    "line": 681,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "carbon.html",
+    "line": 691,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 328,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 329,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 330,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 332,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 334,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 341,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 351,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 503,
+    "mechanisms": [
+      ".href="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 738,
+    "mechanisms": [
+      "new Audio"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 788,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 801,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 812,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 822,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 836,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 837,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "code.html",
+    "line": 848,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "contact.html",
+    "line": 245,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "credits.html",
+    "line": 251,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "credits.html",
+    "line": 252,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 2469,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 2479,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 2526,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 2534,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 2567,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 2629,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 3134,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 3392,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 4452,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 4729,
+    "mechanisms": [
+      "location.hostname"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 4779,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 4789,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 4815,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 4954,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5158,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5577,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5643,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5889,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5890,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5891,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5893,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5894,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5898,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard.html",
+    "line": 5906,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 2148,
+    "mechanisms": [
+      "location.search",
+      "new URL"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 2479,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 2489,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 2544,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 2577,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 2639,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 3166,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 3417,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 4483,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 4760,
+    "mechanisms": [
+      "location.hostname"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 4810,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 4820,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 4846,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 4985,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5189,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5636,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5702,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5950,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5951,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5952,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5954,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5955,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5959,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 5967,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "dashboard_updated.html",
+    "line": 6870,
+    "mechanisms": []
+  },
+  {
+    "branch": "main",
+    "path": "eysc.html",
+    "line": 247,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "eysc.html",
+    "line": 250,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "eysc.html",
+    "line": 251,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/archive.js",
+    "line": 6,
+    "mechanisms": [
+      "new URL"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/archive.js",
+    "line": 23,
+    "mechanisms": [
+      "new URL"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/archive.js",
+    "line": 24,
+    "mechanisms": [
+      "new URL"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/archive.js",
+    "line": 30,
+    "mechanisms": [
+      "new URL"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/archive.js",
+    "line": 31,
+    "mechanisms": [
+      "new URL"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/archive.js",
+    "line": 35,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/ephemeris.js",
+    "line": 4,
+    "mechanisms": [
+      "new URL"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/ephemeris.js",
+    "line": 12,
+    "mechanisms": [
+      "new URL"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "functions/api/ephemeris.js",
+    "line": 20,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "gods-eye/index.html",
+    "line": 8,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "gods-eye/index.html",
+    "line": 450,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "gods-eye/src/components/LoadingScreen.tsx",
+    "line": 128,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "gods-eye/src/index.css",
+    "line": 1,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "hellopotato.html",
+    "line": 466,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 989,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 1017,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 1097,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 1152,
+    "mechanisms": []
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 1299,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 1309,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 1344,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 1391,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 1392,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 3135,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 3138,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 3143,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 3151,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 3156,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 3166,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 3193,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 4275,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 4283,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 4326,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index.html",
+    "line": 4337,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1233,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1261,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1341,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1398,
+    "mechanisms": []
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1597,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1607,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1642,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1689,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1690,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 1691,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 2967,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 2970,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 2975,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 2983,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 2988,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 2998,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 3025,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 4327,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 4347,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 4376,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "index2.html",
+    "line": 4387,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "login.html",
+    "line": 308,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 633,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 655,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 727,
+    "mechanisms": []
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 823,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 857,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 900,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 901,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 1371,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 1374,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 1379,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 1387,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 1392,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 1402,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 1431,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 2323,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "oldindex.html",
+    "line": 2333,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 843,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 860,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 937,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 977,
+    "mechanisms": []
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 1105,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 1140,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 1187,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 1188,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 2746,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 2749,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 2754,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 2762,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 2767,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 2777,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 2804,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 3830,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "main",
+    "path": "trial.html",
+    "line": 3838,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "beacon_tutorial_v2.js",
+    "line": 73,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "beacon_tutorial_v2.js",
+    "line": 74,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "beacon_tutorial_v2.js",
+    "line": 75,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "beacon_tutorial_v2.js",
+    "line": 77,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "beacon_tutorial_v2.js",
+    "line": 78,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "beacon_tutorial_v2.js",
+    "line": 82,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "beacon_tutorial_v2.js",
+    "line": 90,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "beacon_tutorial_v2.js",
+    "line": 117,
+    "mechanisms": []
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "blog.html",
+    "line": 272,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "blog.html",
+    "line": 426,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 328,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 329,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 330,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 332,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 334,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 341,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 351,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 503,
+    "mechanisms": [
+      ".href="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 738,
+    "mechanisms": [
+      "new Audio"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 788,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 801,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 812,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 822,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 836,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 837,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "code.html",
+    "line": 848,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "contact.html",
+    "line": 245,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "credits.html",
+    "line": 251,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "credits.html",
+    "line": 252,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 2469,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 2479,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 2526,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 2534,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 2567,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 2629,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 3134,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 3392,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 4452,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 4729,
+    "mechanisms": [
+      "location.hostname"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 4779,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 4789,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 4815,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 4954,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5158,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5577,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5643,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5889,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5890,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5891,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5893,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5894,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5898,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard.html",
+    "line": 5906,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 2148,
+    "mechanisms": [
+      "location.search",
+      "new URL"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 2479,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 2489,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 2544,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 2577,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 2639,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 3166,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 3417,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 4483,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 4760,
+    "mechanisms": [
+      "location.hostname"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 4810,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 4820,
+    "mechanisms": [
+      "location.reload"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 4846,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 4985,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5189,
+    "mechanisms": [
+      "fetch("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5636,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5702,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5950,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5951,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5952,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5954,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5955,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5959,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 5967,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "dashboard_updated.html",
+    "line": 6870,
+    "mechanisms": []
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "hellopotato.html",
+    "line": 466,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 633,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 655,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 727,
+    "mechanisms": []
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 823,
+    "mechanisms": [
+      "location.href"
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 857,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 900,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 901,
+    "mechanisms": [
+      ".src="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 1371,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 1374,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 1379,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 1387,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 1392,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 1402,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 1431,
+    "mechanisms": [
+      "url("
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 2323,
+    "mechanisms": [
+      ".src ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "index.html",
+    "line": 2333,
+    "mechanisms": [
+      ".href ="
+    ]
+  },
+  {
+    "branch": "origin/cloudflare/workers-autoconfig",
+    "path": "login.html",
+    "line": 308,
+    "mechanisms": [
+      "location.href"
+    ]
+  }
+]

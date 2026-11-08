@@ -1,0 +1,18 @@
+{
+  "original_files": 136,
+  "moved": 77,
+  "kept": 59,
+  "worker_assertions": 62,
+  "publisher_tests": 5,
+  "live_urls": 180,
+  "browser": {
+    "http_files": 136,
+    "http_passed": 136,
+    "html_pages": 26,
+    "parity_passed": 26,
+    "mobile_pages": 5,
+    "mode": "Offline external dependencies blocked equally before and after; authenticated and provider behavior not simulated"
+  },
+  "social_reserved": true,
+  "production_deployed": false
+}

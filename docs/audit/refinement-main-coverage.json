@@ -1,0 +1,633 @@
+{
+  "main": "056b25677afd5a5621fb36a6fcc107a53f553889",
+  "files": 173,
+  "intentional_differences": [
+    {
+      "main_path": ".gitignore",
+      "source": ".gitignore",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "CozyStudio/js/animations.js",
+      "source": "projects/CozyStudio/js/animations.js",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "CozyStudio/js/presets.js",
+      "source": "projects/CozyStudio/js/presets.js",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "REDESIGN.md",
+      "source": "REDESIGN.md",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "package.json",
+      "source": "package.json",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "preview-server.mjs",
+      "source": "preview-server.mjs",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "wrangler.jsonc",
+      "source": "wrangler.jsonc",
+      "same_bytes_as_main": false
+    }
+  ],
+  "results": [
+    {
+      "main_path": ".assetsignore",
+      "source": ".assetsignore",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": ".gitignore",
+      "source": ".gitignore",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "67.gif",
+      "source": "website/interactive-assets/code/67.gif",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "CozyStudio/README.md",
+      "source": "projects/CozyStudio/README.md",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "CozyStudio/index.html",
+      "source": "projects/CozyStudio/index.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "CozyStudio/js/animations.js",
+      "source": "projects/CozyStudio/js/animations.js",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "CozyStudio/js/app.js",
+      "source": "projects/CozyStudio/js/app.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "CozyStudio/js/bluetooth.js",
+      "source": "projects/CozyStudio/js/bluetooth.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "CozyStudio/js/presets.js",
+      "source": "projects/CozyStudio/js/presets.js",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "CozyStudio/js/protocol.js",
+      "source": "projects/CozyStudio/js/protocol.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "CozyStudio/styles.css",
+      "source": "projects/CozyStudio/styles.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "EXPERIENCE-REFINEMENT.md",
+      "source": "docs/EXPERIENCE-REFINEMENT.md",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "REDESIGN.md",
+      "source": "REDESIGN.md",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "assets/brand-surfaces.css",
+      "source": "assets/brand-surfaces.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/platform.css",
+      "source": "assets/platform.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/platform.js",
+      "source": "assets/platform.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/secondary.css",
+      "source": "assets/secondary.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/secondary.js",
+      "source": "assets/secondary.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/unity/spaces.js",
+      "source": "assets/unity/spaces.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/unity/style.css",
+      "source": "assets/unity/style.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/unity/three.module.js",
+      "source": "assets/unity/three.module.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/unity/world.js",
+      "source": "assets/unity/world.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "assets/unity/world2.js",
+      "source": "assets/unity/world2.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "bazooka.gif",
+      "source": "website/interactive-assets/code/bazooka.gif",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "bazooka.mp3",
+      "source": "website/interactive-assets/code/bazooka.mp3",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "beacon_tutorial_v2.js",
+      "source": "website/scripts/beacon_tutorial_v2.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "blog.html",
+      "source": "website/pages/blog.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "carbon.html",
+      "source": "projects/carbon/carbon.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "code.html",
+      "source": "website/pages/code.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "contact.html",
+      "source": "website/pages/contact.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "credits.html",
+      "source": "website/pages/credits.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "dashboard.html",
+      "source": "website/app/dashboard.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "dashboard_updated.html",
+      "source": "website/app/dashboard_updated.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "data.gif",
+      "source": "website/interactive-assets/code/data.gif",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "data.mp3",
+      "source": "website/interactive-assets/code/data.mp3",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "demo.html",
+      "source": "website/pages/demo.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "eysc.html",
+      "source": "projects/voltway/eysc.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "eysc.zip",
+      "source": "projects/voltway/eysc.zip",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "favicon.ico",
+      "source": "assets/branding/favicon.ico",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "focus.html",
+      "source": "projects/focus/focus.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "founder.html",
+      "source": "website/pages/founder.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "functions/api/archive.js",
+      "source": "functions/api/archive.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "functions/api/ephemeris.js",
+      "source": "functions/api/ephemeris.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/README.md",
+      "source": "projects/gods-eye/README.md",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/index.html",
+      "source": "projects/gods-eye/index.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/package-lock.json",
+      "source": "projects/gods-eye/package-lock.json",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/package.json",
+      "source": "projects/gods-eye/package.json",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/redacted.html",
+      "source": "projects/gods-eye/redacted.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/App.tsx",
+      "source": "projects/gods-eye/src/App.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/CameraController.tsx",
+      "source": "projects/gods-eye/src/components/CameraController.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/ControlPanel.tsx",
+      "source": "projects/gods-eye/src/components/ControlPanel.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/LoadingScreen.tsx",
+      "source": "projects/gods-eye/src/components/LoadingScreen.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/ObjectInspector.tsx",
+      "source": "projects/gods-eye/src/components/ObjectInspector.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/OrbitPath.tsx",
+      "source": "projects/gods-eye/src/components/OrbitPath.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/Planet.tsx",
+      "source": "projects/gods-eye/src/components/Planet.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/PlanetRing.tsx",
+      "source": "projects/gods-eye/src/components/PlanetRing.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/SolarSystem.tsx",
+      "source": "projects/gods-eye/src/components/SolarSystem.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/StarField.tsx",
+      "source": "projects/gods-eye/src/components/StarField.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/Sun.tsx",
+      "source": "projects/gods-eye/src/components/Sun.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/Timeline.tsx",
+      "source": "projects/gods-eye/src/components/Timeline.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/components/UIOverlay.tsx",
+      "source": "projects/gods-eye/src/components/UIOverlay.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/data/celestialBodies.ts",
+      "source": "projects/gods-eye/src/data/celestialBodies.ts",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/data/orbitalMechanics.ts",
+      "source": "projects/gods-eye/src/data/orbitalMechanics.ts",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/hooks/useAppState.tsx",
+      "source": "projects/gods-eye/src/hooks/useAppState.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/index.css",
+      "source": "projects/gods-eye/src/index.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/main.tsx",
+      "source": "projects/gods-eye/src/main.tsx",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/types/celestial.ts",
+      "source": "projects/gods-eye/src/types/celestial.ts",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/src/utils/textures.ts",
+      "source": "projects/gods-eye/src/utils/textures.ts",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/tsconfig.app.json",
+      "source": "projects/gods-eye/tsconfig.app.json",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/tsconfig.json",
+      "source": "projects/gods-eye/tsconfig.json",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/tsconfig.node.json",
+      "source": "projects/gods-eye/tsconfig.node.json",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "gods-eye/vite.config.ts",
+      "source": "projects/gods-eye/vite.config.ts",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "hellopotato.html",
+      "source": "website/admin/hellopotato.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "hero-scene.js",
+      "source": "website/scripts/hero-scene.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "index.html",
+      "source": "website/pages/index.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "index2.html",
+      "source": "website/variants/index2.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "job.mp3",
+      "source": "website/interactive-assets/code/job.mp3",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "job.png",
+      "source": "website/interactive-assets/code/job.png",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "job2.mp3",
+      "source": "website/interactive-assets/code/job2.mp3",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "login.html",
+      "source": "website/app/login.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "logo.png",
+      "source": "assets/branding/logo.png",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "nothing",
+      "source": "archive/unclassified/nothing",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "oldindex.html",
+      "source": "website/variants/oldindex.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "package-lock.json",
+      "source": "package-lock.json",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "package.json",
+      "source": "package.json",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "preview-server.mjs",
+      "source": "preview-server.mjs",
+      "same_bytes_as_main": false
+    },
+    {
+      "main_path": "privacy.html",
+      "source": "website/pages/privacy.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "rick.gif",
+      "source": "website/interactive-assets/code/rick.gif",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "rick.mp3",
+      "source": "website/interactive-assets/code/rick.mp3",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "sixseven.mp3",
+      "source": "website/interactive-assets/code/sixseven.mp3",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/beacon-chat.js",
+      "source": "src/beacon-chat.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/beacon.css",
+      "source": "src/beacon.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/cinematic.css",
+      "source": "src/cinematic.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/cursor.css",
+      "source": "src/cursor.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/cursor.js",
+      "source": "src/cursor.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/main.js",
+      "source": "src/main.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/mascot.css",
+      "source": "src/mascot.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/mascot.js",
+      "source": "src/mascot.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/night.css",
+      "source": "src/night.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/pillars.css",
+      "source": "src/pillars.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/pillars.js",
+      "source": "src/pillars.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/refinement.css",
+      "source": "src/refinement.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/spaces.js",
+      "source": "src/spaces.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/style.css",
+      "source": "src/style.css",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "src/world.js",
+      "source": "src/world.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "terms.html",
+      "source": "website/pages/terms.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "tests/browser_workflows.py",
+      "source": "tests/browser_workflows.py",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "tests/cinematic_homepage.py",
+      "source": "tests/cinematic_homepage.py",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "tests/experience_refinement.py",
+      "source": "tests/experience_refinement.py",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "tests/responsive_matrix.py",
+      "source": "tests/responsive_matrix.py",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "trial.html",
+      "source": "website/variants/trial.html",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "user.gif",
+      "source": "website/interactive-assets/code/user.gif",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "user.mp3",
+      "source": "website/interactive-assets/code/user.mp3",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "vite.config.js",
+      "source": "vite.config.js",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "voltwayvideeeo.mp4",
+      "source": "projects/voltway/resources/voltwayvideeeo.mp4",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "voltwayvideeo.mp4",
+      "source": "projects/voltway/resources/voltwayvideeo.mp4",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "voltwayvideo.mp4",
+      "source": "voltwayvideo.mp4",
+      "same_bytes_as_main": true
+    },
+    {
+      "main_path": "wrangler.jsonc",
+      "source": "wrangler.jsonc",
+      "same_bytes_as_main": false
+    }
+  ]
+}
