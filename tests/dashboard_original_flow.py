@@ -32,7 +32,7 @@ with sync_playwright() as p:
   page.locator('#fabBtn').click();expect(page.locator('#requestModal')).to_be_visible();page.evaluate('closeRequestModal()')
   page.wait_for_function('window._map');page.wait_for_timeout(600)
   pins=page.evaluate('()=>{let labels=[];_map.eachLayer(l=>{if(l.getPopup())labels.push(l.getPopup().getContent())});return labels}')
-  assert any('Help with groceries' in x for x in pins) and any('Visible keys' in x for x in pins),pins
+  assert any('Help with groceries' in x for x in pins) and any('Visible keys' in x for x in pins) and any('Older unclaimed umbrella' in x for x in pins),pins
   assert not any('phantom' in x.lower() or 'Another emirate' in x for x in pins),pins
   page.evaluate("__dashboardFixture.remove('lostfound/current-item')")
   page.wait_for_function('()=>{let found=false;_map.eachLayer(l=>{if(l.getPopup()?.getContent().includes("Visible keys"))found=true});return !found}')

@@ -166,3 +166,16 @@ body.platform #bt-root #bt-hint{max-width:calc(100vw - 40px);text-align:center}
  body.platform #bt-root #bt-skp{top:auto!important;bottom:16px!important;right:12px!important}
  body.platform #bt-root[data-phase^="sim-"] #bt-bub{top:66px!important;left:12px!important;width:calc(100vw - 24px)!important}
 }
+
+/* Reserve space for search icons above the general input padding rules. */
+body.platform .app-filterbar .app-search input[type="search"]{padding-inline-start:40px!important}
+body.platform .app-search>.app-icon{left:auto;right:auto;inset-inline-start:13px;pointer-events:none}
+.app-admin-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:6px;background:#e9e4fa;color:#60449a;font-size:10px;font-weight:700;letter-spacing:.02em}
+body.platform.dark .app-admin-badge{background:#393050;color:#ddd0ff}
+body.platform .admin-message-action{margin:0 0 14px;min-height:40px;width:100%}
+body.platform #adminMessageModal .modal-content{width:min(440px,100%);max-height:calc(var(--app-vh,100dvh) - 40px)}
+.admin-recipient-row{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;text-align:start;border:1px solid var(--app-line);background:var(--app-surface);color:var(--app-ink);padding:12px;margin:7px 0;border-radius:8px;cursor:pointer}
+.admin-recipient-row small{display:block;color:var(--app-muted);margin-top:3px}
+.admin-recipient-row:hover{background:var(--app-tint)}
+#adminRecipientResults{max-height:300px;overflow:auto}
+#adminMessageStatus{color:var(--app-muted);font-size:12px;min-height:20px}

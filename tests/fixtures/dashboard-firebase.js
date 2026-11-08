@@ -7,7 +7,7 @@ const state=window.__dashboardFixture ||= (()=>{
   'users/member-b':{fullName:'Other Neighbour',region:'Sharjah',leaderboardPoints:0},
   'requests/live-request':{title:'Help with groceries',description:'A real visible test request',category:'Food',location:'Sharjah',region:'Sharjah',userId:'member-b',userName:'Other Neighbour',createdAt:stamp(now),lat:25.347,lng:55.421,volunteers:[]},
   'requests/other-region':{title:'Another emirate',category:'Food',region:'Dubai',createdAt:stamp(now),lat:25.2,lng:55.3},
-  'lostfound/expired-item':{item:'Expired phantom',type:'Found',region:'Sharjah',createdAt:stamp(now-40*86400000),lat:25.345,lng:55.422},
+  'lostfound/expired-item':{item:'Older unclaimed umbrella',description:'Unclaimed umbrella reported 40 days ago.',type:'Found',region:'Sharjah',location:'Sharjah',userId:'member-a',userName:'Test Neighbour',createdAt:stamp(now-40*86400000),lat:25.345,lng:55.422},
   'lostfound/current-item':{item:'Visible keys',type:'Found',description:'Keys',location:'Sharjah',region:'Sharjah',userId:'member-b',userName:'Other Neighbour',createdAt:stamp(now),lat:25.348,lng:55.423},
   'chats/member-a_member-b_live-request':{participants:['member-a','member-b'],itemLabel:'Help with groceries',chatType:'community',postOwnerId:'member-b',requestId:'live-request','unread_member-a':true,lastUpdated:stamp(now)},
   'chats/member-a_member-b_live-request/messages/first':{text:'Could you help?',senderId:'member-b',createdAt:stamp(now)},
@@ -48,7 +48,7 @@ export const serverTimestamp=()=>state.stamp(Date.now());
 export const increment=value=>({increment:value});
 export const arrayUnion=(...values)=>({arrayUnion:values});
 export async function updateDoc(ref,patch){const data={...(state.data.get(ref.path)||{})};for(const [key,value] of Object.entries(patch))data[key]=value?.increment!==undefined?(data[key]||0)+value.increment:value?.arrayUnion?[...(data[key]||[]),...value.arrayUnion]:value;state.data.set(ref.path,data);state.writes.push({path:ref.path,operation:'update',patch});emit();}
-export async function setDoc(ref,data){state.data.set(ref.path,{...(state.data.get(ref.path)||{}),...data});state.writes.push({path:ref.path,operation:'set',data});emit();}
+export async function setDoc(ref,data){if(state.failSet)throw new Error('permission-denied');state.data.set(ref.path,{...(state.data.get(ref.path)||{}),...data});state.writes.push({path:ref.path,operation:'set',data});emit();}
 export async function addDoc(ref,data){const id='generated-'+Date.now();state.data.set(ref.path+'/'+id,data);state.writes.push({path:ref.path+'/'+id,operation:'add',data});emit();return {id};}
 export async function deleteDoc(ref){if(state.failDelete)throw new Error('permission-denied');state.data.delete(ref.path);state.writes.push({path:ref.path,operation:'delete'});emit();}
 state.put=(path,data)=>{state.data.set(path,data);emit();};
