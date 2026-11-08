@@ -284,10 +284,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/dashboard.html",
-      "source_sha256": "ac7f7265bbe3b9e594be59da08f2aeb843761600e1468bb24ed48a0aedbcc26c",
-      "source_bytes": 572442,
-      "source_change": "Keep the restored dashboard layout and fix tutorial actions, phone practice chat, posting overlay, simulation isolation and cleanup on both dashboard entries.",
-      "source_change_kind": "tutorial-action-repair"
+      "source_sha256": "50c5e84b0bcaa227ee4a19fa867fba6e0eb67fa38d3eb62b80d5ceb5990e37c5",
+      "source_bytes": 575484,
+      "source_change": "Keep the tutorial and dashboard restoration; fix search icon spacing, retain Lost and Found until manual deletion, and add private admin messaging using the existing moderation UID and chat flow.",
+      "source_change_kind": "member-messaging-refinement"
     },
     {
       "path": "dashboard_updated.html",
@@ -301,10 +301,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/dashboard_updated.html",
-      "source_sha256": "4be03f14505a55904c9430967c8356f90daf3a56e95abb4b21613df537de4e61",
-      "source_bytes": 621739,
-      "source_change": "Keep the restored dashboard layout and fix tutorial actions, phone practice chat, posting overlay, simulation isolation and cleanup on both dashboard entries.",
-      "source_change_kind": "tutorial-action-repair"
+      "source_sha256": "149ddc749efd8e9e7fd896ef67afc5a0302890324f53dbc111293106e127dcb2",
+      "source_bytes": 624749,
+      "source_change": "Keep the tutorial and dashboard restoration; fix search icon spacing, retain Lost and Found until manual deletion, and add private admin messaging using the existing moderation UID and chat flow.",
+      "source_change_kind": "member-messaging-refinement"
     },
     {
       "path": "data.gif",
@@ -1946,10 +1946,10 @@
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path",
-      "source_bytes": 44422,
-      "source_sha256": "da902178a0fb268566cb1849427971e605eb425629f2c977962be464d665f8e6",
-      "source_change": "Keep the restored dashboard layout and fix tutorial actions, phone practice chat, posting overlay, simulation isolation and cleanup on both dashboard entries.",
-      "source_change_kind": "tutorial-action-repair"
+      "source_bytes": 45671,
+      "source_sha256": "423cdfcab62b9fad5d6c226e1e4f1dcd6d8fcdd60b479d5a09c6f31b090e3490",
+      "source_change": "Keep the tutorial and dashboard restoration; fix search icon spacing, retain Lost and Found until manual deletion, and add private admin messaging using the existing moderation UID and chat flow.",
+      "source_change_kind": "member-messaging-refinement"
     },
     {
       "original": "assets/platform.js",
