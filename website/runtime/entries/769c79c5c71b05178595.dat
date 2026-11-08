@@ -6036,9 +6036,8 @@
         { from:'bot', text:`I'll be ready at 8:50am outside Block 3, Al Majaz 2.`, delay:2200 },
       ]},
 
-    /* 4 */ { type:'sim-end', tab:'community', target:'#bt-sim-end-btn', side:null, yFrac:.5,
-      say: ()=>`Your reply is sent. Select End Chat below the sample messages to finish this practice conversation.`,
-      hint:'Select End Chat below the sample messages' },
+    /* 4 */ { type:'guide', tab:'community', target:'#chatPopup', side:'left', yFrac:.35,
+      say: ()=>`Nice, your reply was sent. Select Continue to see how a neighbour can rate help they received.` },
 
     /* 5 */ { type:'sim-rate', tab:'community', target:null, side:null, yFrac:.5,
       say: ()=>`Ahmed is rating you! He's giving you 5 stars. Watch what happens with your points…` },
@@ -6310,7 +6309,6 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
   </div>
   <div id="bt-sim-msgs"></div>
-  <div id="bt-sim-chat-footer"><span>Practice conversation</span><button id="bt-sim-end-btn" onclick="BeaconTutorial._simEndChat()" disabled>End Chat</button></div>
   <div id="bt-sim-chat-input">
     <input id="bt-sim-msg-field" placeholder="Type a message…" autocomplete="off"/>
     <button id="bt-sim-send-btn" onclick="BeaconTutorial._simSend()">
@@ -6524,7 +6522,6 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     const chat=document.getElementById('bt-sim-chat');if(!chat)return;
     document.getElementById('bt-sim-msgs').innerHTML='';
     simUserReplied=false;simChatReady=false;chat.classList.add('on');
-    document.getElementById('bt-sim-end-btn').disabled=true;
     later(()=>{addMsg('bot','Hi! Can you give me a lift to my hospital appointment tomorrow at 9am?');simChatReady=true;typeText('Type a reply to Ahmed, then select Send. This is a practice conversation.');},700);
   }
 
@@ -6545,7 +6542,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     const hint = document.getElementById('bt-hint');
 
     // Close sim-chat if open unless we're in it
-    if (step.type !== 'sim-chat' && step.type !== 'sim-end' && step.type !== 'sim-rate' && step.type !== 'points') {
+    if (step.type !== 'sim-chat' && step.type !== 'sim-rate' && step.type !== 'points') {
       const sc = document.getElementById('bt-sim-chat');
       if (sc) sc.classList.remove('on');
       const sr = document.getElementById('bt-sim-rating');
@@ -6576,13 +6573,6 @@ body.dark #bt-sim-rating-box{background:#1e293b}
         typeText(typeof step.say==='function' ? step.say(uName) : step.say);
         // Enable pointer events on target
         enableTarget(step.target);bindAction(step);
-      } else if (step.type === 'sim-end') {
-        document.getElementById('bt-sim-chat')?.classList.add('on');
-        document.getElementById('bt-sim-end-btn').disabled=false;
-        if(hint)hint.classList.remove('on');
-        positionGuide({side:'left',yFrac:.3});
-        document.getElementById('bt-bub')?.classList.add('on');
-        typeText(step.say(uName));
       } else if (step.type === 'sim-chat') {
         if (hint) hint.classList.remove('on');
         if (nxt) nxt.classList.remove('on');
@@ -6701,14 +6691,6 @@ body.dark #bt-sim-rating-box{background:#1e293b}
         simUserReplied=true;typeText('Reply sent. Ahmed is replying...');
         later(()=>{addMsg('bot','Thank you! I will meet you outside at 8:50am.');playPop();runStep(4);},900);
       }
-    },
-
-    _simEndChat() {
-      if(idx!==4||!simUserReplied)return;
-      // called when user clicks End Chat in sim chat
-      document.getElementById('bt-sim-chat')?.classList.remove('on');
-      document.getElementById('bt-nxt')?.classList.remove('on');
-      runStep(5);
     },
 
     _simRatingDone() {

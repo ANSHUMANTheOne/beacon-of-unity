@@ -36,8 +36,7 @@ success. Closing a chat invalidates pending async opening work.
 
 ## Tutorial and notifications
 
-The Skip control no longer overlaps posting. Highlighted elements retain their
-original positioning. Ending or skipping the tour restores the real form handler,
+The Skip control no longer overlaps posting. The explanatory step does not highlight an inactive post button; Continue advances to the actionable Post your request step. The mascot prompt stays clear of the I can help control. After a practice reply, Continue advances to the rating example, with no End Chat action. Ending or skipping the tour restores the real form handler,
 preserves the user's draft, cancels pending simulated posting and removes sample
 cards. Simulation cleanup applies to the public demo too.
 
