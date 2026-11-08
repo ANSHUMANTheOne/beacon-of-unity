@@ -48,8 +48,8 @@ export const serverTimestamp=()=>state.stamp(Date.now());
 export const increment=value=>({increment:value});
 export const arrayUnion=(...values)=>({arrayUnion:values});
 export async function updateDoc(ref,patch){const data={...(state.data.get(ref.path)||{})};for(const [key,value] of Object.entries(patch))data[key]=value?.increment!==undefined?(data[key]||0)+value.increment:value?.arrayUnion?[...(data[key]||[]),...value.arrayUnion]:value;state.data.set(ref.path,data);state.writes.push({path:ref.path,operation:'update',patch});emit();}
-export async function setDoc(ref,data){state.data.set(ref.path,{...(state.data.get(ref.path)||{}),...data});emit();}
-export async function addDoc(ref,data){const id='generated-'+Date.now();state.data.set(ref.path+'/'+id,data);emit();return {id};}
+export async function setDoc(ref,data){state.data.set(ref.path,{...(state.data.get(ref.path)||{}),...data});state.writes.push({path:ref.path,operation:'set',data});emit();}
+export async function addDoc(ref,data){const id='generated-'+Date.now();state.data.set(ref.path+'/'+id,data);state.writes.push({path:ref.path+'/'+id,operation:'add',data});emit();return {id};}
 export async function deleteDoc(ref){if(state.failDelete)throw new Error('permission-denied');state.data.delete(ref.path);state.writes.push({path:ref.path,operation:'delete'});emit();}
 state.put=(path,data)=>{state.data.set(path,data);emit();};
 state.remove=path=>{state.data.delete(path);emit();};

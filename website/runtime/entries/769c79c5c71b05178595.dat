@@ -6002,9 +6002,9 @@
         { from:'bot', text:`I'll be ready at 8:50am outside Block 3, Al Majaz 2.`, delay:2200 },
       ]},
 
-    /* 4 */ { type:'guide', tab:'community', target:'#chatPopup', side:null, yFrac:.5,
-      say: ()=>`Nice work! Now Ahmed wants to end the chat and resolve the request. Click the "End Chat" button at the top of the chat to finish helping him.`,
-      hint:'Click "End Chat" in the chat header' },
+    /* 4 */ { type:'sim-end', tab:'community', target:'#bt-sim-end-btn', side:null, yFrac:.5,
+      say: ()=>`Your reply is sent. Select End Chat below the sample messages to finish this practice conversation.`,
+      hint:'Select End Chat below the sample messages' },
 
     /* 5 */ { type:'sim-rate', tab:'community', target:null, side:null, yFrac:.5,
       say: ()=>`Ahmed is rating you! He's giving you 5 stars. Watch what happens with your points…` },
@@ -6013,18 +6013,18 @@
       say: ()=>`🎉 You earned 4 points! (2 base + 2 bonus for 5 stars). Points fuel your leaderboard ranking and unlock rewards. The more you help, the more you earn!` },
 
     /* 7 */ { type:'guide', tab:'community', target:'#fabBtn', side:'right', yFrac:.82,
-      say: ()=>`Now let's learn how to post your own request. See that glowing ＋ button? Tap it to create a help request!`,
-      hint:'Click the + button' },
+      say: ()=>`Next, practise creating a request with sample details. Select Continue to find the Post your request button.`,
+      hint:'Select Continue' },
 
     /* 8 */ { type:'interact', tab:'community', target:'#fabBtn', side:'right', yFrac:.82,
-      say: ()=>`👆 Go ahead - tap the ＋ button to open the post form!`,
-      hint:'Tap the + button' },
+      say: ()=>`Select Post your request to open the practice form. This step will not publish a real request.`,
+      hint:'Select Post your request', action:'post' },
 
     /* 9 */ { type:'sim-post', tab:'community', target:'#requestModal', side:null, yFrac:.5,
-      say: ()=>`Fill in the form! I've pre-filled a demo for you - just click "Post Request" to see it appear in the feed.` },
+      say: ()=>`This is a practice form with sample details. Scroll within it if needed, then select Post Request. Nothing will be published to your community.` },
 
-    /* 10 */ { type:'guide', tab:'community', target:'#requestFeed', side:'left', yFrac:.48,
-      say: ()=>`Your post appeared in the feed! Your neighbours can now see it and offer help. Posts with high urgency glow red so no-one misses them.` },
+    /* 10 */ { type:'guide', tab:'community', target:'#bt-sim-mypost', side:'left', yFrac:.48,
+      say: ()=>`Your sample post appeared in the feed. A real request would be visible to neighbours so they can offer help. This practice post is removed when you leave the tour.` },
 
     /* 11 */ { type:'guide', tab:'lostfound', target:'lostFoundTab', side:'left', yFrac:.4,
       say: ()=>`Lost & Found! 🔍 Report lost keys, wallets, phones - or items you've found. Everything is tagged LOST or FOUND so the community can reunite them with their owners.` },
@@ -6039,7 +6039,7 @@
       say: ()=>`The Leaderboard! 🏆 Your points rank you against neighbours locally and globally across UAE. Top 3 at month-end get an official Beacon of Unity certificate!` },
 
     /* 15 */ { type:'guide', tab:'reliable-news', target:'reliable-newsTab', side:'left', yFrac:.4,
-      say: ()=>`Reliable News! 📰 Only verified, trusted sources - no misinformation. Stay informed about what matters in your neighbourhood and across the UAE.` },
+      say: ()=>`Reliable News! 📰 Browse Al Jazeera, BBC News, NPR News and Times of India, with source and topic filters. Select Continue to keep going.` },
 
     /* 16 */ { type:'guide', tab:'rewards', target:'rewardsTab', side:'left', yFrac:.4,
       say: ()=>`Rewards! 🎁 Spend your points on profile skins, picture frame colours, and exclusive perks. Your good deeds have real tangible value here!` },
@@ -6047,11 +6047,11 @@
     /* 17 */ { type:'guide', tab:'badges', target:'badgesTab', side:'left', yFrac:.4,
       say: ()=>`Badges! 🏅 Earn them by hitting milestones - first help, streaks, top helper, and more. They show on your profile and tell your story to the community.` },
 
-    /* 18 */ { type:'guide', tab:null, target:'minimap-widget', side:'right', yFrac:.75,
-      say: ()=>`Your Region Minimap! 📍 Live activity around you. Click it to expand and see exactly what's happening in your neighbourhood right now.` },
+    /* 18 */ { type:'interact', action:'map', tab:null, target:'minimap-widget', side:'right', yFrac:.75,
+      say: ()=>`Select the highlighted neighbourhood map to expand it. It shows the same current posts as your community feeds.` },
 
     /* 19 */ { type:'guide', tab:null, target:'settingsBtn', side:'right', yFrac:.82,
-      say: n=>`Last one, ${n}! ⚙️ The Settings button. Want to replay this tour anytime? Settings → "View Tutorial". I'll always be here. Welcome to Beacon of Unity! 🌟` },
+      say: n=>`Last one, ${n}! ⚙️ The Settings button. Want to replay this tour anytime? Settings → "Take a guided tour". Select Finish to return to your community.` },
   ];
 
   /* ══ CSS ══════════════════════════════════════════════════════ */
@@ -6273,9 +6273,10 @@ body.dark #bt-sim-rating-box{background:#1e293b}
   <div id="bt-sim-chat-header">
     <div id="bt-sim-chat-avatar">A</div>
     <div><div id="bt-sim-chat-name">Ahmed Al Rashid</div><div id="bt-sim-chat-sub">Community Helper</div></div>
-    <button id="bt-sim-end-btn" style="margin-left:auto" onclick="BeaconTutorial._simEndChat()">End Chat</button>
+
   </div>
   <div id="bt-sim-msgs"></div>
+  <div id="bt-sim-chat-footer"><span>Practice conversation</span><button id="bt-sim-end-btn" onclick="BeaconTutorial._simEndChat()" disabled>End Chat</button></div>
   <div id="bt-sim-chat-input">
     <input id="bt-sim-msg-field" placeholder="Type a message…" autocomplete="off"/>
     <button id="bt-sim-send-btn" onclick="BeaconTutorial._simSend()">
@@ -6314,7 +6315,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     <div style="font-size:44px;margin-bottom:16px">⚠️</div>
     <div id="bt-wt">Skip the tutorial?</div>
     <div id="bt-wd">You won't see this automatically again. Beacon was really looking forward to showing you around!</div>
-    <div id="bt-wh">💡 Replay anytime: <strong>Settings ⚙️ → "View Tutorial"</strong></div>
+    <div id="bt-wh">💡 Replay anytime: <strong>Settings ⚙️ → "Take a guided tour"</strong></div>
     <div id="bt-wbtns">
       <button onclick="BeaconTutorial._cancelSkip()">Keep going</button>
       <button onclick="BeaconTutorial._confirmSkip()">Skip anyway</button>
@@ -6330,7 +6331,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     </div>
     <div id="bt-ft"></div>
     <div id="bt-fsub">You now know everything Beacon of Unity has to offer.</div>
-    <div id="bt-fhint">💡 To replay this tour: <strong>Settings ⚙️</strong> → <strong>"View Tutorial"</strong></div>
+    <div id="bt-fhint">💡 To replay this tour: <strong>Settings ⚙️</strong> → <strong>"Take a guided tour"</strong></div>
     <button id="bt-fgo" onclick="BeaconTutorial._enterDash()">Enter Dashboard →</button>
   </div>
 </div>`;
@@ -6377,6 +6378,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     const el=document.getElementById('bt-bt'), wav=document.getElementById('bt-bwav');
     if(!el) return;
     el.innerHTML=''; if(wav) wav.classList.remove('done');
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=text;wav?.classList.add('done');cb?.();return;}
     let i=0;
     const cur=document.createElement('span'); cur.className='bt-cur'; el.appendChild(cur);
     typingTimer=setInterval(()=>{
@@ -6422,7 +6424,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
 
   /* ══ SCAN SWIPE ═══════════════════════════════════════════════ */
   function scanSwipe(cb) {
-    const sw=document.getElementById('bt-scanswipe'); if(!sw){cb&&cb();return;}
+    const sw=document.getElementById('bt-scanswipe'); if(!sw||matchMedia('(prefers-reduced-motion: reduce)').matches){cb?.();return;}
     sw.style.transition='none'; sw.style.transform='translateY(-110%)';
     void sw.offsetHeight; sw.classList.add('swipe');
     setTimeout(()=>{ cb&&cb(); setTimeout(()=>{ sw.classList.remove('swipe'); sw.style.transition='none'; sw.style.transform='translateY(-110%)'; },50); },430);
@@ -6444,7 +6446,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
         <div class="bt-sim-desc">I have a medical appointment tomorrow at 9am. No transport available. Would really appreciate a lift!</div>
         <button class="bt-sim-help-btn pulse" id="bt-sim-help-btn" onclick="BeaconTutorial._simICanHelp()">I can help →</button>
       </div>`;
-    feed.prepend(div);
+    feed.before(div);
   }
 
   function removeSimFeed() {
@@ -6465,7 +6467,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
         <div class="bt-sim-meta">👤 ${uName} &nbsp;·&nbsp; 📍 Al Majaz 2 &nbsp;·&nbsp; 🕐 Just now</div>
         <div class="bt-sim-desc">Need a 3m+ ladder for a weekend repair. Happy to return same day!</div>
       </div>`;
-    feed.prepend(div);
+    feed.before(div);
   }
 
   /* ══ SIM CHAT LOGIC ═══════════════════════════════════════════ */
@@ -6485,25 +6487,23 @@ body.dark #bt-sim-rating-box{background:#1e293b}
   }
 
   function openSimChat() {
-    const chat = document.getElementById('bt-sim-chat');
-    if (!chat) return;
-    document.getElementById('bt-sim-msgs').innerHTML = '';
-    simMsgStep = 0; simUserReplied = false; simChatReady = false;
-    chat.classList.add('on');
-    // First bot message after a moment
-    setTimeout(() => {
-      addMsg('bot', 'Hi! Thanks for offering to help. I need a ride to Al Corniche Hospital tomorrow morning around 9am. Is that possible?');
-      playPop();
-      simChatReady = true;
-      // Update bubble to tell user to reply
-      typeText('Ahmed sent you a message! 💬 Type a reply in the chat box and press Send to respond to him.');
-    }, 1000);
+    const chat=document.getElementById('bt-sim-chat');if(!chat)return;
+    document.getElementById('bt-sim-msgs').innerHTML='';
+    simUserReplied=false;simChatReady=false;chat.classList.add('on');
+    document.getElementById('bt-sim-end-btn').disabled=true;
+    later(()=>{addMsg('bot','Hi! Can you give me a lift to my hospital appointment tomorrow at 9am?');simChatReady=true;typeText('Type a reply to Ahmed, then select Send. This is a practice conversation.');},700);
   }
 
   /* ══ STEP RUNNER ══════════════════════════════════════════════ */
   function runStep(i) {
-    idx = i;
-    const step = STEPS[i];
+    if(!tutorialRunning)return;
+    actionCleanup?.();actionCleanup=null;restoreTargets();
+    const epoch=++stepEpoch;transitioning=true;idx=i;
+    const step={...STEPS[i]};
+    if(i===18&&innerWidth<=800)step.target='#app-map-button';
+    if(i===19&&innerWidth<=800)step.target='#app-settings-button';
+    const root=document.getElementById('bt-root');if(root){root.dataset.phase=step.type;root.dataset.step=String(i);}
+    document.getElementById('bt-nxt')?.classList.remove('on');
     updateDots(i);
 
     // Show/hide Continue based on type
@@ -6511,7 +6511,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     const hint = document.getElementById('bt-hint');
 
     // Close sim-chat if open unless we're in it
-    if (step.type !== 'sim-chat' && step.type !== 'sim-rate' && step.type !== 'points') {
+    if (step.type !== 'sim-chat' && step.type !== 'sim-end' && step.type !== 'sim-rate' && step.type !== 'points') {
       const sc = document.getElementById('bt-sim-chat');
       if (sc) sc.classList.remove('on');
       const sr = document.getElementById('bt-sim-rating');
@@ -6521,12 +6521,13 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     }
 
     // Inject sim feed for step 2 (interact with "I can help")
-    if (i >= 2 && i <= 6) injectSimFeed();
-    else if (i > 6) removeSimFeed();
+    if (i >= 1 && i <= 6) injectSimFeed();
+    else if (i === 7 || i > 10) removeSimFeed();
 
     if (step.tab && typeof window.switchTab === 'function') window.switchTab(step.tab);
 
     scanSwipe(() => {
+      if(!tutorialRunning||epoch!==stepEpoch)return;transitioning=false;
       spotlight(step);
 
       // handle different step types
@@ -6540,7 +6541,14 @@ body.dark #bt-sim-rating-box{background:#1e293b}
         playChime();
         typeText(typeof step.say==='function' ? step.say(uName) : step.say);
         // Enable pointer events on target
-        enableTarget(step.target);
+        enableTarget(step.target);bindAction(step);
+      } else if (step.type === 'sim-end') {
+        document.getElementById('bt-sim-chat')?.classList.add('on');
+        document.getElementById('bt-sim-end-btn').disabled=false;
+        if(hint)hint.classList.remove('on');
+        positionGuide({side:'left',yFrac:.3});
+        document.getElementById('bt-bub')?.classList.add('on');
+        typeText(step.say(uName));
       } else if (step.type === 'sim-chat') {
         if (hint) hint.classList.remove('on');
         if (nxt) nxt.classList.remove('on');
@@ -6549,7 +6557,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
         if (bub) bub.classList.add('on');
         playChime();
         typeText(typeof step.say==='function' ? step.say(uName) : step.say);
-        setTimeout(openSimChat, 1400);
+        later(openSimChat,300);
       } else if (step.type === 'sim-post') {
         if (hint) hint.classList.remove('on');
         if (nxt) nxt.classList.remove('on');
@@ -6567,7 +6575,7 @@ body.dark #bt-sim-rating-box{background:#1e293b}
         if (bub) bub.classList.add('on');
         playChime();
         typeText(typeof step.say==='function' ? step.say(uName) : step.say);
-        setTimeout(() => document.getElementById('bt-sim-rating').classList.add('on'), 1200);
+        later(()=>document.getElementById('bt-sim-rating')?.classList.add('on'),400);
       } else if (step.type === 'points') {
         if (hint) hint.classList.remove('on');
         positionGuide(step);
@@ -6593,21 +6601,51 @@ body.dark #bt-sim-rating-box{background:#1e293b}
   }
 
   let tutorialRunning = false, tutorialPostTimer = null, tutorialPostCleanup = null;
+  let actionCleanup = null, stepEpoch = 0, transitioning = false;
+  const tourTimers = new Set();
+  function later(fn, delay, expected = idx) {
+    const timer=setTimeout(()=>{tourTimers.delete(timer);if(tutorialRunning&&idx===expected)fn();},delay);
+    tourTimers.add(timer);return timer;
+  }
+  function clearTourTimers(){for(const timer of tourTimers)clearTimeout(timer);tourTimers.clear();}
+  function restoreTargets(){for(const [el,saved] of targetStyles){el.style.position=saved.position;el.style.setProperty('z-index',saved.zIndex,saved.priority||'');}targetStyles.clear();}
+  function bindAction(step){
+    const el=document.getElementById(step.target.replace('#',''));
+    if(!el)return;
+    const handler=event=>{
+      if(!tutorialRunning||transitioning)return;
+      if(step.action==='post'){event.preventDefault();event.stopImmediatePropagation();runStep(9);}
+      else if(step.action==='map'){
+        if(el.id==='app-map-button')enableTarget('#minimapModal');
+        later(()=>{window.closeMinimapModal?.();document.getElementById('minimap-close')?.click();runStep(19);},1000);
+      }
+    };
+    el.addEventListener('click',handler,true);actionCleanup=()=>el.removeEventListener('click',handler,true);
+  }
   const targetStyles = new Map();
   function enableTarget(sel) {
     if (!sel) return;
     const el = document.getElementById(sel.replace('#','')) || document.querySelector(sel);
     if (el) {
       // raise z-index so it's clickable above the dark overlay
-      targetStyles.set(el, { position: el.style.position, zIndex: el.style.zIndex });
+      if(!targetStyles.has(el))targetStyles.set(el,{position:el.style.position,zIndex:el.style.getPropertyValue('z-index'),priority:el.style.getPropertyPriority('z-index')});
       if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
-      el.style.zIndex = '18200';
+      el.style.setProperty('z-index','18200','important');
+      // A target inside the fixed sidebar or sticky mobile header needs its
+      // stacking context above the blocker as well.
+      for(let parent=el.parentElement;parent&&parent!==document.body;parent=parent.parentElement){
+        const css=getComputedStyle(parent);
+        if(css.zIndex!=='auto'||css.transform!=='none'||css.position==='fixed'||css.position==='sticky'){
+          if(!targetStyles.has(parent))targetStyles.set(parent,{position:parent.style.position,zIndex:parent.style.getPropertyValue('z-index'),priority:parent.style.getPropertyPriority('z-index')});
+          parent.style.setProperty('z-index','18200','important');
+        }
+      }
     }
   }
   function disableTarget(sel) {
     if (!sel) return;
     const el = document.getElementById(sel.replace('#','')) || document.querySelector(sel);
-    if (el && targetStyles.has(el)) { const saved = targetStyles.get(el); el.style.position = saved.position; el.style.zIndex = saved.zIndex; targetStyles.delete(el); }
+    if (el && targetStyles.has(el)) { const saved = targetStyles.get(el); el.style.position = saved.position; el.style.setProperty('z-index',saved.zIndex,saved.priority||''); targetStyles.delete(el); }
   }
 
   /* ══ SIM ACTIONS ══════════════════════════════════════════════ */
@@ -6622,35 +6660,17 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     },
 
     _simSend() {
-      const field = document.getElementById('bt-sim-msg-field');
-      if (!field || !simChatReady) return;
-      const text = field.value.trim();
-      if (!text) return;
-      field.value = '';
-      addMsg('mine', text);
-      playPop();
-
-      if (!simUserReplied) {
-        simUserReplied = true;
-        // Bot replies
-        setTimeout(() => {
-          addMsg('bot', "That's perfect, thank you so much! I really appreciate your help. 🙏");
-          playPop();
-        }, 1000);
-        setTimeout(() => {
-          addMsg('bot', "I'll be ready at 8:50am outside Block 3, Al Majaz 2.");
-          playPop();
-          // Now tell user to end chat
-          setTimeout(() => {
-            const nxt = document.getElementById('bt-nxt');
-            if (nxt) { nxt.textContent = 'Continue →'; nxt.classList.add('on'); }
-            typeText('Ahmed has all the info he needs! Now click "End Chat" in the chat header to wrap up and trigger the rating.');
-          }, 600);
-        }, 2400);
+      const field=document.getElementById('bt-sim-msg-field');
+      if(!field||!simChatReady||idx!==3||!field.value.trim())return;
+      addMsg('mine',field.value.trim());field.value='';playPop();
+      if(!simUserReplied){
+        simUserReplied=true;typeText('Reply sent. Ahmed is replying...');
+        later(()=>{addMsg('bot','Thank you! I will meet you outside at 8:50am.');playPop();runStep(4);},900);
       }
     },
 
     _simEndChat() {
+      if(idx!==4||!simUserReplied)return;
       // called when user clicks End Chat in sim chat
       document.getElementById('bt-sim-chat')?.classList.remove('on');
       document.getElementById('bt-nxt')?.classList.remove('on');
@@ -6664,14 +6684,14 @@ body.dark #bt-sim-rating-box{background:#1e293b}
       if (pts) pts.classList.add('on');
       playPoints();
       spawnConfetti();
-      setTimeout(() => {
+      later(() => {
         pts.classList.remove('on');
         runStep(6);
       }, 2200);
     },
 
     start() {
-      tutorialPostCleanup?.(); clearTimeout(tutorialPostTimer); tutorialRunning = true;
+      actionCleanup?.();actionCleanup=null;clearTourTimers();restoreTargets();tutorialPostCleanup?.();clearTimeout(tutorialPostTimer);tutorialRunning=true;transitioning=false;
       uName = (window.currentUserFirstName) ||
               (window.currentUserName ? window.currentUserName.split(' ')[0] : '') ||
               localStorage.getItem('bou_user_first') || 'friend';
@@ -6691,10 +6711,11 @@ body.dark #bt-sim-rating-box{background:#1e293b}
       document.getElementById('bt-dots')?.classList.add('on');
       document.getElementById('bt-skp')?.classList.add('on');
       buildDots();
-      setTimeout(() => { if(ov) ov.style.display='none'; runStep(0); }, 700);
+      later(() => { if(ov) ov.style.display='none'; runStep(0); },700);
     },
 
     _next() {
+      if(transitioning||!tutorialRunning)return;
       document.getElementById('bt-spl')?.classList.remove('on');
       document.getElementById('bt-nxt')?.classList.remove('on');
       // Special: after step 4 (guide about ending chat) - just continue
@@ -6703,9 +6724,9 @@ body.dark #bt-sim-rating-box{background:#1e293b}
     },
 
     _finish() {
-      tutorialRunning = false; clearTimeout(tutorialPostTimer); tutorialPostCleanup?.();
-      for (const [el, saved] of targetStyles) { el.style.position = saved.position; el.style.zIndex = saved.zIndex; }
-      targetStyles.clear();
+      tutorialRunning=false;stepEpoch++;transitioning=false;actionCleanup?.();actionCleanup=null;clearTourTimers();clearInterval(typingTimer);clearTimeout(tutorialPostTimer);tutorialPostCleanup?.();
+      restoreTargets();
+      ['bt-sim-chat','bt-sim-rating','bt-pts'].forEach(id=>document.getElementById(id)?.classList.remove('on'));
       ['bt-dk','bt-spl','bt-guide','bt-bub','bt-dots','bt-nxt','bt-skp','bt-hint'].forEach(id => {
         document.getElementById(id)?.classList.remove('on');
       });
@@ -6742,22 +6763,30 @@ body.dark #bt-sim-rating-box{background:#1e293b}
       if (!tutorialRunning) return;
       const values = { reqTitle:'Need a ladder for ceiling repair', reqCat:'Tools', reqDesc:'Need a 3m+ ladder for a weekend repair. Happy to return same day!', reqLoc:'Al Majaz 2' };
       const saved = Object.fromEntries(Object.keys(values).map(id => [id,document.getElementById(id)?.value]));
-      const oldDisplay = modal.style.display, oldZ = modal.style.zIndex;
+      const oldDisplay=modal.style.display,oldZ=modal.style.getPropertyValue('z-index'),oldPriority=modal.style.getPropertyPriority('z-index');
       for (const [id,value] of Object.entries(values)) { const field=document.getElementById(id);if(field)field.value=value; }
-      modal.style.display='flex';modal.style.zIndex='19300';
+      modal.style.display='flex';modal.style.setProperty('z-index','19300','important');
       const button=document.getElementById('submitReqBtn');
+      const cancel=modal.querySelector('[onclick*=closeRequestModal]');
+      function onCancel(event){event.preventDefault();event.stopImmediatePropagation();cleanup();runStep(8);}
+      function onEscape(event){if(event.key==='Escape')onCancel(event);}
       const cleanup=()=>{
-        button?.removeEventListener('click',onTutorialPost,true);
+        modal.removeEventListener('click',onTutorialPost,true);
+        cancel?.removeEventListener('click',onCancel,true);
+        document.removeEventListener('keydown',onEscape,true);
         if(button)button._tutorialHooked=false;
-        modal.style.display=oldDisplay;modal.style.zIndex=oldZ;
+        modal.style.display=oldDisplay;modal.style.setProperty('z-index',oldZ,oldPriority);
         for(const [id,value] of Object.entries(saved)){const field=document.getElementById(id);if(field&&value!==undefined)field.value=value;}
         tutorialPostCleanup=null;
       };
       function onTutorialPost(event){
+        if(!button?.contains(event.target))return;
         event.preventDefault();event.stopImmediatePropagation();cleanup();injectPostedCard();
         tutorialPostTimer=setTimeout(()=>{if(tutorialRunning){window.switchTab?.('community');runStep(10);}},400);
       }
-      if(button){button._tutorialHooked=true;button.addEventListener('click',onTutorialPost,true);}
+      if(button){button._tutorialHooked=true;modal.addEventListener('click',onTutorialPost,true);}
+      cancel?.addEventListener('click',onCancel,true);
+      document.addEventListener('keydown',onEscape,true);
       tutorialPostCleanup=cleanup;
     },600);
   }
