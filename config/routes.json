@@ -284,10 +284,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/dashboard.html",
-      "source_sha256": "50c5e84b0bcaa227ee4a19fa867fba6e0eb67fa38d3eb62b80d5ceb5990e37c5",
-      "source_bytes": 575484,
-      "source_change": "Keep the tutorial and dashboard restoration; fix search icon spacing, retain Lost and Found until manual deletion, and add private admin messaging using the existing moderation UID and chat flow.",
-      "source_change_kind": "member-messaging-refinement"
+      "source_sha256": "560bb4e08acfde67bd89c25352296fff746e272f6121731b2b7f35ced5a9befe",
+      "source_bytes": 574519,
+      "source_change": "Keep current dashboard behavior; correct tutorial prompts so post is only highlighted when actionable, remove the misleading End Chat instruction, and keep Beacon clear of the I can help action.",
+      "source_change_kind": "tutorial-action-refinement"
     },
     {
       "path": "dashboard_updated.html",
@@ -301,10 +301,10 @@
       "category": "Main website",
       "reason": "Runtime source stored under a neutral identifier; original public path and exact contents retained",
       "published": "/dashboard_updated.html",
-      "source_sha256": "149ddc749efd8e9e7fd896ef67afc5a0302890324f53dbc111293106e127dcb2",
-      "source_bytes": 624749,
-      "source_change": "Keep the tutorial and dashboard restoration; fix search icon spacing, retain Lost and Found until manual deletion, and add private admin messaging using the existing moderation UID and chat flow.",
-      "source_change_kind": "member-messaging-refinement"
+      "source_sha256": "3d0a78536425af08e6e527e6ee6c46a56b3c5fcfe8bb5c5733b753c68c1f1424",
+      "source_bytes": 623784,
+      "source_change": "Keep current dashboard behavior; correct tutorial prompts so post is only highlighted when actionable, remove the misleading End Chat instruction, and keep Beacon clear of the I can help action.",
+      "source_change_kind": "tutorial-action-refinement"
     },
     {
       "path": "data.gif",
@@ -1203,10 +1203,10 @@
       "baseline_commit": "056b25677afd5a5621fb36a6fcc107a53f553889",
       "category": "Shared resource",
       "reason": "Preserve current main design dependency at the same public path",
-      "source_bytes": 45671,
-      "source_sha256": "423cdfcab62b9fad5d6c226e1e4f1dcd6d8fcdd60b479d5a09c6f31b090e3490",
-      "source_change": "Keep the tutorial and dashboard restoration; fix search icon spacing, retain Lost and Found until manual deletion, and add private admin messaging using the existing moderation UID and chat flow.",
-      "source_change_kind": "member-messaging-refinement"
+      "source_bytes": 46191,
+      "source_sha256": "17af26acbc2c2da56de994eac3d5dc507884eba7a2726a03dda60041addfacd9",
+      "source_change": "Keep current dashboard behavior; correct tutorial prompts so post is only highlighted when actionable, remove the misleading End Chat instruction, and keep Beacon clear of the I can help action.",
+      "source_change_kind": "tutorial-action-refinement"
     },
     {
       "original": "assets/platform.js",

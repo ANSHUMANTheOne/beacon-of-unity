@@ -179,3 +179,10 @@ body.platform #adminMessageModal .modal-content{width:min(440px,100%);max-height
 .admin-recipient-row:hover{background:var(--app-tint)}
 #adminRecipientResults{max-height:300px;overflow:auto}
 #adminMessageStatus{color:var(--app-muted);font-size:12px;min-height:20px}
+
+/* Keep Beacon's tutorial prompt clear of the highlighted help action. */
+body.platform #bt-root[data-step="2"] #bt-guide{display:none!important}
+body.platform #bt-root[data-step="2"] #bt-bub{top:82px!important;left:50%!important;width:min(460px,calc(100vw - 32px))!important;transform:translateX(-50%)!important}
+@media(max-width:800px){
+ body.platform #bt-root[data-step="2"] #bt-bub{top:66px!important;left:12px!important;width:calc(100vw - 24px)!important;max-height:132px;overflow:auto;transform:none!important}
+}
