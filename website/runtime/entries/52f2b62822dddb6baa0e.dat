@@ -2523,6 +2523,7 @@
                 loadRequests();
                 loadLF();
                 loadActiveChats();
+                initAdminMessaging();
                 if (isAdmin(user.email)) { const n=document.getElementById('adminNavItem'); if(n) n.style.display='flex'; }
                 // ── Online presence heartbeat ──
                 const _presenceRef = doc(db, 'users', user.uid);
@@ -2685,10 +2686,6 @@
         async function maybeAutoDelete(docId) {
             try { await deleteDoc(doc(db, 'requests', docId)); } catch(_) {}
         }
-        async function maybeAutoDeleteLF(docId) {
-            try { await deleteDoc(doc(db, 'lostfound', docId)); } catch(_) {}
-        }
-
         // Keep a request: increment extensions, record timestamp
         window.keepPost = async (docId, currentExt, maxExt) => {
             if (currentExt >= maxExt) return;
@@ -2702,19 +2699,6 @@
                 : '✅ Extended by 2 more days!';
             alert(msg);
         };
-        window.keepLFPost = async (docId, currentExt, maxExt) => {
-            if (currentExt >= maxExt) return;
-            const isFinalExt = currentExt + 1 >= maxExt;
-            await updateDoc(doc(db, 'lostfound', docId), {
-                extensions:    currentExt + 1,
-                lastExtendedAt: serverTimestamp()
-            });
-            const msg = isFinalExt
-                ? '✅ Extended by 2 days. This is your final extension - the post will auto-delete when it expires.'
-                : '✅ Extended by 2 more days!';
-            alert(msg);
-        };
-
         // Admin: edit a community request
         window.adminEditRequest = async (docId) => {
             if (!isAdmin(auth.currentUser?.email)) return;
@@ -2883,8 +2867,6 @@
                     const postRegion = data.region || "Sharjah";
                     if (postRegion !== userRegion) return;
 
-                    const info = getExpiryInfo(data);
-                    if (info.isDead) { maybeAutoDeleteLF(docSnap.id); return; }
 
                     hasItems = true;
                     const isOwner   = auth.currentUser.uid === data.userId;
@@ -2894,39 +2876,6 @@
                     const lfDistHtml = (userLat && data.lat && data.lng)
                         ? `<span class="dist-chip">📍 ${fmtDist(haversineKm(userLat,userLng,data.lat,data.lng))}</span>`
                         : '';
-
-                    // Days-left chip
-                    const dL = info.daysLeft;
-                    const chipColor    = dL < 1 ? '#ef4444' : dL <= 2 ? '#f97316' : '#64748b';
-                    const daysLeftLabel = dL < 1 ? '<1d left' : `${Math.floor(dL)}d left`;
-                    const daysLeftHtml = `<span style="font-size:10px;color:${chipColor};font-weight:600;background:${chipColor}15;border:1px solid ${chipColor}30;border-radius:99px;padding:1px 7px;margin-left:4px;">⏳ ${daysLeftLabel}</span>`;
-                    const extBadge = info.extensions > 0
-                        ? `<span style="font-size:10px;color:#7c3aed;font-weight:600;background:#f3e8ff;border:1px solid #ddd6fe;border-radius:99px;padding:1px 7px;margin-left:4px;">🔁 Ext ${info.extensions}/${info.MAX_EXT}</span>`
-                        : '';
-
-                    // Expiry warning banner - owner only, ≤ WARN_DAYS left
-                    let expiryWarningHtml = '';
-                    const warnKey = `exp_warned_lf_${docSnap.id}`;
-                    if (isOwner && dL <= WARN_DAYS && !sessionStorage.getItem(warnKey)) {
-                        const canExtend = info.extensions < info.MAX_EXT;
-                        const daysStr   = dL < 1 ? 'less than a day' : `${Math.floor(dL)} day${Math.floor(dL)===1?'':'s'}`;
-                        const finalNote = (info.isFinal && info.extensions > 0)
-                            ? ' <b style="color:#ef4444;">This is your final extension.</b> After this, the post is automatically deleted.'
-                            : '';
-                        expiryWarningHtml = `
-                        <div id="expwarn-lf-${docSnap.id}" style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fed7aa;border-radius:10px;padding:10px 12px;margin-bottom:10px;">
-                            <span style="font-size:20px;flex-shrink:0;">⏳</span>
-                            <div style="flex:1;min-width:0;">
-                                <div style="font-size:12px;font-weight:700;color:#c2410c;margin-bottom:2px;">Is this item still missing / unclaimed?</div>
-                                <div style="font-size:11px;color:#ea580c;line-height:1.55;">Expires in <b>${daysStr}</b>.${finalNote}</div>
-                                ${canExtend ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
-                                    <button onclick="keepLFPost('${docSnap.id}',${info.extensions},${info.MAX_EXT});sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-lf-${docSnap.id}').remove();" style="background:#f97316;color:white;border:none;padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✅ Keep - Extend 2 Days</button>
-                                    <button onclick="deleteLF('${docSnap.id}', this);sessionStorage.setItem('${warnKey}','1');" style="background:#fee2e2;color:#991b1b;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑 Delete Now</button>
-                                    <button onclick="sessionStorage.setItem('${warnKey}','1');document.getElementById('expwarn-lf-${docSnap.id}').remove();" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;line-height:1;padding:0;">✕</button>
-                                </div>` : `<div style="font-size:11px;font-weight:700;color:#ef4444;margin-top:6px;">⚠️ No more extensions available - this post will be auto-deleted when it expires.</div>`}
-                            </div>
-                        </div>`;
-                    }
 
                     // Admin controls
                     const adminControls = adminUser ? `
@@ -2939,15 +2888,14 @@
                     card.innerHTML = `
                         <div style="display:flex; justify-content:space-between; align-items:start;">
                             <span class="badge ${data.type === 'Lost' ? 'badge-lost' : 'badge-found'}">${data.type}</span>
-                            <div style="text-align:right;"><small>📍 ${data.location}</small>${lfDistHtml}${daysLeftHtml}${extBadge}
+                            <div style="text-align:right;"><small>📍 ${data.location}</small>${lfDistHtml}
                             ${isOwner ? `<button class="btn-delete" onclick="deleteLF('${docSnap.id}', this)">Delete</button>` : ''}</div>
                         </div>
                         ${data.image ? `<img src="${data.image}" style="width:100%; border-radius:12px; margin:10px 0; max-height:200px; object-fit:cover;">` : ''}
                         <h4 style="margin:10px 0; font-family:'Syne',sans-serif; font-weight:700;">${data.item}</h4>
                         <p style="font-size:11px; color:#64748b;">Reported by: <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${getEquippedSkin(data.equippedSkin||'ocean').gradient};margin-right:3px;vertical-align:middle;"></span>${data.userName}</p>
-                        <p style="font-size:13px; color:#475569;">${data.description}</p>
+                        <p style="font-size:13px; color:#475569;">${data.description || ''}</p>
                         ${adminControls}
-                        ${expiryWarningHtml}
                         ${!isOwner ? `<button class="btn-help" style="width:100%;margin-top:4px;" onclick="startChat('${docSnap.id}','${data.userId}','${data.type}: ${data.item}','lostfound')">Contact User</button>` : ''}`;
                     feed.appendChild(card);
                 });
@@ -2992,6 +2940,89 @@
             alert("Added to queue!");
         };
 
+        // Use the existing moderation account's immutable Firebase UID for identity badges.
+        // Never infer administrator identity from chatType, a display name or a profile role.
+        const MESSAGING_ADMIN_UIDS = ['vVzdX3mSWqWHgTLKQpfrrPb5dSv1'];
+        const isMessagingAdmin = () => !window.IS_DEMO_MODE && MESSAGING_ADMIN_UIDS.includes(auth.currentUser?.uid);
+        function initAdminMessaging() {
+            if (!isMessagingAdmin()) return;
+            for (const id of ['activeChatsList','activeChatsMobile']) {
+                const list=document.getElementById(id);
+                if (!list || list.previousElementSibling?.classList.contains('admin-message-action')) continue;
+                const button=document.createElement('button');
+                button.className='btn-help admin-message-action';button.textContent='Message a member';
+                button.onclick=window.openAdminMessagePicker;list.before(button);
+            }
+            const section=document.getElementById('upmAdminSection');
+            if(section&&!document.getElementById('adminMessageFromProfile')){
+                const button=document.createElement('button');button.id='adminMessageFromProfile';
+                button.className='btn-help';button.textContent='Message as Admin';button.style.marginTop='12px';
+                button.onclick=()=>window.startAdminChat(section.dataset.uid);section.append(button);
+            }
+        }
+        let adminPickerReturnFocus=null;
+        function adminMessageModal() {
+            let modal=document.getElementById('adminMessageModal');if(modal)return modal;
+            modal=document.createElement('div');modal.id='adminMessageModal';modal.className='modal';
+            modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-labelledby','adminMessageTitle');
+            modal.innerHTML='<div class="modal-content"><h2 id="adminMessageTitle">Message a member</h2><p>Your messages will be labelled Admin.</p><label for="adminRecipientSearch">Find a member</label><input type="search" id="adminRecipientSearch" placeholder="Search by name or email" autocomplete="off"><p id="adminMessageStatus" role="status"></p><div id="adminRecipientResults"></div><button type="button" class="btn-help" id="adminMessageClose">Cancel</button></div>';
+            const close=()=>{modal.style.display='none';adminPickerReturnFocus?.focus();};
+            modal.querySelector('#adminMessageClose').onclick=close;
+            modal.addEventListener('click',event=>{if(event.target===modal)close();});
+            modal.addEventListener('keydown',event=>{
+                if(event.key==='Escape'){event.preventDefault();close();}
+                if(event.key==='Tab'){
+                    const controls=[...modal.querySelectorAll('input,button:not(:disabled)')].filter(el=>el.getClientRects().length);
+                    if(event.shiftKey&&document.activeElement===controls[0]){event.preventDefault();controls.at(-1)?.focus();}
+                    else if(!event.shiftKey&&document.activeElement===controls.at(-1)){event.preventDefault();controls[0]?.focus();}
+                }
+            });
+            document.body.append(modal);return modal;
+        }
+        window.openAdminMessagePicker = async () => {
+            if(!isMessagingAdmin())return;
+            adminPickerReturnFocus=document.activeElement;
+            const modal=adminMessageModal(),input=modal.querySelector('input'),results=modal.querySelector('#adminRecipientResults'),status=modal.querySelector('#adminMessageStatus');
+            modal.style.display='flex';input.value='';results.replaceChildren();status.textContent='Loading members...';input.focus();
+            try{
+                const snapshot=await getDocs(collection(db,'users'));
+                if(!isMessagingAdmin())return;
+                const members=snapshot.docs.filter(d=>d.id!==auth.currentUser.uid).map(d=>({...d.data(),uid:d.id}));
+                const render=()=>{
+                    const term=input.value.trim().toLowerCase();
+                    const matches=members.filter(m=>[m.fullName,m.email,m.region].some(value=>String(value||'').toLowerCase().includes(term)));
+                    results.replaceChildren();status.textContent=matches.length ? (matches.length>40?'Showing the first 40 matches. Refine your search.':'Select a member to open a private conversation.') : 'No matching members.';
+                    for(const member of matches.slice(0,40)){
+                        const button=document.createElement('button');button.type='button';button.className='admin-recipient-row';
+                        const text=document.createElement('span'),name=document.createElement('strong'),region=document.createElement('small');
+                        name.textContent=member.fullName||'Member';region.textContent=member.region||'';text.append(name,region);
+                        const action=document.createElement('span');action.textContent='Message';button.append(text,action);
+                        button.onclick=async()=>{button.disabled=true;await window.startAdminChat(member.uid);button.disabled=false;};results.append(button);
+                    }
+                };
+                input.oninput=render;render();
+            }catch(error){status.textContent='Could not load members. Close and try again.';}
+        };
+        window.startAdminChat = async (targetUid) => {
+            if(!isMessagingAdmin()||!targetUid||targetUid===auth.currentUser.uid)return;
+            const modal=adminMessageModal(),status=modal.querySelector('#adminMessageStatus');
+            const adminUid=auth.currentUser.uid;
+            try{
+                const member=await getDoc(doc(db,'users',targetUid));
+                if(!isMessagingAdmin()||auth.currentUser.uid!==adminUid)return;
+                if(!member.exists())throw new Error('missing-member');
+                const chatId=[auth.currentUser.uid,targetUid].sort().join('_')+'_admin';
+                await setDoc(doc(db,'chats',chatId),{
+                    participants:[auth.currentUser.uid,targetUid],itemLabel:'Beacon of Unity admin',chatType:'admin',
+                    postOwnerId:auth.currentUser.uid,requestId:null,lastUpdated:serverTimestamp()
+                },{merge:true});
+                currentChatId=chatId;currentChatOtherUserId=targetUid;currentChatOtherName=member.data().fullName||'Member';
+                currentChatType='admin';currentChatPostOwnerId=auth.currentUser.uid;
+                modal.style.display='none';document.getElementById('userProfileModal').style.display='none';
+                await openChatWindow(currentChatOtherName);document.getElementById('msgInput').focus();
+            }catch(error){modal.style.display='flex';status.textContent='Could not open this conversation. Please try again.';}
+        };
+
         window.startChat = async (itemId, targetUserId, label, chatType) => {
             currentChatId = [auth.currentUser.uid, targetUserId].sort().join("_") + "_" + itemId;
             currentChatOtherUserId = targetUserId;
@@ -3018,7 +3049,7 @@
             document.getElementById('chatAvatarCircle').textContent = initials;
             document.getElementById('chatAvatarCircle').style.background = getEquippedSkin(userEquippedSkin).gradient;
             document.getElementById('chatWith').textContent = label || 'Chat';
-            document.getElementById('chatSubline').textContent = 'Community Helper';
+            document.getElementById('chatSubline').textContent = MESSAGING_ADMIN_UIDS.includes(openedOtherId) ? 'Admin · Beacon of Unity' : (currentChatType === 'admin' && isMessagingAdmin() ? 'You are messaging as Admin' : 'Community Helper');
             document.getElementById('chatPopup').style.display = 'flex';
             // Apply chat background skin
             const msgArea = document.getElementById('messageArea');
@@ -3137,6 +3168,7 @@
 
                         const wrap = document.createElement('div');
                         wrap.className = 'imsg-bubble-wrap';
+                        if(MESSAGING_ADMIN_UIDS.includes(data.senderId)){const badge=document.createElement('span');badge.className='app-admin-badge';badge.textContent='Admin';wrap.appendChild(badge);}
 
                         const bub = document.createElement('div');
                         bub.className = 'imsg-bubble';
@@ -3401,6 +3433,7 @@
             const input = document.getElementById('msgInput');
             if (!input.value.trim() || !currentChatId) return;
             const msgText = input.value.trim();
+            const senderLabel = isMessagingAdmin() ? 'Admin · ' + userName : userName;
             await addDoc(collection(db, "chats", currentChatId, "messages"), {
                 text: msgText,
                 senderId: auth.currentUser.uid,
@@ -3421,14 +3454,14 @@
                         body: JSON.stringify({
                             type: 'chat',
                             token: recipToken,
-                            title: userName,
+                            title: senderLabel,
                             message: msgText.substring(0, 120)
                         })
                     });
                 }
             } catch (e) { /* silently ignore notification errors */ }
             // In-app notification
-            try { await pushNotif(currentChatOtherUserId, '💬', `New message from ${userName}`, msgText.slice(0,80)); } catch {}
+            try { await pushNotif(currentChatOtherUserId, '💬', `New message from ${senderLabel}`, msgText.slice(0,80)); } catch {}
             input.value = "";
         }
         document.getElementById('sendMsgBtn').onclick = sendMessage;
@@ -3444,6 +3477,7 @@
             const parts = chatId.split('_');
             const otherId = parts[0] === auth.currentUser.uid ? parts[1] : parts[0];
             const cType = chatData.chatType || 'community';
+            const adminConversation = cType === 'admin' && (chatData.participants || []).some(uid=>MESSAGING_ADMIN_UIDS.includes(uid));
             const pOwnerId = chatData.postOwnerId || '';
             const hasUnread = chatData[`unread_${auth.currentUser.uid}`] === true;
 
@@ -3458,8 +3492,8 @@
                 <div style="flex:1; min-width:0;">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
                         <span style="font-size:10px; font-weight:700; padding:2px 7px; border-radius:99px; flex-shrink:0;
-                            ${cType === 'community' ? 'background:#e0f2fe; color:#0369a1;' : 'background:#fee2e2; color:#991b1b;'}">
-                            ${cType === 'community' ? '✨ Community' : '🔍 Lost & Found'}
+                            ${adminConversation ? 'background:#e9e4fa; color:#60449a;' : (cType === 'community' ? 'background:#e0f2fe; color:#0369a1;' : 'background:#fee2e2; color:#991b1b;')}">
+                            ${adminConversation ? 'Admin' : (cType === 'community' ? '✨ Community' : '🔍 Lost & Found')}
                         </span>
                         ${hasUnread ? '<span class="chat-new-badge" style="background:#ef4444;color:white;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:700;">NEW</span>' : ''}
                     </div>
