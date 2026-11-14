@@ -1,0 +1,78 @@
+/* Guided observation controls. The sky remains the main canvas. */
+.unified-mission .mission-stage{position:absolute;left:28px;top:112px;bottom:auto;right:auto;width:min(388px,calc(100vw - 56px));max-height:calc(100vh - 132px);overflow-y:auto;display:block;padding:25px 25px 21px;border:1px solid rgba(184,208,207,.22);border-radius:10px;background:linear-gradient(155deg,rgba(13,30,38,.94),rgba(8,20,29,.88));color:#f2f4ed;box-shadow:0 22px 72px #02090e70;backdrop-filter:blur(20px)}
+.unified-mission .mission-stage::-webkit-scrollbar{width:5px}.unified-mission .mission-stage::-webkit-scrollbar-thumb{background:#70888a;border-radius:5px}
+.mission-stage-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:0;border:0}
+.mission-stage-head h3{font:500 clamp(25px,2.4vw,32px)/1.05 'Inter',sans-serif;letter-spacing:-.065em;color:#f6f4ec;margin:9px 0 0}
+.stage-kicker,.stage-step{font:600 10px/1.3 'JetBrains Mono',monospace;letter-spacing:.11em;color:#98babd}
+.mission-stage-head #stageSkyArea{border:0;background:none;color:#e5ab92;font:500 11px 'Inter',sans-serif;padding:2px 0;white-space:nowrap;text-align:right;cursor:pointer}
+.mission-stage-head #stageSkyArea:hover{color:#fff}
+.stage-field{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:24px 0 19px;padding:0 0 17px;border-bottom:1px solid #b8d0d02d}
+.stage-field #stageField{font:11px/1.4 'JetBrains Mono',monospace;color:#d3e1df;text-align:right}
+.mission-stage #stageBandSlot{display:block}
+.unified-mission .mission-stage .mission-band-panel{padding:0;border:0}
+.unified-mission .mission-stage .mission-band-top{display:block}
+.unified-mission .mission-stage .mission-band-top h4{font:600 10px 'JetBrains Mono',monospace;letter-spacing:.12em;color:#98babd}
+.unified-mission .mission-stage .mission-band-top select{display:none}
+.stage-band-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0 0}
+.stage-band-choices button{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-height:59px;padding:9px 10px;border:1px solid #70949a4b;border-radius:5px;background:#ffffff09;color:#d6e4e2;text-align:left;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.stage-band-choices button:hover{background:#ffffff16;border-color:#a6c6ca;transform:translateY(-2px)}
+.stage-band-choices button.active{background:#e7e7db;color:#1d3136;border-color:#f8f5eb}
+.stage-band-choices button:disabled{opacity:.55;cursor:wait}
+.stage-band-choices strong{font:600 18px/1 'Inter',sans-serif;letter-spacing:-.05em}
+.stage-band-choices small{font:9px/1.2 'JetBrains Mono',monospace;white-space:nowrap}
+.unified-mission .mission-stage .mission-band-values{display:none}
+.mission-spectrum{margin:18px 0 0}
+.mission-spectrum-head{color:#a7bcc0;font:10px 'JetBrains Mono',monospace}
+.mission-spectrum-head strong{color:#e5a88e;font-size:13px}
+.mission-spectrum-track{height:7px;margin-top:10px;border:0;border-radius:20px;background:linear-gradient(90deg,#68898e,#8bb5c0 45%,#d4b4a2 76%,#e7a388)}
+.mission-spectrum-track::before{top:-4px;bottom:-4px;border:1px solid #f4e9d5;border-radius:4px;background:#f8efe23d;transition:left .35s ease,width .35s ease}
+.mission-spectrum-marker{top:-8px;bottom:-8px;background:#fff;box-shadow:0 0 0 2px #163039;transition:left .12s linear}
+.mission-spectrum-marker::after{background:#fff}
+.stage-visit-details{margin:22px 0 0;padding:13px 0;border-top:1px solid #b8d0d02d;border-bottom:1px solid #b8d0d02d}
+.stage-visit-details summary{display:flex;align-items:center;justify-content:space-between;gap:10px;list-style:none;cursor:pointer;color:#9dbbbd;font:600 10px 'JetBrains Mono',monospace;letter-spacing:.09em}
+.stage-visit-details summary::-webkit-details-marker{display:none}
+.stage-visit-details summary span{font:11px 'Inter',sans-serif;letter-spacing:0;color:#e1e8e2}
+.stage-visit-details summary::after{content:'⌄';font:16px 'Inter',sans-serif;color:#dfa58f;margin-left:5px}
+.stage-visit-details[open] summary::after{transform:rotate(180deg)}
+.mission-stage-pickers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 0}
+.mission-stage-pickers label{font:10px 'Inter',sans-serif;color:#b0c9c8}
+.unified-mission .mission-stage select{background:#122d37;border:1px solid #688b90;color:#eff4ef;font:10px 'JetBrains Mono',monospace;padding:8px 5px}
+.mission-stage-actions{display:flex;gap:8px;margin:18px 0 0}
+.mission-stage-actions button{height:42px;padding:0 13px;border-radius:5px;font:600 11px 'Inter',sans-serif;transition:transform .18s,background .18s}
+.mission-stage-actions button:hover{transform:translateY(-2px)}
+.unified-mission .mission-stage-actions .stage-primary{flex:1.35;background:#d77d5c;border-color:#d77d5c;color:#111f25}
+.unified-mission .mission-stage-actions .stage-primary:hover{background:#eda486}
+.unified-mission .mission-stage-actions .stage-secondary{flex:1;background:transparent;border-color:#7b9695;color:#d8e5df}
+.mission-stage-readout{display:flex;flex-direction:column;gap:5px;margin:17px 0 0;padding:13px 0 0;border-top:1px solid #b8d0d02d;color:#92adaf;font:10px/1.4 'Inter',sans-serif}
+.mission-stage-readout strong{color:#e4b39d;font:600 11px/1.4 'Inter',sans-serif}
+.mission-stage-readout #stageCoords,.mission-stage-note{display:none!important}
+.unified-mission .mission-comparison.is-collapsed{display:none!important}
+.unified-mission .mission-comparison:not(.is-collapsed){left:min(438px,34vw);right:28px;top:112px;width:auto;max-width:940px;max-height:calc(100vh - 132px);background:#f4f2ea;border:1px solid #d3d6cf;border-radius:9px;box-shadow:0 25px 85px #02080c80}
+.observation-beam-ticks{opacity:.5;stroke-width:1}
+.observation-beam-halo{opacity:.055}
+@media (min-width:801px){.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{display:block}}
+@media (max-width:800px){
+ .unified-mission .mission-stage{left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:min(55vh,430px);padding:16px 18px 14px}
+ .mission-stage-head h3{font-size:24px;margin-top:5px}
+ .stage-field{margin:14px 0 12px;padding-bottom:11px}
+ .stage-band-choices{grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:9px}
+ .stage-band-choices button{min-height:45px;padding:6px 4px;align-items:center;text-align:center}
+ .stage-band-choices strong{font-size:15px}.stage-band-choices small{display:none}
+ .mission-spectrum{margin-top:10px}.stage-visit-details{margin-top:12px;padding:10px 0}
+ .mission-stage-actions{margin-top:11px}.mission-stage-actions button{height:36px}
+ .mission-stage-readout{margin-top:10px;padding-top:9px}
+ .unified-mission .mission-comparison:not(.is-collapsed){left:12px;right:12px;top:85px;bottom:12px;max-height:none;overflow:auto}
+ .unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{display:none}
+}
+@media (max-width:460px){.unified-mission .mission-stage{max-height:min(57vh,420px)}.mission-stage-head #stageSkyArea{max-width:83px;white-space:normal}.stage-visit-details summary span{font-size:10px}.mission-stage-readout #stageTime{display:none}}
+@media (prefers-reduced-motion:reduce){.stage-band-choices button,.mission-stage-actions button,.mission-spectrum-track::before{transition:none}}.unified-mission .calm-primary-actions{display:none!important}
+.unified-mission .mission-stage-head #stageSkyArea{display:inline-flex;align-items:flex-start;justify-content:flex-end}
+.unified-mission .mission-stage-actions{display:flex;flex-direction:row;align-items:stretch;gap:8px;margin:18px 0 0}
+.unified-mission .mission-stage-actions button{flex:1 1 0;height:42px;min-height:42px;padding:0 10px;white-space:nowrap}
+.unified-mission .mission-stage-actions .stage-primary{flex:1.3 1 0}
+@media (max-width:800px){.unified-mission .mission-stage-actions{margin-top:11px}.unified-mission .mission-stage-actions button{height:38px;min-height:38px}}
+.unified-mission .mission-stage-readout>*{max-width:none;overflow:visible;text-overflow:clip;white-space:normal}
+.stage-band-choices button.active{animation:band-settle .42s ease-out}
+@keyframes band-settle{from{box-shadow:0 0 0 0 #e7e7db77}to{box-shadow:0 0 0 11px #e7e7db00}}
+@media (prefers-reduced-motion:reduce){.stage-band-choices button.active{animation:none}}
+@media (max-width:800px){.unified-mission .mission-comparison:not(.is-collapsed){bottom:auto;height:auto;max-height:calc(100vh - 100px)}}

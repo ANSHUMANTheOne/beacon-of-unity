@@ -1,0 +1,14 @@
+{
+  "name": "omniscope-beacon",
+  "main": "./index.js",
+  "compatibility_date": "2026-05-22",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "routes": [
+    { "pattern": "beaconofunity.com/omniscope*", "zone_name": "beaconofunity.com" }
+  ]
+}

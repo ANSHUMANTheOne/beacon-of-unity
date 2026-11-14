@@ -1,0 +1,270 @@
+/* OmniScope observation workspace: one instrument system across scene and FITS analysis. */
+:root{--obs-bg:#0b141b;--obs-surface:#14232c;--obs-surface-2:#192b35;--obs-line:#3a5159;--obs-text:#e9efec;--obs-muted:#a9bdc0;--obs-accent:#e2a273;--obs-accent-soft:#efd2b5}
+.unified-mission .mission-stage{width:354px;top:96px;left:22px;max-height:calc(100vh - 115px);padding:22px;background:var(--obs-surface);border:1px solid var(--obs-line);border-radius:4px;box-shadow:none;backdrop-filter:none;color:var(--obs-text)}
+.unified-mission .mission-stage-head h3{font:600 25px/1.15 'Inter',sans-serif;letter-spacing:-.045em;color:var(--obs-text)}
+.unified-mission .stage-kicker,.unified-mission .stage-step,.unified-mission .mission-stage .mission-band-top h4{font:600 10px/1.3 'Inter',sans-serif;letter-spacing:.08em;color:var(--obs-muted)}
+.unified-mission .mission-stage-head #stageSkyArea{color:var(--obs-accent-soft);font:500 11px 'Inter',sans-serif}
+.unified-mission .stage-field{margin:18px 0 16px;padding-bottom:15px;border-color:var(--obs-line)}
+.unified-mission .stage-field #stageField{color:var(--obs-text);font:11px 'JetBrains Mono',monospace}
+.unified-mission .stage-band-choices{grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;margin-top:10px;border:1px solid var(--obs-line);border-radius:3px;overflow:hidden}
+.unified-mission .stage-band-choices button{min-height:42px;padding:5px 0;align-items:center;border:0;border-right:1px solid var(--obs-line);border-radius:0;background:transparent;color:var(--obs-muted);box-shadow:none;transform:none}
+.unified-mission .stage-band-choices button:last-child{border-right:0}
+.unified-mission .stage-band-choices button strong{font:600 12px 'Inter',sans-serif}
+.unified-mission .stage-band-choices button small{display:none}
+.unified-mission .stage-band-choices button:hover{background:#28404a;color:var(--obs-text)}
+.unified-mission .stage-band-choices button.active{background:#dfab82;color:#12212a;animation:none}
+.stage-selected-range{margin:9px 0 0;color:var(--obs-accent-soft);font:11px 'JetBrains Mono',monospace}
+.unified-mission .mission-spectrum{margin:12px 0 0}
+.unified-mission .mission-spectrum-track{height:5px;background:#46616a;border-radius:0}
+.unified-mission .mission-spectrum-track::before{top:-4px;bottom:-4px;background:#e1a16b66;border:1px solid var(--obs-accent);border-radius:1px}
+.unified-mission .mission-spectrum-head{color:var(--obs-muted)}
+.unified-mission .mission-spectrum-head strong{color:var(--obs-accent-soft)}
+.unified-mission .stage-selected-range{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0 0}
+.unified-mission .stage-wave{width:92px;height:26px;flex:none;overflow:hidden}
+.unified-mission .stage-wave-path{fill:none;stroke:#f5cfab;stroke-width:1.6;stroke-linecap:round;opacity:.85}
+.unified-mission .mission-spectrum-guide{display:flex;justify-content:space-between;gap:4px;margin-top:7px;color:#adc5c9;font-size:10px;line-height:1.25}
+.unified-mission .mission-spectrum-guide span:nth-child(2){color:#d3e3e5;text-align:center}
+.unified-mission .stage-visit-details{margin-top:18px;border-color:var(--obs-line)}
+.unified-mission .stage-visit-details summary{color:var(--obs-muted);letter-spacing:.04em;font:600 10px 'Inter',sans-serif}
+.unified-mission .stage-visit-details summary span{color:var(--obs-text);font:11px 'Inter',sans-serif}
+.unified-mission .mission-stage-actions .stage-primary{background:var(--obs-accent);border-color:var(--obs-accent);color:#15242b}
+.unified-mission .mission-stage-actions .stage-secondary{background:none;border-color:var(--obs-line);color:var(--obs-text)}
+.unified-mission .mission-stage-readout{border-color:var(--obs-line);color:var(--obs-muted)}
+.unified-mission .mission-stage-readout strong{color:var(--obs-accent-soft)}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{width:246px;padding:17px;top:76px;left:18px;max-height:calc(100vh - 94px)}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage-head h3{font-size:21px}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage-head #stageSkyArea{max-width:65px;white-space:normal}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .stage-field{display:block;margin:15px 0;padding-bottom:13px}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .stage-field #stageField{display:block;margin-top:8px;text-align:left;font-size:10px}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .stage-visit-details summary{display:block}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .stage-visit-details summary span{display:block;margin-top:7px}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage-actions,.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage-readout{display:none}
+.unified-mission .mission-comparison:not(.is-collapsed){position:absolute;left:282px;right:18px;top:76px;bottom:18px;width:auto;max-width:none;max-height:none;height:auto;overflow:auto;background:var(--obs-surface);border:1px solid var(--obs-line);border-radius:4px;box-shadow:none;backdrop-filter:none;color:var(--obs-text)}
+.unified-mission .mission-comparison-head{display:flex;align-items:center;gap:16px;padding:17px 20px 13px;border-bottom:1px solid var(--obs-line)}
+.unified-mission .mission-comparison-head .analysis-title{min-width:0;flex:1}
+.unified-mission .mission-comparison-head .calm-eyebrow{display:block;margin:0;color:var(--obs-accent);font:600 9px 'Inter',sans-serif;letter-spacing:.1em}
+.unified-mission .mission-comparison-head h3{margin:4px 0 2px;color:var(--obs-text);font:600 22px/1.1 'Inter',sans-serif;letter-spacing:-.045em}
+#missionFieldContext{margin:3px 0 0;color:var(--obs-muted);font:11px 'JetBrains Mono',monospace}
+.unified-mission .mission-comparison-head>button{display:inline-flex!important;align-items:center;justify-content:center;height:31px;min-width:64px;width:auto;border:1px solid var(--obs-line);border-radius:3px;background:transparent;color:var(--obs-text);font:500 11px 'Inter',sans-serif;padding:0 9px;white-space:nowrap}
+.unified-mission .mission-comparison-head>button:hover{background:var(--obs-surface-2)}
+.mission-workspace-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 20px;border-bottom:1px solid var(--obs-line)}
+.unified-mission .mission-modes{display:flex;flex:0 1 auto;gap:0;padding:0;border:1px solid var(--obs-line);border-radius:3px;overflow:hidden}
+.unified-mission .mission-modes button{flex:none;border:0;border-right:1px solid var(--obs-line);border-radius:0;padding:8px 13px;background:transparent;color:var(--obs-muted);font:500 11px 'Inter',sans-serif}
+.unified-mission .mission-modes button:last-child{border-right:0}
+.unified-mission .mission-modes button.active{background:#d5d9cd;color:#17252d}
+.unified-mission .mission-modes button:hover:not(.active){background:#263a43;color:var(--obs-text)}
+.mission-zoom{display:flex;align-items:center;gap:0;color:var(--obs-muted);white-space:nowrap;font:10px 'JetBrains Mono',monospace}
+.mission-zoom button{min-width:27px;height:29px;padding:0 7px;border:1px solid var(--obs-line);border-right:0;border-radius:0;background:transparent;color:var(--obs-text);cursor:pointer;font:500 11px 'Inter',sans-serif}
+.mission-zoom button:last-child{border-right:1px solid var(--obs-line)}
+.mission-zoom button:hover,.mission-zoom button[aria-pressed=true]{background:#2a414a;color:var(--obs-accent-soft)}
+.mission-zoom #missionZoomValue{min-width:47px;text-align:center}
+.unified-mission .mission-visit-dates{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:10px 20px 9px;color:var(--obs-text);border:0;font:600 11px 'Inter',sans-serif}
+.unified-mission .mission-visit-dates span:nth-child(2){padding-left:10px;border-left:1px solid var(--obs-line)}
+.unified-mission .mission-image-area{position:relative;margin:0 18px;background:#050b10;border:1px solid var(--obs-line);border-radius:1px;overflow:hidden}
+.unified-mission .mission-image-area canvas{display:block;width:100%;height:auto;max-height:none;object-fit:contain;aspect-ratio:900/430;cursor:grab;touch-action:none}
+.unified-mission .mission-image-area canvas:active{cursor:grabbing}
+.mission-crosshair{position:absolute;width:1px;height:1px;pointer-events:none;z-index:4}
+.mission-crosshair::before,.mission-crosshair::after{content:'';position:absolute;background:#e9c7a0aa}
+.mission-crosshair::before{width:1px;height:24px;left:0;top:-12px}.mission-crosshair::after{height:1px;width:24px;top:0;left:-12px}
+.mission-crosshair[hidden]{display:none}
+.mission-registration{display:flex;justify-content:space-between;gap:12px;padding:8px 20px 11px;color:var(--obs-muted);font:10px 'Inter',sans-serif}
+#missionCursor{font-family:'JetBrains Mono',monospace;text-align:right}
+.unified-mission .mission-wipe{margin:0 20px!important;padding:7px 0;color:var(--obs-muted)}
+.mission-change-panel{margin:0 18px;padding:11px 0 13px;background:none;border:0;border-top:1px solid var(--obs-line);border-bottom:1px solid var(--obs-line);color:var(--obs-text)}
+.mission-change-head{display:flex;gap:12px;align-items:center;color:var(--obs-text);font:11px 'Inter',sans-serif}
+.mission-change-head>span{display:none}
+.mission-change-head strong{order:0;flex:1;color:var(--obs-text);font:600 13px 'Inter',sans-serif}
+.mission-change-head button{order:1;border:1px solid var(--obs-line);border-radius:3px;background:transparent;color:var(--obs-text);font:500 10px 'Inter',sans-serif;padding:5px 9px}
+.mission-change-head button:hover{background:var(--obs-surface-2)}
+.mission-change-panel[data-state=unavailable] .mission-change-head strong,.mission-change-panel[data-state=inconclusive] .mission-change-head strong{color:var(--obs-accent-soft)}
+.mission-change-panel p{margin:5px 0;color:var(--obs-text);font:11px/1.45 'Inter',sans-serif}
+.mission-change-panel small{color:var(--obs-muted);font:10px/1.4 'Inter',sans-serif}
+.mission-change-picks{display:flex;gap:5px;margin:7px 0 0}
+.mission-change-picks:empty{display:none}
+.mission-change-picks button{height:23px;min-width:23px;border:1px solid var(--obs-line);border-radius:2px;background:none;color:var(--obs-text);font:600 10px 'Inter',sans-serif}
+.mission-change-picks button.active{background:var(--obs-accent);border-color:var(--obs-accent);color:var(--obs-bg)}
+.analysis-details{margin:0 18px;border:0;color:var(--obs-muted)}
+.analysis-details>summary{display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;list-style:none;color:var(--obs-text);font:600 11px 'Inter',sans-serif}
+.analysis-details>summary::-webkit-details-marker{display:none}
+.analysis-details>summary::before{content:'+';color:var(--obs-accent);font:18px 'Inter',sans-serif}
+.analysis-details[open]>summary::before{content:'−'}
+.analysis-details>summary span{color:var(--obs-muted);font:10px 'Inter',sans-serif;font-weight:400}
+.analysis-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--obs-line)}
+.analysis-detail-group{min-width:0;padding:13px 16px 14px 0;border-bottom:1px solid var(--obs-line)}
+.analysis-detail-group h4{margin:0 0 7px;color:var(--obs-muted);font:600 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.06em}
+.analysis-detail-group>span,.analysis-detail-group>strong,.analysis-detail-group>p{display:block;margin:0;color:var(--obs-text);font:11px/1.6 'Inter',sans-serif}
+.analysis-detail-group #missionLiveOrbit,.analysis-detail-group #missionLiveWave{font-family:'JetBrains Mono',monospace;overflow-wrap:anywhere}
+.analysis-detail-group .mission-caution{padding:0;border:0;color:var(--obs-muted)}
+.analysis-detail-group .mission-science-note{margin-top:8px;border:0;color:var(--obs-muted)}
+.analysis-detail-group .mission-science-note summary{color:var(--obs-accent-soft);font:11px 'Inter',sans-serif}
+.analysis-detail-group #missionDetails{margin-top:11px;padding:0;border:0;background:none;color:var(--obs-accent-soft);font:600 11px 'Inter',sans-serif;cursor:pointer}
+.unified-mission .calm-panel{background:var(--obs-surface);border-color:var(--obs-line);color:var(--obs-text);box-shadow:none;backdrop-filter:none}
+.calm-layout .calm-panel-header{background:var(--obs-surface);border-color:var(--obs-line)}
+.calm-layout .calm-panel-header h2{color:var(--obs-text)}
+.calm-layout .calm-panel-header p,.calm-layout .calm-panel label,.calm-layout .calm-panel .sub,.calm-layout .calm-panel .status{color:var(--obs-muted)}
+.calm-layout .calm-panel select,.calm-layout .calm-panel input[type=number],.calm-layout .calm-panel input[type=date],.calm-layout .calm-panel textarea{background:#0e1a23;color:var(--obs-text);border-color:var(--obs-line)}
+.calm-layout .calm-panel .overline,.calm-layout .calm-panel details summary{color:var(--obs-accent-soft)}
+.calm-layout .calm-panel .main-btn{background:var(--obs-accent);border-color:var(--obs-accent);color:var(--obs-bg)}
+.calm-layout .calm-panel .sub-btn,.calm-layout .calm-panel .calm-close{background:transparent;border-color:var(--obs-line);color:var(--obs-text)}
+.spacecraft-info{background:var(--obs-surface);border-color:var(--obs-line);border-radius:4px;color:var(--obs-text);box-shadow:none}
+.spacecraft-info-head,.spacecraft-info p,.spacecraft-info>small{color:var(--obs-muted)}
+.spacecraft-info>strong{color:var(--obs-text)}
+.spacecraft-info-actions button,.spacecraft-locate{background:var(--obs-surface-2);border-color:var(--obs-line);color:var(--obs-text)}
+.spacecraft-beacon-title{background:var(--obs-surface);border-color:var(--obs-line);color:var(--obs-text)}
+.spacecraft-beacon-title small{color:var(--obs-muted)}
+@media (max-width:1100px) and (min-width:801px){.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{width:208px;left:10px;padding:13px}.unified-mission .mission-comparison:not(.is-collapsed){left:232px;right:10px}.mission-workspace-toolbar{flex-wrap:wrap}}
+@media (max-width:800px){
+ .unified-mission .mission-stage{left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:min(57vh,430px);padding:17px}
+ .unified-mission .mission-comparison:not(.is-collapsed){left:0;right:0;top:64px;bottom:0;width:100%;height:calc(100vh - 64px);max-height:none;border-radius:0;border-left:0;border-right:0;border-bottom:0}
+ .unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{display:none}
+ .unified-mission .mission-comparison-head{padding:13px 14px 10px}
+ .unified-mission .mission-comparison-head h3{font-size:19px}
+ .unified-mission .mission-comparison-head>button{min-width:55px;padding:0 6px}
+ .mission-workspace-toolbar{padding:9px 13px;flex-wrap:wrap;gap:8px}
+ .unified-mission .mission-modes{width:100%;justify-content:space-between}
+ .unified-mission .mission-modes button{flex:1;padding:7px 4px;font-size:10px}
+ .mission-zoom{margin-left:auto}
+ .unified-mission .mission-visit-dates{padding:9px 13px;font-size:10px}
+ .unified-mission .mission-image-area{margin:0 8px}
+ .mission-registration{padding:8px 12px;display:block}
+ #missionCursor{display:block;margin-top:4px;text-align:left;font-size:9px}
+ .mission-change-panel,.analysis-details{margin:0 12px}
+ .analysis-details-grid{grid-template-columns:1fr}
+ .analysis-details>summary span{display:none}
+}.mission-mobile-date-b{display:none}
+.unified-mission .mission-image-area canvas{aspect-ratio:auto}
+@media (max-width:800px){
+ .unified-mission .mission-visit-dates{display:block}
+ .unified-mission .mission-visit-dates span:nth-child(2){display:none}
+ .mission-mobile-date-b{display:block;position:absolute;z-index:3;top:50%;left:0;right:0;transform:translateY(-50%);padding:5px 12px;background:var(--obs-surface);border-top:1px solid var(--obs-line);border-bottom:1px solid var(--obs-line);color:var(--obs-text);font:600 10px 'Inter',sans-serif}
+}
+@media (max-width:800px){.unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area canvas{max-height:none!important;height:auto!important;object-fit:fill;aspect-ratio:auto}}
+@media (max-width:800px){#missionFieldContext{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px}.unified-mission .mission-comparison-head .analysis-title{min-width:0}.unified-mission .mission-comparison-head h3{font-size:18px}}
+@media (max-width:800px){.unified-mission .mission-image-area > .mission-mobile-date-b{display:block;left:0;right:0;bottom:auto;top:50%;width:auto;transform:translateY(-50%);padding:5px 12px;background:var(--obs-surface);color:var(--obs-text);border-top:1px solid var(--obs-line);border-bottom:1px solid var(--obs-line);font:600 10px 'Inter',sans-serif}}
+.analysis-detail-group #missionBaseline,.analysis-detail-group #analysisAcquiredA,.analysis-detail-group #analysisAcquiredB,.analysis-detail-group #missionBandValues{display:block;margin:4px 0;color:var(--obs-text);font:10px/1.55 'JetBrains Mono',monospace;overflow-wrap:anywhere}
+.analysis-detail-group #missionBandValues{color:var(--obs-muted)}
+.analysis-detail-group a{display:inline-block;margin:8px 14px 0 0;color:var(--obs-accent-soft);font:600 10px 'Inter',sans-serif;text-decoration:none}
+.analysis-detail-group a:hover{text-decoration:underline}
+.unified-mission .mission-data-link{display:none!important}
+
+/* Keep a wide display from turning the registered pair into a full-screen poster. */
+@media (min-width:801px){
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-comparison-head{position:sticky;top:0;z-index:11;background:var(--obs-surface)}
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-workspace-toolbar{position:sticky;top:91px;z-index:10;background:var(--obs-surface)}
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-visit-dates,
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area,
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-registration,
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-change-panel,
+ .unified-mission .mission-comparison:not(.is-collapsed) .analysis-details{width:calc(100% - 40px);max-width:960px;margin-left:auto;margin-right:auto}
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area canvas{width:100%;height:auto;max-height:none;aspect-ratio:auto;object-fit:contain}
+}
+@media (min-width:801px) and (max-height:820px){
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-visit-dates,
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area,
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-registration,
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-change-panel,
+ .unified-mission .mission-comparison:not(.is-collapsed) .analysis-details{max-width:760px}
+}
+.mission-mobile-date-b[hidden]{display:none!important}
+@media (max-width:800px){
+ .unified-mission .mission-comparison:not(.is-collapsed) .mission-image-area canvas{margin-left:auto;margin-right:auto}
+ .unified-mission .mission-comparison:not(.is-collapsed)[data-stacked="false"] .mission-image-area canvas{max-width:min(100%,300px);height:auto!important}
+}
+
+/* Observatory composition: a fixed instrument rail, an open scene, and one image workspace. */
+.unified-mission .mission-stage{left:20px;top:92px;bottom:auto;width:336px;max-height:calc(100vh - 112px);padding:25px 25px 23px;border:1px solid #e9fdffc4;border-radius:18px;background:radial-gradient(220px 180px at var(--glass-x,16%) var(--glass-y,0%),#e6fbff38,transparent 80%),linear-gradient(155deg,#b6e0e921,#315c6a30 34%,#1029375c 78%);backdrop-filter:blur(12px) saturate(175%) brightness(1.22);-webkit-backdrop-filter:blur(12px) saturate(175%) brightness(1.22);box-shadow:inset 0 1px 0 #ffffffd4,inset 1px 0 0 #d4f4f65e,inset -1px 0 0 #e1f9ff35,0 24px 64px #0009,0 0 28px #9fdce020;overflow-y:auto}
+.unified-mission .mission-stage-head h3{font-size:28px;line-height:1.08;margin-top:10px}
+.unified-mission .stage-kicker,.unified-mission .stage-step,.unified-mission .mission-stage .mission-band-top h4{font-size:11px;letter-spacing:.055em}
+.unified-mission .stage-field #stageField{font-size:11px}
+.unified-mission .stage-visit-details summary{font-size:11px}
+.unified-mission .stage-visit-details summary span{font-size:11px}
+.unified-mission .mission-stage-actions button{font-size:11px}
+.unified-mission .mission-stage-readout{font-size:11px;line-height:1.5}
+.unified-mission .stage-band-choices{border-color:#c7e2e159;border-radius:10px;background:#eaf9ff0b;box-shadow:inset 0 1px 1px #ffffff1c}
+.unified-mission .stage-band-choices button{border-color:#c7e2e135;transition:background .2s ease,color .2s ease,box-shadow .2s ease}
+.unified-mission .stage-band-choices button.active{background:linear-gradient(160deg,#f4dbbd,#dca778);box-shadow:inset 0 1px 0 #fff8ecaa}
+.unified-mission .mission-stage-actions button{border-radius:11px;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.unified-mission .mission-stage-actions button:hover{transform:translateY(-2px)}
+.unified-mission .mission-stage-actions .stage-primary{background:linear-gradient(155deg,#f5d7b2,#dba174);box-shadow:inset 0 1px 0 #fff8e0a6,0 7px 20px #d78f5830}
+.unified-mission .mission-stage-actions .stage-secondary{background:#ffffff14;border-color:#d1eaeb64;box-shadow:inset 0 1px 0 #ffffff33}
+.unified-mission .mission-stage-actions .stage-secondary:hover{background:#ffffff27}
+.unified-mission .mission-stage *,
+.unified-mission .mission-comparison *{font-family:'Public Sans',Arial,sans-serif!important}
+.unified-mission .mission-stage-head h3{font-family:'Public Sans',Arial,sans-serif!important;font-size:28px;font-weight:600;letter-spacing:-.055em}
+.unified-mission .mission-comparison-head h3,
+.unified-mission .mission-scene-caption strong{font-family:'Public Sans',Arial,sans-serif!important}
+.unified-mission .stage-selected-range,
+.unified-mission .mission-stage-readout,
+.unified-mission .mission-spectrum-head,
+.unified-mission .mission-spectrum-head strong,
+.unified-mission .mission-comparison .mono{font-family:'Public Sans',Arial,sans-serif!important;font-variant-numeric:tabular-nums}
+.mission-scene-caption{position:absolute;right:29px;bottom:27px;z-index:5;color:#dce7e7;text-align:right;text-shadow:0 2px 12px #03090d;pointer-events:none}
+.mission-scene-caption strong{font:600 17px/1.1 'Inter',sans-serif;letter-spacing:-.035em}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-scene-caption{display:none}
+.spacecraft-beacon-ring{border-color:#e9c7a1;background:#bc754355;box-shadow:0 0 0 5px #e8ba8a22,0 0 18px #e6a57855}
+.spacecraft-beacon-core{background:#f5e6d2}
+.spacecraft-beacon-title{border-color:#f4dbb58c;color:#f8eee2;background:linear-gradient(145deg,#6380859e,#243846c9);backdrop-filter:blur(16px) saturate(145%);-webkit-backdrop-filter:blur(16px) saturate(145%);box-shadow:inset 0 1px 0 #fff8dd80,0 8px 22px #0008}
+.spacecraft-beacon-title small{color:#e8be99;font-size:10px}
+.spacecraft-wave{position:absolute;left:40px;top:44px;display:flex;align-items:center;gap:7px;width:164px;height:34px;padding:3px 8px;border:1px solid #f6ddbc80;border-radius:10px;background:linear-gradient(140deg,#d4e4e548,#21394480);backdrop-filter:blur(12px) saturate(145%);-webkit-backdrop-filter:blur(12px) saturate(145%);box-shadow:inset 0 1px 0 #ffffff8a,0 8px 22px #0006;pointer-events:none}
+.spacecraft-wave span{font-size:9px;font-weight:700;letter-spacing:.08em;color:#f5d6b1}
+.spacecraft-wave svg{display:block;width:128px;height:28px;overflow:hidden}
+.spacecraft-wave path{fill:none;stroke:#f3c899;stroke-width:1.8;stroke-linecap:round;filter:drop-shadow(0 0 3px #f1bc8b88)}
+.spacecraft-beacon.wave-left .spacecraft-wave{left:auto;right:40px}
+.spacecraft-beacon[aria-expanded="true"] .spacecraft-wave,.orbit-context .spacecraft-wave{display:none}
+.orbit-context .spacecraft-beacon-title{display:none}
+.orbit-context .spacecraft-beacon-ring{transform:scale(.56);box-shadow:0 0 0 3px #e8ba8a22,0 0 12px #e6a57855}
+.deep-orbit .spacecraft-beacon-ring{transform:scale(.23);box-shadow:0 0 0 8px #e8ba8a12}
+.observation-beam-wave{stroke-width:1;opacity:.38}
+.observation-beam-halo{opacity:.025}
+.observation-beam-ticks{stroke:#e8b58c;stroke-width:2;opacity:.75}
+.observation-beam-label{display:none}
+.observation-beam-wave{stroke-width:1.2;opacity:.72}
+.observation-beam-halo{stroke-width:12;opacity:.06}
+.observation-beam-particle{fill:#f6d9ad;filter:drop-shadow(0 0 4px #e7ad76)}
+.observation-beam[hidden]{display:none}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:16px;top:88px;bottom:auto;width:248px;max-height:calc(100vh - 104px);padding:22px 18px;border:1px solid #e9fdffc4;border-radius:16px;background:radial-gradient(220px 180px at var(--glass-x,16%) var(--glass-y,0%),#e6fbff38,transparent 80%),linear-gradient(155deg,#b6e0e921,#315c6a30 34%,#10293770 78%)}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .stage-wave,
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-spectrum-guide{display:none}
+.unified-mission:has(.mission-comparison:not(.is-collapsed)) .stage-range-text{font-size:10px;white-space:nowrap}
+.unified-mission .mission-comparison:not(.is-collapsed){left:280px;right:16px;top:88px;bottom:16px;border:1px solid #bde0e45e;border-radius:10px;background:#13232c;box-shadow:inset 0 1px 0 #ffffff30,0 20px 50px #0008}
+.unified-mission .mission-comparison-head{background:linear-gradient(160deg,#8bbfcb31,#1b3a48ac 75%);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}
+.unified-mission .mission-comparison-head{padding:19px 22px 15px}
+.unified-mission .mission-comparison-head h3{font-size:23px}
+.mission-workspace-toolbar{padding:12px 22px}
+.unified-mission .mission-image-area{margin:0 20px}
+.mission-difference-legend{position:absolute;z-index:5;right:17px;top:17px;display:flex;flex-direction:column;gap:10px;width:193px;padding:15px 16px;background:#10202aee;border:1px solid #47606a;color:var(--obs-text);font:11px/1.3 'Inter',sans-serif;box-shadow:0 8px 30px #0006}
+.mission-difference-legend[hidden]{display:none}
+.mission-difference-legend strong{font:600 10px/1.3 'JetBrains Mono',monospace;letter-spacing:.03em;color:#d6e4e4}
+.mission-difference-legend span{display:flex;align-items:center;gap:8px}
+.mission-difference-legend i{display:inline-block;flex:none;width:11px;height:11px;border-radius:50%}
+.mission-difference-legend .legend-earlier{background:#cf7954}.mission-difference-legend .legend-later{background:#6587bc}
+.mission-difference-legend small{padding-top:7px;border-top:1px solid var(--obs-line);color:var(--obs-muted);font:10px/1.45 'Inter',sans-serif}
+@media (max-width:1100px) and (min-width:801px){.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{left:10px;width:210px;padding:18px 14px}.unified-mission .mission-comparison:not(.is-collapsed){left:232px;right:10px}}
+@media (max-width:800px){
+ .unified-mission .mission-stage{left:10px;right:10px;top:auto;bottom:10px;width:auto;max-height:min(48vh,365px);padding:16px 19px 18px;border:1px solid #d3edf078;border-radius:17px;overflow:auto}
+ .unified-mission .mission-stage-head h3{font-size:24px;margin-top:5px}
+ .unified-mission .stage-field,.unified-mission .mission-stage-readout{display:none}
+ .unified-mission .mission-spectrum{margin-top:10px}
+ .unified-mission .stage-visit-details{margin-top:12px}
+ .unified-mission .mission-stage-actions{margin-top:12px}
+ .mission-scene-caption{display:block;right:14px;bottom:calc(min(48vh,365px) + 12px)}
+ .mission-scene-caption strong{font-size:13px}
+ .unified-mission .mission-comparison:not(.is-collapsed){left:0;right:0;top:64px;bottom:0}
+ .unified-mission .mission-comparison-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px 10px;padding:14px 16px 12px}
+ .unified-mission .mission-comparison-head .analysis-title{grid-column:1 / -1}
+ .unified-mission .mission-comparison-head .calm-eyebrow{font-size:10px}
+ .unified-mission .mission-comparison-head h3{font-size:22px;line-height:1.1;white-space:nowrap}
+ .unified-mission .mission-comparison-head>button{grid-row:2;margin:0;min-width:0;height:31px;padding:0 11px}
+ .unified-mission .mission-comparison-head #missionReplay{grid-column:1;justify-self:start}
+ .unified-mission .mission-comparison-head #missionEnlarge{grid-column:2;justify-self:end}
+ .unified-mission .mission-image-area{margin:0 8px}
+ .mission-difference-legend{position:static;width:auto;box-shadow:none;border:0;border-top:1px solid var(--obs-line);gap:7px;padding:12px 14px}
+}
+@media (max-width:800px){.mission-difference-legend:not([hidden]){display:grid;grid-template-columns:1fr 1fr;gap:7px 10px;padding:10px 12px}.mission-difference-legend strong,.mission-difference-legend small{grid-column:1 / -1}}
+@media (max-width:800px){.spacecraft-wave{left:26px;width:130px;padding:3px 6px;gap:4px}.spacecraft-wave svg{width:100px}}
+@media (prefers-reduced-transparency:reduce){
+ .unified-mission .mission-stage,.unified-mission:has(.mission-comparison:not(.is-collapsed)) .mission-stage{background:#172b35;backdrop-filter:none;-webkit-backdrop-filter:none}
+ .spacecraft-beacon-title{background:#223943;backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+body *{font-family:'Public Sans',Arial,sans-serif!important}
+body .mono,body .mission-stage-readout,body .mission-spectrum-head{font-variant-numeric:tabular-nums}
